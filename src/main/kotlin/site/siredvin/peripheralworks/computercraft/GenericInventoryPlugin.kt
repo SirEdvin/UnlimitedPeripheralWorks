@@ -13,6 +13,8 @@ import java.util.*
 
 class GenericInventoryPlugin(private val itemStorage: ItemStorage): IPeripheralPlugin {
 
+    /*Kotlin rework from https://github.com/cc-tweaked/cc-restitched/blob/mc-1.18.x%2Fstable/src/main/java/dan200/computercraft/shared/peripheral/generic/methods/InventoryMethods.java */
+
     override val additionalType: String
         get() = "inventory"
 
