@@ -7,19 +7,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntity
 
 object InventoryDealer {
-    fun extractHandler(obj: Any?): ItemStorage? {
-        if (obj is BlockEntity) {
-            if (obj.isRemoved)
-                return null
-            val inventory = InventoryUtil.getInventory(obj)
-            if (inventory != null)
-                return ItemStorage.wrap(inventory)
-        }
-        if (obj is Container)
-            return ItemStorage.wrap(obj)
-        return null
-    }
-
     fun moveItem(from: ItemStorage, fromSlot: Int, to: ItemStorage, toSlot: Int, limit: Int): Int {
         // Moving nothing is easy
         if (limit == 0) {

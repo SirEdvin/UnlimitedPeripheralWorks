@@ -1,20 +1,51 @@
 package site.siredvin.peripheralworks.computercraft
 
 import dan200.computercraft.api.peripheral.IPeripheral
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
+import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
+import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.computercraft.plugins.FluidStoragePlugin
+import site.siredvin.peripheralworks.computercraft.plugins.InventoryPlugin
+import site.siredvin.peripheralworks.computercraft.plugins.ItemStoragePlugin
 
 object ComputerCraftProxy {
+    private val PLUGIN_PROVIDERS: MutableList<PeripheralPluginProvider> = mutableListOf()
+
+    fun addProvider(provider: PeripheralPluginProvider) {
+        PLUGIN_PROVIDERS.add(provider)
+        PLUGIN_PROVIDERS.sort()
+    }
+
+    init {
+        addProvider(FluidStoragePlugin.Provider())
+        addProvider(InventoryPlugin.Provider())
+        addProvider(ItemStoragePlugin.Provider())
+    }
+
     fun peripheralProvider(level: Level, pos: BlockPos, side: Direction): IPeripheral? {
         val entity = level.getBlockEntity(pos)
-        val fluidStorage = FluidStorage.SIDED.find(level, pos, side)
-        if (fluidStorage != null) {
-            val peripheral = NewIntegrationPeripheral(entity)
-            peripheral.reallyAddPlugin(GenericFluidTransferPlugin(fluidStorage))
-            return peripheral
+        val plugins: MutableMap<String, IPeripheralPlugin> = mutableMapOf()
+        var firstType: String? = null
+
+        PLUGIN_PROVIDERS.forEach {
+            if (!plugins.containsKey(it.pluginType) && !it.conflictWith.any { pluginType -> plugins.containsKey(pluginType) }) {
+                val plugin = it.provide(level, pos, side)
+                if (plugin != null) {
+                    plugins[it.pluginType] = plugin
+                    if (firstType == null)
+                        firstType = it.pluginType
+                }
+            }
         }
-        return null
+
+        if (plugins.isEmpty() || firstType == null)
+            return null
+
+        val peripheral = PluggablePeripheral(firstType!!, entity)
+        plugins.values.forEach { peripheral.addPlugin(it) }
+        return peripheral
     }
 }

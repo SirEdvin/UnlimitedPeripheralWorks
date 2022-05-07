@@ -72,7 +72,12 @@ repositories {
     maven {
         url = uri("https://maven.terraformersmc.com/")
     }
-    maven { url = uri("https://cursemaven.com") }
+    maven {
+        url = uri("https://cursemaven.com")
+        content {
+            includeGroup("curse.maven")
+        }
+    }
     mavenLocal()
 }
 

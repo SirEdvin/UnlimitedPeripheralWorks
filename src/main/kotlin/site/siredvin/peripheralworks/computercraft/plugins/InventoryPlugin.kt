@@ -1,4 +1,4 @@
-package site.siredvin.peripheralworks.computercraft
+package site.siredvin.peripheralworks.computercraft.plugins
 
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
@@ -6,17 +6,42 @@ import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.shared.peripheral.generic.data.ItemData
 import dan200.computercraft.shared.util.ItemStorage
+
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
+import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.util.assertBetween
+import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.ExtractorProxy
 import site.siredvin.peripheralworks.util.InventoryDealer
 import java.util.*
 
-class GenericInventoryPlugin(private val itemStorage: ItemStorage): IPeripheralPlugin {
+class InventoryPlugin(private val itemStorage: ItemStorage): IPeripheralPlugin {
 
     /*Kotlin rework from https://github.com/cc-tweaked/cc-restitched/blob/mc-1.18.x%2Fstable/src/main/java/dan200/computercraft/shared/peripheral/generic/methods/InventoryMethods.java */
 
+    companion object {
+        const val PLUGIN_TYPE = "inventory"
+    }
+
+    class Provider: PeripheralPluginProvider {
+        override val pluginType: String
+            get() = PLUGIN_TYPE
+        override val conflictWith: Set<String>
+            get() = setOf(ItemStoragePlugin.PLUGIN_TYPE)
+
+        override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            val blockEntity = level.getBlockEntity(pos) ?: return null
+            val itemStorage = ExtractorProxy.extractCCItemStorage(blockEntity) ?: return null
+            if (itemStorage.size() == 0)
+                return null
+            return InventoryPlugin(itemStorage)
+        }
+    }
+
     override val additionalType: String
-        get() = "inventory"
+        get() = PLUGIN_TYPE
 
     @LuaFunction(mainThread = true)
     fun size(): Int {
@@ -56,7 +81,7 @@ class GenericInventoryPlugin(private val itemStorage: ItemStorage): IPeripheralP
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = InventoryDealer.extractHandler(location.target)
+        val toStorage = ExtractorProxy.extractCCItemStorage(location.target)
             ?: throw LuaException("Target '$toName' is not an inventory")
 
         // Validate slots
@@ -82,7 +107,7 @@ class GenericInventoryPlugin(private val itemStorage: ItemStorage): IPeripheralP
         // Find location to transfer to
         val location =
             computer.getAvailablePeripheral(fromName) ?: throw LuaException("Source '$fromName' does not exist")
-        val fromStorage = InventoryDealer.extractHandler(location.target)
+        val fromStorage = ExtractorProxy.extractCCItemStorage(location.target)
             ?: throw LuaException("Source '$fromName' is not an inventory")
 
         // Validate slots
