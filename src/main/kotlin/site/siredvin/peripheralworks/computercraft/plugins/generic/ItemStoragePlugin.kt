@@ -1,4 +1,4 @@
-package site.siredvin.peripheralworks.computercraft.plugins
+package site.siredvin.peripheralworks.computercraft.plugins.generic
 
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction

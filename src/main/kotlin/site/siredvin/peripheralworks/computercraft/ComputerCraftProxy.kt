@@ -7,9 +7,10 @@ import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.computercraft.plugins.FluidStoragePlugin
-import site.siredvin.peripheralworks.computercraft.plugins.InventoryPlugin
-import site.siredvin.peripheralworks.computercraft.plugins.ItemStoragePlugin
+import site.siredvin.peripheralworks.computercraft.plugins.generic.FluidStoragePlugin
+import site.siredvin.peripheralworks.computercraft.plugins.generic.InventoryPlugin
+import site.siredvin.peripheralworks.computercraft.plugins.generic.ItemStoragePlugin
+import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
 
 object ComputerCraftProxy {
     private val PLUGIN_PROVIDERS: MutableList<PeripheralPluginProvider> = mutableListOf()
@@ -23,6 +24,7 @@ object ComputerCraftProxy {
         addProvider(FluidStoragePlugin.Provider())
         addProvider(InventoryPlugin.Provider())
         addProvider(ItemStoragePlugin.Provider())
+        addProvider(SpecificPluginProvider())
     }
 
     fun peripheralProvider(level: Level, pos: BlockPos, side: Direction): IPeripheral? {
@@ -34,9 +36,9 @@ object ComputerCraftProxy {
             if (!plugins.containsKey(it.pluginType) && !it.conflictWith.any { pluginType -> plugins.containsKey(pluginType) }) {
                 val plugin = it.provide(level, pos, side)
                 if (plugin != null) {
-                    plugins[it.pluginType] = plugin
+                    plugins[plugin.additionalType ?: it.pluginType] = plugin
                     if (firstType == null)
-                        firstType = it.pluginType
+                        firstType = plugin.additionalType ?: it.pluginType
                 }
             }
         }

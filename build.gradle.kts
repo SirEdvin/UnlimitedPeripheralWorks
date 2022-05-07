@@ -45,6 +45,7 @@ val curseforgeKey = secretEnv["CURSEFORGE_KEY"] ?: System.getenv("CURSEFORGE_KEY
 val modrinthKey = secretEnv["MODRINTH_KEY"] ?: System.getenv("MODRINTH_KEY") ?: ""
 
 loom {
+    accessWidenerPath.set(file("src/main/resources/peripheralworks.accesswidener"))
     runs {
         create("datagen") {
             client()
