@@ -46,7 +46,7 @@ object ComputerCraftProxy {
         if (plugins.isEmpty() || firstType == null)
             return null
 
-        val peripheral = PluggablePeripheral(firstType!!, entity)
+        val peripheral = PluggablePeripheral(firstType!!, entity ?: pos)
         plugins.values.forEach { peripheral.addPlugin(it) }
         return peripheral
     }

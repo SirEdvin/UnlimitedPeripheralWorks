@@ -7,10 +7,23 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage
 import net.minecraft.world.Container
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
+import site.siredvin.peripheralworks.api.CCItemStorageExtractor
 
 object ExtractorProxy {
-    fun extractFluidStorage(obj: Any?): Storage<FluidVariant>? {
+
+    private val ADDITIONAL_CC_ITEM_STORAGE_EXTRACTORS: MutableList<CCItemStorageExtractor> = mutableListOf()
+
+    init {
+        addCCItemStorageExtractor(MinecartHelpers::minecartExtractor)
+    }
+
+    fun addCCItemStorageExtractor(extractor: CCItemStorageExtractor) {
+        ADDITIONAL_CC_ITEM_STORAGE_EXTRACTORS.add(extractor)
+    }
+
+    fun extractFluidStorage(level: Level, obj: Any?): Storage<FluidVariant>? {
         if (obj is BlockEntity) {
             if (obj.isRemoved)
                 return null
@@ -19,7 +32,7 @@ object ExtractorProxy {
         return null
     }
 
-    fun extractItemStorage(obj: Any?): Storage<ItemVariant>? {
+    fun extractItemStorage(level: Level, obj: Any?): Storage<ItemVariant>? {
         if (obj is BlockEntity) {
             if (obj.isRemoved)
                 return null
@@ -28,7 +41,13 @@ object ExtractorProxy {
         return null
     }
 
-    fun extractCCItemStorage(obj: Any?): ItemStorage? {
+    fun extractCCItemStorage(level: Level, obj: Any?): ItemStorage? {
+        for (extractor in this.ADDITIONAL_CC_ITEM_STORAGE_EXTRACTORS) {
+            val result = extractor.extract(level, obj)
+            if (result != null)
+                return result
+        }
+
         if (obj is BlockEntity) {
             if (obj.isRemoved)
                 return null

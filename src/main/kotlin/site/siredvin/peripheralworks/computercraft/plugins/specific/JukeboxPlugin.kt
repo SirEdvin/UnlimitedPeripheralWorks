@@ -58,7 +58,7 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = ExtractorProxy.extractItemStorage(location.target)
+        val toStorage = ExtractorProxy.extractItemStorage(target.level!!, location.target)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
         Transaction.openOuter().use {
@@ -82,7 +82,7 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractItemStorage(location.target)
+        val fromStorage = ExtractorProxy.extractItemStorage(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         val item = Registry.ITEM.get(ResourceLocation(targetItem))

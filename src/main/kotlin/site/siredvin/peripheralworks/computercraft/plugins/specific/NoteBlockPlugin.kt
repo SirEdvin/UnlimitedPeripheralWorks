@@ -14,8 +14,8 @@ import site.siredvin.peripheralium.util.assertBetween
 
 class NoteBlockPlugin(private val level: Level, private val pos: BlockPos): IPeripheralPlugin {
     companion object {
-        val lowerNote = NoteBlock.NOTE.possibleValues.minOf { it }
-        val upperNote = NoteBlock.NOTE.possibleValues.maxOf { it }
+        val lowerNote: Int = NoteBlock.NOTE.possibleValues.minOf { it }
+        val upperNote: Int = NoteBlock.NOTE.possibleValues.maxOf { it }
     }
 
     override val additionalType: String

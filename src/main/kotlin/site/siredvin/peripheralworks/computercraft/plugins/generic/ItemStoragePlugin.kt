@@ -23,7 +23,7 @@ import java.util.*
 import java.util.function.Predicate
 import kotlin.collections.HashMap
 
-class ItemStoragePlugin(private val storage: Storage<ItemVariant>): IPeripheralPlugin {
+class ItemStoragePlugin(private val level: Level, private val storage: Storage<ItemVariant>): IPeripheralPlugin {
     companion object {
         const val PLUGIN_TYPE = "item_storage"
     }
@@ -43,7 +43,7 @@ class ItemStoragePlugin(private val storage: Storage<ItemVariant>): IPeripheralP
                 if (size == 0)
                     return null
             }
-            return ItemStoragePlugin(itemStorage)
+            return ItemStoragePlugin(level, itemStorage)
         }
     }
 
@@ -65,7 +65,7 @@ class ItemStoragePlugin(private val storage: Storage<ItemVariant>): IPeripheralP
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = ExtractorProxy.extractItemStorage(location.target)
+        val toStorage = ExtractorProxy.extractItemStorage(level, location.target)
             ?: throw LuaException("Target '$toName' is not an fluid inventory")
 
         val predicate: Predicate<ItemVariant> = if (itemName.isEmpty) {
@@ -84,7 +84,7 @@ class ItemStoragePlugin(private val storage: Storage<ItemVariant>): IPeripheralP
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractItemStorage(location.target)
+        val fromStorage = ExtractorProxy.extractItemStorage(level, location.target)
             ?: throw LuaException("Target '$fromName' is not an fluid inventory")
 
         val predicate: Predicate<ItemVariant> = if (itemName.isEmpty) {

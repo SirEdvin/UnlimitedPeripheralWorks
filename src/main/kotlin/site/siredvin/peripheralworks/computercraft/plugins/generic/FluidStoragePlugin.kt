@@ -20,7 +20,7 @@ import site.siredvin.peripheralworks.common.ExtractorProxy
 import java.util.Optional
 import java.util.function.Predicate
 
-class FluidStoragePlugin(private val storage: Storage<FluidVariant>): IPeripheralPlugin {
+class FluidStoragePlugin(private val level: Level, private val storage: Storage<FluidVariant>): IPeripheralPlugin {
 
     companion object {
         const val FORGE_COMPACT_DEVIDER = 81.0
@@ -33,7 +33,7 @@ class FluidStoragePlugin(private val storage: Storage<FluidVariant>): IPeriphera
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val fluidStorage = FluidStorage.SIDED.find(level, pos, side) ?: return null
-            return FluidStoragePlugin(fluidStorage)
+            return FluidStoragePlugin(level, fluidStorage)
         }
 
     }
@@ -62,7 +62,7 @@ class FluidStoragePlugin(private val storage: Storage<FluidVariant>): IPeriphera
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = ExtractorProxy.extractFluidStorage(location.target)
+        val toStorage = ExtractorProxy.extractFluidStorage(level, location.target)
             ?: throw LuaException("Target '$toName' is not an fluid inventory")
 
         val predicate: Predicate<FluidVariant> = if (fluidName.isEmpty) {
@@ -79,7 +79,7 @@ class FluidStoragePlugin(private val storage: Storage<FluidVariant>): IPeriphera
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractFluidStorage(location.target)
+        val fromStorage = ExtractorProxy.extractFluidStorage(level, location.target)
             ?: throw LuaException("Target '$fromName' is not an fluid inventory")
 
         val predicate: Predicate<FluidVariant> = if (fluidName.isEmpty) {
