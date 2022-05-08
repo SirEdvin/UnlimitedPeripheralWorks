@@ -78,7 +78,7 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
             ?: throw LuaException("Target '$fromName' does not exist")
 
         val fromStorage = ExtractorProxy.extractItemStorage(location.target)
-            ?: throw LuaException("Target '$fromName' is not an fluid inventory")
+            ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         val itemPredicate = if (itemHint.isPresent) {
             val item = Registry.ITEM.get(ResourceLocation(itemHint.get()))
