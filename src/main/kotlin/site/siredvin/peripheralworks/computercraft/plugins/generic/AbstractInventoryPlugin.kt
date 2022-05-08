@@ -8,8 +8,8 @@ import dan200.computercraft.shared.peripheral.generic.data.ItemData
 import dan200.computercraft.shared.util.ItemStorage
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.assertBetween
-import site.siredvin.peripheralworks.common.ExtractorProxy
 import site.siredvin.peripheralworks.util.InventoryDealer
 import java.util.*
 

@@ -9,14 +9,12 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
 import net.minecraft.nbt.StringTag
-import net.minecraft.world.item.BookItem
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.WrittenBookItem
 import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.assertBetween
-import site.siredvin.peripheralworks.common.ExtractorProxy
 import java.util.*
 import java.util.function.Predicate
 

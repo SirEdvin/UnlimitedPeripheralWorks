@@ -14,9 +14,10 @@ import net.minecraft.core.Direction
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.material.Fluids
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.ExtractorProxy
 import java.util.Optional
 import java.util.function.Predicate
 
@@ -68,7 +69,9 @@ class FluidStoragePlugin(private val level: Level, private val storage: Storage<
         val predicate: Predicate<FluidVariant> = if (fluidName.isEmpty) {
             Predicate { true }
         } else {
-            val fluid = Registry.FLUID.get(ResourceLocation(fluidName.get())) ?: throw LuaException("There is no fluid ${fluidName.get()}")
+            val fluid = Registry.FLUID.get(ResourceLocation(fluidName.get()))
+            if (fluid.isSame(Fluids.EMPTY))
+                throw LuaException("There is no fluid ${fluidName.get()}")
             Predicate { it.fluid.isSame(fluid) }
         }
         return StorageUtil.move(storage, toStorage, predicate, limit.map { it * FORGE_COMPACT_DEVIDER.toLong() }.orElse(Long.MAX_VALUE), null) / FORGE_COMPACT_DEVIDER
@@ -85,7 +88,9 @@ class FluidStoragePlugin(private val level: Level, private val storage: Storage<
         val predicate: Predicate<FluidVariant> = if (fluidName.isEmpty) {
             Predicate { true }
         } else {
-            val fluid = Registry.FLUID.get(ResourceLocation(fluidName.get())) ?: throw LuaException("There is no fluid ${fluidName.get()}")
+            val fluid = Registry.FLUID.get(ResourceLocation(fluidName.get()))
+            if (fluid.isSame(Fluids.EMPTY))
+                throw LuaException("There is no fluid ${fluidName.get()}")
             Predicate { it.fluid.isSame(fluid) }
         }
         return StorageUtil.move(fromStorage, storage, predicate, limit.map { it * FORGE_COMPACT_DEVIDER.toLong() }.orElse(Long.MAX_VALUE), null) / FORGE_COMPACT_DEVIDER

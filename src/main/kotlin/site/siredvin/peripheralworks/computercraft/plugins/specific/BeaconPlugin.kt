@@ -17,8 +17,8 @@ import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.entity.BeaconBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralworks.common.ExtractorProxy
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.min

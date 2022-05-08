@@ -6,10 +6,10 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.PoweredRailBlock
 import net.minecraft.world.level.block.state.BlockState
+import site.siredvin.peripheralium.common.MinecartHelpers
+import site.siredvin.peripheralium.util.MergedContainer
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralworks.common.MinecartHelpers
 import site.siredvin.peripheralworks.computercraft.plugins.generic.AbstractInventoryPlugin
-import site.siredvin.peripheralworks.util.MergedContainer
 
 class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): AbstractInventoryPlugin()  {
 

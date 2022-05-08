@@ -79,7 +79,9 @@ repositories {
             includeGroup("curse.maven")
         }
     }
-    mavenLocal()
+    maven {
+        url = uri("https://repo.repsy.io/mvn/siredvin/default")
+    }
 }
 
 dependencies {
@@ -96,7 +98,9 @@ dependencies {
 
     modImplementation("com.github.cc-tweaked:cc-restitched:v1.18.2-1.100.5-ccr")
     modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3671141")
-    modImplementation("siredvin.site:Peripheralium:0.1.0-SNAPSHOT")
+    modImplementation("siredvin.site:Peripheralium:0.1.1") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
 
     // Some mod integrations
 

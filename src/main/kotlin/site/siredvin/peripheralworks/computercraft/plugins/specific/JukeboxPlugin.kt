@@ -15,8 +15,8 @@ import net.minecraft.world.item.RecordItem
 import net.minecraft.world.level.block.JukeboxBlock
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralworks.common.ExtractorProxy
 
 class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
     override val additionalType: String

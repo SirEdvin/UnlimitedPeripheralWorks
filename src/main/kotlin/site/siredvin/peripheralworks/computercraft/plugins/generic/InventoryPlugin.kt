@@ -5,8 +5,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.ExtractorProxy
 
 class InventoryPlugin(override val level: Level, override val itemStorage: ItemStorage): AbstractInventoryPlugin() {
 
