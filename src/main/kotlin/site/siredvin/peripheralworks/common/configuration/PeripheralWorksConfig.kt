@@ -67,7 +67,7 @@ object PeripheralWorksConfig {
             builder.push("integrations")
             INTEGRATION_CONFIGURATIONS.entries.forEach {
                 builder.push(it.key)
-                it.value.addToConfig(builder)`
+                it.value.addToConfig(builder)
                 builder.pop()
             }
             builder.pop()
