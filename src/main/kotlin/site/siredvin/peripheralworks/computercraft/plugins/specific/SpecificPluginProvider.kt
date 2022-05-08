@@ -10,7 +10,9 @@ import net.minecraft.world.level.block.entity.BeaconBlockEntity
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralworks.PeripheralWorks
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 class SpecificPluginProvider: PeripheralPluginProvider {
     override val pluginType: String
@@ -19,14 +21,14 @@ class SpecificPluginProvider: PeripheralPluginProvider {
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
         val state = level.getBlockState(pos)
         when (state.block) {
-            Blocks.NOTE_BLOCK -> return NoteBlockPlugin(level, pos)
-            Blocks.POWERED_RAIL -> return PoweredRailPlugin(level, pos)
+            Blocks.NOTE_BLOCK -> if (PeripheralWorksConfig.enableNoteBlock) return NoteBlockPlugin(level, pos)
+            Blocks.POWERED_RAIL -> if (PeripheralWorksConfig.enablePoweredRail) return PoweredRailPlugin(level, pos)
         }
         val entity = level.getBlockEntity(pos) ?: return null
         return when (entity::class.java) {
-            LecternBlockEntity::class.java -> LecternPlugin(entity as LecternBlockEntity)
-            BeaconBlockEntity::class.java -> BeaconPlugin(entity as BeaconBlockEntity)
-            JukeboxBlockEntity::class.java -> JukeboxPlugin(entity as JukeboxBlockEntity)
+            LecternBlockEntity::class.java -> if (PeripheralWorksConfig.enableLectern) LecternPlugin(entity as LecternBlockEntity) else null
+            BeaconBlockEntity::class.java -> if (PeripheralWorksConfig.enableBeacon) BeaconPlugin(entity as BeaconBlockEntity) else null
+            JukeboxBlockEntity::class.java -> if (PeripheralWorksConfig.enableJukebox) JukeboxPlugin(entity as JukeboxBlockEntity) else null
             else -> null
         }
     }

@@ -18,6 +18,7 @@ import net.minecraft.world.level.material.Fluids
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import java.util.Optional
 import java.util.function.Predicate
 
@@ -33,6 +34,8 @@ class FluidStoragePlugin(private val level: Level, private val storage: Storage<
             get() = PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            if (!PeripheralWorksConfig.enableGenericFluidStorage)
+                return null
             val fluidStorage = FluidStorage.SIDED.find(level, pos, side) ?: return null
             return FluidStoragePlugin(level, fluidStorage)
         }

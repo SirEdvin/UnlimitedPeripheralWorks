@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import java.util.*
 import java.util.function.Predicate
 import kotlin.collections.HashMap
@@ -37,6 +38,8 @@ class ItemStoragePlugin(private val level: Level, private val storage: Storage<I
             get() = setOf(InventoryPlugin.PLUGIN_TYPE)
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            if (!PeripheralWorksConfig.enableGenericItemStorage)
+                return null
             val itemStorage = ItemStorage.SIDED.find(level, pos, side) ?: return null
             Transaction.openOuter().use {
                 val size = itemStorage.iterable(it).count()

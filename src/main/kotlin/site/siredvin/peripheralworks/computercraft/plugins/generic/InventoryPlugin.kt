@@ -7,6 +7,7 @@ import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 class InventoryPlugin(override val level: Level, override val itemStorage: ItemStorage): AbstractInventoryPlugin() {
 
@@ -23,6 +24,8 @@ class InventoryPlugin(override val level: Level, override val itemStorage: ItemS
             get() = setOf(ItemStoragePlugin.PLUGIN_TYPE)
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            if (!PeripheralWorksConfig.enableGenericInventory)
+                return null
             val blockEntity = level.getBlockEntity(pos) ?: return null
             val itemStorage = ExtractorProxy.extractCCItemStorage(level, blockEntity) ?: return null
             if (itemStorage.size() == 0)

@@ -19,6 +19,8 @@ class EnergyStoragePlugin(private val energyStorage: EnergyStorage): IPeripheral
             get() = PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            if (!Configuration.enableEnergyStorage)
+                return null
             val energyStorage = EnergyStorage.SIDED.find(level, pos, side) ?: return null
             return EnergyStoragePlugin(energyStorage)
         }
