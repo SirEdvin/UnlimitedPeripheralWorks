@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Written book now will have correct text display in lectern peripheral
+
 ### Changed
 
 - Now `item_storage` and `fluid_storage` have transfer limit
 - Peripheral names are now much similar to standard ComputerCraft logic
+- Lectern now will strip text to not corrupt book

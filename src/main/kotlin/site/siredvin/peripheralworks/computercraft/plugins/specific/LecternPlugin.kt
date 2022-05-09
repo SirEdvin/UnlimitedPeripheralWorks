@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.assertBetween
+import site.siredvin.peripheralworks.util.TextBookUtils
 import java.util.*
 import java.util.function.Predicate
 
@@ -64,11 +65,7 @@ class LecternPlugin(private val target: LecternBlockEntity): IPeripheralPlugin {
     @LuaFunction(mainThread = true)
     fun getText(): List<String> {
         assertBook()
-        val pagesData = target.book.tag?.getList("pages", 8) ?: return emptyList()
-        val pages: MutableList<String> = mutableListOf()
-        for (i in 0 until pagesData.size)
-            pages.add(pagesData.getString(i))
-        return pages
+        return TextBookUtils.getBookText(target.book)
     }
 
     @LuaFunction(mainThread = true)
@@ -81,7 +78,7 @@ class LecternPlugin(private val target: LecternBlockEntity): IPeripheralPlugin {
     fun addPage(text: Optional<String>): MethodResult {
         assertEditableBook()
         val pagesData = target.book.tag!!.getList("pages", 8)
-        pagesData.add(StringTag.valueOf(text.orElse("")))
+        pagesData.add(StringTag.valueOf(TextBookUtils.stripText(text.orElse(""))))
         target.book.tag!!.put("pages", pagesData)
         target.pageCount += 1
         return MethodResult.of(true)
@@ -103,7 +100,7 @@ class LecternPlugin(private val target: LecternBlockEntity): IPeripheralPlugin {
         assertEditableBook()
         assertBetween(page, 1, target.pageCount, "page")
         val pagesData = target.book.tag!!.getList("pages", 8)
-        pagesData[page - 1] = StringTag.valueOf(text)
+        pagesData[page - 1] = StringTag.valueOf(TextBookUtils.stripText(text))
         target.book.tag!!.put("pages", pagesData)
         return MethodResult.of(true)
     }
