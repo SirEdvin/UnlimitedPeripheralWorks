@@ -24,8 +24,6 @@ import java.util.function.Predicate
 import kotlin.math.min
 
 class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
-    override val additionalType: String
-        get() = "beacon"
 
     @LuaFunction(mainThread = true)
     fun getLevel(): Int {

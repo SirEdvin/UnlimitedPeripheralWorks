@@ -21,9 +21,6 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): A
         const val PUSH_POWER = 5.0
     }
 
-    override val additionalType: String
-        get() = "poweredRail"
-
     private val blockState: BlockState
         get() {
             val state = level.getBlockState(pos)

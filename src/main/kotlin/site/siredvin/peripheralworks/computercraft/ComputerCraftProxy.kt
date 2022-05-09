@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.computercraft
 import dan200.computercraft.api.peripheral.IPeripheral
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Registry
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
@@ -29,24 +30,22 @@ object ComputerCraftProxy {
 
     fun peripheralProvider(level: Level, pos: BlockPos, side: Direction): IPeripheral? {
         val entity = level.getBlockEntity(pos)
+        val state = level.getBlockState(pos)
         val plugins: MutableMap<String, IPeripheralPlugin> = mutableMapOf()
-        var firstType: String? = null
 
         PLUGIN_PROVIDERS.forEach {
             if (!plugins.containsKey(it.pluginType) && !it.conflictWith.any { pluginType -> plugins.containsKey(pluginType) }) {
                 val plugin = it.provide(level, pos, side)
                 if (plugin != null) {
                     plugins[plugin.additionalType ?: it.pluginType] = plugin
-                    if (firstType == null)
-                        firstType = plugin.additionalType ?: it.pluginType
                 }
             }
         }
 
-        if (plugins.isEmpty() || firstType == null)
+        if (plugins.isEmpty())
             return null
 
-        val peripheral = PluggablePeripheral(firstType!!, entity ?: pos)
+        val peripheral = PluggablePeripheral(Registry.BLOCK.getKey(state.block).toString(), entity ?: pos)
         plugins.values.forEach { peripheral.addPlugin(it) }
         return peripheral
     }

@@ -16,9 +16,6 @@ class NoteBlockPlugin(private val level: Level, private val pos: BlockPos): IPer
         val upperNote: Int = NoteBlock.NOTE.possibleValues.maxOf { it }
     }
 
-    override val additionalType: String
-        get() = "noteBlock"
-
     private val blockState: BlockState
         get() {
             val state = level.getBlockState(pos)

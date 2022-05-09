@@ -19,8 +19,6 @@ import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 
 class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
-    override val additionalType: String
-        get() = "jukebox"
 
     private fun assertDisc() {
         if (target.record.isEmpty)

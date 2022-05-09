@@ -21,9 +21,6 @@ import java.util.function.Predicate
 
 class LecternPlugin(private val target: LecternBlockEntity): IPeripheralPlugin {
 
-    override val additionalType: String
-        get() = "lectern"
-
     private fun assertBook() {
         if (!target.hasBook())
             throw LuaException("Lectern should contain book")
