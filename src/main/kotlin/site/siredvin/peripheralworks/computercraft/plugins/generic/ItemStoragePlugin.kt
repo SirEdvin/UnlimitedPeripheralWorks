@@ -23,6 +23,7 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import java.util.*
 import java.util.function.Predicate
 import kotlin.collections.HashMap
+import kotlin.math.min
 
 class ItemStoragePlugin(private val level: Level, private val storage: Storage<ItemVariant>): IPeripheralPlugin {
     companion object {
@@ -79,7 +80,8 @@ class ItemStoragePlugin(private val level: Level, private val storage: Storage<I
                 throw LuaException("There is no item ${itemName.get()}")
             Predicate { it.isOf(item) }
         }
-        return StorageUtil.move(storage, toStorage, predicate, limit.orElse(Long.MAX_VALUE), null)
+        val realLimit = min(PeripheralWorksConfig.itemStorageTransferLimit, limit.orElse(Long.MAX_VALUE))
+        return StorageUtil.move(storage, toStorage, predicate, realLimit, null)
     }
 
     @LuaFunction(mainThread = true)
@@ -98,6 +100,7 @@ class ItemStoragePlugin(private val level: Level, private val storage: Storage<I
                 throw LuaException("There is no item ${itemName.get()}")
             Predicate { it.isOf(item) }
         }
-        return StorageUtil.move(fromStorage, storage, predicate, limit.orElse(Long.MAX_VALUE), null)
+        val realLimit = min(PeripheralWorksConfig.itemStorageTransferLimit, limit.orElse(Long.MAX_VALUE))
+        return StorageUtil.move(fromStorage, storage, predicate, realLimit, null)
     }
 }

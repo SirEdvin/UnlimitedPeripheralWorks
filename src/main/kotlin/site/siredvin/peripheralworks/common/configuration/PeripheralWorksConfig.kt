@@ -13,6 +13,10 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_GENERIC_ITEM_STORAGE.get()
     val enableGenericFluidStorage: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_GENERIC_FLUID_STORAGE.get()
+    val itemStorageTransferLimit: Long
+        get() = ConfigHolder.COMMON_CONFIG.ITEM_STORAGE_TRANSFER_LIMIT.get()
+    val fluidStorageTransferLimit: Long
+        get() = ConfigHolder.COMMON_CONFIG.FLUID_STORAGE_TRANSFER_LIMIT.get()
 
     val enableBeacon: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_BEACON.get()
@@ -35,6 +39,8 @@ object PeripheralWorksConfig {
         var ENABLE_GENERIC_INVENTORY: ForgeConfigSpec.BooleanValue
         var ENABLE_GENERIC_ITEM_STORAGE: ForgeConfigSpec.BooleanValue
         var ENABLE_GENERIC_FLUID_STORAGE: ForgeConfigSpec.BooleanValue
+        val ITEM_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.LongValue
+        val FLUID_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.LongValue
         // Specific plugins
         var ENABLE_BEACON: ForgeConfigSpec.BooleanValue
         var ENABLE_NOTEBLOCK: ForgeConfigSpec.BooleanValue
@@ -51,6 +57,10 @@ object PeripheralWorksConfig {
                 .define("enableGenericItemStorage", true)
             ENABLE_GENERIC_FLUID_STORAGE = builder.comment("Enables generic integration for fluid storages")
                 .define("enableGenericFluidStorage", true)
+            ITEM_STORAGE_TRANSFER_LIMIT = builder.comment("Limits max item transfer per one operation")
+                .defineInRange("itemStorageTransferLimit", 128L, 1L, Long.MAX_VALUE)
+            FLUID_STORAGE_TRANSFER_LIMIT = builder.comment("Limits max fluid transfer per one operation")
+                .defineInRange("fluidStorageTransferLimit", 5305500L, 1L, Long.MAX_VALUE)
             builder.pop()
             builder.push("specific")
             ENABLE_BEACON = builder.comment("Enables integration for minecraft beacon")

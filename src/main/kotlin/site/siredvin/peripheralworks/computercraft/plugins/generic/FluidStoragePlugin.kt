@@ -21,6 +21,7 @@ import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import java.util.Optional
 import java.util.function.Predicate
+import kotlin.math.min
 
 class FluidStoragePlugin(private val level: Level, private val storage: Storage<FluidVariant>): IPeripheralPlugin {
 
@@ -77,7 +78,8 @@ class FluidStoragePlugin(private val level: Level, private val storage: Storage<
                 throw LuaException("There is no fluid ${fluidName.get()}")
             Predicate { it.fluid.isSame(fluid) }
         }
-        return StorageUtil.move(storage, toStorage, predicate, limit.map { it * FORGE_COMPACT_DEVIDER.toLong() }.orElse(Long.MAX_VALUE), null) / FORGE_COMPACT_DEVIDER
+        val realLimit = min(PeripheralWorksConfig.fluidStorageTransferLimit, limit.map { it * FORGE_COMPACT_DEVIDER.toLong() }.orElse(Long.MAX_VALUE))
+        return StorageUtil.move(storage, toStorage, predicate, realLimit, null) / FORGE_COMPACT_DEVIDER
     }
 
     @LuaFunction(mainThread = true)
@@ -96,6 +98,7 @@ class FluidStoragePlugin(private val level: Level, private val storage: Storage<
                 throw LuaException("There is no fluid ${fluidName.get()}")
             Predicate { it.fluid.isSame(fluid) }
         }
-        return StorageUtil.move(fromStorage, storage, predicate, limit.map { it * FORGE_COMPACT_DEVIDER.toLong() }.orElse(Long.MAX_VALUE), null) / FORGE_COMPACT_DEVIDER
+        val realLimit = min(PeripheralWorksConfig.fluidStorageTransferLimit, limit.map { it * FORGE_COMPACT_DEVIDER.toLong() }.orElse(Long.MAX_VALUE))
+        return StorageUtil.move(fromStorage, storage, predicate, realLimit, null) / FORGE_COMPACT_DEVIDER
     }
 }
