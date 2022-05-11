@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 09-05-22
+
+### Fixed
+
+- `item_storage` now propagates peripheral type
+
 ## [0.1.1] - 09-05-22
 
 ### Fixed

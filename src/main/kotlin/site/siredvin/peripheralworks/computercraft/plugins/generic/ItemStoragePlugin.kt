@@ -51,6 +51,9 @@ class ItemStoragePlugin(private val level: Level, private val storage: Storage<I
         }
     }
 
+    override val additionalType: String
+        get() = PLUGIN_TYPE
+
     @LuaFunction(mainThread = true)
     fun items(): List<Map<String, *>> {
         val result: MutableList<Map<String, *>> = mutableListOf()
