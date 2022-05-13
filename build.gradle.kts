@@ -82,6 +82,14 @@ repositories {
     maven {
         url = uri("https://repo.repsy.io/mvn/siredvin/default")
     }
+
+    maven {
+        name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
 }
 
 dependencies {
@@ -114,6 +122,8 @@ dependencies {
     modImplementation("curse.maven:techreborn-233564:3761009") {
         exclude(group="net.fabricmc.fabric-api")
     }
+
+    modCompileOnly("maven.modrinth:lifts:1.4.1-BETA+1.18")
 
 
     modRuntimeOnly("curse.maven:wthit-440979:3735869")
