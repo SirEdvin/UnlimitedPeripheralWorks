@@ -90,6 +90,26 @@ repositories {
             includeGroup("maven.modrinth")
         }
     }
+    maven {
+        name = "JitPack"
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.LlamaLad7")
+            includeGroup("com.github.mattidragon")
+        }
+    }
+    maven {
+        url = uri("https://kneelawk.com/maven/")
+        content {
+            includeGroup("com.kneelawk")
+        }
+    }
+    maven {
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+        content {
+            includeGroup("me.lucko")
+        }
+    }
 }
 
 dependencies {
@@ -122,12 +142,18 @@ dependencies {
     modImplementation("curse.maven:techreborn-233564:3761009") {
         exclude(group="net.fabricmc.fabric-api")
     }
-
-    modCompileOnly("maven.modrinth:lifts:1.4.1-BETA+1.18")
+    modCompileOnly("curse.maven:lifts-451554:3770970") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
 
 
     modRuntimeOnly("curse.maven:wthit-440979:3735869")
     modRuntimeOnly("curse.maven:spark-361579:3644349")
+    // For testing inventory logic
+    modRuntimeOnly("curse.maven:ExtendedDrawers-616602:3902207")
+    modRuntimeOnly("com.github.LlamaLad7:MixinExtras:0.0.10")
+    modRuntimeOnly("com.kneelawk:graphlib:0.2.4+1.18.2")
+    modRuntimeOnly("com.github.mattidragon:mconfig:1.2.0")
 
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:8.1.449")
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:8.1.449")
@@ -143,8 +169,8 @@ tasks {
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions { jvmTarget = javaVersion.toString() }
-        sourceCompatibility = javaVersion.toString()
-        targetCompatibility = javaVersion.toString()
+//        sourceCompatibility = javaVersion.toString()
+//        targetCompatibility = javaVersion.toString()
     }
     jar { from("LICENSE") { rename { "${it}_${base.archivesName}" } } }
     processResources {
