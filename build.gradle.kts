@@ -60,6 +60,7 @@ loom {
 
 sourceSets.main.configure {
     resources.srcDir("src/generated/resources")
+    kotlin.exclude("**/integrations/lifts/**")
 }
 
 repositories {
@@ -110,6 +111,7 @@ repositories {
             includeGroup("me.lucko")
         }
     }
+    mavenLocal()
 }
 
 dependencies {
@@ -124,9 +126,9 @@ dependencies {
     val fabricKotlinVersion: String by project
     modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion")
 
-    modImplementation("com.github.cc-tweaked:cc-restitched:v1.18.2-1.100.5-ccr")
-    modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3671141")
-    modImplementation("siredvin.site:Peripheralium:0.1.1") {
+    modImplementation("com.github.cc-tweaked:cc-restitched:v1.19.1-1.101.2-ccr")
+    modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3960064")
+    modImplementation("siredvin.site:Peripheralium:0.2.1") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
@@ -136,27 +138,27 @@ dependencies {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("curse.maven:reborncore-237903:3761010")  {
+    modImplementation("curse.maven:reborncore-237903:3958647")  {
         exclude(group="net.fabricmc.fabric-api")
     }
-    modImplementation("curse.maven:techreborn-233564:3761009") {
+    modImplementation("curse.maven:techreborn-233564:3958646") {
         exclude(group="net.fabricmc.fabric-api")
     }
-    modCompileOnly("curse.maven:lifts-451554:3770970") {
-        exclude(group="net.fabricmc.fabric-api")
-    }
+//    modCompileOnly("curse.maven:lifts-451554:3770970") {
+//        exclude(group="net.fabricmc.fabric-api")
+//    }
 
 
-    modRuntimeOnly("curse.maven:wthit-440979:3735869")
-    modRuntimeOnly("curse.maven:spark-361579:3644349")
+//    modRuntimeOnly("curse.maven:wthit-440979:3735869")
+//    modRuntimeOnly("curse.maven:spark-361579:3644349")
     // For testing inventory logic
-    modRuntimeOnly("curse.maven:ExtendedDrawers-616602:3902207")
-    modRuntimeOnly("com.github.LlamaLad7:MixinExtras:0.0.10")
-    modRuntimeOnly("com.kneelawk:graphlib:0.2.4+1.18.2")
-    modRuntimeOnly("com.github.mattidragon:mconfig:1.2.0")
+//    modRuntimeOnly("curse.maven:ExtendedDrawers-616602:3902207")
+//    modRuntimeOnly("com.github.LlamaLad7:MixinExtras:0.0.10")
+//    modRuntimeOnly("com.kneelawk:graphlib:0.2.4+1.18.2")
+//    modRuntimeOnly("com.github.mattidragon:mconfig:1.2.0")
 
-    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:8.1.449")
-    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:8.1.449")
+//    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:8.1.449")
+//    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:8.1.449")
 }
 
 tasks {

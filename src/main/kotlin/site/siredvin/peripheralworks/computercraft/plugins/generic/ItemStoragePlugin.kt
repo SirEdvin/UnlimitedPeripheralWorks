@@ -43,8 +43,11 @@ class ItemStoragePlugin(private val level: Level, private val storage: Storage<I
                 return null
             val itemStorage = ItemStorage.SIDED.find(level, pos, side) ?: return null
             Transaction.openOuter().use {
-                val size = itemStorage.iterable(it).count()
-                if (size == 0)
+                var counting = 0
+                itemStorage.iterator().forEach { _ ->
+                    counting++
+                }
+                if (counting == 0)
                     return null
             }
             return ItemStoragePlugin(level, itemStorage)
@@ -59,7 +62,7 @@ class ItemStoragePlugin(private val level: Level, private val storage: Storage<I
         val result: MutableList<Map<String, *>> = mutableListOf()
         val transaction = Transaction.openOuter()
         transaction.use {
-            storage.iterator(transaction).forEach {
+            storage.iterator().forEach {
                 if (!it.isResourceBlank)
                     result.add(ItemData.fill(HashMap(), it.resource.toStack()))
             }

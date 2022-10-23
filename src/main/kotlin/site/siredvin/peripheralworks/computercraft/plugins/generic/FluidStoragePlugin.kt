@@ -49,15 +49,12 @@ class FluidStoragePlugin(private val level: Level, private val storage: Storage<
     @LuaFunction(mainThread = true)
     fun tanks(): List<Map<String, *>> {
         val data: MutableList<Map<String, *>> = mutableListOf()
-        val transaction = Transaction.openOuter()
-        transaction.use {
-            storage.iterator(transaction).forEach {
-                data.add(hashMapOf(
-                    "name" to Registry.FLUID.getKey(it.resource.fluid).toString(),
-                    "amount" to it.amount / FORGE_COMPACT_DEVIDER,
-                    "capacity" to it.capacity / FORGE_COMPACT_DEVIDER
-                ))
-            }
+        storage.iterator().forEach {
+            data.add(hashMapOf(
+                "name" to Registry.FLUID.getKey(it.resource.fluid).toString(),
+                "amount" to it.amount / FORGE_COMPACT_DEVIDER,
+                "capacity" to it.capacity / FORGE_COMPACT_DEVIDER
+            ))
         }
         return data
     }

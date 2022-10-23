@@ -30,8 +30,8 @@
   "depends": {
     "fabricloader": ">=0.13.3",
     "fabric": "*",
-    "minecraft": "1.18.x",
+    "minecraft": "1.19.x",
     "java": ">=17",
-    "peripheralium": ">=0.1.1"
+    "peripheralium": ">=0.2.1"
   }
 }
