@@ -1,16 +1,21 @@
 package site.siredvin.peripheralworks.computercraft
 
 import dan200.computercraft.api.peripheral.IPeripheral
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Registry
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
+import site.siredvin.peripheralium.extra.plugins.FluidStoragePlugin
+import site.siredvin.peripheralium.extra.plugins.InventoryPlugin
+import site.siredvin.peripheralium.extra.plugins.ItemStoragePlugin
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.computercraft.plugins.generic.FluidStoragePlugin
-import site.siredvin.peripheralworks.computercraft.plugins.generic.InventoryPlugin
-import site.siredvin.peripheralworks.computercraft.plugins.generic.ItemStoragePlugin
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
 
 object ComputerCraftProxy {
@@ -21,10 +26,61 @@ object ComputerCraftProxy {
         PLUGIN_PROVIDERS.sort()
     }
 
+    class FluidStorageProvider: PeripheralPluginProvider {
+        override val pluginType: String
+            get() = FluidStoragePlugin.PLUGIN_TYPE
+
+        override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            if (!PeripheralWorksConfig.enableGenericFluidStorage)
+                return null
+            val fluidStorage = FluidStorage.SIDED.find(level, pos, side) ?: return null
+            return FluidStoragePlugin(level, fluidStorage)
+        }
+
+    }
+
+    class ItemStorageProvider: PeripheralPluginProvider {
+        override val pluginType: String
+            get() = ItemStoragePlugin.PLUGIN_TYPE
+        override val priority: Int
+            get() = 200
+        override val conflictWith: Set<String>
+            get() = setOf(InventoryPlugin.PLUGIN_TYPE)
+
+        override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            if (!PeripheralWorksConfig.enableGenericItemStorage)
+                return null
+            val itemStorage = ItemStorage.SIDED.find(level, pos, side) ?: return null
+            Transaction.openOuter().use {
+                val size = itemStorage.iterable(it).count()
+                if (size == 0)
+                    return null
+            }
+            return ItemStoragePlugin(level, itemStorage)
+        }
+    }
+
+    class InventoryProvider: PeripheralPluginProvider {
+        override val pluginType: String
+            get() = InventoryPlugin.PLUGIN_TYPE
+        override val conflictWith: Set<String>
+            get() = setOf(ItemStoragePlugin.PLUGIN_TYPE)
+
+        override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            if (!PeripheralWorksConfig.enableGenericInventory)
+                return null
+            val blockEntity = level.getBlockEntity(pos) ?: return null
+            val itemStorage = ExtractorProxy.extractCCItemStorage(level, blockEntity) ?: return null
+            if (itemStorage.size() == 0)
+                return null
+            return InventoryPlugin(level, itemStorage)
+        }
+    }
+
     init {
-        addProvider(FluidStoragePlugin.Provider())
-        addProvider(InventoryPlugin.Provider())
-        addProvider(ItemStoragePlugin.Provider())
+        addProvider(FluidStorageProvider())
+        addProvider(InventoryProvider())
+        addProvider(ItemStorageProvider())
         addProvider(SpecificPluginProvider())
     }
 

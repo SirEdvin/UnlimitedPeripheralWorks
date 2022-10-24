@@ -110,6 +110,7 @@ repositories {
             includeGroup("me.lucko")
         }
     }
+    mavenLocal()
 }
 
 dependencies {
@@ -126,7 +127,7 @@ dependencies {
 
     modImplementation("com.github.cc-tweaked:cc-restitched:v1.18.2-1.100.5-ccr")
     modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3671141")
-    modImplementation("siredvin.site:Peripheralium:0.1.1") {
+    modImplementation("siredvin.site:Peripheralium:0.3.0-${minecraftVersion}") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
