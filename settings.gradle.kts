@@ -11,3 +11,5 @@ pluginManagement {
         kotlin("jvm").version(kotlinVersion)
     }
 }
+
+rootProject.name = "UnlimitedPeripheralWorks"
