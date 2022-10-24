@@ -10,9 +10,9 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.RailShape
 import net.minecraft.world.phys.Vec3
 import site.siredvin.peripheralium.common.MinecartHelpers
+import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
 import site.siredvin.peripheralium.util.MergedContainer
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralworks.computercraft.plugins.generic.AbstractInventoryPlugin
 import java.util.*
 
 class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): AbstractInventoryPlugin()  {
