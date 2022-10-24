@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
+import site.siredvin.peripheralium.util.TextBookUtils
 import site.siredvin.peripheralium.util.assertBetween
-import site.siredvin.peripheralworks.util.TextBookUtils
 import java.util.*
 import java.util.function.Predicate
 
@@ -52,7 +52,7 @@ class LecternPlugin(private val target: LecternBlockEntity): IPeripheralPlugin {
     @LuaFunction(mainThread = true)
     fun getActivePage(): Int {
         assertBook()
-        return target.page
+        return target.page + 1
     }
 
     @LuaFunction(mainThread = true)

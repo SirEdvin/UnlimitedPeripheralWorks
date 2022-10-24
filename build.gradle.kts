@@ -128,7 +128,7 @@ dependencies {
 
     modImplementation("com.github.cc-tweaked:cc-restitched:v1.19.1-1.101.2-ccr")
     modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3960064")
-    modImplementation("siredvin.site:Peripheralium:0.2.2") {
+    modImplementation("siredvin.site:Peripheralium:0.3.0-${minecraftVersion}") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
