@@ -12,6 +12,7 @@ import net.minecraft.network.chat.TextComponent
 import net.minecraft.network.chat.TranslatableComponent
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.util.assertBetween
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 
 class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
@@ -38,9 +39,7 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
         return entity.liftShaft!!.size - index
     }
 
-    private fun getLiftName(index: Int, lift: LiftBlockEntity): Component {
-        if (lift.liftName != null)
-            return TextComponent(lift.liftName!!)
+    private fun getLiftNameRaw(index: Int): Component {
         val floor = reverseNumber(index)
         val suffix = when (floor) {
             1 -> "st"
@@ -51,6 +50,12 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
 
         return TextComponent(floor.toString()).append(TranslatableComponent("screen.lifts.number.$suffix"))
             .append(" ").append(TranslatableComponent("screen.lifts.common.floor") )
+    }
+
+    private fun getLiftName(index: Int, lift: LiftBlockEntity): Component {
+        if (lift.liftName != null)
+            return TextComponent(lift.liftName!!)
+        return getLiftNameRaw(index)
     }
 
     private fun toLuaBase(index: Int, lift: LiftBlockEntity): MutableMap<String, Any?> {
@@ -97,13 +102,28 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
     }
 
     @LuaFunction(mainThread = true)
+    fun getFloorName(index: Int): String {
+        assertBetween(index, 1, Int.MAX_VALUE, "Floor should be positive integer")
+        val realIndex = reverseNumber(index)
+        if (entity.liftShaft == null)
+            return getLiftNameRaw(realIndex).string
+        val maxFloor = entity.liftShaft!!.lifts.size
+        assertBetween(index, 1, maxFloor, "There is only $maxFloor present")
+        entity.liftShaft!!.lifts.forEachIndexed { internal_index, liftBlockEntity ->
+            if (internal_index == realIndex)
+                return getLiftName(realIndex, liftBlockEntity).string
+        }
+        return getLiftNameRaw(realIndex).string
+    }
+
+    @LuaFunction(mainThread = true)
     fun getCurrentFloor(): MethodResult {
         if (entity.liftShaft == null)
             return MethodResult.of(null, "Lift shaft are not exists")
 
         entity.liftShaft!!.lifts.forEachIndexed { index, liftBlockEntity ->
             if (liftBlockEntity.isPlatformHere)
-                return MethodResult.of(getLiftName(index, liftBlockEntity).string)
+                return MethodResult.of(reverseNumber(index))
         }
         return MethodResult.of(null, "Seems platform on the way")
     }
