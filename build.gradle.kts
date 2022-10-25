@@ -23,6 +23,7 @@ val modVersion: String by project
 version = modVersion
 val mavenGroup: String by project
 group = mavenGroup
+val minecraftVersion: String by project
 
 fun getenv(path: String = ".env"): Map<String, String> {
     val env = hashMapOf<String, String>()
@@ -115,7 +116,6 @@ repositories {
 }
 
 dependencies {
-    val minecraftVersion: String by project
     minecraft("com.mojang:minecraft:$minecraftVersion")
     val yarnMappings: String by project
     mappings(loom.officialMojangMappings())
@@ -217,7 +217,7 @@ curseforge {
             changelogType = "markdown"
         }
         mainArtifact(tasks.remapJar.get().archivePath, closureOf<CurseArtifact> {
-            displayName = "UnlimitedPeripheralWorks $version"
+            displayName = "UnlimitedPeripheralWorks $version $minecraftVersion"
             relations(closureOf<CurseRelation> {
                 requiredDependency("cc-restitched")
                 requiredDependency("forge-config-api-port-fabric")
