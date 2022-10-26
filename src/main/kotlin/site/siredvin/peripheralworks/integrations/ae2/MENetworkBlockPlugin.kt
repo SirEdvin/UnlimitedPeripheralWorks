@@ -4,7 +4,7 @@ import appeng.api.config.Actionable
 import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
-import appeng.blockentity.misc.InterfaceBlockEntity
+import appeng.blockentity.grid.AENetworkBlockEntity
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
@@ -32,7 +32,7 @@ import java.util.*
 import java.util.function.Predicate
 import kotlin.math.min
 
-class MEInterfacePlugin(private val level: Level, private val entity: InterfaceBlockEntity): IPeripheralPlugin {
+class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity): IPeripheralPlugin {
 
     /*
     Still todo:
@@ -61,9 +61,9 @@ class MEInterfacePlugin(private val level: Level, private val entity: InterfaceB
             if (!Configuration.enableMEInterface)
                 return null
             val entity = level.getBlockEntity(pos)
-            if (entity !is InterfaceBlockEntity)
+            if (entity !is AENetworkBlockEntity)
                 return null
-            return MEInterfacePlugin(level, entity)
+            return MENetworkBlockPlugin(level, entity)
         }
     }
 

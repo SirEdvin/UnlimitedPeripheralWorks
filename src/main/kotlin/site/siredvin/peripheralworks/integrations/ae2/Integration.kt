@@ -6,7 +6,7 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 class Integration: Runnable {
     override fun run() {
         PeripheralWorksConfig.registerIntegrationConfiguration("ae2", Configuration)
-        ComputerCraftProxy.addProvider(MEInterfacePlugin.Provider())
+        ComputerCraftProxy.addProvider(MENetworkBlockPlugin.Provider())
     }
 
 }
