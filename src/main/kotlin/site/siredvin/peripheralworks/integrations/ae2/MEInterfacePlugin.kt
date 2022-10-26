@@ -34,6 +34,15 @@ import kotlin.math.min
 
 class MEInterfacePlugin(private val level: Level, private val entity: InterfaceBlockEntity): IPeripheralPlugin {
 
+    /*
+    Still todo:
+        - get information about crafting CPUs
+        - get information about available patterns
+        - schedule crafting task
+        - information about current crafting tasks
+        - ability to disable crafting tasks
+     */
+
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }
