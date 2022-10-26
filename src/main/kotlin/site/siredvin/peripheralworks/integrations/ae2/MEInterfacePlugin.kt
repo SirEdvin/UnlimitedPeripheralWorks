@@ -268,4 +268,33 @@ class MEInterfacePlugin(private val level: Level, private val entity: InterfaceB
         return insertedAmount / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
     }
 
+    @LuaFunction(mainThread = true)
+    fun getEnergy(): Double {
+        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        return energyService.storedPower
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getEnergyCapacity(): Double {
+        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        return energyService.maxStoredPower
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getAverageEnergyDemand(): Double {
+        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        return energyService.avgPowerUsage
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getAverageEnergyIncome(): Double {
+        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        return energyService.avgPowerInjection
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getChannelEnergyDemand(): Double {
+        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        return energyService.channelPowerUsage
+    }
 }
