@@ -21,6 +21,7 @@ object PeripheralWorks: ModInitializer {
         // Load all integrations
         Platform.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("lifts").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
         // Register configuration
         // Pretty important to setup configuration after integration loading!
         ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)

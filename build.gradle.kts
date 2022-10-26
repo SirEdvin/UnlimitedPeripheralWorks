@@ -147,6 +147,10 @@ dependencies {
         exclude(group="net.fabricmc.fabric-api")
     }
 
+    modImplementation("curse.maven:ae2-223794:4023496") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
+
 
     modRuntimeOnly("curse.maven:wthit-440979:3735869")
     modRuntimeOnly("curse.maven:spark-361579:3644349")

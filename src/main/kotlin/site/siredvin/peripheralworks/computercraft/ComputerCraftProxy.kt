@@ -88,10 +88,12 @@ object ComputerCraftProxy {
         val entity = level.getBlockEntity(pos)
         val state = level.getBlockState(pos)
         val plugins: MutableMap<String, IPeripheralPlugin> = mutableMapOf()
+        val deniedPluginTypes: MutableSet<String> = mutableSetOf()
 
         PLUGIN_PROVIDERS.forEach {
-            if (!plugins.containsKey(it.pluginType) && !it.conflictWith.any { pluginType -> plugins.containsKey(pluginType) }) {
+            if (!plugins.containsKey(it.pluginType) && !deniedPluginTypes.contains(it.pluginType) && !it.conflictWith.any { pluginType -> plugins.containsKey(pluginType) }) {
                 val plugin = it.provide(level, pos, side)
+                deniedPluginTypes.addAll(it.conflictWith)
                 if (plugin != null) {
                     plugins[plugin.additionalType ?: it.pluginType] = plugin
                 }

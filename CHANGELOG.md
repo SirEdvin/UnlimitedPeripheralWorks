@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ae2` integration
+
 ## [0.2.0] - 25-10-22
 
 ### Added
