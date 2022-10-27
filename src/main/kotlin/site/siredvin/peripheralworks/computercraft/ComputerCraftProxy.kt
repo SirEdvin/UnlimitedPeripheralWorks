@@ -93,9 +93,9 @@ object ComputerCraftProxy {
         PLUGIN_PROVIDERS.forEach {
             if (!plugins.containsKey(it.pluginType) && !deniedPluginTypes.contains(it.pluginType) && !it.conflictWith.any { pluginType -> plugins.containsKey(pluginType) }) {
                 val plugin = it.provide(level, pos, side)
-                deniedPluginTypes.addAll(it.conflictWith)
                 if (plugin != null) {
                     plugins[plugin.additionalType ?: it.pluginType] = plugin
+                    deniedPluginTypes.addAll(it.conflictWith)
                 }
             }
         }

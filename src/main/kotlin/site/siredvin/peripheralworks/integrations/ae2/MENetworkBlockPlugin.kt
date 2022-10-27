@@ -4,6 +4,9 @@ import appeng.api.config.Actionable
 import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
+import appeng.api.stacks.AEKey
+import appeng.api.stacks.GenericStack
+import appeng.api.storage.AEKeyFilter
 import appeng.blockentity.grid.AENetworkBlockEntity
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
@@ -55,7 +58,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             get() = setOf(ItemStoragePlugin.PLUGIN_TYPE, FluidStoragePlugin.PLUGIN_TYPE)
 
         override val priority: Int
-            get() = 10
+            get() = 1000
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             if (!Configuration.enableMEInterface)
@@ -65,6 +68,19 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
                 return null
             return MENetworkBlockPlugin(level, entity)
         }
+    }
+
+    fun genericStackToMap(stack: GenericStack): MutableMap<String, Any> {
+        if (stack.what is AEItemKey) {
+            val base = LuaRepresentation.forItemStack((stack.what as AEItemKey).toStack(stack.amount.toInt()))
+            base["type"] = "item"
+            return base
+        }
+        val base = mutableMapOf<String, Any>()
+        base["type"] = "fluid"
+        base["name"] = Registry.FLUID.getKey((stack.what as AEFluidKey).fluid).toString()
+        base["count"] = stack.amount.toInt() / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
+        return base
     }
 
     @LuaFunction(mainThread = true)
@@ -305,5 +321,100 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     fun getChannelEnergyDemand(): Double {
         val energyService = entity.mainNode.grid?.energyService ?: return 0.0
         return energyService.channelPowerUsage
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getChannelInformation(): Map<String, Any> {
+        val pathingService = entity.mainNode.grid?.pathingService ?: return emptyMap()
+        return mapOf(
+            "maxChannels" to pathingService.channelMode.adHocNetworkChannels,
+            "usedChannels" to pathingService.usedChannels,
+        )
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getCraftingCPUs(): List<Map<String, *>> {
+        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val data: MutableList<Map<String, *>> = mutableListOf()
+        craftingService.cpus.forEach {
+            val cpuInformation = mutableMapOf<String, Any>()
+            if (it.name != null)
+                cpuInformation["name"] = it.name.toString()
+            cpuInformation["capacity"] = 1 + it.coProcessors
+            cpuInformation["storage"] = it.availableStorage
+            cpuInformation["isBusy"] = it.isBusy
+            data.add(cpuInformation)
+        }
+        return data
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getCraftableItems(): List<Map<String, *>> {
+        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val data: MutableList<Map<String, *>> = mutableListOf()
+        craftingService.getCraftables { it is AEItemKey }.forEach {
+            data.add(LuaRepresentation.forItem((it as AEItemKey).item))
+        }
+        return data
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getCraftableFluids(): List<Map<String, *>> {
+        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val data: MutableList<Map<String, *>> = mutableListOf()
+        craftingService.getCraftables { it is AEFluidKey }.forEach {
+            data.add(mapOf(
+                "name" to Registry.FLUID.getKey((it as AEFluidKey).fluid).toString(),
+            ))
+        }
+        return data
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getPatternsFor(mode: String, id_key: String): List<Map<String, *>> {
+        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val key: AEKey = when (mode) {
+            "fluid" -> {
+                val fluid = Registry.FLUID.get(ResourceLocation(id_key))
+                AEFluidKey.of(fluid)
+            }
+            "item" -> {
+                val item = Registry.ITEM.get(ResourceLocation(id_key))
+                AEItemKey.of(item)
+            }
+            else -> {
+                throw LuaException("first argument should be 'fluid' or 'item'")
+            }
+        }
+        val patterns = craftingService.getCraftingFor(key)
+        val data = mutableListOf<Map<String, *>>()
+        patterns.forEach { pattern ->
+            val patternRepresentation = mutableMapOf<String, Any>()
+            val outputs = mutableListOf<Map<String, Any>>()
+            val inputs = mutableListOf<Map<String, Any>>()
+            pattern.outputs.forEach {outputs.add(genericStackToMap(it))}
+            pattern.inputs.forEach {
+                val inputData: MutableMap<String, Any>
+                if (it.possibleInputs.size == 1) {
+                    inputData = genericStackToMap(it.possibleInputs[0])
+                    inputData["count"] = (inputData["count"] as Int) * it.multiplier
+                } else {
+                    val inputVariants = mutableListOf<Map<String, Any>>()
+                    it.possibleInputs.forEach {pInput ->
+                        val pInputResult = genericStackToMap(pInput)
+                        pInputResult["count"] = (pInputResult["count"] as Int) * it.multiplier
+                        inputVariants.add(pInputResult)
+                    }
+                    inputData = mutableMapOf(
+                        "variants" to inputVariants
+                    )
+                }
+                inputs.add(inputData)
+            }
+            patternRepresentation["inputs"] = inputs
+            patternRepresentation["outputs"] = outputs
+            data.add(patternRepresentation)
+        }
+        return data
     }
 }
