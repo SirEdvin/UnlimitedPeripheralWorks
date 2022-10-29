@@ -1,6 +1,8 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.config.Actionable
+import appeng.api.networking.crafting.CalculationStrategy
+import appeng.api.networking.crafting.ICraftingSimulationRequester
 import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
@@ -25,30 +27,30 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.Fluids
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.api.peripheral.IPluggablePeripheral
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.common.configuration.PeripheraliumConfig
 import site.siredvin.peripheralium.extra.plugins.FluidStoragePlugin
 import site.siredvin.peripheralium.extra.plugins.ItemStoragePlugin
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.CRAFTING_JOB_EXECUTOR
+import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
+import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMap
+import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.min
 
 class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity): IPeripheralPlugin {
-
-    /*
-    Still todo:
-        - get information about crafting CPUs
-        - get information about available patterns
-        - schedule crafting task
-        - information about current crafting tasks
-        - ability to disable crafting tasks
-     */
-
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }
+    private var _connectedPeripheral: IPluggablePeripheral? = null
+
+    override var connectedPeripheral: IPluggablePeripheral?
+        get() = this._connectedPeripheral
+        set(value) { this._connectedPeripheral = value }
 
     class Provider: PeripheralPluginProvider {
         override val pluginType: String
@@ -70,32 +72,11 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         }
     }
 
-    fun genericStackToMap(stack: GenericStack): MutableMap<String, Any> {
-        if (stack.what is AEItemKey) {
-            val base = LuaRepresentation.forItemStack((stack.what as AEItemKey).toStack(stack.amount.toInt()))
-            base["type"] = "item"
-            return base
-        }
-        val base = mutableMapOf<String, Any>()
-        base["type"] = "fluid"
-        base["name"] = Registry.FLUID.getKey((stack.what as AEFluidKey).fluid).toString()
-        base["count"] = stack.amount.toInt() / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
-        return base
-    }
-
     @LuaFunction(mainThread = true)
     fun items(): MethodResult {
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
         val items = mutableListOf<Map<String, Any>>()
-        inventory.availableStacks.forEach {
-            val aeKey = it.key
-            if (aeKey is AEItemKey) {
-                val data = LuaRepresentation.forItemStack(aeKey.toStack(it.longValue.toInt()))
-                data.remove("maxStackSize")
-                items.add(data)
-            }
-        }
-        return MethodResult.of(items)
+        return MethodResult.of(keyCounterToLua(inventory.availableStacks, {it is AEItemKey}))
     }
 
     @LuaFunction(mainThread = true)
@@ -189,17 +170,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     @LuaFunction(mainThread = true)
     fun tanks(): List<Map<String, *>> {
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
-        val items = mutableListOf<Map<String, Any>>()
-        inventory.availableStacks.forEach {
-            val aeKey = it.key
-            if (aeKey is AEFluidKey) {
-                items.add(mapOf(
-                    "name" to Registry.FLUID.getKey(aeKey.fluid).toString(),
-                    "amount" to it.longValue / FluidStoragePlugin.FORGE_COMPACT_DEVIDER,
-                ))
-            }
-        }
-        return items
+        return keyCounterToLua(inventory.availableStacks, {it is AEFluidKey})
     }
 
     @LuaFunction(mainThread = true)
@@ -373,19 +344,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     @LuaFunction(mainThread = true)
     fun getPatternsFor(mode: String, id_key: String): List<Map<String, *>> {
         val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
-        val key: AEKey = when (mode) {
-            "fluid" -> {
-                val fluid = Registry.FLUID.get(ResourceLocation(id_key))
-                AEFluidKey.of(fluid)
-            }
-            "item" -> {
-                val item = Registry.ITEM.get(ResourceLocation(id_key))
-                AEItemKey.of(item)
-            }
-            else -> {
-                throw LuaException("first argument should be 'fluid' or 'item'")
-            }
-        }
+        val key: AEKey = buildKey(mode, id_key)
         val patterns = craftingService.getCraftingFor(key)
         val data = mutableListOf<Map<String, *>>()
         patterns.forEach { pattern ->
@@ -416,5 +375,18 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             data.add(patternRepresentation)
         }
         return data
+    }
+
+    @LuaFunction(mainThread = false)
+    fun scheduleTask(computer: IComputerAccess, mode: String, id_key: String, amount: Optional<Long>): MethodResult {
+        val craftingService = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
+
+        val key = buildKey(mode, id_key)
+        val callback = CraftingCallback(
+            this.connectedPeripheral!!.connectedComputers, craftingService, key,
+            amount.orElse(1), IActionSource.ofMachine(entity), level
+        )
+        CRAFTING_JOB_EXECUTOR.submit(callback)
+        return MethodResult.pullEvent(CraftingCallback.COMPLETE, callback)
     }
 }
