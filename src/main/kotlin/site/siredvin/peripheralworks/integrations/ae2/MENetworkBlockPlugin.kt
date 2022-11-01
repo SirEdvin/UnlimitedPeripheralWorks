@@ -2,13 +2,10 @@ package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.config.Actionable
 import appeng.api.networking.crafting.CalculationStrategy
-import appeng.api.networking.crafting.ICraftingSimulationRequester
 import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
 import appeng.api.stacks.AEKey
-import appeng.api.stacks.GenericStack
-import appeng.api.storage.AEKeyFilter
 import appeng.blockentity.grid.AENetworkBlockEntity
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
@@ -33,8 +30,8 @@ import site.siredvin.peripheralium.common.configuration.PeripheraliumConfig
 import site.siredvin.peripheralium.extra.plugins.FluidStoragePlugin
 import site.siredvin.peripheralium.extra.plugins.ItemStoragePlugin
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.peripheralworks.PeripheralWorks
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.CRAFTING_JOB_EXECUTOR
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMap
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
@@ -46,11 +43,6 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }
-    private var _connectedPeripheral: IPluggablePeripheral? = null
-
-    override var connectedPeripheral: IPluggablePeripheral?
-        get() = this._connectedPeripheral
-        set(value) { this._connectedPeripheral = value }
 
     class Provider: PeripheralPluginProvider {
         override val pluginType: String
@@ -378,15 +370,34 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     }
 
     @LuaFunction(mainThread = false)
-    fun scheduleTask(computer: IComputerAccess, mode: String, id_key: String, amount: Optional<Long>): MethodResult {
+    fun scheduleCrafting(mode: String, id_key: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
         val craftingService = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
 
         val key = buildKey(mode, id_key)
-        val callback = CraftingCallback(
-            this.connectedPeripheral!!.connectedComputers, craftingService, key,
-            amount.orElse(1), IActionSource.ofMachine(entity), level
-        )
-        CRAFTING_JOB_EXECUTOR.submit(callback)
-        return MethodResult.pullEvent(CraftingCallback.COMPLETE, callback)
+        try {
+            val source = IActionSource.ofMachine(entity)
+            val realAmount = amount.orElse(1)
+            val future = craftingService.beginCraftingCalculation(
+                level, { source }, key, realAmount,
+                CalculationStrategy.REPORT_MISSING_ITEMS
+            )
+            val plan = future.get()
+
+            if (!plan.missingItems().isEmpty) {
+                return MethodResult.of(false, "Missing items", keyCounterToLua(plan.missingItems()))
+            }
+            val realTargetCPU = if (targetCPU.isPresent) {
+                craftingService.cpus.first {
+                    it.name != null && it.name!!.equals(targetCPU.get())
+                }
+            } else {
+                null
+            }
+            craftingService.submitJob(plan, null, realTargetCPU, false, source)
+            return MethodResult.of(true)
+        } catch (e: Exception) {
+            PeripheralWorks.LOGGER.error(e)
+            return MethodResult.of(false, e)
+        }
     }
 }
