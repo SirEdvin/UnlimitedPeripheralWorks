@@ -127,7 +127,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
     modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
     modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion")
-    
+
     modImplementation("com.github.cc-tweaked:cc-restitched:v1.19.1-1.101.2-ccr")
     modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3960064")
     modImplementation("siredvin.site:Peripheralium:${peripheraliumVersion}-${minecraftVersion}") {
@@ -150,7 +150,7 @@ dependencies {
 //        exclude(group="net.fabricmc.fabric-api")
 //    }
 
-    modImplementation("curse.maven:ae2-223794:4023496") {
+    modImplementation("curse.maven:ae2-223794:4055594") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
@@ -214,7 +214,7 @@ curseforge {
         id = CURSEFORGE_ID
         releaseType = CURSEFORGE_RELEASE_TYPE
         addGameVersion("Fabric")
-        addGameVersion("1.18.2")
+        addGameVersion(minecraftVersion)
         try {
             changelog = "${project.changelog.get(project.version as String).withHeader(false).toText()}"
             changelogType = "markdown"
