@@ -116,19 +116,21 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:$minecraftVersion")
-    val yarnMappings: String by project
-    mappings(loom.officialMojangMappings())
-    val loaderVersion: String by project
-    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
     val fabricVersion: String by project
-    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
+    val loaderVersion: String by project
+    val yarnMappings: String by project
     val fabricKotlinVersion: String by project
-    modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion")
+    val peripheraliumVersion: String by project
 
+    minecraft("com.mojang:minecraft:$minecraftVersion")
+    mappings(loom.officialMojangMappings())
+    modImplementation("net.fabricmc:fabric-loader:$loaderVersion")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricVersion")
+    modImplementation("net.fabricmc:fabric-language-kotlin:$fabricKotlinVersion")
+    
     modImplementation("com.github.cc-tweaked:cc-restitched:v1.19.1-1.101.2-ccr")
     modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3960064")
-    modImplementation("siredvin.site:Peripheralium:0.3.0-${minecraftVersion}") {
+    modImplementation("siredvin.site:Peripheralium:${peripheraliumVersion}-${minecraftVersion}") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
@@ -147,6 +149,10 @@ dependencies {
 //    modCompileOnly("curse.maven:lifts-451554:3770970") {
 //        exclude(group="net.fabricmc.fabric-api")
 //    }
+
+    modImplementation("curse.maven:ae2-223794:4023496") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
 
 
 //    modRuntimeOnly("curse.maven:wthit-440979:3735869")
