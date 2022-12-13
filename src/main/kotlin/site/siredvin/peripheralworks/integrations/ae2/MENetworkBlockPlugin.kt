@@ -67,7 +67,6 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     @LuaFunction(mainThread = true)
     fun items(): MethodResult {
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
-        val items = mutableListOf<Map<String, Any>>()
         return MethodResult.of(keyCounterToLua(inventory.availableStacks, {it is AEItemKey}))
     }
 
