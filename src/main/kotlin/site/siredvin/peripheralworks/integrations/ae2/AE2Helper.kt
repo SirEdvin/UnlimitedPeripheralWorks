@@ -36,28 +36,31 @@ object AE2Helper {
         return base
     }
 
-    fun keyCounterToLua(counter: KeyCounter, predicate: Predicate<AEKey> = ALWAYS, displayType: Boolean = false): MutableList<Map<String, Any>> {
-        val items = mutableListOf<Map<String, Any>>()
-        counter.forEach {
-            val aeKey = it.key
-            if (predicate.test(aeKey)) {
-                if (aeKey is AEItemKey) {
-                    val data = LuaRepresentation.forItemStack(aeKey.toStack(it.longValue.toInt()))
-                    data.remove("maxStackSize")
-                    if (displayType)
-                        data["type"] = "item"
-                    items.add(data)
-                } else if (aeKey is AEFluidKey) {
-                    val data = mutableMapOf(
-                        "name" to Registry.FLUID.getKey(aeKey.fluid).toString(),
-                        "amount" to it.longValue / FluidStoragePlugin.FORGE_COMPACT_DEVIDER,
-                    )
-                    if (displayType)
-                        data["type"] = "fluid"
+    fun keyCounterToLua(counter: KeyCounter, predicate: Predicate<AEKey> = ALWAYS, displayType: Boolean = false): List<Map<String, Any>> {
+        return counter
+            .mapNotNull { entry ->
+                val aeKey = entry.key
+                when {
+                    !predicate.test(aeKey) -> null
+                    aeKey is AEItemKey -> {
+                        val data = LuaRepresentation.forItemStack(aeKey.toStack(entry.longValue.toInt()))
+                        data.remove("maxStackSize")
+                        if (displayType)
+                            data["type"] = "item"
+                        data
+                    }
+                    aeKey is AEFluidKey -> {
+                        val data = mutableMapOf(
+                            "name" to Registry.FLUID.getKey(aeKey.fluid).toString(),
+                            "amount" to entry.longValue / FluidStoragePlugin.FORGE_COMPACT_DEVIDER,
+                        )
+                        if (displayType)
+                            data["type"] = "fluid"
+                        data
+                    }
+                    else -> null
                 }
             }
-        }
-        return items
     }
 
     fun buildKey(mode: String, id_key: String): AEKey {

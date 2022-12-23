@@ -24,7 +24,6 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.Fluids
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.api.peripheral.IPluggablePeripheral
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.common.configuration.PeripheraliumConfig
 import site.siredvin.peripheralium.extra.plugins.FluidStoragePlugin
@@ -67,7 +66,6 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     @LuaFunction(mainThread = true)
     fun items(): MethodResult {
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
-        val items = mutableListOf<Map<String, Any>>()
         return MethodResult.of(keyCounterToLua(inventory.availableStacks, {it is AEItemKey}))
     }
 
