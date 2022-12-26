@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- ix fluid tally in ME networks #6
+- Item Count with "item_storage" type is reported as 1 when there's more #4 (derived from Periperallium)
+- AE2 fluid amount unit inconsistency #8
+
 ## [0.2.1] - 2022-11-02
 
 ### Added
