@@ -1,4 +1,5 @@
 package site.siredvin.peripheralworks
+import aztech.modern_industrialization.ModernIndustrialization
 import dan200.computercraft.api.ComputerCraftAPI
 import net.fabricmc.api.ModInitializer
 import net.minecraftforge.api.ModLoadingContext
@@ -22,6 +23,7 @@ object PeripheralWorks: ModInitializer {
         Platform.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("lifts").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("modern_industrialization").ifPresent {(it as Runnable).run()}
         // Register configuration
         // Pretty important to setup configuration after integration loading!
         ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)

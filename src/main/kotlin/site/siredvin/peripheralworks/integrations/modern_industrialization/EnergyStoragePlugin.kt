@@ -1,6 +1,9 @@
-package site.siredvin.peripheralworks.integrations.team_reborn_energy
+package site.siredvin.peripheralworks.integrations.modern_industrialization
 
+import aztech.modern_industrialization.compat.megane.holder.EnergyComponentHolder
 import aztech.modern_industrialization.machines.blockentities.EnergyFromFluidMachineBlockEntity
+import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity
+import aztech.modern_industrialization.machines.components.EnergyComponent
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -9,7 +12,7 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import team.reborn.energy.api.EnergyStorage
 
-class EnergyStoragePlugin(private val energyStorage: EnergyStorage): IPeripheralPlugin {
+class EnergyStoragePlugin(private val energyStorage: EnergyComponent): IPeripheralPlugin {
 
     companion object {
         const val PLUGIN_TYPE = "energy_storage"
@@ -22,8 +25,10 @@ class EnergyStoragePlugin(private val energyStorage: EnergyStorage): IPeripheral
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             if (!Configuration.enableEnergyStorage)
                 return null
-            val energyStorage = EnergyStorage.SIDED.find(level, pos, side) ?: return null
-            return EnergyStoragePlugin(energyStorage)
+            val blockEntity = level.getBlockEntity(pos) ?: return null
+            if (blockEntity is EnergyComponentHolder)
+                return EnergyStoragePlugin(blockEntity.energyComponent)
+            return null
         }
 
     }
@@ -34,7 +39,7 @@ class EnergyStoragePlugin(private val energyStorage: EnergyStorage): IPeripheral
 
     @LuaFunction(mainThread = true)
     fun getEnergy(): Long {
-        return energyStorage.amount
+        return energyStorage.eu
     }
 
     @LuaFunction(mainThread = true)
@@ -44,6 +49,6 @@ class EnergyStoragePlugin(private val energyStorage: EnergyStorage): IPeripheral
 
     @LuaFunction
     fun getEnergyUnits(): String {
-        return ""
+        return "EU"
     }
 }
