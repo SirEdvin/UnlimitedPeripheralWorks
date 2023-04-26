@@ -36,6 +36,7 @@ import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMa
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
 import java.util.*
 import java.util.function.Predicate
+import kotlin.NoSuchElementException
 import kotlin.math.min
 
 class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity): IPeripheralPlugin {
@@ -300,7 +301,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         craftingService.cpus.forEach {
             val cpuInformation = mutableMapOf<String, Any>()
             if (it.name != null)
-                cpuInformation["name"] = it.name.toString()
+                cpuInformation["name"] = it.name!!.string
             cpuInformation["capacity"] = 1 + it.coProcessors
             cpuInformation["storage"] = it.availableStorage
             cpuInformation["isBusy"] = it.isBusy
@@ -367,35 +368,55 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         return data
     }
 
+    @LuaFunction(mainThread = true)
+    fun getActiveCraftings(): MethodResult {
+        val craftingService = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
+        val craftingList: MutableList<Map<String, Any>> = mutableListOf()
+        craftingService.cpus.forEach {
+            if (it.isBusy && it.jobStatus != null) {
+                val jobStatus = it.jobStatus!!
+                val baseMap = mutableMapOf(
+                    "target" to genericStackToMap(jobStatus.crafting),
+                    "amount" to jobStatus.totalItems,
+                    "progress" to jobStatus.progress
+                )
+                if (it.name != null) {
+                    baseMap["CPU"] = it.name!!.string
+                }
+                craftingList.add(baseMap)
+            }
+        }
+        return MethodResult.of(craftingList)
+    }
+
     @LuaFunction(mainThread = false)
     fun scheduleCrafting(mode: String, id_key: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
         val craftingService = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
 
         val key = buildKey(mode, id_key)
-        try {
-            val source = IActionSource.ofMachine(entity)
-            val realAmount = amount.orElse(1)
-            val future = craftingService.beginCraftingCalculation(
-                level, { source }, key, realAmount,
-                CalculationStrategy.REPORT_MISSING_ITEMS
-            )
-            val plan = future.get()
+        val source = IActionSource.ofMachine(entity)
+        val realAmount = amount.orElse(1)
+        val future = craftingService.beginCraftingCalculation(
+            level, { source }, key, realAmount,
+            CalculationStrategy.REPORT_MISSING_ITEMS
+        )
+        val plan = future.get()
 
-            if (!plan.missingItems().isEmpty) {
-                return MethodResult.of(false, "Missing items", keyCounterToLua(plan.missingItems()))
-            }
-            val realTargetCPU = if (targetCPU.isPresent) {
-                craftingService.cpus.first {
-                    it.name != null && it.name!!.equals(targetCPU.get())
-                }
-            } else {
-                null
-            }
-            craftingService.submitJob(plan, null, realTargetCPU, false, source)
-            return MethodResult.of(true)
-        } catch (e: Exception) {
-            PeripheralWorks.LOGGER.error(e)
-            return MethodResult.of(false, e)
+        if (!plan.missingItems().isEmpty) {
+            return MethodResult.of(false, "Missing items", keyCounterToLua(plan.missingItems()))
         }
+        val realTargetCPU = if (targetCPU.isPresent) {
+            try {
+                craftingService.cpus.first {
+                    it.name != null && it.name!!.string.equals(targetCPU.get())
+                }
+            } catch (e: NoSuchElementException) {
+                return MethodResult.of(null, "Cannot find target CPU")
+            }
+        } else {
+            null
+        }
+        craftingService.submitJob(plan, null, realTargetCPU, false, source)
+        return MethodResult.of(true)
     }
 }

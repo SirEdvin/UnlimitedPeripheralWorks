@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `getActiveCrafting` for ae2 integration
+
+### Fixed
+
+- CPU logic for ae2 now correctly works with names
+
 ## [0.2.1] - 2022-11-02
 
 ### Added

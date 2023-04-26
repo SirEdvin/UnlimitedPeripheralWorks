@@ -13,10 +13,6 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_GENERIC_ITEM_STORAGE.get()
     val enableGenericFluidStorage: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_GENERIC_FLUID_STORAGE.get()
-    val itemStorageTransferLimit: Long
-        get() = ConfigHolder.COMMON_CONFIG.ITEM_STORAGE_TRANSFER_LIMIT.get()
-    val fluidStorageTransferLimit: Long
-        get() = ConfigHolder.COMMON_CONFIG.FLUID_STORAGE_TRANSFER_LIMIT.get()
 
     val enableBeacon: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_BEACON.get()
