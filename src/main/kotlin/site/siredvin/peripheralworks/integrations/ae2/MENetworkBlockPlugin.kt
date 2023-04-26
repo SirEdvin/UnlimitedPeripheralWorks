@@ -395,7 +395,11 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
         val key = buildKey(mode, id_key)
         val source = IActionSource.ofMachine(entity)
-        val realAmount = amount.orElse(1)
+        val realAmount = if (mode == "item") {
+            amount.orElse(1)
+        } else {
+            amount.orElse(1000) * FluidStoragePlugin.FORGE_COMPACT_DEVIDER
+        }.toLong()
         val future = craftingService.beginCraftingCalculation(
             level, { source }, key, realAmount,
             CalculationStrategy.REPORT_MISSING_ITEMS
