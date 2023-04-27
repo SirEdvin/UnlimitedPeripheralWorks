@@ -286,8 +286,6 @@ modrinth {
         changelog.set("")
     }
     dependencies {
-        required.project("fabric-language-kotlin")
-        required.project("cc-restitched")
-        required.project("forge-config-api-port")
+        required.project("peripheralium")
     }
 }
