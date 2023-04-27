@@ -8,19 +8,58 @@ import dan200.computercraft.api.peripheral.IPeripheral
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
+import net.minecraft.core.BlockPos
 import net.minecraft.nbt.StringTag
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
+import site.siredvin.peripheralium.api.peripheral.IObservingPeripheralPlugin
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.api.peripheral.IPluggablePeripheral
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.TextBookUtils
 import site.siredvin.peripheralium.util.assertBetween
+import java.lang.ref.WeakReference
 import java.util.*
 import java.util.function.Predicate
 
 
-class LecternPlugin(private val target: LecternBlockEntity): IPeripheralPlugin {
+class LecternPlugin(private val target: LecternBlockEntity): IObservingPeripheralPlugin {
+
+    companion object {
+        val OBSERVED_LECTERNS: MutableMap<BlockPos, WeakHashMap<IPluggablePeripheral, Boolean>> = mutableMapOf()
+
+        fun sendEvent(pos: BlockPos, event: String, vararg arguments: Any) {
+            if (OBSERVED_LECTERNS.containsKey(pos)) {
+                val map = OBSERVED_LECTERNS[pos]!!
+                if (map.size == 0) {
+                    OBSERVED_LECTERNS.remove(pos)
+                } else {
+                    map.keys.forEach {
+                        it.queueEvent(event, *arguments)
+                    }
+                }
+            }
+        }
+
+        fun subscribe(pos: BlockPos, peripheral: IPluggablePeripheral) {
+            if (!OBSERVED_LECTERNS.containsKey(pos))
+                OBSERVED_LECTERNS[pos] = WeakHashMap()
+            OBSERVED_LECTERNS[pos]!![peripheral] = true
+        }
+
+        fun unsubscribe(pos: BlockPos, peripheral: IPluggablePeripheral) {
+            if (OBSERVED_LECTERNS.containsKey(pos))
+                OBSERVED_LECTERNS[pos]!!.remove(peripheral)
+        }
+    }
+
+    private var _connectedPeripheral: IPluggablePeripheral? = null
+    override var connectedPeripheral: IPluggablePeripheral?
+        get() = _connectedPeripheral
+        set(value) {
+            _connectedPeripheral = value
+        }
 
     private fun assertBook() {
         if (!target.hasBook())
@@ -161,5 +200,17 @@ class LecternPlugin(private val target: LecternBlockEntity): IPeripheralPlugin {
             it.commit()
         }
         return MethodResult.of(true)
+    }
+
+    override fun onFirstAttach() {
+        if (connectedPeripheral != null) {
+            subscribe(target.blockPos, _connectedPeripheral!!)
+        }
+    }
+
+    override fun onLastDetach() {
+        if (connectedPeripheral != null) {
+            unsubscribe(target.blockPos, _connectedPeripheral!!)
+        }
     }
 }

@@ -112,6 +112,21 @@ repositories {
             includeGroup("me.lucko")
         }
     }
+    // for reach entity attributes, required by Magna
+    maven {
+        url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+    maven {
+        name = "Ladysnake Mods"
+        url = uri("https://ladysnake.jfrog.io/artifactory/mods")
+        content {
+            includeGroup("io.github.ladysnake")
+            includeGroupByRegex("io\\.github\\.onyxstudios.*")
+        }
+    }
     mavenLocal()
 }
 
@@ -151,6 +166,20 @@ dependencies {
 //    }
 
     modImplementation("curse.maven:ae2-223794:4055594") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
+
+    modImplementation("curse.maven:modernindust-405388:4118259") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
+
+    modImplementation("com.github.Technici4n:magna:1.7.1-1.18") {
+        exclude(group="io.github.prospector")
+        exclude(group="me.shedaniel.cloth")
+        exclude(group="net.fabricmc.fabric-api")
+    }
+
+    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.5.0") {
         exclude(group="net.fabricmc.fabric-api")
     }
 

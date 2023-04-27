@@ -32,6 +32,6 @@
     "fabric": "*",
     "minecraft": "1.19.x",
     "java": ">=17",
-    "peripheralium": ">=0.4.17-1.19.2"
+    "peripheralium": ">=0.4.20-1.19.2"
   }
 }

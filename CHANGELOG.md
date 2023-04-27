@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2023-04-27
+### Added
+
+- `getActiveCrafting` for ae2 integration
+- Events for lectern integration
+- Modern industrialization integration
+
+### Fixed
+
+- CPU logic for ae2 now correctly works with names
+
 ## [0.2.2] - 2022-12-26
 ### Fixed
 - ix fluid tally in ME networks #6

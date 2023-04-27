@@ -14,11 +14,6 @@ import java.util.function.Predicate
 object AE2Helper {
 
     private val ALWAYS: Predicate<AEKey> = Predicate{ true }
-    val CRAFTING_JOB_EXECUTOR: ExecutorService = Executors.newCachedThreadPool(ThreadFactory {
-        val crafting = Thread(it, "AE Crafting Calculator for ComputerCraft")
-        crafting.isDaemon = true
-        return@ThreadFactory crafting
-    })
 
     init {
     }
