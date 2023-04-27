@@ -169,17 +169,21 @@ dependencies {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("curse.maven:modernindust-405388:4118259") {
+    modImplementation("curse.maven:modernindust-405388:4494075") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("com.github.Technici4n:magna:1.7.1-1.18") {
+    modImplementation("com.github.Technici4n:magna:1.8.1-1.19") {
         exclude(group="io.github.prospector")
         exclude(group="me.shedaniel.cloth")
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.5.0") {
+    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.6.0") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
+
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:7.0.72") {
         exclude(group="net.fabricmc.fabric-api")
     }
 

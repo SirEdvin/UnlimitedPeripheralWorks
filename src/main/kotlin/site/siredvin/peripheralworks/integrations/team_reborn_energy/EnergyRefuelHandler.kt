@@ -37,7 +37,7 @@ object EnergyRefuelHandler: TurtleRefuelEvent.Handler {
     @Subscribe
     fun onTurtleRefuel(event: TurtleRefuelEvent) {
         if (event.handler == null && Configuration.enableTurtleRefulWithEnergy) {
-            val storage = EnergyStorage.ITEM.find(event.stack, ContainerItemContext.withInitial(event.stack))
+            val storage = EnergyStorage.ITEM.find(event.stack, ContainerItemContext.withConstant(event.stack))
             if (storage != null && storage.amount > 0)
                 event.handler = this
         }
