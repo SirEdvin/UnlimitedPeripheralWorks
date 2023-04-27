@@ -42,7 +42,9 @@ class CraftingMachinePlugin(private val crafter: CrafterComponent): IPeripheralP
     @LuaFunction(mainThread = true)
     fun getCraftingInformation(): MethodResult {
         if (!crafter.hasActiveRecipe())
-            return MethodResult.of(null, "There is not crafting right now")
+            return MethodResult.of(mapOf(
+                "maxRecipeCost" to crafter.behavior.maxRecipeEu
+            ))
         return MethodResult.of(mapOf(
             "progress" to crafter.progress,
             "currentEfficiency" to crafter.efficiencyTicks,
