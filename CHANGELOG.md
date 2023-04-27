@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2023-04-27
 ### Added
 
 - `getActiveCrafting` for ae2 integration
+- Events for lectern integration
+- Modern industrialization integration
 
 ### Fixed
 
