@@ -18,12 +18,20 @@ public class LecternMixin {
 
     @Inject(method = "setBook(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)V", at = @At("TAIL"))
     public void setBook(ItemStack itemStack, Player player, CallbackInfo ci) {
-        LecternPlugin.Companion.sendEvent(
-                ((LecternBlockEntity)(Object)this).getBlockPos(),
-                "lectern_book_changed",
-                itemStack.getHoverName().getString(),
-                player.getName().getString()
-        );
+        if (player != null) {
+            LecternPlugin.Companion.sendEvent(
+                    ((LecternBlockEntity) (Object) this).getBlockPos(),
+                    "lectern_book_changed",
+                    itemStack.getHoverName().getString(),
+                    player.getName().getString()
+            );
+        } else {
+            LecternPlugin.Companion.sendEvent(
+                    ((LecternBlockEntity) (Object) this).getBlockPos(),
+                    "lectern_book_changed",
+                    itemStack.getHoverName().getString()
+            );
+        }
     }
 
     @Inject(method = "onBookItemRemove", at = @At("TAIL"))
