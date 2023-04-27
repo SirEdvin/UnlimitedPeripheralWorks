@@ -9,6 +9,7 @@ plugins {
     id("fabric-loom")
     id("com.matthewprenger.cursegradle") version "1.4.0"
     id("org.jetbrains.changelog") version "1.3.1"
+    id("com.modrinth.minotaur") version "2.+"
 
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm").version(kotlinVersion)
@@ -264,5 +265,29 @@ curseforge {
 project.afterEvaluate {
     tasks.getByName<CurseUploadTask>("curseforge${CURSEFORGE_ID}") {
         dependsOn(tasks.remapJar)
+    }
+}
+
+val MODRINTH_ID: String by project
+val MODRINTH_RELEASE_TYPE: String by project
+
+modrinth {
+    token.set(modrinthKey)
+    projectId.set(MODRINTH_ID)
+    versionNumber.set("${minecraftVersion}-${project.version}")
+    versionName.set("UnlimitedPeripheralWorks ${minecraftVersion} ${version}")
+    versionType.set(MODRINTH_RELEASE_TYPE)
+    uploadFile.set(tasks.remapJar.get())
+    gameVersions.set(listOf(minecraftVersion))
+    loaders.set(listOf("fabric")) // Must also be an array - no need to specify this if you're using Loom or ForgeGradl
+    try {
+        changelog.set("${project.changelog.get(project.version as String).withHeader(false).toText()}")
+    } catch (ignored: Exception) {
+        changelog.set("")
+    }
+    dependencies {
+        required.project("fabric-language-kotlin")
+        required.project("cc-restitched")
+        required.project("forge-config-api-port")
     }
 }
