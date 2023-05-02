@@ -9,10 +9,12 @@ import net.minecraft.world.level.block.PoweredRailBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.RailShape
 import net.minecraft.world.phys.Vec3
-import site.siredvin.peripheralium.common.MinecartHelpers
+import site.siredvin.peripheralium.api.storage.SlottedStorage
+import site.siredvin.peripheralium.api.storage.TargetableContainer
 import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
 import site.siredvin.peripheralium.util.MergedContainer
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.peripheralworks.utils.MinecartUtils
 import java.util.*
 
 class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): AbstractInventoryPlugin()  {
@@ -29,8 +31,8 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): A
             return state
         }
 
-    override val itemStorage: dan200.computercraft.shared.util.ItemStorage
-        get() = dan200.computercraft.shared.util.ItemStorage.wrap(MergedContainer(MinecartHelpers.getContainerMinecarts(level, pos)))
+    override val storage: SlottedStorage
+        get() = TargetableContainer(MergedContainer(MinecartUtils.getContainerMinecarts(level, pos)))
 
 
     @LuaFunction(mainThread = true)
@@ -55,13 +57,13 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): A
             RailShape.NORTH_WEST -> if (isReversed) Vec3(0.0, 0.0, -PUSH_POWER) else Vec3(-PUSH_POWER, 0.0, 0.0)
             RailShape.NORTH_EAST -> if (isReversed) Vec3(0.0, 0.0, -PUSH_POWER) else Vec3(PUSH_POWER, 0.0, 0.0)
         }
-        MinecartHelpers.getMinecarts(level, pos).filter { it.deltaMovement.length() == 0.0 }.forEach {
+        MinecartUtils.getMinecarts(level, pos).filter { it.deltaMovement.length() == 0.0 }.forEach {
             it.deltaMovement = moveVector
         }
     }
 
     @LuaFunction(mainThread = true, value = ["getMinecarts"])
     fun getMinecartsLua(): List<Map<String, Any>> {
-        return MinecartHelpers.getMinecarts(level, pos).map { LuaRepresentation.forEntity(it) }
+        return MinecartUtils.getMinecarts(level, pos).map { LuaRepresentation.forEntity(it) }
     }
 }

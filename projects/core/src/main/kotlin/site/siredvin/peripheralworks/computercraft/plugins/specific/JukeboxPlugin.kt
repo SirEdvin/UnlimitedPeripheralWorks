@@ -5,9 +5,6 @@ import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
-import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.Items
@@ -15,24 +12,27 @@ import net.minecraft.world.item.RecordItem
 import net.minecraft.world.level.block.JukeboxBlock
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.common.ExtractorProxy
+import site.siredvin.peripheralium.api.storage.ExtractorProxy
+import site.siredvin.peripheralium.api.storage.StorageUtils
+import site.siredvin.peripheralium.api.storage.TargetableContainer
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.peripheralium.xplat.XplatRegistries
 
 class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
 
     private fun assertDisc() {
-        if (target.record.isEmpty)
+        if (target.getItem(0).isEmpty)
             throw LuaException("Disc should present in jukebox")
     }
 
     private fun assertNoDisc() {
-        if (!target.record.isEmpty)
+        if (!target.getItem(0).isEmpty)
             throw LuaException("Jukebox should be empty")
     }
 
     @LuaFunction(mainThread = true)
     fun getDisc(): Map<String, Any>? {
-        val record = target.record
+        val record = target.getItem(0)
         if (record.isEmpty)
             return null
         return LuaRepresentation.forItemStack(record)
@@ -41,7 +41,7 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
     @LuaFunction(mainThread = true)
     fun replay() {
         assertDisc()
-        target.level!!.levelEvent(null, 1010, target.blockPos, Item.getId(target.record.item))
+        target.level!!.levelEvent(null, 1010, target.blockPos, Item.getId(target.getItem(0).item))
     }
 
     @LuaFunction(mainThread = true)
@@ -56,18 +56,12 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = ExtractorProxy.extractItemStorage(target.level!!, location.target)
+        val toStorage = ExtractorProxy.extractTargetableStorage(target.level!!, location.target)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
-        Transaction.openOuter().use {
-            val amount = toStorage.insert(ItemVariant.of(target.record), 1, it)
-            if (amount != 1L) {
-                it.abort()
-                return MethodResult.of(null, "Not enough space in target inventory")
-            }
-            target.clearContent()
-            it.commit()
-        }
+        val moved = TargetableContainer(target).moveTo(toStorage, 1, -1, StorageUtils.ALWAYS)
+        if (moved == 0)
+            return MethodResult.of(null, "Not enough space in target inventory")
         target.level!!.setBlockAndUpdate(target.blockPos, target.blockState.setValue(JukeboxBlock.HAS_RECORD, false))
         stop()
         return MethodResult.of(true)
@@ -80,24 +74,18 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractItemStorage(target.level!!, location.target)
+        val fromStorage = ExtractorProxy.extractStorage(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
-        val item = Registry.ITEM.get(ResourceLocation(targetItem))
+        val item = XplatRegistries.ITEMS.get(ResourceLocation(targetItem))
         if (item == Items.AIR)
             throw LuaException("Cannot find item $targetItem")
         if (item !is RecordItem)
             throw LuaException("Item should be a valid disc item")
 
-        Transaction.openOuter().use {
-            val amount = fromStorage.extract(ItemVariant.of(item), 1, it)
-            if (amount != 1L) {
-                it.abort()
-                return MethodResult.of(null, "Cannot find disc in desired inventory")
-            }
-            target.record = item.defaultInstance
-            it.commit()
-        }
+        val moved = TargetableContainer(target).moveFrom(fromStorage, 1, takePredicate = { it.`is`(item.asItem()) })
+        if (moved == 0)
+            return MethodResult.of(null, "Cannot find disc in desired inventory")
         target.level!!.setBlockAndUpdate(target.blockPos, target.blockState.setValue(JukeboxBlock.HAS_RECORD, true))
         replay()
         return MethodResult.of(true)

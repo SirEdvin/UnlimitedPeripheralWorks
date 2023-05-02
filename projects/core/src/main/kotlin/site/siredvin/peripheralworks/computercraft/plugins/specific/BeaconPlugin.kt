@@ -5,19 +5,15 @@ import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
-import net.minecraft.core.Registry
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
-import net.minecraft.world.item.Items
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BeaconBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.common.ExtractorProxy
+import site.siredvin.peripheralium.api.storage.ExtractorProxy
+import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import java.util.*
 import java.util.function.Predicate
@@ -62,7 +58,7 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
     }
 
     @LuaFunction(mainThread = true)
-    fun configure(computer: IComputerAccess, primaryPower: String, fromName: String, itemHint: Optional<String>, regenerationSecondary: Optional<Boolean>): MethodResult {
+    fun configure(computer: IComputerAccess, primaryPower: String, fromName: String, itemQuery: Optional<Any>, regenerationSecondary: Optional<Boolean>): MethodResult {
         var primaryEffect: MobEffect? = null
         for (i in 0..min(target.levels - 1, 2)) {
             primaryEffect = BeaconBlockEntity.BEACON_EFFECTS[i].find { it.descriptionId == primaryPower }
@@ -75,26 +71,18 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractItemStorage(target.level!!, location.target)
+        val fromStorage = ExtractorProxy.extractStorage(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
-        val itemPredicate = if (itemHint.isPresent) {
-            val item = Registry.ITEM.get(ResourceLocation(itemHint.get()))
-            if (item == Items.AIR)
-                throw LuaException("Cannot find item ${itemHint.get()}")
-            Predicate<ItemVariant> { it.isOf(item) }
+        val itemPredicate = if (itemQuery.isPresent) {
+            PeripheralPluginUtils.itemQueryToPredicate(itemQuery)
         } else {
-            Predicate<ItemVariant> { it.toStack().`is`(ItemTags.BEACON_PAYMENT_ITEMS) }
+            Predicate<ItemStack> { it.`is`(ItemTags.BEACON_PAYMENT_ITEMS) }
         }
 
-        Transaction.openOuter().use {
-            val extractableResource = StorageUtil.findExtractableResource(fromStorage, itemPredicate, it)
-                ?: return MethodResult.of(null, "Target storage cannot provide desired items")
-            val amount = fromStorage.extract(extractableResource, 1, it)
-            if (amount != 1L)
-                return MethodResult.of(null, "Target storage cannot provide desired items")
-            it.commit()
-        }
+        val extractedStack = fromStorage.takeItems(itemPredicate, 1)
+        if (extractedStack.isEmpty)
+            return MethodResult.of(null, "Target storage cannot provide desired items")
 
         target.primaryPower = primaryEffect
 

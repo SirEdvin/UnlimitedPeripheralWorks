@@ -2,6 +2,7 @@ accessWidener	v1	named
 # Lectern integration
 accessible method net/minecraft/world/level/block/entity/LecternBlockEntity setPage (I)V
 accessible field net/minecraft/world/level/block/entity/LecternBlockEntity pageCount I
+accessible field net/minecraft/world/level/block/entity/LecternBlockEntity bookAccess Lnet/minecraft/world/Container;
 # Beacon integration
 accessible field net/minecraft/world/level/block/entity/BeaconBlockEntity levels I
 accessible field net/minecraft/world/level/block/entity/BeaconBlockEntity primaryPower Lnet/minecraft/world/effect/MobEffect;
