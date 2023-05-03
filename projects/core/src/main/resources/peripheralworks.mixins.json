@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "site.siredvin.peripheralworks.mixins",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "LecternMixin"
+  ],
+  "client": [
+  ],
+  "refmap": "peripheralworks.refmap.json"
+}

@@ -3,11 +3,13 @@ plugins {
     alias(libs.plugins.kotlin)
 }
 
+val mavenGroup by properties
+
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "maven-publish")
 
-    group = "siredvin.site"
+    group = mavenGroup!!
 
     val javaVersion = JavaVersion.VERSION_17
     java {

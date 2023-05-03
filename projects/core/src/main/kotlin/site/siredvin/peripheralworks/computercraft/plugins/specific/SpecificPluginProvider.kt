@@ -11,7 +11,7 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-class SpecificPluginProvider: PeripheralPluginProvider {
+object SpecificPluginProvider: PeripheralPluginProvider {
     override val pluginType: String
         get() = "minecraft"
 

@@ -9,12 +9,14 @@ loom = "1.1.9"
 forgegradle = "5.1.+"
 # Core mod dependencies
 cc-tweaked = "1.104.0"
-peripheralium = "0.5.0-2"
+peripheralium = "0.5.0-7"
+mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.79.0+1.19.4"
 fabric-loader = "0.14.9"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "6.0.2"
+teamreborn-energy = "3.0.0"
 # Forge dependencies
 forge = "45.0.42"
 forge-kotlin = "4.2.0"
@@ -34,7 +36,9 @@ kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = 
 cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.19.4-common-api", version.ref = "cc-tweaked"}
 cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.19.4-core", version.ref = "cc-tweaked"}
 common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
-peripheralium-core = {module = "siredvin.site:peripheralium-common-1.19.4", version.ref = "peripheralium"}
+peripheralium-core = {module = "site.siredvin:peripheralium-common-1.19.4", version.ref = "peripheralium"}
+peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.19.4", version.ref = "peripheralium"}
+mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 # Fabric mod dependencies
 fabric-loader = {module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader"}
 fabric-api = {module = "net.fabricmc.fabric-api:fabric-api", version.ref="fabric-api"}
@@ -42,6 +46,7 @@ fabric-kotlin = {module = "net.fabricmc:fabric-language-kotlin", version.ref = "
 fabric-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-fabric", version.ref = "forgeconfigapirt-fabric"}
 cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.19.4-fabric-api", version.ref = "cc-tweaked"}
 cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.19.4-fabric", version.ref = "cc-tweaked"}
+teamreborn-energy = {module = "teamreborn:energy", version.ref = "teamreborn-energy"}
 # Forge mod dependencies
 cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.19.4-forge", version.ref="cc-tweaked"}
 forge-kotlin = {module = "thedarkcolour:kotlinforforge", version.ref = "forge-kotlin"}
@@ -57,8 +62,7 @@ loom = {id = "fabric-loom", version.ref = "loom"}
 kotlin = ["kotlin-stdlib", "kotlin-coroutines", "kotlin-atomicfu"]
 cccommon = ["cc-tweaked-common", "cc-tweaked-core", "peripheralium-core"]
 apicommon = ["common-config"]
-ccfabric-api = ["cc-tweaked-fabric-api", "cc-tweaked-core"]
-ccfabric = ["cc-tweaked-fabric", "cc-tweaked-core"]
+ccfabric = ["cc-tweaked-fabric", "cc-tweaked-core", "peripheralium-fabric"]
 fabric-core = ["fabric-loader"]
 fabric = ["fabric-api", "fabric-kotlin", "fabric-config"]
 forge-raw = ["forge-kotlin"]
@@ -69,6 +73,7 @@ forge = ["cc-tweaked-forge"]
 #externalMods-forge-compile = ["oculus", "jei-api"]
 externalMods-forge-runtime = ["jei-forge"]
 #externalMods-fabric = ["nightConfig-core", "nightConfig-toml"]
+externalMods-fabric-api = ["teamreborn-energy"]
 #externalMods-fabric-compile = ["iris", "jei-api", "rei-api", "rei-builtin"]
 externalMods-fabric-runtime = ["jei-fabric"]
 #

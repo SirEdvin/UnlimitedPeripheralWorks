@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.cccommon)
     api(libs.bundles.apicommon)
+    compileOnly(libs.mixin)
 }
 
 publishing {

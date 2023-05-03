@@ -48,7 +48,7 @@ rootProject.name = "UnlimitedPeripheralWorks $minecraftVersion"
 
 include(":core")
 //include(":forge")
-//include(":fabric")
+include(":fabric")
 
 
 for (project in rootProject.children) {
