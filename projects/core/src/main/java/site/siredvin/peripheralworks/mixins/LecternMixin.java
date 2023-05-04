@@ -13,7 +13,7 @@ import site.siredvin.peripheralworks.computercraft.plugins.specific.LecternPlugi
 public class LecternMixin {
     @Inject(method = "setPage", at = @At("TAIL"))
     public void setPage(int i, CallbackInfo ci) {
-        LecternPlugin.Companion.sendEvent(((LecternBlockEntity)(Object)this).getBlockPos(), "lectern_page_changed", i);
+        LecternPlugin.Companion.sendEvent(((LecternBlockEntity)(Object)this).getBlockPos(), "lectern_page_changed", i + 1);
     }
 
     @Inject(method = "setBook(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/player/Player;)V", at = @At("TAIL"))

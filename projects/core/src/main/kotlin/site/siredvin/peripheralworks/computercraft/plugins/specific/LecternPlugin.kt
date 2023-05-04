@@ -9,12 +9,14 @@ import net.minecraft.core.BlockPos
 import net.minecraft.nbt.StringTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IObservingPeripheralPlugin
 import site.siredvin.peripheralium.api.peripheral.IPluggablePeripheral
 import site.siredvin.peripheralium.api.storage.ExtractorProxy
 import site.siredvin.peripheralium.api.storage.StorageUtils
 import site.siredvin.peripheralium.api.storage.TargetableContainer
+import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralium.util.TextBookUtils
 import site.siredvin.peripheralium.util.assertBetween
 import java.util.*
@@ -158,7 +160,7 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
     }
 
     @LuaFunction(mainThread = true)
-    fun injectBook(computer: IComputerAccess, fromName: String, bookName: Optional<String>): MethodResult {
+    fun injectBook(computer: IComputerAccess, fromName: String, bookQuery: Any?): MethodResult {
         assertNoBook()
 
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
@@ -169,14 +171,13 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
 
         var predicate: Predicate<ItemStack> = Predicate { it.`is`(Items.WRITABLE_BOOK) || it.`is`(Items.WRITTEN_BOOK) }
 
-        if (bookName.isPresent)
-            predicate = predicate.and {
-                it.item.getName(it).string == bookName.get()
-            }
+        if (bookQuery != null)
+            predicate = predicate.and(PeripheralPluginUtils.itemQueryToPredicate(bookQuery))
 
-        val moved = TargetableContainer(target.bookAccess).moveFrom(fromStorage, 1, takePredicate = predicate)
-        if (moved == 0)
+        val extractedBook = fromStorage.takeItems(predicate, 1)
+        if (extractedBook.isEmpty)
             return MethodResult.of(null, "Cannot find book in desired inventory")
+        LecternBlock.placeBook(null, target.level!!, target.blockPos, target.blockState, extractedBook)
         return MethodResult.of(true)
     }
 
