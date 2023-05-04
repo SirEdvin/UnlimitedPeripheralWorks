@@ -4,9 +4,11 @@ import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.NoteBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
+import net.minecraft.world.level.gameevent.GameEvent
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.util.assertBetween
 
@@ -53,6 +55,7 @@ class NoteBlockPlugin(private val level: Level, private val pos: BlockPos): IPer
 
     @LuaFunction(mainThread = true)
     fun play() {
-        blockState.triggerEvent(level, pos, 0, 0)
+        level.blockEvent(pos, Blocks.NOTE_BLOCK, 0, 0)
+        level.gameEvent(null, GameEvent.NOTE_BLOCK_PLAY, pos)
     }
 }

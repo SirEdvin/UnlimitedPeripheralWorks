@@ -8,3 +8,6 @@ accessible field net/minecraft/world/level/block/entity/LecternBlockEntity bookA
 accessible field net/minecraft/world/level/block/entity/BeaconBlockEntity levels I
 accessible field net/minecraft/world/level/block/entity/BeaconBlockEntity primaryPower Lnet/minecraft/world/effect/MobEffect;
 accessible field net/minecraft/world/level/block/entity/BeaconBlockEntity secondaryPower Lnet/minecraft/world/effect/MobEffect;
+# Jukebox integration
+accessible method net/minecraft/world/level/block/entity/JukeboxBlockEntity startPlaying ()V
+accessible method net/minecraft/world/level/block/entity/JukeboxBlockEntity stopPlaying ()V

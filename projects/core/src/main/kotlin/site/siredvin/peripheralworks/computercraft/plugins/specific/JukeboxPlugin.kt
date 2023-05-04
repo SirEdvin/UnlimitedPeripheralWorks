@@ -6,17 +6,18 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.item.Item
+import net.minecraft.tags.ItemTags
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.RecordItem
-import net.minecraft.world.level.block.JukeboxBlock
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.api.storage.ExtractorProxy
-import site.siredvin.peripheralium.api.storage.StorageUtils
 import site.siredvin.peripheralium.api.storage.TargetableContainer
+import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.xplat.XplatRegistries
+import java.util.function.Predicate
 
 class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
 
@@ -41,12 +42,14 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
     @LuaFunction(mainThread = true)
     fun replay() {
         assertDisc()
-        target.level!!.levelEvent(null, 1010, target.blockPos, Item.getId(target.getItem(0).item))
+        if (!target.isRecordPlaying)
+            target.startPlaying()
     }
 
     @LuaFunction(mainThread = true)
     fun stop() {
-        target.level!!.levelEvent(1010, target.blockPos, 0)
+        if (target.isRecordPlaying)
+            target.stopPlaying()
     }
 
     @LuaFunction(mainThread = true)
@@ -59,16 +62,16 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
         val toStorage = ExtractorProxy.extractTargetableStorage(target.level!!, location.target)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
-        val moved = TargetableContainer(target).moveTo(toStorage, 1, -1, StorageUtils.ALWAYS)
-        if (moved == 0)
+        val stored = toStorage.storeItem(target.getItem(0))
+        if (!stored.isEmpty)
             return MethodResult.of(null, "Not enough space in target inventory")
-        target.level!!.setBlockAndUpdate(target.blockPos, target.blockState.setValue(JukeboxBlock.HAS_RECORD, false))
-        stop()
+
+        target.removeItem(0, 1)
         return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun injectDisc(computer: IComputerAccess, fromName: String, targetItem: String): MethodResult {
+    fun injectDisc(computer: IComputerAccess, fromName: String, itemQuery: Any?): MethodResult {
         assertNoDisc()
 
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
@@ -77,16 +80,16 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
         val fromStorage = ExtractorProxy.extractStorage(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
-        val item = XplatRegistries.ITEMS.get(ResourceLocation(targetItem))
-        if (item == Items.AIR)
-            throw LuaException("Cannot find item $targetItem")
-        if (item !is RecordItem)
-            throw LuaException("Item should be a valid disc item")
+        var predicate: Predicate<ItemStack> = Predicate {
+            it.`is`(ItemTags.MUSIC_DISCS)
+        }
 
-        val moved = TargetableContainer(target).moveFrom(fromStorage, 1, takePredicate = { it.`is`(item.asItem()) })
+        if (itemQuery != null)
+            predicate = predicate.and(PeripheralPluginUtils.itemQueryToPredicate(itemQuery))
+
+        val moved = TargetableContainer(target).moveFrom(fromStorage, 1, takePredicate = predicate)
         if (moved == 0)
             return MethodResult.of(null, "Cannot find disc in desired inventory")
-        target.level!!.setBlockAndUpdate(target.blockPos, target.blockState.setValue(JukeboxBlock.HAS_RECORD, true))
         replay()
         return MethodResult.of(true)
     }

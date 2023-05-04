@@ -1,10 +1,12 @@
 package site.siredvin.peripheralworks
+import dan200.computercraft.core.computer.Computer
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import site.siredvin.peripheralium.api.storage.ExtractorProxy
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.StorageProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
+import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.utils.MinecartUtils
 
 
@@ -18,5 +20,6 @@ object PeripheralWorksCore {
         ExtractorProxy.addStorageExtractor(MinecartUtils::minecartExtractor)
         ComputerCraftProxy.addProvider(StorageProvider)
         ComputerCraftProxy.addProvider(SpecificPluginProvider)
+        ComputerCraftProxy.addProvider(SpecificProtectedPluginProviders)
     }
 }
