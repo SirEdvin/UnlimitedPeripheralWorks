@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.common.configuration
 
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.IConfigHandler
+import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 
 object PeripheralWorksConfig {
 
@@ -56,7 +57,7 @@ object PeripheralWorksConfig {
             ITEM_STORAGE_TRANSFER_LIMIT = builder.comment("Limits max item transfer per one operation")
                 .defineInRange("itemStorageTransferLimit", 128L, 1L, Long.MAX_VALUE)
             FLUID_STORAGE_TRANSFER_LIMIT = builder.comment("Limits max fluid transfer per one operation")
-                .defineInRange("fluidStorageTransferLimit", 5305500L, 1L, Long.MAX_VALUE)
+                .defineInRange("fluidStorageTransferLimit", 65500L * PeripheraliumPlatform.fluidCompactDivider.toLong(), 1L, Long.MAX_VALUE)
             builder.pop()
             builder.push("specific")
             ENABLE_BEACON = builder.comment("Enables integration for minecraft beacon")

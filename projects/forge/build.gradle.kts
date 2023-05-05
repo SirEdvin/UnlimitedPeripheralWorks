@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin)
     id("net.minecraftforge.gradle") version "5.+"
     id("org.parchmentmc.librarian.forgegradle") version "1.+"
+    alias(libs.plugins.mixinGradle)
 }
 
 val modVersion: String by extra
@@ -18,6 +19,7 @@ base {
 
 repositories {
     mavenCentral()
+    mavenLocal()
     // For CC:T common code
     maven {
         url = uri("https://squiddev.cc/maven/")
@@ -47,6 +49,8 @@ minecraft {
     val extractedLibs = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
     mappings("parchment", "${extractedLibs.findVersion("parchmentMc").get()}-${extractedLibs.findVersion("parchment").get()}-$minecraftVersion")
 
+    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
+
     runs {
         all {
             property("forge.logging.markers", "REGISTRIES")
@@ -69,13 +73,19 @@ minecraft {
         val data by registering {
             workingDirectory(file("run"))
             args(
-                "--mod", "peripheralium", "--all",
+                "--mod", "peripheralworks", "--all",
                 "--output", file("src/generated/resources/"),
                 "--existing", project(":core").file("src/main/resources/"),
                 "--existing", file("src/main/resources/"),
             )
         }
     }
+}
+
+mixin {
+    add(sourceSets.main.get(), "peripehralworks.refmap.json")
+
+    config("peripheralworks.mixins.json")
 }
 
 dependencies {
@@ -88,7 +98,7 @@ dependencies {
         exclude("fuzs.forgeconfigapiport")
     }
     implementation(libs.bundles.forge.raw)
-    implementation(fg.deobf("cc.tweaked:cc-tweaked-1.19.4-forge:${extractedLibs.findVersion("cc-tweaked").get()}"))
+    libs.bundles.forge.base.get().map { implementation(fg.deobf(it)) }
 
     libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it))}
 }
@@ -100,6 +110,8 @@ sourceSets.main.configure {
 tasks {
     val extractedLibs = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
     val forgeVersion = extractedLibs.findVersion("forge").get()
+    val computercraftVersion = extractedLibs.findVersion("cc-tweaked").get()
+    val peripheraliumVersion = extractedLibs.findVersion("peripheralium").get()
 
     processResources {
         from(project(":core").sourceSets.main.get().resources)
@@ -108,9 +120,19 @@ tasks {
         inputs.property("forgeVersion", forgeVersion)
 
         filesMatching("META-INF/mods.toml") {
-            expand(mapOf("forgeVersion" to forgeVersion, "file" to mapOf("jarVersion" to project.version)))
+            expand(mapOf(
+                "forgeVersion" to forgeVersion,
+                "file" to mapOf("jarVersion" to project.version),
+                "computercraftVersion" to computercraftVersion,
+                "peripheraliumVersion" to peripheraliumVersion
+            ))
         }
         exclude(".cache")
+    }
+    withType<JavaCompile> {
+        if (name != "testJavaCompile") {
+            source(project(":core").sourceSets.main.get().allSource)
+        }
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         source(project(":core").sourceSets.main.get().allSource)

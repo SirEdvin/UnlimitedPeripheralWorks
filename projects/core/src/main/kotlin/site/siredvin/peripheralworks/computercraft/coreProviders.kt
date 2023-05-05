@@ -22,13 +22,15 @@ object StorageProvider: PeripheralPluginProvider {
         get() = setOf(PeripheralPluginUtils.TYPES.INVENTORY)
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-        if (!PeripheralWorksConfig.enableGenericItemStorage)
+        if (!PeripheralWorksConfig.enableGenericItemStorage && !PeripheralWorksConfig.enableGenericInventory)
             return null
         val storage = ExtractorProxy.extractStorage(level, pos) ?: return null
         if (Iterators.size(storage.getItems()) == 0)
             return null
-        if (storage is SlottedStorage)
+        if (storage is SlottedStorage && PeripheralWorksConfig.enableGenericInventory)
             return InventoryPlugin(level, storage)
-        return ItemStoragePlugin(storage, level)
+        if (PeripheralWorksConfig.enableGenericItemStorage)
+            return ItemStoragePlugin(storage, level)
+        return null
     }
 }

@@ -10,6 +10,7 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
 import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import java.util.function.Supplier
 
 object ComputerCraftProxy {
     private val PLUGIN_PROVIDERS: MutableList<PeripheralPluginProvider> = mutableListOf()
@@ -19,7 +20,7 @@ object ComputerCraftProxy {
         PLUGIN_PROVIDERS.sort()
     }
 
-    fun peripheralProvider(level: Level, pos: BlockPos, state: BlockState, entity: BlockEntity?, side: Direction): IPeripheral? {
+    fun collectPlugins(level: Level, pos: BlockPos, side: Direction): Map<String, IPeripheralPlugin> {
         val plugins: MutableMap<String, IPeripheralPlugin> = mutableMapOf()
         val deniedPluginTypes: MutableSet<String> = mutableSetOf()
 
@@ -32,7 +33,24 @@ object ComputerCraftProxy {
                 }
             }
         }
+        return plugins
+    }
 
+    fun lazyPeripheralProvider(level: Level, pos: BlockPos, side: Direction): Supplier<IPeripheral>? {
+        val plugins = collectPlugins(level, pos, side)
+        if (plugins.isEmpty())
+            return null
+        return Supplier {
+            val state = level.getBlockState(pos)
+            val entity = level.getBlockEntity(pos)
+            val peripheral = PluggablePeripheral(XplatRegistries.BLOCKS.getKey(state.block).toString(), entity ?: pos)
+            plugins.values.forEach { peripheral.addPlugin(it) }
+            return@Supplier peripheral
+        }
+    }
+
+    fun peripheralProvider(level: Level, pos: BlockPos, state: BlockState, entity: BlockEntity?, side: Direction): IPeripheral? {
+        val plugins = collectPlugins(level, pos, side)
         if (plugins.isEmpty())
             return null
 
