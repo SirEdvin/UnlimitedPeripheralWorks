@@ -33,6 +33,7 @@ object ForgePeripheralWorks {
     fun commonSetup(event: FMLCommonSetupEvent) {
         // Load all integrations
         Platform.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider(IPeripheralProvider { world, pos, side ->
             val supplier = ComputerCraftProxy.lazyPeripheralProvider(world, pos, side)

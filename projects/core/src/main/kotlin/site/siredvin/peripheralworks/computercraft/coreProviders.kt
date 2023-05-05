@@ -25,9 +25,7 @@ object StorageProvider: PeripheralPluginProvider {
         if (!PeripheralWorksConfig.enableGenericItemStorage && !PeripheralWorksConfig.enableGenericInventory)
             return null
         val storage = ExtractorProxy.extractStorage(level, pos) ?: return null
-        if (Iterators.size(storage.getItems()) == 0)
-            return null
-        if (storage is SlottedStorage && PeripheralWorksConfig.enableGenericInventory)
+        if (storage is SlottedStorage && PeripheralWorksConfig.enableGenericInventory && storage.size != 0)
             return InventoryPlugin(level, storage)
         if (PeripheralWorksConfig.enableGenericItemStorage)
             return ItemStoragePlugin(storage, level)
