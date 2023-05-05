@@ -26,8 +26,8 @@ object PeripheralWorksConfig {
     val enablePoweredRail: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_POWERED_RAIL.get()
 
-    fun registerIntegrationConfiguration(name: String, configuration: IConfigHandler) {
-        INTEGRATION_CONFIGURATIONS[name] = configuration
+    fun registerIntegrationConfiguration(configuration: IConfigHandler) {
+        INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
 
     class CommonConfig internal constructor(builder: ForgeConfigSpec.Builder) {

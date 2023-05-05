@@ -10,14 +10,13 @@ mixinGradle = "0.7.+"
 forgegradle = "5.1.+"
 # Core mod dependencies
 cc-tweaked = "1.104.0"
-peripheralium = "0.5.0-17"
+peripheralium = "0.5.0-19"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.79.0+1.19.4"
 fabric-loader = "0.14.9"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "6.0.2"
-teamreborn-energy = "3.0.0"
 # Forge dependencies
 forge = "45.0.42"
 forge-kotlin = "4.2.0"
@@ -28,17 +27,29 @@ parchmentMc = "1.19.3"
 # Dev mod dependenceis
 jei = "13.1.0.6"
 
+# Integration mod dependencies (fabric)
+teamreborn-energy = "3.0.0"
+
+# Integration mod dependencies (forge)
+occultism = "4521662"  # occultism-1.19.4-1.78.0.jar file
+curios-forge = "1.19.4-5.1.4.2"
+geckolib-forge = "4.1.2"
+smartbrainlib = "1.9"
+modonomicon = "1.19.4-1.30.1"
+
 [libraries]
 # Base libraries
 kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = "kotlin-atomicfu"}
+
 # Core mod dependencies
 cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.19.4-common-api", version.ref = "cc-tweaked"}
 cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.19.4-core", version.ref = "cc-tweaked"}
 common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
 peripheralium-core = {module = "site.siredvin:peripheralium-common-1.19.4", version.ref = "peripheralium"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
+
 # Fabric mod dependencies
 fabric-loader = {module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader"}
 fabric-api = {module = "net.fabricmc.fabric-api:fabric-api", version.ref="fabric-api"}
@@ -47,14 +58,25 @@ fabric-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-fabric", v
 cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.19.4-fabric-api", version.ref = "cc-tweaked"}
 cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.19.4-fabric", version.ref = "cc-tweaked"}
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.19.4", version.ref = "peripheralium"}
-teamreborn-energy = {module = "teamreborn:energy", version.ref = "teamreborn-energy"}
+
 # Forge mod dependencies
 cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.19.4-forge", version.ref="cc-tweaked"}
 forge-kotlin = {module = "thedarkcolour:kotlinforforge", version.ref = "forge-kotlin"}
 peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.19.4", version.ref = "peripheralium"}
+
 # Dev mod dependencies
 jei-fabric = { module = "mezz.jei:jei-1.19.4-fabric", version.ref = "jei" }
 jei-forge = { module = "mezz.jei:jei-1.19.4-forge", version.ref = "jei" }
+
+# Fabric integration dependencies
+teamreborn-energy = {module = "teamreborn:energy", version.ref = "teamreborn-energy"}
+
+# Forge integration dependencies
+occultism = {module = "curse.maven:occultism-361026", version.ref = "occultism"}
+curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
+gecolib-forge = {module = "software.bernie.geckolib:geckolib-forge-1.19.4", version.ref = "geckolib-forge"}
+smartbrainlib = {module = "net.tslat.smartbrainlib:SmartBrainLib-forge-1.19.4", version.ref = "smartbrainlib"}
+modonomicon = {module = "com.klikli_dev:modonomicon", version.ref="modonomicon"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -72,14 +94,17 @@ forge-raw = ["forge-kotlin"]
 forge-base = ["cc-tweaked-forge", "peripheralium-forge"]
 
 # Minecraft
-#externalMods-common = ["jei-api", "nightConfig-core", "nightConfig-toml"]
-#externalMods-forge-compile = ["oculus", "jei-api"]
 externalMods-forge-runtime = ["jei-forge"]
-#externalMods-fabric = ["nightConfig-core", "nightConfig-toml"]
-externalMods-fabric-api = ["teamreborn-energy"]
-#externalMods-fabric-compile = ["iris", "jei-api", "rei-api", "rei-builtin"]
 externalMods-fabric-runtime = ["jei-fabric"]
-#
-## Testing
-#test = ["junit-jupiter-api", "junit-jupiter-params", "hamcrest", "jqwik-api"]
-#testRuntime = ["junit-jupiter-engine", "jqwik-engine"]
+
+# Integration dependencies
+externalMods-fabric-integrations-api = ["teamreborn-energy"]
+
+externalMods-forge-integrations-full = ["occultism"]
+externalMods-forge-integrations-active = ["occultism"]
+externalMods-forge-integrations-activedep = [
+    "curios-forge", # by occultism right now
+    "gecolib-forge", # by occultism right now
+    "smartbrainlib",  # by occultism right now
+    "modonomicon",  # by occultism right now
+]

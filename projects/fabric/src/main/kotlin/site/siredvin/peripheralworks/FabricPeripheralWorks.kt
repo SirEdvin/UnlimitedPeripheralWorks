@@ -10,7 +10,7 @@ import site.siredvin.peripheralworks.util.Platform
 
 
 @Suppress("UNUSED")
-object PeripheralWorks: ModInitializer {
+object FabricPeripheralWorks: ModInitializer {
 
     override fun onInitialize() {
         // Register configuration

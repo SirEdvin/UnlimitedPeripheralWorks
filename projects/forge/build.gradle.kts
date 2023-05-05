@@ -43,6 +43,45 @@ repositories {
             includeGroup("thedarkcolour")
         }
     }
+    // Integration dependencies
+
+    maven {
+        url = uri("https://www.cursemaven.com")
+        content {
+            includeGroup("curse.maven")
+        }
+    }
+
+    maven {
+        name = "KliKli Dev Repsy Maven (Occultism)"
+        url = uri("https://repo.repsy.io/mvn/klikli-dev/mods")
+        content {
+            includeGroup("com.klikli_dev")
+        }
+    }
+
+    maven {
+        name = "Curios Maven"
+        url = uri("https://maven.theillusivec4.top/")
+        content {
+            includeGroup("top.theillusivec4.curios")
+        }
+    }
+
+    maven {
+        name = "SBL Maven"
+        url = uri("https://dl.cloudsmith.io/public/tslat/sbl/maven/")
+        content {
+            includeGroup("net.tslat.smartbrainlib")
+        }
+    }
+    maven {
+        name = "Geckolib Maven"
+        url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+        content {
+            includeGroup("software.bernie.geckolib")
+        }
+    }
 }
 
 minecraft {
@@ -99,8 +138,11 @@ dependencies {
     }
     implementation(libs.bundles.forge.raw)
     libs.bundles.forge.base.get().map { implementation(fg.deobf(it)) }
-
     libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it))}
+
+    libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
+    libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }
+    libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(fg.deobf(it)) }
 }
 
 sourceSets.main.configure {

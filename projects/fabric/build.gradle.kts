@@ -60,7 +60,7 @@ dependencies {
     // Like, what???
     modImplementation("net.fabricmc:fabric-loader:0.14.19")
 
-    modApi(libs.bundles.externalMods.fabric.api) {
+    modApi(libs.bundles.externalMods.fabric.integrations.api) {
         exclude("net.fabricmc.fabric-api")
     }
 

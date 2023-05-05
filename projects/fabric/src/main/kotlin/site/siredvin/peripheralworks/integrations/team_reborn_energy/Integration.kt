@@ -27,6 +27,6 @@ class Integration: Runnable {
     override fun run() {
         ComputerCraftProxy.addProvider(EnergyPluginProvider)
         ComputerCraftAPI.registerRefuelHandler(EnergyRefuelHandler)
-        PeripheralWorksConfig.registerIntegrationConfiguration("team_reborn_energy", Configuration)
+        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }

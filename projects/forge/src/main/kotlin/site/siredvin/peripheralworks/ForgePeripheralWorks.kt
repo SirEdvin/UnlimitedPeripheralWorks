@@ -1,5 +1,7 @@
 package site.siredvin.peripheralworks
 
+import com.github.klikli_dev.occultism.common.blockentity.SacrificialBowlBlockEntity
+import com.github.klikli_dev.occultism.common.item.spirit.MinerSpiritItem
 import dan200.computercraft.api.ForgeComputerCraftAPI
 import dan200.computercraft.api.peripheral.IPeripheralProvider
 import net.minecraftforge.common.util.LazyOptional
@@ -11,6 +13,7 @@ import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
 import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
+import site.siredvin.peripheralworks.utils.Platform
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
 
@@ -28,8 +31,9 @@ object ForgePeripheralWorks {
     }
 
     fun commonSetup(event: FMLCommonSetupEvent) {
-        // So, potentail source of problem is pretty simple
-        // My config files are need some extra registration, probably?
+        // Load all integrations
+        Platform.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
+        // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider(IPeripheralProvider { world, pos, side ->
             val supplier = ComputerCraftProxy.lazyPeripheralProvider(world, pos, side)
                 ?: return@IPeripheralProvider LazyOptional.empty()
