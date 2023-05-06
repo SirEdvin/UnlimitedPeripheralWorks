@@ -10,7 +10,7 @@ mixinGradle = "0.7.+"
 forgegradle = "5.1.+"
 # Core mod dependencies
 cc-tweaked = "1.104.0"
-peripheralium = "0.5.0-19"
+peripheralium = "0.5.0-22"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.79.0+1.19.4"
@@ -18,7 +18,7 @@ fabric-loader = "0.14.9"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "6.0.2"
 # Forge dependencies
-forge = "45.0.42"
+forge = "45.0.57"
 forge-kotlin = "4.2.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
@@ -37,6 +37,9 @@ geckolib-forge = "4.1.2"
 smartbrainlib = "1.9"
 modonomicon = "1.19.4-1.30.1"
 easyvillagers = "4502611"  # easyvillagers 1.19.4-1.0.8
+integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
+commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
+cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
 
 [libraries]
 # Base libraries
@@ -80,6 +83,10 @@ smartbrainlib = {module = "net.tslat.smartbrainlib:SmartBrainLib-forge-1.19.4", 
 modonomicon = {module = "com.klikli_dev:modonomicon", version.ref="modonomicon"}
 
 easyvillagers = {module = "curse.maven:easyvillagers-400514", version.ref="easyvillagers"}
+
+integrateddynamics = {module = "curse.maven:integrateddynamics-236307", version.ref="integrateddynamics"}
+commoncapabilities = {module = "curse.maven:commoncapabilities-247007", version.ref="commoncapabilites"}
+cyclopscore = {module = "curse.maven:cyclopscore-232758", version.ref="cyclopscore"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -103,11 +110,20 @@ externalMods-fabric-runtime = ["jei-fabric"]
 # Integration dependencies
 externalMods-fabric-integrations-api = ["teamreborn-energy"]
 
-externalMods-forge-integrations-full = ["occultism", "easyvillagers"]
-externalMods-forge-integrations-active = ["occultism", "easyvillagers"]
+externalMods-forge-integrations-full = [
+    "occultism", "easyvillagers",
+    "integrateddynamics",
+    "cyclopscore", # by integrateddynamics, required for class typing
+]
+externalMods-forge-integrations-active = [
+    "occultism", "easyvillagers",
+    "integrateddynamics",
+    "cyclopscore", # by integrateddynamics, required for class typing
+]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now
     "gecolib-forge", # by occultism right now
     "smartbrainlib",  # by occultism right now
     "modonomicon",  # by occultism right now
+    "commoncapabilities", # by integrateddynamics
 ]

@@ -9,6 +9,7 @@ import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import net.minecraftforge.registries.NewRegistryEvent
 import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -22,11 +23,13 @@ import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 object ForgePeripheralWorks {
 
     init {
+        ForgePeripheralium.sayHi()
         PeripheralWorksCore.configure()
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         ComputerCraftProxy.addProvider(EnergyStorageProvider)
         val eventBus = MOD_CONTEXT.getKEventBus()
         eventBus.addListener(this::commonSetup)
+        eventBus.addListener(this::registrySetup)
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "${PeripheralWorksCore.MOD_ID}.toml")
     }
@@ -41,5 +44,9 @@ object ForgePeripheralWorks {
                 ?: return@IPeripheralProvider LazyOptional.empty()
             return@IPeripheralProvider LazyOptional.of { supplier.get() }
         })
+    }
+
+    fun registrySetup(event: NewRegistryEvent) {
+        Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
     }
 }
