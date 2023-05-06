@@ -15,11 +15,9 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 object StorageProvider: PeripheralPluginProvider {
     override val pluginType: String
-        get() = PeripheralPluginUtils.TYPES.ITEM_STORAGE
-    override val priority: Int
-        get() = 200
+        get() = "storage"
     override val conflictWith: Set<String>
-        get() = setOf(PeripheralPluginUtils.TYPES.INVENTORY)
+        get() = setOf(PeripheralPluginUtils.TYPES.INVENTORY, PeripheralPluginUtils.TYPES.ITEM_STORAGE)
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
         if (!PeripheralWorksConfig.enableGenericItemStorage && !PeripheralWorksConfig.enableGenericInventory)

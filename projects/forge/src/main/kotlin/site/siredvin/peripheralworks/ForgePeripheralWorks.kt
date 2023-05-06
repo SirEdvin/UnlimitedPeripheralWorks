@@ -9,6 +9,7 @@ import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
+import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider

@@ -15,10 +15,7 @@ class Integration: Runnable {
 
     object AutoTraderProvider: PeripheralPluginProvider {
         override val pluginType: String
-            get() = "auto_trader"
-
-        override val conflictWith: Set<String>
-            get() = setOf(PeripheralPluginUtils.TYPES.INVENTORY, PeripheralPluginUtils.TYPES.ITEM_STORAGE)
+            get() = "easy_villager_trader"
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             if (!Configuration.enableAutoTrader)
                 return null

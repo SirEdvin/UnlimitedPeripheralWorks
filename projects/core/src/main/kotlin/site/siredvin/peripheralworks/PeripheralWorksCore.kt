@@ -1,5 +1,4 @@
 package site.siredvin.peripheralworks
-import dan200.computercraft.core.computer.Computer
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import site.siredvin.peripheralium.api.storage.ExtractorProxy

@@ -11,7 +11,7 @@ class AutoTraderPlugin(private val autoTrader: AutoTraderTileentity): TraderPlug
 
     @LuaFunction(mainThread = true)
     fun getSelectedOffer(): Int {
-        return autoTrader.tradeIndex - 1
+        return autoTrader.tradeIndex + 1
     }
 
     @LuaFunction(mainThread = true)
