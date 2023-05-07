@@ -87,7 +87,7 @@ class Integration: Runnable {
             .handle {
                 ValueTypeNbt.ValueNbt.of(collectFileValues(it))
             }.withUpdateType(AspectUpdateType.NETWORK_TICK).buildRead()
-        AspectRegistry.getInstance().register(PartTypes.BLOCK_READER, ccAspect)
+        AspectRegistry.getInstance().register(PartTypes.MACHINE_READER, ccAspect)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }

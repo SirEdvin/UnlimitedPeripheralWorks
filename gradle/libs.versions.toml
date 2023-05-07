@@ -10,7 +10,7 @@ mixinGradle = "0.7.+"
 forgegradle = "5.1.+"
 # Core mod dependencies
 cc-tweaked = "1.104.0"
-peripheralium = "0.5.0-22"
+peripheralium = "0.5.0-26"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.79.0+1.19.4"
@@ -40,6 +40,7 @@ easyvillagers = "4502611"  # easyvillagers 1.19.4-1.0.8
 integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
 commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
+natures-compass-forge = "4476818"  # NaturesCompass-1.19.4-1.11.0-forge.jar
 
 [libraries]
 # Base libraries
@@ -87,6 +88,8 @@ easyvillagers = {module = "curse.maven:easyvillagers-400514", version.ref="easyv
 integrateddynamics = {module = "curse.maven:integrateddynamics-236307", version.ref="integrateddynamics"}
 commoncapabilities = {module = "curse.maven:commoncapabilities-247007", version.ref="commoncapabilites"}
 cyclopscore = {module = "curse.maven:cyclopscore-232758", version.ref="cyclopscore"}
+
+nature-compass-forge = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-forge"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -114,11 +117,13 @@ externalMods-forge-integrations-full = [
     "occultism", "easyvillagers",
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
+    "nature-compass-forge",
 ]
 externalMods-forge-integrations-active = [
     "occultism", "easyvillagers",
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
+    "nature-compass-forge",
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now

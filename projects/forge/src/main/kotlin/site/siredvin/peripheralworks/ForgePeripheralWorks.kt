@@ -1,9 +1,9 @@
 package site.siredvin.peripheralworks
 
-import com.github.klikli_dev.occultism.common.blockentity.SacrificialBowlBlockEntity
-import com.github.klikli_dev.occultism.common.item.spirit.MinerSpiritItem
 import dan200.computercraft.api.ForgeComputerCraftAPI
 import dan200.computercraft.api.peripheral.IPeripheralProvider
+import dan200.computercraft.client.turtle.TurtleModemModeller
+import dan200.computercraft.client.turtle.TurtleUpgradeModellers
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -11,6 +11,7 @@ import net.minecraftforge.fml.config.ModConfig
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.registries.NewRegistryEvent
 import site.siredvin.peripheralium.ForgePeripheralium
+import site.siredvin.peripheralworks.common.Registries
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
@@ -32,6 +33,8 @@ object ForgePeripheralWorks {
         eventBus.addListener(this::registrySetup)
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "${PeripheralWorksCore.MOD_ID}.toml")
+        Registries.TURTLE_SERIALIZER.register(eventBus)
+        Registries.POCKET_SERIALIZER.register(eventBus)
     }
 
     fun commonSetup(event: FMLCommonSetupEvent) {
@@ -48,5 +51,6 @@ object ForgePeripheralWorks {
 
     fun registrySetup(event: NewRegistryEvent) {
         Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
     }
 }
