@@ -43,6 +43,13 @@ repositories {
             includeGroup("fuzs.forgeconfigapiport")
         }
     }
+    // Integration dependencies
+    maven {
+        url = uri("https://www.cursemaven.com")
+        content {
+            includeGroup("curse.maven")
+        }
+    }
 }
 
 dependencies {
@@ -75,6 +82,10 @@ dependencies {
         exclude("net.fabricmc.fabric-api")
         exclude("net.fabricmc", "fabric-loader")
     }
+
+    libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
+    libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
+//    libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
 }
 
 loom {

@@ -10,7 +10,7 @@ mixinGradle = "0.7.+"
 forgegradle = "5.1.+"
 # Core mod dependencies
 cc-tweaked = "1.104.0"
-peripheralium = "0.5.0-26"
+peripheralium = "0.5.0-27"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.79.0+1.19.4"
@@ -25,10 +25,11 @@ parchmentMc = "1.19.3"
 # Extra mod dependencies
 
 # Dev mod dependenceis
-jei = "13.1.0.6"
+jei = "13.1.0.9"
 
 # Integration mod dependencies (fabric)
 teamreborn-energy = "3.0.0"
+natures-compass-fabric = "4476811"  # NaturesCompass-1.19.4-2.2.0-fabric
 
 # Integration mod dependencies (forge)
 occultism = "4521662"  # occultism-1.19.4-1.78.0.jar file
@@ -76,6 +77,8 @@ jei-forge = { module = "mezz.jei:jei-1.19.4-forge", version.ref = "jei" }
 # Fabric integration dependencies
 teamreborn-energy = {module = "teamreborn:energy", version.ref = "teamreborn-energy"}
 
+nature-compass-fabric = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-fabric"}
+
 # Forge integration dependencies
 occultism = {module = "curse.maven:occultism-361026", version.ref = "occultism"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
@@ -112,6 +115,13 @@ externalMods-fabric-runtime = ["jei-fabric"]
 
 # Integration dependencies
 externalMods-fabric-integrations-api = ["teamreborn-energy"]
+
+externalMods-fabric-integrations-full = [
+    "nature-compass-fabric"
+]
+externalMods-fabric-integrations-active = [
+    "nature-compass-fabric"
+]
 
 externalMods-forge-integrations-full = [
     "occultism", "easyvillagers",

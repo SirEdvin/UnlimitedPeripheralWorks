@@ -20,7 +20,19 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "site.siredvin.peripheralworks.PeripheralWorks"
+        "value": "site.siredvin.peripheralworks.FabricPeripheralWorks"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.FabricPeripheralWorksClient"
+      }
+    ],
+    "fabric-datagen": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.data.FabricDataGenerators"
       }
     ]
   },

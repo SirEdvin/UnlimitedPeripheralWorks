@@ -2,13 +2,12 @@ package site.siredvin.peripheralworks.integrations.naturescompass
 
 import com.chaosthedude.naturescompass.NaturesCompass
 import com.chaosthedude.naturescompass.items.NaturesCompassItem
-import com.chaosthedude.naturescompass.util.BiomeUtils
-import com.chaosthedude.naturescompass.util.CompassState
+import com.chaosthedude.naturescompass.utils.BiomeUtils
+import com.chaosthedude.naturescompass.utils.CompassState
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.Vec3i
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
@@ -23,14 +22,14 @@ class NaturesCompassPeripheral<O: IPeripheralOwner>(peripheralOwner: O, override
     }
 
     
-    var compassStack: ItemStack = NaturesCompass.naturesCompass.defaultInstance.copy()
+    var compassStack: ItemStack = NaturesCompass.NATURES_COMPASS_ITEM.defaultInstance.copy()
 
     val compass: NaturesCompassItem
-        get() = NaturesCompass.naturesCompass
+        get() = NaturesCompass.NATURES_COMPASS_ITEM
 
     @LuaFunction
     fun getBiomes(): List<String> {
-        return BiomeUtils.getAllowedBiomeKeys(peripheralOwner.level).map { it.toString() }
+        return BiomeUtils.getAllowedBiomeIDs(peripheralOwner.level).map { it.toString() }
     }
     
     @LuaFunction
@@ -38,7 +37,7 @@ class NaturesCompassPeripheral<O: IPeripheralOwner>(peripheralOwner: O, override
         if (compass.getState(compassStack) == CompassState.SEARCHING)
             return MethodResult.of(null, "Another compass search is running, stop it to start another")
         val biomeLoc = ResourceLocation(biome)
-        val optionalBiome = BiomeUtils.getBiomeForKey(level, biomeLoc)
+        val optionalBiome = BiomeUtils.getBiomeForIdentifier(level, biomeLoc)
         if (optionalBiome.isEmpty)
             return MethodResult.of(null, "Incorrect biome id $biome")
         return peripheralOwner.withPlayer({
@@ -67,7 +66,7 @@ class NaturesCompassPeripheral<O: IPeripheralOwner>(peripheralOwner: O, override
             "x" to relativePos.x,
             "z" to relativePos.z,
             "distance" to BiomeUtils.getDistanceToBiome(peripheralOwner.pos, x, z),
-            "biome" to compass.getBiomeKey(compassStack).toString()
+            "biome" to compass.getBiomeID(compassStack).toString()
         )
     }
 }
