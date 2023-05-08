@@ -259,10 +259,9 @@ curseforge {
             changelogType = "markdown"
         }
         mainArtifact(tasks.jar.get().archivePath, closureOf<CurseArtifact> {
-            displayName = "Peripheralium $version for $minecraftVersion"
+            displayName = "UnlimitedPeripheralWorks $version for $minecraftVersion"
             relations(closureOf<CurseRelation> {
-                requiredDependency("cc-tweaked")
-                requiredDependency("kotlin-for-forge")
+                requiredDependency("peripheralium")
             })
         })
     })
@@ -282,7 +281,7 @@ modrinth {
     token.set(modrinthKey)
     projectId.set(MODRINTH_ID)
     versionNumber.set("${minecraftVersion}-${project.version}")
-    versionName.set("Peripheralium ${version} for ${minecraftVersion}")
+    versionName.set("UnlimitedPeripheralWorks ${version} for ${minecraftVersion}")
     versionType.set(MODRINTH_RELEASE_TYPE)
     uploadFile.set(tasks.jar.get())
     gameVersions.set(listOf(minecraftVersion))
@@ -293,8 +292,7 @@ modrinth {
         changelog.set("")
     }
     dependencies {
-        required.project("kotlin-for-forge")
-        required.project("cc-tweaked")
+        required.project("peripheralium")
     }
 }
 
