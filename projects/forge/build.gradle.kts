@@ -1,4 +1,11 @@
 import site.siredvin.peripheralium.gradle.mavenDependencies
+import org.jetbrains.changelog.date
+import com.matthewprenger.cursegradle.CurseArtifact
+import com.matthewprenger.cursegradle.CurseProject
+import com.matthewprenger.cursegradle.CurseUploadTask
+import com.matthewprenger.cursegradle.CurseRelation
+import com.matthewprenger.cursegradle.Options
+
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -6,6 +13,9 @@ plugins {
     id("net.minecraftforge.gradle") version "5.+"
     id("org.parchmentmc.librarian.forgegradle") version "1.+"
     alias(libs.plugins.mixinGradle)
+    id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("org.jetbrains.changelog") version "1.3.1"
+    id("com.modrinth.minotaur") version "2.+"
 }
 
 val modVersion: String by extra
@@ -82,6 +92,27 @@ repositories {
             includeGroup("software.bernie.geckolib")
         }
     }
+    maven {
+        url = uri("https://api.modrinth.com/maven")
+        name = "Modrinth"
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+    maven {
+        url = uri("https://maven.shedaniel.me/")
+        content {
+            includeGroup("me.shedaniel.cloth")
+            includeGroup("me.shedaniel")
+        }
+    }
+
+    maven {
+        url = uri("https://maven.architectury.dev/")
+        content {
+            includeGroup("dev.architectury")
+        }
+    }
 }
 
 minecraft {
@@ -122,7 +153,7 @@ minecraft {
 }
 
 mixin {
-    add(sourceSets.main.get(), "peripehralworks.refmap.json")
+    add(sourceSets.main.get(), "peripheralworks.refmap.json")
 
     config("peripheralworks.mixins.json")
 }
@@ -131,6 +162,8 @@ dependencies {
     val extractedLibs = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
     minecraft("net.minecraftforge:forge:${minecraftVersion}-${extractedLibs.findVersion("forge").get()}")
     implementation(libs.bundles.kotlin)
+
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
     compileOnly(project(":core")) {
         exclude("cc.tweaked")
@@ -183,7 +216,86 @@ tasks {
 
 tasks.jar {
     finalizedBy("reobfJar")
-    archiveClassifier.set("slim")
+    archiveClassifier.set("")
+}
+
+tasks.jarJar {
+    finalizedBy("reobfJarJar")
+    archiveClassifier.set("jarjar")
+}
+
+val rootProjectDir: File by extra
+
+changelog {
+    version.set(modVersion)
+    path.set("${rootProjectDir}/CHANGELOG.md")
+    header.set(provider { "[${version.get()}] - ${date()}" })
+    itemPrefix.set("-")
+    keepUnreleasedSection.set(true)
+    unreleasedTerm.set("[Unreleased]")
+    groups.set(listOf())
+}
+
+
+val CURSEFORGE_RELEASE_TYPE: String by extra
+val CURSEFORGE_ID: String by extra
+val curseforgeKey: String by extra
+
+curseforge {
+    options(closureOf<Options> {
+        forgeGradleIntegration = false
+    })
+    apiKey = curseforgeKey
+    project(closureOf<CurseProject> {
+        id = CURSEFORGE_ID
+        releaseType = CURSEFORGE_RELEASE_TYPE
+        addGameVersion("Forge")
+        addGameVersion(minecraftVersion)
+        try {
+            changelog = "${project.changelog.get(project.version as String).withHeader(false).toText()}"
+            changelogType = "markdown"
+        } catch (ignored: Exception) {
+            changelog = "Seems not real release"
+            changelogType = "markdown"
+        }
+        mainArtifact(tasks.jar.get().archivePath, closureOf<CurseArtifact> {
+            displayName = "Peripheralium $version for $minecraftVersion"
+            relations(closureOf<CurseRelation> {
+                requiredDependency("cc-tweaked")
+                requiredDependency("kotlin-for-forge")
+            })
+        })
+    })
+}
+project.afterEvaluate {
+    tasks.getByName<CurseUploadTask>("curseforge${CURSEFORGE_ID}") {
+        dependsOn(tasks.jar)
+    }
+}
+
+
+val MODRINTH_ID: String by extra
+val MODRINTH_RELEASE_TYPE: String by extra
+val modrinthKey: String by extra
+
+modrinth {
+    token.set(modrinthKey)
+    projectId.set(MODRINTH_ID)
+    versionNumber.set("${minecraftVersion}-${project.version}")
+    versionName.set("Peripheralium ${version} for ${minecraftVersion}")
+    versionType.set(MODRINTH_RELEASE_TYPE)
+    uploadFile.set(tasks.jar.get())
+    gameVersions.set(listOf(minecraftVersion))
+    loaders.set(listOf("forge")) // Must also be an array - no need to specify this if you're using Loom or ForgeGradl
+    try {
+        changelog.set("${project.changelog.get(project.version as String).withHeader(false).toText()}")
+    } catch (ignored: Exception) {
+        changelog.set("")
+    }
+    dependencies {
+        required.project("kotlin-for-forge")
+        required.project("cc-tweaked")
+    }
 }
 
 publishing {
@@ -192,14 +304,9 @@ publishing {
             artifactId = base.archivesName.get()
             from(components["java"])
             fg.component(this)
-            // jarJar.component is broken (https://github.com/MinecraftForge/ForgeGradle/issues/914), so declare the
-            // artifact explicitly.
-            artifact(tasks.jarJar)
 
             mavenDependencies {
                 exclude(dependencies.create("site.siredvin:"))
-                exclude(libs.jei.forge.get())
-
             }
         }
     }

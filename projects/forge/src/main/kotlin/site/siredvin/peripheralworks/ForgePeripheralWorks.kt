@@ -41,6 +41,7 @@ object ForgePeripheralWorks {
         // Load all integrations
         Platform.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider(IPeripheralProvider { world, pos, side ->
             val supplier = ComputerCraftProxy.lazyPeripheralProvider(world, pos, side)

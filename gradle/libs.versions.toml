@@ -10,7 +10,7 @@ mixinGradle = "0.7.+"
 forgegradle = "5.1.+"
 # Core mod dependencies
 cc-tweaked = "1.104.0"
-peripheralium = "0.5.0-27"
+peripheralium = "0.5.1"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.79.0+1.19.4"
@@ -23,13 +23,19 @@ forge-kotlin = "4.2.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
 # Extra mod dependencies
+cloth-config = "10.0.96"
+architectury = "8.1.80"
 
 # Dev mod dependenceis
 jei = "13.1.0.9"
+rei = "11.0.597"
+
+# Shared integration mod dependency
 
 # Integration mod dependencies (fabric)
 teamreborn-energy = "3.0.0"
 natures-compass-fabric = "4476811"  # NaturesCompass-1.19.4-2.2.0-fabric
+tomstorage-fabric = "1.19.4-1.5.6-fabric"
 
 # Integration mod dependencies (forge)
 occultism = "4521662"  # occultism-1.19.4-1.78.0.jar file
@@ -42,6 +48,7 @@ integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
 commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
 natures-compass-forge = "4476818"  # NaturesCompass-1.19.4-1.11.0-forge.jar
+tomstorage-forge = "1.19.4-1.5.6"
 
 [libraries]
 # Base libraries
@@ -73,11 +80,23 @@ peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.19.4", vers
 # Dev mod dependencies
 jei-fabric = { module = "mezz.jei:jei-1.19.4-fabric", version.ref = "jei" }
 jei-forge = { module = "mezz.jei:jei-1.19.4-forge", version.ref = "jei" }
+rei-fabric = {module = "me.shedaniel:RoughlyEnoughItems-fabric", version.ref = "rei"}
+
+# Extra mod dependency
+cloth-config-forge = {module = "me.shedaniel.cloth:cloth-config-forge", version.ref = "cloth-config"}
+cloth-config-fabric = {module = "me.shedaniel.cloth:cloth-config-fabric", version.ref = "cloth-config"}
+
+architectury-forge = {module = "dev.architectury:architectury-forge", version.ref="architectury"}
+architectury-fabric = {module = "dev.architectury:architectury-fabric", version.ref="architectury"}
+
+
 
 # Fabric integration dependencies
 teamreborn-energy = {module = "teamreborn:energy", version.ref = "teamreborn-energy"}
 
 nature-compass-fabric = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-fabric"}
+
+tomstorage-fabric = {module = "maven.modrinth:toms-storage", version.ref="tomstorage-fabric"}
 
 # Forge integration dependencies
 occultism = {module = "curse.maven:occultism-361026", version.ref = "occultism"}
@@ -93,6 +112,8 @@ commoncapabilities = {module = "curse.maven:commoncapabilities-247007", version.
 cyclopscore = {module = "curse.maven:cyclopscore-232758", version.ref="cyclopscore"}
 
 nature-compass-forge = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-forge"}
+
+tomstorage-forge = {module = "maven.modrinth:toms-storage", version.ref="tomstorage-forge"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -110,17 +131,21 @@ forge-raw = ["forge-kotlin"]
 forge-base = ["cc-tweaked-forge", "peripheralium-forge"]
 
 # Minecraft
-externalMods-forge-runtime = ["jei-forge"]
-externalMods-fabric-runtime = ["jei-fabric"]
+externalMods-forge-runtime = ["jei-forge", "architectury-forge", "cloth-config-forge"]
+externalMods-fabric-runtime = ["rei-fabric", "architectury-fabric", "cloth-config-fabric"]
 
 # Integration dependencies
 externalMods-fabric-integrations-api = ["teamreborn-energy"]
 
 externalMods-fabric-integrations-full = [
-    "nature-compass-fabric"
+    "nature-compass-fabric",
+    "tomstorage-fabric"
 ]
 externalMods-fabric-integrations-active = [
-    "nature-compass-fabric"
+    "nature-compass-fabric",
+    "tomstorage-fabric"
+]
+externalMods-fabric-integrations-activedep = [
 ]
 
 externalMods-forge-integrations-full = [
@@ -128,12 +153,14 @@ externalMods-forge-integrations-full = [
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
+    "tomstorage-forge"
 ]
 externalMods-forge-integrations-active = [
     "occultism", "easyvillagers",
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
+    "tomstorage-forge"
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now

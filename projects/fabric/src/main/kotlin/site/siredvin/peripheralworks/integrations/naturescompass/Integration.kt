@@ -21,10 +21,16 @@ import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripher
 import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.FabricPeripheralWorksClient
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.RegistrationQueue
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 
 class Integration: Runnable {
+
+    companion object {
+        val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
+    }
 
     fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): NaturesCompassPeripheral<TurtlePeripheralOwner> {
         return NaturesCompassPeripheral(TurtlePeripheralOwner(turtle, side), Configuration.enableNaturesCompassTurtleUpgrade)
@@ -34,40 +40,55 @@ class Integration: Runnable {
     var NATURES_COMPASS_TURTLE: TurtleUpgradeSerialiser<PeripheralTurtleUpgrade<NaturesCompassPeripheral<TurtlePeripheralOwner>>>? = null
     var NATURES_COMPASS_POCKET: PocketUpgradeSerialiser<PocketNaturesCompassUpgrade>? = null
 
-    override fun run() {
-//        println(RegistriesAccessor.getROOT().keySet())
-        val turtleSerializerRegister = RegistriesAccessor.getROOT().get(TurtleUpgradeSerialiser.REGISTRY_ID.location()) as Registry<TurtleUpgradeSerialiser<*>>
-        val pocketSerializerRegister = RegistriesAccessor.getROOT().get(PocketUpgradeSerialiser.REGISTRY_ID.location()) as Registry<PocketUpgradeSerialiser<*>>
-        val upgradeID = ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
+    fun registerTurtleUpgrade(registry: Registry<TurtleUpgradeSerialiser<*>>) {
         NATURES_COMPASS_TURTLE = Registry.register(
-            turtleSerializerRegister, upgradeID,
+            registry, UPGRADE_ID,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PeripheralTurtleUpgrade.dynamic(stack.item, ::forTurtle) {
-                    upgradeID
-            }
-        })
-        NATURES_COMPASS_POCKET = Registry.register(
-            pocketSerializerRegister, upgradeID,
-            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
-                return@simpleWithCustomItem PocketNaturesCompassUpgrade(stack)
-            }
-        )
-
+                    UPGRADE_ID
+                }
+            })
         ModTurtleUpgradeDataProvider.hookUpgrade {
             it.simpleWithCustomItem(
                 ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
                 NATURES_COMPASS_TURTLE, NaturesCompass.NATURES_COMPASS_ITEM
             )
         }
+        FabricPeripheralWorksClient.registerHook { ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+            NATURES_COMPASS_TURTLE, TurtleUpgradeModeller.flatItem()
+        ) }
+    }
+
+    fun registerPocketUpgrade(registry: Registry<PocketUpgradeSerialiser<*>>) {
+        NATURES_COMPASS_POCKET = Registry.register(
+            registry, UPGRADE_ID,
+            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
+                return@simpleWithCustomItem PocketNaturesCompassUpgrade(stack)
+            }
+        )
         ModPocketUpgradeDataProvider.hookUpgrade {
             it.simpleWithCustomItem(
                 PocketNaturesCompassUpgrade.TYPE,
                 NATURES_COMPASS_POCKET, NaturesCompass.NATURES_COMPASS_ITEM
             )
         }
+    }
 
-        FabricPeripheralWorksClient.registerHook { ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-            NATURES_COMPASS_TURTLE, TurtleUpgradeModeller.flatItem()
-        ) }
+    override fun run() {
+        val rawTurtleRegistry = BuiltInRegistries.REGISTRY.get(TurtleUpgradeSerialiser.REGISTRY_ID.location())
+        val rawPocketRegistry = BuiltInRegistries.REGISTRY.get(PocketUpgradeSerialiser.REGISTRY_ID.location())
+        if (rawTurtleRegistry == null) {
+            RegistrationQueue.scheduleTurtleUpgrade(::registerTurtleUpgrade)
+        } else {
+            val turtleSerializerRegister = rawTurtleRegistry as Registry<TurtleUpgradeSerialiser<*>>
+            registerTurtleUpgrade(turtleSerializerRegister)
+        }
+        if (rawPocketRegistry == null) {
+            RegistrationQueue.schedulePocketUpgrade(::registerPocketUpgrade)
+        } else {
+            val pocketSerializerRegister = rawPocketRegistry as Registry<PocketUpgradeSerialiser<*>>
+            registerPocketUpgrade(pocketSerializerRegister)
+        }
+        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }

@@ -1,10 +1,21 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
+import site.siredvin.peripheralium.gradle.mavenDependencies
+import org.jetbrains.changelog.date
+import com.matthewprenger.cursegradle.CurseArtifact
+import com.matthewprenger.cursegradle.CurseProject
+import com.matthewprenger.cursegradle.CurseUploadTask
+import com.matthewprenger.cursegradle.CurseRelation
+import com.matthewprenger.cursegradle.Options
+
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.loom)
     alias(libs.plugins.kotlin)
     idea
+    id("com.matthewprenger.cursegradle") version "1.4.0"
+    id("org.jetbrains.changelog") version "1.3.1"
+    id("com.modrinth.minotaur") version "2.+"
 }
 
 val modVersion: String by extra
@@ -50,6 +61,27 @@ repositories {
             includeGroup("curse.maven")
         }
     }
+    maven {
+        url = uri("https://api.modrinth.com/maven")
+        name = "Modrinth"
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+    maven {
+        url = uri("https://maven.shedaniel.me/")
+        content {
+            includeGroup("me.shedaniel.cloth")
+            includeGroup("me.shedaniel")
+        }
+    }
+
+    maven {
+        url = uri("https://maven.architectury.dev/")
+        content {
+            includeGroup("dev.architectury")
+        }
+    }
 }
 
 dependencies {
@@ -85,12 +117,12 @@ dependencies {
 
     libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
     libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
-//    libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+    libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
 }
 
 loom {
     accessWidenerPath.set(project(":core").file("src/main/resources/peripheralworks.accesswidener"))
-    mixin.defaultRefmapName.set("peripehralworks.refmap.json")
+    mixin.defaultRefmapName.set("peripheralworks.refmap.json")
     runs {
         named("client") {
             configName = "Fabric Client"
@@ -113,10 +145,21 @@ sourceSets.main.configure {
 }
 
 tasks {
+    val extractedLibs = project.extensions.getByType<VersionCatalogsExtension>().named("libs")
+    val computercraftVersion = extractedLibs.findVersion("cc-tweaked").get()
+    val peripheraliumVersion = extractedLibs.findVersion("peripheralium").get()
+
     processResources {
+
         from(project(":core").sourceSets.main.get().resources)
         inputs.property("version", project.version)
-        filesMatching("fabric.mod.json") { expand(mutableMapOf("version" to project.version)) }
+        filesMatching("fabric.mod.json") { expand(
+            mutableMapOf(
+                "version" to project.version,
+                "computercraftVersion" to computercraftVersion,
+                "peripheraliumVersion" to peripheraliumVersion
+            )
+        ) }
         exclude(".cache")
     }
     withType<JavaCompile> {
@@ -129,16 +172,88 @@ tasks {
     }
 }
 
+val rootProjectDir: File by extra
+
+changelog {
+    version.set(modVersion)
+    path.set("${rootProjectDir}/CHANGELOG.md")
+    header.set(provider { "[${version.get()}] - ${date()}" })
+    itemPrefix.set("-")
+    keepUnreleasedSection.set(true)
+    unreleasedTerm.set("[Unreleased]")
+    groups.set(listOf())
+}
+
+
+val CURSEFORGE_RELEASE_TYPE: String by extra
+val CURSEFORGE_ID: String by extra
+val curseforgeKey: String by extra
+
+curseforge {
+    options(closureOf<Options> {
+        forgeGradleIntegration = false
+    })
+    apiKey = curseforgeKey
+    project(closureOf<CurseProject> {
+        id = CURSEFORGE_ID
+        releaseType = CURSEFORGE_RELEASE_TYPE
+        addGameVersion("Fabric")
+        addGameVersion(minecraftVersion)
+        try {
+            changelog = "${project.changelog.get(project.version as String).withHeader(false).toText()}"
+            changelogType = "markdown"
+        } catch (ignored: Exception) {
+            changelog = "Seems not real release"
+            changelogType = "markdown"
+        }
+        mainArtifact(tasks.remapJar.get().archivePath, closureOf<CurseArtifact> {
+            displayName = "UnlimitedPeripheralWorks $version for $minecraftVersion"
+            relations(closureOf<CurseRelation> {
+                requiredDependency("peripheralium")
+            })
+        })
+    })
+}
+project.afterEvaluate {
+    tasks.getByName<CurseUploadTask>("curseforge${CURSEFORGE_ID}") {
+        dependsOn(tasks.remapJar)
+    }
+}
+
+
+val MODRINTH_ID: String by extra
+val MODRINTH_RELEASE_TYPE: String by extra
+val modrinthKey: String by extra
+
+modrinth {
+    token.set(modrinthKey)
+    projectId.set(MODRINTH_ID)
+    versionNumber.set("${minecraftVersion}-${project.version}")
+    versionName.set("UnlimitedPeripheralWorks ${version} for ${minecraftVersion}")
+    versionType.set(MODRINTH_RELEASE_TYPE)
+    uploadFile.set(tasks.remapJar.get())
+    gameVersions.set(listOf(minecraftVersion))
+    loaders.set(listOf("fabric")) // Must also be an array - no need to specify this if you're using Loom or ForgeGradl
+    try {
+        changelog.set("${project.changelog.get(project.version as String).withHeader(false).toText()}")
+    } catch (ignored: Exception) {
+        changelog.set("")
+    }
+    dependencies {
+        required.project("peripheralium")
+    }
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            artifact(tasks.remapJar) {
-                artifactId = base.archivesName.get()
-                builtBy(tasks.remapJar)
-            }
-            artifact(tasks.remapSourcesJar) {
-                artifactId = base.archivesName.get()
-                builtBy(tasks.remapSourcesJar)
+            artifactId = base.archivesName.get()
+            from(components["java"])
+
+            mavenDependencies {
+                exclude(dependencies.create("site.siredvin:"))
+                exclude(libs.jei.fabric.get())
+
             }
         }
     }

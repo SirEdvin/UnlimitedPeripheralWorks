@@ -14,18 +14,18 @@ import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.ForgePeripheralWorksClient
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.Registries
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 
 class Integration: Runnable {
 
-    fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): NaturesCompassPeripheral<TurtlePeripheralOwner> {
+    private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): NaturesCompassPeripheral<TurtlePeripheralOwner> {
         return NaturesCompassPeripheral(TurtlePeripheralOwner(turtle, side), Configuration.enableNaturesCompassTurtleUpgrade)
     }
 
-
-    var NATURES_COMPASS_TURTLE: RegistryObject<TurtleUpgradeSerialiser<PeripheralTurtleUpgrade<NaturesCompassPeripheral<TurtlePeripheralOwner>>>>? = null
-    var NATURES_COMPASS_POCKET: RegistryObject<PocketUpgradeSerialiser<PocketNaturesCompassUpgrade>>? = null
+    private var NATURES_COMPASS_TURTLE: RegistryObject<TurtleUpgradeSerialiser<PeripheralTurtleUpgrade<NaturesCompassPeripheral<TurtlePeripheralOwner>>>>? = null
+    private var NATURES_COMPASS_POCKET: RegistryObject<PocketUpgradeSerialiser<PocketNaturesCompassUpgrade>>? = null
 
     override fun run() {
         NATURES_COMPASS_TURTLE = Registries.TURTLE_SERIALIZER.register(
@@ -62,5 +62,7 @@ class Integration: Runnable {
         ForgePeripheralWorksClient.registerHook { ComputerCraftAPIClient.registerTurtleUpgradeModeller(
             NATURES_COMPASS_TURTLE!!.get(), TurtleUpgradeModeller.flatItem()
         ) }
+
+        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }
