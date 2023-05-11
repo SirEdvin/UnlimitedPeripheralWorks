@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "peripheralworks:item/netherite_peripheralium_hub"
+  }
+}

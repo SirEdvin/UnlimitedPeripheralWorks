@@ -8,60 +8,53 @@ import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
-import net.minecraftforge.registries.RegistryObject
 import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripheralOwner
 import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.ForgePeripheralWorksClient
+import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.common.Registries
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
-import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
-import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
+import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import java.util.function.Consumer
 
 class Integration: Runnable {
+
+    companion object {
+        val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
+    }
 
     private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): NaturesCompassPeripheral<TurtlePeripheralOwner> {
         return NaturesCompassPeripheral(TurtlePeripheralOwner(turtle, side), Configuration.enableNaturesCompassTurtleUpgrade)
     }
 
-    private var NATURES_COMPASS_TURTLE: RegistryObject<TurtleUpgradeSerialiser<PeripheralTurtleUpgrade<NaturesCompassPeripheral<TurtlePeripheralOwner>>>>? = null
-    private var NATURES_COMPASS_POCKET: RegistryObject<PocketUpgradeSerialiser<PocketNaturesCompassUpgrade>>? = null
-
     override fun run() {
-        NATURES_COMPASS_TURTLE = Registries.TURTLE_SERIALIZER.register(
-            NaturesCompassPeripheral.TYPE
-        ) {
-            TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
+        PeripheralWorksPlatform.registerTurtleUpgrade(
+            UPGRADE_ID, TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PeripheralTurtleUpgrade.dynamic(stack.item, ::forTurtle) {
-                    ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
+                    UPGRADE_ID
                 }
-            }
-        }
-        NATURES_COMPASS_POCKET = Registries.POCKET_SERIALIZER.register(
-            NaturesCompassPeripheral.TYPE
-        ) {
-            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
+            }, { dataProvider, serializer ->
+                dataProvider.simpleWithCustomItem(
+                    ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
+                    serializer, NaturesCompass.naturesCompass
+                )
+            },
+            listOf(Consumer{
+                PeripheralWorksClientCore.registerHook { ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+                    it.get(), TurtleUpgradeModeller.flatItem()
+                ) }
+            })
+        )
+        PeripheralWorksPlatform.registerPocketUpgrade(
+            UPGRADE_ID, PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PocketNaturesCompassUpgrade(stack)
             }
-        }
-
-
-        ModTurtleUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(
-                ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
-                NATURES_COMPASS_TURTLE!!.get(), NaturesCompass.naturesCompass
-            )
-        }
-        ModPocketUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(
+        ) { dataProvider, serializer ->
+            dataProvider.simpleWithCustomItem(
                 PocketNaturesCompassUpgrade.TYPE,
-                NATURES_COMPASS_POCKET!!.get(), NaturesCompass.naturesCompass
+                serializer, NaturesCompass.naturesCompass
             )
         }
-
-        ForgePeripheralWorksClient.registerHook { ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-            NATURES_COMPASS_TURTLE!!.get(), TurtleUpgradeModeller.flatItem()
-        ) }
 
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }

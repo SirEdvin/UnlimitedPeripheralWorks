@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "addition": {
+    "tag": "forge:ingots/netherite"
+  },
+  "base": {
+    "item": "peripheralworks:peripheralium_hub"
+  },
+  "result": {
+    "item": "peripheralworks:netherite_peripheralium_hub"
+  }
+}

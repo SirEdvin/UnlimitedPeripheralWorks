@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.data
 
+import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.data.PackOutput

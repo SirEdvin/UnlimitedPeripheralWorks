@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "D": {
+      "tag": "c:diamonds"
+    },
+    "E": {
+      "tag": "c:emeralds"
+    },
+    "M": {
+      "item": "computercraft:wireless_modem_advanced"
+    },
+    "P": {
+      "item": "peripheralium:peripheralium_dust"
+    }
+  },
+  "pattern": [
+    "PDP",
+    "EME",
+    "PDP"
+  ],
+  "result": {
+    "item": "peripheralworks:peripheralium_hub"
+  }
+}

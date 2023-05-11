@@ -14,7 +14,10 @@ import site.siredvin.peripheralworks.common.RegistrationQueue
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
+import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
+import site.siredvin.peripheralworks.fabric.FabricPeripheralWorksPlatform
 import site.siredvin.peripheralworks.util.Platform
+import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 
 
 @Suppress("UNUSED")
@@ -23,8 +26,10 @@ object FabricPeripheralWorks: ModInitializer {
     override fun onInitialize() {
         // Register configuration
         FabricPeripheralium.sayHi()
-        PeripheralWorksCore.configure()
+        PeripheralWorksCore.configure(FabricPeripheralWorksPlatform, FabricModRecipeIngredients)
         ComputerCraftProxy.addProvider(FluidStorageProvider)
+        // Register items and blocks
+        PeripheralWorksCommonHooks.onRegister()
         // Load all integrations
         Platform.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }

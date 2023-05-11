@@ -1,5 +1,14 @@
 {
   "aspect.integrateddynamics.read.list.cc_folder": "Directory inside computer",
   "pocket.peripheralworks.natures_compass": "Nature Compassing",
-  "turtle.peripheralworks.natures_compass": "Nature Compassing"
+  "turtle.peripheralworks.natures_compass": "Nature Compassing",
+  "item.peripheralworks.peripheralium_hub": "Peripheralium hub",
+  "item.peripheralworks.netherite_peripheralium_hub": "Netherite peripheralium hub",
+  "turtle.peripheralworks.peripheralium_hub": "Hub",
+  "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
+  "pocket.peripheralworks.peripheralium_hub": "Hub",
+  "pocket.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
+
+  "text.peripheralworks.item_disabled": "  §4Item disabled in configuration",
+  "text.peripheralworks.peripheralium_hub_max_peripherals": "  §6Max upgrades inside hub: %s"
 }

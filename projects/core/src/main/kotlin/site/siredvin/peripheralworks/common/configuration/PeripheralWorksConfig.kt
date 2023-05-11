@@ -26,6 +26,15 @@ object PeripheralWorksConfig {
     val enablePoweredRail: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_POWERED_RAIL.get()
 
+    val enablePeripheraliumHubs: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_PERIPHERALIUM_HUBS.get()
+
+    val peripheraliumHubUpgradeCount: Int
+        get() = ConfigHolder.COMMON_CONFIG.PERIPHERALIUM_HUB_UPGRADE_COUNT.get()
+
+    val netheritePeripheraliumHubUpgradeCount: Int
+        get() = ConfigHolder.COMMON_CONFIG.NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -44,6 +53,10 @@ object PeripheralWorksConfig {
         var ENABLE_LECTERN: ForgeConfigSpec.BooleanValue
         var ENABLE_JUKEBOX: ForgeConfigSpec.BooleanValue
         var ENABLE_POWERED_RAIL: ForgeConfigSpec.BooleanValue
+        // Peripheralium hubs
+        val ENABLE_PERIPHERALIUM_HUBS: ForgeConfigSpec.BooleanValue
+        val PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
+        val NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
 
         init {
             builder.push("plugins")
@@ -70,6 +83,14 @@ object PeripheralWorksConfig {
                 .define("enableJukebox", true)
             ENABLE_POWERED_RAIL = builder.comment("Enables integration for minecraft powered rail")
                 .define("enablePoweredRail", true)
+            builder.pop()
+            builder.push("Peripherals")
+            ENABLE_PERIPHERALIUM_HUBS = builder.comment("Enables peripheralium hubs (regular one and netherite versions), which allows you to use many peripherals in one")
+                .define("enablePeripheraliumHubs", true)
+            PERIPHERALIUM_HUB_UPGRADE_COUNT = builder.comment("Regulare amount of upgrades that can be installed on peripheralium hub")
+                .defineInRange("peripheraliumHubUpgradeCount", 3, 1, 64)
+            NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT  = builder.comment("Regulare amount of upgrades that can be installed on netherite peripheralium hub")
+                .defineInRange("netheritePeripheraliumHubUpgradeCount", 7, 1, 64)
             builder.pop().pop()
             builder.push("integrations")
             INTEGRATION_CONFIGURATIONS.entries.forEach {
