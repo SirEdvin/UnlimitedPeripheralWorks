@@ -1,14 +1,17 @@
 package site.siredvin.peripheralworks.xplat
 
 import dan200.computercraft.api.client.ComputerCraftAPIClient
+import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralium.computercraft.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripheralOwner
 import site.siredvin.peripheralium.computercraft.pocket.BasePocketUpgrade
 import site.siredvin.peripheralium.computercraft.pocket.PeripheralPocketUpgrade
 import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
+import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
@@ -87,7 +90,10 @@ object PeripheralWorksCommonHooks {
             listOf(Consumer {
                 PeripheralWorksClientCore.registerHook {
                     ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-                        it.get(), ScaledItemModeller(0.5f)
+                        it.get(), TurtleUpgradeModeller.sided(
+                            ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/universal_scanner_left"),
+                            ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/universal_scanner_right")
+                        )
                     )
                 }
             })

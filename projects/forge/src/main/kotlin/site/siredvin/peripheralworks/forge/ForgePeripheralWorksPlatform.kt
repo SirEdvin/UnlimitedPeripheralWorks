@@ -7,9 +7,11 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import dan200.computercraft.api.upgrades.UpgradeDataProvider
+import dan200.computercraft.shared.ModRegistry
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -20,7 +22,6 @@ import site.siredvin.peripheralworks.common.Registries
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
-import java.util.Set
 import java.util.function.BiFunction
 import java.util.function.Consumer
 import java.util.function.Supplier
@@ -73,5 +74,19 @@ object ForgePeripheralWorksPlatform: PeripheralWorksPlatform {
     ) {
         val pocketUpgrade = Registries.POCKET_SERIALIZER.register(key.path) {serializer}
         ModPocketUpgradeDataProvider.hookUpgrade {dataGenerator.apply(it, pocketUpgrade.get())}
+    }
+
+    override fun createTurtlesWithUpgrade(upgrade: ITurtleUpgrade): List<ItemStack> {
+        return listOf(
+            ModRegistry.Items.TURTLE_NORMAL.get().create(-1, null, -1, null, upgrade, 0, null),
+            ModRegistry.Items.TURTLE_ADVANCED.get().create(-1, null, -1, null, upgrade, 0, null),
+        )
+    }
+
+    override fun createPocketsWithUpgrade(upgrade: IPocketUpgrade): List<ItemStack> {
+        return listOf(
+            ModRegistry.Items.POCKET_COMPUTER_NORMAL.get().create(-1, null, -1, upgrade),
+            ModRegistry.Items.POCKET_COMPUTER_ADVANCED.get().create(-1, null, -1, upgrade),
+        )
     }
 }

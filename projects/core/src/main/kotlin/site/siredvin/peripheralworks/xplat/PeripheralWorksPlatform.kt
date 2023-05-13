@@ -10,6 +10,7 @@ import dan200.computercraft.api.upgrades.UpgradeDataProvider.Upgrade
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -80,6 +81,13 @@ interface PeripheralWorksPlatform {
         ) {
             get().registerPocketUpgrade(key, serializer, dataGenerator)
         }
+
+        fun createTurtlesWithUpgrade(upgrade: ITurtleUpgrade): List<ItemStack> {
+            return get().createTurtlesWithUpgrade(upgrade)
+        }
+        fun createPocketsWithUpgrade(upgrade: IPocketUpgrade): List<ItemStack> {
+            return get().createPocketsWithUpgrade(upgrade)
+        }
     }
 
     fun <T: Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T>
@@ -108,4 +116,7 @@ interface PeripheralWorksPlatform {
         serializer: PocketUpgradeSerialiser<V>,
         dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, Upgrade<PocketUpgradeSerialiser<*>>>
     )
+
+    fun createTurtlesWithUpgrade(upgrade: ITurtleUpgrade): List<ItemStack>
+    fun createPocketsWithUpgrade(upgrade: IPocketUpgrade): List<ItemStack>
 }
