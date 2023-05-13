@@ -7,11 +7,16 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import dan200.computercraft.api.upgrades.UpgradeDataProvider
+import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralworks.common.RegistrationQueue
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
@@ -30,6 +35,20 @@ object FabricPeripheralWorksPlatform: PeripheralWorksPlatform {
         val registeredBlock = Registry.register(BuiltInRegistries.BLOCK, key, block.get())
         Registry.register(BuiltInRegistries.ITEM, key, itemFactory(registeredBlock))
         return Supplier { registeredBlock }
+    }
+
+    override fun <V: BlockEntity, T: BlockEntityType<V>> registerBlockEntity(key: ResourceLocation, blockEntityTypeSup: Supplier<T>): Supplier<T> {
+        val registeredBlockEntityType = Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, key, blockEntityTypeSup.get())
+        return Supplier { registeredBlockEntityType }
+    }
+
+    override fun <T : BlockEntity> createBlockEntityType(
+        factory: BiFunction<BlockPos, BlockState, T>,
+        block: Block
+    ): BlockEntityType<T> {
+        return FabricBlockEntityTypeBuilder.create({ t: BlockPos, u: BlockState ->
+            factory.apply(t, u)
+        }).addBlock(block).build()
     }
 
     private fun <V : ITurtleUpgrade> rawTurtleUpgradeRegistration(

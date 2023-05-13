@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.common.configuration
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.IConfigHandler
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
+import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 
 object PeripheralWorksConfig {
 
@@ -35,6 +36,9 @@ object PeripheralWorksConfig {
     val netheritePeripheraliumHubUpgradeCount: Int
         get() = ConfigHolder.COMMON_CONFIG.NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT.get()
 
+    val enableUniversalScanner: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_UNIVERSAL_SCANNER.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -57,6 +61,7 @@ object PeripheralWorksConfig {
         val ENABLE_PERIPHERALIUM_HUBS: ForgeConfigSpec.BooleanValue
         val PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
         val NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
+        val ENABLE_UNIVERSAL_SCANNER: ForgeConfigSpec.BooleanValue
 
         init {
             builder.push("plugins")
@@ -91,7 +96,12 @@ object PeripheralWorksConfig {
                 .defineInRange("peripheraliumHubUpgradeCount", 3, 1, 64)
             NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT  = builder.comment("Regulare amount of upgrades that can be installed on netherite peripheralium hub")
                 .defineInRange("netheritePeripheraliumHubUpgradeCount", 7, 1, 64)
+            ENABLE_UNIVERSAL_SCANNER = builder.comment("Enables universal scanner")
+                .define("enableUniversalScanner", true)
             builder.pop().pop()
+            builder.push("operations")
+            register(SphereOperations.values(), builder)
+            builder.pop()
             builder.push("integrations")
             INTEGRATION_CONFIGURATIONS.entries.forEach {
                 builder.push(it.key)
@@ -99,6 +109,12 @@ object PeripheralWorksConfig {
                 builder.pop()
             }
             builder.pop()
+        }
+
+        private fun register(data: Array<out IConfigHandler>, builder: ForgeConfigSpec.Builder) {
+            for (handler in data) {
+                handler.addToConfig(builder)
+            }
         }
     }
 }

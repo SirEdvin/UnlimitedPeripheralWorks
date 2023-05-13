@@ -5,11 +5,11 @@ import com.mojang.math.Transformation
 import dan200.computercraft.api.client.TransformedModel
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller
 import dan200.computercraft.api.turtle.ITurtleAccess
+import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import org.joml.Quaternionf
-import site.siredvin.peripheralworks.computercraft.turtles.PeripheraliumHubTurtleUpgrade
 
-class PeripheraliumHubModeller(scaleFactor: Float, modelPixelSize: Int = 16): TurtleUpgradeModeller<PeripheraliumHubTurtleUpgrade> {
+class ScaledItemModeller<T: ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: Int = 16): TurtleUpgradeModeller<T> {
 
     companion object {
         fun buildMatrix(side: TurtleSide, scaleFactor: Float, modelPixelSize: Int): Transformation {
@@ -40,7 +40,7 @@ class PeripheraliumHubModeller(scaleFactor: Float, modelPixelSize: Int = 16): Tu
     private val rightTransformation = buildMatrix(TurtleSide.RIGHT, scaleFactor, modelPixelSize)
 
     override fun getModel(
-        upgrade: PeripheraliumHubTurtleUpgrade,
+        upgrade: T,
         turtle: ITurtleAccess?,
         side: TurtleSide
     ): TransformedModel {

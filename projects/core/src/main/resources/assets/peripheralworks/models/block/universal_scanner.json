@@ -1,0 +1,23 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "bottom": "peripheralworks:block/peripheral_casing",
+    "side": "peripheralworks:block/universal_scanner_side",
+    "top": "peripheralworks:block/peripheral_casing",
+    "front": "peripheralworks:block/universal_scanner_front",
+    "particle": "peripheralworks:block/universal_scanner_front"
+  },
+  "elements": [
+    {   "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "uv": [ 0, 0, 16, 16 ], "texture": "#bottom", "cullface": "down" },
+        "up":    { "uv": [ 0, 16, 16, 0 ], "texture": "#top", "cullface": "up" },
+        "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#front", "cullface": "north" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "south" },
+        "west":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "west" },
+        "east":  { "uv": [ 0, 0, 16, 16 ], "texture": "#side", "cullface": "east" }
+      }
+    }
+  ]
+}

@@ -1,3 +1,5 @@
-// 1.19.4	2023-05-10T22:17:19.110089906	vanilla/Recipes
+// 1.19.4	2023-05-13T12:20:26.967172016	vanilla/Recipes
 ba86cef78e2e738aeeedda481442d6a620e5dd50 data/peripheralworks/recipes/netherite_peripheralium_hub.json
+d3e006255acdc2e8ad644319af644d21aa344893 data/peripheralworks/recipes/peripheral_casing.json
 18af30591547644f148c40da544bd9a5beab8e8e data/peripheralworks/recipes/peripheralium_hub.json
+555bce600855adba123d7ce53aba512c936ec217 data/peripheralworks/recipes/universal_scanner.json

@@ -24,4 +24,8 @@ interface ModRecipeIngredients {
     val netheriteIngot: Ingredient
     val emerald: Ingredient
     val diamond: Ingredient
+    val ironIngot: Ingredient
+    val anyCoal: Ingredient
+    val peripheraliumBlock: Ingredient
+    val observer: Ingredient
 }

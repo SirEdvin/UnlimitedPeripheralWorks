@@ -1,15 +1,16 @@
 package site.siredvin.peripheralworks
-import com.tom.storagemod.block.InventoryConnectorBlock
-import dan200.computercraft.api.ComputerCraftAPI
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.Event
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.fml.config.ModConfig
 import site.siredvin.peripheralium.FabricPeripheralium
+import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
 import site.siredvin.peripheralworks.common.RegistrationQueue
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -27,6 +28,10 @@ object FabricPeripheralWorks: ModInitializer {
         // Register configuration
         FabricPeripheralium.sayHi()
         PeripheralWorksCore.configure(FabricPeripheralWorksPlatform, FabricModRecipeIngredients)
+        PeripheralWorksCore.configureCreativeTab(
+            FabricItemGroup.builder(
+            ResourceLocation(PeripheralWorksCore.MOD_ID, "tab")
+        )).build()
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
@@ -37,9 +42,13 @@ object FabricPeripheralWorks: ModInitializer {
         // Pretty important to setup configuration after integration loading!
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)
         // Register block lookup
-        PeripheralLookup.get().registerFallback(ComputerCraftProxy::peripheralProvider)
-        val event: Event<RegistryEntryAddedCallback<Registry<*>>> = RegistryEntryAddedCallback.event(BuiltInRegistries.REGISTRY) as Event<RegistryEntryAddedCallback<Registry<*>>>
+        PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->
+            if (blockEntity is IPeripheralProvider<*>)
+                return@registerFallback blockEntity.getPeripheral(context)
+            return@registerFallback ComputerCraftProxy.peripheralProvider(world, pos, state, blockEntity, context)
+        }
 
+        val event: Event<RegistryEntryAddedCallback<Registry<*>>> = RegistryEntryAddedCallback.event(BuiltInRegistries.REGISTRY) as Event<RegistryEntryAddedCallback<Registry<*>>>
         event.register(RegistrationQueue::onNewRegistry)
     }
 }

@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "peripheralium:peripheralium_block"
+    },
+    "C": {
+      "tag": "c:coal"
+    },
+    "I": {
+      "tag": "c:iron_ingots"
+    }
+  },
+  "pattern": [
+    "ICI",
+    "CBC",
+    "ICI"
+  ],
+  "result": {
+    "item": "peripheralworks:peripheral_casing"
+  }
+}

@@ -6,11 +6,14 @@ import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import dan200.computercraft.api.upgrades.UpgradeDataProvider
 import dan200.computercraft.api.upgrades.UpgradeDataProvider.Upgrade
+import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.items.DescriptiveBlockItem
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import java.util.function.BiFunction
@@ -48,6 +51,20 @@ interface PeripheralWorksPlatform {
                 .registerBlock(ResourceLocation(PeripheralWorksCore.MOD_ID, name), block, itemFactory)
         }
 
+        fun <V : BlockEntity, T : BlockEntityType<V>> registerBlockEntity(
+            key: ResourceLocation,
+            blockEntityTypeSup: Supplier<T>
+        ): Supplier<T> {
+            return get().registerBlockEntity(key, blockEntityTypeSup)
+        }
+
+        fun <T : BlockEntity> createBlockEntityType(
+            factory: BiFunction<BlockPos, BlockState, T>,
+            block: Block
+        ): BlockEntityType<T> {
+            return get().createBlockEntityType(factory, block)
+        }
+
         fun <V: ITurtleUpgrade> registerTurtleUpgrade(
             key: ResourceLocation,
             serializer: TurtleUpgradeSerialiser<V>,
@@ -68,6 +85,17 @@ interface PeripheralWorksPlatform {
     fun <T: Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T>
 
     fun <T: Block> registerBlock(key: ResourceLocation, block: Supplier<T>, itemFactory: (T) -> (Item)): Supplier<T>
+
+    fun <V : BlockEntity, T : BlockEntityType<V>> registerBlockEntity(
+        key: ResourceLocation,
+        blockEntityTypeSup: Supplier<T>
+    ): Supplier<T>
+
+    fun <T : BlockEntity> createBlockEntityType(
+        factory: BiFunction<BlockPos, BlockState, T>,
+        block: Block
+    ): BlockEntityType<T>
+
 
     fun <V: ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,

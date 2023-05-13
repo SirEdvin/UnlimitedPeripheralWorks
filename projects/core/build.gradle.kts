@@ -21,7 +21,8 @@ sourceSets.main.configure {
 minecraft {
     version(minecraftVersion)
     accessWideners(
-        "src/main/resources/peripheralworks.accesswidener"
+        "src/main/resources/peripheralworks.accesswidener",
+        "src/main/resources/peripheralworks-common.accesswidener"
     )
 }
 
