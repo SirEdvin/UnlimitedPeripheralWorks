@@ -34,21 +34,21 @@ class UniversalScannerPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeri
 
         fun of(turtle: ITurtleAccess, side: TurtleSide): UniversalScannerPeripheral {
             val owner = TurtlePeripheralOwner(turtle, side)
-            owner.attachOperations()
+            owner.attachOperations(config = PeripheralWorksConfig)
             owner.attachFuel()
             return UniversalScannerPeripheral(owner)
         }
 
         fun of(pocket: IPocketAccess): UniversalScannerPeripheral {
             val owner = PocketPeripheralOwner(pocket)
-            owner.attachOperations()
+            owner.attachOperations(config = PeripheralWorksConfig)
             owner.attachFuel()
             return UniversalScannerPeripheral(owner)
         }
 
         fun of(blockEntity: UniversalScannerBlockEntity): UniversalScannerPeripheral {
             val owner = BlockEntityPeripheralOwner(blockEntity)
-            owner.attachOperations()
+            owner.attachOperations(config = PeripheralWorksConfig)
             return UniversalScannerPeripheral(owner)
         }
 

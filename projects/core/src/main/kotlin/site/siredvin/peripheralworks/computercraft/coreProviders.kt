@@ -26,7 +26,7 @@ object StorageProvider: PeripheralPluginProvider {
         if (storage is SlottedStorage && PeripheralWorksConfig.enableGenericInventory && storage.size != 0)
             return InventoryPlugin(level, storage)
         if (PeripheralWorksConfig.enableGenericItemStorage)
-            return ItemStoragePlugin(storage, level)
+            return ItemStoragePlugin(storage, level, PeripheralWorksConfig.itemStorageTransferLimit)
         return null
     }
 }

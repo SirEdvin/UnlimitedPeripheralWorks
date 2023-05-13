@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.integrations.occultism
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.IConfigHandler
+import site.siredvin.peripheralium.api.config.IConfigHandler
 
 object Configuration: IConfigHandler {
 

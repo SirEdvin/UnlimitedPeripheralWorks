@@ -18,7 +18,7 @@ object FluidStorageProvider: PeripheralPluginProvider {
         if (!PeripheralWorksConfig.enableGenericFluidStorage)
             return null
         val fluidStorage = FluidStorage.SIDED.find(level, pos, side) ?: return null
-        return FluidStoragePlugin(level, fluidStorage)
+        return FluidStoragePlugin(level, fluidStorage, PeripheralWorksConfig.fluidStorageTransferLimit)
     }
 
 }

@@ -9,9 +9,12 @@ import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.storage.Storage
 import site.siredvin.peripheralium.extra.plugins.AbstractItemStoragePlugin
 import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 class OccultismItemStoragePlugin(private val storageController: IStorageController, override val level: Level): AbstractItemStoragePlugin() {
     override val storage = OccultismItemStorage(storageController)
+    override val itemStorageTransferLimit: Int
+        get() = PeripheralWorksConfig.itemStorageTransferLimit
 
     @LuaFunction(mainThread = true)
     fun getMaxSlots(): Int {

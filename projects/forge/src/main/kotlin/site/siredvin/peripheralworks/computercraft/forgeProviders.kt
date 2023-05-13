@@ -22,7 +22,7 @@ object FluidStorageProvider: PeripheralPluginProvider {
         val cap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER)
         if (!cap.isPresent)
             return null
-        return ForgeFluidStoragePlugin(cap.orElseThrow { NullPointerException() })
+        return ForgeFluidStoragePlugin(cap.orElseThrow { NullPointerException() }, PeripheralWorksConfig.fluidStorageTransferLimit)
     }
 
 }
