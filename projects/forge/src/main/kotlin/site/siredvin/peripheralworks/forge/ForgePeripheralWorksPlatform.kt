@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraftforge.common.Tags
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.Registries
@@ -88,5 +89,9 @@ object ForgePeripheralWorksPlatform: PeripheralWorksPlatform {
             ModRegistry.Items.POCKET_COMPUTER_NORMAL.get().create(-1, null, -1, upgrade),
             ModRegistry.Items.POCKET_COMPUTER_ADVANCED.get().create(-1, null, -1, upgrade),
         )
+    }
+
+    override fun isOre(block: BlockState): Boolean {
+        return block.`is`(Tags.Blocks.ORES)
     }
 }

@@ -21,6 +21,13 @@ object Blocks {
             TooltipCollection::isDisabled, TooltipCollection::universalScanningFreeRadius, TooltipCollection::universalScanningMaxRadius
         ) }
     )
+    val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerBlock(
+        "ultimate_sensor", { GenericBlockEntityBlock({ BlockEntityTypes.ULTIMATE_SENSOR.get() }, true) },
+        {PeripheralBlockItem(
+            it, Item.Properties(), PeripheralWorksConfig::enableUltimateSensor,
+            TooltipCollection::isDisabled
+        ) }
+    )
 
     fun doSomething() {}
 }

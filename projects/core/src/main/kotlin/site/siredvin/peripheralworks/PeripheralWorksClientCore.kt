@@ -9,7 +9,9 @@ object PeripheralWorksClientCore {
 
     private val EXTRA_MODELS = arrayOf(
         "turtle/universal_scanner_left",
-        "turtle/universal_scanner_right"
+        "turtle/universal_scanner_right",
+        "turtle/ultimate_sensor_left",
+        "turtle/ultimate_sensor_right"
     )
 
     fun registerExtraModels(register: Consumer<ResourceLocation>) {

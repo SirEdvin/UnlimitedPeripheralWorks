@@ -88,6 +88,10 @@ interface PeripheralWorksPlatform {
         fun createPocketsWithUpgrade(upgrade: IPocketUpgrade): List<ItemStack> {
             return get().createPocketsWithUpgrade(upgrade)
         }
+
+        fun isOre(block: BlockState): Boolean {
+            return get().isOre(block)
+        }
     }
 
     fun <T: Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T>
@@ -119,4 +123,6 @@ interface PeripheralWorksPlatform {
 
     fun createTurtlesWithUpgrade(upgrade: ITurtleUpgrade): List<ItemStack>
     fun createPocketsWithUpgrade(upgrade: IPocketUpgrade): List<ItemStack>
+
+    fun isOre(block: BlockState): Boolean
 }

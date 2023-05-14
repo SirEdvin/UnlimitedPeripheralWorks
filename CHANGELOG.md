@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Peripheralium hub: pocket/turtle upgrade that can equip other upgrades
 - Universal scanner: scan entity, block or items around, can be equipped on turtle or pocket computer
+- Ultimate sensor: allow you to inspect a lot about world that surround you!
 
 ## [0.3.0] - 2023-08-05
 

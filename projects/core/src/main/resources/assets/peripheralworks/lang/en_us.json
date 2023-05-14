@@ -3,18 +3,24 @@
   "item.peripheralworks.netherite_peripheralium_hub": "Netherite peripheralium hub",
   "item.peripheralworks.peripheral_casing": "Peripheral casing",
   "item.peripheralworks.universal_scanner": "Universal scanner",
+  "item.peripheralworks.ultimate_sensor": "Ultimate sensor",
 
-  "item.peripheralworks.tooltip.universal_scanner": "§3Universal tool, that can work by himself or be installed on turtle/pocket computer",
+  "item.peripheralworks.tooltip.universal_scanner": "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers",
+  "item.peripheralworks.tooltip.ultimate_sensor": "§3§oLimitless possibilities for understanding world in one little box. Works with turtles and pocket computers",
 
   "block.peripheralworks.peripheral_casing": "Peripheral casing",
   "block.peripheralworks.universal_scanner": "Universal scanner",
+  "block.peripheralworks.ultimate_sensor": "Ultimate sensor",
 
   "turtle.peripheralworks.peripheralium_hub": "Hub",
   "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
   "turtle.peripheralworks.universal_scanner": "Scanning",
+  "turtle.peripheralworks.ultimate_sensor": "Sensing",
+
   "pocket.peripheralworks.peripheralium_hub": "Hub",
   "pocket.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
   "pocket.peripheralworks.universal_scanner": "Scanning",
+  "pocket.peripheralworks.ultimate_sensor": "Sensing",
 
   "aspect.integrateddynamics.read.list.cc_folder": "Directory inside computer",
 

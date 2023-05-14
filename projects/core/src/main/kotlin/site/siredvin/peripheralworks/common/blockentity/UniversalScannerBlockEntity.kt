@@ -2,10 +2,8 @@ package site.siredvin.peripheralworks.common.blockentity
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.blockentities.PeripheralBlockEntity
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 

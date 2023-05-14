@@ -4,6 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 import site.siredvin.peripheralium.api.config.IOperationAbilityConfig
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
+import site.siredvin.peripheralworks.computercraft.operations.InspectOperations
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 
 object PeripheralWorksConfig: IOperationAbilityConfig {
@@ -51,6 +52,9 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
     val enableUniversalScanner: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_UNIVERSAL_SCANNER.get()
 
+    val enableUltimateSensor: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_UNIVERSAL_SCANNER.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -78,6 +82,7 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
         val PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
         val NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
         val ENABLE_UNIVERSAL_SCANNER: ForgeConfigSpec.BooleanValue
+        val ENABLE_ULTIMATE_SENSOR: ForgeConfigSpec.BooleanValue
 
         init {
             builder.push("base")
@@ -122,9 +127,12 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
                 .defineInRange("netheritePeripheraliumHubUpgradeCount", 7, 1, 64)
             ENABLE_UNIVERSAL_SCANNER = builder.comment("Enables universal scanner")
                 .define("enableUniversalScanner", true)
+            ENABLE_ULTIMATE_SENSOR = builder.comment("Enables ultimate sensor")
+                .define("enableUltimateSensor", true)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.values(), builder)
+            register(InspectOperations.values(), builder)
             builder.pop()
             builder.push("integrations")
             INTEGRATION_CONFIGURATIONS.entries.forEach {

@@ -9,6 +9,7 @@ import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import dan200.computercraft.api.upgrades.UpgradeDataProvider
 import dan200.computercraft.shared.ModRegistry.Items
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
@@ -123,5 +124,9 @@ object FabricPeripheralWorksPlatform: PeripheralWorksPlatform {
             Items.POCKET_COMPUTER_NORMAL.get().create(-1, null, -1, upgrade),
             Items.POCKET_COMPUTER_ADVANCED.get().create(-1, null, -1, upgrade),
         )
+    }
+
+    override fun isOre(block: BlockState): Boolean {
+        return block.`is`(ConventionalBlockTags.ORES)
     }
 }

@@ -56,7 +56,7 @@ class UniversalScannerPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeri
 
     internal class UniversalScanningPlugin(owner: IPeripheralOwner) : AbstractScanningPlugin(owner) {
         override val allowedMods: Set<AreaInteractionMode> = setOf(AreaInteractionMode.BLOCK, AreaInteractionMode.ENTITY, AreaInteractionMode.ITEM)
-        override val operations: Array<IPeripheralOperation<*>> = arrayOf(SphereOperations.UNIVERSAL_SCAN)
+        override val operations: List<IPeripheralOperation<*>> = listOf(SphereOperations.UNIVERSAL_SCAN)
         override val blockStateEnriches: List<BiConsumer<BlockState, MutableMap<String, Any>>> = emptyList()
         override val entityEnriches: List<BiConsumer<Entity, MutableMap<String, Any>>> = emptyList()
         override val itemEnriches: List<BiConsumer<ItemEntity, MutableMap<String, Any>>> = emptyList()
