@@ -1,9 +1,7 @@
 package site.siredvin.peripheralworks
 import net.minecraft.world.item.CreativeModeTab
-import net.minecraft.world.item.ItemStack
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import site.siredvin.peripheralium.PeripheraliumCore
 import site.siredvin.peripheralium.api.storage.ExtractorProxy
 import site.siredvin.peripheralium.util.text
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
@@ -40,22 +38,22 @@ object PeripheralWorksCore {
                 output.accept(Blocks.MAP_PEDESTAL.get().asItem().defaultInstance)
                 output.accept(Blocks.DISPLAY_PEDESTAL.get().asItem().defaultInstance)
                 PeripheraliumPlatform.getTurtleUpgrade(PeripheraliumHubPeripheral.ID.toString())
-                    ?.let { PeripheralWorksPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
                 PeripheraliumPlatform.getTurtleUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID.toString())
-                    ?.let { PeripheralWorksPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
                 PeripheraliumPlatform.getTurtleUpgrade(UniversalScannerPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheralWorksPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
                 PeripheraliumPlatform.getTurtleUpgrade(UltimateSensorPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheralWorksPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
 
                 PeripheraliumPlatform.getPocketUpgrade(PeripheraliumHubPeripheral.ID.toString())
-                    ?.let { PeripheralWorksPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
                 PeripheraliumPlatform.getPocketUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID.toString())
-                    ?.let { PeripheralWorksPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
                 PeripheraliumPlatform.getPocketUpgrade(UniversalScannerPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheralWorksPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
                 PeripheraliumPlatform.getPocketUpgrade(UltimateSensorPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheralWorksPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
+                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
             }
     }
 

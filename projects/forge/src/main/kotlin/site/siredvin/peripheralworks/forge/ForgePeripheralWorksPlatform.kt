@@ -48,17 +48,6 @@ object ForgePeripheralWorksPlatform: PeripheralWorksPlatform {
         return ForgePeripheralWorks.blockEntityTypesRegistry.register(key.path, blockEntityTypeSup)
     }
 
-    override fun <T : BlockEntity> createBlockEntityType(
-        factory: BiFunction<BlockPos, BlockState, T>,
-        block: Block
-    ): BlockEntityType<T> {
-        return BlockEntityType.Builder.of({ t: BlockPos?, u: BlockState? ->
-            factory.apply(
-                t!!, u!!
-            )
-        }, block).build(null)
-    }
-
     override fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,
         serializer: TurtleUpgradeSerialiser<V>,
@@ -77,23 +66,5 @@ object ForgePeripheralWorksPlatform: PeripheralWorksPlatform {
     ) {
         val pocketUpgrade = Registries.POCKET_SERIALIZER.register(key.path) {serializer}
         ModPocketUpgradeDataProvider.hookUpgrade {dataGenerator.apply(it, pocketUpgrade.get())}
-    }
-
-    override fun createTurtlesWithUpgrade(upgrade: ITurtleUpgrade): List<ItemStack> {
-        return listOf(
-            ModRegistry.Items.TURTLE_NORMAL.get().create(-1, null, -1, null, upgrade, 0, null),
-            ModRegistry.Items.TURTLE_ADVANCED.get().create(-1, null, -1, null, upgrade, 0, null),
-        )
-    }
-
-    override fun createPocketsWithUpgrade(upgrade: IPocketUpgrade): List<ItemStack> {
-        return listOf(
-            ModRegistry.Items.POCKET_COMPUTER_NORMAL.get().create(-1, null, -1, upgrade),
-            ModRegistry.Items.POCKET_COMPUTER_ADVANCED.get().create(-1, null, -1, upgrade),
-        )
-    }
-
-    override fun isOre(block: BlockState): Boolean {
-        return block.`is`(Tags.Blocks.ORES)
     }
 }
