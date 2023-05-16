@@ -3,10 +3,12 @@ package site.siredvin.peripheralworks.computercraft.operations
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.peripheral.IPeripheralOperation
 
-enum class InspectOperations(
+enum class UnconditionalFreeOperations(
     private val defaultCooldown: Int,
 ): IPeripheralOperation<Any?> {
-    INSPECT_CHUNK(10_000);
+    INSPECT_CHUNK(10_000),
+    UPDATE_MAP(60_000),
+    EXTRACT_MAP(10_000);
 
     private var cooldown: ForgeConfigSpec.IntValue? = null
 

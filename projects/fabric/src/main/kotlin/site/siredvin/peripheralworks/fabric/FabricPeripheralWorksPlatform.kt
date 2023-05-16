@@ -8,11 +8,13 @@ import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import dan200.computercraft.api.upgrades.UpgradeDataProvider
 import dan200.computercraft.shared.ModRegistry.Items
+import dan200.computercraft.shared.util.NBTUtil
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack

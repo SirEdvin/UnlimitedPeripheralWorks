@@ -16,7 +16,7 @@ import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripher
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.UltimateSensorBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
-import site.siredvin.peripheralworks.computercraft.operations.InspectOperations
+import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 import site.siredvin.peripheralworks.utils.SensorCollection
 import java.util.function.Function
 
@@ -59,7 +59,7 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeriph
             registerInspector("time", SensorCollection::inspectTime)
             registerInspector("light", SensorCollection::inspectLight)
             registerInspector("calendar", SensorCollection::inspectCalendar)
-            registerInspector("chunk", SensorCollection::inspectChunk, InspectOperations.INSPECT_CHUNK)
+            registerInspector("chunk", SensorCollection::inspectChunk, UnconditionalFreeOperations.INSPECT_CHUNK)
         }
 
         fun of(turtle: ITurtleAccess, side: TurtleSide): UltimateSensorPeripheral {

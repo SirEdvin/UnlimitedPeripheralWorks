@@ -13,5 +13,6 @@ object ModDataProviders {
         generator.add {
             ModTurtleUpgradeDataProvider(it)
         }
+        generator.lootTable(ModLootTableProvider.getTables())
     }
 }

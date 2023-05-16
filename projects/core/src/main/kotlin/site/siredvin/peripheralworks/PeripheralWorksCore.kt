@@ -36,6 +36,9 @@ object PeripheralWorksCore {
                 output.accept(Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance)
                 output.accept(Blocks.UNIVERSAL_SCANNER.get().asItem().defaultInstance)
                 output.accept(Blocks.ULTIMATE_SENSOR.get().asItem().defaultInstance)
+                output.accept(Blocks.ITEM_PEDESTAL.get().asItem().defaultInstance)
+                output.accept(Blocks.MAP_PEDESTAL.get().asItem().defaultInstance)
+                output.accept(Blocks.DISPLAY_PEDESTAL.get().asItem().defaultInstance)
                 PeripheraliumPlatform.getTurtleUpgrade(PeripheraliumHubPeripheral.ID.toString())
                     ?.let { PeripheralWorksPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
                 PeripheraliumPlatform.getTurtleUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID.toString())

@@ -49,5 +49,31 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" C ")
             .pattern(" O ")
             .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Blocks.ITEM_PEDESTAL.get().asItem(), 5)
+            .define('S', ingredients.smoothStone)
+            .define('_', ingredients.smoothStoneSlab)
+            .pattern("___")
+            .pattern(" S ")
+            .pattern("_S_")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Blocks.MAP_PEDESTAL.get().asItem())
+            .define('O', Ingredient.of(Blocks.ITEM_PEDESTAL.get()))
+            .define('P', ingredients.peripheralium)
+            .define('C', ingredients.compass)
+            .pattern("PCP")
+            .pattern(" O ")
+            .pattern(" P ")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Blocks.DISPLAY_PEDESTAL.get().asItem(), 4)
+            .define('O', Ingredient.of(Blocks.ITEM_PEDESTAL.get()))
+            .define('P', ingredients.peripheralium)
+            .define('B', ingredients.smoothBasalt)
+            .pattern("POP")
+            .pattern("OBO")
+            .pattern("POP")
+            .save(consumer)
     }
 }

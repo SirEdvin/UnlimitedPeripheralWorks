@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "O": {
+      "item": "peripheralworks:item_pedestal"
+    },
+    "P": {
+      "item": "peripheralium:peripheralium_dust"
+    }
+  },
+  "pattern": [
+    "PCP",
+    " O ",
+    " P "
+  ],
+  "result": {
+    "item": "peripheralworks:map_pedestal"
+  }
+}

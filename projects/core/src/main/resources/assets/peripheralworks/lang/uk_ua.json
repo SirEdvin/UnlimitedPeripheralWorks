@@ -4,13 +4,22 @@
   "item.peripheralworks.peripheral_casing": "Оболонка периферійного пристрою",
   "item.peripheralworks.universal_scanner": "Універсальний сканер",
   "item.peripheralworks.ultimate_sensor": "Надпотужний датчик",
+  "item.peripheralworks.item_pedestal": "П'єдестал для предметів",
+  "item.peripheralworks.map_pedestal": "П'єдестал для мап",
+  "item.peripheralworks.display_pedestal": "Display pedestal",
 
   "item.peripheralworks.tooltip.universal_scanner": "§3Найкращий инструмент для дослідження навколишнього світу, особливо якщо у вас немає третього ока. Працює також із черепашками та портативними комп'ютерами",
   "item.peripheralworks.tooltip.ultimate_sensor": "§3§oБезмежні можливості вивчення світу завдякі цій маленькій коробочці. Працює також із черепашками та портативними комп'ютерами",
+  "item.peripheralworks.tooltip.item_pedestal": "§3§oМиленький п'єдестал, що може зберігати лише один стак предметів. Але здається, ви можете отримати значно більше інформації про них.",
+  "item.peripheralworks.tooltip.map_pedestal": "§3§oМиленький п'єдестал, що може зберігати лише один стак предметів. Посилений компасом, він тепер може розуміти мапи.",
+  "item.peripheralworks.tooltip.display_pedestal": "§3§oМиленький п'єдестал, який не може зберігати предмети, але може показати будь-який предмет",
 
   "block.peripheralworks.peripheral_casing": "Оболонка периферійного пристрою",
   "block.peripheralworks.universal_scanner": "Універсальний сканер",
   "block.peripheralworks.ultimate_sensor": "Надпотужний датчик",
+  "block.peripheralworks.item_pedestal": "П'єдестал для предметів",
+  "block.peripheralworks.map_pedestal": "П'єдестал для мап",
+  "block.peripheralworks.display_pedestal": "П'єдестал для демонстрацій",
 
   "turtle.peripheralworks.peripheralium_hub": "З вбудованим осереднком",
   "turtle.peripheralworks.netherite_peripheralium_hub": "З вбудованим незеритовим осередком",
@@ -31,5 +40,5 @@
   "text.peripheralworks.item_disabled": "  §4§nПредмет заборонений до використання в налаштуваннях",
   "text.peripheralworks.peripheralium_hub_max_peripherals": "  §6Максимальна кількість периферійних пристроїв: %s",
   "text.peripheralworks.universal_scanner_free_range": "  §6Бескоштовний радіус сканування: %s",
-  "text.peripheralworks.universal_scanner_max_range": "  §6Максимальний радіус сканування: %s"
+  "text.peripheralworks.universal_scanner_max_range": "  §6Максимальний радіус сканування: %s",
 }

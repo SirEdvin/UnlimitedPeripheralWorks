@@ -1,4 +1,7 @@
-// 1.19.4	2023-05-13T12:20:26.967172016	vanilla/Recipes
+// 1.19.4	2023-05-16T18:07:40.527528115	vanilla/Recipes
+379f6f63779c41d1be5a1de6c1315cdc0e712956 data/peripheralworks/recipes/display_pedestal.json
+169c5991b28b93c851e46abeaefd752048626eab data/peripheralworks/recipes/item_pedestal.json
+b929cb33a2a61b583a688d95bf8534260eb9ff09 data/peripheralworks/recipes/map_pedestal.json
 ba86cef78e2e738aeeedda481442d6a620e5dd50 data/peripheralworks/recipes/netherite_peripheralium_hub.json
 d3e006255acdc2e8ad644319af644d21aa344893 data/peripheralworks/recipes/peripheral_casing.json
 18af30591547644f148c40da544bd9a5beab8e8e data/peripheralworks/recipes/peripheralium_hub.json

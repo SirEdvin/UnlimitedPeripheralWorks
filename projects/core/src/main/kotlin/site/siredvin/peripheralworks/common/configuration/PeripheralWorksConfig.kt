@@ -4,7 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 import site.siredvin.peripheralium.api.config.IOperationAbilityConfig
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-import site.siredvin.peripheralworks.computercraft.operations.InspectOperations
+import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 
 object PeripheralWorksConfig: IOperationAbilityConfig {
@@ -55,6 +55,15 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
     val enableUltimateSensor: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_UNIVERSAL_SCANNER.get()
 
+    val enableItemPedestal: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_ITEM_PEDESTAL.get()
+
+    val enableMapPedestal: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_MAP_PEDESTAL.get()
+
+    val enableDisplayPedestal: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_MAP_PEDESTAL.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -83,6 +92,9 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
         val NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
         val ENABLE_UNIVERSAL_SCANNER: ForgeConfigSpec.BooleanValue
         val ENABLE_ULTIMATE_SENSOR: ForgeConfigSpec.BooleanValue
+        val ENABLE_ITEM_PEDESTAL: ForgeConfigSpec.BooleanValue
+        val ENABLE_MAP_PEDESTAL: ForgeConfigSpec.BooleanValue
+        val ENABLE_DISPLAY_PEDESTAL: ForgeConfigSpec.BooleanValue
 
         init {
             builder.push("base")
@@ -129,10 +141,16 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
                 .define("enableUniversalScanner", true)
             ENABLE_ULTIMATE_SENSOR = builder.comment("Enables ultimate sensor")
                 .define("enableUltimateSensor", true)
+            ENABLE_ITEM_PEDESTAL = builder.comment("Enables item pedestal nbt reading")
+                .define("enableItemPedestal", true)
+            ENABLE_MAP_PEDESTAL = builder.comment("Enables map pedestal, for detail map information reading")
+                .define("enableMapPedestal", true)
+            ENABLE_DISPLAY_PEDESTAL = builder.comment("Enables display pedestal")
+                .define("enableDisplayPedestal", true)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.values(), builder)
-            register(InspectOperations.values(), builder)
+            register(UnconditionalFreeOperations.values(), builder)
             builder.pop()
             builder.push("integrations")
             INTEGRATION_CONFIGURATIONS.entries.forEach {

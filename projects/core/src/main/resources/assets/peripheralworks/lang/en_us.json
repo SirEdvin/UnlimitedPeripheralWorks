@@ -4,13 +4,22 @@
   "item.peripheralworks.peripheral_casing": "Peripheral casing",
   "item.peripheralworks.universal_scanner": "Universal scanner",
   "item.peripheralworks.ultimate_sensor": "Ultimate sensor",
+  "item.peripheralworks.item_pedestal": "Item pedestal",
+  "item.peripheralworks.map_pedestal": "Map pedestal",
+  "item.peripheralworks.display_pedestal": "Display pedestal",
 
   "item.peripheralworks.tooltip.universal_scanner": "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers",
   "item.peripheralworks.tooltip.ultimate_sensor": "§3§oLimitless possibilities for understanding world in one little box. Works with turtles and pocket computers",
+  "item.peripheralworks.tooltip.item_pedestal": "§3§oCute pedestal, that can store only single item stack. But seems you can get more information about this stack now.",
+  "item.peripheralworks.tooltip.map_pedestal": "§3§oCute pedestal, that can store only single item stack. Infused with compass, it now can understand maps.",
+  "item.peripheralworks.tooltip.display_pedestal": "§3§oCute pedestal, that cannot store anything, but can display literally anything",
 
   "block.peripheralworks.peripheral_casing": "Peripheral casing",
   "block.peripheralworks.universal_scanner": "Universal scanner",
   "block.peripheralworks.ultimate_sensor": "Ultimate sensor",
+  "block.peripheralworks.item_pedestal": "Item pedestal",
+  "block.peripheralworks.map_pedestal": "Map pedestal",
+  "block.peripheralworks.display_pedestal": "Display pedestal",
 
   "turtle.peripheralworks.peripheralium_hub": "Hub",
   "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",

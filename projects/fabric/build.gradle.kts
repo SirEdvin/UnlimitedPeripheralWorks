@@ -131,7 +131,7 @@ loom {
         named("server") {
             configName = "Fabric Server"
         }
-        create("datagen") {
+        create("data") {
             client()
             vmArg("-Dfabric-api.datagen")
             vmArg("-Dfabric-api.datagen.modid=${modBaseName}")

@@ -28,4 +28,8 @@ interface ModRecipeIngredients {
     val anyCoal: Ingredient
     val peripheraliumBlock: Ingredient
     val observer: Ingredient
+    val smoothStone: Ingredient
+    val smoothBasalt: Ingredient
+    val smoothStoneSlab: Ingredient
+    val compass: Ingredient
 }

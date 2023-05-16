@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:smooth_basalt"
+    },
+    "O": {
+      "item": "peripheralworks:item_pedestal"
+    },
+    "P": {
+      "item": "peripheralium:peripheralium_dust"
+    }
+  },
+  "pattern": [
+    "POP",
+    "OBO",
+    "POP"
+  ],
+  "result": {
+    "count": 4,
+    "item": "peripheralworks:display_pedestal"
+  }
+}

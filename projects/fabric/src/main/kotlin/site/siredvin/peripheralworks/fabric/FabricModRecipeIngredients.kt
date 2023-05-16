@@ -25,4 +25,13 @@ object FabricModRecipeIngredients: ModRecipeIngredients {
         get() = Ingredient.of(site.siredvin.peripheralium.common.setup.Blocks.PERIPHERALIUM_BLOCK.get().asItem())
     override val observer: Ingredient
         get() = Ingredient.of(Blocks.OBSERVER)
+    override val smoothStone: Ingredient
+        get() = Ingredient.of(Blocks.SMOOTH_STONE)
+
+    override val smoothBasalt: Ingredient
+        get() = Ingredient.of(Blocks.SMOOTH_BASALT)
+    override val smoothStoneSlab: Ingredient
+        get() = Ingredient.of(Blocks.SMOOTH_STONE_SLAB)
+    override val compass: Ingredient
+        get() = Ingredient.of(net.minecraft.world.item.Items.COMPASS)
 }
