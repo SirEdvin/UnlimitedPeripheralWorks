@@ -245,6 +245,10 @@ modrinth {
     }
 }
 
+tasks.create("uploadMod") {
+    dependsOn(tasks.modrinth, tasks.curseforge)
+}
+
 publishing {
     publications {
         create<MavenPublication>("maven") {

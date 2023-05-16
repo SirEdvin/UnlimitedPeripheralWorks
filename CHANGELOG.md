@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2023-16-05
+
 ### Added
 
 - Peripheralium hub: pocket/turtle upgrade that can equip other upgrades
