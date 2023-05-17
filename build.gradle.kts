@@ -127,6 +127,14 @@ repositories {
             includeGroupByRegex("io\\.github\\.onyxstudios.*")
         }
     }
+    maven {
+        name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+
     mavenLocal()
 }
 
@@ -145,7 +153,7 @@ dependencies {
 
     modImplementation("com.github.cc-tweaked:cc-restitched:v1.18.2-1.100.5-ccr")
     modImplementation("curse.maven:forgeconfigapirt-fabric-547434:3671141")
-    modImplementation("siredvin.site:Peripheralium:${peripheraliumVersion}-${minecraftVersion}") {
+    modImplementation("siredvin.site:peripheralium:${peripheraliumVersion}-${minecraftVersion}") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
@@ -184,7 +192,7 @@ dependencies {
     }
 
 
-    modRuntimeOnly("curse.maven:wthit-440979:3735869")
+//    modRuntimeOnly("curse.maven:wthit-440979:3735869")
     modRuntimeOnly("curse.maven:spark-361579:3644349")
     // For testing inventory logic
     modRuntimeOnly("curse.maven:ExtendedDrawers-616602:3902207")
@@ -194,6 +202,20 @@ dependencies {
 
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:8.1.449")
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:8.1.449")
+
+    testImplementation(kotlin("test"))
+    testCompileOnly(libs.autoService)
+    testAnnotationProcessor(libs.autoService)
+    testImplementation(libs.byteBuddy)
+    testImplementation(libs.byteBuddyAgent)
+    testImplementation(libs.bundles.test)
+}
+
+
+tasks.test {
+    dependsOn(tasks.generateDLIConfig)
+    useJUnitPlatform()
+    systemProperty("junit.jupiter.extensions.autodetection.enabled", true)
 }
 
 tasks {
@@ -288,4 +310,8 @@ modrinth {
     dependencies {
         required.project("peripheralium")
     }
+}
+
+tasks.create("uploadMod") {
+    dependsOn(tasks.modrinth, tasks.curseforge)
 }

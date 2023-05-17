@@ -1,0 +1,24 @@
+[versions]
+# Testing
+autoService = "1.0.1"
+byteBuddy = "1.14.2"
+hamcrest = "2.2"
+jqwik = "1.7.2"
+junit = "5.9.2"
+
+
+[libraries]
+# Testing
+autoService = { module = "com.google.auto.service:auto-service", version.ref = "autoService" }
+byteBuddyAgent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "byteBuddy" }
+byteBuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "byteBuddy" }
+hamcrest = { module = "org.hamcrest:hamcrest", version.ref = "hamcrest" }
+jqwik-api = { module = "net.jqwik:jqwik-api", version.ref = "jqwik" }
+jqwik-engine = { module = "net.jqwik:jqwik-engine", version.ref = "jqwik" }
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+
+[bundles]
+## Testing
+test = ["junit-jupiter-api", "junit-jupiter-params", "hamcrest", "jqwik-api"]
