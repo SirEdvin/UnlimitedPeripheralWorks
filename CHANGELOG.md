@@ -6,9 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### [0.2.5] - 2023-05-17
+## [0.2.5] - 2023-05-17
 
-## Fixed
+### Fixed
 
 - NBT storing [issue](https://github.com/cc-tweaked/CC-Tweaked/issues/1196) for CC:R
 
