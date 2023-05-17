@@ -128,6 +128,14 @@ repositories {
             includeGroupByRegex("io\\.github\\.onyxstudios.*")
         }
     }
+    maven {
+        name = "Modrinth"
+        url = uri("https://api.modrinth.com/maven")
+        content {
+            includeGroup("maven.modrinth")
+        }
+    }
+
     mavenLocal()
 }
 
@@ -197,8 +205,22 @@ dependencies {
 //    modRuntimeOnly("com.kneelawk:graphlib:0.2.4+1.18.2")
 //    modRuntimeOnly("com.github.mattidragon:mconfig:1.2.0")
 
-//    modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:8.1.449")
-//    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:8.1.449")
+    // modCompileOnly("me.shedaniel:RoughlyEnoughItems-api-fabric:8.1.449")
+    // modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:8.1.449")
+
+    testImplementation(kotlin("test"))
+    testCompileOnly(libs.autoService)
+    testAnnotationProcessor(libs.autoService)
+    testImplementation(libs.byteBuddy)
+    testImplementation(libs.byteBuddyAgent)
+    testImplementation(libs.bundles.test)
+}
+
+
+tasks.test {
+    dependsOn(tasks.generateDLIConfig)
+    useJUnitPlatform()
+    systemProperty("junit.jupiter.extensions.autodetection.enabled", true)
 }
 
 tasks {
@@ -293,4 +315,8 @@ modrinth {
     dependencies {
         required.project("peripheralium")
     }
+}
+
+tasks.create("uploadMod") {
+    dependsOn(tasks.modrinth, tasks.curseforge)
 }

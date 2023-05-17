@@ -31,6 +31,9 @@ bin/
 # fabric
 
 run/
+logs/
+config/
 
 .env
 UnlimitedPeripheralWorks-1.19
+UnlimitedPeripheralWorks-1.19.4

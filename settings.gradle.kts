@@ -12,4 +12,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "UnlimitedPeripheralWorks"
+val minecraftVersion: String by settings
+rootProject.name = "UnlimitedPeripheralWorks $minecraftVersion"
