@@ -35,17 +35,19 @@ public class NBTUtilMixin {
 
     @Inject(method="getNBTHash", at=@At("HEAD"), cancellable = true)
     private static void getNBTHash(@Nullable CompoundTag tag, CallbackInfoReturnable<String> cir) {
-        if (tag == null) cir.setReturnValue(null);
-
-        try {
-            var digest = MessageDigest.getInstance("MD5");
-            DataOutput output = new DataOutputStream(new DigestOutputStream(digest));
-            writeNamedTag(output, "", assertNonNull(tag));
-            var hash = digest.digest();
-            cir.setReturnValue(ENCODING.encode(hash));
-        } catch (NoSuchAlgorithmException | IOException e) {
-            ComputerCraft.log.error("Cannot hash NBT", e);
+        if (tag == null){
             cir.setReturnValue(null);
+        } else {
+            try {
+                var digest = MessageDigest.getInstance("MD5");
+                DataOutput output = new DataOutputStream(new DigestOutputStream(digest));
+                writeNamedTag(output, "", assertNonNull(tag));
+                var hash = digest.digest();
+                cir.setReturnValue(ENCODING.encode(hash));
+            } catch (NoSuchAlgorithmException | IOException e) {
+                ComputerCraft.log.error("Cannot hash NBT", e);
+                cir.setReturnValue(null);
+            }
         }
     }
 

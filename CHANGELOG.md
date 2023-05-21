@@ -6,11 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.6] - 2023-05-21
+
+### Fixed
+
+- [Null-check](https://github.com/SirEdvin/UnlimitedPeripheralWorks/issues/15) for NBT sorting 
+
 ## [0.2.5] - 2023-05-17
 
 ### Fixed
 
-- NBT storing [issue](https://github.com/cc-tweaked/CC-Tweaked/issues/1196) for CC:R
+- NBT sorting [issue](https://github.com/cc-tweaked/CC-Tweaked/issues/1196) for CC:R
 
 ## [0.2.4] - 2023-04-27
 
