@@ -21,7 +21,6 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraftforge.common.Tags
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.common.Registries
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
@@ -54,7 +53,7 @@ object ForgePeripheralWorksPlatform: PeripheralWorksPlatform {
         dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
         postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>
     ) {
-        val turtleUpgrade = Registries.TURTLE_SERIALIZER.register(key.path) { serializer }
+        val turtleUpgrade = ForgePeripheralWorks.turtleSerializers.register(key.path) { serializer }
         ModTurtleUpgradeDataProvider.hookUpgrade { dataGenerator.apply(it, turtleUpgrade.get()) }
         postRegistrationHooks.forEach { it.accept(turtleUpgrade) }
     }
@@ -64,7 +63,7 @@ object ForgePeripheralWorksPlatform: PeripheralWorksPlatform {
         serializer: PocketUpgradeSerialiser<V>,
         dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>
     ) {
-        val pocketUpgrade = Registries.POCKET_SERIALIZER.register(key.path) {serializer}
+        val pocketUpgrade = ForgePeripheralWorks.pocketSerializers.register(key.path) {serializer}
         ModPocketUpgradeDataProvider.hookUpgrade {dataGenerator.apply(it, pocketUpgrade.get())}
     }
 }

@@ -1,6 +1,8 @@
 package site.siredvin.peripheralworks
 
 import dan200.computercraft.api.ForgeComputerCraftAPI
+import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
+import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
@@ -17,7 +19,6 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.NewRegistryEvent
 import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
-import site.siredvin.peripheralworks.common.Registries
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
@@ -39,6 +40,14 @@ object ForgePeripheralWorks {
         DeferredRegister.create(ForgeRegistries.ITEMS, PeripheralWorksCore.MOD_ID)
     val blockEntityTypesRegistry: DeferredRegister<BlockEntityType<*>> =
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, PeripheralWorksCore.MOD_ID)
+    val turtleSerializers = DeferredRegister.create(
+        TurtleUpgradeSerialiser.REGISTRY_ID,
+        PeripheralWorksCore.MOD_ID
+    )
+    val pocketSerializers = DeferredRegister.create(
+        PocketUpgradeSerialiser.REGISTRY_ID,
+        PeripheralWorksCore.MOD_ID
+    )
 
     init {
         ForgePeripheralium.sayHi()
@@ -57,8 +66,8 @@ object ForgePeripheralWorks {
         blocksRegistry.register(eventBus)
         itemsRegistry.register(eventBus)
         blockEntityTypesRegistry.register(eventBus)
-        Registries.TURTLE_SERIALIZER.register(eventBus)
-        Registries.POCKET_SERIALIZER.register(eventBus)
+        turtleSerializers.register(eventBus)
+        pocketSerializers.register(eventBus)
     }
 
     fun commonSetup(event: FMLCommonSetupEvent) {
