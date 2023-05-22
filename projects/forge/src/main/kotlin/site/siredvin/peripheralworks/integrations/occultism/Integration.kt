@@ -57,13 +57,13 @@ class Integration: Runnable {
     override fun run() {
         ComputerCraftProxy.addProvider(OccultismStorageProvider)
         ComputerCraftProxy.addProvider(SpecificOccultismPluginProvider)
-        ExtractorProxy.addStorageExtractor(ExtractorProxy.StorageExtractor { _, something ->
-            if (something is BlockEntity && something.isRemoved)
+        ExtractorProxy.addStorageExtractor(ExtractorProxy.StorageExtractor { _, _, blockEntity ->
+            if (blockEntity == null || blockEntity.isRemoved)
                 return@StorageExtractor null
-            if (something is IStorageController)
-                return@StorageExtractor OccultismItemStorage(something)
-            if (something is IStorageControllerProxy)
-                return@StorageExtractor OccultismItemStorage(something.linkedStorageController)
+            if (blockEntity is IStorageController)
+                return@StorageExtractor OccultismItemStorage(blockEntity)
+            if (blockEntity is IStorageControllerProxy)
+                return@StorageExtractor OccultismItemStorage(blockEntity.linkedStorageController)
             return@StorageExtractor null
         })
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)

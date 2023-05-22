@@ -22,8 +22,8 @@ open class TraderPlugin(private val trader: TraderTileentityBase): IPeripheralPl
             return null
         val villager = trader.villagerEntity
         val base = LuaRepresentation.forEntity(villager)
-        merchantData(villager, base)
-        villagerData(villager, base)
+        merchantData.accept(villager, base)
+        villagerData.accept(villager, base)
         return base
     }
 }

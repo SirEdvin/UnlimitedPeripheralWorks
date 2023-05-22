@@ -150,7 +150,7 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = ExtractorProxy.extractTargetableStorage(target.level!!, location.target)
+        val toStorage = ExtractorProxy.extractTargetableStorageFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
         val moved = TargetableContainer(target.bookAccess).moveTo(toStorage, 1, takePredicate = StorageUtils.ALWAYS)
@@ -166,7 +166,7 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractStorage(target.level!!, location.target)
+        val fromStorage = ExtractorProxy.extractStorageFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate: Predicate<ItemStack> = Predicate { it.`is`(Items.WRITABLE_BOOK) || it.`is`(Items.WRITTEN_BOOK) }

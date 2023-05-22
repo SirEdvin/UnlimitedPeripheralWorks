@@ -15,8 +15,8 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
         get() = ConfigHolder.COMMON_CONFIG.IS_INITIAL_COOLDOWN_ENABLED.get()
     override val initialCooldownSensetiveLevel: Int
         get() = ConfigHolder.COMMON_CONFIG.INITIAL_COOLDOWN_SENSENTIVE_LEVEL.get()
-    override val cooldownTrasholdLevel: Int
-        get() = ConfigHolder.COMMON_CONFIG.COOLDOWN_TRASHOLD_LEVEL.get()
+    override val cooldownTresholdLevel: Int
+        get() = ConfigHolder.COMMON_CONFIG.COOLDOWN_TRESHOLD_LEVEL.get()
 
     val enableGenericInventory: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_GENERIC_INVENTORY.get()
@@ -73,7 +73,7 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
         // Generic configuration
         var IS_INITIAL_COOLDOWN_ENABLED: ForgeConfigSpec.BooleanValue
         var INITIAL_COOLDOWN_SENSENTIVE_LEVEL: ForgeConfigSpec.IntValue
-        var COOLDOWN_TRASHOLD_LEVEL: ForgeConfigSpec.IntValue
+        var COOLDOWN_TRESHOLD_LEVEL: ForgeConfigSpec.IntValue
         // Generic plugins
         var ENABLE_GENERIC_INVENTORY: ForgeConfigSpec.BooleanValue
         var ENABLE_GENERIC_ITEM_STORAGE: ForgeConfigSpec.BooleanValue
@@ -102,8 +102,8 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
                 .define("isInitialCooldownEnabled", true)
             INITIAL_COOLDOWN_SENSENTIVE_LEVEL = builder.comment("Determinates initial cooldown sensentive level, values lower then this value will not trigger initial cooldown")
                 .defineInRange("initialCooldownSensetiveLevel", 6000, 0, Int.MAX_VALUE)
-            COOLDOWN_TRASHOLD_LEVEL = builder.comment("Determinates trashold for cooldown to be stored")
-                .defineInRange("cooldownTrashholdLevel", 100, 0, Int.MAX_VALUE)
+            COOLDOWN_TRESHOLD_LEVEL = builder.comment("Determinates treshold for cooldown to be stored")
+                .defineInRange("cooldownTreshholdLevel", 100, 0, Int.MAX_VALUE)
             builder.pop()
             builder.push("plugins")
             builder.push("generic")

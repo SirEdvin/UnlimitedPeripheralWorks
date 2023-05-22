@@ -78,7 +78,7 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractStorage(target.level!!, location.target)
+        val fromStorage = ExtractorProxy.extractStorageFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate = Predicate<ItemStack> { it.`is`(ItemTags.BEACON_PAYMENT_ITEMS) }

@@ -22,7 +22,7 @@ object Blocks {
         "universal_scanner", { GenericBlockEntityBlock({ BlockEntityTypes.UNIVERSAL_SCANNER.get() }, true) },
         {PeripheralBlockItem(
             it, Item.Properties(), PeripheralWorksConfig::enableUniversalScanner, alwaysShow = false,
-            TooltipCollection::isDisabled, TooltipCollection::universalScanningFreeRadius, TooltipCollection::universalScanningMaxRadius
+            TooltipCollection::isDisabled, TooltipCollection::universalScanningRadius
         ) }
     )
     val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerBlock(
