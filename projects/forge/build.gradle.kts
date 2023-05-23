@@ -154,7 +154,6 @@ minecraft {
 
 mixin {
     add(sourceSets.main.get(), "peripheralworks.refmap.json")
-
     config("peripheralworks.mixins.json")
 }
 
