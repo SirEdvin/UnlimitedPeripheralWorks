@@ -262,6 +262,8 @@ curseforge {
             displayName = "UnlimitedPeripheralWorks $version for $minecraftVersion"
             relations(closureOf<CurseRelation> {
                 requiredDependency("peripheralium")
+                requiredDependency("cc-tweaked")
+                requiredDependency("kotlin-for-forge")
             })
         })
     })
@@ -293,6 +295,8 @@ modrinth {
     }
     dependencies {
         required.project("peripheralium")
+        required.project("kotlin-for-forge")
+        required.project("cc-tweaked")
     }
 }
 
