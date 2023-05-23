@@ -51,6 +51,10 @@ class Integration: Runnable {
 
     }
 
+    private fun isExceptionExpected(exception: IllegalStateException): Boolean {
+        return exception.message == "FileSystem has not been created yet"
+    }
+
     private fun collectFileValues(it: DimPos): CompoundTag {
         val level = it.getLevel(false) ?: return EMPTY_TAG
         val entity = level.getBlockEntity(it.blockPos)
@@ -75,7 +79,10 @@ class Integration: Runnable {
             PeripheralWorksCore.LOGGER.error(ignored)
             return EMPTY_TAG
         } catch (ignored: IllegalStateException) {
-            PeripheralWorksCore.LOGGER.warn("Illegal state exception when trying to get ccAspect from ${it.blockPos}")
+            if (!isExceptionExpected(ignored)) {
+                PeripheralWorksCore.LOGGER.warn("Illegal state exception when trying to get ccAspect from ${it.blockPos}")
+                PeripheralWorksCore.LOGGER.error(ignored)
+            }
             return EMPTY_TAG
         }
     }

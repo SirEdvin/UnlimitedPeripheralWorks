@@ -10,7 +10,7 @@ mixinGradle = "0.7.+"
 forgegradle = "5.1.+"
 # Core mod dependencies
 cc-tweaked = "1.104.0"
-peripheralium = "0.5.3-12"
+peripheralium = "0.5.3-16"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.79.0+1.19.4"
@@ -18,7 +18,7 @@ fabric-loader = "0.14.9"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "6.0.2"
 # Forge dependencies
-forge = "45.0.57"
+forge = "45.0.64"
 forge-kotlin = "4.2.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
@@ -49,6 +49,9 @@ commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
 natures-compass-forge = "4476818"  # NaturesCompass-1.19.4-1.11.0-forge.jar
 tomstorage-forge = "1.19.4-1.5.6"
+mcjtylib = "1.19.4-7.2.6"
+rftools-base = "1.19-4.1.7"
+deep-resonance = "1.19-4.1.3"
 
 [libraries]
 # Base libraries
@@ -114,6 +117,10 @@ cyclopscore = {module = "curse.maven:cyclopscore-232758", version.ref="cyclopsco
 nature-compass-forge = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-forge"}
 
 tomstorage-forge = {module = "maven.modrinth:toms-storage", version.ref="tomstorage-forge"}
+
+mcjtylib = {module = "maven.modrinth:mcjtylib", version.ref="mcjtylib"}
+rftools-base = {module = "maven.modrinth:rftools-base", version.ref = "rftools-base"}
+deep-resonance = {module = "maven.modrinth:deep-resonance", version.ref="deep-resonance"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -153,14 +160,20 @@ externalMods-forge-integrations-full = [
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
-    "tomstorage-forge"
+    "tomstorage-forge",
+    "deep-resonance",
+    "rftools-base", # by deepresonance
+    "mcjtylib", # by deepresonance, required for class typing
 ]
 externalMods-forge-integrations-active = [
     "occultism", "easyvillagers",
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
-    "tomstorage-forge"
+    "tomstorage-forge",
+    "deep-resonance",
+    "rftools-base", # by deepresonance
+    "mcjtylib", # by deepresonance, required for class typing
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now

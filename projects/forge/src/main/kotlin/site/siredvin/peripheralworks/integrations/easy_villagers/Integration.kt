@@ -30,7 +30,6 @@ class Integration: Runnable {
     }
 
     override fun run() {
-        // TODO: there is no integration for storage, but is was, so CC are able to capture it but not me?
         ComputerCraftProxy.addProvider(AutoTraderProvider)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }

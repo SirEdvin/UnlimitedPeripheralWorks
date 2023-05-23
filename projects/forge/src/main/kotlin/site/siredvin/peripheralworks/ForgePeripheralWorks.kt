@@ -54,7 +54,6 @@ object ForgePeripheralWorks {
         // Configure configuration
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "${PeripheralWorksCore.MOD_ID}.toml")
-
         PeripheralWorksCore.configure(ForgePeripheralWorksPlatform, ForgeModRecipeIngredients)
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         ComputerCraftProxy.addProvider(EnergyStorageProvider)
@@ -75,6 +74,7 @@ object ForgePeripheralWorks {
         Platform.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)

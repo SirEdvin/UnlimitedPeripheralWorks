@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Peripheralium 0.5.3 support
+- DeepResonance integration
+
+### Fixed
+
+- Log spamming for integrateddynamics aspect
+
 ## [0.4.0] - 2023-16-05
 
 ### Added
