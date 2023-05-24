@@ -49,7 +49,7 @@ val modrinthKey = secretEnv["MODRINTH_KEY"] ?: System.getenv("MODRINTH_KEY") ?: 
 loom {
     accessWidenerPath.set(file("src/main/resources/peripheralworks.accesswidener"))
     runs {
-        create("datagen") {
+        create("data") {
             client()
             vmArg("-Dfabric-api.datagen")
             vmArg("-Dfabric-api.datagen.modid=peripheralworks")
@@ -136,6 +136,26 @@ repositories {
         }
     }
 
+    maven {
+        name = "Create, Porting Lib, Forge Tags, Milk Lib, Registrate"
+        url = uri("https://mvn.devos.one/snapshots/")
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("io.github.fabricators_of_create")
+            includeGroup("me.alphamode")
+            includeGroup("com.tterrag.registrate_fabric")
+            includeGroup("io.github.tropheusj")
+        }
+    }
+
+    maven {
+        name = "Flywheel"
+        url = uri("https://maven.tterrag.com/")
+        content {
+            includeGroup("com.jozufozu.flywheel")
+        }
+    }
+
     mavenLocal()
 }
 
@@ -195,6 +215,8 @@ dependencies {
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:7.0.72") {
         exclude(group="net.fabricmc.fabric-api")
     }
+
+    modImplementation("com.simibubi.create:create-fabric-${minecraftVersion}:0.5.0.i-999+1.18.2")
 
 
 //    modRuntimeOnly("curse.maven:wthit-440979:3735869")
