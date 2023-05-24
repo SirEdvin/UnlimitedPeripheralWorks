@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.7] - 2023-05-21
+
 ### Added
 
 - Create item vaults (and probably something else) will now have inventory peripheral instead of item_storage.
