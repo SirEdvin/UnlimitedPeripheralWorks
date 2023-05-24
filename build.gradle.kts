@@ -49,7 +49,7 @@ val modrinthKey = secretEnv["MODRINTH_KEY"] ?: System.getenv("MODRINTH_KEY") ?: 
 loom {
     accessWidenerPath.set(file("src/main/resources/peripheralworks.accesswidener"))
     runs {
-        create("datagen") {
+        create("data") {
             client()
             vmArg("-Dfabric-api.datagen")
             vmArg("-Dfabric-api.datagen.modid=peripheralworks")
