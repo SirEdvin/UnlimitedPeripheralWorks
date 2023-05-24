@@ -69,7 +69,12 @@ repositories {
     maven {
         url = uri("https://squiddev.cc/maven")
     }
-    maven { url = uri("https://jitpack.io") }
+    maven {
+        url = uri("https://jitpack.io")
+        content {
+            includeGroupByRegex("com.github.*")
+        }
+    }
     maven {
         url = uri("https://maven.shedaniel.me/")
     }
@@ -142,6 +147,7 @@ repositories {
         content {
             includeGroup("com.simibubi.create")
             includeGroup("io.github.fabricators_of_create")
+            includeGroup("io.github.fabricators_of_create.Porting-Lib")
             includeGroup("me.alphamode")
             includeGroup("com.tterrag.registrate_fabric")
             includeGroup("io.github.tropheusj")
@@ -216,7 +222,7 @@ dependencies {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("com.simibubi.create:create-fabric-${minecraftVersion}:0.5.0.i-999+1.18.2")
+    modImplementation("com.simibubi.create:create-fabric-${minecraftVersion}:0.5.0.i-991+1.19.2")
 
 
 //    modRuntimeOnly("curse.maven:wthit-440979:3735869")

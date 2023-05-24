@@ -30,7 +30,7 @@ class CreateCCItemStorage(private val handlers: List<ItemStackHandler>) : ItemSt
         return pair.first.getSlotLimit(pair.second)
     }
 
-    override fun setStack(slot: Int, stack: ItemStack?) {
+    override fun setStack(slot: Int, stack: ItemStack) {
         val pair = fromIndex(slot)
         pair?.first?.setStackInSlot(pair.second, stack)
     }
