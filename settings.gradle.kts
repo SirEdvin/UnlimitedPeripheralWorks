@@ -2,34 +2,20 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
-        maven("https://maven.minecraftforge.net") {
-            name = "Forge"
+        maven("https://mvn.siredvin.site/minecraft") {
+            name = "SirEdvin's Minecraft repository"
             content {
                 includeGroup("net.minecraftforge")
                 includeGroup("net.minecraftforge.gradle")
-            }
-        }
-
-        maven("https://maven.parchmentmc.org") {
-            name = "Librarian"
-            content {
-                includeGroupByRegex("^org\\.parchmentmc.*")
-            }
-        }
-
-        maven("https://repo.spongepowered.org/repository/maven-public/") {
-            name = "Sponge"
-            content {
+                includeGroup("org.parchmentmc")
+                includeGroup("org.parchmentmc.feather")
+                includeGroup("org.parchmentmc.data")
                 includeGroup("org.spongepowered")
                 includeGroup("org.spongepowered.gradle.vanilla")
-            }
-        }
-
-        maven("https://maven.fabricmc.net/") {
-            name = "Fabric"
-            content {
-                includeGroup("fabric-loom")
                 includeGroup("net.fabricmc")
+                includeGroup("fabric-loom")
+                includeGroup("site.siredvin")
+                includeGroupByRegex("site.siredvin.*")
             }
         }
     }
