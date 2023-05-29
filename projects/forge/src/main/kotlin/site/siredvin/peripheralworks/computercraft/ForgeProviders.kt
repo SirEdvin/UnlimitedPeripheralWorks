@@ -11,34 +11,36 @@ import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-object FluidStorageProvider: PeripheralPluginProvider {
+object FluidStorageProvider : PeripheralPluginProvider {
     override val pluginType: String
         get() = PeripheralPluginUtils.Type.FLUID_STORAGE
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-        if (!PeripheralWorksConfig.enableGenericFluidStorage)
+        if (!PeripheralWorksConfig.enableGenericFluidStorage) {
             return null
+        }
         val blockEntity = level.getBlockEntity(pos) ?: return null
         val cap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER)
-        if (!cap.isPresent)
+        if (!cap.isPresent) {
             return null
+        }
         return ForgeFluidStoragePlugin(cap.orElseThrow { NullPointerException() }, PeripheralWorksConfig.fluidStorageTransferLimit)
     }
-
 }
 
-object EnergyStorageProvider: PeripheralPluginProvider {
+object EnergyStorageProvider : PeripheralPluginProvider {
     override val pluginType: String
         get() = PeripheralPluginUtils.Type.ENERGY_STORAGE
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-        if (!PeripheralWorksConfig.enableGenericFluidStorage)
+        if (!PeripheralWorksConfig.enableGenericFluidStorage) {
             return null
+        }
         val blockEntity = level.getBlockEntity(pos) ?: return null
         val cap = blockEntity.getCapability(ForgeCapabilities.ENERGY)
-        if (!cap.isPresent)
+        if (!cap.isPresent) {
             return null
+        }
         return ForgeEnergyPlugin(cap.orElseThrow { NullPointerException() })
     }
-
 }

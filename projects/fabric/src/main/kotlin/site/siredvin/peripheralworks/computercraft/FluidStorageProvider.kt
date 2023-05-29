@@ -10,15 +10,15 @@ import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-object FluidStorageProvider: PeripheralPluginProvider {
+object FluidStorageProvider : PeripheralPluginProvider {
     override val pluginType: String
         get() = PeripheralPluginUtils.Type.FLUID_STORAGE
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-        if (!PeripheralWorksConfig.enableGenericFluidStorage)
+        if (!PeripheralWorksConfig.enableGenericFluidStorage) {
             return null
+        }
         val fluidStorage = FluidStorage.SIDED.find(level, pos, side) ?: return null
         return FluidStoragePlugin(level, fluidStorage, PeripheralWorksConfig.fluidStorageTransferLimit)
     }
-
 }

@@ -5,7 +5,7 @@ import dan200.computercraft.api.lua.MethodResult
 import de.maxhenkel.easyvillagers.blocks.tileentity.AutoTraderTileentity
 import site.siredvin.peripheralium.util.assertBetween
 
-class AutoTraderPlugin(private val autoTrader: AutoTraderTileentity): TraderPlugin(autoTrader) {
+class AutoTraderPlugin(private val autoTrader: AutoTraderTileentity) : TraderPlugin(autoTrader) {
     override val additionalType: String
         get() = "easy_auto_trader"
 

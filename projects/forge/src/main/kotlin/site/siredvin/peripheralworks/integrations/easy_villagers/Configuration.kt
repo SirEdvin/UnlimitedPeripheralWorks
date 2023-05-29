@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.easy_villagers
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private var ENABLE_AUTO_TRADER: ForgeConfigSpec.BooleanValue? = null
 

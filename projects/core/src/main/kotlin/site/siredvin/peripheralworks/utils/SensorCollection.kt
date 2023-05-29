@@ -3,20 +3,14 @@ package site.siredvin.peripheralworks.utils
 import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.server.commands.TimeCommand
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.util.world.ScanUtils
-import site.siredvin.peripheralium.xplat.XplatRegistries
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
-import net.minecraft.world.level.WorldGenLevel
-
 import net.minecraft.world.level.levelgen.WorldgenRandom
+import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-
+import site.siredvin.peripheralium.xplat.XplatRegistries
 
 object SensorCollection {
 
@@ -42,10 +36,12 @@ object SensorCollection {
 
     fun inspectWeather(owner: IPeripheralOwner): MethodResult {
         val level = owner.level as? ServerLevel ?: return MethodResult.of(null, "Something isn't loaded correctly")
-        if (level.isThundering)
+        if (level.isThundering) {
             return MethodResult.of("thunder")
-        if (level.isRaining)
+        }
+        if (level.isRaining) {
             return MethodResult.of("rain")
+        }
         return MethodResult.of("stable")
     }
 
@@ -66,10 +62,12 @@ object SensorCollection {
 
     fun inspectLight(owner: IPeripheralOwner): MethodResult {
         val level = owner.level as? ServerLevel ?: return MethodResult.of(null, "Something isn't loaded correctly")
-        return MethodResult.of(mapOf(
-            "light" to level.getBrightness(LightLayer.BLOCK, owner.pos.above()),
-            "sunlight" to level.getBrightness(LightLayer.SKY, owner.pos.above()),
-        ))
+        return MethodResult.of(
+            mapOf(
+                "light" to level.getBrightness(LightLayer.BLOCK, owner.pos.above()),
+                "sunlight" to level.getBrightness(LightLayer.SKY, owner.pos.above()),
+            ),
+        )
     }
 
     private fun decodeMoonPhase(level: Level): String {
@@ -107,15 +105,16 @@ object SensorCollection {
                     val blockState = level.getBlockState(BlockPos(x, y, z))
                     if (!blockState.isAir && PeripheraliumPlatform.isOre(blockState)) {
                         val key = XplatRegistries.BLOCKS.getKey(blockState.block).toString()
-                        if (!ores.containsKey(key))
+                        if (!ores.containsKey(key)) {
                             ores[key] = 0
+                        }
                         ores[key] = ores[key]!! + 1
                     }
                 }
             }
         }
         information["oresDistribution"] = ores
-        information["isSlime"] = WorldgenRandom.seedSlimeChunk(chunkPos.x, chunkPos.z, level.seed, VANILLA_SLIME_CHUNK_SALT).nextInt(10) == 0;
+        information["isSlime"] = WorldgenRandom.seedSlimeChunk(chunkPos.x, chunkPos.z, level.seed, VANILLA_SLIME_CHUNK_SALT).nextInt(10) == 0
         return MethodResult.of(information)
     }
 }

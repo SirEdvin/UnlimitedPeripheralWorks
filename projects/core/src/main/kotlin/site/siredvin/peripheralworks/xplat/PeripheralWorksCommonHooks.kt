@@ -7,7 +7,6 @@ import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.packs.resources.Resource
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
@@ -30,101 +29,114 @@ import java.util.function.Consumer
 import java.util.function.Function
 import java.util.function.Supplier
 
-
 object PeripheralWorksCommonHooks {
 
-    private fun <T: ITurtleUpgrade, V: Item> registerScaledTurtleUpgrade(id: ResourceLocation, item: Supplier<V>, scaleFactor: Float, builder: Function<ItemStack, T>) {
+    private fun <T : ITurtleUpgrade, V : Item> registerScaledTurtleUpgrade(id: ResourceLocation, item: Supplier<V>, scaleFactor: Float, builder: Function<ItemStack, T>) {
         PeripheralWorksPlatform.registerTurtleUpgrade(
             id,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem builder.apply(stack)
-            }, { dataProvider, serializer ->
+            },
+            { dataProvider, serializer ->
                 dataProvider.simpleWithCustomItem(
-                    id, serializer, item.get()
+                    id,
+                    serializer,
+                    item.get(),
                 )
             },
-            listOf(Consumer {
-                PeripheralWorksClientCore.registerHook {
-                    ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-                        it.get(), ScaledItemModeller(scaleFactor)
-                    )
-                }
-            })
+            listOf(
+                Consumer {
+                    PeripheralWorksClientCore.registerHook {
+                        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+                            it.get(),
+                            ScaledItemModeller(scaleFactor),
+                        )
+                    }
+                },
+            ),
         )
     }
 
-    private fun <T: ITurtleUpgrade, V: Block> registerBlockTurtleUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
+    private fun <T : ITurtleUpgrade, V : Block> registerBlockTurtleUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
         PeripheralWorksPlatform.registerTurtleUpgrade(
             id,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack, id) },
-             { dataProvider, serializer ->
+            { dataProvider, serializer ->
                 dataProvider.simpleWithCustomItem(
                     id,
-                    serializer, block.get().asItem()
+                    serializer,
+                    block.get().asItem(),
                 )
-            } ,
-            listOf(Consumer {
-                PeripheralWorksClientCore.registerHook {
-                    ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-                        it.get(), TurtleUpgradeModeller.sided(
-                            ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${id.path}_left"),
-                            ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${id.path}_right")
+            },
+            listOf(
+                Consumer {
+                    PeripheralWorksClientCore.registerHook {
+                        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+                            it.get(),
+                            TurtleUpgradeModeller.sided(
+                                ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${id.path}_left"),
+                                ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${id.path}_right"),
+                            ),
                         )
-                    )
-                }
-            })
+                    }
+                },
+            ),
         )
     }
 
-    private fun <T: IPocketUpgrade, V: Item> registerPocketUpgrade(id: ResourceLocation, item: Supplier<V>, builder: Function<ItemStack, T>) {
+    private fun <T : IPocketUpgrade, V : Item> registerPocketUpgrade(id: ResourceLocation, item: Supplier<V>, builder: Function<ItemStack, T>) {
         PeripheralWorksPlatform.registerPocketUpgrade(
             id,
-            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack) }
+            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack) },
         ) { dataProvider, serializer ->
             dataProvider.simpleWithCustomItem(
-                id, serializer, item.get()
+                id,
+                serializer,
+                item.get(),
             )
         }
     }
 
-    private fun <T: IPocketUpgrade, V: Block> registerPocketUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
+    private fun <T : IPocketUpgrade, V : Block> registerPocketUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
         PeripheralWorksPlatform.registerPocketUpgrade(
             id,
-            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack, id) }
+            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack, id) },
         ) { dataProvider, serializer ->
             dataProvider.simpleWithCustomItem(
-                id, serializer, block.get().asItem()
+                id,
+                serializer,
+                block.get().asItem(),
             )
         }
     }
 
     private fun registerTurtleUpgrades() {
-        registerScaledTurtleUpgrade(PeripheraliumHubPeripheral.ID, Items.PERIPHERALIUM_HUB, 0.5f) {stack ->
+        registerScaledTurtleUpgrade(PeripheraliumHubPeripheral.ID, Items.PERIPHERALIUM_HUB, 0.5f) { stack ->
             PeripheraliumHubTurtleUpgrade(
                 PeripheralWorksConfig::peripheraliumHubUpgradeCount,
                 PeripheraliumHubPeripheral.TYPE,
-                stack
+                stack,
             )
         }
-        registerScaledTurtleUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID, Items.NETHERITE_PERIPHERALIUM_MODEM, 0.5f) {stack ->
+        registerScaledTurtleUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID, Items.NETHERITE_PERIPHERALIUM_MODEM, 0.5f) { stack ->
             PeripheraliumHubTurtleUpgrade(
                 PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
                 PeripheraliumHubPeripheral.NETHERITE_TYPE,
-                stack
+                stack,
             )
         }
 
-        registerBlockTurtleUpgrade(UniversalScannerPeripheral.UPGRADE_ID, Blocks.UNIVERSAL_SCANNER) {stack, id ->
+        registerBlockTurtleUpgrade(UniversalScannerPeripheral.UPGRADE_ID, Blocks.UNIVERSAL_SCANNER) { stack, id ->
             PeripheralTurtleUpgrade.dynamic(
                 stack.item,
-                UniversalScannerPeripheral::of
+                UniversalScannerPeripheral::of,
             ) { id }
         }
 
-        registerBlockTurtleUpgrade(UltimateSensorPeripheral.UPGRADE_ID, Blocks.ULTIMATE_SENSOR) {stack, id ->
+        registerBlockTurtleUpgrade(UltimateSensorPeripheral.UPGRADE_ID, Blocks.ULTIMATE_SENSOR) { stack, id ->
             PeripheralTurtleUpgrade.dynamic(
                 stack.item,
-                UltimateSensorPeripheral::of
+                UltimateSensorPeripheral::of,
             ) { id }
         }
     }
@@ -134,14 +146,14 @@ object PeripheralWorksCommonHooks {
             PeripheraliumHubPocketUpgrade(
                 PeripheralWorksConfig::peripheraliumHubUpgradeCount,
                 PeripheraliumHubPeripheral.TYPE,
-                it
+                it,
             )
         }
         registerPocketUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID, Items.NETHERITE_PERIPHERALIUM_MODEM) {
             PeripheraliumHubPocketUpgrade(
                 PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
                 PeripheraliumHubPeripheral.NETHERITE_TYPE,
-                it
+                it,
             )
         }
         registerPocketUpgrade(UniversalScannerPeripheral.UPGRADE_ID, Blocks.UNIVERSAL_SCANNER) { stack, id ->

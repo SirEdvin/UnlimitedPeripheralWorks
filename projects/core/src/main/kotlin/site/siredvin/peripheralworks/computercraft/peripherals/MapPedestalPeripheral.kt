@@ -15,9 +15,10 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 import site.siredvin.peripheralworks.computercraft.plugins.PedestalInventoryPlugin
 
-class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity): OwnedPeripheral<BlockEntityPeripheralOwner<MapPedestalBlockEntity>>(
-    TYPE, BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING)
-)  {
+class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) : OwnedPeripheral<BlockEntityPeripheralOwner<MapPedestalBlockEntity>>(
+    TYPE,
+    BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING),
+) {
     companion object {
         const val TYPE = "map_pedestal"
     }
@@ -37,7 +38,7 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity): Ow
             val savedData =
                 MapItem.getSavedData(blockEntity.storedStack, peripheralOwner.level!!) ?: return@withOperation MethodResult.of(
                     null,
-                    "Cannot get information from map"
+                    "Cannot get information from map",
                 )
             val data = mutableMapOf<String, Any>()
             val facing = if (peripheralOwner.facing == Direction.UP || peripheralOwner.facing == Direction.DOWN) {
@@ -49,8 +50,9 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity): Ow
             data["scale"] = savedData.scale
             data["banners"] = savedData.banners.map {
                 val mapData = mutableMapOf<String, Any>()
-                if (it.name != null)
+                if (it.name != null) {
                     mapData["name"] = it.name!!.string
+                }
                 mapData["pos"] = LuaRepresentation.forBlockPos(it.pos, facing, peripheralOwner.pos)
                 mapData["color"] = it.color.getName()
                 return@map mapData
@@ -62,8 +64,8 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity): Ow
     @LuaFunction(mainThread = true)
     fun updateData(): MethodResult {
         return peripheralOwner.withOperation(UnconditionalFreeOperations.UPDATE_MAP, null, {
-            val savedData = MapItem.getSavedData(blockEntity.storedStack, peripheralOwner.level!!) ?:
-            return@withOperation MethodResult.of(null, "Cannot get information from map")
+            val savedData = MapItem.getSavedData(blockEntity.storedStack, peripheralOwner.level!!)
+                ?: return@withOperation MethodResult.of(null, "Cannot get information from map")
             peripheralOwner.owner?.let { (Items.FILLED_MAP as MapItem).update(peripheralOwner.level!!, it, savedData) }
             return@withOperation MethodResult.of(true)
         })

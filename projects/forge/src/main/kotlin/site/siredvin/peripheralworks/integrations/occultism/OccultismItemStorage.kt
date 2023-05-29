@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralium.api.storage.Storage
 import java.util.function.Predicate
 
-class OccultismItemStorage(private val storageController: IStorageController): Storage {
+class OccultismItemStorage(private val storageController: IStorageController) : Storage {
     override fun getItems(): Iterator<ItemStack> {
         return storageController.stacks.iterator()
     }

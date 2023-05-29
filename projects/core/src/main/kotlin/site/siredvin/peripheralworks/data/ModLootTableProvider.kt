@@ -12,9 +12,11 @@ import java.util.function.BiConsumer
 object ModLootTableProvider {
     fun getTables(): List<LootTableProvider.SubProviderEntry> {
         return listOf(
-            LootTableProvider.SubProviderEntry({ LootTableSubProvider {
-                registerBlocks(it)
-            } }, LootContextParamSets.BLOCK)
+            LootTableProvider.SubProviderEntry({
+                LootTableSubProvider {
+                    registerBlocks(it)
+                }
+            }, LootContextParamSets.BLOCK),
         )
     }
 

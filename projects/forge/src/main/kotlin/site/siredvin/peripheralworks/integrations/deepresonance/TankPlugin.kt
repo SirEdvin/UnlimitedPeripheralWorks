@@ -7,7 +7,7 @@ import net.minecraftforge.fluids.FluidStack
 import site.siredvin.peripheralium.extra.plugins.ForgeFluidStoragePlugin
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-class TankPlugin(private val target: TankTileEntity): ForgeFluidStoragePlugin(target.fluidHandler, PeripheralWorksConfig.fluidStorageTransferLimit) {
+class TankPlugin(private val target: TankTileEntity) : ForgeFluidStoragePlugin(target.fluidHandler, PeripheralWorksConfig.fluidStorageTransferLimit) {
 
     override fun fluidInformation(stack: FluidStack): MutableMap<String, Any> {
         val base = super.fluidInformation(stack)

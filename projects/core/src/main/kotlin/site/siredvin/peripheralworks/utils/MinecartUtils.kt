@@ -15,8 +15,12 @@ object MinecartUtils {
 
     fun getSearchShape(pos: BlockPos): AABB {
         return AABB(
-            pos.x.toDouble() + SEARCH_MARGIN, pos.y.toDouble() , pos.z.toDouble() + SEARCH_MARGIN,
-            (pos.x + 1).toDouble() - SEARCH_MARGIN, (pos.y + 1).toDouble() - SEARCH_MARGIN, (pos.z + 1).toDouble() - SEARCH_MARGIN
+            pos.x.toDouble() + SEARCH_MARGIN,
+            pos.y.toDouble(),
+            pos.z.toDouble() + SEARCH_MARGIN,
+            (pos.x + 1).toDouble() - SEARCH_MARGIN,
+            (pos.y + 1).toDouble() - SEARCH_MARGIN,
+            (pos.z + 1).toDouble() - SEARCH_MARGIN,
         )
     }
 
@@ -29,14 +33,17 @@ object MinecartUtils {
     }
 
     fun minecartExtractor(level: Level, obj: Any?): SlottedStorage? {
-        if (obj !is BlockPos)
+        if (obj !is BlockPos) {
             return null
+        }
         val state = level.getBlockState(obj)
-        if (!state.`is`(Blocks.POWERED_RAIL))
+        if (!state.`is`(Blocks.POWERED_RAIL)) {
             return null
+        }
         val containers = getContainerMinecarts(level, obj)
-        if(containers.isEmpty())
+        if (containers.isEmpty()) {
             return null
+        }
         return TargetableContainer(MergedContainer(containers))
     }
 }

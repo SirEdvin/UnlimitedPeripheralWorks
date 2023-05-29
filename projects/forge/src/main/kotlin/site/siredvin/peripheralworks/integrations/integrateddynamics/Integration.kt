@@ -24,14 +24,14 @@ import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 
-class Integration: Runnable {
+class Integration : Runnable {
 
     companion object {
         const val FILESYSTEM_PATH = "/integrateddynamics"
         val EMPTY_TAG = CompoundTag()
     }
 
-    object VariableStoreProvider: PeripheralPluginProvider {
+    object VariableStoreProvider : PeripheralPluginProvider {
         override val pluginType: String
             get() = "variable_store"
 
@@ -41,14 +41,15 @@ class Integration: Runnable {
         override val conflictWith: Set<String>
             get() = setOf(PeripheralPluginUtils.Type.INVENTORY, PeripheralPluginUtils.Type.ITEM_STORAGE)
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableVariableStore)
+            if (!Configuration.enableVariableStore) {
                 return null
+            }
             val blockEntity = level.getBlockEntity(pos)
-            if (blockEntity is BlockEntityVariablestore)
+            if (blockEntity is BlockEntityVariablestore) {
                 return VariableStorePlugin(blockEntity)
+            }
             return null
         }
-
     }
 
     private fun isExceptionExpected(exception: IllegalStateException): Boolean {
@@ -62,11 +63,12 @@ class Integration: Runnable {
         val serverComputer = computer.serverComputer ?: return EMPTY_TAG
         try {
             val fileSystem = serverComputer.computer.environment.fileSystem
-            if (!fileSystem.exists(FILESYSTEM_PATH) || !fileSystem.isDir(FILESYSTEM_PATH))
+            if (!fileSystem.exists(FILESYSTEM_PATH) || !fileSystem.isDir(FILESYSTEM_PATH)) {
                 return CompoundTag()
+            }
             val buffer = CompoundTag()
             fileSystem.list(FILESYSTEM_PATH).forEach { filePath ->
-                val wrapper = fileSystem.openForRead("${FILESYSTEM_PATH}/${filePath}", EncodedReadableHandle::openUtf8)
+                val wrapper = fileSystem.openForRead("$FILESYSTEM_PATH/$filePath", EncodedReadableHandle::openUtf8)
                 val handle = EncodedReadableHandle(wrapper.get(), wrapper)
                 val stringBuilder = StringBuilder()
                 handle.readAll()?.forEach { line -> stringBuilder.append(line) }

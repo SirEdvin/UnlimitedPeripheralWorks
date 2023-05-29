@@ -14,7 +14,7 @@ import site.siredvin.peripheralium.api.storage.StorageUtils
 import site.siredvin.peripheralium.util.BlockUtil
 import site.siredvin.peripheralworks.api.IItemStackStorage
 
-abstract class AbstractItemPedestal<T : BlockEntity>: BasePedestal<T>(BlockUtil.defaultProperties()) {
+abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil.defaultProperties()) {
 
     override fun use(
         blockState: BlockState,
@@ -22,7 +22,7 @@ abstract class AbstractItemPedestal<T : BlockEntity>: BasePedestal<T>(BlockUtil.
         blockPos: BlockPos,
         player: Player,
         interactionHand: InteractionHand,
-        blockHitResult: BlockHitResult
+        blockHitResult: BlockHitResult,
     ): InteractionResult {
         val itemInHand = player.getItemInHand(interactionHand)
         if (!itemInHand.isEmpty) {
@@ -44,9 +44,15 @@ abstract class AbstractItemPedestal<T : BlockEntity>: BasePedestal<T>(BlockUtil.
         if (blockState.block !== replace.block) {
             val blockEntity = level.getBlockEntity(blockPos)
             if (blockEntity is IItemStackStorage) {
-                if (!blockEntity.storedStack.isEmpty)
-                    Containers.dropItemStack(level, blockPos.x.toDouble(),
-                        blockPos.y.toDouble(), blockPos.z.toDouble(), blockEntity.storedStack)
+                if (!blockEntity.storedStack.isEmpty) {
+                    Containers.dropItemStack(
+                        level,
+                        blockPos.x.toDouble(),
+                        blockPos.y.toDouble(),
+                        blockPos.z.toDouble(),
+                        blockEntity.storedStack,
+                    )
+                }
             }
         }
         super.onRemove(blockState, level, blockPos, replace, bl)

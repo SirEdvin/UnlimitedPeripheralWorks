@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:package-name")
+
 package site.siredvin.peripheralworks.integrations.toms_storage
 
 import com.tom.storagemod.tile.InventoryConnectorBlockEntity
@@ -10,9 +12,9 @@ import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 
-class Integration: Runnable {
+class Integration : Runnable {
 
-    object TomsItemStoragePluginProvider: PeripheralPluginProvider {
+    object TomsItemStoragePluginProvider : PeripheralPluginProvider {
         override val pluginType: String
             get() = "toms_storage"
 
@@ -23,12 +25,12 @@ class Integration: Runnable {
             get() = 50
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableTomsStorage)
+            if (!Configuration.enableTomsStorage) {
                 return null
+            }
             val entity = level.getBlockEntity(pos) as? InventoryConnectorBlockEntity ?: return null
             return TomsItemStoragePlugin(entity)
         }
-
     }
 
     override fun run() {

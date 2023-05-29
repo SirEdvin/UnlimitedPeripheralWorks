@@ -29,7 +29,6 @@ import site.siredvin.peripheralworks.utils.Platform
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
-
 @Mod(PeripheralWorksCore.MOD_ID)
 @Mod.EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 object ForgePeripheralWorks {
@@ -42,11 +41,11 @@ object ForgePeripheralWorks {
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, PeripheralWorksCore.MOD_ID)
     val turtleSerializers = DeferredRegister.create(
         TurtleUpgradeSerialiser.REGISTRY_ID,
-        PeripheralWorksCore.MOD_ID
+        PeripheralWorksCore.MOD_ID,
     )
     val pocketSerializers = DeferredRegister.create(
         PocketUpgradeSerialiser.REGISTRY_ID,
-        PeripheralWorksCore.MOD_ID
+        PeripheralWorksCore.MOD_ID,
     )
 
     init {
@@ -80,8 +79,9 @@ object ForgePeripheralWorks {
             val entity = world.getBlockEntity(pos)
             if (entity is IPeripheralProvider<*>) {
                 val foundPeripheral = entity.getPeripheral(side)
-                if (foundPeripheral != null)
+                if (foundPeripheral != null) {
                     return@registerPeripheralProvider LazyOptional.of { foundPeripheral }
+                }
             }
             val supplier = ComputerCraftProxy.lazyPeripheralProvider(world, pos, side)
                 ?: return@registerPeripheralProvider LazyOptional.empty()

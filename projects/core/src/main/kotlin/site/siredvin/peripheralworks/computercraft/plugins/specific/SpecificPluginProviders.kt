@@ -12,7 +12,7 @@ import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-object SpecificPluginProvider: PeripheralPluginProvider {
+object SpecificPluginProvider : PeripheralPluginProvider {
     override val pluginType: String
         get() = "minecraft"
 
@@ -37,7 +37,7 @@ object SpecificPluginProvider: PeripheralPluginProvider {
  * generate inventory or item_storage plugins.
  * For example, I guess my code or fabric code force Jukebox to run sound after transaction finished
  */
-object SpecificProtectedPluginProviders: PeripheralPluginProvider {
+object SpecificProtectedPluginProviders : PeripheralPluginProvider {
     override val pluginType: String
         get() = "minecraft"
 

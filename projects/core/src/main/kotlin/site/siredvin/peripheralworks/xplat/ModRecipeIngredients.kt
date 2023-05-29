@@ -12,12 +12,12 @@ interface ModRecipeIngredients {
         }
 
         fun get(): ModRecipeIngredients {
-            if (_IMPL == null)
+            if (_IMPL == null) {
                 throw IllegalStateException("You should init PeripheralWorks Platform first")
+            }
             return _IMPL!!
         }
     }
-
 
     val enderModem: Ingredient
     val peripheralium: Ingredient

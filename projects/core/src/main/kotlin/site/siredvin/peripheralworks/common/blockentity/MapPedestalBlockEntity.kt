@@ -11,9 +11,14 @@ import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.MapPedestalPeripheral
 import java.util.function.Predicate
 
-class MapPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) : AbstractItemPedestalBlockEntity<MapPedestalPeripheral>(
-    BlockEntityTypes.MAP_PEDESTAL.get(), blockPos, blockState
-), IItemStackHolder, Container {
+class MapPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
+    AbstractItemPedestalBlockEntity<MapPedestalPeripheral>(
+        BlockEntityTypes.MAP_PEDESTAL.get(),
+        blockPos,
+        blockState,
+    ),
+    IItemStackHolder,
+    Container {
 
     override val itemFilter: Predicate<ItemStack> = Predicate { it.`is`(Items.MAP) || it.`is`(Items.FILLED_MAP) }
 

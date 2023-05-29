@@ -10,9 +10,13 @@ import site.siredvin.peripheralworks.api.IItemStackHolder
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.DisplayPedestalPeripheral
 
-class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<DisplayPedestalPeripheral>(
-    BlockEntityTypes.DISPLAY_PEDESTAL.get(), blockPos, blockState
-), IItemStackHolder {
+class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
+    MutableNBTBlockEntity<DisplayPedestalPeripheral>(
+        BlockEntityTypes.DISPLAY_PEDESTAL.get(),
+        blockPos,
+        blockState,
+    ),
+    IItemStackHolder {
 
     companion object {
         private const val STORED_ITEM_STACK_TAG = "storedItemStack"
@@ -50,10 +54,12 @@ class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) : M
         if (data.contains(STORED_ITEM_STACK_TAG)) {
             _storedStack = ItemStack.of(data.getCompound(STORED_ITEM_STACK_TAG))
         }
-        if (data.contains(RENDER_LABEL_TAG))
+        if (data.contains(RENDER_LABEL_TAG)) {
             _renderLabel = data.getBoolean(RENDER_LABEL_TAG)
-        if (data.contains(RENDER_ITEM_TAG))
+        }
+        if (data.contains(RENDER_ITEM_TAG)) {
             _renderItem = data.getBoolean(RENDER_ITEM_TAG)
+        }
         return state ?: blockState
     }
 

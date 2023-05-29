@@ -6,7 +6,7 @@ import net.minecraft.data.PackOutput
 import java.util.function.Consumer
 import java.util.function.Function
 
-class ModPocketUpgradeDataProvider(output: PackOutput): PocketUpgradeDataProvider(output) {
+class ModPocketUpgradeDataProvider(output: PackOutput) : PocketUpgradeDataProvider(output) {
     companion object {
         private val REGISTERED_BUILDERS: MutableList<Function<PocketUpgradeDataProvider, Upgrade<PocketUpgradeSerialiser<*>>>> = mutableListOf()
 

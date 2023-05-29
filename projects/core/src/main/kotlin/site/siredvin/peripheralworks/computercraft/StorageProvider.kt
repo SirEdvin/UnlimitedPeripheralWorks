@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.computercraft
 
-import com.google.common.collect.Iterators
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
@@ -13,20 +12,23 @@ import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-object StorageProvider: PeripheralPluginProvider {
+object StorageProvider : PeripheralPluginProvider {
     override val pluginType: String
         get() = "storage"
     override val conflictWith: Set<String>
         get() = setOf(PeripheralPluginUtils.Type.INVENTORY, PeripheralPluginUtils.Type.ITEM_STORAGE)
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-        if (!PeripheralWorksConfig.enableGenericItemStorage && !PeripheralWorksConfig.enableGenericInventory)
+        if (!PeripheralWorksConfig.enableGenericItemStorage && !PeripheralWorksConfig.enableGenericInventory) {
             return null
+        }
         val storage = ExtractorProxy.extractStorage(level, pos, level.getBlockEntity(pos)) ?: return null
-        if (storage is SlottedStorage && PeripheralWorksConfig.enableGenericInventory && storage.size != 0)
+        if (storage is SlottedStorage && PeripheralWorksConfig.enableGenericInventory && storage.size != 0) {
             return InventoryPlugin(level, storage)
-        if (PeripheralWorksConfig.enableGenericItemStorage)
+        }
+        if (PeripheralWorksConfig.enableGenericItemStorage) {
             return ItemStoragePlugin(storage, level, PeripheralWorksConfig.itemStorageTransferLimit)
+        }
         return null
     }
 }

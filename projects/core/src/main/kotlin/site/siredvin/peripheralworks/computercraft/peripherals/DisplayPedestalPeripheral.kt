@@ -17,9 +17,10 @@ import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEnti
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import java.util.*
 
-class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEntity): OwnedPeripheral<BlockEntityPeripheralOwner<DisplayPedestalBlockEntity>>(
-    TYPE, BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING)
-)  {
+class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEntity) : OwnedPeripheral<BlockEntityPeripheralOwner<DisplayPedestalBlockEntity>>(
+    TYPE,
+    BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING),
+) {
     companion object {
         const val TYPE = "display_pedestal"
     }
@@ -29,21 +30,25 @@ class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEnt
 
     @LuaFunction(mainThread = true)
     fun getItem(): Map<String, Any>? {
-        if (blockEntity.storedStack.isEmpty)
+        if (blockEntity.storedStack.isEmpty) {
             return null
+        }
         return LuaRepresentation.forItemStack(blockEntity.storedStack, RepresentationMode.FULL)
     }
 
     @LuaFunction(mainThread = true)
     fun setItem(id: String, name: Optional<String>, nbtData: Optional<String>): MethodResult {
         val item = XplatRegistries.ITEMS.get(ResourceLocation(id))
-        if (item == Items.AIR)
+        if (item == Items.AIR) {
             return MethodResult.of(null, "Cannot find item with id $id")
+        }
         val stack = ItemStack(item)
-        if (nbtData.isPresent)
+        if (nbtData.isPresent) {
             stack.tag = TagParser.parseTag(nbtData.get())
-        if (name.isPresent)
+        }
+        if (name.isPresent) {
             stack.setHoverName(Component.literal(name.get()))
+        }
         blockEntity.storedStack = stack
         return MethodResult.of(true)
     }

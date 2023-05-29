@@ -18,7 +18,6 @@ import site.siredvin.peripheralworks.utils.MinecartUtils
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 
-
 @Suppress("UNUSED")
 object PeripheralWorksCore {
     const val MOD_ID = "peripheralworks"

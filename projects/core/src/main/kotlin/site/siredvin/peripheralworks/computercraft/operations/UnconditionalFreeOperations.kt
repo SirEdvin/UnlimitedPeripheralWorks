@@ -5,16 +5,20 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralOperation
 
 enum class UnconditionalFreeOperations(
     private val defaultCooldown: Int,
-): IPeripheralOperation<Any?> {
+) : IPeripheralOperation<Any?> {
     INSPECT_CHUNK(10_000),
     UPDATE_MAP(60_000),
-    EXTRACT_MAP(10_000);
+    EXTRACT_MAP(10_000),
+    ;
 
     private var cooldown: ForgeConfigSpec.IntValue? = null
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
         cooldown = builder.defineInRange(
-            settingsName() + "Cooldown", defaultCooldown, 1000, Int.MAX_VALUE
+            settingsName() + "Cooldown",
+            defaultCooldown,
+            1000,
+            Int.MAX_VALUE,
         )
     }
 

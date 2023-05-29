@@ -14,7 +14,7 @@ import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.util.representation.RepresentationMode
 import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEntity
 
-class DisplayPedestal: BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defaultProperties()) {
+class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defaultProperties()) {
 
     override fun use(
         blockState: BlockState,
@@ -22,14 +22,14 @@ class DisplayPedestal: BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defaul
         blockPos: BlockPos,
         player: Player,
         interactionHand: InteractionHand,
-        blockHitResult: BlockHitResult
+        blockHitResult: BlockHitResult,
     ): InteractionResult {
         val itemInHand = player.getItemInHand(interactionHand)
         val blockEntity = level.getBlockEntity(blockPos)
         if (blockEntity is DisplayPedestalBlockEntity) {
             blockEntity.getPeripheral(Direction.EAST)?.queueEvent(
                 "pedestal_right_click",
-                LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL)
+                LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL),
             )
             return InteractionResult.SUCCESS
         }

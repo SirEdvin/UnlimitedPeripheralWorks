@@ -3,10 +3,10 @@ package site.siredvin.peripheralworks.util
 import net.fabricmc.loader.api.FabricLoader
 import site.siredvin.peripheralworks.FabricPeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import java.lang.InstantiationException
-import java.lang.IllegalAccessException
 import java.lang.ClassNotFoundException
 import java.lang.Exception
+import java.lang.IllegalAccessException
+import java.lang.InstantiationException
 import java.util.*
 
 object Platform {
@@ -14,7 +14,7 @@ object Platform {
         val modPresent = FabricLoader.getInstance().allMods.stream().anyMatch { it.metadata.id == modid }
         if (modPresent) {
             PeripheralWorksCore.LOGGER.info("Loading integration for $modid")
-            return maybeLoadIntegration("${modid}.$path")
+            return maybeLoadIntegration("$modid.$path")
         } else {
             PeripheralWorksCore.LOGGER.info("Mod $modid is not present, skip loading integration")
         }

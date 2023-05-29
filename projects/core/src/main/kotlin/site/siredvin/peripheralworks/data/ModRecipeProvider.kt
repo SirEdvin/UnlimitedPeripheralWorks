@@ -5,7 +5,6 @@ import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.world.item.crafting.Ingredient
 import site.siredvin.peripheralium.data.blocks.TweakedShapedRecipeBuilder
-import site.siredvin.peripheralium.data.blocks.TweakedShapelessRecipeBuilder
 import site.siredvin.peripheralium.data.blocks.TweakedUpgradeRecipeBuilder
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
@@ -29,7 +28,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
         TweakedUpgradeRecipeBuilder.smithing(
             Ingredient.of(Items.PERIPHERALIUM_HUB.get()),
             ingredients.netheriteIngot,
-            Items.NETHERITE_PERIPHERALIUM_MODEM.get()
+            Items.NETHERITE_PERIPHERALIUM_MODEM.get(),
         ).save(consumer)
 
         TweakedShapedRecipeBuilder.shaped(Blocks.PERIPHERAL_CASING.get().asItem())

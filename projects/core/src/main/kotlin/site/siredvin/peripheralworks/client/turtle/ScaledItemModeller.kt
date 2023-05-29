@@ -9,7 +9,7 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import org.joml.Quaternionf
 
-class ScaledItemModeller<T: ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: Int = 16): TurtleUpgradeModeller<T> {
+class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: Int = 16) : TurtleUpgradeModeller<T> {
 
     companion object {
         fun buildMatrix(side: TurtleSide, scaleFactor: Float, modelPixelSize: Int): Transformation {
@@ -28,10 +28,11 @@ class ScaledItemModeller<T: ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: 
             stack.pushPose()
             stack.scale(scaleFactor, scaleFactor, 1f)
             stack.translate(shiftFactor, shiftFactor, 0f)
-            if (modelPixelSize * scaleFactor < 12)
+            if (modelPixelSize * scaleFactor < 12) {
                 // So, here we center model around turtle side center, instead of turtle center, because turtle is not cubical
                 // And we do this only if model with
                 stack.translate(1.5 * scaleFactor / 12.0, 0.0, 0.0)
+            }
             return Transformation(stack.last().pose())
         }
     }
@@ -42,7 +43,7 @@ class ScaledItemModeller<T: ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: 
     override fun getModel(
         upgrade: T,
         turtle: ITurtleAccess?,
-        side: TurtleSide
+        side: TurtleSide,
     ): TransformedModel {
         return TransformedModel.of(upgrade.craftingItem, if (side == TurtleSide.LEFT) leftTransformation else rightTransformation)
     }

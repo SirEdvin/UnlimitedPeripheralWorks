@@ -9,18 +9,23 @@ import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 object Items {
     val PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerItem("peripheralium_hub") {
         PeripheralItem(
-            Item.Properties(), PeripheralWorksConfig::enablePeripheraliumHubs, alwaysShow = false, TooltipCollection::isDisabled,
-            TooltipCollection.buildMaxPeripheralsCount(PeripheralWorksConfig::peripheraliumHubUpgradeCount)
+            Item.Properties(),
+            PeripheralWorksConfig::enablePeripheraliumHubs,
+            alwaysShow = false,
+            TooltipCollection::isDisabled,
+            TooltipCollection.buildMaxPeripheralsCount(PeripheralWorksConfig::peripheraliumHubUpgradeCount),
         )
     }
     val NETHERITE_PERIPHERALIUM_MODEM = PeripheralWorksPlatform.registerItem("netherite_peripheralium_hub") {
         PeripheralItem(
-            Item.Properties(), PeripheralWorksConfig::enablePeripheraliumHubs, alwaysShow = false, TooltipCollection::isDisabled,
-            TooltipCollection.buildMaxPeripheralsCount(PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount)
+            Item.Properties(),
+            PeripheralWorksConfig::enablePeripheraliumHubs,
+            alwaysShow = false,
+            TooltipCollection::isDisabled,
+            TooltipCollection.buildMaxPeripheralsCount(PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount),
         )
     }
 
     fun doSomething() {
-
     }
 }

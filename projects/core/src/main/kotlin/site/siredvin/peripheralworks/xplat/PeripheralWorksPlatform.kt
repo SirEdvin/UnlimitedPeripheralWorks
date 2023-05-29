@@ -8,17 +8,12 @@ import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import dan200.computercraft.api.upgrades.UpgradeDataProvider
 import dan200.computercraft.api.upgrades.UpgradeDataProvider.Upgrade
-import net.minecraft.core.BlockPos
-import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.items.DescriptiveBlockItem
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import java.util.function.BiFunction
 import java.util.function.Consumer
@@ -33,70 +28,71 @@ interface PeripheralWorksPlatform {
         }
 
         fun get(): PeripheralWorksPlatform {
-            if (_IMPL == null)
+            if (_IMPL == null) {
                 throw IllegalStateException("You should init PeripheralWorks Platform first")
+            }
             return _IMPL!!
         }
 
-        fun <T: Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T> {
+        fun <T : Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T> {
             return get().registerItem(key, item)
         }
 
-        fun <T: Item> registerItem(name: String, item: Supplier<T>): Supplier<T> {
+        fun <T : Item> registerItem(name: String, item: Supplier<T>): Supplier<T> {
             return registerItem(ResourceLocation(PeripheralWorksCore.MOD_ID, name), item)
         }
 
-        fun <T: Block> registerBlock(key: ResourceLocation, block: Supplier<T>, itemFactory: (T) -> (Item)): Supplier<T> {
+        fun <T : Block> registerBlock(key: ResourceLocation, block: Supplier<T>, itemFactory: (T) -> (Item)): Supplier<T> {
             return get().registerBlock(key, block, itemFactory)
         }
 
-        fun <T: Block> registerBlock(name: String, block: Supplier<T>, itemFactory: (T) -> (Item) = { block -> DescriptiveBlockItem(block, Item.Properties()) }): Supplier<T> {
+        fun <T : Block> registerBlock(name: String, block: Supplier<T>, itemFactory: (T) -> (Item) = { block -> DescriptiveBlockItem(block, Item.Properties()) }): Supplier<T> {
             return get()
                 .registerBlock(ResourceLocation(PeripheralWorksCore.MOD_ID, name), block, itemFactory)
         }
 
         fun <V : BlockEntity, T : BlockEntityType<V>> registerBlockEntity(
             key: ResourceLocation,
-            blockEntityTypeSup: Supplier<T>
+            blockEntityTypeSup: Supplier<T>,
         ): Supplier<T> {
             return get().registerBlockEntity(key, blockEntityTypeSup)
         }
 
-        fun <V: ITurtleUpgrade> registerTurtleUpgrade(
+        fun <V : ITurtleUpgrade> registerTurtleUpgrade(
             key: ResourceLocation,
             serializer: TurtleUpgradeSerialiser<V>,
             dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
-            postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>
+            postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>,
         ) {
             get().registerTurtleUpgrade(key, serializer, dataGenerator, postRegistrationHooks)
         }
-        fun <V: IPocketUpgrade> registerPocketUpgrade(
+        fun <V : IPocketUpgrade> registerPocketUpgrade(
             key: ResourceLocation,
             serializer: PocketUpgradeSerialiser<V>,
-            dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>
+            dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>,
         ) {
             get().registerPocketUpgrade(key, serializer, dataGenerator)
         }
     }
 
-    fun <T: Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T>
+    fun <T : Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T>
 
-    fun <T: Block> registerBlock(key: ResourceLocation, block: Supplier<T>, itemFactory: (T) -> (Item)): Supplier<T>
+    fun <T : Block> registerBlock(key: ResourceLocation, block: Supplier<T>, itemFactory: (T) -> (Item)): Supplier<T>
 
     fun <V : BlockEntity, T : BlockEntityType<V>> registerBlockEntity(
         key: ResourceLocation,
-        blockEntityTypeSup: Supplier<T>
+        blockEntityTypeSup: Supplier<T>,
     ): Supplier<T>
 
-    fun <V: ITurtleUpgrade> registerTurtleUpgrade(
+    fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,
         serializer: TurtleUpgradeSerialiser<V>,
         dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
-        postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>
+        postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>,
     )
-    fun <V: IPocketUpgrade> registerPocketUpgrade(
+    fun <V : IPocketUpgrade> registerPocketUpgrade(
         key: ResourceLocation,
         serializer: PocketUpgradeSerialiser<V>,
-        dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>
+        dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>,
     )
 }

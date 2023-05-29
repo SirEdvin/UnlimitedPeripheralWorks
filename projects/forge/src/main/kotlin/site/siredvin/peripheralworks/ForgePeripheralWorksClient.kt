@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks
 
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers

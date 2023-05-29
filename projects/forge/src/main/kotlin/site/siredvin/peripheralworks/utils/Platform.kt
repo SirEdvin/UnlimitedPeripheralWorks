@@ -5,13 +5,12 @@ import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import java.util.*
 
-
 object Platform {
     fun maybeLoadIntegration(modid: String, path: String = "Integration"): Optional<Any> {
         val modPresent = ModList.get().isLoaded(modid)
         if (modPresent) {
             PeripheralWorksCore.LOGGER.info("Loading integration for $modid")
-            return maybeLoadIntegration("${modid}.$path")
+            return maybeLoadIntegration("$modid.$path")
         } else {
             PeripheralWorksCore.LOGGER.info("Mod $modid is not present, skip loading integration")
         }

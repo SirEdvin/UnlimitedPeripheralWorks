@@ -3,13 +3,12 @@ package site.siredvin.peripheralworks.integrations.toms_storage
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private var ENABLE_TOMS_STORAGE: ForgeConfigSpec.BooleanValue? = null
 
     val enableTomsStorage: Boolean
         get() = ENABLE_TOMS_STORAGE?.get() ?: true
-
 
     override val name: String
         get() = "toms_storage"

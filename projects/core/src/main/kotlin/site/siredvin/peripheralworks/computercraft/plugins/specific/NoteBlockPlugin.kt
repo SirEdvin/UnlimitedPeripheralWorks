@@ -12,7 +12,7 @@ import net.minecraft.world.level.gameevent.GameEvent
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.util.assertBetween
 
-class NoteBlockPlugin(private val level: Level, private val pos: BlockPos): IPeripheralPlugin {
+class NoteBlockPlugin(private val level: Level, private val pos: BlockPos) : IPeripheralPlugin {
     companion object {
         val lowerNote: Int = NoteBlock.NOTE.possibleValues.minOf { it }
         val upperNote: Int = NoteBlock.NOTE.possibleValues.maxOf { it }
@@ -21,8 +21,9 @@ class NoteBlockPlugin(private val level: Level, private val pos: BlockPos): IPer
     private val blockState: BlockState
         get() {
             val state = level.getBlockState(pos)
-            if (state.block !is NoteBlock)
+            if (state.block !is NoteBlock) {
                 throw LuaException("Target block is not note block at all!")
+            }
             return state
         }
 

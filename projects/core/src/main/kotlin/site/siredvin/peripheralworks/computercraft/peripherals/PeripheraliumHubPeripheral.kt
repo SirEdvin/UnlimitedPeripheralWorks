@@ -13,7 +13,7 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.modem.ModemPeripheral
 
-abstract class PeripheraliumHubPeripheral<O: IPeripheralOwner>(private val maxUpdateCount: Int, owner: O, type: String): ModemPeripheral<O>(type, owner) {
+abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxUpdateCount: Int, owner: O, type: String) : ModemPeripheral<O>(type, owner) {
 
     companion object {
         const val TYPE = "peripheralium_hub"
@@ -66,8 +66,9 @@ abstract class PeripheraliumHubPeripheral<O: IPeripheralOwner>(private val maxUp
 
     @LuaFunction(mainThread = true)
     fun equip(slot: Int): MethodResult {
-        if (activeUpgrades.size > maxUpdateCount)
+        if (activeUpgrades.size > maxUpdateCount) {
             throw LuaException("Cannot add new upgrade, maximum upgrade count for this hub is $maxUpdateCount")
+        }
         val storage = peripheralOwner.storage ?: return MethodResult.of(null, "Cannot access inventory for some reason")
         assertBetween(slot, 1, storage.size, "Slot should be between 1 and ${storage.size}")
         val stack = storage.getItem(slot - 1)
@@ -76,24 +77,27 @@ abstract class PeripheraliumHubPeripheral<O: IPeripheralOwner>(private val maxUp
             return MethodResult.of(equipTestResult.first, equipTestResult.second)
         }
         val takenStack: ItemStack = storage.takeItems(1, slot - 1, slot - 1, StorageUtils.ALWAYS)
-        if (takenStack.isEmpty)
+        if (takenStack.isEmpty) {
             return MethodResult.of(null, "Cannot extract item for equipment")
+        }
         val equipResult = equipImpl(takenStack)
         if (equipResult.first == null || !equipResult.first!!) {
-            storage.storeItem(takenStack, slot - 1, slot -1)
+            storage.storeItem(takenStack, slot - 1, slot - 1)
             return MethodResult.of(equipResult.first, equipResult.second)
         }
         return MethodResult.of(true)
     }
-    
+
     @LuaFunction(mainThread = true)
     fun unequip(id: String): MethodResult {
         val storage = peripheralOwner.storage ?: return MethodResult.of(null, "Cannot access inventory for some reason")
-        if (!activeUpgrades.contains(id))
+        if (!activeUpgrades.contains(id)) {
             throw LuaException("Cannot find upgrade with id $id")
+        }
         val stack = unequipImpl(id)
-        if (stack.isEmpty)
+        if (stack.isEmpty) {
             return MethodResult.of(null, "Cannot generate stack for unknown reason")
+        }
         StorageUtils.toInventoryOrToWorld(stack, storage, 0, peripheralOwner.pos, peripheralOwner.level!!)
         return MethodResult.of(true)
     }

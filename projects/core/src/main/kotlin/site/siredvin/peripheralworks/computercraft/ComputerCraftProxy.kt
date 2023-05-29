@@ -38,8 +38,9 @@ object ComputerCraftProxy {
 
     fun lazyPeripheralProvider(level: Level, pos: BlockPos, side: Direction): Supplier<IPeripheral>? {
         val plugins = collectPlugins(level, pos, side)
-        if (plugins.isEmpty())
+        if (plugins.isEmpty()) {
             return null
+        }
         return Supplier {
             val state = level.getBlockState(pos)
             val entity = level.getBlockEntity(pos)
@@ -51,8 +52,9 @@ object ComputerCraftProxy {
 
     fun peripheralProvider(level: Level, pos: BlockPos, state: BlockState, entity: BlockEntity?, side: Direction): IPeripheral? {
         val plugins = collectPlugins(level, pos, side)
-        if (plugins.isEmpty())
+        if (plugins.isEmpty()) {
             return null
+        }
 
         val peripheral = PluggablePeripheral(XplatRegistries.BLOCKS.getKey(state.block).toString(), entity ?: pos)
         plugins.values.forEach { peripheral.addPlugin(it) }

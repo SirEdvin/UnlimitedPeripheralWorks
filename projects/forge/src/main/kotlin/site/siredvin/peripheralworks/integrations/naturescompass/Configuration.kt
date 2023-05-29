@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.naturescompass
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private var ENABLE_NATURES_COMPASS_TURTLE_UPGRADE: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_NATURES_COMPASS_POCKET_UPGRADE: ForgeConfigSpec.BooleanValue? = null

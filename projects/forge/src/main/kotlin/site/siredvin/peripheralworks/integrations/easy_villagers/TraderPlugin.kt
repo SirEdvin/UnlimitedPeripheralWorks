@@ -7,7 +7,7 @@ import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.util.representation.merchantData
 import site.siredvin.peripheralium.util.representation.villagerData
 
-open class TraderPlugin(private val trader: TraderTileentityBase): IPeripheralPlugin {
+open class TraderPlugin(private val trader: TraderTileentityBase) : IPeripheralPlugin {
     override val additionalType: String
         get() = "easy_trader"
 
@@ -18,8 +18,9 @@ open class TraderPlugin(private val trader: TraderTileentityBase): IPeripheralPl
 
     @LuaFunction(mainThread = true)
     fun inspect(): Map<String, Any>? {
-        if (!trader.hasVillager())
+        if (!trader.hasVillager()) {
             return null
+        }
         val villager = trader.villagerEntity
         val base = LuaRepresentation.forEntity(villager)
         merchantData.accept(villager, base)

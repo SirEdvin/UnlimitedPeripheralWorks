@@ -52,9 +52,13 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
     }
 
     fun itemTimeRotation(direction: Direction, time: Float): Quaternionf {
-        return if (direction == Direction.WEST) Axis.XP.rotationDegrees(time % 360) else Axis.YP.rotationDegrees(
-            time % 360
-        )
+        return if (direction == Direction.WEST) {
+            Axis.XP.rotationDegrees(time % 360)
+        } else {
+            Axis.YP.rotationDegrees(
+                time % 360,
+            )
+        }
     }
 
     override fun render(
@@ -63,22 +67,24 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
         poseStack: PoseStack,
         buffer: MultiBufferSource,
         packedLight: Int,
-        packedOverlay: Int
+        packedOverlay: Int,
     ) {
         val storedStack = blockEntity!!.storedStack
         if (storedStack.isEmpty) return
         val blockDirection = blockEntity.blockState.getValue(FACING)
-        if (blockEntity.renderItem)
+        if (blockEntity.renderItem) {
             renderItem(storedStack, blockDirection, poseStack, buffer, packedOverlay, packedLight, 0.8f)
-        if (blockEntity.renderLabel)
+        }
+        if (blockEntity.renderLabel) {
             renderLabel(
                 poseStack,
                 buffer,
                 packedLight,
                 getLabelTranslate(blockDirection),
                 storedStack.hoverName,
-                0xffffff
+                0xffffff,
             )
+        }
     }
 
     private fun renderItem(
@@ -88,7 +94,7 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
         buffer: MultiBufferSource,
         combinedOverlay: Int,
         lightLevel: Int,
-        scale: Float
+        scale: Float,
     ) {
         val level: Level? = Minecraft.getInstance().level
         Objects.requireNonNull(level)
@@ -102,8 +108,14 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
         poseStack.scale(scale, scale, scale)
         val model = Minecraft.getInstance().itemRenderer.getModel(stack, level, null, lightLevel)
         Minecraft.getInstance().itemRenderer.render(
-            stack, ItemDisplayContext.GROUND, true, poseStack, buffer,
-            lightLevel, combinedOverlay, model
+            stack,
+            ItemDisplayContext.GROUND,
+            true,
+            poseStack,
+            buffer,
+            lightLevel,
+            combinedOverlay,
+            model,
         )
         poseStack.popPose()
     }
@@ -114,7 +126,7 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
         lightLevel: Int,
         translation: Vector3d,
         text: Component,
-        color: Int
+        color: Int,
     ) {
         val font = Minecraft.getInstance().font
         stack.pushPose()

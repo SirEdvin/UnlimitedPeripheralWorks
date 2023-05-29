@@ -6,7 +6,7 @@ import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Blocks
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 
-object FabricModRecipeIngredients: ModRecipeIngredients {
+object FabricModRecipeIngredients : ModRecipeIngredients {
     override val enderModem: Ingredient
         get() = Ingredient.of(Items.WIRELESS_MODEM_ADVANCED.get())
     override val peripheralium: Ingredient

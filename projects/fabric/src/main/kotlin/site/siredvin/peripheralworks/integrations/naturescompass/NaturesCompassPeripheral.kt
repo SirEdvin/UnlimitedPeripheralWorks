@@ -15,13 +15,12 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.ext.toRelative
 
-class NaturesCompassPeripheral<O: IPeripheralOwner>(peripheralOwner: O, override val isEnabled: Boolean) :
+class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, override val isEnabled: Boolean) :
     OwnedPeripheral<O>(TYPE, peripheralOwner) {
     companion object {
         const val TYPE = "natures_compass"
     }
 
-    
     var compassStack: ItemStack = NaturesCompass.NATURES_COMPASS_ITEM.defaultInstance.copy()
 
     val compass: NaturesCompassItem
@@ -31,15 +30,17 @@ class NaturesCompassPeripheral<O: IPeripheralOwner>(peripheralOwner: O, override
     fun getBiomes(): List<String> {
         return BiomeUtils.getAllowedBiomeIDs(peripheralOwner.level).map { it.toString() }
     }
-    
+
     @LuaFunction
     fun scheduleSearch(biome: String): MethodResult {
-        if (compass.getState(compassStack) == CompassState.SEARCHING)
+        if (compass.getState(compassStack) == CompassState.SEARCHING) {
             return MethodResult.of(null, "Another compass search is running, stop it to start another")
+        }
         val biomeLoc = ResourceLocation(biome)
         val optionalBiome = BiomeUtils.getBiomeForIdentifier(level, biomeLoc)
-        if (optionalBiome.isEmpty)
+        if (optionalBiome.isEmpty) {
             return MethodResult.of(null, "Incorrect biome id $biome")
+        }
         return peripheralOwner.withPlayer({
             compass.searchForBiome(it.level as ServerLevel, it, biomeLoc, peripheralOwner.pos, compassStack)
             return@withPlayer MethodResult.of(true)
@@ -53,20 +54,22 @@ class NaturesCompassPeripheral<O: IPeripheralOwner>(peripheralOwner: O, override
 
     @LuaFunction
     fun getResult(): Map<String, Any>? {
-        if (compass.getState(compassStack) != CompassState.FOUND)
+        if (compass.getState(compassStack) != CompassState.FOUND) {
             return null
+        }
         val x = compass.getFoundBiomeX(compassStack)
         val z = compass.getFoundBiomeZ(compassStack)
         val ownerPos = peripheralOwner.pos
         var facing = peripheralOwner.facing
-        if (facing == Direction.UP || facing == Direction.DOWN)
+        if (facing == Direction.UP || facing == Direction.DOWN) {
             facing = Direction.EAST
+        }
         val relativePos = BlockPos(x, 0, z).subtract(ownerPos).toRelative(facing)
         return mapOf(
             "x" to relativePos.x,
             "z" to relativePos.z,
             "distance" to BiomeUtils.getDistanceToBiome(peripheralOwner.pos, x, z),
-            "biome" to compass.getBiomeID(compassStack).toString()
+            "biome" to compass.getBiomeID(compassStack).toString(),
         )
     }
 }

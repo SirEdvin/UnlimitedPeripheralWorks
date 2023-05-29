@@ -4,10 +4,10 @@ import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 import site.siredvin.peripheralium.api.config.IOperationAbilityConfig
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
+import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 
-object PeripheralWorksConfig: IOperationAbilityConfig {
+object PeripheralWorksConfig : IOperationAbilityConfig {
 
     private val INTEGRATION_CONFIGURATIONS: MutableMap<String, IConfigHandler> = mutableMapOf()
 
@@ -74,18 +74,21 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
         var IS_INITIAL_COOLDOWN_ENABLED: ForgeConfigSpec.BooleanValue
         var INITIAL_COOLDOWN_SENSENTIVE_LEVEL: ForgeConfigSpec.IntValue
         var COOLDOWN_TRESHOLD_LEVEL: ForgeConfigSpec.IntValue
+
         // Generic plugins
         var ENABLE_GENERIC_INVENTORY: ForgeConfigSpec.BooleanValue
         var ENABLE_GENERIC_ITEM_STORAGE: ForgeConfigSpec.BooleanValue
         var ENABLE_GENERIC_FLUID_STORAGE: ForgeConfigSpec.BooleanValue
         val ITEM_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.IntValue
         val FLUID_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.IntValue
+
         // Specific plugins
         var ENABLE_BEACON: ForgeConfigSpec.BooleanValue
         var ENABLE_NOTEBLOCK: ForgeConfigSpec.BooleanValue
         var ENABLE_LECTERN: ForgeConfigSpec.BooleanValue
         var ENABLE_JUKEBOX: ForgeConfigSpec.BooleanValue
         var ENABLE_POWERED_RAIL: ForgeConfigSpec.BooleanValue
+
         // Peripheralium hubs
         val ENABLE_PERIPHERALIUM_HUBS: ForgeConfigSpec.BooleanValue
         val PERIPHERALIUM_HUB_UPGRADE_COUNT: ForgeConfigSpec.IntValue
@@ -135,7 +138,7 @@ object PeripheralWorksConfig: IOperationAbilityConfig {
                 .define("enablePeripheraliumHubs", true)
             PERIPHERALIUM_HUB_UPGRADE_COUNT = builder.comment("Regulare amount of upgrades that can be installed on peripheralium hub")
                 .defineInRange("peripheraliumHubUpgradeCount", 3, 1, 64)
-            NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT  = builder.comment("Regulare amount of upgrades that can be installed on netherite peripheralium hub")
+            NETHERITE_PERIPHERALIUM_HUB_UPGRADE_COUNT = builder.comment("Regulare amount of upgrades that can be installed on netherite peripheralium hub")
                 .defineInRange("netheritePeripheraliumHubUpgradeCount", 7, 1, 64)
             ENABLE_UNIVERSAL_SCANNER = builder.comment("Enables universal scanner")
                 .define("enableUniversalScanner", true)

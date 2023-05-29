@@ -15,8 +15,7 @@ import site.siredvin.peripheralium.api.storage.SlottedStorage
 import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
 import site.siredvin.peripheralium.storage.ItemHandlerWrapper
 
-
-class VariableStorePlugin(private val store: BlockEntityVariablestore): AbstractInventoryPlugin() {
+class VariableStorePlugin(private val store: BlockEntityVariablestore) : AbstractInventoryPlugin() {
 
     override val level: Level
     override val storage: SlottedStorage
@@ -33,8 +32,9 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore): Abstract
         dataMap["id"] = facade.id
         dataMap["type"] = facade.outputType.typeName
         dataMap["isDynamic"] = facade is OperatorVariableFacade
-        if (facade.label != null)
+        if (facade.label != null) {
             dataMap["label"] = facade.label!!
+        }
         return dataMap
     }
 
@@ -48,8 +48,9 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore): Abstract
         val records = mutableMapOf<Int, Map<String, *>>()
         store.inventory.itemStacks.forEachIndexed { index, itemStack ->
             val facade = extractFacade(itemStack)
-            if (facade != null)
+            if (facade != null) {
                 records[index + 1] = parseEntry(facade)
+            }
         }
         return records
     }
@@ -71,9 +72,9 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore): Abstract
         valueData["id"] = facade.id
         valueData["value"] = NBTUtil.toLua(value.type.serialize(value))
         valueData["dynamic"] = facade is OperatorVariableFacade
-        if (facade.label != null)
+        if (facade.label != null) {
             valueData["label"] = facade.label
+        }
         return valueData
     }
-
 }

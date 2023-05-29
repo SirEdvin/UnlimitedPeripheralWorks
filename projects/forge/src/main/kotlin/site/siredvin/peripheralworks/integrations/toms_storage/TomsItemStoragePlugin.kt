@@ -7,7 +7,7 @@ import site.siredvin.peripheralium.extra.plugins.AbstractItemStoragePlugin
 import site.siredvin.peripheralium.storage.ItemHandlerWrapper
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-class TomsItemStoragePlugin(private val target: InventoryConnectorBlockEntity): AbstractItemStoragePlugin() {
+class TomsItemStoragePlugin(private val target: InventoryConnectorBlockEntity) : AbstractItemStoragePlugin() {
     override val itemStorageTransferLimit: Int
         get() = PeripheralWorksConfig.itemStorageTransferLimit
     override val level: Level

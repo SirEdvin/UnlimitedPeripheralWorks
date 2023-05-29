@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import site.siredvin.peripheralworks.computercraft.peripherals.pocket.PocketPeripheraliumHubPeripheral
 
-class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade, private val id: String, private val origin: PocketPeripheraliumHubPeripheral): IPocketAccess {
+class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade, private val id: String, private val origin: PocketPeripheraliumHubPeripheral) : IPocketAccess {
 
     companion object {
         const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
@@ -52,18 +52,21 @@ class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade,
     }
 
     override fun invalidatePeripheral() {
-        if (peripheral != null)
+        if (peripheral != null) {
             origin.removeRemotePeripheral(upgrade.upgradeID.toString())
+        }
         peripheral = upgrade.createPeripheral(access)
-        if (peripheral != null)
+        if (peripheral != null) {
             origin.attachRemotePeripheral(peripheral!!, upgrade.upgradeID.toString())
+        }
     }
 
     override fun getUpgrades(): MutableMap<ResourceLocation, IPeripheral> {
-        if (peripheral == null)
+        if (peripheral == null) {
             return mutableMapOf()
+        }
         return mutableMapOf(
-            upgrade.upgradeID to peripheral!!
+            upgrade.upgradeID to peripheral!!,
         )
     }
 }

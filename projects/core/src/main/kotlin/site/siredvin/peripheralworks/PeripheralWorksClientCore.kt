@@ -20,22 +20,25 @@ object PeripheralWorksClientCore {
         "turtle/universal_scanner_left",
         "turtle/universal_scanner_right",
         "turtle/ultimate_sensor_left",
-        "turtle/ultimate_sensor_right"
+        "turtle/ultimate_sensor_right",
     )
 
     val EXTRA_BLOCK_ENTITY_RENDERERS: Array<Supplier<BlockEntityType<BlockEntity>>> = arrayOf(
         BlockEntityTypes.ITEM_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.MAP_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
-        BlockEntityTypes.DISPLAY_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>
+        BlockEntityTypes.DISPLAY_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
     )
 
     fun getBlockEntityRendererProvider(type: BlockEntityType<BlockEntity>): BlockEntityRendererProvider<BlockEntity> {
-        if (type == BlockEntityTypes.ITEM_PEDESTAL.get())
-            return BlockEntityRendererProvider {PedestalTileRenderer<ItemPedestalBlockEntity>()} as BlockEntityRendererProvider<BlockEntity>
-        if (type == BlockEntityTypes.MAP_PEDESTAL.get())
-            return BlockEntityRendererProvider {PedestalTileRenderer<MapPedestalBlockEntity>()} as BlockEntityRendererProvider<BlockEntity>
-        if (type == BlockEntityTypes.DISPLAY_PEDESTAL.get())
-            return BlockEntityRendererProvider {PedestalTileRenderer<DisplayPedestalBlockEntity>()} as BlockEntityRendererProvider<BlockEntity>
+        if (type == BlockEntityTypes.ITEM_PEDESTAL.get()) {
+            return BlockEntityRendererProvider { PedestalTileRenderer<ItemPedestalBlockEntity>() } as BlockEntityRendererProvider<BlockEntity>
+        }
+        if (type == BlockEntityTypes.MAP_PEDESTAL.get()) {
+            return BlockEntityRendererProvider { PedestalTileRenderer<MapPedestalBlockEntity>() } as BlockEntityRendererProvider<BlockEntity>
+        }
+        if (type == BlockEntityTypes.DISPLAY_PEDESTAL.get()) {
+            return BlockEntityRendererProvider { PedestalTileRenderer<DisplayPedestalBlockEntity>() } as BlockEntityRendererProvider<BlockEntity>
+        }
         throw IllegalArgumentException("There is no extra renderer for $type")
     }
 
@@ -44,10 +47,11 @@ object PeripheralWorksClientCore {
     }
 
     fun registerHook(it: Runnable) {
-        if (!initialized)
+        if (!initialized) {
             CLIENT_HOOKS.add(it)
-        else
+        } else {
             it.run()
+        }
     }
 
     fun onInit() {

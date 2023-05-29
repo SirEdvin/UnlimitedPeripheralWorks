@@ -19,7 +19,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import site.siredvin.peripheralium.common.blocks.BaseTileEntityBlock
 import java.util.stream.Stream
 
-abstract class BasePedestal<T : BlockEntity>(properties: Properties): BaseTileEntityBlock<T>(false, properties) {
+abstract class BasePedestal<T : BlockEntity>(properties: Properties) : BaseTileEntityBlock<T>(false, properties) {
     init {
         registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.UP))
     }
@@ -45,7 +45,7 @@ abstract class BasePedestal<T : BlockEntity>(properties: Properties): BaseTileEn
         state: BlockState,
         blockGetter: BlockGetter,
         blockPos: BlockPos,
-        collisionContext: CollisionContext
+        collisionContext: CollisionContext,
     ): VoxelShape {
         return when (state.getValue(FACING)) {
             Direction.SOUTH -> SOUTH_PEDESTAL
@@ -63,37 +63,37 @@ abstract class BasePedestal<T : BlockEntity>(properties: Properties): BaseTileEn
             box(3.0, 0.0, 3.0, 13.0, 1.0, 13.0),
             box(6.0, 1.0, 6.0, 10.0, 9.0, 10.0),
             box(4.0, 9.0, 4.0, 12.0, 10.0, 12.0),
-            box(5.0, 10.0, 5.0, 11.0, 11.0, 11.0)
+            box(5.0, 10.0, 5.0, 11.0, 11.0, 11.0),
         ).reduce { v1: VoxelShape, v2: VoxelShape -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
         private val DOWN_PEDESTAL = Stream.of(
             box(3.0, 15.0, 3.0, 13.0, 16.0, 13.0),
             box(6.0, 7.0, 6.0, 10.0, 15.0, 10.0),
             box(4.0, 6.0, 4.0, 12.0, 7.0, 12.0),
-            box(5.0, 5.0, 5.0, 11.0, 6.0, 11.0)
+            box(5.0, 5.0, 5.0, 11.0, 6.0, 11.0),
         ).reduce { v1: VoxelShape, v2: VoxelShape -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
         private val SOUTH_PEDESTAL = Stream.of(
             box(3.0, 3.0, 0.0, 13.0, 13.0, 1.0),
             box(6.0, 6.0, 1.0, 10.0, 10.0, 9.0),
             box(4.0, 4.0, 9.0, 12.0, 12.0, 10.0),
-            box(5.0, 5.0, 10.0, 11.0, 11.0, 11.0)
+            box(5.0, 5.0, 10.0, 11.0, 11.0, 11.0),
         ).reduce { v1: VoxelShape, v2: VoxelShape -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
         private val NORTH_PEDESTAL = Stream.of(
             box(3.0, 3.0, 15.0, 13.0, 13.0, 16.0),
             box(6.0, 6.0, 7.0, 10.0, 10.0, 15.0),
             box(4.0, 4.0, 6.0, 12.0, 12.0, 7.0),
-            box(5.0, 5.0, 5.0, 11.0, 11.0, 6.0)
+            box(5.0, 5.0, 5.0, 11.0, 11.0, 6.0),
         ).reduce { v1: VoxelShape, v2: VoxelShape -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
         private val WEST_PEDESTAL = Stream.of(
             box(15.0, 3.0, 3.0, 16.0, 13.0, 13.0),
             box(7.0, 6.0, 6.0, 15.0, 10.0, 10.0),
             box(6.0, 4.0, 4.0, 7.0, 12.0, 12.0),
-            box(5.0, 5.0, 5.0, 6.0, 11.0, 11.0)
+            box(5.0, 5.0, 5.0, 6.0, 11.0, 11.0),
         ).reduce { v1: VoxelShape, v2: VoxelShape -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
         private val EAST_PEDESTAL = Stream.of(
             box(0.0, 3.0, 3.0, 1.0, 13.0, 13.0),
             box(1.0, 6.0, 6.0, 9.0, 10.0, 10.0),
             box(9.0, 4.0, 4.0, 10.0, 12.0, 12.0),
-            box(10.0, 5.0, 5.0, 11.0, 11.0, 11.0)
+            box(10.0, 5.0, 5.0, 11.0, 11.0, 11.0),
         ).reduce { v1: VoxelShape, v2: VoxelShape -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
     }
 }

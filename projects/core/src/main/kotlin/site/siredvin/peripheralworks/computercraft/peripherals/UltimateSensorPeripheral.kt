@@ -20,13 +20,14 @@ import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeO
 import site.siredvin.peripheralworks.utils.SensorCollection
 import java.util.function.Function
 
-class UltimateSensorPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeripheralOwner>(TYPE, owner) {
+class UltimateSensorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPeripheralOwner>(TYPE, owner) {
 
     internal data class WrappedCall(val func: Function<IPeripheralOwner, MethodResult>, val operation: IPeripheralOperation<Any?>?) {
         fun call(owner: IPeripheralOwner): MethodResult {
-            if (operation == null)
+            if (operation == null) {
                 return func.apply(owner)
-            return owner.withOperation(operation, null, {  func.apply(owner) })
+            }
+            return owner.withOperation(operation, null, { func.apply(owner) })
         }
     }
 
@@ -38,14 +39,16 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeriph
         private val INSPECTORS: MutableMap<String, WrappedCall> = mutableMapOf()
 
         fun registerAnalyzer(name: String, analyzer: Function<IPeripheralOwner, MethodResult>, operation: IPeripheralOperation<Any?>? = null) {
-            if (ANALYZERS.containsKey(name))
+            if (ANALYZERS.containsKey(name)) {
                 throw IllegalArgumentException("Cannot register duplicate analyzer for name $name")
+            }
             ANALYZERS[name] = WrappedCall(analyzer, operation)
         }
 
         fun registerInspector(name: String, inspector: Function<IPeripheralOwner, MethodResult>, operation: IPeripheralOperation<Any?>? = null) {
-            if (INSPECTORS.containsKey(name))
+            if (INSPECTORS.containsKey(name)) {
                 throw IllegalArgumentException("Cannot register duplicate analyzer for name $name")
+            }
             INSPECTORS[name] = WrappedCall(inspector, operation)
         }
 
@@ -81,14 +84,14 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeriph
             owner.attachOperations(config = PeripheralWorksConfig)
             return UltimateSensorPeripheral(owner)
         }
-
     }
 
     init {
         val baseList = ArrayList(ANALYZERS.mapNotNull { it.value.operation })
-        baseList.addAll(INSPECTORS.mapNotNull {  it.value.operation })
-        if (baseList.isNotEmpty())
+        baseList.addAll(INSPECTORS.mapNotNull { it.value.operation })
+        if (baseList.isNotEmpty()) {
             this.addOperations(baseList)
+        }
     }
 
     override val isEnabled: Boolean

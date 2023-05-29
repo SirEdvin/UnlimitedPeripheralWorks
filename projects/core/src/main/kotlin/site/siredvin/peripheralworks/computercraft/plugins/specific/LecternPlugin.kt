@@ -22,8 +22,7 @@ import site.siredvin.peripheralium.util.assertBetween
 import java.util.*
 import java.util.function.Predicate
 
-
-class LecternPlugin(private val target: LecternBlockEntity): IObservingPeripheralPlugin {
+class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripheralPlugin {
 
     companion object {
         val OBSERVED_LECTERNS: MutableMap<BlockPos, WeakHashMap<IPluggablePeripheral, Boolean>> = mutableMapOf()
@@ -42,14 +41,16 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
         }
 
         fun subscribe(pos: BlockPos, peripheral: IPluggablePeripheral) {
-            if (!OBSERVED_LECTERNS.containsKey(pos))
+            if (!OBSERVED_LECTERNS.containsKey(pos)) {
                 OBSERVED_LECTERNS[pos] = WeakHashMap()
+            }
             OBSERVED_LECTERNS[pos]!![peripheral] = true
         }
 
         fun unsubscribe(pos: BlockPos, peripheral: IPluggablePeripheral) {
-            if (OBSERVED_LECTERNS.containsKey(pos))
+            if (OBSERVED_LECTERNS.containsKey(pos)) {
                 OBSERVED_LECTERNS[pos]!!.remove(peripheral)
+            }
         }
     }
 
@@ -61,20 +62,22 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
         }
 
     private fun assertBook() {
-        if (!target.hasBook())
+        if (!target.hasBook()) {
             throw LuaException("Lectern should contain book")
+        }
     }
 
     private fun assertNoBook() {
-        if (target.hasBook())
+        if (target.hasBook()) {
             throw LuaException("Lectern shouldn't contain book")
+        }
     }
 
     private fun assertEditableBook() {
-        if (!isBookEditable())
+        if (!isBookEditable()) {
             throw LuaException("Book should be editable")
+        }
     }
-
 
     @LuaFunction(mainThread = true)
     fun hasBook(): Boolean {
@@ -154,8 +157,9 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
         val moved = TargetableContainer(target.bookAccess).moveTo(toStorage, 1, takePredicate = StorageUtils.ALWAYS)
-        if (moved == 0)
+        if (moved == 0) {
             return MethodResult.of(null, "Not enough space in target inventory")
+        }
         return MethodResult.of(true)
     }
 
@@ -171,12 +175,14 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
 
         var predicate: Predicate<ItemStack> = Predicate { it.`is`(Items.WRITABLE_BOOK) || it.`is`(Items.WRITTEN_BOOK) }
 
-        if (bookQuery != null)
+        if (bookQuery != null) {
             predicate = predicate.and(PeripheralPluginUtils.itemQueryToPredicate(bookQuery))
+        }
 
         val extractedBook = fromStorage.takeItems(predicate, 1)
-        if (extractedBook.isEmpty)
+        if (extractedBook.isEmpty) {
             return MethodResult.of(null, "Cannot find book in desired inventory")
+        }
         LecternBlock.placeBook(null, target.level!!, target.blockPos, target.blockState, extractedBook)
         return MethodResult.of(true)
     }

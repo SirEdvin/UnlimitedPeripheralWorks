@@ -16,7 +16,7 @@ import site.siredvin.peripheralworks.common.blockentity.UniversalScannerBlockEnt
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 
-class UniversalScannerPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeripheralOwner>(TYPE, owner) {
+class UniversalScannerPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPeripheralOwner>(TYPE, owner) {
 
     companion object {
         const val TYPE = "universal_scanner"
@@ -49,16 +49,18 @@ class UniversalScannerPeripheral(owner: IPeripheralOwner): OwnedPeripheral<IPeri
         } else {
             SphereOperations.UNIVERSAL_SCAN.maxFreeRadius
         }
-        owner.attachAbility(PeripheralOwnerAbility.SCANNING,
+        owner.attachAbility(
+            PeripheralOwnerAbility.SCANNING,
             ScanningAbility(owner, maxRadius).attachBlockScan(
-                SphereOperations.UNIVERSAL_SCAN
+                SphereOperations.UNIVERSAL_SCAN,
             ).attachLivingEntityScan(
-                SphereOperations.UNIVERSAL_SCAN, { true }
+                SphereOperations.UNIVERSAL_SCAN,
+                { true },
             ).attachItemScan(
-                SphereOperations.UNIVERSAL_SCAN
+                SphereOperations.UNIVERSAL_SCAN,
             ).attachPlayerScan(
-                SphereOperations.UNIVERSAL_SCAN
-            )
+                SphereOperations.UNIVERSAL_SCAN,
+            ),
         )
     }
 

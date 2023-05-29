@@ -12,7 +12,7 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class PeripheralRecord<O: IPeripheralOwner>(val peripheral: IPeripheral, val name: String, val internalID: String, private val modelPeripheral: ModemPeripheral<O>) {
+class PeripheralRecord<O : IPeripheralOwner>(val peripheral: IPeripheral, val name: String, val internalID: String, private val modelPeripheral: ModemPeripheral<O>) {
     private val methodMap: Map<String, PeripheralMethod> = PeripheralAPI.getMethods(peripheral)
     private val wrappers: ConcurrentMap<IComputerAccess, RemoteComputerWrapper<O>>
 
@@ -40,7 +40,7 @@ class PeripheralRecord<O: IPeripheralOwner>(val peripheral: IPeripheral, val nam
         access: IComputerAccess,
         context: ILuaContext?,
         methodName: String,
-        arguments: IArguments?
+        arguments: IArguments?,
     ): MethodResult {
         val method = methodMap[methodName]
             ?: throw LuaException("No such method $methodName")

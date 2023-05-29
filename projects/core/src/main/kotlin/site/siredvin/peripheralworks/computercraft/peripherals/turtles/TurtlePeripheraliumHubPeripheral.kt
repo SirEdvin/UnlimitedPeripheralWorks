@@ -9,7 +9,7 @@ import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.computercraft.modem.LocalTurtleWrapper
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 
-class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAccess, side: TurtleSide, type: String): PeripheraliumHubPeripheral<TurtlePeripheralOwner>(maxUpdateCount, TurtlePeripheralOwner(access, side), type) {
+class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAccess, side: TurtleSide, type: String) : PeripheraliumHubPeripheral<TurtlePeripheralOwner>(maxUpdateCount, TurtlePeripheralOwner(access, side), type) {
 
     val activeTurtleUpgrades: MutableList<LocalTurtleWrapper> = mutableListOf()
 
@@ -25,8 +25,9 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
     fun connectTurtleUpgrade(upgrade: ITurtleUpgrade) {
         val wrapper = LocalTurtleWrapper(peripheralOwner.turtle, peripheralOwner.side, upgrade, upgrade.upgradeID.toString(), this)
         activeTurtleUpgrades.add(wrapper)
-        if (wrapper.peripheral != null)
+        if (wrapper.peripheral != null) {
             attachRemotePeripheral(wrapper.peripheral, upgrade.upgradeID.toString())
+        }
     }
 
     fun disconnectTurtleUpgrade(upgrade: ITurtleUpgrade) {
@@ -36,10 +37,12 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
     }
 
     fun swapUpgrade(old: ITurtleUpgrade?, new: ITurtleUpgrade?) {
-        if (old != null)
+        if (old != null) {
             detachTurtleUpgrade(old)
-        if (new != null)
+        }
+        if (new != null) {
             attachTurtleUpgrade(new)
+        }
     }
 
     fun attachTurtleUpgrade(upgrade: ITurtleUpgrade) {
@@ -58,15 +61,17 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
 
     override fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = PeripheraliumPlatform.getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgradeID)})
+        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
+        }
         return Pair(true, null)
     }
 
     override fun equipImpl(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = PeripheraliumPlatform.getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgradeID)})
+        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
+        }
         attachTurtleUpgrade(upgrade)
         return Pair(true, null)
     }

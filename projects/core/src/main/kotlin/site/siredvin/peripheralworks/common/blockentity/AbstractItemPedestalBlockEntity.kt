@@ -14,9 +14,14 @@ import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
 import site.siredvin.peripheralworks.api.IItemStackStorage
 import java.util.function.Predicate
 
-abstract class AbstractItemPedestalBlockEntity<T: IOwnedPeripheral<*>>(blockEntityType: BlockEntityType<*>, blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<T>(
-    blockEntityType, blockPos, blockState
-), IItemStackStorage, Container {
+abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEntityType: BlockEntityType<*>, blockPos: BlockPos, blockState: BlockState) :
+    MutableNBTBlockEntity<T>(
+        blockEntityType,
+        blockPos,
+        blockState,
+    ),
+    IItemStackStorage,
+    Container {
 
     companion object {
         private const val STORED_ITEM_STACK_TAG = "storedItemStack"
@@ -24,7 +29,7 @@ abstract class AbstractItemPedestalBlockEntity<T: IOwnedPeripheral<*>>(blockEnti
 
     abstract val itemFilter: Predicate<ItemStack>
 
-    protected class ExtraSimpleStorage<T: IOwnedPeripheral<*>>(private val itemPedestalBlockEntity: AbstractItemPedestalBlockEntity<T>): SimpleContainer(1) {
+    protected class ExtraSimpleStorage<T : IOwnedPeripheral<*>>(private val itemPedestalBlockEntity: AbstractItemPedestalBlockEntity<T>) : SimpleContainer(1) {
         override fun setChanged() {
             itemPedestalBlockEntity.pushInternalDataChangeToClient()
         }

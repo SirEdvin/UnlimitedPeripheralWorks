@@ -8,10 +8,10 @@ import dan200.computercraft.api.peripheral.WorkMonitor
 import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
 import javax.annotation.Nonnull
 
-class RemoteComputerWrapper<O: IPeripheralOwner>(
+class RemoteComputerWrapper<O : IPeripheralOwner>(
     private val computer: IComputerAccess,
     private val record: PeripheralRecord<O>,
-    private val modemPeripheral: ModemPeripheral<O>
+    private val modemPeripheral: ModemPeripheral<O>,
 ) : IComputerAccess {
     override fun mount(desiredLocation: String, mount: Mount): String? {
         return computer.mount(desiredLocation, mount, record.name)
@@ -20,7 +20,7 @@ class RemoteComputerWrapper<O: IPeripheralOwner>(
     override fun mount(
         desiredLocation: String,
         mount: Mount,
-        driveName: String
+        driveName: String,
     ): String? {
         return computer.mount(desiredLocation, mount, driveName)
     }
@@ -32,7 +32,7 @@ class RemoteComputerWrapper<O: IPeripheralOwner>(
     override fun mountWritable(
         desiredLocation: String,
         mount: WritableMount,
-        driveName: String
+        driveName: String,
     ): String? {
         return computer.mountWritable(desiredLocation, mount, driveName)
     }

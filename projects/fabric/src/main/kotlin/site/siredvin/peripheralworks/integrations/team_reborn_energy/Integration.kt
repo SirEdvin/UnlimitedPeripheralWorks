@@ -10,18 +10,18 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import team.reborn.energy.api.EnergyStorage
 
-class Integration: Runnable {
-    object EnergyPluginProvider: PeripheralPluginProvider {
+class Integration : Runnable {
+    object EnergyPluginProvider : PeripheralPluginProvider {
         override val pluginType: String
             get() = EnergyStoragePlugin.PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableEnergyStorage)
+            if (!Configuration.enableEnergyStorage) {
                 return null
+            }
             val energyStorage = EnergyStorage.SIDED.find(level, pos, side) ?: return null
             return EnergyStoragePlugin(energyStorage)
         }
-
     }
 
     override fun run() {

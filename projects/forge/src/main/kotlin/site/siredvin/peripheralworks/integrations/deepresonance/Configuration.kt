@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.deepresonance
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private var ENABLE_RESONATING_CRYSTAL: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_GENERATOR_PART: ForgeConfigSpec.BooleanValue? = null

@@ -12,8 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.function.Consumer
 
-
-abstract class ModemPeripheral<O: IPeripheralOwner>(peripheralType: String, owner: O): OwnedPeripheral<O>(peripheralType, owner) {
+abstract class ModemPeripheral<O : IPeripheralOwner>(peripheralType: String, owner: O) : OwnedPeripheral<O>(peripheralType, owner) {
 
     val peripheralsRecord: ConcurrentMap<String, PeripheralRecord<O>> = ConcurrentHashMap()
     private val remotePeripherals =
@@ -22,7 +21,7 @@ abstract class ModemPeripheral<O: IPeripheralOwner>(peripheralType: String, owne
     protected open fun selectName(peripheral: IPeripheral): String {
         val maxIndex = peripheralsRecord.keys.stream().filter { key: String ->
             key.startsWith(
-                peripheral.type
+                peripheral.type,
             )
         }.map { key: String ->
             val splitName = key.split("_".toRegex()).dropLastWhile { it.isEmpty() }
@@ -71,22 +70,26 @@ abstract class ModemPeripheral<O: IPeripheralOwner>(peripheralType: String, owne
     override fun attach(computer: IComputerAccess) {
         super.attach(computer)
         synchronized(peripheralsRecord) {
-            peripheralsRecord.values.forEach(Consumer { record: PeripheralRecord<O> ->
-                record.attach(
-                    computer
-                )
-            })
+            peripheralsRecord.values.forEach(
+                Consumer { record: PeripheralRecord<O> ->
+                    record.attach(
+                        computer,
+                    )
+                },
+            )
         }
     }
 
     override fun detach(computer: IComputerAccess) {
         super.detach(computer)
         synchronized(peripheralsRecord) {
-            peripheralsRecord.values.forEach(Consumer { record: PeripheralRecord<O> ->
-                record.detach(
-                    computer
-                )
-            })
+            peripheralsRecord.values.forEach(
+                Consumer { record: PeripheralRecord<O> ->
+                    record.detach(
+                        computer,
+                    )
+                },
+            )
         }
     }
 

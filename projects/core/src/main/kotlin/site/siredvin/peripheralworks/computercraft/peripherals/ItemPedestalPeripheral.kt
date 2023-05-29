@@ -7,9 +7,10 @@ import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.plugins.PedestalInventoryPlugin
 
-class ItemPedestalPeripheral(blockEntity: ItemPedestalBlockEntity): OwnedPeripheral<BlockEntityPeripheralOwner<ItemPedestalBlockEntity>>(
-    TYPE, BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING)
-)  {
+class ItemPedestalPeripheral(blockEntity: ItemPedestalBlockEntity) : OwnedPeripheral<BlockEntityPeripheralOwner<ItemPedestalBlockEntity>>(
+    TYPE,
+    BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING),
+) {
     companion object {
         const val TYPE = "item_pedestal"
     }

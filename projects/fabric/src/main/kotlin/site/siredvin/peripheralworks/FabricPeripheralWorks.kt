@@ -20,9 +20,8 @@ import site.siredvin.peripheralworks.fabric.FabricPeripheralWorksPlatform
 import site.siredvin.peripheralworks.util.Platform
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 
-
 @Suppress("UNUSED")
-object FabricPeripheralWorks: ModInitializer {
+object FabricPeripheralWorks : ModInitializer {
 
     override fun onInitialize() {
         // Register configuration
@@ -30,8 +29,9 @@ object FabricPeripheralWorks: ModInitializer {
         PeripheralWorksCore.configure(FabricPeripheralWorksPlatform, FabricModRecipeIngredients)
         PeripheralWorksCore.configureCreativeTab(
             FabricItemGroup.builder(
-            ResourceLocation(PeripheralWorksCore.MOD_ID, "tab")
-        )).build()
+                ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
+            ),
+        ).build()
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
@@ -43,8 +43,9 @@ object FabricPeripheralWorks: ModInitializer {
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->
-            if (blockEntity is IPeripheralProvider<*>)
+            if (blockEntity is IPeripheralProvider<*>) {
                 return@registerFallback blockEntity.getPeripheral(context)
+            }
             return@registerFallback ComputerCraftProxy.peripheralProvider(world, pos, state, blockEntity, context)
         }
 

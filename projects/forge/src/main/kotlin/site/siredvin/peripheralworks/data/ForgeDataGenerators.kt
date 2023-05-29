@@ -15,8 +15,8 @@ object ForgeDataGenerators {
             ForgeDataGenerators.ForgeGeneratorSink(
                 generator.getVanillaPack(true),
                 event.existingFileHelper,
-                event.lookupProvider
-            )
+                event.lookupProvider,
+            ),
         )
     }
 }

@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.team_reborn_energy
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private const val defaultEnergyToFuelRate = 50 // really calculated :) Trust me
 

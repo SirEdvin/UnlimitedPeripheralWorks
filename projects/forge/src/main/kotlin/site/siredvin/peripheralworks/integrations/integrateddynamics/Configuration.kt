@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.integrateddynamics
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.config.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private var ENABLE_VARIABLE_STORE: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_COMPUTER_ASPECT: ForgeConfigSpec.BooleanValue? = null

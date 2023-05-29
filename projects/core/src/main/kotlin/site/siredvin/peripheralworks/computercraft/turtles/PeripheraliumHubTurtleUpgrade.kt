@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 import java.util.function.Supplier
 

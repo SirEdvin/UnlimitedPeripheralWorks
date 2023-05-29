@@ -10,9 +10,14 @@ import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.ItemPedestalPeripheral
 import java.util.function.Predicate
 
-class ItemPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) : AbstractItemPedestalBlockEntity<ItemPedestalPeripheral>(
-    BlockEntityTypes.ITEM_PEDESTAL.get(), blockPos, blockState
-), IItemStackHolder, Container {
+class ItemPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
+    AbstractItemPedestalBlockEntity<ItemPedestalPeripheral>(
+        BlockEntityTypes.ITEM_PEDESTAL.get(),
+        blockPos,
+        blockState,
+    ),
+    IItemStackHolder,
+    Container {
 
     override val itemFilter: Predicate<ItemStack> = Predicate { true }
 

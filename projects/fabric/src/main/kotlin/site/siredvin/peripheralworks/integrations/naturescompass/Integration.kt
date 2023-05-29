@@ -16,7 +16,7 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.Consumer
 
-class Integration: Runnable {
+class Integration : Runnable {
 
     companion object {
         val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
@@ -28,30 +28,40 @@ class Integration: Runnable {
 
     override fun run() {
         PeripheralWorksPlatform.registerTurtleUpgrade(
-            UPGRADE_ID, TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
+            UPGRADE_ID,
+            TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PeripheralTurtleUpgrade.dynamic(stack.item, ::forTurtle) {
                     UPGRADE_ID
                 }
-            }, { dataProvider, serializer ->
+            },
+            { dataProvider, serializer ->
                 dataProvider.simpleWithCustomItem(
                     ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
-                    serializer, NaturesCompass.NATURES_COMPASS_ITEM
+                    serializer,
+                    NaturesCompass.NATURES_COMPASS_ITEM,
                 )
             },
-            listOf(Consumer{
-                PeripheralWorksClientCore.registerHook { ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-                    it.get(), TurtleUpgradeModeller.flatItem()
-                ) }
-            })
+            listOf(
+                Consumer {
+                    PeripheralWorksClientCore.registerHook {
+                        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+                            it.get(),
+                            TurtleUpgradeModeller.flatItem(),
+                        )
+                    }
+                },
+            ),
         )
         PeripheralWorksPlatform.registerPocketUpgrade(
-            UPGRADE_ID, PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
+            UPGRADE_ID,
+            PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PocketNaturesCompassUpgrade(stack)
-            }
+            },
         ) { dataProvider, serializer ->
             dataProvider.simpleWithCustomItem(
                 PocketNaturesCompassUpgrade.TYPE,
-                serializer, NaturesCompass.NATURES_COMPASS_ITEM
+                serializer,
+                NaturesCompass.NATURES_COMPASS_ITEM,
             )
         }
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)

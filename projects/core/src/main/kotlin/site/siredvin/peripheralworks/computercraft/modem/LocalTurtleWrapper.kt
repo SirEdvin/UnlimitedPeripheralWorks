@@ -12,14 +12,13 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 
-class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, val upgrade: ITurtleUpgrade, private val id: String, private val origin: TurtlePeripheraliumHubPeripheral): ITurtleAccess {
+class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, val upgrade: ITurtleUpgrade, private val id: String, private val origin: TurtlePeripheraliumHubPeripheral) : ITurtleAccess {
 
     companion object {
         const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
     }
 
     val peripheral: IPeripheral? = upgrade.createPeripheral(this, tweakedSide)
-
 
     override fun getLevel(): Level {
         return access.level
@@ -110,21 +109,24 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
     }
 
     override fun getUpgrade(side: TurtleSide): ITurtleUpgrade? {
-        if (side == tweakedSide)
+        if (side == tweakedSide) {
             return upgrade
+        }
         return access.getUpgrade(side)
     }
 
     override fun setUpgrade(side: TurtleSide, upgrade: ITurtleUpgrade?) {
-        if (side == tweakedSide)
+        if (side == tweakedSide) {
             origin.swapUpgrade(this.upgrade, upgrade)
-        else
+        } else {
             access.setUpgrade(side, upgrade)
+        }
     }
 
     override fun getPeripheral(side: TurtleSide): IPeripheral? {
-        if (side == tweakedSide)
+        if (side == tweakedSide) {
             return peripheral
+        }
         return access.getPeripheral(side)
     }
 

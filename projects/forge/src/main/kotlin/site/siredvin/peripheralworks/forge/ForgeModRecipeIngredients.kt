@@ -6,7 +6,7 @@ import net.minecraft.world.level.block.Blocks
 import net.minecraftforge.common.Tags
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 
-object ForgeModRecipeIngredients: ModRecipeIngredients {
+object ForgeModRecipeIngredients : ModRecipeIngredients {
     override val enderModem: Ingredient
         get() = Ingredient.of(Items.WIRELESS_MODEM_ADVANCED.get())
     override val peripheralium: Ingredient
