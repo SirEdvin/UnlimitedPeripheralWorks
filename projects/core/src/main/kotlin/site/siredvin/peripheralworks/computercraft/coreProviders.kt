@@ -17,7 +17,7 @@ object StorageProvider: PeripheralPluginProvider {
     override val pluginType: String
         get() = "storage"
     override val conflictWith: Set<String>
-        get() = setOf(PeripheralPluginUtils.TYPES.INVENTORY, PeripheralPluginUtils.TYPES.ITEM_STORAGE)
+        get() = setOf(PeripheralPluginUtils.Type.INVENTORY, PeripheralPluginUtils.Type.ITEM_STORAGE)
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
         if (!PeripheralWorksConfig.enableGenericItemStorage && !PeripheralWorksConfig.enableGenericInventory)

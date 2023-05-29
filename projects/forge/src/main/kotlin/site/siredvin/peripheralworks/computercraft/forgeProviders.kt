@@ -13,7 +13,7 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 object FluidStorageProvider: PeripheralPluginProvider {
     override val pluginType: String
-        get() = PeripheralPluginUtils.TYPES.FLUID_STORAGE
+        get() = PeripheralPluginUtils.Type.FLUID_STORAGE
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
         if (!PeripheralWorksConfig.enableGenericFluidStorage)
@@ -29,7 +29,7 @@ object FluidStorageProvider: PeripheralPluginProvider {
 
 object EnergyStorageProvider: PeripheralPluginProvider {
     override val pluginType: String
-        get() = PeripheralPluginUtils.TYPES.ENERGY_STORAGE
+        get() = PeripheralPluginUtils.Type.ENERGY_STORAGE
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
         if (!PeripheralWorksConfig.enableGenericFluidStorage)

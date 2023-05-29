@@ -45,7 +45,7 @@ class Integration: Runnable {
 
     object TankStorageProvider: PeripheralPluginProvider {
         override val pluginType: String
-            get() = PeripheralPluginUtils.TYPES.FLUID_STORAGE
+            get() = PeripheralPluginUtils.Type.FLUID_STORAGE
 
         override val priority: Int
             get() = 50

@@ -17,7 +17,7 @@ class Integration: Runnable {
             get() = "toms_storage"
 
         override val conflictWith: Set<String>
-            get() = setOf(PeripheralPluginUtils.TYPES.ITEM_STORAGE, PeripheralPluginUtils.TYPES.INVENTORY)
+            get() = setOf(PeripheralPluginUtils.Type.ITEM_STORAGE, PeripheralPluginUtils.Type.INVENTORY)
 
         override val priority: Int
             get() = 50
