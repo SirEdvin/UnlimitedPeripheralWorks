@@ -42,7 +42,7 @@ class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, overrid
             return MethodResult.of(null, "Incorrect biome id $biome")
         }
         return peripheralOwner.withPlayer({
-            compass.searchForBiome(it.level as ServerLevel, it, biomeLoc, peripheralOwner.pos, compassStack)
+            compass.searchForBiome(it.fakePlayer.level as ServerLevel, it.fakePlayer, biomeLoc, peripheralOwner.pos, compassStack)
             return@withPlayer MethodResult.of(true)
         })
     }
