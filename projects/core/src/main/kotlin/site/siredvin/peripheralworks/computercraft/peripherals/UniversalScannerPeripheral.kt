@@ -44,22 +44,24 @@ class UniversalScannerPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPer
     }
 
     init {
-        val maxRadius = if (owner.getAbility(PeripheralOwnerAbility.FUEL) != null) {
-            SphereOperations.UNIVERSAL_SCAN.maxCostRadius
+        val operation = if (owner.getAbility(PeripheralOwnerAbility.FUEL) != null) {
+            SphereOperations.PORTABLE_UNIVERSAL_SCAN
         } else {
-            SphereOperations.UNIVERSAL_SCAN.maxFreeRadius
+            // Because only block entity doesn't have fuel ability here
+            SphereOperations.STATIONARY_UNIVERSAL_SCAN
         }
+        val maxRadius = operation.maxCostRadius
         owner.attachAbility(
             PeripheralOwnerAbility.SCANNING,
             ScanningAbility(owner, maxRadius).attachBlockScan(
-                SphereOperations.UNIVERSAL_SCAN,
+                operation,
             ).attachLivingEntityScan(
-                SphereOperations.UNIVERSAL_SCAN,
+                operation,
                 { true },
             ).attachItemScan(
-                SphereOperations.UNIVERSAL_SCAN,
+                operation,
             ).attachPlayerScan(
-                SphereOperations.UNIVERSAL_SCAN,
+                operation,
             ),
         )
     }

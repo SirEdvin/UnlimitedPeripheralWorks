@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Ultimate scanner now can scan for players around
+- Block scanner now can scan up to 24 blocks
+
 ## [0.4.1] - 2023-16-23
 
 ### Added

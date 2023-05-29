@@ -23,7 +23,6 @@ repositories {
     mavenLocal()
 }
 
-
 dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.cccommon)

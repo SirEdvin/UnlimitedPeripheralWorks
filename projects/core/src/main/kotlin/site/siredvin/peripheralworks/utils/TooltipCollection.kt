@@ -30,8 +30,8 @@ object TooltipCollection {
 
     fun universalScanningRadius(item: PeripheralBlockItem): List<Component> {
         return listOf(
-            text(PeripheralWorksCore.MOD_ID, "universal_scanner_free_range", SphereOperations.UNIVERSAL_SCAN.maxFreeRadius),
-            text(PeripheralWorksCore.MOD_ID, "universal_scanner_max_range", SphereOperations.UNIVERSAL_SCAN.maxCostRadius),
+            text(PeripheralWorksCore.MOD_ID, "universal_scanner_free_range", SphereOperations.PORTABLE_UNIVERSAL_SCAN.maxFreeRadius),
+            text(PeripheralWorksCore.MOD_ID, "universal_scanner_max_range", SphereOperations.PORTABLE_UNIVERSAL_SCAN.maxCostRadius),
         )
     }
 }

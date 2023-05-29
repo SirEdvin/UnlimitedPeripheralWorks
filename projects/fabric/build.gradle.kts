@@ -5,7 +5,6 @@ plugins {
     id("site.siredvin.mod-publishing")
 }
 
-
 val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
@@ -20,10 +19,12 @@ fabricShaking {
     commonProjectName.set("core")
     createRefmap.set(true)
     accessWidener.set(project(":core").file("src/main/resources/peripheralworks.accesswidener"))
-    extraVersionMappings.set(mapOf(
-        "computercraft" to "cc-tweaked",
-        "peripheralium" to "peripheralium",
-    ))
+    extraVersionMappings.set(
+        mapOf(
+            "computercraft" to "cc-tweaked",
+            "peripheralium" to "peripheralium",
+        ),
+    )
     shake()
 }
 
@@ -67,7 +68,6 @@ dependencies {
     libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
 }
 
-
 publishingShaking {
     shake()
 }
@@ -78,7 +78,7 @@ modPublishing {
         listOf(
             "cc-tweaked",
             "fabric-language-kotlin",
-            "peripheralium"
+            "peripheralium",
         ),
     )
     requiredDependenciesCurseforge.add("forge-config-api-port-fabric")
