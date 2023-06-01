@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "peripheralworks:block/remote_observer",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "peripheralworks:block/remote_observer"
+    },
+    "facing=south": {
+      "model": "peripheralworks:block/remote_observer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "peripheralworks:block/remote_observer",
+      "y": 270
+    }
+  }
+}

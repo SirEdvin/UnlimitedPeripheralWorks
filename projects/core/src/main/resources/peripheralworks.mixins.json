@@ -7,9 +7,11 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "LecternMixin"
+    "LecternMixin",
+    "ServerLevelMixin"
   ],
   "client": [
+    "LevelRendererMixin"
   ],
   "refmap": "peripheralworks.refmap.json"
 }

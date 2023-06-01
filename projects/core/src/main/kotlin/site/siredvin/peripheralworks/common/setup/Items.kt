@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.common.setup
 import net.minecraft.world.item.Item
 import site.siredvin.peripheralium.common.items.PeripheralItem
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.utils.TooltipCollection
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 
@@ -25,6 +26,8 @@ object Items {
             TooltipCollection.buildMaxPeripheralsCount(PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount),
         )
     }
+
+    val ULTIMATE_CONFIGURATOR = PeripheralWorksPlatform.registerItem("ultimate_configurator", ::UltimateConfigurator)
 
     fun doSomething() {
     }

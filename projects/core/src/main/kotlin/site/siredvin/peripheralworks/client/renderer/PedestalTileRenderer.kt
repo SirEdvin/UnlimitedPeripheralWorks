@@ -69,7 +69,7 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
         packedLight: Int,
         packedOverlay: Int,
     ) {
-        val storedStack = blockEntity!!.storedStack
+        val storedStack = blockEntity.storedStack
         if (storedStack.isEmpty) return
         val blockDirection = blockEntity.blockState.getValue(FACING)
         if (blockEntity.renderItem) {

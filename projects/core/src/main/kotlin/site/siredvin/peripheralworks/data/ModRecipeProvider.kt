@@ -74,5 +74,14 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("OBO")
             .pattern("POP")
             .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Items.ULTIMATE_CONFIGURATOR.get())
+            .define('I', ingredients.peripheralium)
+            .define('S', ingredients.stick)
+            .define('D', ingredients.diamond)
+            .pattern(" ID")
+            .pattern(" SI")
+            .pattern("S  ")
+            .save(consumer)
     }
 }

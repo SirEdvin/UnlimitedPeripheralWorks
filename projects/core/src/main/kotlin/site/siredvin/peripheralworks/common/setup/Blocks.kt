@@ -8,6 +8,7 @@ import site.siredvin.peripheralium.util.BlockUtil
 import site.siredvin.peripheralworks.common.block.DisplayPedestal
 import site.siredvin.peripheralworks.common.block.ItemPedestal
 import site.siredvin.peripheralworks.common.block.MapPedestal
+import site.siredvin.peripheralworks.common.block.PeripheralProxy
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.utils.TooltipCollection
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
@@ -47,21 +48,73 @@ object Blocks {
 
     val ITEM_PEDESTAL = PeripheralWorksPlatform.registerBlock(
         "item_pedestal",
-        { ItemPedestal() },
-        { PeripheralBlockItem(it, Item.Properties(), PeripheralWorksConfig::enableItemPedestal, alwaysShow = true, TooltipCollection::isDisabled) },
-    )
+        ::ItemPedestal,
+    ) {
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableItemPedestal,
+            alwaysShow = true,
+            TooltipCollection::isDisabled
+        )
+    }
 
     val MAP_PEDESTAL = PeripheralWorksPlatform.registerBlock(
         "map_pedestal",
-        { MapPedestal() },
-        { PeripheralBlockItem(it, Item.Properties(), PeripheralWorksConfig::enableMapPedestal, alwaysShow = true, TooltipCollection::isDisabled) },
-    )
+        ::MapPedestal,
+    ) {
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableMapPedestal,
+            alwaysShow = true,
+            TooltipCollection::isDisabled
+        )
+    }
 
     val DISPLAY_PEDESTAL = PeripheralWorksPlatform.registerBlock(
         "display_pedestal",
-        { DisplayPedestal() },
-        { PeripheralBlockItem(it, Item.Properties(), PeripheralWorksConfig::enableDisplayPedestal, alwaysShow = true, TooltipCollection::isDisabled) },
+        ::DisplayPedestal,
+    ) {
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableDisplayPedestal,
+            alwaysShow = true,
+            TooltipCollection::isDisabled
+        )
+    }
+
+    val REMOTE_OBSERVER = PeripheralWorksPlatform.registerBlock(
+        "remote_observer",
+        { GenericBlockEntityBlock({ BlockEntityTypes.REMOTE_OBSERVER.get() }, true, belongToTickingEntity = true) },
+        {
+            PeripheralBlockItem(
+                it,
+                Item.Properties(),
+                PeripheralWorksConfig::enableRemoteObserver,
+                alwaysShow = false,
+                TooltipCollection::isDisabled,
+                TooltipCollection::remoteObserverRadius,
+                // TODO: add tooltip about capacity
+            )
+        }
     )
+
+    val PERIPHERAL_PROXY = PeripheralWorksPlatform.registerBlock(
+        "peripheral_proxy",
+        ::PeripheralProxy
+    ) {
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enablePeripheralProxy,
+            alwaysShow = false,
+            TooltipCollection::isDisabled,
+            // TODO: add tooltip about radius
+            // TODO: add tooltip about capacity
+        )
+    }
 
     fun doSomething() {}
 }

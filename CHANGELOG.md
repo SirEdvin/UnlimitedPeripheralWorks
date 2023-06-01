@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ultimate scanner now can scan for players around
 - Block scanner now can scan up to 24 blocks
+- Remote observer
+- Peripheral proxy, for accessing peripheral with wired network in small range.
 
 ## [0.4.1] - 2023-16-23
 

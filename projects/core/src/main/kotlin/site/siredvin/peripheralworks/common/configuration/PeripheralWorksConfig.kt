@@ -64,6 +64,24 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
     val enableDisplayPedestal: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_MAP_PEDESTAL.get()
 
+    val enableRemoteObserver: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_REMOTE_OBSERVER.get()
+
+    val remoteObserverMaxRange: Int
+        get() = ConfigHolder.COMMON_CONFIG.REMOTE_OBSERVER_MAX_RANGE.get()
+
+    val remoteObserverMaxCapacity: Int
+        get() = ConfigHolder.COMMON_CONFIG.REMOTE_OBSERVER_MAX_CAPACITY.get()
+
+    val enablePeripheralProxy: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_PERIPHERAL_PROXY.get()
+
+    val peripheralProxyMaxRange: Int
+        get() = ConfigHolder.COMMON_CONFIG.PERIPHERAL_PROXY_MAX_RANGE.get()
+
+    val peripheralProxyMaxCapacity: Int
+        get() = ConfigHolder.COMMON_CONFIG.PERIPHERAL_PROXY_MAX_CAPACITY.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -98,6 +116,12 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
         val ENABLE_ITEM_PEDESTAL: ForgeConfigSpec.BooleanValue
         val ENABLE_MAP_PEDESTAL: ForgeConfigSpec.BooleanValue
         val ENABLE_DISPLAY_PEDESTAL: ForgeConfigSpec.BooleanValue
+        val ENABLE_REMOTE_OBSERVER: ForgeConfigSpec.BooleanValue
+        val REMOTE_OBSERVER_MAX_RANGE: ForgeConfigSpec.IntValue
+        val REMOTE_OBSERVER_MAX_CAPACITY: ForgeConfigSpec.IntValue
+        val ENABLE_PERIPHERAL_PROXY: ForgeConfigSpec.BooleanValue
+        val PERIPHERAL_PROXY_MAX_RANGE: ForgeConfigSpec.IntValue
+        val PERIPHERAL_PROXY_MAX_CAPACITY: ForgeConfigSpec.IntValue
 
         init {
             builder.push("base")
@@ -150,6 +174,18 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
                 .define("enableMapPedestal", true)
             ENABLE_DISPLAY_PEDESTAL = builder.comment("Enables display pedestal")
                 .define("enableDisplayPedestal", true)
+            ENABLE_REMOTE_OBSERVER = builder.comment("Enables remote observer")
+                .define("enableRemoteObserver", true)
+            REMOTE_OBSERVER_MAX_RANGE = builder.comment("Max range for remote observer")
+                .defineInRange("remoteObserverMaxRange", 16, 1, 128)
+            REMOTE_OBSERVER_MAX_CAPACITY = builder.comment("Max capacity for remote observer")
+                .defineInRange("remoteObserverMaxCapacity", 8, 1, 128)
+            ENABLE_PERIPHERAL_PROXY = builder.comment("Enables remote observer")
+                .define("enableRemoteObserver", true)
+            PERIPHERAL_PROXY_MAX_RANGE = builder.comment("Max range for peripheral proxy")
+                .defineInRange("peripheralProxyMaxRange", 16, 1, 128)
+            PERIPHERAL_PROXY_MAX_CAPACITY = builder.comment("Max capacity for peripheral proxy")
+                .defineInRange("peripheralProxyMaxCapacity", 8, 1, 128)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.values(), builder)

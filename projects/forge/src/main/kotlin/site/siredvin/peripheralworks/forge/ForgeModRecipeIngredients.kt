@@ -33,4 +33,7 @@ object ForgeModRecipeIngredients : ModRecipeIngredients {
         get() = Ingredient.of(Blocks.SMOOTH_STONE_SLAB)
     override val compass: Ingredient
         get() = Ingredient.of(net.minecraft.world.item.Items.COMPASS)
+
+    override val stick: Ingredient
+        get() = Ingredient.of(net.minecraft.world.item.Items.STICK)
 }

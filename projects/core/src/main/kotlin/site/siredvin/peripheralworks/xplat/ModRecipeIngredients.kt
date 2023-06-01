@@ -32,4 +32,5 @@ interface ModRecipeIngredients {
     val smoothBasalt: Ingredient
     val smoothStoneSlab: Ingredient
     val compass: Ingredient
+    val stick: Ingredient
 }

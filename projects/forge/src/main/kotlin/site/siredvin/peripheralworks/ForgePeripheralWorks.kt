@@ -1,14 +1,19 @@
 package site.siredvin.peripheralworks
 
+import com.mojang.brigadier.Command
+import com.mojang.brigadier.context.CommandContext
 import dan200.computercraft.api.ForgeComputerCraftAPI
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import net.minecraft.commands.CommandSourceStack
+import net.minecraft.commands.Commands
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.event.CreativeModeTabEvent
+import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -19,6 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.NewRegistryEvent
 import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
+import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
@@ -28,6 +34,7 @@ import site.siredvin.peripheralworks.forge.ForgePeripheralWorksPlatform
 import site.siredvin.peripheralworks.utils.Platform
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
+
 
 @Mod(PeripheralWorksCore.MOD_ID)
 @Mod.EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -97,5 +104,10 @@ object ForgePeripheralWorks {
     @SubscribeEvent
     fun registerCreativeTab(event: CreativeModeTabEvent.Register) {
         event.registerCreativeModeTab(ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"), PeripheralWorksCore::configureCreativeTab)
+    }
+
+    @SubscribeEvent
+    fun register(event: RegisterCommandsEvent) {
+        DebugCommands.register(event.dispatcher)
     }
 }

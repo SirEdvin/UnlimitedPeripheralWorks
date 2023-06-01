@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.peripheralworks.client.renderer.PedestalTileRenderer
+import site.siredvin.peripheralworks.client.renderer.PeripheralProxyRenderer
 import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.MapPedestalBlockEntity
@@ -27,6 +28,7 @@ object PeripheralWorksClientCore {
         BlockEntityTypes.ITEM_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.MAP_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.DISPLAY_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
+        BlockEntityTypes.PERIPHERAL_PROXY as Supplier<BlockEntityType<BlockEntity>>,
     )
 
     fun getBlockEntityRendererProvider(type: BlockEntityType<BlockEntity>): BlockEntityRendererProvider<BlockEntity> {
@@ -38,6 +40,9 @@ object PeripheralWorksClientCore {
         }
         if (type == BlockEntityTypes.DISPLAY_PEDESTAL.get()) {
             return BlockEntityRendererProvider { PedestalTileRenderer<DisplayPedestalBlockEntity>() } as BlockEntityRendererProvider<BlockEntity>
+        }
+        if (type == BlockEntityTypes.PERIPHERAL_PROXY.get()) {
+            return BlockEntityRendererProvider { PeripheralProxyRenderer() } as BlockEntityRendererProvider<BlockEntity>
         }
         throw IllegalArgumentException("There is no extra renderer for $type")
     }

@@ -7,11 +7,13 @@ import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import site.siredvin.peripheralium.computercraft.pocket.PeripheralPocketUpgrade
 import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
+import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
@@ -31,7 +33,11 @@ import java.util.function.Supplier
 
 object PeripheralWorksCommonHooks {
 
+    private val TURTLE_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
+    private val POCKET_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
+
     private fun <T : ITurtleUpgrade, V : Item> registerScaledTurtleUpgrade(id: ResourceLocation, item: Supplier<V>, scaleFactor: Float, builder: Function<ItemStack, T>) {
+        TURTLE_UPGRADES.add(id)
         PeripheralWorksPlatform.registerTurtleUpgrade(
             id,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
@@ -58,6 +64,7 @@ object PeripheralWorksCommonHooks {
     }
 
     private fun <T : ITurtleUpgrade, V : Block> registerBlockTurtleUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
+        TURTLE_UPGRADES.add(id)
         PeripheralWorksPlatform.registerTurtleUpgrade(
             id,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack, id) },
@@ -85,6 +92,7 @@ object PeripheralWorksCommonHooks {
     }
 
     private fun <T : IPocketUpgrade, V : Item> registerPocketUpgrade(id: ResourceLocation, item: Supplier<V>, builder: Function<ItemStack, T>) {
+        POCKET_UPGRADES.add(id)
         PeripheralWorksPlatform.registerPocketUpgrade(
             id,
             PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack) },
@@ -98,6 +106,7 @@ object PeripheralWorksCommonHooks {
     }
 
     private fun <T : IPocketUpgrade, V : Block> registerPocketUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
+        POCKET_UPGRADES.add(id)
         PeripheralWorksPlatform.registerPocketUpgrade(
             id,
             PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack, id) },
@@ -171,5 +180,20 @@ object PeripheralWorksCommonHooks {
         Blocks.doSomething()
         registerTurtleUpgrades()
         registerPocketUpgrades()
+    }
+
+    fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
+        TURTLE_UPGRADES.forEach {
+            val upgrade = PeripheraliumPlatform.getTurtleUpgrade(it.toString())
+            if (upgrade != null) {
+                PeripheraliumPlatform.createTurtlesWithUpgrade(upgrade).forEach(output::accept)
+            }
+        }
+        POCKET_UPGRADES.forEach {
+            val upgrade = PeripheraliumPlatform.getPocketUpgrade(it.toString())
+            if (upgrade != null) {
+                PeripheraliumPlatform.createPocketsWithUpgrade(upgrade).forEach(output::accept)
+            }
+        }
     }
 }

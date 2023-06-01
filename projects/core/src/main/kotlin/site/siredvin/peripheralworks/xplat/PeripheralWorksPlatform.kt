@@ -22,12 +22,14 @@ import java.util.function.Supplier
 interface PeripheralWorksPlatform {
     companion object {
         private var _IMPL: PeripheralWorksPlatform? = null
+        val ITEMS: MutableList<Supplier<Item>> = mutableListOf()
+        val BLOCKS: MutableList<Supplier<Block>> = mutableListOf()
 
         fun configure(impl: PeripheralWorksPlatform) {
             _IMPL = impl
         }
 
-        fun get(): PeripheralWorksPlatform {
+        private fun get(): PeripheralWorksPlatform {
             if (_IMPL == null) {
                 throw IllegalStateException("You should init PeripheralWorks Platform first")
             }
@@ -35,7 +37,9 @@ interface PeripheralWorksPlatform {
         }
 
         fun <T : Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T> {
-            return get().registerItem(key, item)
+            val registeredItem = get().registerItem(key, item)
+            ITEMS.add(registeredItem as Supplier<Item>)
+            return registeredItem
         }
 
         fun <T : Item> registerItem(name: String, item: Supplier<T>): Supplier<T> {
@@ -47,8 +51,10 @@ interface PeripheralWorksPlatform {
         }
 
         fun <T : Block> registerBlock(name: String, block: Supplier<T>, itemFactory: (T) -> (Item) = { block -> DescriptiveBlockItem(block, Item.Properties()) }): Supplier<T> {
-            return get()
+            val registeredBlock = get()
                 .registerBlock(ResourceLocation(PeripheralWorksCore.MOD_ID, name), block, itemFactory)
+            BLOCKS.add(registeredBlock as Supplier<Block>)
+            return registeredBlock
         }
 
         fun <V : BlockEntity, T : BlockEntityType<V>> registerBlockEntity(

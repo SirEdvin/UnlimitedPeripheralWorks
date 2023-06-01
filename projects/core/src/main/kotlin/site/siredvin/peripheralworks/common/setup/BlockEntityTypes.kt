@@ -13,7 +13,7 @@ object BlockEntityTypes {
         ResourceLocation(PeripheralWorksCore.MOD_ID, "universal_scanner"),
     ) {
         PeripheraliumPlatform.createBlockEntityType(
-            { pos, state -> UniversalScannerBlockEntity(pos, state) },
+            ::UniversalScannerBlockEntity,
             Blocks.UNIVERSAL_SCANNER.get(),
         )
     }
@@ -22,7 +22,7 @@ object BlockEntityTypes {
         ResourceLocation(PeripheralWorksCore.MOD_ID, "ultimate_sensor"),
     ) {
         PeripheraliumPlatform.createBlockEntityType(
-            { pos, state -> UltimateSensorBlockEntity(pos, state) },
+            ::UltimateSensorBlockEntity,
             Blocks.ULTIMATE_SENSOR.get(),
         )
     }
@@ -31,7 +31,7 @@ object BlockEntityTypes {
         ResourceLocation(PeripheralWorksCore.MOD_ID, "item_pedestal"),
     ) {
         PeripheraliumPlatform.createBlockEntityType(
-            { pos, state -> ItemPedestalBlockEntity(pos, state) },
+            ::ItemPedestalBlockEntity,
             Blocks.ITEM_PEDESTAL.get(),
         )
     }
@@ -40,7 +40,7 @@ object BlockEntityTypes {
         ResourceLocation(PeripheralWorksCore.MOD_ID, "map_pedestal"),
     ) {
         PeripheraliumPlatform.createBlockEntityType(
-            { pos, state -> MapPedestalBlockEntity(pos, state) },
+            ::MapPedestalBlockEntity,
             Blocks.MAP_PEDESTAL.get(),
         )
     }
@@ -49,8 +49,26 @@ object BlockEntityTypes {
         ResourceLocation(PeripheralWorksCore.MOD_ID, "display_pedestal"),
     ) {
         PeripheraliumPlatform.createBlockEntityType(
-            { pos, state -> DisplayPedestalBlockEntity(pos, state) },
+            ::DisplayPedestalBlockEntity,
             Blocks.DISPLAY_PEDESTAL.get(),
+        )
+    }
+
+    val REMOTE_OBSERVER: Supplier<BlockEntityType<RemoteObserverBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(
+        ResourceLocation(PeripheralWorksCore.MOD_ID, "remote_observer"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::RemoteObserverBlockEntity,
+            Blocks.REMOTE_OBSERVER.get(),
+        )
+    }
+
+    val PERIPHERAL_PROXY: Supplier<BlockEntityType<PeripheralProxyBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(
+        ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::PeripheralProxyBlockEntity,
+            Blocks.PERIPHERAL_PROXY.get()
         )
     }
 

@@ -7,12 +7,16 @@
   "item.peripheralworks.item_pedestal": "Item pedestal",
   "item.peripheralworks.map_pedestal": "Map pedestal",
   "item.peripheralworks.display_pedestal": "Display pedestal",
+  "item.peripheralworks.ultimate_configurator": "Ultimate configurator",
+  "item.peripheralworks.remote_observer": "Remote observer",
 
   "item.peripheralworks.tooltip.universal_scanner": "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers",
   "item.peripheralworks.tooltip.ultimate_sensor": "§3§oLimitless possibilities for understanding world in one little box. Works with turtles and pocket computers",
   "item.peripheralworks.tooltip.item_pedestal": "§3§oCute pedestal, that can store only single item stack. But seems you can get more information about this stack now.",
   "item.peripheralworks.tooltip.map_pedestal": "§3§oCute pedestal, that can store only single item stack. Infused with compass, it now can understand maps.",
   "item.peripheralworks.tooltip.display_pedestal": "§3§oCute pedestal, that cannot store anything, but can display literally anything",
+  "item.peripheralworks.tooltip.ultimate_configurator": "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable",
+  "item.peripheralworks.tooltip.remote_observer": "§3§oJust like observer, but can see a little further",
 
   "block.peripheralworks.peripheral_casing": "Peripheral casing",
   "block.peripheralworks.universal_scanner": "Universal scanner",
@@ -20,6 +24,7 @@
   "block.peripheralworks.item_pedestal": "Item pedestal",
   "block.peripheralworks.map_pedestal": "Map pedestal",
   "block.peripheralworks.display_pedestal": "Display pedestal",
+  "block.peripheralworks.remote_observer": "Remote observer",
 
   "turtle.peripheralworks.peripheralium_hub": "Hub",
   "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
@@ -40,5 +45,12 @@
   "text.peripheralworks.item_disabled": "  §4Item disabled in configuration",
   "text.peripheralworks.peripheralium_hub_max_peripherals": "  §6Max upgrades inside hub: %s",
   "text.peripheralworks.universal_scanner_free_range": "  §6Cost-free scan range: %s",
-  "text.peripheralworks.universal_scanner_max_range": "  §6Max scan range: %s"
+  "text.peripheralworks.universal_scanner_max_range": "  §6Max scan range: %s",
+  "text.peripheralworks.remote_observer_mode": "  Remote observer configuration",
+  "text.peripheralworks.active_configuration_mode": "Active configuration mode:",
+  "text.peripheralworks.configuration_target_block": "Target block %s",
+  "text.peripheralworks.remote_observer_range": "  §6Max range of observed block: %s",
+  "text.peripheralworks.remote_observer_too_far": "Remote observer too far from this block",
+  "text.peripheralworks.remote_observer_block_track_added": "Remote observer now tracks this block",
+  "text.peripheralworks.remote_observer_block_track_removed": "Remote observer will not track this block from now"
 }

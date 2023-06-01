@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "peripheralworks:block/peripheral_proxy",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "peripheralworks:block/peripheral_proxy"
+    },
+    "facing=south": {
+      "model": "peripheralworks:block/peripheral_proxy",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "peripheralworks:block/peripheral_proxy",
+      "y": 270
+    }
+  }
+}

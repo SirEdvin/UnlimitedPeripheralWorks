@@ -16,6 +16,7 @@ import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPlug
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.utils.MinecartUtils
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
+import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 
 @Suppress("UNUSED")
@@ -28,31 +29,9 @@ object PeripheralWorksCore {
         return builder.icon { Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance }
             .title(text(MOD_ID, "creative_tab"))
             .displayItems { _, output ->
-                output.accept(Items.PERIPHERALIUM_HUB.get().defaultInstance)
-                output.accept(Items.NETHERITE_PERIPHERALIUM_MODEM.get().defaultInstance)
-                output.accept(Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance)
-                output.accept(Blocks.UNIVERSAL_SCANNER.get().asItem().defaultInstance)
-                output.accept(Blocks.ULTIMATE_SENSOR.get().asItem().defaultInstance)
-                output.accept(Blocks.ITEM_PEDESTAL.get().asItem().defaultInstance)
-                output.accept(Blocks.MAP_PEDESTAL.get().asItem().defaultInstance)
-                output.accept(Blocks.DISPLAY_PEDESTAL.get().asItem().defaultInstance)
-                PeripheraliumPlatform.getTurtleUpgrade(PeripheraliumHubPeripheral.ID.toString())
-                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
-                PeripheraliumPlatform.getTurtleUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID.toString())
-                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
-                PeripheraliumPlatform.getTurtleUpgrade(UniversalScannerPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
-                PeripheraliumPlatform.getTurtleUpgrade(UltimateSensorPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheraliumPlatform.createTurtlesWithUpgrade(it).forEach(output::accept) }
-
-                PeripheraliumPlatform.getPocketUpgrade(PeripheraliumHubPeripheral.ID.toString())
-                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
-                PeripheraliumPlatform.getPocketUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID.toString())
-                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
-                PeripheraliumPlatform.getPocketUpgrade(UniversalScannerPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
-                PeripheraliumPlatform.getPocketUpgrade(UltimateSensorPeripheral.UPGRADE_ID.toString())
-                    ?.let { PeripheraliumPlatform.createPocketsWithUpgrade(it).forEach(output::accept) }
+                PeripheralWorksPlatform.ITEMS.forEach { output.accept(it.get()) }
+                PeripheralWorksPlatform.BLOCKS.forEach { output.accept(it.get()) }
+                PeripheralWorksCommonHooks.registerUpgradesInCreativeTab(output)
             }
     }
 
