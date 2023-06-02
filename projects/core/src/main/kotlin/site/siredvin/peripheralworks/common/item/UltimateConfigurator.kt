@@ -20,7 +20,7 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.toolkit.configurator.ConfigurationMode
 import site.siredvin.peripheralworks.toolkit.configurator.ConfiguratorModeRegistry
 
-class UltimateConfigurator: DescriptiveItem(Properties().stacksTo(1)) {
+class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
 
     companion object {
         const val ACTIVE_MOD_NAME = "activeMod"
@@ -31,7 +31,7 @@ class UltimateConfigurator: DescriptiveItem(Properties().stacksTo(1)) {
         itemStack: ItemStack,
         level: Level?,
         list: MutableList<Component>,
-        tooltipFlag: TooltipFlag
+        tooltipFlag: TooltipFlag,
     ) {
         super.appendHoverText(itemStack, level, list, tooltipFlag)
         val activeMode = getActiveMode(itemStack)
@@ -44,14 +44,16 @@ class UltimateConfigurator: DescriptiveItem(Properties().stacksTo(1)) {
 
     fun getActiveMode(stack: ItemStack): Pair<ConfigurationMode, BlockPos>? {
         val data = stack.tag ?: return null
-        if (!data.contains(ACTIVE_MOD_NAME))
+        if (!data.contains(ACTIVE_MOD_NAME)) {
             return null
-        if (!data.contains(ACTIVE_MOD_POS))
+        }
+        if (!data.contains(ACTIVE_MOD_POS)) {
             return null
+        }
         val configurationMode = ConfiguratorModeRegistry.get(ResourceLocation(data.getString(ACTIVE_MOD_NAME))) ?: return null
         return Pair(
             configurationMode,
-            NbtUtils.readBlockPos(data.getCompound(ACTIVE_MOD_POS))
+            NbtUtils.readBlockPos(data.getCompound(ACTIVE_MOD_POS)),
         )
     }
 
@@ -82,10 +84,11 @@ class UltimateConfigurator: DescriptiveItem(Properties().stacksTo(1)) {
     override fun use(
         level: Level,
         player: Player,
-        interactionHand: InteractionHand
+        interactionHand: InteractionHand,
     ): InteractionResultHolder<ItemStack> {
-        if (interactionHand == InteractionHand.OFF_HAND)
+        if (interactionHand == InteractionHand.OFF_HAND) {
             return super.use(level, player, interactionHand)
+        }
         val itemStack = player.getItemInHand(interactionHand)
         val blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE)
         return if (blockHitResult.type == HitResult.Type.MISS) {

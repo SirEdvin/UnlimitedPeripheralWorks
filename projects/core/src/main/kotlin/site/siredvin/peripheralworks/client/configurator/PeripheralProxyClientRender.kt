@@ -8,11 +8,10 @@ import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 
-object PeripheralProxyClientRender: ConfigurationModeRender {
+object PeripheralProxyClientRender : ConfigurationModeRender {
 
     private val targetFlareColor = FlareRenderer.FlareColor(0.957f, 0.635f, 0.38f)
     private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
-
 
     override fun render(
         minecraft: Minecraft,
@@ -21,22 +20,31 @@ object PeripheralProxyClientRender: ConfigurationModeRender {
         partialTick: Float,
         camera: Camera,
         gameRenderer: GameRenderer,
-        projectionMatrix: Matrix4f
+        projectionMatrix: Matrix4f,
     ) {
         FlareRenderer.initFlareRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? PeripheralProxyBlockEntity ?: return
         FlareRenderer.renderFlare(
-            poseStack, camera, partialTick, entity.blockPos.x + 0.5, entity.blockPos.y + 0.5, entity.blockPos.z + 0.5,
-            sourceFlareColor, 1f
+            poseStack,
+            camera,
+            partialTick,
+            entity.blockPos.x + 0.5,
+            entity.blockPos.y + 0.5,
+            entity.blockPos.z + 0.5,
+            sourceFlareColor,
+            1f,
         )
         entity.remotePeripherals.values.forEach {
             val normal = it.direction.normal
             FlareRenderer.renderFlare(
-                poseStack, camera, partialTick,
+                poseStack,
+                camera,
+                partialTick,
                 it.targetBlock.x + 0.5 + 0.45 * normal.x,
                 it.targetBlock.y + 0.5 + 0.45 * normal.y,
                 it.targetBlock.z + 0.5 + 0.45 * normal.z,
-                targetFlareColor, 1f
+                targetFlareColor,
+                1f,
             )
         }
         FlareRenderer.uninitFlareRenderer(poseStack)

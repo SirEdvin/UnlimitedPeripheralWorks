@@ -8,15 +8,15 @@ import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.Tag
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralworks.computercraft.peripherals.RemoteObserverPeripheral
-import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralium.api.blockentities.IObservingBlockEntity
 import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
 import site.siredvin.peripheralium.common.blocks.GenericBlockEntityBlock
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.util.representation.stateProperties
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
+import site.siredvin.peripheralworks.computercraft.peripherals.RemoteObserverPeripheral
 
 class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     MutableNBTBlockEntity<RemoteObserverPeripheral>(BlockEntityTypes.REMOTE_OBSERVER.get(), blockPos, blockState), IObservingBlockEntity {
@@ -39,8 +39,9 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     fun isPosApplicable(pos: BlockPos): Boolean {
-        if (pos == this.blockPos)
+        if (pos == this.blockPos) {
             return false
+        }
         return pos.closerThan(this.blockPos, PeripheralWorksConfig.remoteObserverMaxRange.toDouble())
     }
 
@@ -65,8 +66,9 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     fun removePosToTrack(pos: BlockPos) {
-        if (trackedBlocks.remove(pos))
+        if (trackedBlocks.remove(pos)) {
             BlockStateUpdateEventBus.removeBlockPos(pos)
+        }
     }
 
     private fun unload() {
@@ -96,8 +98,10 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                 stateProperties.accept(it.previous, previousState)
                 stateProperties.accept(it.current, currentState)
                 computer.queueEvent(
-                    "block_change", LuaRepresentation.forBlockPos(it.pos, facing, blockPos),
-                    previousState, currentState
+                    "block_change",
+                    LuaRepresentation.forBlockPos(it.pos, facing, blockPos),
+                    previousState,
+                    currentState,
                 )
             }
         }

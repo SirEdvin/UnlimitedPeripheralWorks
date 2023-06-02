@@ -4,14 +4,9 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import site.siredvin.peripheralium.api.storage.ExtractorProxy
 import site.siredvin.peripheralium.util.text
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.common.setup.Blocks
-import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.StorageProvider
-import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
-import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
-import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.utils.MinecartUtils

@@ -10,8 +10,8 @@ object ConfiguratorModeRegistry {
     private val CONDITION_REGISTRY = mutableMapOf<Predicate<BlockState>, ResourceLocation>()
 
     init {
-        register(RemoteObserverMode.modeID, RemoteObserverMode) {it.`is`(Blocks.REMOTE_OBSERVER.get())}
-        register(PeripheralProxyMode.modeID, PeripheralProxyMode) {it.`is`(Blocks.PERIPHERAL_PROXY.get())}
+        register(RemoteObserverMode.modeID, RemoteObserverMode) { it.`is`(Blocks.REMOTE_OBSERVER.get()) }
+        register(PeripheralProxyMode.modeID, PeripheralProxyMode) { it.`is`(Blocks.PERIPHERAL_PROXY.get()) }
     }
 
     fun register(modeID: ResourceLocation, builder: ConfigurationMode, condition: Predicate<BlockState>) {
@@ -25,8 +25,9 @@ object ConfiguratorModeRegistry {
 
     fun get(state: BlockState): ConfigurationMode? {
         CONDITION_REGISTRY.forEach { (predicate, modID) ->
-            if (predicate.test(state))
+            if (predicate.test(state)) {
                 return get(modID)
+            }
         }
         return null
     }

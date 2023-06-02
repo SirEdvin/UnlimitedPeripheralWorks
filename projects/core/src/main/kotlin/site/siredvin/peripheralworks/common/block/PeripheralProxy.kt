@@ -21,14 +21,14 @@ import site.siredvin.peripheralium.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import java.util.stream.Stream
 
-class PeripheralProxy: BaseTileEntityBlock<PeripheralProxyBlockEntity>(true, BlockUtil.defaultProperties()) {
+class PeripheralProxy : BaseTileEntityBlock<PeripheralProxyBlockEntity>(true, BlockUtil.defaultProperties()) {
     companion object {
         val FACING: DirectionProperty = BlockStateProperties.HORIZONTAL_FACING
         val SHAPE = Stream.of(
             Block.box(0.0, 0.0, 0.0, 16.0, 2.0, 16.0),
             Block.box(2.0, 2.0, 2.0, 14.0, 4.0, 14.0),
-            Block.box(4.0, 4.0, 4.0, 12.0, 6.0, 12.0)
-        ).reduce{ v1, v2 -> Shapes.join(v1, v2, BooleanOp.OR)}.get();
+            Block.box(4.0, 4.0, 4.0, 12.0, 6.0, 12.0),
+        ).reduce { v1, v2 -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
     }
 
     init {

@@ -8,7 +8,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import java.util.WeakHashMap
 import java.util.function.Consumer
 
 object BlockStateUpdateEventBus {
@@ -63,8 +62,9 @@ object BlockStateUpdateEventBus {
         var consumedTracker = lastConsumedID
         for (message in eventQueue) {
             if (message != null) {
-                if (message.first <= consumedTracker)
+                if (message.first <= consumedTracker) {
                     continue
+                }
                 consumer.accept(message.second)
                 consumedTracker = message.first
             }

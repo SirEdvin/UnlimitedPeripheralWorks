@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.computercraft.peripherals
 
-import com.mojang.blaze3d.vertex.BufferBuilder
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import site.siredvin.peripheralium.common.blocks.GenericBlockEntityBlock
@@ -12,7 +11,7 @@ import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntit
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 class RemoteObserverPeripheral(
-    private val blockEntity: RemoteObserverBlockEntity
+    private val blockEntity: RemoteObserverBlockEntity,
 ) : OwnedPeripheral<BlockEntityPeripheralOwner<RemoteObserverBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
     companion object {
         const val TYPE = "remote_observer"
@@ -30,8 +29,9 @@ class RemoteObserverPeripheral(
     @LuaFunction(mainThread = true)
     fun addPosition(pos: Map<*, *>): MethodResult {
         val targetPos = LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(GenericBlockEntityBlock.FACING))
-        if (!blockEntity.isPosApplicable(targetPos))
+        if (!blockEntity.isPosApplicable(targetPos)) {
             return MethodResult.of(false, "Position too far away")
+        }
         blockEntity.addPosToTrack(targetPos)
         return MethodResult.of(true)
     }
@@ -39,7 +39,7 @@ class RemoteObserverPeripheral(
     @LuaFunction(mainThread = true)
     fun removePosition(pos: Map<*, *>): MethodResult {
         blockEntity.removePosToTrack(
-            LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(GenericBlockEntityBlock.FACING))
+            LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(GenericBlockEntityBlock.FACING)),
         )
         return MethodResult.of(true)
     }
@@ -50,7 +50,7 @@ class RemoteObserverPeripheral(
             LuaRepresentation.forBlockPos(
                 it,
                 blockEntity.blockState.getValue(GenericBlockEntityBlock.FACING),
-                peripheralOwner.pos
+                peripheralOwner.pos,
             )
         }
     }

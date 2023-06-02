@@ -36,8 +36,12 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     data class RemotePeripheralRecord(
-        val targetBlock: BlockPos, var peripheralName: String?, val direction: Direction,
-        var connectedToListener: Boolean = false, var connectedToPeripheral: Boolean = false, var stack: ItemStack = ItemStack.EMPTY
+        val targetBlock: BlockPos,
+        var peripheralName: String?,
+        val direction: Direction,
+        var connectedToListener: Boolean = false,
+        var connectedToPeripheral: Boolean = false,
+        var stack: ItemStack = ItemStack.EMPTY,
     ) {
         fun toTag(): CompoundTag {
             val tag = CompoundTag()
@@ -59,8 +63,9 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     fun isPosApplicable(pos: BlockPos): Boolean {
-        if (pos == this.blockPos)
+        if (pos == this.blockPos) {
             return false
+        }
         return pos.closerThan(this.blockPos, PeripheralWorksConfig.peripheralProxyMaxRange.toDouble())
     }
 
@@ -71,8 +76,9 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     fun buildPeripheralName(targetPeripheral: IPeripheral): String {
         val naiveName = targetPeripheral.type
         val maxNumber = remotePeripherals.mapNotNull {
-            if (it.value.peripheralName?.startsWith(naiveName) == true)
+            if (it.value.peripheralName?.startsWith(naiveName) == true) {
                 return@mapNotNull Integer.parseInt(it.value.peripheralName!!.split("_")[1])
+            }
             return@mapNotNull null
         }.maxOrNull() ?: -1
         return "${naiveName}_${maxNumber + 1}"
@@ -99,26 +105,31 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             record.connectedToListener = true
         }
         if (peripheral != null) {
-            if (record.peripheralName == null)
+            if (record.peripheralName == null) {
                 record.peripheralName = buildPeripheralName(targetPeripheral)
+            }
             peripheral!!.attachRemotePeripheral(targetPeripheral, record.peripheralName!!)
             record.connectedToPeripheral = true
         } else if (!record.connectedToPeripheral) {
             peripheralConnectionIncomplete = true
         }
-        if (level != null && level!!.isClientSide && record.stack.isEmpty)
+        if (level != null && level!!.isClientSide && record.stack.isEmpty) {
             record.stack = level!!.getBlockState(record.targetBlock).block.asItem().defaultInstance
+        }
     }
 
     private fun untrackRecord(record: RemotePeripheralRecord) {
         BlockStateUpdateEventBus.removeBlockPos(record.targetBlock)
-        if (record.peripheralName != null)
+        if (record.peripheralName != null) {
             peripheral?.removeRemotePeripheral(record.peripheralName!!)
+        }
     }
 
     fun addPosToTrack(pos: BlockPos, direction: Direction, targetPeripheral: IPeripheral) {
         val record = RemotePeripheralRecord(
-            pos, buildPeripheralName(targetPeripheral), direction
+            pos,
+            buildPeripheralName(targetPeripheral),
+            direction,
         )
         remotePeripherals[pos] = record
         trackRecord(record, targetPeripheral)
@@ -153,7 +164,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         if (targetPeripheral == null) {
             PeripheralWorksCore.LOGGER.debug(
                 "Postpone {} for peripheral proxing, it doesn't contains any peripheral for now",
-                record.targetBlock
+                record.targetBlock,
             )
             peripheralConnectionIncomplete = true
         } else {
@@ -168,8 +179,9 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             remotePeripherals.values.forEach {
                 if (it.stack.isEmpty) {
                     it.stack = level.getBlockState(it.targetBlock).block.asItem().defaultInstance
-                    if (it.stack.isEmpty)
+                    if (it.stack.isEmpty) {
                         itemStackCacheBuilt = false
+                    }
                 }
             }
         }

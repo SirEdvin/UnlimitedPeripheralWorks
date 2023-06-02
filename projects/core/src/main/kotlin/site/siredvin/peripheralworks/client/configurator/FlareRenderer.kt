@@ -46,8 +46,14 @@ object FlareRenderer {
     }
 
     fun renderFlare(
-        matrices: PoseStack, camera: Camera,
-        ticks: Float, x: Double, y: Double, z: Double, color: FlareColor, size: Float
+        matrices: PoseStack,
+        camera: Camera,
+        ticks: Float,
+        x: Double,
+        y: Double,
+        z: Double,
+        color: FlareColor,
+        size: Float,
     ) {
         matrices.pushPose()
 

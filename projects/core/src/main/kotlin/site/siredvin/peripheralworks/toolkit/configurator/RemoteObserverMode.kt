@@ -13,13 +13,14 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-object RemoteObserverMode: ConfigurationMode {
+object RemoteObserverMode : ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "remote_observer")
     override val description: Component = text(PeripheralWorksCore.MOD_ID, "remote_observer_mode")
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
-        if (level.isClientSide)
+        if (level.isClientSide) {
             return InteractionResultHolder.consume(stack)
+        }
         val entity = level.getBlockEntity(configurationTarget)
         if (entity !is RemoteObserverBlockEntity) {
             PeripheralWorksCore.LOGGER.error("Remote observer configuration mode renderer process $configurationTarget which is not remote observer")

@@ -55,7 +55,7 @@ object Blocks {
             Item.Properties(),
             PeripheralWorksConfig::enableItemPedestal,
             alwaysShow = true,
-            TooltipCollection::isDisabled
+            TooltipCollection::isDisabled,
         )
     }
 
@@ -68,7 +68,7 @@ object Blocks {
             Item.Properties(),
             PeripheralWorksConfig::enableMapPedestal,
             alwaysShow = true,
-            TooltipCollection::isDisabled
+            TooltipCollection::isDisabled,
         )
     }
 
@@ -81,7 +81,7 @@ object Blocks {
             Item.Properties(),
             PeripheralWorksConfig::enableDisplayPedestal,
             alwaysShow = true,
-            TooltipCollection::isDisabled
+            TooltipCollection::isDisabled,
         )
     }
 
@@ -97,12 +97,12 @@ object Blocks {
                 TooltipCollection::isDisabled,
                 TooltipCollection::remoteObserverTooptips,
             )
-        }
+        },
     )
 
     val PERIPHERAL_PROXY = PeripheralWorksPlatform.registerBlock(
         "peripheral_proxy",
-        ::PeripheralProxy
+        ::PeripheralProxy,
     ) {
         PeripheralBlockItem(
             it,
@@ -110,7 +110,7 @@ object Blocks {
             PeripheralWorksConfig::enablePeripheralProxy,
             alwaysShow = false,
             TooltipCollection::isDisabled,
-            TooltipCollection::peripheralProxyTooptips
+            TooltipCollection::peripheralProxyTooptips,
         )
     }
 

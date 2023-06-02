@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.toolkit.configurator
 
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResultHolder
@@ -15,13 +14,14 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-object PeripheralProxyMode: ConfigurationMode {
+object PeripheralProxyMode : ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
     override val description: Component = text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_mode")
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
-        if (level.isClientSide)
+        if (level.isClientSide) {
             return InteractionResultHolder.consume(stack)
+        }
         val entity = level.getBlockEntity(configurationTarget)
         if (entity !is PeripheralProxyBlockEntity) {
             PeripheralWorksCore.LOGGER.error("Peripheral proxy configuration mode renderer process $configurationTarget which is not peripheral proxy")
@@ -48,18 +48,18 @@ object PeripheralProxyMode: ConfigurationMode {
             if (entity.togglePos(hit.blockPos, hit.direction, targetPeripheral)) {
                 player.displayClientMessage(
                     text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_block_track_added"),
-                    true
+                    true,
                 )
             } else {
                 player.displayClientMessage(
                     text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_block_track_removed"),
-                    true
+                    true,
                 )
             }
         } else if (entity.removePosToTrack(hit.blockPos)) {
             player.displayClientMessage(
                 text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_block_track_removed"),
-                true
+                true,
             )
         }
         return InteractionResultHolder.consume(stack)

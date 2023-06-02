@@ -56,6 +56,6 @@ object FabricPeripheralWorks : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             DebugCommands.register(dispatcher)
-        };
+        }
     }
 }

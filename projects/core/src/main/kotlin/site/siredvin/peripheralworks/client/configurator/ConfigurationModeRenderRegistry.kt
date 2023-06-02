@@ -34,5 +34,4 @@ object ConfigurationModeRenderRegistry {
             renderMode.render(minecraft, activeModePair.second, poseStack, partialTick, camera, gameRenderer, projectionMatrix)
         }
     }
-
 }

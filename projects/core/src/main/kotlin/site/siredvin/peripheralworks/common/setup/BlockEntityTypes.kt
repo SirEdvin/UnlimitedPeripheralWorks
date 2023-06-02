@@ -64,11 +64,11 @@ object BlockEntityTypes {
     }
 
     val PERIPHERAL_PROXY: Supplier<BlockEntityType<PeripheralProxyBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
+        ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy"),
     ) {
         PeripheraliumPlatform.createBlockEntityType(
             ::PeripheralProxyBlockEntity,
-            Blocks.PERIPHERAL_PROXY.get()
+            Blocks.PERIPHERAL_PROXY.get(),
         )
     }
 
