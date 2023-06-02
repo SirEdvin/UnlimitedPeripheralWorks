@@ -27,5 +27,7 @@ object ModLootTableProvider {
         LootTableHelper.dropSelf(consumer, Blocks.ITEM_PEDESTAL)
         LootTableHelper.dropSelf(consumer, Blocks.MAP_PEDESTAL)
         LootTableHelper.dropSelf(consumer, Blocks.DISPLAY_PEDESTAL)
+        LootTableHelper.dropSelf(consumer, Blocks.REMOTE_OBSERVER)
+        LootTableHelper.dropSelf(consumer, Blocks.PERIPHERAL_PROXY)
     }
 }

@@ -83,5 +83,25 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" SI")
             .pattern("S  ")
             .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Blocks.REMOTE_OBSERVER.get())
+            .define('O', ingredients.observer)
+            .define('c', Ingredient.of(Blocks.PERIPHERAL_CASING.get()))
+            .define('d', ingredients.peripheralium)
+            .define('i', ingredients.ironIngot)
+            .pattern("ddd")
+            .pattern("dOd")
+            .pattern("ici")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Blocks.PERIPHERAL_PROXY.get())
+            .define('O', ingredients.enderModem)
+            .define('c', Ingredient.of(Blocks.PERIPHERAL_CASING.get()))
+            .define('d', ingredients.peripheralium)
+            .define('i', ingredients.diamond)
+            .pattern("ddd")
+            .pattern("dOd")
+            .pattern("ici")
+            .save(consumer)
     }
 }
