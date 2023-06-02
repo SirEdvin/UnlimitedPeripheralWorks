@@ -13,6 +13,7 @@ import site.siredvin.peripheralium.util.text
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 object PeripheralProxyMode: ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
@@ -26,8 +27,16 @@ object PeripheralProxyMode: ConfigurationMode {
             PeripheralWorksCore.LOGGER.error("Peripheral proxy configuration mode renderer process $configurationTarget which is not peripheral proxy")
             return InteractionResultHolder.consume(stack)
         }
+        if (entity.blockPos == hit.blockPos) {
+            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_not_self"), true)
+            return InteractionResultHolder.consume(stack)
+        }
         if (!entity.isPosApplicable(hit.blockPos)) {
             player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_too_far"), true)
+            return InteractionResultHolder.consume(stack)
+        }
+        if (entity.remotePeripherals.size >= PeripheralWorksConfig.peripheralProxyMaxCapacity) {
+            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_too_many"), true)
             return InteractionResultHolder.consume(stack)
         }
         val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, hit.blockPos, hit.direction)

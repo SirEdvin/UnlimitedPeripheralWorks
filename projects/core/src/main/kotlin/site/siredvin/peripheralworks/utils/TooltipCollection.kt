@@ -36,9 +36,17 @@ object TooltipCollection {
         )
     }
 
-    fun remoteObserverRadius(item: PeripheralBlockItem): List<Component> {
+    fun remoteObserverTooptips(item: PeripheralBlockItem): List<Component> {
         return listOf(
             text(PeripheralWorksCore.MOD_ID, "remote_observer_range", PeripheralWorksConfig.remoteObserverMaxRange),
+            text(PeripheralWorksCore.MOD_ID, "remote_observer_max_capacity", PeripheralWorksConfig.remoteObserverMaxCapacity),
+        )
+    }
+
+    fun peripheralProxyTooptips(item: PeripheralBlockItem): List<Component> {
+        return listOf(
+            text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_range", PeripheralWorksConfig.peripheralProxyMaxRange),
+            text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_max_capacity", PeripheralWorksConfig.peripheralProxyMaxCapacity),
         )
     }
 }

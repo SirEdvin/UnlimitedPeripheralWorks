@@ -11,6 +11,7 @@ import net.minecraft.world.phys.BlockHitResult
 import site.siredvin.peripheralium.util.text
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 object RemoteObserverMode: ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "remote_observer")
@@ -24,8 +25,16 @@ object RemoteObserverMode: ConfigurationMode {
             PeripheralWorksCore.LOGGER.error("Remote observer configuration mode renderer process $configurationTarget which is not remote observer")
             return InteractionResultHolder.consume(stack)
         }
+        if (entity.blockPos == hit.blockPos) {
+            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "remote_observer_not_self"), true)
+            return InteractionResultHolder.consume(stack)
+        }
         if (!entity.isPosApplicable(hit.blockPos)) {
             player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "remote_observer_too_far"), true)
+            return InteractionResultHolder.consume(stack)
+        }
+        if (entity.trackedBlocksView.size >= PeripheralWorksConfig.remoteObserverMaxCapacity) {
+            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "remote_observer_too_many"), true)
             return InteractionResultHolder.consume(stack)
         }
         if (entity.togglePos(hit.blockPos)) {

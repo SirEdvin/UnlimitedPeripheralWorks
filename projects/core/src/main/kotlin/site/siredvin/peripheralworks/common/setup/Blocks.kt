@@ -95,8 +95,7 @@ object Blocks {
                 PeripheralWorksConfig::enableRemoteObserver,
                 alwaysShow = false,
                 TooltipCollection::isDisabled,
-                TooltipCollection::remoteObserverRadius,
-                // TODO: add tooltip about capacity
+                TooltipCollection::remoteObserverTooptips,
             )
         }
     )
@@ -111,8 +110,7 @@ object Blocks {
             PeripheralWorksConfig::enablePeripheralProxy,
             alwaysShow = false,
             TooltipCollection::isDisabled,
-            // TODO: add tooltip about radius
-            // TODO: add tooltip about capacity
+            TooltipCollection::peripheralProxyTooptips
         )
     }
 

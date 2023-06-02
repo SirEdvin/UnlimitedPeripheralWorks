@@ -9,6 +9,7 @@
   "item.peripheralworks.display_pedestal": "Display pedestal",
   "item.peripheralworks.ultimate_configurator": "Ultimate configurator",
   "item.peripheralworks.remote_observer": "Remote observer",
+  "item.peripheralworks.peripheral_proxy": "Peripheral proxy",
 
   "item.peripheralworks.tooltip.universal_scanner": "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers",
   "item.peripheralworks.tooltip.ultimate_sensor": "§3§oLimitless possibilities for understanding world in one little box. Works with turtles and pocket computers",
@@ -17,6 +18,7 @@
   "item.peripheralworks.tooltip.display_pedestal": "§3§oCute pedestal, that cannot store anything, but can display literally anything",
   "item.peripheralworks.tooltip.ultimate_configurator": "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable",
   "item.peripheralworks.tooltip.remote_observer": "§3§oJust like observer, but can see a little further",
+  "item.peripheralworks.tooltip.peripheral_proxy": "§3§oAllows you to connect peripherals at the small distances without wired network",
 
   "block.peripheralworks.peripheral_casing": "Peripheral casing",
   "block.peripheralworks.universal_scanner": "Universal scanner",
@@ -25,6 +27,7 @@
   "block.peripheralworks.map_pedestal": "Map pedestal",
   "block.peripheralworks.display_pedestal": "Display pedestal",
   "block.peripheralworks.remote_observer": "Remote observer",
+  "block.peripheralworks.peripheral_proxy": "Peripheral proxy",
 
   "turtle.peripheralworks.peripheralium_hub": "Hub",
   "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
@@ -47,10 +50,22 @@
   "text.peripheralworks.universal_scanner_free_range": "  §6Cost-free scan range: %s",
   "text.peripheralworks.universal_scanner_max_range": "  §6Max scan range: %s",
   "text.peripheralworks.remote_observer_mode": "  Remote observer configuration",
+  "text.peripheralworks.peripheral_proxy_mode": "  Peripheral proxy configuration",
   "text.peripheralworks.active_configuration_mode": "Active configuration mode:",
   "text.peripheralworks.configuration_target_block": "Target block %s",
   "text.peripheralworks.remote_observer_range": "  §6Max range of observed block: %s",
+  "text.peripheralworks.remote_observer_max_capacity": "  §6Max connected observed block count: %s",
+  "text.peripheralworks.remote_observer_not_self": "Cannot connect remote observer to itself",
   "text.peripheralworks.remote_observer_too_far": "Remote observer too far from this block",
+  "text.peripheralworks.remote_observer_too_many": "Too many blocks already connected to this remote observer",
   "text.peripheralworks.remote_observer_block_track_added": "Remote observer now tracks this block",
-  "text.peripheralworks.remote_observer_block_track_removed": "Remote observer will not track this block from now"
+  "text.peripheralworks.remote_observer_block_track_removed": "Remote observer will not track this block from now",
+  "text.peripheralworks.peripheral_proxy_not_self": "Cannot connect peripheral proxy to itself",
+  "text.peripheralworks.peripheral_proxy_too_far": "Peripheral proxy too far from this block",
+  "text.peripheralworks.peripheral_proxy_too_many": "Too many peripherals already connected to this peripheral proxy",
+  "text.peripheralworks.peripheral_proxy_is_not_peripheral": "This block does not contains a peripheral",
+  "text.peripheralworks.peripheral_proxy_block_track_added": "This peripheral is connected to peripheral proxy",
+  "text.peripheralworks.peripheral_proxy_block_track_removed": "This peripheral is disconnected from peripheral proxy",
+  "text.peripheralworks.peripheral_proxy_range": "  §6Max range of connected peripherals: %s",
+  "text.peripheralworks.peripheral_proxy_max_capacity": "  §6Max connected peripherals count: %s"
 }
