@@ -35,7 +35,7 @@ object PeripheralProxyMode: ConfigurationMode {
             player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_too_far"), true)
             return InteractionResultHolder.consume(stack)
         }
-        if (entity.remotePeripherals.size >= PeripheralWorksConfig.peripheralProxyMaxCapacity) {
+        if (!entity.remotePeripherals.contains(hit.blockPos) && entity.remotePeripherals.size >= PeripheralWorksConfig.peripheralProxyMaxCapacity) {
             player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_too_many"), true)
             return InteractionResultHolder.consume(stack)
         }

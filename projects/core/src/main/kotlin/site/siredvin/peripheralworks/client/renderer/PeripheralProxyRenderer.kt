@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemDisplayContext
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import org.joml.Vector3d
+import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import java.util.*
 import kotlin.math.cos
@@ -62,10 +63,11 @@ class PeripheralProxyRenderer: BlockEntityRenderer<PeripheralProxyBlockEntity> {
     ) {
         val angleStep = 360.0 / blockEntity.remotePeripherals.size.toDouble()
         var startingAngle = 0.0
+        if (!blockEntity.itemStackCacheBuilt)
+            blockEntity.updateCachedStacks(blockEntity.level!!)
         blockEntity.remotePeripherals.values.forEach {
-            if (!it.stack.isEmpty) {
+            if (!it.stack.isEmpty)
                 renderItem(it.stack, poseStack, buffer, packedOverlay, packedLight, startingAngle, 0.8f);
-            }
             startingAngle += angleStep
         }
     }

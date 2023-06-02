@@ -33,7 +33,7 @@ object RemoteObserverMode: ConfigurationMode {
             player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "remote_observer_too_far"), true)
             return InteractionResultHolder.consume(stack)
         }
-        if (entity.trackedBlocksView.size >= PeripheralWorksConfig.remoteObserverMaxCapacity) {
+        if (!entity.trackedBlocksView.contains(hit.blockPos) && entity.trackedBlocksView.size >= PeripheralWorksConfig.remoteObserverMaxCapacity) {
             player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "remote_observer_too_many"), true)
             return InteractionResultHolder.consume(stack)
         }

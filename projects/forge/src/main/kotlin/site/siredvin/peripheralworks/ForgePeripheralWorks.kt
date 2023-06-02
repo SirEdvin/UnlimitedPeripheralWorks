@@ -105,9 +105,4 @@ object ForgePeripheralWorks {
     fun registerCreativeTab(event: CreativeModeTabEvent.Register) {
         event.registerCreativeModeTab(ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"), PeripheralWorksCore::configureCreativeTab)
     }
-
-    @SubscribeEvent
-    fun register(event: RegisterCommandsEvent) {
-        DebugCommands.register(event.dispatcher)
-    }
 }

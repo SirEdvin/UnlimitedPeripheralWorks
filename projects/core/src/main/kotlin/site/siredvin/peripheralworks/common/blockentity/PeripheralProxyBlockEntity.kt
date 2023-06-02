@@ -52,6 +52,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     private var lastConsumedEventID: Long = BlockStateUpdateEventBus.lastEventID - 1
     private var peripheralConnectionIncomplete: Boolean = false
     private var listenerConnectionIncomplete: Boolean = false
+    var itemStackCacheBuilt: Boolean = false
 
     override fun createPeripheral(side: Direction): PeripheralProxyPeripheral {
         return PeripheralProxyPeripheral(this)
@@ -105,9 +106,8 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         } else if (!record.connectedToPeripheral) {
             peripheralConnectionIncomplete = true
         }
-        if (level != null && level!!.isClientSide && record.stack.isEmpty) {
+        if (level != null && level!!.isClientSide && record.stack.isEmpty)
             record.stack = level!!.getBlockState(record.targetBlock).block.asItem().defaultInstance
-        }
     }
 
     private fun untrackRecord(record: RemotePeripheralRecord) {
@@ -151,11 +151,27 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     fun connectBlockPos(level: Level, record: RemotePeripheralRecord) {
         val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, record.targetBlock, Direction.NORTH)
         if (targetPeripheral == null) {
-            PeripheralWorksCore.LOGGER.warn("Postpone ${record.targetBlock} for peripheral proxing, it doesn't contains any peripheral for now")
+            PeripheralWorksCore.LOGGER.debug(
+                "Postpone {} for peripheral proxing, it doesn't contains any peripheral for now",
+                record.targetBlock
+            )
             peripheralConnectionIncomplete = true
         } else {
             trackRecord(record, targetPeripheral)
             pushInternalDataChangeToClient()
+        }
+    }
+
+    fun updateCachedStacks(level: Level) {
+        if (level.isClientSide) {
+            itemStackCacheBuilt = true
+            remotePeripherals.values.forEach {
+                if (it.stack.isEmpty) {
+                    it.stack = level.getBlockState(it.targetBlock).block.asItem().defaultInstance
+                    if (it.stack.isEmpty)
+                        itemStackCacheBuilt = false
+                }
+            }
         }
     }
 
@@ -169,10 +185,13 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                 if (level == null) {
                     peripheralConnectionIncomplete = true
                     listenerConnectionIncomplete = true
-                    PeripheralWorksCore.LOGGER.warn("Postpone of loading blockPos $blockPos")
+                    PeripheralWorksCore.LOGGER.debug("Postpone of loading blockPos {}", blockPos)
                 } else {
                     connectBlockPos(level!!, record)
                 }
+            }
+            if (level?.isClientSide == true) {
+                updateCachedStacks(level!!)
             }
         }
         return state ?: blockState
@@ -190,19 +209,19 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         }
         var dataModified = false
         lastConsumedEventID = BlockStateUpdateEventBus.traverseEvents(lastConsumedEventID) {
-            PeripheralWorksCore.LOGGER.warn("Processing event change $it ${it.pos}")
+            PeripheralWorksCore.LOGGER.debug("Processing event change {} {}", it, it.pos)
             if (remotePeripherals.contains(it.pos)) {
                 val record = remotePeripherals[it.pos]
-                PeripheralWorksCore.LOGGER.warn("Extracted record $record for ${it.pos}")
+                PeripheralWorksCore.LOGGER.debug("Extracted record {} for {}", record, it.pos)
                 if (record != null) {
                     untrackRecord(record)
                     val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, it.pos, record.direction)
                     if (targetPeripheral == null) {
-                        PeripheralWorksCore.LOGGER.warn("Cannot find peripheral for ${it.pos} purging it completely")
+                        PeripheralWorksCore.LOGGER.debug("Cannot find peripheral for {} purging it completely", it.pos)
                         dataModified = true
                         remotePeripherals.remove(it.pos)
                     } else {
-                        PeripheralWorksCore.LOGGER.warn("Find peripheral $targetPeripheral for ${it.pos}")
+                        PeripheralWorksCore.LOGGER.debug("Find peripheral {} for {}", targetPeripheral, it.pos)
                         trackRecord(record, targetPeripheral)
                     }
                 }
