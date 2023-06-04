@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.2] - 2023-06-04
+
 ### Added
 
 - Ultimate scanner now can scan for players around
@@ -13,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remote observer
 - Peripheral proxy, for accessing peripheral with wired network in small range.
 
-## [0.4.1] - 2023-16-23
+## [0.4.1] - 2023-05-23
 
 ### Added
 
@@ -24,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Log spamming for integrateddynamics aspect
 
-## [0.4.0] - 2023-16-05
+## [0.4.0] - 2023-05-16
 
 ### Added
 
