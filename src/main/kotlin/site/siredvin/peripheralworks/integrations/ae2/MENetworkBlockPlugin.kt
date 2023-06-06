@@ -72,6 +72,9 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun pushItem(computer: IComputerAccess, toName: String, itemName: Optional<String>, limit: Optional<Long>): Long {
+        if (limit.isPresent && limit.get() == 0.toLong())
+            return 0
+
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
@@ -99,24 +102,28 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         val realLimit = min(min(PeripheraliumConfig.itemStorageTransferLimit, limit.orElse(Long.MAX_VALUE)), itemToTransfer.longValue)
         val extractedLimit = inventory.extract(itemToTransfer.key, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
         val transferStack = (itemToTransfer.key as AEItemKey).toStack(extractedLimit.toInt())
-        val transaction = Transaction.openOuter()
-        val insertedAmount = toStorage.insert(ItemVariant.of(transferStack), extractedLimit, transaction)
-        if (insertedAmount == 0L) {
-            transaction.abort()
-            return 0
+        return Transaction.openOuter().use {
+            val insertedAmount = toStorage.insert(ItemVariant.of(transferStack), extractedLimit, it)
+            if (insertedAmount == 0L) {
+                it.abort()
+                return@use 0
+            }
+            val extractedAmount = inventory.extract(itemToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+            if (extractedAmount != insertedAmount) {
+                inventory.insert(itemToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+                it.abort()
+                return@use 0
+            }
+            it.commit()
+            return@use extractedAmount
         }
-        val extractedAmount = inventory.extract(itemToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-        if (extractedAmount != insertedAmount) {
-            inventory.insert(itemToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-            transaction.abort()
-            return 0
-        }
-        transaction.commit()
-        return extractedAmount
     }
 
     @LuaFunction(mainThread = true)
     fun pullItem(computer: IComputerAccess, fromName: String, itemName: Optional<String>, limit: Optional<Long>): Long {
+        if (limit.isPresent && limit.get() == 0.toLong())
+            return 0
+
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
@@ -132,29 +139,30 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             Predicate { it.isOf(item) }
         }
 
-        val transaction = Transaction.openOuter()
-        val extractableResource = StorageUtil.findExtractableContent(fromStorage, predicate, transaction) ?: return 0
-        val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
-        val aeKey = AEItemKey.of(extractableResource.resource)
-        val realLimit = min(min(PeripheraliumConfig.itemStorageTransferLimit, limit.orElse(Long.MAX_VALUE)), extractableResource.amount)
-        val insertLimit = inventory.insert(aeKey, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
-        if (insertLimit == 0L) {
-            transaction.abort()
-            return 0
+        return Transaction.openOuter().use {
+            val extractableResource = StorageUtil.findExtractableContent(fromStorage, predicate, it) ?: return 0
+            val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
+            val aeKey = AEItemKey.of(extractableResource.resource)
+            val realLimit = min(min(PeripheraliumConfig.itemStorageTransferLimit, limit.orElse(Long.MAX_VALUE)), extractableResource.amount)
+            val insertLimit = inventory.insert(aeKey, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
+            if (insertLimit == 0L) {
+                it.abort()
+                return@use 0
+            }
+            val extractedAmount = fromStorage.extract(extractableResource.resource, realLimit, it)
+            if (extractedAmount == 0L) {
+                it.abort()
+                return@use 0
+            }
+            val insertedAmount = inventory.insert(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+            if (extractedAmount != insertedAmount) {
+                inventory.extract(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+                it.abort()
+                return@use 0
+            }
+            it.commit()
+            return@use insertedAmount
         }
-        val extractedAmount = fromStorage.extract(extractableResource.resource, realLimit, transaction)
-        if (extractedAmount == 0L) {
-            transaction.abort()
-            return 0
-        }
-        val insertedAmount = inventory.insert(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-        if (extractedAmount != insertedAmount) {
-            inventory.extract(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-            transaction.abort()
-            return 0
-        }
-        transaction.commit()
-        return insertedAmount
     }
 
 
@@ -166,6 +174,9 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun pushFluid(computer: IComputerAccess, toName: String, limit: Optional<Long>, fluidName: Optional<String>): Double {
+        if (limit.isPresent && limit.get() == 0.toLong())
+            return 0.0
+
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
@@ -195,24 +206,28 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         }.orElse(Long.MAX_VALUE)), fluidToTransfer.longValue)
         val extractedLimit = inventory.extract(fluidToTransfer.key, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
         val transferVariant = (fluidToTransfer.key as AEFluidKey).toVariant()
-        val transaction = Transaction.openOuter()
-        val insertedAmount = toStorage.insert(transferVariant, extractedLimit, transaction)
-        if (insertedAmount == 0L) {
-            transaction.abort()
-            return 0.0
+        return Transaction.openOuter().use {
+            val insertedAmount = toStorage.insert(transferVariant, extractedLimit, it)
+            if (insertedAmount == 0L) {
+                it.abort()
+                return@use 0.0
+            }
+            val extractedAmount = inventory.extract(fluidToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+            if (extractedAmount != insertedAmount) {
+                inventory.insert(fluidToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+                it.abort()
+                return@use 0.0
+            }
+            it.commit()
+            return@use extractedAmount / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
         }
-        val extractedAmount = inventory.extract(fluidToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-        if (extractedAmount != insertedAmount) {
-            inventory.insert(fluidToTransfer.key, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-            transaction.abort()
-            return 0.0
-        }
-        transaction.commit()
-        return extractedAmount / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
     }
 
     @LuaFunction(mainThread = true)
     fun pullFluid(computer: IComputerAccess, fromName: String, limit: Optional<Long>, fluidName: Optional<String>): Double {
+        if (limit.isPresent && limit.get() == 0.toLong())
+            return 0.0
+
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
@@ -228,31 +243,32 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             Predicate { it.isOf(fluid) }
         }
 
-        val transaction = Transaction.openOuter()
-        val extractableResource = StorageUtil.findExtractableContent(fromStorage, predicate, transaction) ?: return 0.0
-        val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
-        val aeKey = AEFluidKey.of(extractableResource.resource)
-        val realLimit = min(min(PeripheraliumConfig.fluidStorageTransferLimit, limit.map {
-            (FluidStoragePlugin.FORGE_COMPACT_DEVIDER * it).toLong()
-        }.orElse(Long.MAX_VALUE)), extractableResource.amount)
-        val insertLimit = inventory.insert(aeKey, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
-        if (insertLimit == 0L) {
-            transaction.abort()
-            return 0.0
+        return Transaction.openOuter().use {
+            val extractableResource = StorageUtil.findExtractableContent(fromStorage, predicate, it) ?: return 0.0
+            val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
+            val aeKey = AEFluidKey.of(extractableResource.resource)
+            val realLimit = min(min(PeripheraliumConfig.fluidStorageTransferLimit, limit.map {limit ->
+                (FluidStoragePlugin.FORGE_COMPACT_DEVIDER * limit).toLong()
+            }.orElse(Long.MAX_VALUE)), extractableResource.amount)
+            val insertLimit = inventory.insert(aeKey, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
+            if (insertLimit == 0L) {
+                it.abort()
+                return@use 0.0
+            }
+            val extractedAmount = fromStorage.extract(extractableResource.resource, realLimit, it)
+            if (extractedAmount == 0L) {
+                it.abort()
+                return@use 0.0
+            }
+            val insertedAmount = inventory.insert(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+            if (extractedAmount != insertedAmount) {
+                inventory.extract(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
+                it.abort()
+                return@use 0.0
+            }
+            it.commit()
+            return@use insertedAmount / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
         }
-        val extractedAmount = fromStorage.extract(extractableResource.resource, realLimit, transaction)
-        if (extractedAmount == 0L) {
-            transaction.abort()
-            return 0.0
-        }
-        val insertedAmount = inventory.insert(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-        if (extractedAmount != insertedAmount) {
-            inventory.extract(aeKey, realLimit, Actionable.MODULATE, IActionSource.ofMachine(entity))
-            transaction.abort()
-            return 0.0
-        }
-        transaction.commit()
-        return insertedAmount / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
     }
 
     @LuaFunction(mainThread = true)
