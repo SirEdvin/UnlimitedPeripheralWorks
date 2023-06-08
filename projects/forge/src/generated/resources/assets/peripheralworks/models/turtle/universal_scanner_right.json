@@ -1,0 +1,6 @@
+{
+  "parent": "peripheralworks:turtle/upgrade_base_right",
+  "textures": {
+    "texture": "peripheralworks:block/universal_scanner_side"
+  }
+}
