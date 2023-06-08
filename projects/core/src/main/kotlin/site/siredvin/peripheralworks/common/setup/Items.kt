@@ -17,7 +17,7 @@ object Items {
             TooltipCollection.buildMaxPeripheralsCount(PeripheralWorksConfig::peripheraliumHubUpgradeCount),
         )
     }
-    val NETHERITE_PERIPHERALIUM_MODEM = PeripheralWorksPlatform.registerItem("netherite_peripheralium_hub") {
+    val NETHERITE_PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerItem("netherite_peripheralium_hub") {
         PeripheralItem(
             Item.Properties(),
             PeripheralWorksConfig::enablePeripheraliumHubs,

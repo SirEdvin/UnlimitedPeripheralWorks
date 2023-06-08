@@ -28,7 +28,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
         TweakedUpgradeRecipeBuilder.smithing(
             Ingredient.of(Items.PERIPHERALIUM_HUB.get()),
             ingredients.netheriteIngot,
-            Items.NETHERITE_PERIPHERALIUM_MODEM.get(),
+            Items.NETHERITE_PERIPHERALIUM_HUB.get(),
         ).save(consumer)
 
         TweakedShapedRecipeBuilder.shaped(Blocks.PERIPHERAL_CASING.get().asItem())

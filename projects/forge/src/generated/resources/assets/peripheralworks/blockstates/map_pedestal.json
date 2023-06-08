@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "peripheralworks:block/map_pedestal",
+      "x": 180,
+      "y": 0
+    },
+    "facing=east": {
+      "model": "peripheralworks:block/map_pedestal",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "peripheralworks:block/map_pedestal",
+      "x": 90,
+      "y": 0
+    },
+    "facing=south": {
+      "model": "peripheralworks:block/map_pedestal",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "peripheralworks:block/map_pedestal",
+      "x": 0,
+      "y": 0
+    },
+    "facing=west": {
+      "model": "peripheralworks:block/map_pedestal",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

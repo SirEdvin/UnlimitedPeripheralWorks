@@ -14,5 +14,6 @@ object ModDataProviders {
             ModTurtleUpgradeDataProvider(it)
         }
         generator.lootTable(ModLootTableProvider.getTables())
+        generator.models(ModBlockModelProvider::addModels, ModItemModelProvider::addModels)
     }
 }

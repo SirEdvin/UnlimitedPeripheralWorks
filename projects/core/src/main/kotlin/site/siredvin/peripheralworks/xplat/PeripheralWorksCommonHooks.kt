@@ -127,7 +127,7 @@ object PeripheralWorksCommonHooks {
                 stack,
             )
         }
-        registerScaledTurtleUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID, Items.NETHERITE_PERIPHERALIUM_MODEM, 0.5f) { stack ->
+        registerScaledTurtleUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID, Items.NETHERITE_PERIPHERALIUM_HUB, 0.5f) { stack ->
             PeripheraliumHubTurtleUpgrade(
                 PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
                 PeripheraliumHubPeripheral.NETHERITE_TYPE,
@@ -158,7 +158,7 @@ object PeripheralWorksCommonHooks {
                 it,
             )
         }
-        registerPocketUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID, Items.NETHERITE_PERIPHERALIUM_MODEM) {
+        registerPocketUpgrade(PeripheraliumHubPeripheral.NETHERITE_ID, Items.NETHERITE_PERIPHERALIUM_HUB) {
             PeripheraliumHubPocketUpgrade(
                 PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
                 PeripheraliumHubPeripheral.NETHERITE_TYPE,

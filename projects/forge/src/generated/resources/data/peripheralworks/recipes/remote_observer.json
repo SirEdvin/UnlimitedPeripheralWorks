@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "O": {
+      "item": "minecraft:observer"
+    },
+    "c": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "d": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "dOd",
+    "ici"
+  ],
+  "result": {
+    "item": "peripheralworks:remote_observer"
+  }
+}

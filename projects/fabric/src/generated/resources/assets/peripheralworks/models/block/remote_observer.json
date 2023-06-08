@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "peripheralworks:block/remote_observer_front",
+    "side": "peripheralworks:block/remote_observer_side",
+    "top": "peripheralworks:block/peripheral_casing"
+  }
+}

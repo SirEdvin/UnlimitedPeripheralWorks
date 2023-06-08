@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "peripheralworks:block/peripheral_casing"
+  }
+}
