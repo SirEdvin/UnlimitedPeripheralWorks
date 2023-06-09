@@ -1,5 +1,5 @@
 {
-  "parent": "peripheralworks:turtle/upgrade_base_right",
+  "parent": "peripheralium:base/upgrade_base_right",
   "textures": {
     "texture": "peripheralworks:block/ultimate_sensor_side"
   }
