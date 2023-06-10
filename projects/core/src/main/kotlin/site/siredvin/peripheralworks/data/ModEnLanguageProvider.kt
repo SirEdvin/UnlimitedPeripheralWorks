@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.data
 
 import net.minecraft.data.PackOutput
-import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
