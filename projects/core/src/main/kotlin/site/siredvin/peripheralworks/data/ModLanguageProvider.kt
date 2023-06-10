@@ -2,6 +2,8 @@ package site.siredvin.peripheralworks.data
 
 import net.minecraft.data.PackOutput
 import site.siredvin.peripheralium.data.language.LanguageProvider
+import site.siredvin.peripheralium.data.language.toPocketTranslationKey
+import site.siredvin.peripheralium.data.language.toTurtleTranslationKey
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
@@ -23,8 +25,8 @@ abstract class ModLanguageProvider(output: PackOutput, locale: String): Language
         val baseStream = super.getExpectedKeys()
         val moreStream = Stream.of(
             extraExpectedKeys.stream(),
-            PeripheralWorksPlatform.turtleUpgrades.stream().map { "turtle.$it" },
-            PeripheralWorksPlatform.pocketUpgrades.stream().map { "pocket.$it" },
+            PeripheralWorksPlatform.turtleUpgrades.stream().map { it.toTurtleTranslationKey() },
+            PeripheralWorksPlatform.pocketUpgrades.stream().map { it.toPocketTranslationKey() },
         ).flatMap { it }
         return Stream.concat(baseStream, moreStream)
     }

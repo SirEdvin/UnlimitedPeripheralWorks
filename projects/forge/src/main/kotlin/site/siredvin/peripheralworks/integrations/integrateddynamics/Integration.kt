@@ -25,6 +25,7 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModLanguageProvider
+import site.siredvin.peripheralworks.data.ModUaLanguageProvider
 
 class Integration : Runnable {
 
@@ -104,6 +105,9 @@ class Integration : Runnable {
         ModLanguageProvider.addExpectedKey("aspect.integrateddynamics.read.list.cc_folder")
         ModEnLanguageProvider.addHook {
             it.add("aspect.integrateddynamics.read.list.cc_folder", "Directory inside computer")
+        }
+        ModUaLanguageProvider.addHook {
+            it.add("aspect.integrateddynamics.read.list.cc_folder", "Директорія всередині комп'ютера")
         }
     }
 }

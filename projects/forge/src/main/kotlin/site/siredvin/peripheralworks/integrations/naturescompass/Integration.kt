@@ -14,6 +14,7 @@ import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
+import site.siredvin.peripheralworks.data.ModUaLanguageProvider
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.Consumer
 
@@ -70,6 +71,10 @@ class Integration : Runnable {
 
         ModEnLanguageProvider.addHook {
             it.addUpgrades(UPGRADE_ID, "Nature Compassing")
+        }
+        ModUaLanguageProvider.addHook {
+            it.addTurtle(UPGRADE_ID, "Природновідчуваюча")
+            it.addPocket(UPGRADE_ID, "Природовідчуваючий")
         }
     }
 }

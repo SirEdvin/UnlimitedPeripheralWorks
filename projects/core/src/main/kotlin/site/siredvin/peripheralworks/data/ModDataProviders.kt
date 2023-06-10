@@ -16,5 +16,6 @@ object ModDataProviders {
         generator.lootTable(ModLootTableProvider.getTables())
         generator.models(ModBlockModelProvider::addModels, ModItemModelProvider::addModels)
         generator.add(::ModEnLanguageProvider)
+        generator.add(::ModUaLanguageProvider)
     }
 }
