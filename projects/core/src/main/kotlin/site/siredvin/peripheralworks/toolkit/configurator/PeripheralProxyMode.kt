@@ -8,15 +8,16 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
-import site.siredvin.peripheralium.util.text
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.data.ModText
+import site.siredvin.peripheralworks.data.ModTooltip
 
 object PeripheralProxyMode : ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
-    override val description: Component = text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_mode")
+    override val description: Component = ModTooltip.PERIPHERAL_PROXY_MODE.text
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) {
@@ -28,37 +29,37 @@ object PeripheralProxyMode : ConfigurationMode {
             return InteractionResultHolder.consume(stack)
         }
         if (entity.blockPos == hit.blockPos) {
-            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_not_self"), true)
+            player.displayClientMessage(ModText.PERIPHERAL_PROXY_NOT_SELF.text, true)
             return InteractionResultHolder.consume(stack)
         }
         if (!entity.isPosApplicable(hit.blockPos)) {
-            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_too_far"), true)
+            player.displayClientMessage(ModText.PERIPHERAL_PROXY_TOO_FAR.text, true)
             return InteractionResultHolder.consume(stack)
         }
         if (!entity.remotePeripherals.contains(hit.blockPos) && entity.remotePeripherals.size >= PeripheralWorksConfig.peripheralProxyMaxCapacity) {
-            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_too_many"), true)
+            player.displayClientMessage(ModText.PERIPHERAL_PROXY_TOO_MANY.text, true)
             return InteractionResultHolder.consume(stack)
         }
         val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, hit.blockPos, hit.direction)
         if (targetPeripheral == null && !entity.containsPos(hit.blockPos)) {
-            player.displayClientMessage(text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_is_not_peripheral"), true)
+            player.displayClientMessage(ModText.PERIPHERAL_PROXY_IS_NOT_A_PERIPHERAL.text, true)
             return InteractionResultHolder.consume(stack)
         }
         if (targetPeripheral != null) {
             if (entity.togglePos(hit.blockPos, hit.direction, targetPeripheral)) {
                 player.displayClientMessage(
-                    text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_block_track_added"),
+                    ModText.PERIPHERAL_PROXY_BLOCK_ADDED.text,
                     true,
                 )
             } else {
                 player.displayClientMessage(
-                    text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_block_track_removed"),
+                    ModText.PERIPHERAL_PROXY_BLOCK_REMOVED.text,
                     true,
                 )
             }
         } else if (entity.removePosToTrack(hit.blockPos)) {
             player.displayClientMessage(
-                text(PeripheralWorksCore.MOD_ID, "peripheral_proxy_block_track_removed"),
+                ModText.PERIPHERAL_PROXY_BLOCK_REMOVED.text,
                 true,
             )
         }

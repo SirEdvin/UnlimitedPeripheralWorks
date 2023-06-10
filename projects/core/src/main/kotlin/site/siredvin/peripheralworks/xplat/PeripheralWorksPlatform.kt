@@ -14,16 +14,28 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.peripheralium.common.items.DescriptiveBlockItem
+import site.siredvin.peripheralium.data.language.ModInformationHolder
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import java.util.function.BiFunction
 import java.util.function.Consumer
 import java.util.function.Supplier
 
-interface PeripheralWorksPlatform {
+interface PeripheralWorksPlatform: ModInformationHolder {
     companion object {
         private var _IMPL: PeripheralWorksPlatform? = null
-        val ITEMS: MutableList<Supplier<Item>> = mutableListOf()
-        val BLOCKS: MutableList<Supplier<Block>> = mutableListOf()
+        val ITEMS: MutableList<Supplier<out Item>> = mutableListOf()
+        val BLOCKS: MutableList<Supplier<out Block>> = mutableListOf()
+        val POCKET_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
+        val TURTLE_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
+
+        val holder: ModInformationHolder
+            get() = get()
+
+        val turtleUpgrades: List<ResourceLocation>
+            get() = TURTLE_UPGRADES
+
+        val pocketUpgrades: List<ResourceLocation>
+            get() = POCKET_UPGRADES
 
         fun configure(impl: PeripheralWorksPlatform) {
             _IMPL = impl
@@ -38,7 +50,7 @@ interface PeripheralWorksPlatform {
 
         fun <T : Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T> {
             val registeredItem = get().registerItem(key, item)
-            ITEMS.add(registeredItem as Supplier<Item>)
+            ITEMS.add(registeredItem)
             return registeredItem
         }
 
@@ -53,7 +65,7 @@ interface PeripheralWorksPlatform {
         fun <T : Block> registerBlock(name: String, block: Supplier<T>, itemFactory: (T) -> (Item) = { block -> DescriptiveBlockItem(block, Item.Properties()) }): Supplier<T> {
             val registeredBlock = get()
                 .registerBlock(ResourceLocation(PeripheralWorksCore.MOD_ID, name), block, itemFactory)
-            BLOCKS.add(registeredBlock as Supplier<Block>)
+            BLOCKS.add(registeredBlock)
             return registeredBlock
         }
 
@@ -70,6 +82,7 @@ interface PeripheralWorksPlatform {
             dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
             postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>,
         ) {
+            TURTLE_UPGRADES.add(key)
             get().registerTurtleUpgrade(key, serializer, dataGenerator, postRegistrationHooks)
         }
         fun <V : IPocketUpgrade> registerPocketUpgrade(
@@ -77,8 +90,17 @@ interface PeripheralWorksPlatform {
             serializer: PocketUpgradeSerialiser<V>,
             dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>,
         ) {
+            POCKET_UPGRADES.add(key)
             get().registerPocketUpgrade(key, serializer, dataGenerator)
         }
+    }
+
+    override fun getBlocks(): List<Supplier<out Block>> {
+        return BLOCKS
+    }
+
+    override fun getItems(): List<Supplier<out Item>> {
+        return ITEMS
     }
 
     fun <T : Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T>

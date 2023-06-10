@@ -15,8 +15,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import site.siredvin.peripheralium.common.items.DescriptiveItem
-import site.siredvin.peripheralium.util.text
-import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.toolkit.configurator.ConfigurationMode
 import site.siredvin.peripheralworks.toolkit.configurator.ConfiguratorModeRegistry
 
@@ -36,9 +35,9 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         super.appendHoverText(itemStack, level, list, tooltipFlag)
         val activeMode = getActiveMode(itemStack)
         if (activeMode != null) {
-            list.add(text(PeripheralWorksCore.MOD_ID, "active_configuration_mode"))
+            list.add(ModTooltip.ACTIVE_CONFIGURATION_MODE.text)
             list.add(activeMode.first.description)
-            list.add(text(PeripheralWorksCore.MOD_ID, "configuration_target_block", activeMode.second.toString()))
+            list.add(ModTooltip.CONFIGURATION_TARGET_BLOCK.format(activeMode.second.toString()))
         }
     }
 

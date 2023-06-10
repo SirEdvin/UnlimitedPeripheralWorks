@@ -23,6 +23,8 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.data.ModEnLanguageProvider
+import site.siredvin.peripheralworks.data.ModLanguageProvider
 
 class Integration : Runnable {
 
@@ -98,5 +100,10 @@ class Integration : Runnable {
             }.withUpdateType(AspectUpdateType.NETWORK_TICK).buildRead()
         AspectRegistry.getInstance().register(PartTypes.MACHINE_READER, ccAspect)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
+
+        ModLanguageProvider.addExpectedKey("aspect.integrateddynamics.read.list.cc_folder")
+        ModEnLanguageProvider.addHook {
+            it.add("aspect.integrateddynamics.read.list.cc_folder", "Directory inside computer")
+        }
     }
 }

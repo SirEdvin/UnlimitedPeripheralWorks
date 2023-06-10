@@ -13,6 +13,7 @@ import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.Consumer
 
@@ -66,5 +67,9 @@ class Integration : Runnable {
         }
 
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
+
+        ModEnLanguageProvider.addHook {
+            it.addUpgrades(UPGRADE_ID, "Nature Compassing")
+        }
     }
 }

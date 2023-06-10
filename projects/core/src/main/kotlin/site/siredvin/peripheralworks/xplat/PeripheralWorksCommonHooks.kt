@@ -33,11 +33,7 @@ import java.util.function.Supplier
 
 object PeripheralWorksCommonHooks {
 
-    private val TURTLE_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
-    private val POCKET_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
-
     private fun <T : ITurtleUpgrade, V : Item> registerScaledTurtleUpgrade(id: ResourceLocation, item: Supplier<V>, scaleFactor: Float, builder: Function<ItemStack, T>) {
-        TURTLE_UPGRADES.add(id)
         PeripheralWorksPlatform.registerTurtleUpgrade(
             id,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
@@ -64,7 +60,6 @@ object PeripheralWorksCommonHooks {
     }
 
     private fun <T : ITurtleUpgrade, V : Block> registerBlockTurtleUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
-        TURTLE_UPGRADES.add(id)
         PeripheralWorksPlatform.registerTurtleUpgrade(
             id,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack, id) },
@@ -92,7 +87,6 @@ object PeripheralWorksCommonHooks {
     }
 
     private fun <T : IPocketUpgrade, V : Item> registerPocketUpgrade(id: ResourceLocation, item: Supplier<V>, builder: Function<ItemStack, T>) {
-        POCKET_UPGRADES.add(id)
         PeripheralWorksPlatform.registerPocketUpgrade(
             id,
             PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack) },
@@ -106,7 +100,6 @@ object PeripheralWorksCommonHooks {
     }
 
     private fun <T : IPocketUpgrade, V : Block> registerPocketUpgrade(id: ResourceLocation, block: Supplier<V>, builder: BiFunction<ItemStack, ResourceLocation, T>) {
-        POCKET_UPGRADES.add(id)
         PeripheralWorksPlatform.registerPocketUpgrade(
             id,
             PocketUpgradeSerialiser.simpleWithCustomItem { _, stack -> builder.apply(stack, id) },
@@ -183,13 +176,13 @@ object PeripheralWorksCommonHooks {
     }
 
     fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
-        TURTLE_UPGRADES.forEach {
+        PeripheralWorksPlatform.turtleUpgrades.forEach {
             val upgrade = PeripheraliumPlatform.getTurtleUpgrade(it.toString())
             if (upgrade != null) {
                 PeripheraliumPlatform.createTurtlesWithUpgrade(upgrade).forEach(output::accept)
             }
         }
-        POCKET_UPGRADES.forEach {
+        PeripheralWorksPlatform.pocketUpgrades.forEach {
             val upgrade = PeripheraliumPlatform.getPocketUpgrade(it.toString())
             if (upgrade != null) {
                 PeripheraliumPlatform.createPocketsWithUpgrade(upgrade).forEach(output::accept)
