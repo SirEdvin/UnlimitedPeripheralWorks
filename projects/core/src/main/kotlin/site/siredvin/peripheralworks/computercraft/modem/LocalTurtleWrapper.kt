@@ -9,7 +9,6 @@ import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.Container
 import net.minecraft.world.level.Level
-import net.minecraft.world.phys.Vec3
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 
 class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, val upgrade: ITurtleUpgrade, private val id: String, private val origin: TurtlePeripheraliumHubPeripheral) : ITurtleAccess {

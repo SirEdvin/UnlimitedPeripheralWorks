@@ -23,10 +23,9 @@ class ModPocketUpgradeDataProvider(output: PackOutput) : LibPocketUpgradeDataPro
         }
     }
 
-    fun <V: IPocketUpgrade> simpleWithCustomItem(serialiser: PocketUpgradeSerialiser<V>, item: Item): Upgrade<PocketUpgradeSerialiser<*>> {
+    fun <V : IPocketUpgrade> simpleWithCustomItem(serialiser: PocketUpgradeSerialiser<V>, item: Item): Upgrade<PocketUpgradeSerialiser<*>> {
         return simpleWithCustomItem(XplatRegistries.POCKET_SERIALIZERS.getKey(serialiser), serialiser, item)
     }
-
 
     override fun registerUpgrades(addUpgrade: Consumer<Upgrade<PocketUpgradeSerialiser<*>>>) {
         REGISTERED_BUILDERS.forEach {

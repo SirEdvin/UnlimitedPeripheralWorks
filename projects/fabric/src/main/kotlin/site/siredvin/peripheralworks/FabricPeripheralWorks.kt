@@ -3,10 +3,6 @@ import dan200.computercraft.api.peripheral.PeripheralLookup
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
-import net.fabricmc.fabric.api.event.Event
-import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback
-import net.minecraft.core.Registry
-import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraftforge.fml.config.ModConfig
 import site.siredvin.peripheralium.FabricPeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider

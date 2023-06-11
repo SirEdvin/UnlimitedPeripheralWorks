@@ -39,20 +39,24 @@ object FabricPeripheralWorksPlatform : PeripheralWorksPlatform {
 
     override fun <V : IPocketUpgrade> registerPocketUpgrade(
         key: ResourceLocation,
-        serializer: PocketUpgradeSerialiser<V>
+        serializer: PocketUpgradeSerialiser<V>,
     ): Supplier<PocketUpgradeSerialiser<V>> {
-        val registry: Registry<PocketUpgradeSerialiser<*>> = (BuiltInRegistries.REGISTRY.get(PocketUpgradeSerialiser.registryId().location())
-            ?: throw IllegalStateException("Something is not correct with turtle registry")) as Registry<PocketUpgradeSerialiser<*>>
+        val registry: Registry<PocketUpgradeSerialiser<*>> = (
+            BuiltInRegistries.REGISTRY.get(PocketUpgradeSerialiser.registryId().location())
+                ?: throw IllegalStateException("Something is not correct with turtle registry")
+            ) as Registry<PocketUpgradeSerialiser<*>>
         val registered = Registry.register(registry, key, serializer)
         return Supplier { registered }
     }
 
     override fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,
-        serializer: TurtleUpgradeSerialiser<V>
+        serializer: TurtleUpgradeSerialiser<V>,
     ): Supplier<TurtleUpgradeSerialiser<V>> {
-        val registry: Registry<TurtleUpgradeSerialiser<*>> = (BuiltInRegistries.REGISTRY.get(TurtleUpgradeSerialiser.registryId().location())
-            ?: throw IllegalStateException("Something is not correct with turtle registry")) as Registry<TurtleUpgradeSerialiser<*>>
+        val registry: Registry<TurtleUpgradeSerialiser<*>> = (
+            BuiltInRegistries.REGISTRY.get(TurtleUpgradeSerialiser.registryId().location())
+                ?: throw IllegalStateException("Something is not correct with turtle registry")
+            ) as Registry<TurtleUpgradeSerialiser<*>>
         val registered = Registry.register(registry, key, serializer)
         return Supplier { registered }
     }

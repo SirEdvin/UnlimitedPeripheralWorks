@@ -40,14 +40,14 @@ object ForgePeripheralWorksPlatform : PeripheralWorksPlatform {
 
     override fun <V : IPocketUpgrade> registerPocketUpgrade(
         key: ResourceLocation,
-        serializer: PocketUpgradeSerialiser<V>
+        serializer: PocketUpgradeSerialiser<V>,
     ): Supplier<PocketUpgradeSerialiser<V>> {
         return ForgePeripheralWorks.pocketSerializers.register(key.path) { serializer }
     }
 
     override fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,
-        serializer: TurtleUpgradeSerialiser<V>
+        serializer: TurtleUpgradeSerialiser<V>,
     ): Supplier<TurtleUpgradeSerialiser<V>> {
         return ForgePeripheralWorks.turtleSerializers.register(key.path) { serializer }
     }

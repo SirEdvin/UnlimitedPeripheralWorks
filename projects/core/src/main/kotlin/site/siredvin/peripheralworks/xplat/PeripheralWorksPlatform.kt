@@ -15,7 +15,7 @@ import site.siredvin.peripheralium.data.language.ModInformationHolder
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import java.util.function.Supplier
 
-interface PeripheralWorksPlatform: ModInformationHolder {
+interface PeripheralWorksPlatform : ModInformationHolder {
     companion object {
         private var _IMPL: PeripheralWorksPlatform? = null
         private val ITEMS: MutableList<Supplier<out Item>> = mutableListOf()
@@ -77,14 +77,14 @@ interface PeripheralWorksPlatform: ModInformationHolder {
 
         fun <V : ITurtleUpgrade> registerTurtleUpgrade(
             name: String,
-            serializer: TurtleUpgradeSerialiser<V>
+            serializer: TurtleUpgradeSerialiser<V>,
         ): Supplier<TurtleUpgradeSerialiser<V>> {
             return registerTurtleUpgrade(ResourceLocation(PeripheralWorksCore.MOD_ID, name), serializer)
         }
 
         fun <V : ITurtleUpgrade> registerTurtleUpgrade(
             key: ResourceLocation,
-            serializer: TurtleUpgradeSerialiser<V>
+            serializer: TurtleUpgradeSerialiser<V>,
         ): Supplier<TurtleUpgradeSerialiser<V>> {
             val registered = get().registerTurtleUpgrade(key, serializer)
             TURTLE_UPGRADES.add(registered as Supplier<TurtleUpgradeSerialiser<out ITurtleUpgrade>>)
@@ -93,14 +93,14 @@ interface PeripheralWorksPlatform: ModInformationHolder {
 
         fun <V : IPocketUpgrade> registerPocketUpgrade(
             name: String,
-            serializer: PocketUpgradeSerialiser<V>
+            serializer: PocketUpgradeSerialiser<V>,
         ): Supplier<PocketUpgradeSerialiser<V>> {
             return registerPocketUpgrade(ResourceLocation(PeripheralWorksCore.MOD_ID, name), serializer)
         }
 
         fun <V : IPocketUpgrade> registerPocketUpgrade(
             key: ResourceLocation,
-            serializer: PocketUpgradeSerialiser<V>
+            serializer: PocketUpgradeSerialiser<V>,
         ): Supplier<PocketUpgradeSerialiser<V>> {
             val registered = get().registerPocketUpgrade(key, serializer)
             POCKET_UPGRADES.add(registered as Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>)
@@ -129,10 +129,10 @@ interface PeripheralWorksPlatform: ModInformationHolder {
 
     fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,
-        serializer: TurtleUpgradeSerialiser<V>
+        serializer: TurtleUpgradeSerialiser<V>,
     ): Supplier<TurtleUpgradeSerialiser<V>>
     fun <V : IPocketUpgrade> registerPocketUpgrade(
         key: ResourceLocation,
-        serializer: PocketUpgradeSerialiser<V>
+        serializer: PocketUpgradeSerialiser<V>,
     ): Supplier<PocketUpgradeSerialiser<V>>
 }

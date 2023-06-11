@@ -19,32 +19,32 @@ object PocketUpgradeSerializers {
                 PeripheraliumHubPeripheral.TYPE,
                 stack,
             )
-        }
+        },
     )
 
     val NETHERITE_PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerPocketUpgrade(
         PeripheraliumHubPeripheral.NETHERITE_ID,
-        PocketUpgradeSerialiser.simpleWithCustomItem {_, stack ->
+        PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
             PeripheraliumHubPocketUpgrade(
                 PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
                 PeripheraliumHubPeripheral.NETHERITE_TYPE,
                 stack,
             )
-        }
+        },
     )
 
     val UNIVERSAL_SCANNER = PeripheralWorksPlatform.registerPocketUpgrade(
         UniversalScannerPeripheral.UPGRADE_ID,
-        PocketUpgradeSerialiser.simpleWithCustomItem {id, stack ->
+        PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
             PeripheralPocketUpgrade(id, stack, UniversalScannerPeripheral::of)
-        }
+        },
     )
 
     val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerPocketUpgrade(
         UltimateSensorPeripheral.UPGRADE_ID,
-        PocketUpgradeSerialiser.simpleWithCustomItem {id, stack ->
+        PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
             PeripheralPocketUpgrade(id, stack, UltimateSensorPeripheral::of)
-        }
+        },
     )
 
     fun doSomething() {}

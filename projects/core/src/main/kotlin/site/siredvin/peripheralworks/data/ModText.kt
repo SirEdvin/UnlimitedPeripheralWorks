@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.data
 import site.siredvin.peripheralium.data.language.TextRecord
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
-enum class ModText: TextRecord {
+enum class ModText : TextRecord {
     CREATIVE_TAB,
     REMOTE_OBSERVER_NOT_SELF,
     REMOTE_OBSERVER_TOO_FAR,

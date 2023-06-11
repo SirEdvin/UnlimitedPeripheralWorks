@@ -19,7 +19,7 @@ object TurtleUpgradeSerializers {
                 PeripheraliumHubPeripheral.TYPE,
                 stack,
             )
-        }
+        },
     )
 
     val NETHERITE_PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerTurtleUpgrade(
@@ -30,7 +30,7 @@ object TurtleUpgradeSerializers {
                 PeripheraliumHubPeripheral.NETHERITE_TYPE,
                 stack,
             )
-        }
+        },
     )
 
     val UNIVERSAL_SCANNER = PeripheralWorksPlatform.registerTurtleUpgrade(
@@ -40,7 +40,7 @@ object TurtleUpgradeSerializers {
                 stack.item,
                 UniversalScannerPeripheral::of,
             ) { id }
-        }
+        },
     )
 
     val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerTurtleUpgrade(
@@ -50,7 +50,7 @@ object TurtleUpgradeSerializers {
                 stack.item,
                 UltimateSensorPeripheral::of,
             ) { id }
-        }
+        },
     )
 
     fun doSomething() {}

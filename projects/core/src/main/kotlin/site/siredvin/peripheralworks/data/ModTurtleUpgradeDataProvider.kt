@@ -24,7 +24,7 @@ class ModTurtleUpgradeDataProvider(output: PackOutput) : LibTurtleUpgradeDataPro
         }
     }
 
-    fun <V: ITurtleUpgrade> simpleWithCustomItem(serialiser: TurtleUpgradeSerialiser<V>, item: Item): Upgrade<TurtleUpgradeSerialiser<*>> {
+    fun <V : ITurtleUpgrade> simpleWithCustomItem(serialiser: TurtleUpgradeSerialiser<V>, item: Item): Upgrade<TurtleUpgradeSerialiser<*>> {
         return simpleWithCustomItem(XplatRegistries.TURTLE_SERIALIZERS.getKey(serialiser), serialiser, item)
     }
 
