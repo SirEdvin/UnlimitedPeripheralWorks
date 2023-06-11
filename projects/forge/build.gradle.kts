@@ -27,6 +27,17 @@ forgeShaking {
     shake()
 }
 
+sourceSets.main {
+    kotlin {
+        exclude("site/siredvin/peripheralworks/integrations/deepresonance/**")
+        exclude("site/siredvin/peripheralworks/integrations/easy_villagers/**")
+        exclude("site/siredvin/peripheralworks/integrations/integrateddynamics/**")
+        exclude("site/siredvin/peripheralworks/integrations/naturescompass/**")
+        exclude("site/siredvin/peripheralworks/integrations/occultism/**")
+        exclude("site/siredvin/peripheralworks/integrations/toms_storage/**")
+    }
+}
+
 repositories {
     mavenLocal()
     // location of the maven that hosts JEI files since January 2023

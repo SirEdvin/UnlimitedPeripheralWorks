@@ -1,25 +1,18 @@
 package site.siredvin.peripheralworks.fabric
 
 import dan200.computercraft.api.pocket.IPocketUpgrade
-import dan200.computercraft.api.pocket.PocketUpgradeDataProvider
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
-import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import dan200.computercraft.api.upgrades.UpgradeDataProvider
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import site.siredvin.peripheralworks.common.RegistrationQueue
-import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
-import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
-import java.util.function.BiFunction
-import java.util.function.Consumer
 import java.util.function.Supplier
 
 object FabricPeripheralWorksPlatform : PeripheralWorksPlatform {
@@ -39,64 +32,28 @@ object FabricPeripheralWorksPlatform : PeripheralWorksPlatform {
         return Supplier { registeredBlockEntityType }
     }
 
-    private fun <V : ITurtleUpgrade> rawTurtleUpgradeRegistration(
-        registry: Registry<TurtleUpgradeSerialiser<*>>,
-        key: ResourceLocation,
-        serializer: TurtleUpgradeSerialiser<V>,
-        dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
-        postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>,
-    ): TurtleUpgradeSerialiser<V> {
-        val registeredSerializer = Registry.register(registry, key, serializer)
-
-        ModTurtleUpgradeDataProvider.hookUpgrade {
-            dataGenerator.apply(it, registeredSerializer)
-        }
-        val supplier = Supplier { registeredSerializer }
-        postRegistrationHooks.forEach { it.accept(supplier) }
-        return registeredSerializer
-    }
-
-    private fun <V : IPocketUpgrade> rawPocketUpgradeRegistration(
-        registry: Registry<PocketUpgradeSerialiser<*>>,
-        key: ResourceLocation,
-        serializer: PocketUpgradeSerialiser<V>,
-        dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>,
-    ): PocketUpgradeSerialiser<V> {
-        val registeredSerializer = Registry.register(registry, key, serializer)
-
-        ModPocketUpgradeDataProvider.hookUpgrade {
-            dataGenerator.apply(it, registeredSerializer)
-        }
-        return registeredSerializer
-    }
-
-    override fun <V : ITurtleUpgrade> registerTurtleUpgrade(
-        key: ResourceLocation,
-        serializer: TurtleUpgradeSerialiser<V>,
-        dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
-        postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>,
-    ) {
-        val rawTurtleRegistry = BuiltInRegistries.REGISTRY.get(TurtleUpgradeSerialiser.REGISTRY_ID.location())
-
-        if (rawTurtleRegistry == null) {
-            RegistrationQueue.scheduleTurtleUpgrade { rawTurtleUpgradeRegistration(it, key, serializer, dataGenerator, postRegistrationHooks) }
-        } else {
-            val turtleSerializerRegister = rawTurtleRegistry as Registry<TurtleUpgradeSerialiser<*>>
-            rawTurtleUpgradeRegistration(turtleSerializerRegister, key, serializer, dataGenerator, postRegistrationHooks)
-        }
+    override fun registerCreativeTab(key: ResourceLocation, tab: CreativeModeTab): Supplier<CreativeModeTab> {
+        val registeredTab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, key, tab)
+        return Supplier { registeredTab }
     }
 
     override fun <V : IPocketUpgrade> registerPocketUpgrade(
         key: ResourceLocation,
-        serializer: PocketUpgradeSerialiser<V>,
-        dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>,
-    ) {
-        val rawPocketRegistry = BuiltInRegistries.REGISTRY.get(PocketUpgradeSerialiser.REGISTRY_ID.location())
-        if (rawPocketRegistry == null) {
-            RegistrationQueue.schedulePocketUpgrade { rawPocketUpgradeRegistration(it, key, serializer, dataGenerator) }
-        } else {
-            val pocketSerializerRegister = rawPocketRegistry as Registry<PocketUpgradeSerialiser<*>>
-            rawPocketUpgradeRegistration(pocketSerializerRegister, key, serializer, dataGenerator)
-        }
+        serializer: PocketUpgradeSerialiser<V>
+    ): Supplier<PocketUpgradeSerialiser<V>> {
+        val registry: Registry<PocketUpgradeSerialiser<*>> = (BuiltInRegistries.REGISTRY.get(PocketUpgradeSerialiser.registryId().location())
+            ?: throw IllegalStateException("Something is not correct with turtle registry")) as Registry<PocketUpgradeSerialiser<*>>
+        val registered = Registry.register(registry, key, serializer)
+        return Supplier { registered }
+    }
+
+    override fun <V : ITurtleUpgrade> registerTurtleUpgrade(
+        key: ResourceLocation,
+        serializer: TurtleUpgradeSerialiser<V>
+    ): Supplier<TurtleUpgradeSerialiser<V>> {
+        val registry: Registry<TurtleUpgradeSerialiser<*>> = (BuiltInRegistries.REGISTRY.get(TurtleUpgradeSerialiser.registryId().location())
+            ?: throw IllegalStateException("Something is not correct with turtle registry")) as Registry<TurtleUpgradeSerialiser<*>>
+        val registered = Registry.register(registry, key, serializer)
+        return Supplier { registered }
     }
 }

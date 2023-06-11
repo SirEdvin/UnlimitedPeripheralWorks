@@ -5,7 +5,7 @@ import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.Direction
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.MapItem
-import net.minecraft.world.level.material.MaterialColor
+import net.minecraft.world.level.material.MapColor
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
@@ -46,7 +46,7 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) : O
             } else {
                 peripheralOwner.facing
             }
-            data["colors"] = savedData.colors.map { MaterialColor.getColorFromPackedId(it.toInt()) }
+            data["colors"] = savedData.colors.map { MapColor.getColorFromPackedId(it.toInt()) }
             data["scale"] = savedData.scale
             data["banners"] = savedData.banners.map {
                 val mapData = mutableMapOf<String, Any>()

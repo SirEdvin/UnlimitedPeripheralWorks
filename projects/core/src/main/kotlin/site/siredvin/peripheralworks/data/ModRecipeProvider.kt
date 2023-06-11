@@ -5,7 +5,7 @@ import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.world.item.crafting.Ingredient
 import site.siredvin.peripheralium.data.blocks.TweakedShapedRecipeBuilder
-import site.siredvin.peripheralium.data.blocks.TweakedUpgradeRecipeBuilder
+import site.siredvin.peripheralium.data.blocks.TweakedSmithingTransformRecipeBuilder
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
@@ -25,7 +25,10 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("PDP")
             .save(consumer)
 
-        TweakedUpgradeRecipeBuilder.smithing(
+        // TODO: I really don't want it ot be so expensive
+        // TODO: probably it is nice idea to migrate to peripheralium upgrade template (!)
+        TweakedSmithingTransformRecipeBuilder.smithingTransform(
+            Ingredient.of(net.minecraft.world.item.Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
             Ingredient.of(Items.PERIPHERALIUM_HUB.get()),
             ingredients.netheriteIngot,
             Items.NETHERITE_PERIPHERALIUM_HUB.get(),

@@ -1,14 +1,11 @@
 package site.siredvin.peripheralworks.xplat
 
 import dan200.computercraft.api.pocket.IPocketUpgrade
-import dan200.computercraft.api.pocket.PocketUpgradeDataProvider
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
-import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import dan200.computercraft.api.upgrades.UpgradeDataProvider
-import dan200.computercraft.api.upgrades.UpgradeDataProvider.Upgrade
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -16,8 +13,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.peripheralium.common.items.DescriptiveBlockItem
 import site.siredvin.peripheralium.data.language.ModInformationHolder
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import java.util.function.BiFunction
-import java.util.function.Consumer
 import java.util.function.Supplier
 
 interface PeripheralWorksPlatform: ModInformationHolder {
@@ -25,16 +20,16 @@ interface PeripheralWorksPlatform: ModInformationHolder {
         private var _IMPL: PeripheralWorksPlatform? = null
         private val ITEMS: MutableList<Supplier<out Item>> = mutableListOf()
         private val BLOCKS: MutableList<Supplier<out Block>> = mutableListOf()
-        private val POCKET_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
-        private val TURTLE_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
+        private val POCKET_UPGRADES: MutableList<Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>> = mutableListOf()
+        private val TURTLE_UPGRADES: MutableList<Supplier<TurtleUpgradeSerialiser<out ITurtleUpgrade>>> = mutableListOf()
 
         val holder: ModInformationHolder
             get() = get()
 
-        val turtleUpgrades: List<ResourceLocation>
+        val turtleUpgrades: List<Supplier<TurtleUpgradeSerialiser<out ITurtleUpgrade>>>
             get() = TURTLE_UPGRADES
 
-        val pocketUpgrades: List<ResourceLocation>
+        val pocketUpgrades: List<Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>>
             get() = POCKET_UPGRADES
 
         fun configure(impl: PeripheralWorksPlatform) {
@@ -76,22 +71,40 @@ interface PeripheralWorksPlatform: ModInformationHolder {
             return get().registerBlockEntity(key, blockEntityTypeSup)
         }
 
+        fun registerCreativeTab(key: ResourceLocation, tab: CreativeModeTab): Supplier<CreativeModeTab> {
+            return get().registerCreativeTab(key, tab)
+        }
+
+        fun <V : ITurtleUpgrade> registerTurtleUpgrade(
+            name: String,
+            serializer: TurtleUpgradeSerialiser<V>
+        ): Supplier<TurtleUpgradeSerialiser<V>> {
+            return registerTurtleUpgrade(ResourceLocation(PeripheralWorksCore.MOD_ID, name), serializer)
+        }
+
         fun <V : ITurtleUpgrade> registerTurtleUpgrade(
             key: ResourceLocation,
-            serializer: TurtleUpgradeSerialiser<V>,
-            dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
-            postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>,
-        ) {
-            TURTLE_UPGRADES.add(key)
-            get().registerTurtleUpgrade(key, serializer, dataGenerator, postRegistrationHooks)
+            serializer: TurtleUpgradeSerialiser<V>
+        ): Supplier<TurtleUpgradeSerialiser<V>> {
+            val registered = get().registerTurtleUpgrade(key, serializer)
+            TURTLE_UPGRADES.add(registered as Supplier<TurtleUpgradeSerialiser<out ITurtleUpgrade>>)
+            return registered
         }
+
+        fun <V : IPocketUpgrade> registerPocketUpgrade(
+            name: String,
+            serializer: PocketUpgradeSerialiser<V>
+        ): Supplier<PocketUpgradeSerialiser<V>> {
+            return registerPocketUpgrade(ResourceLocation(PeripheralWorksCore.MOD_ID, name), serializer)
+        }
+
         fun <V : IPocketUpgrade> registerPocketUpgrade(
             key: ResourceLocation,
-            serializer: PocketUpgradeSerialiser<V>,
-            dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>,
-        ) {
-            POCKET_UPGRADES.add(key)
-            get().registerPocketUpgrade(key, serializer, dataGenerator)
+            serializer: PocketUpgradeSerialiser<V>
+        ): Supplier<PocketUpgradeSerialiser<V>> {
+            val registered = get().registerPocketUpgrade(key, serializer)
+            POCKET_UPGRADES.add(registered as Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>)
+            return registered
         }
     }
 
@@ -107,6 +120,8 @@ interface PeripheralWorksPlatform: ModInformationHolder {
 
     fun <T : Block> registerBlock(key: ResourceLocation, block: Supplier<T>, itemFactory: (T) -> (Item)): Supplier<T>
 
+    fun registerCreativeTab(key: ResourceLocation, tab: CreativeModeTab): Supplier<CreativeModeTab>
+
     fun <V : BlockEntity, T : BlockEntityType<V>> registerBlockEntity(
         key: ResourceLocation,
         blockEntityTypeSup: Supplier<T>,
@@ -114,13 +129,10 @@ interface PeripheralWorksPlatform: ModInformationHolder {
 
     fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,
-        serializer: TurtleUpgradeSerialiser<V>,
-        dataGenerator: BiFunction<TurtleUpgradeDataProvider, TurtleUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<TurtleUpgradeSerialiser<*>>>,
-        postRegistrationHooks: List<Consumer<Supplier<TurtleUpgradeSerialiser<V>>>>,
-    )
+        serializer: TurtleUpgradeSerialiser<V>
+    ): Supplier<TurtleUpgradeSerialiser<V>>
     fun <V : IPocketUpgrade> registerPocketUpgrade(
         key: ResourceLocation,
-        serializer: PocketUpgradeSerialiser<V>,
-        dataGenerator: BiFunction<PocketUpgradeDataProvider, PocketUpgradeSerialiser<V>, UpgradeDataProvider.Upgrade<PocketUpgradeSerialiser<*>>>,
-    )
+        serializer: PocketUpgradeSerialiser<V>
+    ): Supplier<PocketUpgradeSerialiser<V>>
 }

@@ -6,20 +6,20 @@ kotlin-atomicfu = "0.20.2"
 # Gradle plugins
 sponge = "0.2.1-SNAPSHOT"
 loom = "1.1.9"
-mixinGradle = "0.7.+"
-forgegradle = "5.1.+"
+mixinGradle = "0.8.+"
+forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.104.0"
-peripheralium = "0.5.7-10"
+cc-tweaked = "1.105.0"
+peripheralium = "0.6.0-4"
 mixin = "0.8.5"
 # Fabric dependencies
-fabric-api = "0.79.0+1.19.4"
-fabric-loader = "0.14.9"
+fabric-api = "0.83.0+1.20"
+fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
-forgeconfigapirt-fabric = "6.0.2"
+forgeconfigapirt-fabric = "7.0.0"
 # Forge dependencies
-forge = "45.0.57"
-forge-kotlin = "4.2.0"
+forge = "46.0.1"
+forge-kotlin = "4.3.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
 # Extra mod dependencies
@@ -60,10 +60,10 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = "kotlin-atomicfu"}
 
 # Core mod dependencies
-cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.19.4-common-api", version.ref = "cc-tweaked"}
-cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.19.4-core", version.ref = "cc-tweaked"}
+cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.20-common-api", version.ref = "cc-tweaked"}
+cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.20-core", version.ref = "cc-tweaked"}
 common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
-peripheralium-core = {module = "site.siredvin:peripheralium-common-1.19.4", version.ref = "peripheralium"}
+peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20", version.ref = "peripheralium"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 # Fabric mod dependencies
@@ -71,14 +71,14 @@ fabric-loader = {module = "net.fabricmc:fabric-loader", version.ref = "fabric-lo
 fabric-api = {module = "net.fabricmc.fabric-api:fabric-api", version.ref="fabric-api"}
 fabric-kotlin = {module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin"}
 fabric-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-fabric", version.ref = "forgeconfigapirt-fabric"}
-cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.19.4-fabric-api", version.ref = "cc-tweaked"}
-cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.19.4-fabric", version.ref = "cc-tweaked"}
-peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.19.4", version.ref = "peripheralium"}
+cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.20-fabric-api", version.ref = "cc-tweaked"}
+cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.20-fabric", version.ref = "cc-tweaked"}
+peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20", version.ref = "peripheralium"}
 
 # Forge mod dependencies
-cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.19.4-forge", version.ref="cc-tweaked"}
+cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20-forge", version.ref="cc-tweaked"}
 forge-kotlin = {module = "thedarkcolour:kotlinforforge", version.ref = "forge-kotlin"}
-peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.19.4", version.ref = "peripheralium"}
+peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.20", version.ref = "peripheralium"}
 
 # Dev mod dependencies
 jei-fabric = { module = "mezz.jei:jei-1.19.4-fabric", version.ref = "jei" }
@@ -138,47 +138,53 @@ forge-raw = ["forge-kotlin"]
 forge-base = ["cc-tweaked-forge", "peripheralium-forge"]
 
 # Minecraft
-externalMods-forge-runtime = ["jei-forge", "architectury-forge", "cloth-config-forge"]
-externalMods-fabric-runtime = ["rei-fabric", "architectury-fabric", "cloth-config-fabric"]
+externalMods-forge-runtime = [
+#    "jei-forge", "architectury-forge", "cloth-config-forge"
+]
+externalMods-fabric-runtime = [
+#    "rei-fabric", "architectury-fabric", "cloth-config-fabric"
+]
 
 # Integration dependencies
-externalMods-fabric-integrations-api = ["teamreborn-energy"]
+externalMods-fabric-integrations-api = [
+#    "teamreborn-energy"
+]
 
 externalMods-fabric-integrations-full = [
-    "nature-compass-fabric",
-    "tomstorage-fabric"
+#    "nature-compass-fabric",
+#    "tomstorage-fabric"
 ]
 externalMods-fabric-integrations-active = [
-    "nature-compass-fabric",
-    "tomstorage-fabric"
+#    "nature-compass-fabric",
+#    "tomstorage-fabric"
 ]
 externalMods-fabric-integrations-activedep = [
 ]
 
 externalMods-forge-integrations-full = [
-    "occultism", "easyvillagers",
-    "integrateddynamics",
-    "cyclopscore", # by integrateddynamics, required for class typing
-    "nature-compass-forge",
-    "tomstorage-forge",
-    "deep-resonance",
-    "rftools-base", # by deepresonance
-    "mcjtylib", # by deepresonance, required for class typing
+#    "occultism", "easyvillagers",
+#    "integrateddynamics",
+#    "cyclopscore", # by integrateddynamics, required for class typing
+#    "nature-compass-forge",
+#    "tomstorage-forge",
+#    "deep-resonance",
+#    "rftools-base", # by deepresonance
+#    "mcjtylib", # by deepresonance, required for class typing
 ]
 externalMods-forge-integrations-active = [
-    "occultism", "easyvillagers",
-    "integrateddynamics",
-    "cyclopscore", # by integrateddynamics, required for class typing
-    "nature-compass-forge",
-    "tomstorage-forge",
-    "deep-resonance",
-    "rftools-base", # by deepresonance
-    "mcjtylib", # by deepresonance, required for class typing
+#    "occultism", "easyvillagers",
+#    "integrateddynamics",
+#    "cyclopscore", # by integrateddynamics, required for class typing
+#    "nature-compass-forge",
+#    "tomstorage-forge",
+#    "deep-resonance",
+#    "rftools-base", # by deepresonance
+#    "mcjtylib", # by deepresonance, required for class typing
 ]
 externalMods-forge-integrations-activedep = [
-    "curios-forge", # by occultism right now
-    "gecolib-forge", # by occultism right now
-    "smartbrainlib",  # by occultism right now
-    "modonomicon",  # by occultism right now
-    "commoncapabilities", # by integrateddynamics
+#    "curios-forge", # by occultism right now
+#    "gecolib-forge", # by occultism right now
+#    "smartbrainlib",  # by occultism right now
+#    "modonomicon",  # by occultism right now
+#    "commoncapabilities", # by integrateddynamics
 ]

@@ -5,14 +5,11 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.Event
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.fml.config.ModConfig
 import site.siredvin.peripheralium.FabricPeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
-import site.siredvin.peripheralworks.common.RegistrationQueue
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -29,11 +26,6 @@ object FabricPeripheralWorks : ModInitializer {
         // Register configuration
         FabricPeripheralium.sayHi()
         PeripheralWorksCore.configure(FabricPeripheralWorksPlatform, FabricModRecipeIngredients)
-        PeripheralWorksCore.configureCreativeTab(
-            FabricItemGroup.builder(
-                ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
-            ),
-        ).build()
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
@@ -50,9 +42,6 @@ object FabricPeripheralWorks : ModInitializer {
             }
             return@registerFallback ComputerCraftProxy.peripheralProvider(world, pos, state, blockEntity, context)
         }
-
-        val event: Event<RegistryEntryAddedCallback<Registry<*>>> = RegistryEntryAddedCallback.event(BuiltInRegistries.REGISTRY) as Event<RegistryEntryAddedCallback<Registry<*>>>
-        event.register(RegistrationQueue::onNewRegistry)
 
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             DebugCommands.register(dispatcher)

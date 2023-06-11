@@ -40,6 +40,14 @@ repositories {
     }
 }
 
+sourceSets.main {
+    kotlin {
+        exclude("site/siredvin/peripheralworks/integrations/naturescompass/**")
+        exclude("site/siredvin/peripheralworks/integrations/team_reborn_energy/**")
+        exclude("site/siredvin/peripheralworks/integrations/toms_storage/**")
+    }
+}
+
 dependencies {
     // TODO: dark mark here, if I will try to move this dependency
     // to libs it will change down toi 0.14.17

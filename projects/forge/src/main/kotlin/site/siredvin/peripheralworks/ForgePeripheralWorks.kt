@@ -3,13 +3,12 @@ package site.siredvin.peripheralworks
 import dan200.computercraft.api.ForgeComputerCraftAPI
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.event.CreativeModeTabEvent
-import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
@@ -39,12 +38,14 @@ object ForgePeripheralWorks {
         DeferredRegister.create(ForgeRegistries.ITEMS, PeripheralWorksCore.MOD_ID)
     val blockEntityTypesRegistry: DeferredRegister<BlockEntityType<*>> =
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, PeripheralWorksCore.MOD_ID)
+    val creativeTabRegistry: DeferredRegister<CreativeModeTab> =
+        DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), PeripheralWorksCore.MOD_ID)
     val turtleSerializers = DeferredRegister.create(
-        TurtleUpgradeSerialiser.REGISTRY_ID,
+        TurtleUpgradeSerialiser.registryId(),
         PeripheralWorksCore.MOD_ID,
     )
     val pocketSerializers = DeferredRegister.create(
-        PocketUpgradeSerialiser.REGISTRY_ID,
+        PocketUpgradeSerialiser.registryId(),
         PeripheralWorksCore.MOD_ID,
     )
 
@@ -64,6 +65,7 @@ object ForgePeripheralWorks {
         blocksRegistry.register(eventBus)
         itemsRegistry.register(eventBus)
         blockEntityTypesRegistry.register(eventBus)
+        creativeTabRegistry.register(eventBus)
         turtleSerializers.register(eventBus)
         pocketSerializers.register(eventBus)
     }
@@ -92,10 +94,5 @@ object ForgePeripheralWorks {
     fun registrySetup(event: NewRegistryEvent) {
         Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
-    }
-
-    @SubscribeEvent
-    fun registerCreativeTab(event: CreativeModeTabEvent.Register) {
-        event.registerCreativeModeTab(ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"), PeripheralWorksCore::configureCreativeTab)
     }
 }

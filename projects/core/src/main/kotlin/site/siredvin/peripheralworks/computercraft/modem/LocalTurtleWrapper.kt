@@ -36,14 +36,6 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
         return access.teleportTo(world, pos)
     }
 
-    override fun getVisualPosition(f: Float): Vec3 {
-        return access.getVisualPosition(f)
-    }
-
-    override fun getVisualYaw(f: Float): Float {
-        return access.getVisualYaw(f)
-    }
-
     override fun getDirection(): Direction {
         return access.direction
     }
