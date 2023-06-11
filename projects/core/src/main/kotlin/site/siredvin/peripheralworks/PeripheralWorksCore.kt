@@ -24,8 +24,8 @@ object PeripheralWorksCore {
         return builder.icon { Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance }
             .title(ModText.CREATIVE_TAB.text)
             .displayItems { _, output ->
-                PeripheralWorksPlatform.ITEMS.forEach { output.accept(it.get()) }
-                PeripheralWorksPlatform.BLOCKS.forEach { output.accept(it.get()) }
+                PeripheralWorksPlatform.holder.getItems().forEach { output.accept(it.get()) }
+                PeripheralWorksPlatform.holder.getBlocks().forEach { output.accept(it.get()) }
                 PeripheralWorksCommonHooks.registerUpgradesInCreativeTab(output)
             }
     }

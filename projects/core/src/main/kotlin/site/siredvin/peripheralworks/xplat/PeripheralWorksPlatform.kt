@@ -23,10 +23,10 @@ import java.util.function.Supplier
 interface PeripheralWorksPlatform: ModInformationHolder {
     companion object {
         private var _IMPL: PeripheralWorksPlatform? = null
-        val ITEMS: MutableList<Supplier<out Item>> = mutableListOf()
-        val BLOCKS: MutableList<Supplier<out Block>> = mutableListOf()
-        val POCKET_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
-        val TURTLE_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
+        private val ITEMS: MutableList<Supplier<out Item>> = mutableListOf()
+        private val BLOCKS: MutableList<Supplier<out Block>> = mutableListOf()
+        private val POCKET_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
+        private val TURTLE_UPGRADES: MutableList<ResourceLocation> = mutableListOf()
 
         val holder: ModInformationHolder
             get() = get()
