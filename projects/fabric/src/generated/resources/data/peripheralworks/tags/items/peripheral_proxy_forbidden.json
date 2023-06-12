@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "peripheralworks:peripheral_proxy",
+    "computercraft:wired_modem_full",
+    "computercraft:wired_modem"
+  ]
+}

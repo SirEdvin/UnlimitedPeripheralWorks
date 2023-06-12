@@ -14,6 +14,7 @@ import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEnti
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
+import site.siredvin.peripheralworks.tags.BlockTags
 
 object PeripheralProxyMode : ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
@@ -30,6 +31,11 @@ object PeripheralProxyMode : ConfigurationMode {
         }
         if (entity.blockPos == hit.blockPos) {
             player.displayClientMessage(ModText.PERIPHERAL_PROXY_NOT_SELF.text, true)
+            return InteractionResultHolder.consume(stack)
+        }
+        val targetBlock = level.getBlockState(hit.blockPos)
+        if (targetBlock.`is`(BlockTags.PERIPHERAL_PROXY_FORBIDDEN)) {
+            player.displayClientMessage(ModText.PERIPHERAL_PROXY_FORBIDDEN.text, true)
             return InteractionResultHolder.consume(stack)
         }
         if (!entity.isPosApplicable(hit.blockPos)) {

@@ -77,7 +77,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         val naiveName = targetPeripheral.type
         val maxNumber = remotePeripherals.mapNotNull {
             if (it.value.peripheralName?.startsWith(naiveName) == true) {
-                return@mapNotNull Integer.parseInt(it.value.peripheralName!!.split("_")[1])
+                return@mapNotNull Integer.parseInt(it.value.peripheralName!!.split("_").last())
             }
             return@mapNotNull null
         }.maxOrNull() ?: -1

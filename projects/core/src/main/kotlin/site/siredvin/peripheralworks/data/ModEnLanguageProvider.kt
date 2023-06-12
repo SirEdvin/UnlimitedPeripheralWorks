@@ -46,6 +46,7 @@ class ModEnLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_TOO_MANY, "Too many peripherals already connected to this peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_TOO_FAR, "Peripheral proxy too far from this block")
         add(ModText.PERIPHERAL_PROXY_IS_NOT_A_PERIPHERAL, "This block does not contains a peripheral")
+        add(ModText.PERIPHERAL_PROXY_FORBIDDEN, "This block is forbidden to add to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "This peripheral is connected to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "This peripheral is disconnected from peripheral proxy")
 

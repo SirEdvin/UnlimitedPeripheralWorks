@@ -10,6 +10,7 @@ import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPlug
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.utils.MinecartUtils
+import site.siredvin.peripheralworks.xplat.ModBlocksReference
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
@@ -30,9 +31,10 @@ object PeripheralWorksCore {
             }
     }
 
-    fun configure(platform: PeripheralWorksPlatform, ingredients: ModRecipeIngredients) {
+    fun configure(platform: PeripheralWorksPlatform, ingredients: ModRecipeIngredients, blocks: ModBlocksReference) {
         PeripheralWorksPlatform.configure(platform)
         ModRecipeIngredients.configure(ingredients)
+        ModBlocksReference.configure(blocks)
         ExtractorProxy.addStorageExtractor(MinecartUtils::minecartExtractor)
         ComputerCraftProxy.addProvider(StorageProvider)
         ComputerCraftProxy.addProvider(SpecificPluginProvider)

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.3] - 2023-06-12
+
+### Changed
+
+- Introduce `peripheral_proxy_forbidden` tag and exclude peripheral proxy and modems to be added as peripherals to peripheral proxy
+
 ## [0.4.2] - 2023-06-04
 
 ### Added

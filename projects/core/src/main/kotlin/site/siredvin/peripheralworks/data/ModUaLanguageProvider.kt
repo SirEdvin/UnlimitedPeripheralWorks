@@ -46,6 +46,7 @@ class ModUaLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_TOO_MANY, "Проксі для периферійних пристроїв задалеко від цьогь блоку")
         add(ModText.PERIPHERAL_PROXY_TOO_FAR, "Забагато периферійних пристоїв вже під'єднано до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_IS_NOT_A_PERIPHERAL, "Цей блок не є периферійним пристоєм")
+        add(ModText.PERIPHERAL_PROXY_FORBIDDEN, "Цей блок заборонено додавати до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "Цей периферійний пристрій тепер під'єднано до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "Цей периферійний пристрій тепер від'єднано від проксі для периферійних пристроїв")
 
