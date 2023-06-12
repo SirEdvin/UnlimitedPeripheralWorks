@@ -26,6 +26,7 @@
   "text.peripheralworks.creative_tab": "Перифіральних пристроїв нескінченний край",
   "text.peripheralworks.peripheral_proxy_block_added": "Цей периферійний пристрій тепер під'єднано до проксі для периферійних пристроїв",
   "text.peripheralworks.peripheral_proxy_block_removed": "Цей периферійний пристрій тепер від'єднано від проксі для периферійних пристроїв",
+  "text.peripheralworks.peripheral_proxy_forbidden": "Цей блок заборонено додавати до проксі для периферійних пристроїв",
   "text.peripheralworks.peripheral_proxy_is_not_a_peripheral": "Цей блок не є периферійним пристоєм",
   "text.peripheralworks.peripheral_proxy_not_self": "Неможливо підключити проксі для периферійних пристроїв до самого себе",
   "text.peripheralworks.peripheral_proxy_too_far": "Забагато периферійних пристоїв вже під'єднано до проксі для периферійних пристроїв",

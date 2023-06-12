@@ -22,6 +22,7 @@ import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
 import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
+import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
 import site.siredvin.peripheralworks.forge.ForgePeripheralWorksPlatform
 import site.siredvin.peripheralworks.utils.Platform
@@ -54,7 +55,7 @@ object ForgePeripheralWorks {
         // Configure configuration
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "${PeripheralWorksCore.MOD_ID}.toml")
-        PeripheralWorksCore.configure(ForgePeripheralWorksPlatform, ForgeModRecipeIngredients)
+        PeripheralWorksCore.configure(ForgePeripheralWorksPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         ComputerCraftProxy.addProvider(EnergyStorageProvider)
         val eventBus = MOD_CONTEXT.getKEventBus()

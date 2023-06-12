@@ -10,6 +10,7 @@ import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
+import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
 import site.siredvin.peripheralworks.fabric.FabricPeripheralWorksPlatform
 import site.siredvin.peripheralworks.util.Platform
@@ -21,7 +22,7 @@ object FabricPeripheralWorks : ModInitializer {
     override fun onInitialize() {
         // Register configuration
         FabricPeripheralium.sayHi()
-        PeripheralWorksCore.configure(FabricPeripheralWorksPlatform, FabricModRecipeIngredients)
+        PeripheralWorksCore.configure(FabricPeripheralWorksPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()

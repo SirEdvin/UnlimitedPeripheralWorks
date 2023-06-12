@@ -27,6 +27,7 @@
   "text.peripheralworks.creative_tab": "UnlimitedPeripheralWorks",
   "text.peripheralworks.peripheral_proxy_block_added": "This peripheral is connected to peripheral proxy",
   "text.peripheralworks.peripheral_proxy_block_removed": "This peripheral is disconnected from peripheral proxy",
+  "text.peripheralworks.peripheral_proxy_forbidden": "This block is forbidden to add to peripheral proxy",
   "text.peripheralworks.peripheral_proxy_is_not_a_peripheral": "This block does not contains a peripheral",
   "text.peripheralworks.peripheral_proxy_not_self": "Cannot connect peripheral proxy to itself",
   "text.peripheralworks.peripheral_proxy_too_far": "Peripheral proxy too far from this block",
