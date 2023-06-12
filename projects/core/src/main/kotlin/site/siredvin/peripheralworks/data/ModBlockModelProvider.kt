@@ -24,7 +24,7 @@ object ModBlockModelProvider {
         Optional.empty(),
         TextureSlot.TEXTURE,
         TextureSlot.TOP,
-        TextureSlot.PARTICLE
+        TextureSlot.PARTICLE,
     )
 
     private fun toYAnglePedestal(direction: Direction): VariantProperties.Rotation {
@@ -55,14 +55,12 @@ object ModBlockModelProvider {
                 direction,
                 Variant.variant().with(
                     VariantProperties.Y_ROT,
-                    toYAnglePedestal(direction)
-                ).with(VariantProperties.X_ROT, toXAnglePedestal(direction))
+                    toYAnglePedestal(direction),
+                ).with(VariantProperties.X_ROT, toXAnglePedestal(direction)),
             )
         }
         return dispatch
     }
-
-
 
     fun pedestalBlock(generators: BlockModelGenerators, block: Block, texture: ResourceLocation, topTexture: ResourceLocation? = null) {
         val textureMapping = TextureMapping()
@@ -72,13 +70,13 @@ object ModBlockModelProvider {
         val model = PEDESTAL.create(
             block,
             textureMapping,
-            generators.modelOutput
+            generators.modelOutput,
         )
         generators.blockStateOutput.accept(
             MultiVariantGenerator.multiVariant(
                 block,
-                Variant.variant().with(VariantProperties.MODEL, model)
-            ).with(createPedestalFacingDispatch())
+                Variant.variant().with(VariantProperties.MODEL, model),
+            ).with(createPedestalFacingDispatch()),
         )
         generators.delegateItemModel(block, ModelLocationUtils.getModelLocation(block))
     }
@@ -87,24 +85,28 @@ object ModBlockModelProvider {
         val peripheralCasingTexture = TextureMapping.getBlockTexture(Blocks.PERIPHERAL_CASING.get())
         genericBlock(generators, Blocks.PERIPHERAL_CASING.get())
         horizontalOrientatedBlock(
-            generators, Blocks.REMOTE_OBSERVER.get(),
-            horizontalOrientedModel(generators, Blocks.REMOTE_OBSERVER.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture)
+            generators,
+            Blocks.REMOTE_OBSERVER.get(),
+            horizontalOrientedModel(generators, Blocks.REMOTE_OBSERVER.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture),
         )
         horizontalOrientatedBlock(
-            generators, Blocks.ULTIMATE_SENSOR.get(),
-            horizontalOrientedModel(generators, Blocks.ULTIMATE_SENSOR.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture)
+            generators,
+            Blocks.ULTIMATE_SENSOR.get(),
+            horizontalOrientedModel(generators, Blocks.ULTIMATE_SENSOR.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture),
         )
         horizontalOrientatedBlock(
-            generators, Blocks.UNIVERSAL_SCANNER.get(),
-            horizontalOrientedModel(generators, Blocks.UNIVERSAL_SCANNER.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture)
+            generators,
+            Blocks.UNIVERSAL_SCANNER.get(),
+            horizontalOrientedModel(generators, Blocks.UNIVERSAL_SCANNER.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture),
         )
 
         pedestalBlock(generators, Blocks.ITEM_PEDESTAL.get(), TextureMapping.getBlockTexture(net.minecraft.world.level.block.Blocks.SMOOTH_STONE))
         pedestalBlock(generators, Blocks.DISPLAY_PEDESTAL.get(), TextureMapping.getBlockTexture(net.minecraft.world.level.block.Blocks.SMOOTH_STONE))
         pedestalBlock(
-            generators, Blocks.MAP_PEDESTAL.get(),
+            generators,
+            Blocks.MAP_PEDESTAL.get(),
             TextureMapping.getBlockTexture(net.minecraft.world.level.block.Blocks.SMOOTH_STONE),
-            TextureMapping.getBlockTexture(Blocks.MAP_PEDESTAL.get(), "_top")
+            TextureMapping.getBlockTexture(Blocks.MAP_PEDESTAL.get(), "_top"),
         )
         horizontalOrientatedBlock(generators, Blocks.PERIPHERAL_PROXY.get())
     }

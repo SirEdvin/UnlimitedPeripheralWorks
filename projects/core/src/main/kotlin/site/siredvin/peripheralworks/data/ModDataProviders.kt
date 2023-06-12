@@ -19,8 +19,9 @@ object ModDataProviders {
         generator.add(::ModEnLanguageProvider)
         generator.add(::ModUaLanguageProvider)
         generator.itemTags(
-            PeripheralWorksCore.MOD_ID, ModTagsProvider::itemTags,
-            generator.blockTags(PeripheralWorksCore.MOD_ID, ModTagsProvider::blockTags)
+            PeripheralWorksCore.MOD_ID,
+            ModTagsProvider::itemTags,
+            generator.blockTags(PeripheralWorksCore.MOD_ID, ModTagsProvider::blockTags),
         )
     }
 }

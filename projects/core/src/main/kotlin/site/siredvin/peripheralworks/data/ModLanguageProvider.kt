@@ -5,12 +5,16 @@ import site.siredvin.peripheralium.data.language.LanguageProvider
 import site.siredvin.peripheralium.data.language.toPocketTranslationKey
 import site.siredvin.peripheralium.data.language.toTurtleTranslationKey
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.stream.Stream
 
-abstract class ModLanguageProvider(output: PackOutput, locale: String): LanguageProvider(
-    output, PeripheralWorksCore.MOD_ID, locale , PeripheralWorksPlatform.holder, *ModText.values(), *ModTooltip.values()
+abstract class ModLanguageProvider(output: PackOutput, locale: String) : LanguageProvider(
+    output,
+    PeripheralWorksCore.MOD_ID,
+    locale,
+    PeripheralWorksPlatform.holder,
+    *ModText.values(),
+    *ModTooltip.values(),
 ) {
 
     companion object {

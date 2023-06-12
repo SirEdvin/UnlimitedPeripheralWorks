@@ -20,7 +20,7 @@ import java.util.function.BiFunction
 import java.util.function.Consumer
 import java.util.function.Supplier
 
-interface PeripheralWorksPlatform: ModInformationHolder {
+interface PeripheralWorksPlatform : ModInformationHolder {
     companion object {
         private var _IMPL: PeripheralWorksPlatform? = null
         private val ITEMS: MutableList<Supplier<out Item>> = mutableListOf()

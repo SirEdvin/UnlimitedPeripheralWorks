@@ -13,8 +13,9 @@ object ModTagsProvider {
     private val DEFAULT_PERIPHERAL_PROXY_BLOCKED_BLOCKS = listOf(
         Blocks.PERIPHERAL_PROXY,
         Supplier { ModBlocksReference.get().wiredModem },
-        Supplier { ModBlocksReference.get().cable }
+        Supplier { ModBlocksReference.get().cable },
     )
+
     @JvmStatic
     fun blockTags(consumer: TagConsumer<Block>) {
         DEFAULT_PERIPHERAL_PROXY_BLOCKED_BLOCKS.forEach { consumer.tag(BlockTags.PERIPHERAL_PROXY_FORBIDDEN).add(it.get()) }

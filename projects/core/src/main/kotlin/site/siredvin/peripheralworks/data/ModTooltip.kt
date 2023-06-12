@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.data
 import site.siredvin.peripheralium.data.language.TextRecord
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
-enum class ModTooltip: TextRecord {
+enum class ModTooltip : TextRecord {
     ITEM_DISABLED,
     PERIPHERALIUM_HUB_MAX_PERIPHERALS,
     UNIVERSAL_SCANNER_FREE_RANGE,
@@ -15,7 +15,7 @@ enum class ModTooltip: TextRecord {
     REMOTE_OBSERVER_RANGE,
     REMOTE_OBSERVER_MAX_CAPACITY,
     PERIPHERAL_PROXY_RANGE,
-    PERIPHERAL_PROXY_MAX_CAPACITY
+    PERIPHERAL_PROXY_MAX_CAPACITY,
     ;
 
     override val textID: String by lazy {
