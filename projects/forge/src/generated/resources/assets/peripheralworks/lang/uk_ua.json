@@ -1,5 +1,4 @@
 {
-  "aspect.integrateddynamics.read.list.cc_folder": "Директорія всередині комп'ютера",
   "block.peripheralworks.display_pedestal": "П'єдестал для демонстрацій",
   "block.peripheralworks.item_pedestal": "П'єдестал для предметів",
   "block.peripheralworks.map_pedestal": "П'єдестал для мап",
@@ -19,7 +18,6 @@
   "item.peripheralworks.ultimate_configurator": "Перифераліумний осередок",
   "item.peripheralworks.ultimate_sensor.tooltip": "§3§oБезмежні можливості вивчення світу завдякі цій маленькій коробочці. Працює також із черепашками та портативними комп'ютерами",
   "item.peripheralworks.universal_scanner.tooltip": "§3Найкращий инструмент для дослідження навколишнього світу, особливо якщо у вас немає третього ока. Працює також із черепашками та портативними комп'ютерами",
-  "pocket.peripheralworks.natures_compass": "Природовідчуваючий",
   "pocket.peripheralworks.netherite_peripheralium_hub": "З вбудованим незеритовим осередком",
   "pocket.peripheralworks.peripheralium_hub": "З вбудованим осередком",
   "pocket.peripheralworks.ultimate_sensor": "Зондуючий",
@@ -49,7 +47,6 @@
   "tooltip.peripheralworks.remote_observer_range": "  §6Максимальна дальність стостерігання: %s",
   "tooltip.peripheralworks.universal_scanner_free_range": "  §6Бескоштовний радіус сканування: %s",
   "tooltip.peripheralworks.universal_scanner_max_range": "  §6Максимальний радіус сканування: %s",
-  "turtle.peripheralworks.natures_compass": "Природновідчуваюча",
   "turtle.peripheralworks.netherite_peripheralium_hub": "З вбудованим незеритовим осередком",
   "turtle.peripheralworks.peripheralium_hub": "З вбудованим осередком",
   "turtle.peripheralworks.ultimate_sensor": "Зондуюча",

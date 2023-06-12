@@ -33,9 +33,9 @@ class ModTurtleUpgradeDataProvider(output: PackOutput) : LibTurtleUpgradeDataPro
             it.apply(this).add(addUpgrade)
         }
 
-        simpleWithCustomItem(TurtleUpgradeSerializers.PERIPHERALIUM_HUB.get(), Items.PERIPHERALIUM_HUB.get())
-        simpleWithCustomItem(TurtleUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB.get(), Items.NETHERITE_PERIPHERALIUM_HUB.get())
-        simpleWithCustomItem(TurtleUpgradeSerializers.UNIVERSAL_SCANNER.get(), Blocks.UNIVERSAL_SCANNER.get().asItem())
-        simpleWithCustomItem(TurtleUpgradeSerializers.ULTIMATE_SENSOR.get(), Blocks.ULTIMATE_SENSOR.get().asItem())
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.PERIPHERALIUM_HUB.get(), Items.PERIPHERALIUM_HUB.get()))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB.get(), Items.NETHERITE_PERIPHERALIUM_HUB.get()))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.UNIVERSAL_SCANNER.get(), Blocks.UNIVERSAL_SCANNER.get().asItem()))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.ULTIMATE_SENSOR.get(), Blocks.ULTIMATE_SENSOR.get().asItem()))
     }
 }

@@ -1,5 +1,4 @@
 {
-  "aspect.integrateddynamics.read.list.cc_folder": "Directory inside computer",
   "block.peripheralworks.display_pedestal": "Display pedestal",
   "block.peripheralworks.item_pedestal": "Item pedestal",
   "block.peripheralworks.map_pedestal": "Map pedestal",
@@ -19,7 +18,6 @@
   "item.peripheralworks.ultimate_configurator": "Peripheralium hub",
   "item.peripheralworks.ultimate_sensor.tooltip": "§3§oLimitless possibilities for understanding world in one little box. Works with turtles and pocket computers",
   "item.peripheralworks.universal_scanner.tooltip": "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers",
-  "pocket.peripheralworks.natures_compass": "Nature Compassing",
   "pocket.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
   "pocket.peripheralworks.peripheralium_hub": "Hub",
   "pocket.peripheralworks.ultimate_sensor": "Sensing",
@@ -49,7 +47,6 @@
   "tooltip.peripheralworks.remote_observer_range": "  §6Max range of observed block: %s",
   "tooltip.peripheralworks.universal_scanner_free_range": "  §6Cost-free scan range: %s",
   "tooltip.peripheralworks.universal_scanner_max_range": "  §6Max scan range: %s",
-  "turtle.peripheralworks.natures_compass": "Nature Compassing",
   "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
   "turtle.peripheralworks.peripheralium_hub": "Hub",
   "turtle.peripheralworks.ultimate_sensor": "Sensing",
