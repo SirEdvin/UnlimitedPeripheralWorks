@@ -1,12 +1,9 @@
 package site.siredvin.peripheralworks.data
 
-import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.data.PackOutput
-import net.minecraft.world.item.Item
 import site.siredvin.peripheralium.data.blocks.LibTurtleUpgradeDataProvider
-import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.TurtleUpgradeSerializers
