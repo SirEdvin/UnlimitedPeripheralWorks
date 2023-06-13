@@ -1,4 +1,4 @@
-// 1.20	2023-06-12T13:15:12.257231876	Unlimited Peripheral Works/Recipes
+// 1.20	2023-06-13T11:31:55.341062439	Unlimited Peripheral Works/Recipes
 4a7532586ebd2d5a239beddc5240e9416d723f4c data/peripheralworks/recipes/peripheralium_hub.json
 e20244a6a3e2ee660321fe0e935132060759e281 data/peripheralworks/recipes/peripheral_proxy.json
 b20284c6d66490535fa58a073c7791064f62f1cd data/peripheralworks/recipes/peripheral_casing.json
@@ -6,6 +6,6 @@ b20284c6d66490535fa58a073c7791064f62f1cd data/peripheralworks/recipes/peripheral
 169c5991b28b93c851e46abeaefd752048626eab data/peripheralworks/recipes/item_pedestal.json
 b929cb33a2a61b583a688d95bf8534260eb9ff09 data/peripheralworks/recipes/map_pedestal.json
 76573b1e35031a89f39029ec55bc20fc827a88e7 data/peripheralworks/recipes/ultimate_configurator.json
-fa62c3786204eca6bfa0261c6873f02eefb83cce data/peripheralworks/recipes/netherite_peripheralium_hub.json
+8adb4992706e45866afda070248b6deb54c401cb data/peripheralworks/recipes/netherite_peripheralium_hub.json
 379f6f63779c41d1be5a1de6c1315cdc0e712956 data/peripheralworks/recipes/display_pedestal.json
 420d58a1be35bf98c431344d30a117629c5cfc37 data/peripheralworks/recipes/remote_observer.json

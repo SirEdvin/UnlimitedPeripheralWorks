@@ -1,8 +1,8 @@
 package site.siredvin.peripheralworks.integrations.occultism
 
-import com.github.klikli_dev.occultism.api.common.blockentity.IStorageController
-import com.github.klikli_dev.occultism.api.common.blockentity.IStorageControllerProxy
-import com.github.klikli_dev.occultism.common.blockentity.GoldenSacrificialBowlBlockEntity
+import com.klikli_dev.occultism.api.common.blockentity.IStorageController
+import com.klikli_dev.occultism.api.common.blockentity.IStorageControllerProxy
+import com.klikli_dev.occultism.common.blockentity.GoldenSacrificialBowlBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level

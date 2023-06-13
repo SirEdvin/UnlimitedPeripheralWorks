@@ -21,6 +21,7 @@ interface ModRecipeIngredients {
 
     val enderModem: Ingredient
     val peripheralium: Ingredient
+    val peripheraliumUpgrade: Ingredient
     val netheriteIngot: Ingredient
     val emerald: Ingredient
     val diamond: Ingredient

@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.occultism
 
-import com.github.klikli_dev.occultism.api.common.blockentity.IStorageController
+import com.klikli_dev.occultism.api.common.blockentity.IStorageController
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.resources.ResourceLocation

@@ -26,12 +26,6 @@ interface PeripheralWorksPlatform : ModInformationHolder {
         val holder: ModInformationHolder
             get() = get()
 
-        val turtleUpgrades: List<Supplier<TurtleUpgradeSerialiser<out ITurtleUpgrade>>>
-            get() = TURTLE_UPGRADES
-
-        val pocketUpgrades: List<Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>>
-            get() = POCKET_UPGRADES
-
         fun configure(impl: PeripheralWorksPlatform) {
             _IMPL = impl
         }
@@ -108,13 +102,17 @@ interface PeripheralWorksPlatform : ModInformationHolder {
         }
     }
 
-    override fun getBlocks(): List<Supplier<out Block>> {
-        return BLOCKS
-    }
+    override val blocks: List<Supplier<out Block>>
+        get() = BLOCKS
 
-    override fun getItems(): List<Supplier<out Item>> {
-        return ITEMS
-    }
+    override val items: List<Supplier<out Item>>
+        get() = ITEMS
+
+    override val turtleSerializers: List<Supplier<TurtleUpgradeSerialiser<out ITurtleUpgrade>>>
+        get() = TURTLE_UPGRADES
+
+    override val pocketSerializers: List<Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>>
+        get() = POCKET_UPGRADES
 
     fun <T : Item> registerItem(key: ResourceLocation, item: Supplier<T>): Supplier<T>
 

@@ -11,6 +11,9 @@ object FabricModRecipeIngredients : ModRecipeIngredients {
         get() = Ingredient.of(Items.WIRELESS_MODEM_ADVANCED.get())
     override val peripheralium: Ingredient
         get() = Ingredient.of(site.siredvin.peripheralium.common.setup.Items.PERIPHERALIUM_DUST.get())
+
+    override val peripheraliumUpgrade: Ingredient
+        get() = Ingredient.of(site.siredvin.peripheralium.common.setup.Items.PERIPHERALIUM_UPGRADE_TEMPLATE.get())
     override val netheriteIngot: Ingredient
         get() = Ingredient.of(ConventionalItemTags.NETHERITE_INGOTS)
     override val emerald: Ingredient

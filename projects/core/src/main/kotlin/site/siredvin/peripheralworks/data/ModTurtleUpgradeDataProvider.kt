@@ -14,7 +14,7 @@ import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.Consumer
 import java.util.function.Function
 
-class ModTurtleUpgradeDataProvider(output: PackOutput) : LibTurtleUpgradeDataProvider(output, PeripheralWorksPlatform.turtleUpgrades) {
+class ModTurtleUpgradeDataProvider(output: PackOutput) : LibTurtleUpgradeDataProvider(output, PeripheralWorksPlatform.holder.turtleSerializers) {
     companion object {
         private val REGISTERED_BUILDERS: MutableList<Function<TurtleUpgradeDataProvider, Upgrade<TurtleUpgradeSerialiser<*>>>> =
             mutableListOf()
@@ -24,18 +24,14 @@ class ModTurtleUpgradeDataProvider(output: PackOutput) : LibTurtleUpgradeDataPro
         }
     }
 
-    fun <V : ITurtleUpgrade> simpleWithCustomItem(serialiser: TurtleUpgradeSerialiser<V>, item: Item): Upgrade<TurtleUpgradeSerialiser<*>> {
-        return simpleWithCustomItem(XplatRegistries.TURTLE_SERIALIZERS.getKey(serialiser), serialiser, item)
-    }
-
     override fun registerUpgrades(addUpgrade: Consumer<Upgrade<TurtleUpgradeSerialiser<*>>>) {
         REGISTERED_BUILDERS.forEach {
             it.apply(this).add(addUpgrade)
         }
 
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.PERIPHERALIUM_HUB.get(), Items.PERIPHERALIUM_HUB.get()))
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB.get(), Items.NETHERITE_PERIPHERALIUM_HUB.get()))
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.UNIVERSAL_SCANNER.get(), Blocks.UNIVERSAL_SCANNER.get().asItem()))
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.ULTIMATE_SENSOR.get(), Blocks.ULTIMATE_SENSOR.get().asItem()))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.PERIPHERALIUM_HUB, Items.PERIPHERALIUM_HUB))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB, Items.NETHERITE_PERIPHERALIUM_HUB))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.UNIVERSAL_SCANNER, Blocks.UNIVERSAL_SCANNER))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.ULTIMATE_SENSOR, Blocks.ULTIMATE_SENSOR))
     }
 }

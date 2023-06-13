@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.occultism
 
-import com.github.klikli_dev.occultism.api.common.blockentity.IStorageController
+import com.klikli_dev.occultism.api.common.blockentity.IStorageController
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralium.api.storage.Storage
 import java.util.function.Predicate

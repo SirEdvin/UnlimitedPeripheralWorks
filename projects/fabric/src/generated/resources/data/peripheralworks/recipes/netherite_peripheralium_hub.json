@@ -10,6 +10,6 @@
     "item": "peripheralworks:netherite_peripheralium_hub"
   },
   "template": {
-    "item": "minecraft:netherite_upgrade_smithing_template"
+    "item": "peripheralium:peripheralium_upgrade_template"
   }
 }

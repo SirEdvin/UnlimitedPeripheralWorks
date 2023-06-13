@@ -25,10 +25,8 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("PDP")
             .save(consumer)
 
-        // TODO: I really don't want it ot be so expensive
-        // TODO: probably it is nice idea to migrate to peripheralium upgrade template (!)
         TweakedSmithingTransformRecipeBuilder.smithingTransform(
-            Ingredient.of(net.minecraft.world.item.Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
+            ingredients.peripheraliumUpgrade,
             Ingredient.of(Items.PERIPHERALIUM_HUB.get()),
             ingredients.netheriteIngot,
             Items.NETHERITE_PERIPHERALIUM_HUB.get(),

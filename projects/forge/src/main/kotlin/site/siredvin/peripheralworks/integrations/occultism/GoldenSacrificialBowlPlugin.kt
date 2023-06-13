@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.occultism
 
-import com.github.klikli_dev.occultism.common.blockentity.GoldenSacrificialBowlBlockEntity
+import com.klikli_dev.occultism.common.blockentity.GoldenSacrificialBowlBlockEntity
 import dan200.computercraft.api.lua.LuaFunction
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 

@@ -43,8 +43,6 @@ repositories {
 sourceSets.main {
     kotlin {
         exclude("site/siredvin/peripheralworks/integrations/naturescompass/**")
-        exclude("site/siredvin/peripheralworks/integrations/team_reborn_energy/**")
-        exclude("site/siredvin/peripheralworks/integrations/toms_storage/**")
     }
 }
 
