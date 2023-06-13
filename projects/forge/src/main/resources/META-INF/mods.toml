@@ -20,7 +20,7 @@ description='''
 [[dependencies.peripheralworks]]
 modId="forge"
 mandatory=true
-versionRange="[${forgeVersion},47)"
+versionRange="[${forgeVersion},48)"
 ordering="NONE"
 side="BOTH"
 
