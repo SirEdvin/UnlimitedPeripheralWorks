@@ -20,8 +20,6 @@ import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
-import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
-import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
 import site.siredvin.peripheralworks.forge.ForgePeripheralWorksPlatform
@@ -56,8 +54,6 @@ object ForgePeripheralWorks {
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "${PeripheralWorksCore.MOD_ID}.toml")
         PeripheralWorksCore.configure(ForgePeripheralWorksPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
-        ComputerCraftProxy.addProvider(FluidStorageProvider)
-        ComputerCraftProxy.addProvider(EnergyStorageProvider)
         val eventBus = MOD_CONTEXT.getKEventBus()
         eventBus.addListener(this::commonSetup)
         eventBus.addListener(this::registrySetup)
@@ -76,7 +72,8 @@ object ForgePeripheralWorks {
         Platform.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+//        Platform.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)
@@ -93,7 +90,7 @@ object ForgePeripheralWorks {
     }
 
     fun registrySetup(event: NewRegistryEvent) {
-        Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
+//        Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
     }
 }

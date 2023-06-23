@@ -7,7 +7,7 @@ import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.api.storage.StorageUtils
+import site.siredvin.peripheralium.storages.item.ItemStorageUtils
 import site.siredvin.peripheralium.util.assertBetween
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -76,7 +76,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         if (equipTestResult.first == null || !equipTestResult.first!!) {
             return MethodResult.of(equipTestResult.first, equipTestResult.second)
         }
-        val takenStack: ItemStack = storage.takeItems(1, slot - 1, slot - 1, StorageUtils.ALWAYS)
+        val takenStack: ItemStack = storage.takeItems(1, slot - 1, slot - 1, ItemStorageUtils.ALWAYS)
         if (takenStack.isEmpty) {
             return MethodResult.of(null, "Cannot extract item for equipment")
         }
@@ -98,7 +98,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         if (stack.isEmpty) {
             return MethodResult.of(null, "Cannot generate stack for unknown reason")
         }
-        StorageUtils.toInventoryOrToWorld(stack, storage, 0, peripheralOwner.pos, peripheralOwner.level!!)
+        ItemStorageUtils.toInventoryOrToWorld(stack, storage, 0, peripheralOwner.pos, peripheralOwner.level!!)
         return MethodResult.of(true)
     }
 

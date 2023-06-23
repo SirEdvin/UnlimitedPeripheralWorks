@@ -2,9 +2,9 @@ package site.siredvin.peripheralworks.integrations.toms_storage
 
 import com.tom.storagemod.tile.InventoryConnectorBlockEntity
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.api.storage.Storage
 import site.siredvin.peripheralium.extra.plugins.AbstractItemStoragePlugin
-import site.siredvin.peripheralium.storage.FabricStorageWrapper
+import site.siredvin.peripheralium.storages.item.FabricStorageWrapper
+import site.siredvin.peripheralium.storages.item.ItemStorage
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
 class TomsItemStoragePlugin(private val target: InventoryConnectorBlockEntity) : AbstractItemStoragePlugin() {
@@ -12,5 +12,5 @@ class TomsItemStoragePlugin(private val target: InventoryConnectorBlockEntity) :
         get() = PeripheralWorksConfig.itemStorageTransferLimit
     override val level: Level
         get() = target.level!!
-    override val storage: Storage = FabricStorageWrapper(target.inventory)
+    override val storage: ItemStorage = FabricStorageWrapper(target.inventory)
 }

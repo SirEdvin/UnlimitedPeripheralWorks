@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.api.peripheral.IOwnedPeripheral
-import site.siredvin.peripheralium.api.storage.TargetableContainer
 import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
+import site.siredvin.peripheralium.storages.ContainerWrapper
 import site.siredvin.peripheralworks.api.IItemStackStorage
 import java.util.function.Predicate
 
@@ -40,7 +40,7 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
     }
 
     protected val inventory = ExtraSimpleStorage(this)
-    override val storage = TargetableContainer(inventory)
+    override val storage = ContainerWrapper(inventory)
 
     override val storedStack: ItemStack
         get() {

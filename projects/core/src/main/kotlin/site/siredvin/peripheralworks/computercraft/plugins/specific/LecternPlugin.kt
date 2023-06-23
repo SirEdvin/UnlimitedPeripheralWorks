@@ -13,10 +13,10 @@ import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IObservingPeripheralPlugin
 import site.siredvin.peripheralium.api.peripheral.IPluggablePeripheral
-import site.siredvin.peripheralium.api.storage.ExtractorProxy
-import site.siredvin.peripheralium.api.storage.StorageUtils
-import site.siredvin.peripheralium.api.storage.TargetableContainer
 import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
+import site.siredvin.peripheralium.storages.ContainerWrapper
+import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
+import site.siredvin.peripheralium.storages.item.ItemStorageUtils
 import site.siredvin.peripheralium.util.TextBookUtils
 import site.siredvin.peripheralium.util.assertBetween
 import java.util.*
@@ -153,10 +153,10 @@ class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripher
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = ExtractorProxy.extractTargetableStorageFromUnknown(target.level!!, location.target)
+        val toStorage = ItemStorageExtractor.extractItemSinkFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
-        val moved = TargetableContainer(target.bookAccess).moveTo(toStorage, 1, takePredicate = StorageUtils.ALWAYS)
+        val moved = ContainerWrapper(target.bookAccess).moveTo(toStorage, 1, takePredicate = ItemStorageUtils.ALWAYS)
         if (moved == 0) {
             return MethodResult.of(null, "Not enough space in target inventory")
         }
@@ -170,7 +170,7 @@ class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripher
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractStorageFromUnknown(target.level!!, location.target)
+        val fromStorage = ItemStorageExtractor.extractStorageFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate: Predicate<ItemStack> = Predicate { it.`is`(Items.WRITABLE_BOOK) || it.`is`(Items.WRITTEN_BOOK) }

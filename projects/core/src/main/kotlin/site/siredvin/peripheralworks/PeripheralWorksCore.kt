@@ -2,9 +2,11 @@ package site.siredvin.peripheralworks
 import net.minecraft.world.item.CreativeModeTab
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import site.siredvin.peripheralium.api.storage.ExtractorProxy
+import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
+import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
 import site.siredvin.peripheralworks.computercraft.StorageProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
@@ -35,8 +37,10 @@ object PeripheralWorksCore {
         PeripheralWorksPlatform.configure(platform)
         ModRecipeIngredients.configure(ingredients)
         ModBlocksReference.configure(blocks)
-        ExtractorProxy.addStorageExtractor(MinecartUtils::minecartExtractor)
+        ItemStorageExtractor.addStorageExtractor(MinecartUtils::minecartExtractor)
         ComputerCraftProxy.addProvider(StorageProvider)
+        ComputerCraftProxy.addProvider(FluidStorageProvider)
+        ComputerCraftProxy.addProvider(EnergyStorageProvider)
         ComputerCraftProxy.addProvider(SpecificPluginProvider)
         ComputerCraftProxy.addProvider(SpecificProtectedPluginProviders)
     }

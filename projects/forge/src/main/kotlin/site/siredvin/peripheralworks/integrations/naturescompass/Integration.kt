@@ -14,9 +14,10 @@ import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
+import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
+import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
-import java.util.function.Consumer
 
 class Integration : Runnable {
 
@@ -29,40 +30,38 @@ class Integration : Runnable {
     }
 
     override fun run() {
-        PeripheralWorksPlatform.registerTurtleUpgrade(
+        val turtleUpgradeSup = PeripheralWorksPlatform.registerTurtleUpgrade(
             UPGRADE_ID,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PeripheralTurtleUpgrade.dynamic(stack.item, ::forTurtle) {
                     UPGRADE_ID
                 }
             },
-            { dataProvider, serializer ->
-                dataProvider.simpleWithCustomItem(
-                    ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
-                    serializer,
-                    NaturesCompass.naturesCompass,
-                )
-            },
-            listOf(
-                Consumer {
-                    PeripheralWorksClientCore.registerHook {
-                        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-                            it.get(),
-                            TurtleUpgradeModeller.flatItem(),
-                        )
-                    }
-                },
-            ),
         )
-        PeripheralWorksPlatform.registerPocketUpgrade(
+        ModTurtleUpgradeDataProvider.hookUpgrade {
+            it.simpleWithCustomItem(
+                ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
+                turtleUpgradeSup.get(),
+                NaturesCompass.naturesCompass,
+            )
+        }
+        PeripheralWorksClientCore.addHook {
+            ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+                turtleUpgradeSup.get(),
+                TurtleUpgradeModeller.flatItem(),
+            )
+        }
+
+        val pocketUpgrade = PeripheralWorksPlatform.registerPocketUpgrade(
             UPGRADE_ID,
             PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PocketNaturesCompassUpgrade(stack)
             },
-        ) { dataProvider, serializer ->
-            dataProvider.simpleWithCustomItem(
+        )
+        ModPocketUpgradeDataProvider.hookUpgrade {
+            it.simpleWithCustomItem(
                 PocketNaturesCompassUpgrade.TYPE,
-                serializer,
+                pocketUpgrade.get(),
                 NaturesCompass.naturesCompass,
             )
         }

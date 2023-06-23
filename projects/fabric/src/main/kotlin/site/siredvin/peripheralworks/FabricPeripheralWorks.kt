@@ -9,7 +9,6 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
-import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
 import site.siredvin.peripheralworks.fabric.FabricPeripheralWorksPlatform
@@ -23,10 +22,10 @@ object FabricPeripheralWorks : ModInitializer {
         // Register configuration
         FabricPeripheralium.sayHi()
         PeripheralWorksCore.configure(FabricPeripheralWorksPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
-        ComputerCraftProxy.addProvider(FluidStorageProvider)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         // Load all integrations
+        Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }

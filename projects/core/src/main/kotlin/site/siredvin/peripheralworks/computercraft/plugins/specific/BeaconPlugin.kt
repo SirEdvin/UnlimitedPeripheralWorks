@@ -13,8 +13,8 @@ import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BeaconBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.api.storage.ExtractorProxy
 import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
+import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import java.util.*
 import java.util.function.Predicate
@@ -94,7 +94,7 @@ class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ExtractorProxy.extractStorageFromUnknown(target.level!!, location.target)
+        val fromStorage = ItemStorageExtractor.extractStorageFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate = Predicate<ItemStack> { it.`is`(ItemTags.BEACON_PAYMENT_ITEMS) }

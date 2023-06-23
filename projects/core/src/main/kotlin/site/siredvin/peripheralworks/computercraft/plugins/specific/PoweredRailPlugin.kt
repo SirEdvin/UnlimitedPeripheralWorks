@@ -9,10 +9,10 @@ import net.minecraft.world.level.block.PoweredRailBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.RailShape
 import net.minecraft.world.phys.Vec3
-import site.siredvin.peripheralium.api.storage.SlottedStorage
-import site.siredvin.peripheralium.api.storage.TargetableContainer
 import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
-import site.siredvin.peripheralium.util.MergedContainer
+import site.siredvin.peripheralium.storages.ContainerWrapper
+import site.siredvin.peripheralium.storages.MergedContainer
+import site.siredvin.peripheralium.storages.item.SlottedItemStorage
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralworks.utils.MinecartUtils
 import java.util.*
@@ -32,8 +32,8 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
             return state
         }
 
-    override val storage: SlottedStorage
-        get() = TargetableContainer(MergedContainer(MinecartUtils.getContainerMinecarts(level, pos)))
+    override val storage: SlottedItemStorage
+        get() = ContainerWrapper(MergedContainer(MinecartUtils.getContainerMinecarts(level, pos)))
 
     @LuaFunction(mainThread = true)
     fun isPowered(): Boolean {

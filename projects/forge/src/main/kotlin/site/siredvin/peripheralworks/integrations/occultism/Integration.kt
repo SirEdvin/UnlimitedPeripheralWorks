@@ -7,8 +7,8 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.api.storage.ExtractorProxy
 import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
+import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -62,8 +62,8 @@ class Integration : Runnable {
     override fun run() {
         ComputerCraftProxy.addProvider(OccultismStorageProvider)
         ComputerCraftProxy.addProvider(SpecificOccultismPluginProvider)
-        ExtractorProxy.addStorageExtractor(
-            ExtractorProxy.StorageExtractor { _, _, blockEntity ->
+        ItemStorageExtractor.addStorageExtractor(
+            ItemStorageExtractor.StorageExtractor { _, _, blockEntity ->
                 if (blockEntity == null || blockEntity.isRemoved) {
                     return@StorageExtractor null
                 }

@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import site.siredvin.peripheralium.api.storage.StorageUtils
+import site.siredvin.peripheralium.storages.item.ItemStorageUtils
 import site.siredvin.peripheralium.util.BlockUtil
 import site.siredvin.peripheralworks.api.IItemStackStorage
 
@@ -64,7 +64,7 @@ abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil
             val blockEntity = level.getBlockEntity(blockPos)
             if (blockEntity is IItemStackStorage) {
                 if (!blockEntity.storedStack.isEmpty) {
-                    val storedStack = blockEntity.storage.takeItems(StorageUtils.ALWAYS, Int.MAX_VALUE)
+                    val storedStack = blockEntity.storage.takeItems(ItemStorageUtils.ALWAYS, Int.MAX_VALUE)
                     if (!storedStack.isEmpty) {
                         player.setItemInHand(InteractionHand.MAIN_HAND, storedStack)
                     }

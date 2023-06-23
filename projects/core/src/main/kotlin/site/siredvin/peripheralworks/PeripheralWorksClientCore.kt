@@ -20,12 +20,14 @@ import java.util.function.Consumer
 import java.util.function.Supplier
 
 object PeripheralWorksClientCore {
+    private val HOOKS = mutableListOf<Runnable>()
     private val EXTRA_MODELS = arrayOf(
         "turtle/universal_scanner_left",
         "turtle/universal_scanner_right",
         "turtle/ultimate_sensor_left",
         "turtle/ultimate_sensor_right",
     )
+    private var inited: Boolean = false
 
     val EXTRA_BLOCK_ENTITY_RENDERERS: Array<Supplier<BlockEntityType<BlockEntity>>> = arrayOf(
         BlockEntityTypes.ITEM_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
@@ -54,7 +56,17 @@ object PeripheralWorksClientCore {
         EXTRA_MODELS.forEach { register.accept(ResourceLocation(PeripheralWorksCore.MOD_ID, it)) }
     }
 
+    fun addHook(hook: Runnable) {
+        if (!inited) {
+            HOOKS.add(hook)
+        } else {
+            hook.run()
+        }
+    }
+
     fun onInit() {
+        inited = true
+        HOOKS.forEach(Runnable::run)
         ComputerCraftAPIClient.registerTurtleUpgradeModeller(
             TurtleUpgradeSerializers.PERIPHERALIUM_HUB.get(),
             ScaledItemModeller(0.5f),

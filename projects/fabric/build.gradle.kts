@@ -40,18 +40,7 @@ repositories {
     }
 }
 
-sourceSets.main {
-    kotlin {
-        exclude("site/siredvin/peripheralworks/integrations/naturescompass/**")
-    }
-}
-
 dependencies {
-    // TODO: dark mark here, if I will try to move this dependency
-    // to libs it will change down toi 0.14.17
-    // Like, what???
-    modImplementation("net.fabricmc:fabric-loader:0.14.19")
-
     modApi(libs.bundles.externalMods.fabric.integrations.api) {
         exclude("net.fabricmc.fabric-api")
     }

@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.api
 
-import site.siredvin.peripheralium.api.storage.SlottedStorage
+import site.siredvin.peripheralium.storages.item.SlottedItemStorage
 
 interface IItemStackStorage : IItemStackHolder {
-    val storage: SlottedStorage
+    val storage: SlottedItemStorage
 }

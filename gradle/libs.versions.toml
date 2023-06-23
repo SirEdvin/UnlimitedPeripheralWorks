@@ -10,15 +10,15 @@ mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.105.0"
-peripheralium = "0.6.1"
+peripheralium = "0.6.3-2"
 mixin = "0.8.5"
 # Fabric dependencies
-fabric-api = "0.83.0+1.20"
+fabric-api = "0.83.1+1.20.1"
 fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "7.0.0"
 # Forge dependencies
-forge = "46.0.1"
+forge = "47.0.19"
 forge-kotlin = "4.3.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
@@ -27,7 +27,7 @@ cloth-config = "11.0.99"
 architectury = "9.0.8"
 
 # Dev mod dependenceis
-jei = "14.0.0.11"
+jei = "15.1.0.19"
 rei = "12.0.625"
 
 # Shared integration mod dependency
@@ -35,26 +35,29 @@ rei = "12.0.625"
 # Integration mod dependencies (fabric)
 teamreborn-energy = "3.0.0"
 tomstorage-fabric = "1.20-1.6.1-fabric"
-techreborn = "4571911"
-reborncore = "4571912"
+techreborn = "4582415" # TechReborn-5.8.1.jar
+reborncore = "4582416" # RebornCore-5.8.1.jar
+ae2-fabric = "fabric-15.0.2-alpha"
 
 # Integration mod dependencies, that not updated yet (fabric)
-natures-compass-fabric = "4476811"  # NaturesCompass-1.19.4-2.2.0-fabric
+natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
+
 
 # Integration mod dependencies (forge)
-occultism = "4584119"  # occultism-1.20-1.80.4.jar
+occultism = "4600625"  # occultism-1.20.1-1.80.10.
 modonomicon = "1.20-1.33.1"
 tomstorage-forge = "1.20-1.6.1"
-easyvillagers = "4573322"  # Easy Villagers 1.20-1.0.8
+easyvillagers = "4584220"  # [1.20.1] Easy Villagers 1.20.1-1.0.8
 curios-forge = "5.2.0-beta.3+1.20.1"
 geckolib-forge = "4.2"
 smartbrainlib = "1.11"
+ae2-forge = "forge-15.0.2-alpha"
 
 # Integration mod dependencies, that not updated yet (forge)
 integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
 commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
-natures-compass-forge = "4476818"  # NaturesCompass-1.19.4-1.11.0-forge.jar
+natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
 mcjtylib = "1.19.4-7.2.6"
 rftools-base = "1.19-4.1.7"
 deep-resonance = "1.19-4.1.3"
@@ -66,10 +69,10 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = "kotlin-atomicfu"}
 
 # Core mod dependencies
-cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.20-common-api", version.ref = "cc-tweaked"}
-cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.20-core", version.ref = "cc-tweaked"}
+cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.20.1-common-api", version.ref = "cc-tweaked"}
+cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.20.1-core", version.ref = "cc-tweaked"}
 common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
-peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20", version.ref = "peripheralium"}
+peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20.1", version.ref = "peripheralium"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 # Fabric mod dependencies
@@ -77,17 +80,17 @@ fabric-loader = {module = "net.fabricmc:fabric-loader", version.ref = "fabric-lo
 fabric-api = {module = "net.fabricmc.fabric-api:fabric-api", version.ref="fabric-api"}
 fabric-kotlin = {module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin"}
 fabric-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-fabric", version.ref = "forgeconfigapirt-fabric"}
-cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.20-fabric-api", version.ref = "cc-tweaked"}
-cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.20-fabric", version.ref = "cc-tweaked"}
-peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20", version.ref = "peripheralium"}
+cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.20.1-fabric-api", version.ref = "cc-tweaked"}
+cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.20.1-fabric", version.ref = "cc-tweaked"}
+peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
 
 # Forge mod dependencies
-cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20-forge", version.ref="cc-tweaked"}
+cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20.1-forge", version.ref="cc-tweaked"}
 forge-kotlin = {module = "thedarkcolour:kotlinforforge", version.ref = "forge-kotlin"}
-peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.20", version.ref = "peripheralium"}
+peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium"}
 
 # Dev mod dependencies
-jei-forge = { module = "mezz.jei:jei-1.20-forge", version.ref = "jei" }
+jei-forge = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
 rei-fabric = {module = "me.shedaniel:RoughlyEnoughItems-fabric", version.ref = "rei"}
 
 # Extra mod dependency
@@ -101,7 +104,7 @@ architectury-fabric = {module = "dev.architectury:architectury-fabric", version.
 
 # Fabric integration dependencies
 teamreborn-energy = {module = "teamreborn:energy", version.ref = "teamreborn-energy"}
-
+ae2-fabric = {module = "maven.modrinth:ae2", version.ref = "ae2-fabric"}
 nature-compass-fabric = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-fabric"}
 
 tomstorage-fabric = {module = "maven.modrinth:toms-storage", version.ref="tomstorage-fabric"}
@@ -115,6 +118,7 @@ curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = 
 gecolib-forge = {module = "software.bernie.geckolib:geckolib-forge-1.20", version.ref = "geckolib-forge"}
 smartbrainlib = {module = "net.tslat.smartbrainlib:SmartBrainLib-forge-1.20", version.ref = "smartbrainlib"}
 modonomicon = {module = "com.klikli_dev:modonomicon", version.ref="modonomicon"}
+ae2-forge = {module = "maven.modrinth:ae2", version.ref = "ae2-forge"}
 
 easyvillagers = {module = "curse.maven:easyvillagers-400514", version.ref="easyvillagers"}
 
@@ -159,14 +163,16 @@ externalMods-fabric-integrations-api = [
 ]
 
 externalMods-fabric-integrations-full = [
-#    "nature-compass-fabric",
+    "nature-compass-fabric",
     "tomstorage-fabric",
-    "techreborn"
+    "techreborn",
+    "ae2-fabric",
 ]
 externalMods-fabric-integrations-active = [
-#    "nature-compass-fabric",
+    "nature-compass-fabric",
     "tomstorage-fabric",
-    "techreborn"
+    "techreborn",
+    "ae2-fabric",
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
@@ -175,9 +181,10 @@ externalMods-fabric-integrations-activedep = [
 externalMods-forge-integrations-full = [
     "occultism",
     "easyvillagers",
+    "ae2-forge",
 #    "integrateddynamics",
 #    "cyclopscore", # by integrateddynamics, required for class typing
-#    "nature-compass-forge",
+    "nature-compass-forge",
     "tomstorage-forge",
 #    "deep-resonance",
 #    "rftools-base", # by deepresonance
@@ -186,9 +193,10 @@ externalMods-forge-integrations-full = [
 externalMods-forge-integrations-active = [
     "occultism",
     "easyvillagers",
+#    "ae2-forge",
 #    "integrateddynamics",
 #    "cyclopscore", # by integrateddynamics, required for class typing
-#    "nature-compass-forge",
+    "nature-compass-forge",
     "tomstorage-forge",
 #    "deep-resonance",
 #    "rftools-base", # by deepresonance

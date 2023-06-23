@@ -2,10 +2,10 @@ package site.siredvin.peripheralworks.integrations.occultism
 
 import com.klikli_dev.occultism.api.common.blockentity.IStorageController
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.api.storage.Storage
+import site.siredvin.peripheralium.storages.item.ItemStorage
 import java.util.function.Predicate
 
-class OccultismItemStorage(private val storageController: IStorageController) : Storage {
+class OccultismItemStorage(private val storageController: IStorageController) : ItemStorage {
     override fun getItems(): Iterator<ItemStack> {
         return storageController.stacks.iterator()
     }

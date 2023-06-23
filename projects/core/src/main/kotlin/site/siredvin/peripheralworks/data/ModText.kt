@@ -17,6 +17,7 @@ enum class ModText : TextRecord {
     PERIPHERAL_PROXY_FORBIDDEN,
     PERIPHERAL_PROXY_BLOCK_ADDED,
     PERIPHERAL_PROXY_BLOCK_REMOVED,
+    TECH_REBORN_ENERGY,
     ;
 
     override val textID: String by lazy {

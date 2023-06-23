@@ -6,9 +6,9 @@ import net.minecraft.world.entity.vehicle.AbstractMinecartContainer
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
-import site.siredvin.peripheralium.api.storage.SlottedStorage
-import site.siredvin.peripheralium.api.storage.TargetableContainer
-import site.siredvin.peripheralium.util.MergedContainer
+import site.siredvin.peripheralium.storages.ContainerWrapper
+import site.siredvin.peripheralium.storages.MergedContainer
+import site.siredvin.peripheralium.storages.item.SlottedItemStorage
 
 object MinecartUtils {
     private const val SEARCH_MARGIN = 0.2
@@ -32,7 +32,7 @@ object MinecartUtils {
         return level.getEntitiesOfClass(AbstractMinecartContainer::class.java, getSearchShape(pos))
     }
 
-    fun minecartExtractor(level: Level, obj: Any?): SlottedStorage? {
+    fun minecartExtractor(level: Level, obj: Any?): SlottedItemStorage? {
         if (obj !is BlockPos) {
             return null
         }
@@ -44,6 +44,6 @@ object MinecartUtils {
         if (containers.isEmpty()) {
             return null
         }
-        return TargetableContainer(MergedContainer(containers))
+        return ContainerWrapper(MergedContainer(containers))
     }
 }

@@ -26,6 +26,9 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
         get() = ConfigHolder.COMMON_CONFIG.ITEM_STORAGE_TRANSFER_LIMIT.get()
     val enableGenericFluidStorage: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_GENERIC_FLUID_STORAGE.get()
+
+    val enableGenericEnergyStorage: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_GENERIC_FLUID_STORAGE.get()
     val fluidStorageTransferLimit: Int
         get() = ConfigHolder.COMMON_CONFIG.FLUID_STORAGE_TRANSFER_LIMIT.get()
 
@@ -97,6 +100,7 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
         var ENABLE_GENERIC_INVENTORY: ForgeConfigSpec.BooleanValue
         var ENABLE_GENERIC_ITEM_STORAGE: ForgeConfigSpec.BooleanValue
         var ENABLE_GENERIC_FLUID_STORAGE: ForgeConfigSpec.BooleanValue
+        var ENABLE_GENERIC_ENERGY_STORAGE: ForgeConfigSpec.BooleanValue
         val ITEM_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.IntValue
         val FLUID_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.IntValue
 
@@ -140,6 +144,8 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
                 .define("enableGenericItemStorage", true)
             ENABLE_GENERIC_FLUID_STORAGE = builder.comment("Enables generic integration for fluid storages")
                 .define("enableGenericFluidStorage", true)
+            ENABLE_GENERIC_ENERGY_STORAGE = builder.comment("Enables generic integration for energy storages")
+                .define("enableGenericEnergyStorage", true)
             ITEM_STORAGE_TRANSFER_LIMIT = builder.comment("Limits max item transfer per one operation")
                 .defineInRange("itemStorageTransferLimit", 128, 1, Int.MAX_VALUE)
             FLUID_STORAGE_TRANSFER_LIMIT = builder.comment("Limits max fluid transfer per one operation")

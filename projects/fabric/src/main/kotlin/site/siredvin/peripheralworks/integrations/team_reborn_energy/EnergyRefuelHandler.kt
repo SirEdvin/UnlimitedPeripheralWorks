@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.util.LimitedInventory
+import site.siredvin.peripheralium.storages.LimitedInventory
 import team.reborn.energy.api.EnergyStorage
 import java.util.OptionalInt
 import kotlin.math.min
