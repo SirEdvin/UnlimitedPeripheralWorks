@@ -50,6 +50,8 @@ class ModUaLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "Цей периферійний пристрій тепер під'єднано до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "Цей периферійний пристрій тепер від'єднано від проксі для периферійних пристроїв")
 
+        add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
+
         add(ModTooltip.ITEM_DISABLED, "  §4§nПредмет заборонений до використання в налаштуваннях")
         add(ModTooltip.PERIPHERALIUM_HUB_MAX_PERIPHERALS, "  §6Максимальна кількість периферійних пристроїв: %s")
         add(ModTooltip.UNIVERSAL_SCANNER_FREE_RANGE, "  §6Бескоштовний радіус сканування: %s")

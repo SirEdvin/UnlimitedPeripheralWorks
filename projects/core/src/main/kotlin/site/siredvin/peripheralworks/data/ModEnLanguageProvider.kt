@@ -50,6 +50,8 @@ class ModEnLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "This peripheral is connected to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "This peripheral is disconnected from peripheral proxy")
 
+        add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
+
         add(ModTooltip.ITEM_DISABLED, "  §4Item disabled in configuration")
         add(ModTooltip.PERIPHERALIUM_HUB_MAX_PERIPHERALS, "  §6Max upgrades inside hub: %s")
         add(ModTooltip.UNIVERSAL_SCANNER_FREE_RANGE, "  §6Cost-free scan range: %s")
