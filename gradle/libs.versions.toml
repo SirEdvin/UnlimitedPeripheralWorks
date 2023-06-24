@@ -18,7 +18,7 @@ fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "7.0.0"
 # Forge dependencies
-forge = "47.0.19"
+forge = "47.0.1"
 forge-kotlin = "4.3.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
