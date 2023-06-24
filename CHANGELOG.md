@@ -6,11 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2023-06-24
+
 ### Added
 
 - `ae2` support
 - `1.20.1` support
-- `natures compass` 
+- `natures compass` support
 
 ## [0.5.1] - 2023-06-13
 
