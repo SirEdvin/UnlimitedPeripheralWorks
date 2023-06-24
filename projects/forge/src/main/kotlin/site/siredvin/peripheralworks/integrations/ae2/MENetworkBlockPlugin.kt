@@ -27,7 +27,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         const val PLUGIN_TYPE = "ae2"
     }
 
-    class Provider : PeripheralPluginProvider {
+    object Provider : PeripheralPluginProvider {
         override val pluginType: String
             get() = PLUGIN_TYPE
 

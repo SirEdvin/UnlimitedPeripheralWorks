@@ -10,6 +10,7 @@ import site.siredvin.peripheralium.storages.fluid.FluidStorage
 import site.siredvin.peripheralium.storages.fluid.FluidStorageExtractor
 import site.siredvin.peripheralium.storages.item.ItemStorage
 import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
+import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 
 class Integration : Runnable {
 
@@ -38,6 +39,9 @@ class Integration : Runnable {
             ItemStorageExtractor.addStorageExtractor(::extractItemStorage)
             FluidStorageExtractor.addFluidStorageExtractor(::extractFluidStorage)
             EnergyStorageExtractor.addEnergyStorageExtractor(::extractEnergyStorage)
+        }
+        if (Configuration.enableMEInterface) {
+            ComputerCraftProxy.addProvider(MENetworkBlockPlugin.Provider)
         }
     }
 }
