@@ -18,7 +18,7 @@ fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "7.0.0"
 # Forge dependencies
-forge = "47.0.1"
+forge = "47.0.4"
 forge-kotlin = "4.3.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
@@ -58,9 +58,9 @@ integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
 commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
 natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
-mcjtylib = "1.19.4-7.2.6"
-rftools-base = "1.19-4.1.7"
-deep-resonance = "1.19-4.1.3"
+mcjtylib = "1.20-8.0.0"
+rftools-base = "1.20-5.0.0"
+deep-resonance = "1.20-5.0.0"
 
 [libraries]
 # Base libraries
@@ -190,9 +190,9 @@ externalMods-forge-integrations-full = [
 #    "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
     "tomstorage-forge",
-#    "deep-resonance",
-#    "rftools-base", # by deepresonance
-#    "mcjtylib", # by deepresonance, required for class typing
+    "deep-resonance",
+    "rftools-base", # by deepresonance
+    "mcjtylib", # by deepresonance, required for class typing
 ]
 externalMods-forge-integrations-active = [
     "occultism",
@@ -202,14 +202,14 @@ externalMods-forge-integrations-active = [
 #    "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
     "tomstorage-forge",
-#    "deep-resonance",
-#    "rftools-base", # by deepresonance
-#    "mcjtylib", # by deepresonance, required for class typing
+    "deep-resonance",
+    "rftools-base", # by deepresonance
+    "mcjtylib", # by deepresonance, required for class typing
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now
     "gecolib-forge", # by occultism right now
     "smartbrainlib",  # by occultism right now
     "modonomicon",  # by occultism right now
-#    "commoncapabilities", # by integrateddynamics
+#    "commoncapabilities", # by integrateddynamics,
 ]

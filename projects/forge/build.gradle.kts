@@ -29,7 +29,6 @@ forgeShaking {
 
 sourceSets.main {
     kotlin {
-        exclude("site/siredvin/peripheralworks/integrations/deepresonance/**")
         exclude("site/siredvin/peripheralworks/integrations/integrateddynamics/**")
     }
 }
