@@ -38,8 +38,6 @@ tomstorage-fabric = "1.20-1.6.1-fabric"
 techreborn = "4582415" # TechReborn-5.8.1.jar
 reborncore = "4582416" # RebornCore-5.8.1.jar
 ae2-fabric = "fabric-15.0.2-alpha"
-
-# Integration mod dependencies, that not updated yet (fabric)
 natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
 
 
@@ -52,15 +50,15 @@ curios-forge = "5.2.0-beta.3+1.20.1"
 geckolib-forge = "4.2"
 smartbrainlib = "1.11"
 ae2-forge = "forge-15.0.2-alpha"
+natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
+mcjtylib = "1.20-8.0.0"
+rftools-base = "1.20-5.0.0"
+deep-resonance = "1.20-5.0.0"
 
 # Integration mod dependencies, that not updated yet (forge)
 integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
 commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
-natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
-mcjtylib = "1.20-8.0.0"
-rftools-base = "1.20-5.0.0"
-deep-resonance = "1.20-5.0.0"
 
 [libraries]
 # Base libraries
