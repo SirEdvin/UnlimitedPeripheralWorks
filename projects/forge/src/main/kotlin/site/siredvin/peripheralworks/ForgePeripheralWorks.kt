@@ -69,11 +69,12 @@ object ForgePeripheralWorks {
 
     fun commonSetup(event: FMLCommonSetupEvent) {
         // Load all integrations
+        Platform.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
-//        Platform.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)

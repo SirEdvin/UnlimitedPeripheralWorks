@@ -18,7 +18,7 @@ fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "7.0.0"
 # Forge dependencies
-forge = "47.0.4"
+forge = "47.0.1"
 forge-kotlin = "4.3.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
@@ -54,6 +54,8 @@ natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
 mcjtylib = "1.20-8.0.0"
 rftools-base = "1.20-5.0.0"
 deep-resonance = "1.20-5.0.0"
+additional-lanterns = "1.0.5-forge-mc1.20"
+supermartijn642s-core-lib = "1.1.10-forge-mc1.20"
 
 # Integration mod dependencies, that not updated yet (forge)
 integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
@@ -131,6 +133,9 @@ tomstorage-forge = {module = "maven.modrinth:toms-storage", version.ref="tomstor
 mcjtylib = {module = "maven.modrinth:mcjtylib", version.ref="mcjtylib"}
 rftools-base = {module = "maven.modrinth:rftools-base", version.ref = "rftools-base"}
 deep-resonance = {module = "maven.modrinth:deep-resonance", version.ref="deep-resonance"}
+
+additional-lanterns = {module = "maven.modrinth:additional-lanterns", version.ref="additional-lanterns"}
+supermartijn642s-core-lib = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -191,6 +196,7 @@ externalMods-forge-integrations-full = [
     "deep-resonance",
     "rftools-base", # by deepresonance
     "mcjtylib", # by deepresonance, required for class typing
+    "additional-lanterns",
 ]
 externalMods-forge-integrations-active = [
     "occultism",
@@ -203,6 +209,7 @@ externalMods-forge-integrations-active = [
     "deep-resonance",
     "rftools-base", # by deepresonance
     "mcjtylib", # by deepresonance, required for class typing
+    "additional-lanterns",
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now
@@ -210,4 +217,5 @@ externalMods-forge-integrations-activedep = [
     "smartbrainlib",  # by occultism right now
     "modonomicon",  # by occultism right now
 #    "commoncapabilities", # by integrateddynamics,
+    "supermartijn642s-core-lib",  # required by additional-lanterns
 ]
