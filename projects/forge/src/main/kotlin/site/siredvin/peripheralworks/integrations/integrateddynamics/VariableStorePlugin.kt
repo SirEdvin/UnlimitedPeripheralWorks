@@ -11,14 +11,14 @@ import org.cyclops.integrateddynamics.blockentity.BlockEntityVariablestore
 import org.cyclops.integrateddynamics.capability.variablefacade.VariableFacadeHolderConfig
 import org.cyclops.integrateddynamics.core.helper.NetworkHelpers
 import org.cyclops.integrateddynamics.core.item.OperatorVariableFacade
-import site.siredvin.peripheralium.api.storage.SlottedStorage
 import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
-import site.siredvin.peripheralium.storage.ItemHandlerWrapper
+import site.siredvin.peripheralium.storages.item.ItemHandlerWrapper
+import site.siredvin.peripheralium.storages.item.SlottedItemStorage
 
 class VariableStorePlugin(private val store: BlockEntityVariablestore) : AbstractInventoryPlugin() {
 
     override val level: Level
-    override val storage: SlottedStorage
+    override val storage: SlottedItemStorage
     private val context: ValueDeseralizationContext
 
     init {

@@ -91,7 +91,7 @@ object ForgePeripheralWorks {
     }
 
     fun registrySetup(event: NewRegistryEvent) {
-//        Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
     }
 }

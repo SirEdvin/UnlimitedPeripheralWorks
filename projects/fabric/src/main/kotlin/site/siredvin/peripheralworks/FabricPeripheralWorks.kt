@@ -29,6 +29,7 @@ object FabricPeripheralWorks : ModInitializer {
         Platform.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)
         // Register block lookup

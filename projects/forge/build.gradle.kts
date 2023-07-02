@@ -27,12 +27,6 @@ forgeShaking {
     shake()
 }
 
-sourceSets.main {
-    kotlin {
-        exclude("site/siredvin/peripheralworks/integrations/integrateddynamics/**")
-    }
-}
-
 repositories {
     mavenLocal()
     // location of the maven that hosts JEI files since January 2023

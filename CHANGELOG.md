@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `integrateddynamics` integration
+- `additional lanterns` integration for fabric 
+
 ## [0.5.3] - 2023-07-01
 
 ### Added

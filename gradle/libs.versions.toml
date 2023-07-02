@@ -39,6 +39,8 @@ techreborn = "4582415" # TechReborn-5.8.1.jar
 reborncore = "4582416" # RebornCore-5.8.1.jar
 ae2-fabric = "fabric-15.0.2-alpha"
 natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
+additional-lanterns-fabric = "1.0.5-fabric-mc1.20"
+supermartijn642s-core-lib-fabric = "1.1.10-fabric-mc1.20"
 
 
 # Integration mod dependencies (forge)
@@ -54,13 +56,11 @@ natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
 mcjtylib = "1.20-8.0.0"
 rftools-base = "1.20-5.0.0"
 deep-resonance = "1.20-5.0.0"
-additional-lanterns = "1.0.5-forge-mc1.20"
-supermartijn642s-core-lib = "1.1.10-forge-mc1.20"
-
-# Integration mod dependencies, that not updated yet (forge)
-integrateddynamics = "4517692"  # IntegratedDynamics-1.19.4-1.16.2.jar
-commoncapabilites = "4517677"  # CommonCapabilities-1.19.4-2.9.0.jar
-cyclopscore = "4517659"  # CyclopsCore-1.19.4-1.18.2.jar
+additional-lanterns-forge = "1.0.5-forge-mc1.20"
+supermartijn642s-core-lib-forge = "1.1.10-forge-mc1.20"
+integrateddynamics = "1.20.1-1.16.7"  # IntegratedDynamics-1.19.4-1.16.2.jar
+commoncapabilites = "1.20.1-2.9.0"  # CommonCapabilities-1.19.4-2.9.0.jar
+cyclopscore = "1.20.1-1.18.4"  # CyclopsCore-1.19.4-1.18.2.jar
 
 [libraries]
 # Base libraries
@@ -112,6 +112,9 @@ tomstorage-fabric = {module = "maven.modrinth:toms-storage", version.ref="tomsto
 techreborn = {module = "curse.maven:techreborn-233564", version.ref="techreborn"}
 reborncore = {module = "curse.maven:reborncore-237903", version.ref="reborncore"}
 
+additional-lanterns-fabric = {module = "maven.modrinth:additional-lanterns", version.ref="additional-lanterns-fabric"}
+supermartijn642s-core-lib-fabric = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib-fabric"}
+
 # Forge integration dependencies
 occultism = {module = "curse.maven:occultism-361026", version.ref = "occultism"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
@@ -122,9 +125,9 @@ ae2-forge = {module = "maven.modrinth:ae2", version.ref = "ae2-forge"}
 
 easyvillagers = {module = "curse.maven:easyvillagers-400514", version.ref="easyvillagers"}
 
-integrateddynamics = {module = "curse.maven:integrateddynamics-236307", version.ref="integrateddynamics"}
-commoncapabilities = {module = "curse.maven:commoncapabilities-247007", version.ref="commoncapabilites"}
-cyclopscore = {module = "curse.maven:cyclopscore-232758", version.ref="cyclopscore"}
+integrateddynamics = {module = "maven.modrinth:integrated-dynamics", version.ref="integrateddynamics"}
+commoncapabilities = {module = "maven.modrinth:common-capabilities", version.ref="commoncapabilites"}
+cyclopscore = {module = "maven.modrinth:cyclops-core", version.ref="cyclopscore"}
 
 nature-compass-forge = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-forge"}
 
@@ -134,8 +137,8 @@ mcjtylib = {module = "maven.modrinth:mcjtylib", version.ref="mcjtylib"}
 rftools-base = {module = "maven.modrinth:rftools-base", version.ref = "rftools-base"}
 deep-resonance = {module = "maven.modrinth:deep-resonance", version.ref="deep-resonance"}
 
-additional-lanterns = {module = "maven.modrinth:additional-lanterns", version.ref="additional-lanterns"}
-supermartijn642s-core-lib = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib"}
+additional-lanterns-forge = {module = "maven.modrinth:additional-lanterns", version.ref="additional-lanterns-forge"}
+supermartijn642s-core-lib-forge = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib-forge"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -174,48 +177,51 @@ externalMods-fabric-integrations-full = [
     "tomstorage-fabric",
     "techreborn",
     "ae2-fabric",
+    "additional-lanterns-fabric",
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
     "tomstorage-fabric",
     "techreborn",
     "ae2-fabric",
+    "additional-lanterns-fabric",
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
+    "supermartijn642s-core-lib-fabric",  # required by additional-lanterns
 ]
 
 externalMods-forge-integrations-full = [
     "occultism",
     "easyvillagers",
     "ae2-forge",
-#    "integrateddynamics",
-#    "cyclopscore", # by integrateddynamics, required for class typing
+    "integrateddynamics",
+    "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
     "tomstorage-forge",
     "deep-resonance",
     "rftools-base", # by deepresonance
     "mcjtylib", # by deepresonance, required for class typing
-    "additional-lanterns",
+    "additional-lanterns-forge",
 ]
 externalMods-forge-integrations-active = [
     "occultism",
     "easyvillagers",
-#    "ae2-forge",
-#    "integrateddynamics",
-#    "cyclopscore", # by integrateddynamics, required for class typing
+    "ae2-forge",
+    "integrateddynamics",
+    "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
     "tomstorage-forge",
     "deep-resonance",
     "rftools-base", # by deepresonance
     "mcjtylib", # by deepresonance, required for class typing
-    "additional-lanterns",
+    "additional-lanterns-forge",
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now
     "gecolib-forge", # by occultism right now
     "smartbrainlib",  # by occultism right now
     "modonomicon",  # by occultism right now
-#    "commoncapabilities", # by integrateddynamics,
-    "supermartijn642s-core-lib",  # required by additional-lanterns
+    "commoncapabilities", # by integrateddynamics,
+    "supermartijn642s-core-lib-forge",  # required by additional-lanterns
 ]
