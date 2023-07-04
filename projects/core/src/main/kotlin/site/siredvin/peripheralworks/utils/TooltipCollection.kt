@@ -48,4 +48,10 @@ object TooltipCollection {
             ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY.format(PeripheralWorksConfig.peripheralProxyMaxCapacity),
         )
     }
+
+    fun realityForgerTooptips(item: PeripheralBlockItem): List<Component> {
+        return listOf(
+            ModTooltip.REALITY_FORGER_RANGE.format(PeripheralWorksConfig.realityForgerMaxRange),
+        )
+    }
 }

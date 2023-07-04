@@ -33,6 +33,8 @@ class ModUaLanguageProvider(
         add(Blocks.DISPLAY_PEDESTAL.get(), "П'єдестал для демонстрацій", "§3§oМиленький п'єдестал, який не може зберігати предмети, але може показати будь-який предмет")
         add(Blocks.REMOTE_OBSERVER.get(), "Віддалений спостерігач", "§3§oПрацює як звичайний спостерічаг, але може бачити трішки далі")
         add(Blocks.PERIPHERAL_PROXY.get(), "Проксі для периферійних пристроїв", "§3§oДає можливість підключати периферійні присторії, що знаходяться на відстані, до комп'ютера без використання провідної мережі")
+        add(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), "Гнучкий якор реальності")
+        add(Blocks.REALITY_FORGER.get(), "Кузня реальності", "§3§oСкладний девайс, який здатний перековувати якорі реальності на щось інше")
 
         add(ModText.CREATIVE_TAB, "Перифіральних пристроїв нескінченний край")
 
@@ -64,6 +66,7 @@ class ModUaLanguageProvider(
         add(ModTooltip.REMOTE_OBSERVER_MAX_CAPACITY, "  §6Максимальна кількість блоків, що можно підключити: %s")
         add(ModTooltip.PERIPHERAL_PROXY_RANGE, "  §6Максимальна дальність для під'єднання перифейрійних пристроїв: %s")
         add(ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY, "  §6Максимальна кількість під'єднаних перифейрійних пристроїв: %s")
+        add(ModTooltip.REALITY_FORGER_RANGE, "  §6Максимальна дальність ковання: %s")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "З вбудованим осередком")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "З вбудованим незеритовим осередком")

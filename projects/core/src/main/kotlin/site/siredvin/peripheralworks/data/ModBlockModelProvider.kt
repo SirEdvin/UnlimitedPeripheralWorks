@@ -109,5 +109,18 @@ object ModBlockModelProvider {
             TextureMapping.getBlockTexture(Blocks.MAP_PEDESTAL.get(), "_top"),
         )
         horizontalOrientatedBlock(generators, Blocks.PERIPHERAL_PROXY.get())
+        horizontalOrientatedBlock(
+            generators,
+            Blocks.REALITY_FORGER.get(),
+            horizontalOrientedModel(
+                generators,
+                Blocks.REALITY_FORGER.get(),
+                overwriteBottom = peripheralCasingTexture,
+                overwriteTop = peripheralCasingTexture,
+
+            ),
+        )
+
+        generators.delegateItemModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_REALITY_ANCHOR.get()))
     }
 }

@@ -7,4 +7,5 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 
 object BlockTags {
     val PERIPHERAL_PROXY_FORBIDDEN = TagKey.create(Registries.BLOCK, ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy_forbidden"))
+    val REALITY_FORGER_FORBIDDEN = TagKey.create(Registries.BLOCK, ResourceLocation(PeripheralWorksCore.MOD_ID, "reality_forger_forbidden"))
 }

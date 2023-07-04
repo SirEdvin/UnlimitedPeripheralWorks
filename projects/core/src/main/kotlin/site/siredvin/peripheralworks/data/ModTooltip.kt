@@ -16,6 +16,7 @@ enum class ModTooltip : TextRecord {
     REMOTE_OBSERVER_MAX_CAPACITY,
     PERIPHERAL_PROXY_RANGE,
     PERIPHERAL_PROXY_MAX_CAPACITY,
+    REALITY_FORGER_RANGE,
     ;
 
     override val textID: String by lazy {

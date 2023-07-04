@@ -5,6 +5,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.*
+import site.siredvin.peripheralworks.utils.modId
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.Supplier
 
@@ -69,6 +70,24 @@ object BlockEntityTypes {
         PeripheraliumPlatform.createBlockEntityType(
             ::PeripheralProxyBlockEntity,
             Blocks.PERIPHERAL_PROXY.get(),
+        )
+    }
+
+    val FLEXIBLE_REALITY_ANCHOR = PeripheralWorksPlatform.registerBlockEntity(
+        ResourceLocation(PeripheralWorksCore.MOD_ID, "flexible_reality_anchor"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::FlexibleRealityAnchorTileEntity,
+            Blocks.FLEXIBLE_REALITY_ANCHOR.get(),
+        )
+    }
+
+    val REALITY_FORGER: Supplier<BlockEntityType<RealityForgerBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(
+        modId("reality_forger"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::RealityForgerBlockEntity,
+            Blocks.REALITY_FORGER.get(),
         )
     }
 

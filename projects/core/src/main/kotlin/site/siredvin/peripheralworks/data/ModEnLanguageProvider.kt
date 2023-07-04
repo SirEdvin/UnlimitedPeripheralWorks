@@ -33,6 +33,8 @@ class ModEnLanguageProvider(
         add(Blocks.DISPLAY_PEDESTAL.get(), "Display pedestal", "§3§oCute pedestal, that cannot store anything, but can display literally anything")
         add(Blocks.REMOTE_OBSERVER.get(), "Remote observer", "§3§oJust like observer, but can see a little further")
         add(Blocks.PERIPHERAL_PROXY.get(), "Peripheral proxy", "§3§oAllows you to connect peripherals at the small distances without wired network")
+        add(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), "Flexible reality anchor")
+        add(Blocks.REALITY_FORGER.get(), "Reality forger", "§3§oComplex device, that can forge reality anchors to something else")
 
         add(ModText.CREATIVE_TAB, "UnlimitedPeripheralWorks")
 
@@ -64,6 +66,7 @@ class ModEnLanguageProvider(
         add(ModTooltip.REMOTE_OBSERVER_MAX_CAPACITY, "  §6Max connected observed block count: %s")
         add(ModTooltip.PERIPHERAL_PROXY_RANGE, "  §6Max range of connected peripherals: %s")
         add(ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY, "  §6Max connected peripherals count: %s")
+        add(ModTooltip.REALITY_FORGER_RANGE, "  §6Max forging range: %s")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "Hub")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "Netherite Hub")

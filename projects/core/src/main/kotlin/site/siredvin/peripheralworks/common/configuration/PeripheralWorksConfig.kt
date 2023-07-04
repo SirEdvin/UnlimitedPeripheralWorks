@@ -85,6 +85,12 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
     val peripheralProxyMaxCapacity: Int
         get() = ConfigHolder.COMMON_CONFIG.PERIPHERAL_PROXY_MAX_CAPACITY.get()
 
+    val enableRealityForger: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_REALITY_FORGER.get()
+
+    val realityForgerMaxRange: Int
+        get() = ConfigHolder.COMMON_CONFIG.REALITY_FORGER_MAX_RANGE.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -126,6 +132,8 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
         val ENABLE_PERIPHERAL_PROXY: ForgeConfigSpec.BooleanValue
         val PERIPHERAL_PROXY_MAX_RANGE: ForgeConfigSpec.IntValue
         val PERIPHERAL_PROXY_MAX_CAPACITY: ForgeConfigSpec.IntValue
+        val ENABLE_REALITY_FORGER: ForgeConfigSpec.BooleanValue
+        val REALITY_FORGER_MAX_RANGE: ForgeConfigSpec.IntValue
 
         init {
             builder.push("base")
@@ -192,6 +200,10 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
                 .defineInRange("peripheralProxyMaxRange", 16, 1, 128)
             PERIPHERAL_PROXY_MAX_CAPACITY = builder.comment("Max capacity for peripheral proxy")
                 .defineInRange("peripheralProxyMaxCapacity", 8, 1, 128)
+            ENABLE_REALITY_FORGER = builder.comment("Enable reality forger")
+                .define("enableRealityForger", true)
+            REALITY_FORGER_MAX_RANGE = builder.comment("Reality forger max range for forging")
+                .defineInRange("realityForgerMaxRange", 24, 1, 256)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.values(), builder)

@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "peripheralworks:block/reality_forger",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "peripheralworks:block/reality_forger",
+      "y": 0
+    },
+    "facing=south": {
+      "model": "peripheralworks:block/reality_forger",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "peripheralworks:block/reality_forger",
+      "y": 270
+    }
+  }
+}

@@ -5,10 +5,7 @@ import net.minecraft.world.level.block.Block
 import site.siredvin.peripheralium.common.blocks.GenericBlockEntityBlock
 import site.siredvin.peripheralium.common.items.PeripheralBlockItem
 import site.siredvin.peripheralium.util.BlockUtil
-import site.siredvin.peripheralworks.common.block.DisplayPedestal
-import site.siredvin.peripheralworks.common.block.ItemPedestal
-import site.siredvin.peripheralworks.common.block.MapPedestal
-import site.siredvin.peripheralworks.common.block.PeripheralProxy
+import site.siredvin.peripheralworks.common.block.*
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.utils.TooltipCollection
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
@@ -108,9 +105,26 @@ object Blocks {
             it,
             Item.Properties(),
             PeripheralWorksConfig::enablePeripheralProxy,
-            alwaysShow = false,
+            alwaysShow = true,
             TooltipCollection::isDisabled,
             TooltipCollection::peripheralProxyTooptips,
+        )
+    }
+    val FLEXIBLE_REALITY_ANCHOR = PeripheralWorksPlatform.registerBlock(
+        "flexible_reality_anchor",
+        ::FlexibleRealityAnchor,
+    )
+    val REALITY_FORGER = PeripheralWorksPlatform.registerBlock(
+        "reality_forger",
+        { GenericBlockEntityBlock({ BlockEntityTypes.REALITY_FORGER.get() }, isRotatable = true, belongToTickingEntity = false) },
+    ) {
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableRealityForger,
+            alwaysShow = true,
+            TooltipCollection::isDisabled,
+            TooltipCollection::realityForgerTooptips,
         )
     }
 
