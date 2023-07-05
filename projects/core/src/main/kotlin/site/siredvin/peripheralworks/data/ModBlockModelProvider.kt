@@ -120,7 +120,5 @@ object ModBlockModelProvider {
 
             ),
         )
-
-        generators.delegateItemModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_REALITY_ANCHOR.get()))
     }
 }

@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `integrateddynamics` integration
-- `additional lanterns` integration for fabric 
+- `additional lanterns` integration for fabric
+- Reality forger
 
 ## [0.5.3] - 2023-07-01
 

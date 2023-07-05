@@ -9,7 +9,7 @@ import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 object ExpansionModelProvider : ModelResourceProvider {
 
     override fun loadModelResource(resourceId: ResourceLocation, context: ModelProviderContext): UnbakedModel? {
-        if (resourceId == FlexibleRealityAnchor.EXTRA_MODEL_ID) {
+        if (resourceId == FlexibleRealityAnchor.BLOCK_MODEL_ID || resourceId == FlexibleRealityAnchor.ITEM_MODEL_ID) {
             return FlexibleRealityAnchorModel()
         }
         return null

@@ -34,7 +34,8 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorTileEntity>(
 
         val SAVABLE_PROPERTIES = listOf(CONFIGURED, PLAYER_PASSABLE, LIGHT_PASSABLE, SKY_LIGHT_PASSABLE, INVISIBLE)
 
-        val EXTRA_MODEL_ID = modId("block/flexible_reality_anchor")
+        val BLOCK_MODEL_ID = modId("block/flexible_reality_anchor")
+        val ITEM_MODEL_ID = modId("item/flexible_reality_anchor")
     }
 
     init {

@@ -51,6 +51,7 @@ class ModEnLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_FORBIDDEN, "This block is forbidden to add to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "This peripheral is connected to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "This peripheral is disconnected from peripheral proxy")
+        add(ModText.DEFINITELY_NOT, "§3§oDefinitely not a ")
 
         add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
 

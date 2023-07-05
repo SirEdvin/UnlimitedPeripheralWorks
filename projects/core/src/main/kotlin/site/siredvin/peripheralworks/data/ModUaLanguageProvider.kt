@@ -51,6 +51,7 @@ class ModUaLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_FORBIDDEN, "Цей блок заборонено додавати до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "Цей периферійний пристрій тепер під'єднано до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "Цей периферійний пристрій тепер від'єднано від проксі для периферійних пристроїв")
+        add(ModText.DEFINITELY_NOT, "§3§oНу точно не ")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
 

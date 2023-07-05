@@ -7,6 +7,7 @@ import site.siredvin.peripheralium.common.items.PeripheralBlockItem
 import site.siredvin.peripheralium.util.BlockUtil
 import site.siredvin.peripheralworks.common.block.*
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.item.FlexibleRealityAnchorItem
 import site.siredvin.peripheralworks.utils.TooltipCollection
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 
@@ -113,7 +114,9 @@ object Blocks {
     val FLEXIBLE_REALITY_ANCHOR = PeripheralWorksPlatform.registerBlock(
         "flexible_reality_anchor",
         ::FlexibleRealityAnchor,
-    )
+    ) {
+        FlexibleRealityAnchorItem(it)
+    }
     val REALITY_FORGER = PeripheralWorksPlatform.registerBlock(
         "reality_forger",
         { GenericBlockEntityBlock({ BlockEntityTypes.REALITY_FORGER.get() }, isRotatable = true, belongToTickingEntity = false) },

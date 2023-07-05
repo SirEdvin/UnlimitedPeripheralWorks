@@ -1,8 +1,7 @@
-// 1.20.1	2023-07-04T23:23:25.182411699	Unlimited Peripheral Works/minecraft:block Loot Table
+// 1.20.1	2023-07-05T11:49:31.63974139	Unlimited Peripheral Works/minecraft:block Loot Table
 0781ecc4d7caaad202150e2bbaacb435a03882ca data/peripheralworks/loot_tables/blocks/ultimate_sensor.json
 fbbfca4d72a5799857020a3d05f2541ca11c4d71 data/peripheralworks/loot_tables/blocks/item_pedestal.json
 49ceaf9817f5ac29e3613656fc964267d13e4ec4 data/peripheralworks/loot_tables/blocks/reality_forger.json
-acdbe79f1df3f4bb894312155980d5871064c7c2 data/peripheralworks/loot_tables/blocks/flexible_reality_anchor.json
 11ab7b4f0c2ecfef2d9bcbbc8f5721ed50313d70 data/peripheralworks/loot_tables/blocks/universal_scanner.json
 7ed2c59efe2eff6af7d68adf69f13b7c8b637de5 data/peripheralworks/loot_tables/blocks/peripheral_proxy.json
 c41e20b1f8780d66f6a04d3be5bd08af1a4f0067 data/peripheralworks/loot_tables/blocks/display_pedestal.json

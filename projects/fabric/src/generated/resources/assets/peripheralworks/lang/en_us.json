@@ -27,6 +27,7 @@
   "pocket.peripheralworks.ultimate_sensor": "Sensing",
   "pocket.peripheralworks.universal_scanner": "Scanning",
   "text.peripheralworks.creative_tab": "UnlimitedPeripheralWorks",
+  "text.peripheralworks.definitely_not": "§3§oDefinitely not a ",
   "text.peripheralworks.peripheral_proxy_block_added": "This peripheral is connected to peripheral proxy",
   "text.peripheralworks.peripheral_proxy_block_removed": "This peripheral is disconnected from peripheral proxy",
   "text.peripheralworks.peripheral_proxy_forbidden": "This block is forbidden to add to peripheral proxy",
