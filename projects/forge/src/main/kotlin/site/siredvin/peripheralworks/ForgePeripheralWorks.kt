@@ -8,6 +8,7 @@ import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraftforge.client.event.ModelEvent
 import net.minecraftforge.common.util.LazyOptional
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
@@ -18,6 +19,8 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.NewRegistryEvent
 import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
+import site.siredvin.peripheralworks.client.FlexibleRealityAnchorGeometryLoader
+import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
@@ -57,6 +60,7 @@ object ForgePeripheralWorks {
         val eventBus = MOD_CONTEXT.getKEventBus()
         eventBus.addListener(this::commonSetup)
         eventBus.addListener(this::registrySetup)
+        eventBus.addListener(this::registryModel)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         blocksRegistry.register(eventBus)
@@ -93,5 +97,12 @@ object ForgePeripheralWorks {
     fun registrySetup(event: NewRegistryEvent) {
         Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
+    }
+
+    fun registryModel(event: ModelEvent.RegisterGeometryLoaders) {
+        val realityAnchor = FlexibleRealityAnchorGeometryLoader()
+        event.register("flexible_reality_anchor", realityAnchor)
+        event.register(FlexibleRealityAnchor.BLOCK_MODEL_ID.path, realityAnchor)
+        event.register(FlexibleRealityAnchor.ITEM_MODEL_ID.path, realityAnchor)
     }
 }

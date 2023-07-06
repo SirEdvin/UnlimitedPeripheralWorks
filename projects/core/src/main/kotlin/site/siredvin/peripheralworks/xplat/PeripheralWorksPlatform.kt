@@ -100,6 +100,10 @@ interface PeripheralWorksPlatform : ModInformationHolder {
             POCKET_UPGRADES.add(registered as Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>)
             return registered
         }
+
+        fun buildFlexibleRealityAnchorBuilder(): BlockEntityType<out BlockEntity> {
+            return get().buildFlexibleRealityAnchorBuilder()
+        }
     }
 
     override val blocks: List<Supplier<out Block>>
@@ -129,8 +133,11 @@ interface PeripheralWorksPlatform : ModInformationHolder {
         key: ResourceLocation,
         serializer: TurtleUpgradeSerialiser<V>,
     ): Supplier<TurtleUpgradeSerialiser<V>>
+
     fun <V : IPocketUpgrade> registerPocketUpgrade(
         key: ResourceLocation,
         serializer: PocketUpgradeSerialiser<V>,
     ): Supplier<PocketUpgradeSerialiser<V>>
+
+    fun buildFlexibleRealityAnchorBuilder(): BlockEntityType<out BlockEntity>
 }

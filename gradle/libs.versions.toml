@@ -18,7 +18,7 @@ fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "7.0.0"
 # Forge dependencies
-forge = "47.0.1"
+forge = "47.0.43"
 forge-kotlin = "4.3.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
@@ -37,21 +37,21 @@ teamreborn-energy = "3.0.0"
 tomstorage-fabric = "1.20-1.6.1-fabric"
 techreborn = "4582415" # TechReborn-5.8.1.jar
 reborncore = "4582416" # RebornCore-5.8.1.jar
-ae2-fabric = "fabric-15.0.2-alpha"
+ae2-fabric = "fabric-15.0.3-alpha"
 natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
 additional-lanterns-fabric = "1.0.5-fabric-mc1.20"
 supermartijn642s-core-lib-fabric = "1.1.10-fabric-mc1.20"
 
 
 # Integration mod dependencies (forge)
-occultism = "4600625"  # occultism-1.20.1-1.80.10.
-modonomicon = "1.20-1.33.1"
+occultism = "1.20.1-1.80.12"
+modonomicon = "1.20.1-1.37.0"
 tomstorage-forge = "1.20-1.6.1"
 easyvillagers = "4584220"  # [1.20.1] Easy Villagers 1.20.1-1.0.8
 curios-forge = "5.2.0-beta.3+1.20.1"
 geckolib-forge = "4.2"
 smartbrainlib = "1.11"
-ae2-forge = "forge-15.0.2-alpha"
+ae2-forge = "forge-15.0.3-alpha"
 natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
 mcjtylib = "1.20-8.0.0"
 rftools-base = "1.20-5.0.0"
@@ -116,7 +116,7 @@ additional-lanterns-fabric = {module = "maven.modrinth:additional-lanterns", ver
 supermartijn642s-core-lib-fabric = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib-fabric"}
 
 # Forge integration dependencies
-occultism = {module = "curse.maven:occultism-361026", version.ref = "occultism"}
+occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
 gecolib-forge = {module = "software.bernie.geckolib:geckolib-forge-1.20", version.ref = "geckolib-forge"}
 smartbrainlib = {module = "net.tslat.smartbrainlib:SmartBrainLib-forge-1.20", version.ref = "smartbrainlib"}

@@ -22,7 +22,7 @@ import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
 import site.siredvin.peripheralium.xplat.XplatRegistries
-import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorTileEntity
+import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
 import java.util.*
 import java.util.function.Function
@@ -47,11 +47,11 @@ class FlexibleRealityAnchorModel : UnbakedModel, BakedModel, FabricBakedModel {
     }
 
     override fun usesBlockLight(): Boolean {
-        return false
+        return true
     }
 
     override fun isCustomRenderer(): Boolean {
-        return false
+        return true
     }
 
     override fun getParticleIcon(): TextureAtlasSprite {
@@ -81,7 +81,7 @@ class FlexibleRealityAnchorModel : UnbakedModel, BakedModel, FabricBakedModel {
         context: RenderContext,
     ) {
         val entity = blockView.getBlockEntity(pos)
-        if (entity !is FlexibleRealityAnchorTileEntity) {
+        if (entity !is FlexibleRealityAnchorBlockEntity) {
             return
         }
         val mimicBlockState = entity.mimic ?: return
@@ -97,7 +97,7 @@ class FlexibleRealityAnchorModel : UnbakedModel, BakedModel, FabricBakedModel {
         if (!stack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())) {
             return emitDefaultItemQuads(context)
         }
-        val mimicBlockStateTag = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(FlexibleRealityAnchorTileEntity.MIMIC_TAG) ?: return emitDefaultItemQuads(context)
+        val mimicBlockStateTag = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG) ?: return emitDefaultItemQuads(context)
         val mimicBlockState = NbtUtils.readBlockState(XplatRegistries.BLOCKS, mimicBlockStateTag)
         if (mimicBlockState.isAir) return emitDefaultItemQuads(context)
         val bakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState)

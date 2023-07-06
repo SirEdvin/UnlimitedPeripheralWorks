@@ -18,8 +18,8 @@ import site.siredvin.peripheralium.util.representation.LuaInterpretation
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.util.world.ScanUtils
 import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.peripheralworks.api.IFlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
-import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorTileEntity
 import site.siredvin.peripheralworks.common.blockentity.RealityForgerBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.tags.BlockTags
@@ -118,7 +118,7 @@ class RealityForgerPeripheral(
     }
 
     private fun forgeRealityTileEntity(
-        realityMirror: FlexibleRealityAnchorTileEntity,
+        realityMirror: IFlexibleRealityAnchorBlockEntity,
         targetState: BlockState?,
         appearanceTable: Map<*, *>,
     ) {
@@ -144,7 +144,7 @@ class RealityForgerPeripheral(
         val data = mutableListOf<Map<String, Any>>()
         ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { blockState, pos ->
             val blockEntity = level!!.getBlockEntity(pos)
-            if (blockEntity is FlexibleRealityAnchorTileEntity) {
+            if (blockEntity is IFlexibleRealityAnchorBlockEntity) {
                 data.add(LuaRepresentation.forBlockPos(pos, this.peripheralOwner.facing, this.pos))
             }
         })
@@ -159,7 +159,7 @@ class RealityForgerPeripheral(
             return MethodResult.of(null, "Block are too far away")
         }
         val appearanceTable = arguments.getTable(1)
-        val entity = level!!.getBlockEntity(targetPosition) as? FlexibleRealityAnchorTileEntity
+        val entity = level!!.getBlockEntity(targetPosition) as? IFlexibleRealityAnchorBlockEntity
             ?: return MethodResult.of(false, "Incorrect coordinates")
         val targetState = findBlock(appearanceTable)
         forgeRealityTileEntity(entity, targetState, appearanceTable)
@@ -174,12 +174,12 @@ class RealityForgerPeripheral(
             if (value !is Map<*, *>) throw LuaException("First argument should be list of block positions")
             poses.add(LuaInterpretation.asBlockPos(peripheralOwner.pos, value, peripheralOwner.facing))
         }
-        val entities: MutableList<FlexibleRealityAnchorTileEntity> = ArrayList<FlexibleRealityAnchorTileEntity>()
+        val entities: MutableList<IFlexibleRealityAnchorBlockEntity> = ArrayList<IFlexibleRealityAnchorBlockEntity>()
         for (pos in poses) {
             if (radiusCorrect(pos, peripheralOwner.pos, interactionRadius)) {
                 return MethodResult.of(null, "One of blocks are too far away")
             }
-            val entity = level!!.getBlockEntity(pos) as? FlexibleRealityAnchorTileEntity
+            val entity = level!!.getBlockEntity(pos) as? IFlexibleRealityAnchorBlockEntity
                 ?: return MethodResult.of(
                     false,
                     "One of provided coordinate are not correct",
@@ -208,7 +208,7 @@ class RealityForgerPeripheral(
         }
         ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { blockState, blockPos ->
             val blockEntity = level!!.getBlockEntity(blockPos)
-            if (blockEntity is FlexibleRealityAnchorTileEntity) {
+            if (blockEntity is IFlexibleRealityAnchorBlockEntity) {
                 forgeRealityTileEntity(blockEntity, targetState, table)
             }
         })
