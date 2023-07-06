@@ -24,12 +24,16 @@ import java.util.stream.Collectors
 import kotlin.collections.HashMap
 
 object RecipeRegistryToolkit {
-    val GSON = Gson()
+    private val GSON = Gson()
     val SERIALIZATION_NULL = Any()
 
     private val RECIPE_SERIALIZERS: MutableMap<Class<out Recipe<*>>, RecipeTransformer<*, Recipe<*>>> = mutableMapOf()
     private val SERIALIZERS: MutableMap<Class<*>, java.util.function.Function<Any, Any?>> = mutableMapOf()
     private val RECIPE_PREDICATES: MutableMap<RecipeType<*>, RecipeSearchPredicate> = mutableMapOf()
+    private val EXCLUDED_RECIPE_TYPES: MutableSet<ResourceLocation> = mutableSetOf()
+
+    val excludedRecipeTypes: Set<ResourceLocation>
+        get() = EXCLUDED_RECIPE_TYPES
 
     private val DEFAULT_RECIPE_PREDICATE: RecipeSearchPredicate =
         RecipeSearchPredicate { stack, recipe, checkMode ->
@@ -39,9 +43,13 @@ object RecipeRegistryToolkit {
             )
         }
 
+    fun excludeRecipeType(type: ResourceLocation) {
+        EXCLUDED_RECIPE_TYPES.add(type)
+    }
+
     init {
         registerSerializer(Ingredient::class.java) {
-            if (it.isEmpty()) {
+            if (it.isEmpty) {
                 return@registerSerializer SERIALIZATION_NULL
             }
             try {
@@ -124,7 +132,6 @@ object RecipeRegistryToolkit {
 
     @Throws(LuaException::class)
     fun getRecipeType(type: ResourceLocation): RecipeType<*> {
-        // TODO: add blocklisting
         return XplatRegistries.RECIPE_TYPES.tryGet(type)
             ?: throw LuaException(String.format("Incorrect recipe type %s", type))
     }

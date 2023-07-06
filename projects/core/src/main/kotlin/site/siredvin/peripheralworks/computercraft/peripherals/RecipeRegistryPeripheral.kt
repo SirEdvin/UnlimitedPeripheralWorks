@@ -32,9 +32,10 @@ class RecipeRegistryPeripheral(
     @LuaFunction
     @Throws(LuaException::class)
     fun getRecipeTypes(): MethodResult {
-        // TODO: Add blocklist of recipe types somehow
         return MethodResult.of(
-            XplatRegistries.RECIPE_TYPES.keySet().stream().map(ResourceLocation::toString)
+            XplatRegistries.RECIPE_TYPES.keySet().stream().filter {
+                !RecipeRegistryToolkit.excludedRecipeTypes.contains(it)
+            }.map(ResourceLocation::toString)
                 .collect(Collectors.toList()),
         )
     }
