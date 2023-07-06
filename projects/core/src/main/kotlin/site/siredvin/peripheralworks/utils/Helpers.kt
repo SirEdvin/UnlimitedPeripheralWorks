@@ -6,11 +6,9 @@ import net.minecraft.ResourceLocationException
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
-
 fun modId(text: String): ResourceLocation {
     return ResourceLocation(PeripheralWorksCore.MOD_ID, text)
 }
-
 
 // argument tricks
 @Throws(LuaException::class)

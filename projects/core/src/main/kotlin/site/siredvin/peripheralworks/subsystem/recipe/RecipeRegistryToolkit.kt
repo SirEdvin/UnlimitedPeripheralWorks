@@ -23,7 +23,6 @@ import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.HashMap
 
-
 object RecipeRegistryToolkit {
     val GSON = Gson()
     val SERIALIZATION_NULL = Any()
@@ -36,24 +35,25 @@ object RecipeRegistryToolkit {
         RecipeSearchPredicate { stack, recipe, checkMode ->
             checkMode.itemStackEquals(
                 recipe.getResultItem(RegistryAccess.EMPTY),
-                stack
+                stack,
             )
         }
 
     init {
         registerSerializer(Ingredient::class.java) {
-            if (it.isEmpty())
-                return@registerSerializer SERIALIZATION_NULL;
+            if (it.isEmpty()) {
+                return@registerSerializer SERIALIZATION_NULL
+            }
             try {
                 return@registerSerializer GSON.fromJson(it.toJson(), HashMap::class.java)
             } catch (ignored: JsonSyntaxException) {
                 try {
                     return@registerSerializer GSON.fromJson(it.toJson(), ArrayList::class.java)
                 } catch (e: JsonSyntaxException) {
-                    e.printStackTrace();
+                    e.printStackTrace()
                 }
             }
-            return@registerSerializer null;
+            return@registerSerializer null
         }
         registerSerializer(ItemStack::class.java) {
             if (it.isEmpty) return@registerSerializer SERIALIZATION_NULL
@@ -61,20 +61,20 @@ object RecipeRegistryToolkit {
         }
         registerSerializer(Item::class.java, LuaRepresentation::forItem)
         registerSerializer(Fluid::class.java, LuaRepresentation::forFluid)
-        registerSerializer(JsonObject::class.java, RecipeRegistryToolkit ::serializeJson);
+        registerSerializer(JsonObject::class.java, RecipeRegistryToolkit::serializeJson)
         registerSerializer(EntityType::class.java) {
             return@registerSerializer mutableMapOf(
-                "name" to XplatRegistries.ENTITY_TYPES.getKey(it).toString()
+                "name" to XplatRegistries.ENTITY_TYPES.getKey(it).toString(),
             )
         }
         registerSerializer(Tag::class.java, PeripheraliumPlatform::nbtToLua)
     }
 
-    fun <V: Container, T : Recipe<V>> registerRecipeSerializer(recipeClass: Class<T>, transformer: RecipeTransformer<V, T>) {
+    fun <V : Container, T : Recipe<V>> registerRecipeSerializer(recipeClass: Class<T>, transformer: RecipeTransformer<V, T>) {
         RECIPE_SERIALIZERS[recipeClass] = transformer as RecipeTransformer<*, Recipe<*>>
     }
 
-    fun <V: Container, T : Recipe<V>> registerRecipeSerializerRaw(recipeClass: Class<T>, transformer: RecipeTransformer<Container, Recipe<Container>>) {
+    fun <V : Container, T : Recipe<V>> registerRecipeSerializerRaw(recipeClass: Class<T>, transformer: RecipeTransformer<Container, Recipe<Container>>) {
         RECIPE_SERIALIZERS[recipeClass] = transformer as RecipeTransformer<*, Recipe<*>>
     }
 
@@ -84,7 +84,7 @@ object RecipeRegistryToolkit {
 
     fun <T : Recipe<*>> registerRecipePredicate(
         recipeType: RecipeType<T>,
-        searchFunction: RecipeSearchPredicate
+        searchFunction: RecipeSearchPredicate,
     ) {
         RECIPE_PREDICATES[recipeType] = searchFunction
     }
@@ -94,14 +94,16 @@ object RecipeRegistryToolkit {
     }
 
     fun serializePossibleCollection(obj: Any?): Any? {
-        if (obj is Collection<*>)
+        if (obj is Collection<*>) {
             return obj.stream().map<Any>(RecipeRegistryToolkit::serialize).collect(
-                Collectors.toList()
+                Collectors.toList(),
             )
-        if (obj != null && obj.javaClass.isArray)
+        }
+        if (obj != null && obj.javaClass.isArray) {
             return Arrays.stream(obj as Array<Any>).map(RecipeRegistryToolkit::serialize).collect(
-                Collectors.toList()
+                Collectors.toList(),
             )
+        }
         return serialize(obj)
     }
 
@@ -135,7 +137,7 @@ object RecipeRegistryToolkit {
         recipeType: RecipeType<*>,
         result: ItemStack,
         level: Level,
-        checkMode: NBTCheckMode
+        checkMode: NBTCheckMode,
     ): MutableList<Any>? {
         val searchPredicate =
             RECIPE_PREDICATES.getOrDefault(recipeType, DEFAULT_RECIPE_PREDICATE)
@@ -144,7 +146,7 @@ object RecipeRegistryToolkit {
             searchPredicate.test(
                 result,
                 it as Recipe<Container>,
-                checkMode
+                checkMode,
             )
         }.collect(Collectors.toList())
     }
@@ -153,8 +155,12 @@ object RecipeRegistryToolkit {
     fun collectRecipeTypes(types: Any?): List<RecipeType<*>> {
         if (types == null || types.toString() == "*") return XplatRegistries.RECIPE_TYPES.iterator().asSequence().toList()
         if (types is String) {
-            return if (types.contains(":")) listOf(getRecipeType(ResourceLocation(types.toString()))) else XplatRegistries.RECIPE_TYPES.iterator().asSequence()
-                .filter { p -> p.toString().startsWith(types) }.toList()
+            return if (types.contains(":")) {
+                listOf(getRecipeType(ResourceLocation(types.toString())))
+            } else {
+                XplatRegistries.RECIPE_TYPES.iterator().asSequence()
+                    .filter { p -> p.toString().startsWith(types) }.toList()
+            }
         }
         if (types is Map<*, *>) {
             val recipeTypes: MutableList<RecipeType<*>> = mutableListOf()

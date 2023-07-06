@@ -4,8 +4,7 @@ import net.minecraft.core.RegistryAccess
 import net.minecraft.world.Container
 import net.minecraft.world.item.crafting.Recipe
 
-
-object DefaultRecipeTransformer: RecipeTransformer<Container, Recipe<Container>>() {
+object DefaultRecipeTransformer : RecipeTransformer<Container, Recipe<Container>>() {
     override fun getInputs(recipe: Recipe<Container>): List<*> {
         return recipe.ingredients
     }

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "peripheralworks:block/informative_registry_side",
+    "side": "peripheralworks:block/informative_registry_side",
+    "top": "peripheralworks:block/peripheral_casing"
+  }
+}

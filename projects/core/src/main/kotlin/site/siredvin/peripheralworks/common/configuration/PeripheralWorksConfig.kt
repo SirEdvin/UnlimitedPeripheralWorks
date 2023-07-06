@@ -91,6 +91,12 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
     val realityForgerMaxRange: Int
         get() = ConfigHolder.COMMON_CONFIG.REALITY_FORGER_MAX_RANGE.get()
 
+    val enableRecipeRegistry: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_RECIPE_REGISTRY.get()
+
+    val enableInformativeRegistry: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_INFORMATIVE_REGISTRY.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -134,6 +140,8 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
         val PERIPHERAL_PROXY_MAX_CAPACITY: ForgeConfigSpec.IntValue
         val ENABLE_REALITY_FORGER: ForgeConfigSpec.BooleanValue
         val REALITY_FORGER_MAX_RANGE: ForgeConfigSpec.IntValue
+        val ENABLE_RECIPE_REGISTRY: ForgeConfigSpec.BooleanValue
+        val ENABLE_INFORMATIVE_REGISTRY: ForgeConfigSpec.BooleanValue
 
         init {
             builder.push("base")
@@ -204,6 +212,10 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
                 .define("enableRealityForger", true)
             REALITY_FORGER_MAX_RANGE = builder.comment("Reality forger max range for forging")
                 .defineInRange("realityForgerMaxRange", 24, 1, 256)
+            ENABLE_RECIPE_REGISTRY = builder.comment("Enables recipe registry")
+                .define("enableRecipeRegistry", true)
+            ENABLE_INFORMATIVE_REGISTRY = builder.comment("Enables informative registry")
+                .define("enableInformativeRegistry", true)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.values(), builder)

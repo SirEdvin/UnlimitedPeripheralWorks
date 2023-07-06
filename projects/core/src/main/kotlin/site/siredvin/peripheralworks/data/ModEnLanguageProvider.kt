@@ -36,6 +36,7 @@ class ModEnLanguageProvider(
         add(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), "Flexible reality anchor")
         add(Blocks.REALITY_FORGER.get(), "Reality forger", "§3§oComplex device, that can forge reality anchors to something else")
         add(Blocks.RECIPE_REGISTRY.get(), "Recipe registry", "§3§oKnowledge device, that holds power to understand any recipe but sometimes luck power to provide information about it")
+        add(Blocks.INFORMATIVE_REGISTRY.get(), "Informative registry", "§3§oKnowledge device, that holds power to list all items in existence")
 
         add(ModText.CREATIVE_TAB, "UnlimitedPeripheralWorks")
 

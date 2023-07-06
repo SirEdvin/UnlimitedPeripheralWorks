@@ -1,5 +1,6 @@
-// 1.20.1	2023-07-06T17:16:01.906218623	vanilla/Loot Tables
+// 1.20.1	2023-07-06T19:54:25.012064113	vanilla/Loot Tables
 0c0f688a43d96795424c446a11d66f061ac3edb9 data/peripheralworks/loot_tables/blocks/display_pedestal.json
+50d55d63ec2c9481748c94e36df7946e41a0452b data/peripheralworks/loot_tables/blocks/informative_registry.json
 d917aadf727552373a8e57bbf68d7945c6947a93 data/peripheralworks/loot_tables/blocks/item_pedestal.json
 1bb7b81a14509373c12d1c54be94d419b23fe865 data/peripheralworks/loot_tables/blocks/map_pedestal.json
 ae7823a6af3037ed7c42aa0881431b77c50b07fd data/peripheralworks/loot_tables/blocks/peripheral_casing.json

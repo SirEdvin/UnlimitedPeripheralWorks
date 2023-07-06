@@ -1,6 +1,7 @@
 {
   "block.peripheralworks.display_pedestal": "Display pedestal",
   "block.peripheralworks.flexible_reality_anchor": "Flexible reality anchor",
+  "block.peripheralworks.informative_registry": "Informative registry",
   "block.peripheralworks.item_pedestal": "Item pedestal",
   "block.peripheralworks.map_pedestal": "Map pedestal",
   "block.peripheralworks.peripheral_casing": "Peripheral casing",
@@ -11,6 +12,7 @@
   "block.peripheralworks.ultimate_sensor": "Ultimate sensor",
   "block.peripheralworks.universal_scanner": "Universal scanner",
   "item.peripheralworks.display_pedestal.tooltip": "§3§oCute pedestal, that cannot store anything, but can display literally anything",
+  "item.peripheralworks.informative_registry.tooltip": "§3§oKnowledge device, that holds power to list all items in existence",
   "item.peripheralworks.item_pedestal.tooltip": "§3§oCute pedestal, that can store only single item stack. But seems you can get more information about this stack now",
   "item.peripheralworks.map_pedestal.tooltip": "§3§oCute pedestal, that can store only single item stack. Infused with compass, it now can understand maps",
   "item.peripheralworks.netherite_peripheralium_hub": "Ultimate configurator",

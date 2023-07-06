@@ -97,5 +97,14 @@ object BlockEntityTypes {
         )
     }
 
+    val INFORMATIVE_REGISTRY: Supplier<BlockEntityType<InformativeRegistryBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(
+        modId("informative_registry"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::InformativeRegistryBlockEntity,
+            Blocks.INFORMATIVE_REGISTRY.get(),
+        )
+    }
+
     fun doSomething() {}
 }

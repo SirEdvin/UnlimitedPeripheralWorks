@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-06T17:15:51.231498374	Unlimited Peripheral Works/minecraft:block Loot Table
+// 1.20.1	2023-07-06T19:54:15.625548157	Unlimited Peripheral Works/minecraft:block Loot Table
 0781ecc4d7caaad202150e2bbaacb435a03882ca data/peripheralworks/loot_tables/blocks/ultimate_sensor.json
 f481eebd4d6b4c19dada4efc59b0fb8c9de4333c data/peripheralworks/loot_tables/blocks/recipe_registry.json
 fbbfca4d72a5799857020a3d05f2541ca11c4d71 data/peripheralworks/loot_tables/blocks/item_pedestal.json
@@ -7,5 +7,6 @@ fbbfca4d72a5799857020a3d05f2541ca11c4d71 data/peripheralworks/loot_tables/blocks
 7ed2c59efe2eff6af7d68adf69f13b7c8b637de5 data/peripheralworks/loot_tables/blocks/peripheral_proxy.json
 c41e20b1f8780d66f6a04d3be5bd08af1a4f0067 data/peripheralworks/loot_tables/blocks/display_pedestal.json
 c6d8afeee6814ba651ea19fd38b4c18f1f415651 data/peripheralworks/loot_tables/blocks/peripheral_casing.json
+89262b4e977b6ca1413d449a6de8bbb8fcdcf7f7 data/peripheralworks/loot_tables/blocks/informative_registry.json
 d687230cc9ef8c2e199ff471525d3244bd321197 data/peripheralworks/loot_tables/blocks/map_pedestal.json
 a6c257852185d4ed159fd5d346ab4b2c7fa5238e data/peripheralworks/loot_tables/blocks/remote_observer.json

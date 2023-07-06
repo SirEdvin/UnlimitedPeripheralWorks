@@ -8,8 +8,7 @@ import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-
-abstract class RecipeTransformer<V: Container, T : Recipe<V>> {
+abstract class RecipeTransformer<V : Container, T : Recipe<V>> {
     abstract fun getInputs(recipe: T): List<*>
 
     abstract fun getOutputs(recipe: T): List<*>

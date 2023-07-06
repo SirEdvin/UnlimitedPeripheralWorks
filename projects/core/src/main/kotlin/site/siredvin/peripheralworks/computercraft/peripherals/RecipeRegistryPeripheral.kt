@@ -13,28 +13,29 @@ import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.blockentity.RecipeRegistryBlockEntity
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
 import site.siredvin.peripheralworks.utils.getResourceLocation
 import java.util.*
 import java.util.stream.Collectors
 
-
 class RecipeRegistryPeripheral(
     blockEntity: RecipeRegistryBlockEntity,
-): OwnedPeripheral<BlockEntityPeripheralOwner<RecipeRegistryBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
+) : OwnedPeripheral<BlockEntityPeripheralOwner<RecipeRegistryBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
     companion object {
         const val TYPE = "recipe_registry"
     }
 
     override val isEnabled: Boolean
-        get() = TODO("Not yet implemented")
+        get() = PeripheralWorksConfig.enableRecipeRegistry
 
     @LuaFunction
     @Throws(LuaException::class)
     fun getRecipeTypes(): MethodResult {
         // TODO: Add blocklist of recipe types somehow
-        return MethodResult.of(XplatRegistries.RECIPE_TYPES.keySet().stream().map(ResourceLocation::toString)
-            .collect(Collectors.toList())
+        return MethodResult.of(
+            XplatRegistries.RECIPE_TYPES.keySet().stream().map(ResourceLocation::toString)
+                .collect(Collectors.toList()),
         )
     }
 
@@ -72,10 +73,12 @@ class RecipeRegistryPeripheral(
         val types = arguments[1]
         val targetItem = XplatRegistries.ITEMS.tryGet(itemID) ?: throw LuaException(String.format("Cannot find item with id %s", itemID))
         val recipeTypes = RecipeRegistryToolkit.collectRecipeTypes(types)
-        return MethodResult.of(recipeTypes.flatMap {
-            level!!.recipeManager.getAllRecipesFor(it as RecipeType<Recipe<Container>>).stream().filter { recipe ->
-                recipe.getResultItem(RegistryAccess.EMPTY).`is`(targetItem)
-            }.toList()
-        })
+        return MethodResult.of(
+            recipeTypes.flatMap {
+                level!!.recipeManager.getAllRecipesFor(it as RecipeType<Recipe<Container>>).stream().filter { recipe ->
+                    recipe.getResultItem(RegistryAccess.EMPTY).`is`(targetItem)
+                }.toList()
+            },
+        )
     }
 }

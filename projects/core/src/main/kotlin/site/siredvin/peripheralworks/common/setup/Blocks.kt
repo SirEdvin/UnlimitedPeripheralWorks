@@ -135,10 +135,22 @@ object Blocks {
         { GenericBlockEntityBlock({ BlockEntityTypes.RECIPE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
     ) {
         PeripheralBlockItem(
-            // TODO: adapt
             it,
             Item.Properties(),
-            PeripheralWorksConfig::enableRealityForger,
+            PeripheralWorksConfig::enableRecipeRegistry,
+            alwaysShow = true,
+            TooltipCollection::isDisabled,
+        )
+    }
+
+    val INFORMATIVE_REGISTRY = PeripheralWorksPlatform.registerBlock(
+        "informative_registry",
+        { GenericBlockEntityBlock({ BlockEntityTypes.INFORMATIVE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
+    ) {
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableInformativeRegistry,
             alwaysShow = true,
             TooltipCollection::isDisabled,
         )
