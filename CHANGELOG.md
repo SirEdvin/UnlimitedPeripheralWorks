@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `integrateddynamics` integration
 - `additional lanterns` integration for fabric
 - Reality forger
+- Recipe registry
 
 ## [0.5.3] - 2023-07-01
 

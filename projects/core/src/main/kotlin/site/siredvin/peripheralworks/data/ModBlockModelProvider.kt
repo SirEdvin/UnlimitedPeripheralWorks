@@ -120,5 +120,17 @@ object ModBlockModelProvider {
 
             ),
         )
+
+        horizontalOrientatedBlock(
+            generators,
+            Blocks.RECIPE_REGISTRY.get(),
+            horizontalOrientedModel(
+                generators,
+                Blocks.RECIPE_REGISTRY.get(),
+                overwriteTop = peripheralCasingTexture,
+                overwriteBottom = peripheralCasingTexture,
+                overwriteFront = TextureMapping.getBlockTexture(Blocks.RECIPE_REGISTRY.get(), "_side")
+            )
+        )
     }
 }

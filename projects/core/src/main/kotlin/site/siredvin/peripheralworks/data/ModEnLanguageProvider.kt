@@ -35,6 +35,7 @@ class ModEnLanguageProvider(
         add(Blocks.PERIPHERAL_PROXY.get(), "Peripheral proxy", "§3§oAllows you to connect peripherals at the small distances without wired network")
         add(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), "Flexible reality anchor")
         add(Blocks.REALITY_FORGER.get(), "Reality forger", "§3§oComplex device, that can forge reality anchors to something else")
+        add(Blocks.RECIPE_REGISTRY.get(), "Recipe registry", "§3§oKnowledge device, that holds power to understand any recipe but sometimes luck power to provide information about it")
 
         add(ModText.CREATIVE_TAB, "UnlimitedPeripheralWorks")
 

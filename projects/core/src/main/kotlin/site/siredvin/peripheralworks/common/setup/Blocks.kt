@@ -130,6 +130,19 @@ object Blocks {
             TooltipCollection::realityForgerTooptips,
         )
     }
+    val RECIPE_REGISTRY = PeripheralWorksPlatform.registerBlock(
+        "recipe_registry",
+        { GenericBlockEntityBlock({ BlockEntityTypes.RECIPE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
+    ) {
+        PeripheralBlockItem(
+            // TODO: adapt
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableRealityForger,
+            alwaysShow = true,
+            TooltipCollection::isDisabled,
+        )
+    }
 
     fun doSomething() {}
 }

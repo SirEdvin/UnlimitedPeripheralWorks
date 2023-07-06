@@ -88,5 +88,14 @@ object BlockEntityTypes {
         )
     }
 
+    val RECIPE_REGISTRY: Supplier<BlockEntityType<RecipeRegistryBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(
+        modId("recipe_registry"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::RecipeRegistryBlockEntity,
+            Blocks.RECIPE_REGISTRY.get(),
+        )
+    }
+
     fun doSomething() {}
 }
