@@ -7,6 +7,6 @@ import site.siredvin.peripheralium.api.blockentities.ISyncingBlockEntity
 interface IFlexibleRealityAnchorBlockEntity : ISyncingBlockEntity {
     var lightLevel: Int
     val mimic: BlockState?
-    fun setMimic(mimic: BlockState?, state: BlockState? = null, skipUpdate: Boolean = false)
+    fun setMimic(mimic: BlockState?, state: BlockState? = null, skipUpdate: Boolean = false): Boolean
     fun setBooleanStateValue(stateValue: BooleanProperty, value: Boolean)
 }

@@ -86,7 +86,7 @@ class FlexibleRealityAnchorModel : UnbakedModel, BakedModel, FabricBakedModel {
         }
         val mimicBlockState = entity.mimic ?: return
         val bakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState)
-        context.bakedModelConsumer().accept(bakedModel)
+        context.bakedModelConsumer().accept(bakedModel, mimicBlockState)
     }
 
     fun emitDefaultItemQuads(context: RenderContext) {

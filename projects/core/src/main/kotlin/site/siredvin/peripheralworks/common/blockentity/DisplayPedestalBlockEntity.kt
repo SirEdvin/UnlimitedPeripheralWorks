@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
 import site.siredvin.peripheralworks.api.IItemStackHolder

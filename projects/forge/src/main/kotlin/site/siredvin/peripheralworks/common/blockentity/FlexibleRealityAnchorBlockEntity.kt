@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.network.Connection
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket
+import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraftforge.client.model.data.ModelData
@@ -42,11 +43,11 @@ open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: Bloc
             this._lightLevel = max(0, min(value, 15))
         }
 
-    override fun setMimic(mimic: BlockState?, state: BlockState?, skipUpdate: Boolean) {
+    override fun setMimic(mimic: BlockState?, state: BlockState?, skipUpdate: Boolean): Boolean {
         val realState = state ?: pendingState ?: blockState
         if (mimic != null) {
             if (mimic.`is`(BlockTags.REALITY_FORGER_FORBIDDEN)) {
-                return
+                return false
             }
         }
         this._mimic = mimic
@@ -56,6 +57,7 @@ open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: Bloc
             if (pendingState == null) pendingState = realState
             pendingState = pendingState!!.setValue(FlexibleRealityAnchor.CONFIGURED, mimic != null)
         }
+        return true
     }
 
     override fun getPeripheral(side: Direction): OwnedPeripheral<*>? {
