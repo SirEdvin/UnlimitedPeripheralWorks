@@ -10,11 +10,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
-import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.Supplier
 
@@ -53,12 +50,5 @@ object ForgePeripheralWorksPlatform : PeripheralWorksPlatform {
         serializer: TurtleUpgradeSerialiser<V>,
     ): Supplier<TurtleUpgradeSerialiser<V>> {
         return ForgePeripheralWorks.turtleSerializers.register(key.path) { serializer }
-    }
-
-    override fun buildFlexibleRealityAnchorBuilder(): BlockEntityType<out BlockEntity> {
-        return PeripheraliumPlatform.createBlockEntityType(
-            ::FlexibleRealityAnchorBlockEntity,
-            Blocks.FLEXIBLE_REALITY_ANCHOR.get(),
-        )
     }
 }

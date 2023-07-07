@@ -8,14 +8,18 @@ import net.minecraft.client.renderer.block.model.ItemTransforms
 import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.BakedModel
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraftforge.client.ChunkRenderTypeSet
 import net.minecraftforge.client.model.IDynamicBakedModel
 import net.minecraftforge.client.model.data.ModelData
+import net.minecraftforge.client.model.data.ModelProperty
 import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
 import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
@@ -23,6 +27,10 @@ import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlo
 import site.siredvin.peripheralworks.common.setup.Blocks
 
 class FlexibleRealityAnchorModel : IDynamicBakedModel {
+
+    companion object {
+        val MIMIC = ModelProperty<BlockState>()
+    }
 
     val emptyModel by lazy {
         Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState())
@@ -42,10 +50,10 @@ class FlexibleRealityAnchorModel : IDynamicBakedModel {
         extraData: ModelData,
         renderType: RenderType?,
     ): MutableList<BakedQuad> {
-        val mimic = extraData.get(FlexibleRealityAnchorBlockEntity.MIMIC)
+        val mimic = extraData.get(MIMIC)
         if (mimic != null && mimic.block !is FlexibleRealityAnchor) {
             val model: BakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimic)
-            return model.getQuads(state, side, rand, extraData, renderType)
+            return model.getQuads(mimic, side, rand, extraData, renderType)
         }
         return mutableListOf()
     }
@@ -75,11 +83,15 @@ class FlexibleRealityAnchorModel : IDynamicBakedModel {
     }
 
     override fun usesBlockLight(): Boolean {
-        return false
+        return true
     }
 
     override fun isCustomRenderer(): Boolean {
-        return false
+        return true
+    }
+
+    override fun getRenderTypes(state: BlockState, rand: RandomSource, data: ModelData): ChunkRenderTypeSet {
+        return ChunkRenderTypeSet.of(RenderType.cutout())
     }
 
     override fun getParticleIcon(): TextureAtlasSprite {
@@ -92,5 +104,16 @@ class FlexibleRealityAnchorModel : IDynamicBakedModel {
 
     override fun getOverrides(): ItemOverrides {
         return ItemOverrides.EMPTY
+    }
+
+    override fun getModelData(
+        level: BlockAndTintGetter,
+        pos: BlockPos,
+        state: BlockState,
+        modelData: ModelData
+    ): ModelData {
+        val blockEntity = level.getBlockEntity(pos)
+        if (blockEntity !is FlexibleRealityAnchorBlockEntity || blockEntity.mimic == null) return super.getModelData(level, pos, state, modelData)
+        return modelData.derive().with(MIMIC, blockEntity.mimic).build()
     }
 }

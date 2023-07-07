@@ -12,9 +12,6 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
-import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.Supplier
 
@@ -62,12 +59,5 @@ object FabricPeripheralWorksPlatform : PeripheralWorksPlatform {
             ) as Registry<TurtleUpgradeSerialiser<*>>
         val registered = Registry.register(registry, key, serializer)
         return Supplier { registered }
-    }
-
-    override fun buildFlexibleRealityAnchorBuilder(): BlockEntityType<out BlockEntity> {
-        return PeripheraliumPlatform.createBlockEntityType(
-            ::FlexibleRealityAnchorBlockEntity,
-            Blocks.FLEXIBLE_REALITY_ANCHOR.get(),
-        )
     }
 }

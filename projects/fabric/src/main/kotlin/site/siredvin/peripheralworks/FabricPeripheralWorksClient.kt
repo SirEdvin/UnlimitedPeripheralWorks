@@ -22,6 +22,6 @@ object FabricPeripheralWorksClient : ClientModInitializer {
         }
         ModelLoadingRegistry.INSTANCE.registerResourceProvider { ExpansionModelProvider }
 
-        BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.translucent())
+        BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.cutout())
     }
 }

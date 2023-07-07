@@ -76,7 +76,10 @@ object BlockEntityTypes {
     val FLEXIBLE_REALITY_ANCHOR = PeripheralWorksPlatform.registerBlockEntity(
         ResourceLocation(PeripheralWorksCore.MOD_ID, "flexible_reality_anchor"),
     ) {
-        PeripheralWorksPlatform.buildFlexibleRealityAnchorBuilder()
+        PeripheraliumPlatform.createBlockEntityType(
+            ::FlexibleRealityAnchorBlockEntity,
+            Blocks.REALITY_FORGER.get(),
+        )
     }
 
     val REALITY_FORGER: Supplier<BlockEntityType<RealityForgerBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(

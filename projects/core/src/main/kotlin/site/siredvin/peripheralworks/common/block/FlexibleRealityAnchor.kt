@@ -17,13 +17,12 @@ import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
 import site.siredvin.peripheralium.util.BlockUtil
-import site.siredvin.peripheralworks.api.IFlexibleRealityAnchorBlockEntity
-import site.siredvin.peripheralworks.common.blockentity.DummyFlexibleAnchorBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.modId
 
-class FlexibleRealityAnchor : BaseNBTBlock<DummyFlexibleAnchorBlockEntity>(
+class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
     false,
     BlockUtil.decoration().dynamicShape(),
 ) {
@@ -69,7 +68,7 @@ class FlexibleRealityAnchor : BaseNBTBlock<DummyFlexibleAnchorBlockEntity>(
 
     override fun getLightBlock(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos): Int {
         val blockEntity = blockGetter.getBlockEntity(blockPos)
-        return if (blockEntity is IFlexibleRealityAnchorBlockEntity) blockEntity.lightLevel else 0
+        return if (blockEntity is FlexibleRealityAnchorBlockEntity) blockEntity.lightLevel else 0
     }
 
     override fun createItemStack(): ItemStack {
@@ -83,7 +82,7 @@ class FlexibleRealityAnchor : BaseNBTBlock<DummyFlexibleAnchorBlockEntity>(
         context: CollisionContext,
     ): VoxelShape {
         if (state.getValue(INVISIBLE)) return super.getShape(state, world, pos, context)
-        val blockEntity = world.getBlockEntity(pos) as? IFlexibleRealityAnchorBlockEntity ?: return super.getShape(state, world, pos, context)
+        val blockEntity = world.getBlockEntity(pos) as? FlexibleRealityAnchorBlockEntity ?: return super.getShape(state, world, pos, context)
         val mimicState = blockEntity.mimic ?: return super.getShape(state, world, pos, context)
         return mimicState.getShape(world, pos)
     }

@@ -10,7 +10,7 @@ mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.105.0"
-peripheralium = "0.6.4-5"
+peripheralium = "0.6.4-6"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.83.1+1.20.1"

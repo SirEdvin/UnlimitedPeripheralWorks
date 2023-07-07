@@ -3,5 +3,5 @@
   "textures": {
     "all": "peripheralworks:block/flexible_reality_anchor"
   },
-  "render_type": "translucent"
+  "render_type": "minecraft:cutout"
 }
