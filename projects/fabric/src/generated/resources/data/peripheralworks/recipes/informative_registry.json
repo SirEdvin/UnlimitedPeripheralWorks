@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "D": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "T": {
+      "tag": "c:bookshelves"
+    }
+  },
+  "pattern": [
+    "DTD",
+    "BCB",
+    " D "
+  ],
+  "result": {
+    "item": "peripheralworks:informative_registry"
+  }
+}

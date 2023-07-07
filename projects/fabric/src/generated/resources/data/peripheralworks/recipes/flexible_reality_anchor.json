@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "I": {
+      "tag": "c:iron_ingots"
+    },
+    "S": {
+      "item": "peripheralium:peripheralium_dust"
+    }
+  },
+  "pattern": [
+    "I I",
+    " S ",
+    "I I"
+  ],
+  "result": {
+    "count": 32,
+    "item": "peripheralworks:flexible_reality_anchor"
+  }
+}

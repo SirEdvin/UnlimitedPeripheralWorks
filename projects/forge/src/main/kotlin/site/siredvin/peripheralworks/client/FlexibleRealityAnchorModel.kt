@@ -110,7 +110,7 @@ class FlexibleRealityAnchorModel : IDynamicBakedModel {
         level: BlockAndTintGetter,
         pos: BlockPos,
         state: BlockState,
-        modelData: ModelData
+        modelData: ModelData,
     ): ModelData {
         val blockEntity = level.getBlockEntity(pos)
         if (blockEntity !is FlexibleRealityAnchorBlockEntity || blockEntity.mimic == null) return super.getModelData(level, pos, state, modelData)

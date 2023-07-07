@@ -1,7 +1,5 @@
 package site.siredvin.peripheralworks
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.resources.ResourceLocation
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers
@@ -9,7 +7,6 @@ import net.minecraftforge.client.event.ModelEvent.RegisterAdditional
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import site.siredvin.peripheralworks.common.setup.Blocks
 
 @Mod.EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, value = [Dist.CLIENT], bus = Mod.EventBusSubscriber.Bus.MOD)
 object ForgePeripheralWorksClient {

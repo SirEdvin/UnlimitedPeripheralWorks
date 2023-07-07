@@ -9,6 +9,8 @@ import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 object FabricModRecipeIngredients : ModRecipeIngredients {
     override val enderModem: Ingredient
         get() = Ingredient.of(Items.WIRELESS_MODEM_ADVANCED.get())
+    override val printer: Ingredient
+        get() = Ingredient.of(Items.PRINTER.get())
     override val peripheralium: Ingredient
         get() = Ingredient.of(site.siredvin.peripheralium.common.setup.Items.PERIPHERALIUM_DUST.get())
 
@@ -40,4 +42,16 @@ object FabricModRecipeIngredients : ModRecipeIngredients {
 
     override val stick: Ingredient
         get() = Ingredient.of(net.minecraft.world.item.Items.STICK)
+
+    override val blueDye: Ingredient
+        get() = Ingredient.of(ConventionalItemTags.BLUE_DYES)
+
+    override val craftingTable: Ingredient
+        get() = Ingredient.of(net.minecraft.world.item.Items.CRAFTING_TABLE)
+
+    override val book: Ingredient
+        get() = Ingredient.of(net.minecraft.world.item.Items.BOOK)
+
+    override val bookshelf: Ingredient
+        get() = Ingredient.of(ConventionalItemTags.BOOKSHELVES)
 }

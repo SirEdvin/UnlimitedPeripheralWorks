@@ -20,6 +20,7 @@ interface ModRecipeIngredients {
     }
 
     val enderModem: Ingredient
+    val printer: Ingredient
     val peripheralium: Ingredient
     val peripheraliumUpgrade: Ingredient
     val netheriteIngot: Ingredient
@@ -34,4 +35,8 @@ interface ModRecipeIngredients {
     val smoothStoneSlab: Ingredient
     val compass: Ingredient
     val stick: Ingredient
+    val blueDye: Ingredient
+    val craftingTable: Ingredient
+    val bookshelf: Ingredient
+    val book: Ingredient
 }
