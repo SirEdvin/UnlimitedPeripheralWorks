@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.common.setup
 
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
-import site.siredvin.peripheralium.computercraft.pocket.PeripheralPocketUpgrade
 import site.siredvin.peripheralium.computercraft.pocket.StatefulPeripheralPocketUpgrade
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral

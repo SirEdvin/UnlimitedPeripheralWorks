@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.common.setup
 
 import net.minecraft.world.item.Item
-import site.siredvin.peripheralium.common.items.PeripheralItem
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.PeripheraliumHub
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator

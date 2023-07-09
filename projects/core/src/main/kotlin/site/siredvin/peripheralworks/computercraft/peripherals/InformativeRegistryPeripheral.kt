@@ -6,9 +6,11 @@ import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.blockentity.InformativeRegistryBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import java.util.function.Function
 import java.util.function.Supplier
 
 class InformativeRegistryPeripheral(
@@ -18,24 +20,58 @@ class InformativeRegistryPeripheral(
     companion object {
         val TYPE = "informative_registry"
         private val EXTRACTORS = mutableMapOf<String, Supplier<MethodResult>>()
+        private val DESCRIPTORS = mutableMapOf<String, Function<String, MethodResult>>()
+        private val LIST_DESCRIPTIONS = mutableMapOf<String, String>()
 
-        fun addExtractor(name: String, extractor: Supplier<MethodResult>) {
+        fun addList(name: String, description: String, extractor: Supplier<MethodResult>, descriptor: Function<String, MethodResult>) {
+            LIST_DESCRIPTIONS[name] = description
+            DESCRIPTORS[name] = descriptor
             EXTRACTORS[name] = extractor
         }
 
         init {
-            addExtractor("item") {
-                MethodResult.of(XplatRegistries.ITEMS.keySet().map(ResourceLocation::toString))
-            }
-            addExtractor("block") {
-                MethodResult.of(XplatRegistries.BLOCKS.keySet().map(ResourceLocation::toString))
-            }
-            addExtractor("fluid") {
-                MethodResult.of(XplatRegistries.FLUIDS.keySet().map(ResourceLocation::toString))
-            }
-            addExtractor("list") {
-                MethodResult.of(EXTRACTORS.keys)
-            }
+            addList(
+                "item",
+                "Minecraft items",
+                {
+                    MethodResult.of(XplatRegistries.ITEMS.keySet().map(ResourceLocation::toString))
+                },
+                {
+                    MethodResult.of(LuaRepresentation.forItem(XplatRegistries.ITEMS.get(ResourceLocation(it))))
+                },
+            )
+
+            addList(
+                "block",
+                "Minecraft blocks",
+                {
+                    MethodResult.of(XplatRegistries.BLOCKS.keySet().map(ResourceLocation::toString))
+                },
+                {
+                    MethodResult.of(LuaRepresentation.forBlockState(XplatRegistries.BLOCKS.get(ResourceLocation(it)).defaultBlockState()))
+                },
+            )
+
+            addList(
+                "fluid",
+                "Minecraft fluids",
+                {
+                    MethodResult.of(XplatRegistries.FLUIDS.keySet().map(ResourceLocation::toString))
+                },
+                {
+                    MethodResult.of(LuaRepresentation.forFluid(XplatRegistries.FLUIDS.get(ResourceLocation(it))))
+                },
+            )
+            addList(
+                "list",
+                "Lists of all possible lists",
+                {
+                    MethodResult.of(LIST_DESCRIPTIONS.keys)
+                },
+                {
+                    MethodResult.of(LIST_DESCRIPTIONS[it])
+                },
+            )
         }
     }
 
@@ -46,5 +82,11 @@ class InformativeRegistryPeripheral(
     fun list(target: String): MethodResult {
         val extractor = EXTRACTORS[target] ?: throw LuaException("Cannot list $target, there is not function for it")
         return extractor.get()
+    }
+
+    @LuaFunction
+    fun describe(target: String, id: String): MethodResult {
+        val descriptor = DESCRIPTORS[target] ?: throw LuaException("Cannot describe $target, there is not function for it")
+        return descriptor.apply(id)
     }
 }

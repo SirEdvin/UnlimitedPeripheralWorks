@@ -2,7 +2,6 @@ package site.siredvin.peripheralworks.computercraft.pocket
 
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.pocket.IPocketAccess
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralium.computercraft.pocket.StatefulPocketUpgrade

@@ -3,7 +3,6 @@ package site.siredvin.peripheralworks.computercraft.modem
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.pocket.IPocketUpgrade
-import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation

@@ -77,8 +77,9 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
 
     fun setDataForUpdate(id: String, data: CompoundTag?) {
         val base = peripheralOwner.dataStorage
-        if (!base.contains(TWEAKED_STORAGES))
+        if (!base.contains(TWEAKED_STORAGES)) {
             base.put(TWEAKED_STORAGES, CompoundTag())
+        }
         val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
         if (data == null) {
             tweakedStorages.remove(id)

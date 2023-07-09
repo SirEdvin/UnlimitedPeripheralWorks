@@ -6,10 +6,8 @@ import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
-import dan200.computercraft.core.apis.PeripheralAPI
 import dan200.computercraft.core.methods.PeripheralMethod
 import dan200.computercraft.shared.computer.core.ServerContext
-import net.minecraft.server.level.ServerLevel
 import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import java.util.concurrent.ConcurrentHashMap
