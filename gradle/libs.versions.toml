@@ -9,8 +9,8 @@ loom = "1.1.9"
 mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.105.0"
-peripheralium = "0.6.4-6"
+cc-tweaked = "1.106.1"
+peripheralium = "0.6.4-13"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.83.1+1.20.1"
@@ -18,7 +18,7 @@ fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "7.0.0"
 # Forge dependencies
-forge = "47.0.43"
+forge = "47.1.0"
 forge-kotlin = "4.3.0"
 parchment = "2023.03.12"
 parchmentMc = "1.19.3"
@@ -37,7 +37,7 @@ teamreborn-energy = "3.0.0"
 tomstorage-fabric = "1.20-1.6.1-fabric"
 techreborn = "4582415" # TechReborn-5.8.1.jar
 reborncore = "4582416" # RebornCore-5.8.1.jar
-ae2-fabric = "fabric-15.0.3-alpha"
+ae2-fabric = "fabric-15.0.4-beta"
 natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
 additional-lanterns-fabric = "1.0.5-fabric-mc1.20"
 supermartijn642s-core-lib-fabric = "1.1.10-fabric-mc1.20"
@@ -51,7 +51,7 @@ easyvillagers = "4584220"  # [1.20.1] Easy Villagers 1.20.1-1.0.8
 curios-forge = "5.2.0-beta.3+1.20.1"
 geckolib-forge = "4.2"
 smartbrainlib = "1.11"
-ae2-forge = "forge-15.0.3-alpha"
+ae2-forge = "forge-15.0.4-beta"
 natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
 mcjtylib = "1.20-8.0.0"
 rftools-base = "1.20-5.0.0"
@@ -69,7 +69,8 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = "kotlin-atomicfu"}
 
 # Core mod dependencies
-cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.20.1-common-api", version.ref = "cc-tweaked"}
+cc-tweaked-common-api = {module = "cc.tweaked:cc-tweaked-1.20.1-common-api", version.ref = "cc-tweaked"}
+cc-tweaked-common = {module = "cc.tweaked:common", version.ref = "cc-tweaked"}
 cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.20.1-core", version.ref = "cc-tweaked"}
 common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
 peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20.1", version.ref = "peripheralium"}
@@ -147,7 +148,7 @@ mixinGradle = { id = "org.spongepowered.mixin", version.ref = "mixinGradle" }
 
 [bundles]
 kotlin = ["kotlin-stdlib", "kotlin-coroutines", "kotlin-atomicfu"]
-cccommon = ["cc-tweaked-common", "cc-tweaked-core", "peripheralium-core"]
+cccommon = ["cc-tweaked-common", "cc-tweaked-common-api", "cc-tweaked-core", "peripheralium-core"]
 apicommon = ["common-config"]
 ccfabric = ["cc-tweaked-fabric", "cc-tweaked-core", "peripheralium-fabric"]
 fabric-core = ["fabric-loader"]

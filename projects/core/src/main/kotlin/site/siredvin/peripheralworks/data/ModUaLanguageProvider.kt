@@ -59,6 +59,9 @@ class ModUaLanguageProvider(
 
         add(ModTooltip.ITEM_DISABLED, "  §4§nПредмет заборонений до використання в налаштуваннях")
         add(ModTooltip.PERIPHERALIUM_HUB_MAX_PERIPHERALS, "  §6Максимальна кількість периферійних пристроїв: %s")
+        add(ModTooltip.PERIPHERALIUM_HUB_STORED, "  §6Підключені периферійні пристрої:")
+        add(ModTooltip.PERIPHERALIUM_HUB_POCKET, "  §6Активний режим: портативний комп'ютер")
+        add(ModTooltip.PERIPHERALIUM_HUB_TURTLE, "  §6Активний режим: черепашка")
         add(ModTooltip.UNIVERSAL_SCANNER_FREE_RANGE, "  §6Бескоштовний радіус сканування: %s")
         add(ModTooltip.UNIVERSAL_SCANNER_MAX_RANGE, "  §6Максимальний радіус сканування: %s")
         add(ModTooltip.REMOTE_OBSERVER_MODE, "  Налаштування віддаленного спостерічага")

@@ -59,6 +59,9 @@ class ModEnLanguageProvider(
 
         add(ModTooltip.ITEM_DISABLED, "  §4Item disabled in configuration")
         add(ModTooltip.PERIPHERALIUM_HUB_MAX_PERIPHERALS, "  §6Max upgrades inside hub: %s")
+        add(ModTooltip.PERIPHERALIUM_HUB_STORED, "  §6Stored upgrades:")
+        add(ModTooltip.PERIPHERALIUM_HUB_POCKET, "  §6Active mode: pocket computer")
+        add(ModTooltip.PERIPHERALIUM_HUB_TURTLE, "  §6Active mode: turtle")
         add(ModTooltip.UNIVERSAL_SCANNER_FREE_RANGE, "  §6Cost-free scan range: %s")
         add(ModTooltip.UNIVERSAL_SCANNER_MAX_RANGE, "  §6Max scan range: %s")
         add(ModTooltip.REMOTE_OBSERVER_MODE, "  Remote observer configuration")

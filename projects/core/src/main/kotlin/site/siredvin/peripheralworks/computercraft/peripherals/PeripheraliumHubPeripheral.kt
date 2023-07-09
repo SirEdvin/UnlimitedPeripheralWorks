@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -19,8 +20,10 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         const val TYPE = "peripheralium_hub"
         const val NETHERITE_TYPE = "netherite_$TYPE"
         const val UPGRADES_TAG = "connectedUpgrades"
+        const val MODE_TAG = "mode"
         val ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
         val NETHERITE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
+        const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
     }
 
     /**
@@ -36,6 +39,8 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
     protected val activeUpgrades: List<String>
         get() = peripheralOwner.dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
 
+    abstract val activeMode: String
+
     abstract fun isUpgradeImpl(stack: ItemStack): Boolean
 
     abstract fun isEquitable(stack: ItemStack): Pair<Boolean?, String?>
@@ -48,12 +53,38 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         val upgradeList = peripheralOwner.dataStorage.getList(UPGRADES_TAG, 8)
         upgradeList.add(StringTag.valueOf(id.toString()))
         peripheralOwner.dataStorage.put(UPGRADES_TAG, upgradeList)
+        if (upgradeList.isNotEmpty()) peripheralOwner.dataStorage.putString(MODE_TAG, activeMode)
     }
 
     protected fun detachUpgrade(id: ResourceLocation) {
         val upgradeList = peripheralOwner.dataStorage.getList(UPGRADES_TAG, 8)
         upgradeList.remove(StringTag.valueOf(id.toString()))
         peripheralOwner.dataStorage.put(UPGRADES_TAG, upgradeList)
+        if (upgradeList.isEmpty()) peripheralOwner.dataStorage.remove(MODE_TAG)
+    }
+
+    fun getDataForUpgrade(id: String): CompoundTag {
+        val base = peripheralOwner.dataStorage
+        if (!base.contains(TWEAKED_STORAGES)) {
+            base.put(TWEAKED_STORAGES, CompoundTag())
+        }
+        val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
+        if (!tweakedStorages.contains(id)) {
+            tweakedStorages.put(id, CompoundTag())
+        }
+        return tweakedStorages.getCompound(id)
+    }
+
+    fun setDataForUpdate(id: String, data: CompoundTag?) {
+        val base = peripheralOwner.dataStorage
+        if (!base.contains(TWEAKED_STORAGES))
+            base.put(TWEAKED_STORAGES, CompoundTag())
+        val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
+        if (data == null) {
+            tweakedStorages.remove(id)
+        } else {
+            tweakedStorages.put(id, data)
+        }
     }
 
     @LuaFunction(mainThread = true)

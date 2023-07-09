@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.common.setup
 
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import site.siredvin.peripheralium.computercraft.pocket.PeripheralPocketUpgrade
+import site.siredvin.peripheralium.computercraft.pocket.StatefulPeripheralPocketUpgrade
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
@@ -36,14 +37,14 @@ object PocketUpgradeSerializers {
     val UNIVERSAL_SCANNER = PeripheralWorksPlatform.registerPocketUpgrade(
         UniversalScannerPeripheral.UPGRADE_ID,
         PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
-            PeripheralPocketUpgrade(id, stack, UniversalScannerPeripheral::of)
+            StatefulPeripheralPocketUpgrade(id, stack, UniversalScannerPeripheral::of)
         },
     )
 
     val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerPocketUpgrade(
         UltimateSensorPeripheral.UPGRADE_ID,
         PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
-            PeripheralPocketUpgrade(id, stack, UltimateSensorPeripheral::of)
+            StatefulPeripheralPocketUpgrade(id, stack, UltimateSensorPeripheral::of)
         },
     )
 

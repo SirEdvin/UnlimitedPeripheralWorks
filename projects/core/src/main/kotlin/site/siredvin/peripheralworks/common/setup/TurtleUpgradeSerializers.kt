@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.common.setup
 
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
+import site.siredvin.peripheralium.computercraft.turtle.StatefulPeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
@@ -36,7 +36,7 @@ object TurtleUpgradeSerializers {
     val UNIVERSAL_SCANNER = PeripheralWorksPlatform.registerTurtleUpgrade(
         UniversalScannerPeripheral.UPGRADE_ID,
         TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack ->
-            PeripheralTurtleUpgrade.dynamic(
+            StatefulPeripheralTurtleUpgrade.dynamic(
                 stack.item,
                 UniversalScannerPeripheral::of,
             ) { id }
@@ -46,7 +46,7 @@ object TurtleUpgradeSerializers {
     val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerTurtleUpgrade(
         UltimateSensorPeripheral.UPGRADE_ID,
         TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack ->
-            PeripheralTurtleUpgrade.dynamic(
+            StatefulPeripheralTurtleUpgrade.dynamic(
                 stack.item,
                 UltimateSensorPeripheral::of,
             ) { id }

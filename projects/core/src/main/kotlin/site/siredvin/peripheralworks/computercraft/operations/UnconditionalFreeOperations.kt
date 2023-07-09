@@ -22,9 +22,6 @@ enum class UnconditionalFreeOperations(
         )
     }
 
-    override val initialCooldown: Int
-        get() = cooldown!!.get() * 3
-
     override fun computerDescription(): Map<String, Any?> {
         val data: MutableMap<String, Any> = HashMap()
         data["name"] = settingsName()

@@ -3,18 +3,20 @@ package site.siredvin.peripheralworks.computercraft.modem
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.pocket.IPocketUpgrade
+import dan200.computercraft.api.turtle.ITurtleUpgrade
+import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.entity.Entity
 import site.siredvin.peripheralworks.computercraft.peripherals.pocket.PocketPeripheraliumHubPeripheral
 
-class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade, private val id: String, private val origin: PocketPeripheraliumHubPeripheral) : IPocketAccess {
-
-    companion object {
-        const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
-    }
+class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade, val id: String, private val origin: PocketPeripheraliumHubPeripheral) : IPocketAccess {
 
     var peripheral: IPeripheral? = upgrade.createPeripheral(this)
+
+    val upgradeData: UpgradeData<IPocketUpgrade>
+        get() = UpgradeData.of(upgrade, upgradeNBTData)
+
     override fun getEntity(): Entity? {
         return access.entity
     }
@@ -36,15 +38,7 @@ class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade,
     }
 
     override fun getUpgradeNBTData(): CompoundTag {
-        val base = access.upgradeNBTData
-        if (!base.contains(TWEAKED_STORAGES)) {
-            base.put(TWEAKED_STORAGES, CompoundTag())
-        }
-        val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
-        if (!tweakedStorages.contains(id)) {
-            tweakedStorages.put(id, CompoundTag())
-        }
-        return tweakedStorages.getCompound(id)
+        return origin.getDataForUpgrade(id)
     }
 
     override fun updateUpgradeNBTData() {
@@ -61,6 +55,7 @@ class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade,
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getUpgrades(): MutableMap<ResourceLocation, IPeripheral> {
         if (peripheral == null) {
             return mutableMapOf()

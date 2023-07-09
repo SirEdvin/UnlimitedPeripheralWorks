@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.turtle.*
+import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -11,13 +12,15 @@ import net.minecraft.world.Container
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 
-class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, val upgrade: ITurtleUpgrade, private val id: String, private val origin: TurtlePeripheraliumHubPeripheral) : ITurtleAccess {
-
-    companion object {
-        const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
-    }
+class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, val upgrade: ITurtleUpgrade, val id: String, private val origin: TurtlePeripheraliumHubPeripheral) : ITurtleAccess {
 
     val peripheral: IPeripheral? = upgrade.createPeripheral(this, tweakedSide)
+
+    val tweakedData: CompoundTag
+        get() = getUpgradeNBTData(tweakedSide)
+
+    val upgradeData: UpgradeData<ITurtleUpgrade>
+        get() = UpgradeData.of(upgrade, tweakedData)
 
     override fun getLevel(): Level {
         return access.level
@@ -108,9 +111,21 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
 
     override fun setUpgrade(side: TurtleSide, upgrade: ITurtleUpgrade?) {
         if (side == tweakedSide) {
-            origin.swapUpgrade(this.upgrade, upgrade)
+            origin.swapUpgrade(UpgradeData.ofDefault(this.upgrade), UpgradeData.ofDefault(upgrade))
         } else {
             access.setUpgrade(side, upgrade)
+        }
+    }
+
+    override fun setUpgradeWithData(side: TurtleSide?, upgrade: UpgradeData<ITurtleUpgrade>?) {
+        if (side == tweakedSide) {
+            if (upgrade == null) {
+                origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), null)
+            } else {
+                origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), upgrade)
+            }
+        } else {
+            access.setUpgradeWithData(side, upgrade)
         }
     }
 
@@ -124,14 +139,7 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
     override fun getUpgradeNBTData(side: TurtleSide): CompoundTag {
         val base = access.getUpgradeNBTData(side)
         if (side == tweakedSide) {
-            if (!base.contains(TWEAKED_STORAGES)) {
-                base.put(TWEAKED_STORAGES, CompoundTag())
-            }
-            val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
-            if (!tweakedStorages.contains(id)) {
-                tweakedStorages.put(id, CompoundTag())
-            }
-            return tweakedStorages.getCompound(id)
+            return origin.getDataForUpgrade(id)
         }
         return base
     }

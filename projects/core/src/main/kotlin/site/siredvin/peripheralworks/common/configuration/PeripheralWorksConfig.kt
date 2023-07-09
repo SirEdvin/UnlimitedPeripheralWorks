@@ -11,10 +11,6 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
 
     private val INTEGRATION_CONFIGURATIONS: MutableMap<String, IConfigHandler> = mutableMapOf()
 
-    override val isInitialCooldownEnabled: Boolean
-        get() = ConfigHolder.COMMON_CONFIG.IS_INITIAL_COOLDOWN_ENABLED.get()
-    override val initialCooldownSensetiveLevel: Int
-        get() = ConfigHolder.COMMON_CONFIG.INITIAL_COOLDOWN_SENSENTIVE_LEVEL.get()
     override val cooldownTresholdLevel: Int
         get() = ConfigHolder.COMMON_CONFIG.COOLDOWN_TRESHOLD_LEVEL.get()
 
@@ -104,8 +100,6 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
     class CommonConfig internal constructor(builder: ForgeConfigSpec.Builder) {
 
         // Generic configuration
-        var IS_INITIAL_COOLDOWN_ENABLED: ForgeConfigSpec.BooleanValue
-        var INITIAL_COOLDOWN_SENSENTIVE_LEVEL: ForgeConfigSpec.IntValue
         var COOLDOWN_TRESHOLD_LEVEL: ForgeConfigSpec.IntValue
 
         // Generic plugins
@@ -145,10 +139,6 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
 
         init {
             builder.push("base")
-            IS_INITIAL_COOLDOWN_ENABLED = builder.comment("Enables initial cooldown on peripheral initialization")
-                .define("isInitialCooldownEnabled", true)
-            INITIAL_COOLDOWN_SENSENTIVE_LEVEL = builder.comment("Determinates initial cooldown sensentive level, values lower then this value will not trigger initial cooldown")
-                .defineInRange("initialCooldownSensetiveLevel", 6000, 0, Int.MAX_VALUE)
             COOLDOWN_TRESHOLD_LEVEL = builder.comment("Determinates treshold for cooldown to be stored")
                 .defineInRange("cooldownTreshholdLevel", 100, 0, Int.MAX_VALUE)
             builder.pop()

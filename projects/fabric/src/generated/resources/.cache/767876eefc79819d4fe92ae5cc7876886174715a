@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-08T00:20:29.645343142	Unlimited Peripheral Works/Block State Definitions
+// 1.20.1	2023-07-09T12:02:21.431922702	Unlimited Peripheral Works/Block State Definitions
 efd5ba47bc8f73def3c977d8887af54ef4ad1370 assets/peripheralworks/models/block/map_pedestal.json
 b7fa74e800d8717eaf90bdc2abea41923665c75e assets/peripheralworks/models/turtle/universal_scanner_left.json
 6ac8890459a72e8c297d106b6eb21ecfe9130615 assets/peripheralworks/models/block/universal_scanner.json
@@ -14,8 +14,8 @@ a7e0f551427f49c65ecbdb9e52c1fc6953064308 assets/peripheralworks/blockstates/reci
 31811cfd5985b614e0c2263a73230ab23659ed12 assets/peripheralworks/models/item/reality_forger.json
 3dcf6aaa434ae731ee96a4ddc791b10735a9acb2 assets/peripheralworks/blockstates/item_pedestal.json
 daadcc722102bc9fb04ce58d12643b07ef7dd730 assets/peripheralworks/models/block/informative_registry.json
-c23515b1dd22a9ab692eb1d023862f1e952c93ff assets/peripheralworks/blockstates/map_pedestal.json
 60b1cbffc25a889c95d8ec0314fddc4043deea3f assets/peripheralworks/blockstates/reality_forger.json
+c23515b1dd22a9ab692eb1d023862f1e952c93ff assets/peripheralworks/blockstates/map_pedestal.json
 153660092864c53a3fe04ba41017d88b8040ab4b assets/peripheralworks/models/item/recipe_registry.json
 d95feb5488962155992a12f57104a8c205978dff assets/peripheralworks/models/turtle/ultimate_sensor_left.json
 ad2c9b225b7c5d784d0b9f7fdeaa4c135418b6ed assets/peripheralworks/models/turtle/universal_scanner_right.json
