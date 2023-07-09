@@ -153,21 +153,6 @@ class RealityForgerPeripheral(
 
     @LuaFunction(mainThread = true)
     @Throws(LuaException::class)
-    fun forgeRealityPiece(arguments: IArguments): MethodResult {
-        val targetPosition = LuaInterpretation.asBlockPos(pos, arguments.getTable(0))
-        if (!radiusCorrect(pos, targetPosition, interactionRadius)) {
-            return MethodResult.of(null, "Block are too far away")
-        }
-        val appearanceTable = arguments.getTable(1)
-        val entity = level!!.getBlockEntity(targetPosition) as? FlexibleRealityAnchorBlockEntity
-            ?: return MethodResult.of(false, "Incorrect coordinates")
-        val targetState = findBlock(appearanceTable)
-        forgeRealityTileEntity(entity, targetState, appearanceTable)
-        return MethodResult.of(true)
-    }
-
-    @LuaFunction(mainThread = true)
-    @Throws(LuaException::class)
     fun forgeRealityPieces(arguments: IArguments): MethodResult {
         val poses: MutableList<BlockPos> = mutableListOf()
         for (value in arguments.getTable(0).values) {

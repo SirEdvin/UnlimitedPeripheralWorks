@@ -42,16 +42,6 @@ class RecipeRegistryPeripheral(
 
     @LuaFunction
     @Throws(LuaException::class)
-    fun inspectRecipeType(recipeTypeName: String): MethodResult {
-        val recipeTypeID = ResourceLocation(recipeTypeName)
-        val recipeType: RecipeType<Recipe<Container>> =
-            XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeName")
-        val recipe = level?.recipeManager?.getAllRecipesFor(recipeType)?.first() ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeName")
-        return MethodResult.of(RecipeRegistryToolkit.serializeRecipe(recipe))
-    }
-
-    @LuaFunction
-    @Throws(LuaException::class)
     fun getAllRecipesForType(arguments: IArguments): MethodResult {
         val recipeTypeID: ResourceLocation = getResourceLocation(arguments, 0)
         val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
