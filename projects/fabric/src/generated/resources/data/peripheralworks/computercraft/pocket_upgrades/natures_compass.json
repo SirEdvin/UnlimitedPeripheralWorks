@@ -1,4 +1,5 @@
 {
+  "fabric:load_conditions": [{"condition": "fabric:all_mods_loaded", "values": ["naturescompass"]}],
   "type": "peripheralworks:natures_compass",
   "item": "naturescompass:naturescompass"
 }
