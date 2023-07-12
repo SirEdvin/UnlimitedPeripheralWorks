@@ -37,6 +37,8 @@ class ModEnLanguageProvider(
         add(Blocks.REALITY_FORGER.get(), "Reality forger", "§3§oComplex device, that can forge reality anchors to something else")
         add(Blocks.RECIPE_REGISTRY.get(), "Recipe registry", "§3§oKnowledge device, that holds power to understand any recipe but sometimes luck power to provide information about it")
         add(Blocks.INFORMATIVE_REGISTRY.get(), "Informative registry", "§3§oKnowledge device, that holds power to list all items in existence")
+        add(Blocks.FLEXIBLE_STATUE.get(), "Flexible statue")
+        add(Blocks.STATUE_WORKBENCH.get(), "Statue workbench", "§3§oImagination your only limit. And also 48 point size limit, but this is not so important")
 
         add(ModText.CREATIVE_TAB, "UnlimitedPeripheralWorks")
 
@@ -73,6 +75,7 @@ class ModEnLanguageProvider(
         add(ModTooltip.PERIPHERAL_PROXY_RANGE, "  §6Max range of connected peripherals: %s")
         add(ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY, "  §6Max connected peripherals count: %s")
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Max forging range: %s")
+        add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Author: %s")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "Hub")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "Netherite Hub")

@@ -19,8 +19,8 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.NewRegistryEvent
 import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
-import site.siredvin.peripheralworks.client.FlexibleRealityAnchorGeometryLoader
-import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
+import site.siredvin.peripheralworks.client.geometry.FlexibleRealityAnchorGeometryLoader
+import site.siredvin.peripheralworks.client.geometry.FlexibleStatueGeometryLoader
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
@@ -100,9 +100,7 @@ object ForgePeripheralWorks {
     }
 
     fun registryModel(event: ModelEvent.RegisterGeometryLoaders) {
-        val realityAnchor = FlexibleRealityAnchorGeometryLoader()
-        event.register("flexible_reality_anchor", realityAnchor)
-        event.register(FlexibleRealityAnchor.BLOCK_MODEL_ID.path, realityAnchor)
-        event.register(FlexibleRealityAnchor.ITEM_MODEL_ID.path, realityAnchor)
+        event.register("flexible_reality_anchor", FlexibleRealityAnchorGeometryLoader)
+        event.register("flexible_statue", FlexibleStatueGeometryLoader)
     }
 }

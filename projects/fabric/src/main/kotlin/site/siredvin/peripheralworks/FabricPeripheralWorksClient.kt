@@ -23,5 +23,6 @@ object FabricPeripheralWorksClient : ClientModInitializer {
         ModelLoadingRegistry.INSTANCE.registerResourceProvider { ExpansionModelProvider }
 
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.cutout())
+        BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_STATUE.get(), RenderType.cutout())
     }
 }

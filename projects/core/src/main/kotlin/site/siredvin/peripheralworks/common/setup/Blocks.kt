@@ -8,6 +8,7 @@ import site.siredvin.peripheralium.util.BlockUtil
 import site.siredvin.peripheralworks.common.block.*
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.FlexibleRealityAnchorItem
+import site.siredvin.peripheralworks.common.item.FlexibleStatueItem
 import site.siredvin.peripheralworks.utils.TooltipCollection
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 
@@ -151,6 +152,27 @@ object Blocks {
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableInformativeRegistry,
+            alwaysShow = true,
+            TooltipCollection::isDisabled,
+        )
+    }
+
+    val FLEXIBLE_STATUE = PeripheralWorksPlatform.registerBlock(
+        "flexible_statue",
+        ::FlexibleStatue,
+    ) {
+        FlexibleStatueItem(it)
+    }
+
+    val STATUE_WORKBENCH = PeripheralWorksPlatform.registerBlock(
+        "statue_workbench",
+        { StatueWorkbench() },
+    ) {
+        // TODO: adapt
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableRealityForger,
             alwaysShow = true,
             TooltipCollection::isDisabled,
         )

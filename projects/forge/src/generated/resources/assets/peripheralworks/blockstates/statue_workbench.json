@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "connected=false": {
+      "model": "peripheralworks:block/statue_workbench"
+    },
+    "connected=true": {
+      "model": "peripheralworks:block/statue_workbench_connected"
+    }
+  }
+}

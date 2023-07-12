@@ -37,6 +37,8 @@ class ModUaLanguageProvider(
         add(Blocks.REALITY_FORGER.get(), "Кузня реальності", "§3§oСкладний девайс, який здатний перековувати якорі реальності на щось інше")
         add(Blocks.RECIPE_REGISTRY.get(), "Реєстр рецептів", "§3§oПрилад знань, який має силу розуміти будь-який рецепт, але іноді йому бракує сили переказати цю інформацію")
         add(Blocks.INFORMATIVE_REGISTRY.get(), "Реєстр інформації", "§3§oПрилад знань, якии має список усіх можливих предметів у світі")
+        add(Blocks.FLEXIBLE_STATUE.get(), "Гнучка статуя")
+        add(Blocks.STATUE_WORKBENCH.get(), "Верстак для статуй", "§3§oУява ваше єдине обмеження. Іще ліміт у розмірах на 48 точок, але це не так важливо")
 
         add(ModText.CREATIVE_TAB, "Перифіральних пристроїв нескінченний край")
 
@@ -73,6 +75,7 @@ class ModUaLanguageProvider(
         add(ModTooltip.PERIPHERAL_PROXY_RANGE, "  §6Максимальна дальність для під'єднання перифейрійних пристроїв: %s")
         add(ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY, "  §6Максимальна кількість під'єднаних перифейрійних пристроїв: %s")
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Максимальна дальність ковання: %s")
+        add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Автор: %s")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "З вбудованим осередком")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "З вбудованим незеритовим осередком")

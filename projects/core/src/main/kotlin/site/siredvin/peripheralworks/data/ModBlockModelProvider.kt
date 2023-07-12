@@ -10,10 +10,15 @@ import net.minecraft.data.models.model.*
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
+import net.minecraft.world.level.block.state.properties.BooleanProperty
+import site.siredvin.peripheralium.data.blocks.createHorizontalFacingDispatch
 import site.siredvin.peripheralium.data.blocks.genericBlock
 import site.siredvin.peripheralium.data.blocks.horizontalOrientatedBlock
 import site.siredvin.peripheralium.data.blocks.horizontalOrientedModel
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
+import site.siredvin.peripheralworks.common.block.FlexibleStatue
+import site.siredvin.peripheralworks.common.block.StatueWorkbench
 import site.siredvin.peripheralworks.common.setup.Blocks
 import java.util.*
 
@@ -62,6 +67,13 @@ object ModBlockModelProvider {
         return dispatch
     }
 
+    private fun createBooleanDispatching(offVariant: ResourceLocation, onVariant: ResourceLocation, property: BooleanProperty): PropertyDispatch {
+        val dispatch = PropertyDispatch.property(property)
+        dispatch.select(false, Variant.variant().with(VariantProperties.MODEL, offVariant))
+        dispatch.select(true, Variant.variant().with(VariantProperties.MODEL, onVariant))
+        return dispatch
+    }
+
     fun pedestalBlock(generators: BlockModelGenerators, block: Block, texture: ResourceLocation, topTexture: ResourceLocation? = null) {
         val textureMapping = TextureMapping()
         textureMapping.put(TextureSlot.TEXTURE, texture)
@@ -79,6 +91,66 @@ object ModBlockModelProvider {
             ).with(createPedestalFacingDispatch()),
         )
         generators.delegateItemModel(block, ModelLocationUtils.getModelLocation(block))
+    }
+
+    fun bottomTopModel(
+        generators: BlockModelGenerators,
+        block: Block,
+        overwriteSide: ResourceLocation? = null,
+        overwriteTop: ResourceLocation? = null,
+        overwriteBottom: ResourceLocation? = null,
+        suffix: String = "",
+    ): ResourceLocation {
+        val textureMapping = TextureMapping.cubeBottomTop(block)
+        if (overwriteSide != null) {
+            textureMapping.put(TextureSlot.SIDE, overwriteSide)
+        }
+        if (overwriteBottom != null) {
+            textureMapping.put(TextureSlot.BOTTOM, overwriteBottom)
+        }
+        if (overwriteTop != null) {
+            textureMapping.put(TextureSlot.TOP, overwriteTop)
+        }
+        return ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(
+            block,
+            suffix,
+            textureMapping,
+            generators.modelOutput,
+        )
+    }
+
+    fun simpleBlockSwitch(
+        generators: BlockModelGenerators,
+        block: Block,
+        offModel: ResourceLocation,
+        onModel: ResourceLocation,
+        property: BooleanProperty,
+        isItemConnected: Boolean = false,
+    ) {
+        generators.blockStateOutput.accept(
+            MultiVariantGenerator.multiVariant(
+                block,
+                Variant.variant().with(VariantProperties.MODEL, offModel),
+            ).with(createBooleanDispatching(offModel, onModel, property)),
+        )
+        generators.delegateItemModel(block, if (isItemConnected) { onModel } else { offModel })
+    }
+
+    fun facingBlockSwitch(
+        generators: BlockModelGenerators,
+        block: Block,
+        offModel: ResourceLocation,
+        onModel: ResourceLocation,
+        property: BooleanProperty,
+        isItemConnected: Boolean = false,
+    ) {
+        generators.blockStateOutput.accept(
+            MultiVariantGenerator.multiVariant(
+                block,
+                Variant.variant().with(VariantProperties.MODEL, offModel),
+            ).with(createBooleanDispatching(offModel, onModel, property)).with(createHorizontalFacingDispatch()),
+        )
+        generators.delegateItemModel(block, if (isItemConnected) { onModel } else { offModel })
     }
 
     fun addModels(generators: BlockModelGenerators) {
@@ -121,6 +193,15 @@ object ModBlockModelProvider {
             ),
         )
 
+        simpleBlockSwitch(
+            generators,
+            Blocks.FLEXIBLE_REALITY_ANCHOR.get(),
+            ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), "_empty"),
+            ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_REALITY_ANCHOR.get()),
+            FlexibleRealityAnchor.CONFIGURED,
+            isItemConnected = true,
+        )
+
         horizontalOrientatedBlock(
             generators,
             Blocks.RECIPE_REGISTRY.get(),
@@ -143,6 +224,35 @@ object ModBlockModelProvider {
                 overwriteBottom = peripheralCasingTexture,
                 overwriteFront = TextureMapping.getBlockTexture(Blocks.INFORMATIVE_REGISTRY.get(), "_side"),
             ),
+        )
+
+        simpleBlockSwitch(
+            generators,
+            Blocks.STATUE_WORKBENCH.get(),
+            bottomTopModel(
+                generators,
+                Blocks.STATUE_WORKBENCH.get(),
+                overwriteBottom = peripheralCasingTexture,
+                overwriteTop = peripheralCasingTexture,
+            ),
+            bottomTopModel(
+                generators,
+                Blocks.STATUE_WORKBENCH.get(),
+                overwriteSide = TextureMapping.getBlockTexture(Blocks.STATUE_WORKBENCH.get()).withSuffix("_side_connected"),
+                overwriteBottom = peripheralCasingTexture,
+                overwriteTop = peripheralCasingTexture,
+                suffix = "_connected",
+            ),
+            StatueWorkbench.CONNECTED,
+        )
+
+        facingBlockSwitch(
+            generators,
+            Blocks.FLEXIBLE_STATUE.get(),
+            ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_STATUE.get(), "_empty"),
+            ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_STATUE.get()),
+            FlexibleStatue.CONFIGURED,
+            isItemConnected = true,
         )
     }
 }

@@ -69,7 +69,7 @@ open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: Bloc
         if (data.contains(LIGHT_LEVEL_TAG)) {
             this.lightLevel = data.getInt(LIGHT_LEVEL_TAG)
         }
-        return pendingState!!
+        return pendingState ?: state ?: blockState
     }
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {

@@ -1,11 +1,11 @@
-package site.siredvin.peripheralworks.client
+package site.siredvin.peripheralworks.client.model
 
 import net.minecraft.client.Minecraft
+import net.minecraft.client.multiplayer.ClientLevel
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.block.model.BakedQuad
 import net.minecraft.client.renderer.block.model.ItemOverrides
 import net.minecraft.client.renderer.block.model.ItemTransforms
-import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.core.BlockPos
@@ -13,6 +13,7 @@ import net.minecraft.core.Direction
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
@@ -22,26 +23,17 @@ import net.minecraftforge.client.model.data.ModelData
 import net.minecraftforge.client.model.data.ModelProperty
 import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
 import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.peripheralworks.client.util.RenderUtils.getTexture
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
 
-class FlexibleRealityAnchorModel : IDynamicBakedModel {
+val emptyFlexibleRealityAnchorModel by lazy {
+    Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState())
+}
 
-    companion object {
-        val MIMIC = ModelProperty<BlockState>()
-    }
-
-    val emptyModel by lazy {
-        Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState())
-    }
-
-    private fun getTexture(): TextureAtlasSprite {
-        return(
-            Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
-                .apply(ResourceLocation("minecraft:block/stone")) as TextureAtlasSprite
-            )
-    }
+object FlexibleRealityAnchorModel : IDynamicBakedModel {
+    val MIMIC = ModelProperty<BlockState>()
 
     override fun getQuads(
         state: BlockState?,
@@ -58,53 +50,16 @@ class FlexibleRealityAnchorModel : IDynamicBakedModel {
         return mutableListOf()
     }
 
-    fun getDefaultRenderPasses(): MutableList<BakedModel> {
-        return mutableListOf(
-            emptyModel,
-        )
-    }
-
-    override fun getRenderPasses(itemStack: ItemStack, fabulous: Boolean): MutableList<BakedModel> {
-        if (!itemStack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())) {
-            return getDefaultRenderPasses()
-        }
-        val mimicBlockStateTag = itemStack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG) ?: return getDefaultRenderPasses()
-        val mimicBlockState = NbtUtils.readBlockState(XplatRegistries.BLOCKS, mimicBlockStateTag)
-        if (mimicBlockState.isAir) return getDefaultRenderPasses()
-        return mutableListOf(Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState))
-    }
-
-    override fun useAmbientOcclusion(): Boolean {
-        return true
-    }
-
-    override fun isGui3d(): Boolean {
-        return false
-    }
-
-    override fun usesBlockLight(): Boolean {
-        return true
-    }
-
-    override fun isCustomRenderer(): Boolean {
-        return true
-    }
-
+    override fun useAmbientOcclusion(): Boolean = true
+    override fun isGui3d(): Boolean = true
+    override fun usesBlockLight(): Boolean = false
+    override fun isCustomRenderer(): Boolean = false
     override fun getRenderTypes(state: BlockState, rand: RandomSource, data: ModelData): ChunkRenderTypeSet {
         return ChunkRenderTypeSet.of(RenderType.cutout())
     }
-
-    override fun getParticleIcon(): TextureAtlasSprite {
-        return getTexture()
-    }
-
-    override fun getTransforms(): ItemTransforms {
-        return emptyModel.transforms
-    }
-
-    override fun getOverrides(): ItemOverrides {
-        return ItemOverrides.EMPTY
-    }
+    override fun getParticleIcon(): TextureAtlasSprite = getTexture(ResourceLocation("minecraft:block/stone"))
+    override fun getTransforms(): ItemTransforms = emptyFlexibleRealityAnchorModel.transforms
+    override fun getOverrides(): ItemOverrides = FlexibleRealityAnchorItemOverrides
 
     override fun getModelData(
         level: BlockAndTintGetter,
@@ -115,5 +70,23 @@ class FlexibleRealityAnchorModel : IDynamicBakedModel {
         val blockEntity = level.getBlockEntity(pos)
         if (blockEntity !is FlexibleRealityAnchorBlockEntity || blockEntity.mimic == null) return super.getModelData(level, pos, state, modelData)
         return modelData.derive().with(MIMIC, blockEntity.mimic).build()
+    }
+}
+
+object FlexibleRealityAnchorItemOverrides : ItemOverrides() {
+    override fun resolve(
+        pModel: BakedModel,
+        pStack: ItemStack,
+        pLevel: ClientLevel?,
+        pEntity: LivingEntity?,
+        pSeed: Int,
+    ): BakedModel? {
+        val mimic = pStack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(
+            FlexibleRealityAnchorBlockEntity.MIMIC_TAG,
+        ) ?: return emptyFlexibleRealityAnchorModel
+        if (mimic.isEmpty) return emptyFlexibleRealityAnchorModel
+        val mimicState = NbtUtils.readBlockState(XplatRegistries.BLOCKS, mimic)
+        if (mimicState.isAir) return emptyFlexibleRealityAnchorModel
+        return Minecraft.getInstance().blockRenderer.getBlockModel(mimicState)
     }
 }

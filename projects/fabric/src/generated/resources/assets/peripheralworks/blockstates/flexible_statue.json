@@ -1,0 +1,36 @@
+{
+  "variants": {
+    "configured=false,facing=east": {
+      "model": "peripheralworks:block/flexible_statue_empty",
+      "y": 90
+    },
+    "configured=false,facing=north": {
+      "model": "peripheralworks:block/flexible_statue_empty",
+      "y": 0
+    },
+    "configured=false,facing=south": {
+      "model": "peripheralworks:block/flexible_statue_empty",
+      "y": 180
+    },
+    "configured=false,facing=west": {
+      "model": "peripheralworks:block/flexible_statue_empty",
+      "y": 270
+    },
+    "configured=true,facing=east": {
+      "model": "peripheralworks:block/flexible_statue",
+      "y": 90
+    },
+    "configured=true,facing=north": {
+      "model": "peripheralworks:block/flexible_statue",
+      "y": 0
+    },
+    "configured=true,facing=south": {
+      "model": "peripheralworks:block/flexible_statue",
+      "y": 180
+    },
+    "configured=true,facing=west": {
+      "model": "peripheralworks:block/flexible_statue",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "configured=false": {
+      "model": "peripheralworks:block/flexible_reality_anchor_empty"
+    },
+    "configured=true": {
+      "model": "peripheralworks:block/flexible_reality_anchor"
+    }
+  }
+}

@@ -25,11 +25,15 @@ import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
 import java.util.*
-import java.util.function.Function
 import java.util.function.Supplier
 
 @Environment(EnvType.CLIENT)
-class FlexibleRealityAnchorModel : UnbakedModel, BakedModel, FabricBakedModel {
+object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
+
+    val defaultItemModel by lazy {
+        Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState())
+    }
+
     override fun getQuads(
         blockState: BlockState?,
         direction: Direction?,
@@ -90,7 +94,7 @@ class FlexibleRealityAnchorModel : UnbakedModel, BakedModel, FabricBakedModel {
     }
 
     fun emitDefaultItemQuads(context: RenderContext) {
-        context.bakedModelConsumer().accept(Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState()))
+        context.bakedModelConsumer().accept(defaultItemModel)
     }
 
     override fun emitItemQuads(stack: ItemStack, randomSupplier: Supplier<RandomSource>, context: RenderContext) {
@@ -102,21 +106,5 @@ class FlexibleRealityAnchorModel : UnbakedModel, BakedModel, FabricBakedModel {
         if (mimicBlockState.isAir) return emitDefaultItemQuads(context)
         val bakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState)
         context.bakedModelConsumer().accept(bakedModel)
-    }
-
-    override fun getDependencies(): MutableCollection<ResourceLocation> {
-        return mutableListOf()
-    }
-
-    override fun resolveParents(function: Function<ResourceLocation, UnbakedModel>) {
-    }
-
-    override fun bake(
-        modelBaker: ModelBaker,
-        function: Function<Material, TextureAtlasSprite>,
-        modelState: ModelState,
-        resourceLocation: ResourceLocation,
-    ): BakedModel {
-        return this
     }
 }

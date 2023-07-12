@@ -78,7 +78,7 @@ object BlockEntityTypes {
     ) {
         PeripheraliumPlatform.createBlockEntityType(
             ::FlexibleRealityAnchorBlockEntity,
-            Blocks.REALITY_FORGER.get(),
+            Blocks.FLEXIBLE_REALITY_ANCHOR.get(),
         )
     }
 
@@ -106,6 +106,24 @@ object BlockEntityTypes {
         PeripheraliumPlatform.createBlockEntityType(
             ::InformativeRegistryBlockEntity,
             Blocks.INFORMATIVE_REGISTRY.get(),
+        )
+    }
+
+    val FLEXIBLE_STATUE = PeripheralWorksPlatform.registerBlockEntity(
+        ResourceLocation(PeripheralWorksCore.MOD_ID, "flexible_statue"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::FlexibleStatueBlockEntity,
+            Blocks.FLEXIBLE_STATUE.get(),
+        )
+    }
+
+    val STATUE_WORKBENCH: Supplier<BlockEntityType<StatueWorkbenchBlockEntity>> = PeripheralWorksPlatform.registerBlockEntity(
+        modId("statue_workbench"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::StatueWorkbenchBlockEntity,
+            Blocks.STATUE_WORKBENCH.get(),
         )
     }
 
