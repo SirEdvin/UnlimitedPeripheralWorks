@@ -38,6 +38,13 @@ repositories {
             includeGroup("mezz.jei")
         }
     }
+    maven {
+        name = "OwO maven"
+        url = uri("https://maven.wispforest.io")
+        content {
+            includeGroup("io.wispforest")
+        }
+    }
 }
 
 dependencies {

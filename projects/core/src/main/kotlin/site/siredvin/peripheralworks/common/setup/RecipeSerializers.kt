@@ -8,7 +8,7 @@ import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 object RecipeSerializers {
     val STATUE_CLONING = PeripheralWorksPlatform.registerRecipeSerializer(
         modId("statue_cloning"),
-        SimpleCraftingRecipeSerializer(::StatueCloningRecipe)
+        SimpleCraftingRecipeSerializer(::StatueCloningRecipe),
     )
 
     fun doSomething() {}

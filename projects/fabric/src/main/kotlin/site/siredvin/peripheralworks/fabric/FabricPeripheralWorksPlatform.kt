@@ -42,7 +42,7 @@ object FabricPeripheralWorksPlatform : PeripheralWorksPlatform {
 
     override fun <C : Container, T : Recipe<C>> registerRecipeSerializer(
         key: ResourceLocation,
-        serializer: RecipeSerializer<T>
+        serializer: RecipeSerializer<T>,
     ): Supplier<RecipeSerializer<T>> {
         val registeredRecipe = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, key, serializer)
         return Supplier { registeredRecipe }

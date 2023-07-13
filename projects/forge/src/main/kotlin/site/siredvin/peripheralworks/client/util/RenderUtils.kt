@@ -26,7 +26,7 @@ object RenderUtils {
         translationZ: Float,
         scaleX: Float,
         scaleY: Float,
-        scaleZ: Float
+        scaleZ: Float,
     ): ItemTransform {
         val translation = Vector3f(translationX, translationY, translationZ)
         translation.mul(0.0625f)
@@ -54,7 +54,7 @@ object RenderUtils {
         ItemTransform.NO_TRANSFORM,
         TRANSFORM_BLOCK_GUI,
         TRANSFORM_BLOCK_GROUND,
-        TRANSFORM_BLOCK_FIXED
+        TRANSFORM_BLOCK_FIXED,
     )
 
     val TEXTURE_ATLAS by lazy {

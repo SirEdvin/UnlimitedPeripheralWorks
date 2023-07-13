@@ -52,7 +52,8 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
 
         private fun bakeQuads(triple: Triple<QuadList, Direction, ModelState>): MutableList<BakedQuad> {
             return triple.first.list.stream().map {
-                    data -> bake(data, triple.second, triple.third)
+                    data ->
+                bake(data, triple.second, triple.third)
             }.collect(Collectors.toList())
         }
 

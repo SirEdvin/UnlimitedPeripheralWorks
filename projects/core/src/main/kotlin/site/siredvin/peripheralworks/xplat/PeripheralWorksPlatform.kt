@@ -72,7 +72,7 @@ interface PeripheralWorksPlatform : ModInformationHolder {
             return get().registerCreativeTab(key, tab)
         }
 
-        fun <C: Container, T: Recipe<C>> registerRecipeSerializer(key: ResourceLocation, serializer: RecipeSerializer<T>): Supplier<RecipeSerializer<T>> {
+        fun <C : Container, T : Recipe<C>> registerRecipeSerializer(key: ResourceLocation, serializer: RecipeSerializer<T>): Supplier<RecipeSerializer<T>> {
             return get().registerRecipeSerializer(key, serializer)
         }
 
@@ -140,7 +140,7 @@ interface PeripheralWorksPlatform : ModInformationHolder {
         blockEntityTypeSup: Supplier<T>,
     ): Supplier<T>
 
-    fun <C: Container, T: Recipe<C>> registerRecipeSerializer(key: ResourceLocation, serializer: RecipeSerializer<T>): Supplier<RecipeSerializer<T>>
+    fun <C : Container, T : Recipe<C>> registerRecipeSerializer(key: ResourceLocation, serializer: RecipeSerializer<T>): Supplier<RecipeSerializer<T>>
 
     fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,

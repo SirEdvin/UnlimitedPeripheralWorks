@@ -33,6 +33,7 @@ rei = "12.0.625"
 # Shared integration mod dependency
 
 # Integration mod dependencies (fabric)
+owo-lib = "0.11.1+1.20"
 teamreborn-energy = "3.0.0"
 tomstorage-fabric = "1.20-1.6.1-fabric"
 techreborn = "4582415" # TechReborn-5.8.1.jar
@@ -41,7 +42,7 @@ ae2-fabric = "fabric-15.0.4-beta"
 natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
 additional-lanterns-fabric = "1.0.5-fabric-mc1.20"
 supermartijn642s-core-lib-fabric = "1.1.10-fabric-mc1.20"
-
+alloy-forgery = "2.0.21+1.20"
 
 # Integration mod dependencies (forge)
 occultism = "1.20.1-1.80.12"
@@ -104,6 +105,7 @@ architectury-fabric = {module = "dev.architectury:architectury-fabric", version.
 
 
 # Fabric integration dependencies
+owo-lib = { module = "io.wispforest:owo-lib", version.ref = "owo-lib"}
 teamreborn-energy = {module = "teamreborn:energy", version.ref = "teamreborn-energy"}
 ae2-fabric = {module = "maven.modrinth:ae2", version.ref = "ae2-fabric"}
 nature-compass-fabric = {module = "curse.maven:naturescompass-252848", version.ref="natures-compass-fabric"}
@@ -115,6 +117,8 @@ reborncore = {module = "curse.maven:reborncore-237903", version.ref="reborncore"
 
 additional-lanterns-fabric = {module = "maven.modrinth:additional-lanterns", version.ref="additional-lanterns-fabric"}
 supermartijn642s-core-lib-fabric = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib-fabric"}
+
+alloy-forgery = {module = "maven.modrinth:alloy-forgery", version.ref="alloy-forgery"}
 
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
@@ -179,6 +183,8 @@ externalMods-fabric-integrations-full = [
     "techreborn",
     "ae2-fabric",
     "additional-lanterns-fabric",
+    "alloy-forgery",
+    "owo-lib",  # required by alloy-forgery
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -186,10 +192,12 @@ externalMods-fabric-integrations-active = [
     "techreborn",
     "ae2-fabric",
     "additional-lanterns-fabric",
+    "alloy-forgery",
+    "owo-lib",  # required by alloy-forgery
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
-    "supermartijn642s-core-lib-fabric",  # required by additional-lanterns
+    "supermartijn642s-core-lib-fabric",  # required by additional-lanterns,
 ]
 
 externalMods-forge-integrations-full = [

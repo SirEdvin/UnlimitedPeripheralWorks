@@ -4,15 +4,12 @@ import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.mojang.math.Transformation
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.block.model.ItemTransform
-import net.minecraft.client.renderer.block.model.ItemTransforms
 import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.ModelState
 import net.minecraft.resources.ResourceLocation
 import org.joml.Matrix4f
 import org.joml.Quaternionf
-import org.joml.Vector3f
 import java.util.concurrent.TimeUnit
 
 object RenderUtils {
