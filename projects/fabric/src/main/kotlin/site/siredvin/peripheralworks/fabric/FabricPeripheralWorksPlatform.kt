@@ -7,8 +7,11 @@ import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.Container
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -35,6 +38,14 @@ object FabricPeripheralWorksPlatform : PeripheralWorksPlatform {
     override fun registerCreativeTab(key: ResourceLocation, tab: CreativeModeTab): Supplier<CreativeModeTab> {
         val registeredTab = Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, key, tab)
         return Supplier { registeredTab }
+    }
+
+    override fun <C : Container, T : Recipe<C>> registerRecipeSerializer(
+        key: ResourceLocation,
+        serializer: RecipeSerializer<T>
+    ): Supplier<RecipeSerializer<T>> {
+        val registeredRecipe = Registry.register(BuiltInRegistries.RECIPE_SERIALIZER, key, serializer)
+        return Supplier { registeredRecipe }
     }
 
     override fun <V : IPocketUpgrade> registerPocketUpgrade(

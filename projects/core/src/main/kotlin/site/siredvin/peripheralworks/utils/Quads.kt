@@ -64,7 +64,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
             "z1" to z1,
             "z2" to z2,
             "texture" to texture.toString(),
-            "tint" to tint,
+            "tint" to PeripheralWorksPlatform.reverseTintConvert(tint),
         )
     }
 

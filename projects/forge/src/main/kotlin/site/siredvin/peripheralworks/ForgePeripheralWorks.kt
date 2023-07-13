@@ -6,6 +6,7 @@ import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraftforge.client.event.ModelEvent
@@ -42,6 +43,8 @@ object ForgePeripheralWorks {
         DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, PeripheralWorksCore.MOD_ID)
     val creativeTabRegistry: DeferredRegister<CreativeModeTab> =
         DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), PeripheralWorksCore.MOD_ID)
+    val recipeSerializers: DeferredRegister<RecipeSerializer<*>> =
+        DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, PeripheralWorksCore.MOD_ID)
     val turtleSerializers = DeferredRegister.create(
         TurtleUpgradeSerialiser.registryId(),
         PeripheralWorksCore.MOD_ID,
@@ -67,6 +70,7 @@ object ForgePeripheralWorks {
         itemsRegistry.register(eventBus)
         blockEntityTypesRegistry.register(eventBus)
         creativeTabRegistry.register(eventBus)
+        recipeSerializers.register(eventBus)
         turtleSerializers.register(eventBus)
         pocketSerializers.register(eventBus)
     }

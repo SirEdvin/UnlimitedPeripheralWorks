@@ -30,6 +30,7 @@ import java.util.function.Supplier
 @Environment(EnvType.CLIENT)
 object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
 
+    val refererTexture = ResourceLocation("minecraft:block/stone")
     val defaultItemModel by lazy {
         Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState())
     }
@@ -41,41 +42,14 @@ object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
     ): MutableList<BakedQuad> {
         return mutableListOf()
     }
-
-    override fun useAmbientOcclusion(): Boolean {
-        return true
-    }
-
-    override fun isGui3d(): Boolean {
-        return false
-    }
-
-    override fun usesBlockLight(): Boolean {
-        return true
-    }
-
-    override fun isCustomRenderer(): Boolean {
-        return true
-    }
-
-    override fun getParticleIcon(): TextureAtlasSprite {
-        return (
-            Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
-                .apply(ResourceLocation("minecraft:block/stone")) as TextureAtlasSprite
-            )
-    }
-
-    override fun getTransforms(): ItemTransforms {
-        return ModelHelper.MODEL_TRANSFORM_BLOCK
-    }
-
-    override fun getOverrides(): ItemOverrides {
-        return ItemOverrides.EMPTY
-    }
-
-    override fun isVanillaAdapter(): Boolean {
-        return false
-    }
+    override fun useAmbientOcclusion(): Boolean = true
+    override fun isGui3d(): Boolean = false
+    override fun usesBlockLight(): Boolean = true
+    override fun isCustomRenderer(): Boolean = false
+    override fun getParticleIcon(): TextureAtlasSprite = RenderUtils.getTexture(refererTexture)
+    override fun getTransforms(): ItemTransforms = ModelHelper.MODEL_TRANSFORM_BLOCK
+    override fun getOverrides(): ItemOverrides = ItemOverrides.EMPTY
+    override fun isVanillaAdapter(): Boolean = false
 
     override fun emitBlockQuads(
         blockView: BlockAndTintGetter,

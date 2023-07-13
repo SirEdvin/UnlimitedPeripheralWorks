@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-06T19:54:25.012064113	vanilla/Loot Tables
+// 1.20.1	2023-07-13T18:28:24.72196441	vanilla/Loot Tables
 0c0f688a43d96795424c446a11d66f061ac3edb9 data/peripheralworks/loot_tables/blocks/display_pedestal.json
 50d55d63ec2c9481748c94e36df7946e41a0452b data/peripheralworks/loot_tables/blocks/informative_registry.json
 d917aadf727552373a8e57bbf68d7945c6947a93 data/peripheralworks/loot_tables/blocks/item_pedestal.json
@@ -8,5 +8,6 @@ e6057985724fed4f7dac37f3852186f1be92618a data/peripheralworks/loot_tables/blocks
 686bc76a4fd435b0f7e306b7796fbd63066d3590 data/peripheralworks/loot_tables/blocks/reality_forger.json
 82eec6d61f7ccfdfc515674d10b73729fa8096fe data/peripheralworks/loot_tables/blocks/recipe_registry.json
 0d4540a33ef43db9a55051c10409a0f3907e0029 data/peripheralworks/loot_tables/blocks/remote_observer.json
+1e9bd860bab0d894835b0fed45c7bf482157517e data/peripheralworks/loot_tables/blocks/statue_workbench.json
 957a2a279def07d969bdf042f7cc32035d1b4d52 data/peripheralworks/loot_tables/blocks/ultimate_sensor.json
 911e2e79bc961fa2eb58e3bc114bffadb83fc19a data/peripheralworks/loot_tables/blocks/universal_scanner.json

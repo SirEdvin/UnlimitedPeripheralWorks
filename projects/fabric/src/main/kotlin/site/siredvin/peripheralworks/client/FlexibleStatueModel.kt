@@ -1,5 +1,7 @@
 package site.siredvin.peripheralworks.client
 
+import com.google.common.cache.CacheBuilder
+import com.google.common.cache.CacheLoader
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess
@@ -11,12 +13,10 @@ import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.*
-import net.minecraft.client.renderer.texture.TextureAtlas
 import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.inventory.InventoryMenu.BLOCK_ATLAS
 import net.minecraft.world.item.ItemStack
@@ -27,25 +27,22 @@ import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntit
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
 @Environment(EnvType.CLIENT)
 object FlexibleStatueModel : BakedModel, FabricBakedModel {
     private val EMPTY_TEXTURE = modId("block/flexible_statue_empty")
-
-    val textureAtlas by lazy {
-        Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
-    }
+    private val meshCache = CacheBuilder.newBuilder()
+        .concurrencyLevel(1).expireAfterAccess(30, TimeUnit.SECONDS)
+        .maximumSize(2_000).build(CacheLoader.from(::buildPrintMesh))
 
     val defaultItemModel by lazy {
         Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_STATUE.get().defaultBlockState())
     }
 
-    val texture: TextureAtlasSprite
-        get() = textureAtlas.apply(EMPTY_TEXTURE)
-
-    fun extractTexture(id: ResourceLocation): TextureAtlasSprite {
-        return textureAtlas.apply(id)
+    val texture: TextureAtlasSprite by lazy {
+        RenderUtils.getTexture(EMPTY_TEXTURE)
     }
 
     override fun getQuads(
@@ -56,36 +53,14 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         return mutableListOf()
     }
 
-    override fun useAmbientOcclusion(): Boolean {
-        return true
-    }
-
-    override fun isGui3d(): Boolean {
-        return false
-    }
-
-    override fun usesBlockLight(): Boolean {
-        return true
-    }
-
-    override fun isCustomRenderer(): Boolean {
-        return true
-    }
-
-    override fun getParticleIcon(): TextureAtlasSprite {
-        return extractTexture(ResourceLocation("minecraft:block/stone"))
-    }
-
-    override fun getTransforms(): ItemTransforms {
-        return ModelHelper.MODEL_TRANSFORM_BLOCK
-    }
-    override fun getOverrides(): ItemOverrides {
-        return ItemOverrides.EMPTY
-    }
-
-    override fun isVanillaAdapter(): Boolean {
-        return false
-    }
+    override fun useAmbientOcclusion(): Boolean = true
+    override fun isGui3d(): Boolean = true
+    override fun usesBlockLight(): Boolean = false
+    override fun isCustomRenderer(): Boolean = false
+    override fun getParticleIcon(): TextureAtlasSprite = texture
+    override fun getTransforms(): ItemTransforms = ModelHelper.MODEL_TRANSFORM_BLOCK
+    override fun getOverrides(): ItemOverrides = ItemOverrides.EMPTY
+    override fun isVanillaAdapter(): Boolean = false
 
     private fun buildShape(emitter: QuadEmitter, quad: QuadData, facing: Direction) {
         // Render inspired by https://github.com/SwitchCraftCC/sc-peripherals/blob/1.20.1/src/main/kotlin/io/sc3/peripherals/client/block/PrintBakedModel.kt logic
@@ -119,13 +94,13 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         }
     }
 
-    private fun buildPrintMesh(list: QuadList, facing: Direction = Direction.SOUTH): Mesh? {
-        val renderer = RendererAccess.INSTANCE.renderer ?: return null
+    private fun buildPrintMesh(pair: Pair<QuadList, Direction>): Mesh {
+        val renderer = RendererAccess.INSTANCE.renderer!!
         val builder = renderer.meshBuilder()
         val emitter = builder.emitter
 
-        list.list.forEach {
-            buildShape(emitter, it, facing)
+        pair.first.list.forEach {
+            buildShape(emitter, it, pair.second)
         }
         return builder.build()
     }
@@ -142,8 +117,8 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
             return
         }
         val quads = entity.bakedQuads ?: return
-        val mesh = buildPrintMesh(quads, entity.facing)
-        if (mesh != null) context.meshConsumer().accept(mesh)
+        val mesh = meshCache.get(Pair(quads, entity.facing))
+        context.meshConsumer().accept(mesh)
     }
 
     fun emitDefaultItemQuads(context: RenderContext) {
@@ -157,7 +132,7 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         val quadList = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getList(FlexibleStatueBlockEntity.BAKED_QUADS_TAG, 10) ?: return emitDefaultItemQuads(context)
         if (quadList.isEmpty()) return emitDefaultItemQuads(context)
         val quads = QuadList(quadList)
-        val mesh = buildPrintMesh(quads) ?: return emitDefaultItemQuads(context)
+        val mesh = meshCache.get(Pair(quads, Direction.SOUTH))
         context.meshConsumer().accept(mesh)
     }
 }

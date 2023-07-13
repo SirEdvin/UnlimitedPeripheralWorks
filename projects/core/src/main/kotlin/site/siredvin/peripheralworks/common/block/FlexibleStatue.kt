@@ -29,7 +29,6 @@ class FlexibleStatue :
         val WHITE_TEXTURE = modId("block/white")
         val CONFIGURED = BooleanProperty.create("configured")
         val FACING = BlockStateProperties.HORIZONTAL_FACING
-
         val BLOCK_MODEL_ID = modId("block/flexible_statue")
         val ITEM_MODEL_ID = modId("item/flexible_statue")
 

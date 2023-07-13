@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-12T22:46:23.001809559	Unlimited Peripheral Works/Block State Definitions
+// 1.20.1	2023-07-13T18:28:36.830615623	Unlimited Peripheral Works/Block State Definitions
 fa09940646b26b32e317d46436ba6e5708942a3d assets/peripheralworks/models/block/statue_workbench_connected.json
 efd5ba47bc8f73def3c977d8887af54ef4ad1370 assets/peripheralworks/models/block/map_pedestal.json
 699158056b5e8e750e0727889b5e5a83345930f3 assets/peripheralworks/models/block/statue_workbench.json
@@ -29,8 +29,8 @@ c8fb84d1128c18b2958d371b6b86c1b3ce6ef08e assets/peripheralworks/blockstates/ulti
 04102637aae8371b82f7433abebded872b4ed5ad assets/peripheralworks/models/item/item_pedestal.json
 778759f975277f38234eec1b10e5b25082f838e1 assets/peripheralworks/models/item/peripheralium_hub.json
 1e7d0abbd9420846ff4b762521b232e9e071d12a assets/peripheralworks/models/block/ultimate_sensor.json
-76a0a59364ad940309fdabf54073f692b9924ea1 assets/peripheralworks/models/item/ultimate_sensor.json
 b073cd6e922c5c57e55d9666f94e510846d07c2d assets/peripheralworks/models/item/peripheral_casing.json
+76a0a59364ad940309fdabf54073f692b9924ea1 assets/peripheralworks/models/item/ultimate_sensor.json
 b5fc0840ecfe842a51f14d18c421dfaf6a604eeb assets/peripheralworks/blockstates/remote_observer.json
 ecc48bf8866709faa895ee4e48100c43fe539942 assets/peripheralworks/models/block/remote_observer.json
 767287600ba5632ed8a38b3d2675cc8ff924a609 assets/peripheralworks/models/item/flexible_reality_anchor.json

@@ -14,6 +14,7 @@ object PeripheralWorksCommonHooks {
         BlockEntityTypes.doSomething()
         Items.doSomething()
         Blocks.doSomething()
+        RecipeSerializers.doSomething()
         PocketUpgradeSerializers.doSomething()
         TurtleUpgradeSerializers.doSomething()
         PeripheralWorksPlatform.registerCreativeTab(

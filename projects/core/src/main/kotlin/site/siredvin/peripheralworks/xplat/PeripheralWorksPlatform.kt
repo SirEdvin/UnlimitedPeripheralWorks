@@ -5,8 +5,11 @@ import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.Container
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -69,6 +72,10 @@ interface PeripheralWorksPlatform : ModInformationHolder {
             return get().registerCreativeTab(key, tab)
         }
 
+        fun <C: Container, T: Recipe<C>> registerRecipeSerializer(key: ResourceLocation, serializer: RecipeSerializer<T>): Supplier<RecipeSerializer<T>> {
+            return get().registerRecipeSerializer(key, serializer)
+        }
+
         fun <V : ITurtleUpgrade> registerTurtleUpgrade(
             name: String,
             serializer: TurtleUpgradeSerialiser<V>,
@@ -104,6 +111,10 @@ interface PeripheralWorksPlatform : ModInformationHolder {
         fun tintConvert(tint: Int): Int {
             return get().tintConvert(tint)
         }
+
+        fun reverseTintConvert(tint: Int): Int {
+            return get().reverseTintConvert(tint)
+        }
     }
 
     override val blocks: List<Supplier<out Block>>
@@ -129,6 +140,8 @@ interface PeripheralWorksPlatform : ModInformationHolder {
         blockEntityTypeSup: Supplier<T>,
     ): Supplier<T>
 
+    fun <C: Container, T: Recipe<C>> registerRecipeSerializer(key: ResourceLocation, serializer: RecipeSerializer<T>): Supplier<RecipeSerializer<T>>
+
     fun <V : ITurtleUpgrade> registerTurtleUpgrade(
         key: ResourceLocation,
         serializer: TurtleUpgradeSerialiser<V>,
@@ -141,5 +154,9 @@ interface PeripheralWorksPlatform : ModInformationHolder {
 
     fun tintConvert(tint: Int): Int {
         return tint
+    }
+
+    fun reverseTintConvert(tint: Int): Int {
+        return tintConvert(tint)
     }
 }

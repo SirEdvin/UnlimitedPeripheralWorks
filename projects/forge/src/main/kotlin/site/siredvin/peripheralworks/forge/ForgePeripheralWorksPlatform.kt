@@ -5,8 +5,11 @@ import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.Container
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
@@ -37,6 +40,10 @@ object ForgePeripheralWorksPlatform : PeripheralWorksPlatform {
 
     override fun registerCreativeTab(key: ResourceLocation, tab: CreativeModeTab): Supplier<CreativeModeTab> {
         return ForgePeripheralWorks.creativeTabRegistry.register(key.path) { tab }
+    }
+
+    override fun <C : Container, T : Recipe<C>> registerRecipeSerializer(key: ResourceLocation, serializer: RecipeSerializer<T>): Supplier<RecipeSerializer<T>> {
+        return ForgePeripheralWorks.recipeSerializers.register(key.path) { serializer }
     }
 
     override fun <V : IPocketUpgrade> registerPocketUpgrade(

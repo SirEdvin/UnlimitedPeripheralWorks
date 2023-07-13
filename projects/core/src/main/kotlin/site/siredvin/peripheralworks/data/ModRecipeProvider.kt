@@ -3,11 +3,13 @@ package site.siredvin.peripheralworks.data
 import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeProvider
+import net.minecraft.data.recipes.SpecialRecipeBuilder
 import net.minecraft.world.item.crafting.Ingredient
 import site.siredvin.peripheralium.data.blocks.TweakedShapedRecipeBuilder
 import site.siredvin.peripheralium.data.blocks.TweakedSmithingTransformRecipeBuilder
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.common.setup.RecipeSerializers
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 import java.util.function.Consumer
 
@@ -142,5 +144,8 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("BCB")
             .pattern(" D ")
             .save(consumer)
+
+        SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLONING.get())
+            .save(consumer, "statue_cloning")
     }
 }

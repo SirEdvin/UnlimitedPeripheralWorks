@@ -32,5 +32,6 @@ object ModLootTableProvider {
         LootTableHelper.dropSelf(consumer, Blocks.REALITY_FORGER)
         LootTableHelper.dropSelf(consumer, Blocks.RECIPE_REGISTRY)
         LootTableHelper.dropSelf(consumer, Blocks.INFORMATIVE_REGISTRY)
+        LootTableHelper.dropSelf(consumer, Blocks.STATUE_WORKBENCH)
     }
 }

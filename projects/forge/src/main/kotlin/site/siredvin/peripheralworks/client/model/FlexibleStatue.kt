@@ -1,5 +1,7 @@
 package site.siredvin.peripheralworks.client.model
 
+import com.google.common.cache.CacheBuilder
+import com.google.common.cache.CacheLoader
 import com.mojang.math.Axis
 import net.minecraft.client.Minecraft
 import net.minecraft.client.multiplayer.ClientLevel
@@ -28,6 +30,7 @@ import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.QuadData
 import site.siredvin.peripheralworks.utils.QuadList
 import site.siredvin.peripheralworks.utils.modId
+import java.util.concurrent.TimeUnit
 import java.util.stream.Collectors
 
 val emptyFlexibleStatueModel by lazy {
@@ -42,24 +45,34 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
     companion object {
         val DEFAULT_TEXTURE = modId("block/white")
         val DUMMY = ResourceLocation("dummy_name")
-    }
+        val quadsCache = CacheBuilder.newBuilder()
+            .concurrencyLevel(1).maximumSize(2_000)
+            .expireAfterAccess(30, TimeUnit.SECONDS).build(CacheLoader.from(::bakeQuads))
+        val bakery by lazy { FaceBakery() }
 
-    protected fun bake(bakery: FaceBakery, data: QuadData, side: Direction, modelState: ModelState = identityModel): BakedQuad {
-        val face = BlockElementFace(
-            null,
-            -1,
-            "",
-            BlockFaceUV(data.uv, 0),
-        )
-        val quad = bakery.bakeQuad(
-            data.start, data.end, face, getTexture(data.texture), side,
-            modelState, null, true, DUMMY,
-        )
-        quad.vertices[3] = data.tint
-        quad.vertices[11] = data.tint
-        quad.vertices[19] = data.tint
-        quad.vertices[27] = data.tint
-        return quad
+        private fun bakeQuads(triple: Triple<QuadList, Direction, ModelState>): MutableList<BakedQuad> {
+            return triple.first.list.stream().map {
+                    data -> bake(data, triple.second, triple.third)
+            }.collect(Collectors.toList())
+        }
+
+        protected fun bake(data: QuadData, side: Direction, modelState: ModelState = identityModel): BakedQuad {
+            val face = BlockElementFace(
+                null,
+                -1,
+                "",
+                BlockFaceUV(data.uv, 0),
+            )
+            val quad = bakery.bakeQuad(
+                data.start, data.end, face, getTexture(data.texture), side,
+                modelState, null, true, DUMMY,
+            )
+            quad.vertices[3] = data.tint
+            quad.vertices[11] = data.tint
+            quad.vertices[19] = data.tint
+            quad.vertices[27] = data.tint
+            return quad
+        }
     }
 
     override fun useAmbientOcclusion(): Boolean = true
@@ -72,6 +85,7 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
 object FlexibleStatueModel : AbstractFlexibleStatueModel() {
     val QUADS = ModelProperty<QuadList>()
     val FACING = ModelProperty<Direction>()
+
     override fun getQuads(
         state: BlockState?,
         side: Direction?,
@@ -87,11 +101,11 @@ object FlexibleStatueModel : AbstractFlexibleStatueModel() {
             Direction.EAST -> Axis.YN.rotationDegrees(90f)
             else -> Axis.YP.rotationDegrees(0f)
         }
-        val bakery = FaceBakery()
-        return quadsData.list.stream().map { data -> bake(bakery, data, safeSide, getModelState(rotation)) }.collect(Collectors.toList())
+        return quadsCache.get(Triple(quadsData, safeSide, getModelState(rotation)))
     }
 
     override fun getOverrides(): ItemOverrides = FlexibleStatueItemOverrides
+    override fun getTransforms(): ItemTransforms = RenderUtils.MODEL_TRANSFORM_BLOCK
 
     override fun getModelData(
         level: BlockAndTintGetter,
@@ -131,10 +145,9 @@ class ItemFlexibleStatueModel(private val quads: QuadList) : AbstractFlexibleSta
         extraData: ModelData,
         renderType: RenderType?,
     ): MutableList<BakedQuad> {
-        val bakery = FaceBakery()
-        return quads.list.stream().map { data -> bake(bakery, data, side ?: Direction.SOUTH) }.collect(Collectors.toList())
+        return quadsCache.get(Triple(quads, side ?: Direction.SOUTH, identityModel))
     }
 
     override fun getOverrides(): ItemOverrides = ItemOverrides.EMPTY
-    override fun getTransforms(): ItemTransforms = RenderUtils.BLOCK_TRANSFORMS
+    override fun getTransforms(): ItemTransforms = RenderUtils.MODEL_TRANSFORM_BLOCK
 }
