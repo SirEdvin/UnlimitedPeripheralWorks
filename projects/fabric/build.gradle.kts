@@ -45,6 +45,21 @@ repositories {
             includeGroup("io.wispforest")
         }
     }
+    maven {
+        name = "Polymer repo"
+        url = uri("https://maven.nucleoid.xyz")
+        content {
+            includeGroup("eu.pb4")
+            includeGroup("xyz.nucleoid")
+        }
+    }
+    maven {
+        name = "OSS Sonatype Repo"
+        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+        content {
+            includeGroup("me.lucko")
+        }
+    }
 }
 
 dependencies {

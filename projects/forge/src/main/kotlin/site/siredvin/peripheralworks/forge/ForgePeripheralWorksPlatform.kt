@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
-import java.awt.Color
 import java.util.function.Supplier
 
 object ForgePeripheralWorksPlatform : PeripheralWorksPlatform {
@@ -58,12 +57,5 @@ object ForgePeripheralWorksPlatform : PeripheralWorksPlatform {
         serializer: TurtleUpgradeSerialiser<V>,
     ): Supplier<TurtleUpgradeSerialiser<V>> {
         return ForgePeripheralWorks.turtleSerializers.register(key.path) { serializer }
-    }
-
-    override fun tintConvert(tint: Int): Int {
-        // For some unknown reason forge tint should be in
-        // bgr
-        val color = Color(tint)
-        return Color(color.blue, color.green, color.red).rgb
     }
 }

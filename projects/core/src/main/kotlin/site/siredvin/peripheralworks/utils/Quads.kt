@@ -8,8 +8,8 @@ import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import org.joml.Vector3f
+import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.io.*
 
 data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, val z1: Float, val z2: Float, val texture: ResourceLocation, val tint: Int) {
@@ -64,7 +64,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
             "z1" to z1,
             "z2" to z2,
             "texture" to texture.toString(),
-            "tint" to PeripheralWorksPlatform.reverseTintConvert(tint),
+            "tint" to PeripheraliumPlatform.reverseTintConvert(tint),
         )
     }
 
@@ -155,7 +155,7 @@ fun convertToQuadData(table: Map<*, *>): QuadData {
         FlexibleStatue.WHITE_TEXTURE
     }
     val tint = if (table.containsKey("tint")) {
-        PeripheralWorksPlatform.tintConvert((table["tint"] as Number).toInt())
+        PeripheraliumPlatform.tintConvert((table["tint"] as Number).toInt())
     } else {
         0xFFFFFF
     }

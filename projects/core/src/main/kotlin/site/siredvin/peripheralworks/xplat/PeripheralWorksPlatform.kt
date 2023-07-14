@@ -107,14 +107,6 @@ interface PeripheralWorksPlatform : ModInformationHolder {
             POCKET_UPGRADES.add(registered as Supplier<PocketUpgradeSerialiser<out IPocketUpgrade>>)
             return registered
         }
-
-        fun tintConvert(tint: Int): Int {
-            return get().tintConvert(tint)
-        }
-
-        fun reverseTintConvert(tint: Int): Int {
-            return get().reverseTintConvert(tint)
-        }
     }
 
     override val blocks: List<Supplier<out Block>>
@@ -151,12 +143,4 @@ interface PeripheralWorksPlatform : ModInformationHolder {
         key: ResourceLocation,
         serializer: PocketUpgradeSerialiser<V>,
     ): Supplier<PocketUpgradeSerialiser<V>>
-
-    fun tintConvert(tint: Int): Int {
-        return tint
-    }
-
-    fun reverseTintConvert(tint: Int): Int {
-        return tintConvert(tint)
-    }
 }

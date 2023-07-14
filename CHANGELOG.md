@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Statue workbench
-- Alloy forgery integration
+- Alloy forgery integration for fabric
+- Universal shop integration for fabric
 
 ## [1.0.0] - 2023-07-09
 

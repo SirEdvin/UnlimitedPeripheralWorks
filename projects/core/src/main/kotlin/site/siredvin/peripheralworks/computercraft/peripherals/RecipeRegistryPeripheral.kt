@@ -11,11 +11,11 @@ import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.peripheralium.ext.getResourceLocation
 import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.blockentity.RecipeRegistryBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
-import site.siredvin.peripheralworks.utils.getResourceLocation
 import java.util.*
 import java.util.stream.Collectors
 
@@ -43,7 +43,7 @@ class RecipeRegistryPeripheral(
     @LuaFunction
     @Throws(LuaException::class)
     fun getAllRecipesForType(arguments: IArguments): MethodResult {
-        val recipeTypeID: ResourceLocation = getResourceLocation(arguments, 0)
+        val recipeTypeID: ResourceLocation = arguments.getResourceLocation(0)
         val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
         return MethodResult.of(level!!.recipeManager.getAllRecipesFor(type).map { it.id })
     }
@@ -51,8 +51,8 @@ class RecipeRegistryPeripheral(
     @LuaFunction
     @Throws(LuaException::class)
     fun getRecipeForType(arguments: IArguments): MethodResult {
-        val recipeTypeID: ResourceLocation = getResourceLocation(arguments, 0)
-        val recipeID: ResourceLocation = getResourceLocation(arguments, 1)
+        val recipeTypeID: ResourceLocation = arguments.getResourceLocation(0)
+        val recipeID: ResourceLocation = arguments.getResourceLocation(1)
         val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
         return MethodResult.of(level!!.recipeManager.getAllRecipesFor(type).filter { it.id == recipeID }.map(RecipeRegistryToolkit::serializeRecipe).toList())
     }
@@ -60,7 +60,7 @@ class RecipeRegistryPeripheral(
     @LuaFunction
     @Throws(LuaException::class)
     fun getRecipesFor(arguments: IArguments): MethodResult {
-        val itemID: ResourceLocation = getResourceLocation(arguments, 0)
+        val itemID: ResourceLocation = arguments.getResourceLocation(0)
         val types = arguments[1]
         val targetItem = XplatRegistries.ITEMS.tryGet(itemID) ?: throw LuaException(String.format("Cannot find item with id %s", itemID))
         val recipeTypes = RecipeRegistryToolkit.collectRecipeTypes(types)

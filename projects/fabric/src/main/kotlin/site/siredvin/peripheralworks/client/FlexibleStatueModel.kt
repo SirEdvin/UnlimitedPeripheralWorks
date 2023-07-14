@@ -23,6 +23,8 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
+import site.siredvin.peripheralium.ext.faces
+import site.siredvin.peripheralium.ext.rotateTowards
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.*

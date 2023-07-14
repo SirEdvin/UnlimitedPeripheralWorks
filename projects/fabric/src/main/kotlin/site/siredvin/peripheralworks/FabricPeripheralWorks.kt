@@ -31,6 +31,7 @@ object FabricPeripheralWorks : ModInitializer {
         Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("alloy_forgery").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("universal_shops").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)
         // Register block lookup

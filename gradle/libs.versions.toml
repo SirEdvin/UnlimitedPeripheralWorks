@@ -10,7 +10,7 @@ mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.106.1"
-peripheralium = "0.6.4"
+peripheralium = "0.6.5-1"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.83.1+1.20.1"
@@ -43,6 +43,13 @@ natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
 additional-lanterns-fabric = "1.0.5-fabric-mc1.20"
 supermartijn642s-core-lib-fabric = "1.1.10-fabric-mc1.20"
 alloy-forgery = "2.0.21+1.20"
+polymer = "0.5.5+1.20.1"
+polymer-sgui = "1.2.2+1.20"
+polymer-placeholder = "2.1.1+1.20"
+polymer-cprotection = "1.0.0"
+polymer-ceconomy = "1.1.1"
+fabric-permissions = "0.2-SNAPSHOT"
+universal-shops = "1.3.2+1.20.1"
 
 # Integration mod dependencies (forge)
 occultism = "1.20.1-1.80.12"
@@ -120,6 +127,16 @@ supermartijn642s-core-lib-fabric = {module = "maven.modrinth:supermartijn642s-co
 
 alloy-forgery = {module = "maven.modrinth:alloy-forgery", version.ref="alloy-forgery"}
 
+polymer-core = {module = "eu.pb4:polymer-core", version.ref = "polymer"}
+polymer-virtual-entity = {module = "eu.pb4:polymer-virtual-entity", version.ref = "polymer"}
+polymer-resource-pack = {module = "eu.pb4:polymer-resource-pack", version.ref = "polymer"}
+polymer-sgui = {module = "eu.pb4:sgui", version.ref="polymer-sgui"}
+polymer-placeholder = {module = "eu.pb4:placeholder-api", version.ref="polymer-placeholder"}
+polymer-cprotection = {module = "eu.pb4:common-protection-api", version.ref = "polymer-cprotection"}
+polymer-ceconomy = {module = "eu.pb4:common-economy-api", version.ref="polymer-ceconomy"}
+fabric-permissions = {module = "me.lucko:fabric-permissions-api", version.ref="fabric-permissions"}
+universal-shops = {module = "maven.modrinth:universal-shops", version.ref="universal-shops"}
+
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
@@ -185,6 +202,15 @@ externalMods-fabric-integrations-full = [
     "additional-lanterns-fabric",
     "alloy-forgery",
     "owo-lib",  # required by alloy-forgery
+    "universal-shops",
+    "polymer-core",  # required by universal-shops
+    "polymer-virtual-entity",  # required by universal-shops
+    "polymer-ceconomy",  # required by universal-shops
+    "polymer-cprotection",  # required by universal-shops
+    "polymer-placeholder",  # required by universal-shops
+    "polymer-resource-pack",  # required by universal-shops
+    "polymer-sgui",  # required by universal-shops,
+    "fabric-permissions",  # required by universal-shops,
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -194,6 +220,15 @@ externalMods-fabric-integrations-active = [
     "additional-lanterns-fabric",
     "alloy-forgery",
     "owo-lib",  # required by alloy-forgery
+    "universal-shops",
+    "polymer-core",  # required by universal-shops
+    "polymer-virtual-entity",  # required by universal-shops
+    "polymer-ceconomy",  # required by universal-shops
+    "polymer-cprotection",  # required by universal-shops
+    "polymer-placeholder",  # required by universal-shops
+    "polymer-resource-pack",  # required by universal-shops
+    "polymer-sgui",  # required by universal-shops
+    "fabric-permissions",  # required by universal-shops,
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
