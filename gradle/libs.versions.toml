@@ -13,7 +13,7 @@ cc-tweaked = "1.106.1"
 peripheralium = "0.6.5-1"
 mixin = "0.8.5"
 # Fabric dependencies
-fabric-api = "0.83.1+1.20.1"
+fabric-api = "0.85.0+1.20.1"
 fabric-loader = "0.14.21"
 fabric-kotlin = "1.9.4+kotlin.1.8.21"
 forgeconfigapirt-fabric = "7.0.0"
@@ -43,6 +43,8 @@ natures-compass-fabric = "4591880"  # NaturesCompass-1.20.1-2.2.1-fabric.jar
 additional-lanterns-fabric = "1.0.5-fabric-mc1.20"
 supermartijn642s-core-lib-fabric = "1.1.10-fabric-mc1.20"
 alloy-forgery = "2.0.21+1.20"
+powah-fabric = "5.0.1-fabric"
+powah-forge = "5.0.1-forge"
 polymer = "0.5.5+1.20.1"
 polymer-sgui = "1.2.2+1.20"
 polymer-placeholder = "2.1.1+1.20"
@@ -137,6 +139,8 @@ polymer-ceconomy = {module = "eu.pb4:common-economy-api", version.ref="polymer-c
 fabric-permissions = {module = "me.lucko:fabric-permissions-api", version.ref="fabric-permissions"}
 universal-shops = {module = "maven.modrinth:universal-shops", version.ref="universal-shops"}
 
+powah-fabric = {module = "maven.modrinth:powah", version.ref="powah-fabric"}
+
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
@@ -161,6 +165,8 @@ deep-resonance = {module = "maven.modrinth:deep-resonance", version.ref="deep-re
 
 additional-lanterns-forge = {module = "maven.modrinth:additional-lanterns", version.ref="additional-lanterns-forge"}
 supermartijn642s-core-lib-forge = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib-forge"}
+
+powah-forge = {module = "maven.modrinth:powah", version.ref="powah-forge"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -211,6 +217,7 @@ externalMods-fabric-integrations-full = [
     "polymer-resource-pack",  # required by universal-shops
     "polymer-sgui",  # required by universal-shops,
     "fabric-permissions",  # required by universal-shops,
+    "powah-fabric",
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -220,15 +227,7 @@ externalMods-fabric-integrations-active = [
     "additional-lanterns-fabric",
     "alloy-forgery",
     "owo-lib",  # required by alloy-forgery
-    "universal-shops",
-    "polymer-core",  # required by universal-shops
-    "polymer-virtual-entity",  # required by universal-shops
-    "polymer-ceconomy",  # required by universal-shops
-    "polymer-cprotection",  # required by universal-shops
-    "polymer-placeholder",  # required by universal-shops
-    "polymer-resource-pack",  # required by universal-shops
-    "polymer-sgui",  # required by universal-shops
-    "fabric-permissions",  # required by universal-shops,
+    "powah-fabric",
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
@@ -247,6 +246,7 @@ externalMods-forge-integrations-full = [
     "rftools-base", # by deepresonance
     "mcjtylib", # by deepresonance, required for class typing
     "additional-lanterns-forge",
+    "powah-forge",
 ]
 externalMods-forge-integrations-active = [
     "occultism",
@@ -260,6 +260,7 @@ externalMods-forge-integrations-active = [
     "rftools-base", # by deepresonance
     "mcjtylib", # by deepresonance, required for class typing
     "additional-lanterns-forge",
+    "powah-forge",
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now
