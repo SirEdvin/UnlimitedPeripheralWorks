@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Statue workbench
 - Alloy forgery integration for fabric
 - Universal shop integration for fabric
+- Powah integration for forge and fabric
 
 ## [1.0.0] - 2023-07-09
 

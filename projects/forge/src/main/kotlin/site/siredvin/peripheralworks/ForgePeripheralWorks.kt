@@ -83,6 +83,7 @@ object ForgePeripheralWorks {
         Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)
