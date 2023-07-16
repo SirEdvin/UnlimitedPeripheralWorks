@@ -7,6 +7,7 @@ import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.StatueWorkbenchBlockEntity
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.utils.QuadList
 import site.siredvin.peripheralworks.utils.convertToQuadList
 import java.util.*
@@ -16,12 +17,10 @@ class StatueWorkbenchPeripheral(
 ) : OwnedPeripheral<BlockEntityPeripheralOwner<StatueWorkbenchBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
     companion object {
         const val TYPE = "statue_workbench"
-        const val MAX_QUAD_COUNT = 256
     }
 
     override val isEnabled: Boolean
-        // TODO: adapt
-        get() = true
+        get() = PeripheralWorksConfig.enableStatueWorkbench
 
     protected fun getStatue(): Optional<FlexibleStatueBlockEntity> {
         val blockEntity = level!!.getBlockEntity(pos.offset(0, 1, 0))
@@ -97,14 +96,23 @@ class StatueWorkbenchPeripheral(
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
         if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
         val quadList: QuadList = convertToQuadList(cubes)
-        if (quadList.list.size > MAX_QUAD_COUNT) {
+        if (quadList.list.size > PeripheralWorksConfig.flexibleStatueMaxQuads) {
             return MethodResult.of(
                 null,
-                java.lang.String.format("You cannot send more then %d quads", MAX_QUAD_COUNT),
+                java.lang.String.format("You cannot send more then %d quads", PeripheralWorksConfig.flexibleStatueMaxQuads),
             )
         }
         val tileEntity = opStatue.get()
         tileEntity.setBakedQuads(quadList, false)
+        return MethodResult.of(true)
+    }
+
+    @LuaFunction(mainThread = true)
+    fun resetCubes(): MethodResult {
+        val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
+        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        val tileEntity = opStatue.get()
+        tileEntity.clear(skipUpdate = false)
         return MethodResult.of(true)
     }
 }

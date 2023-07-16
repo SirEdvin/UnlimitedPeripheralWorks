@@ -145,6 +145,24 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" D ")
             .save(consumer)
 
+        TweakedShapedRecipeBuilder.shaped(Blocks.FLEXIBLE_STATUE.get(), 16)
+            .define('S', ingredients.smoothStone)
+            .define('P', ingredients.peripheralium)
+            .pattern("S S")
+            .pattern(" P ")
+            .pattern("S S")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Blocks.STATUE_WORKBENCH.get())
+            .define('S', Ingredient.of(Blocks.FLEXIBLE_STATUE.get()))
+            .define('B', ingredients.smoothStone)
+            .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
+            .define('D', ingredients.peripheralium)
+            .pattern("BSB")
+            .pattern("SCS")
+            .pattern("BDB")
+            .save(consumer)
+
         SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLONING.get())
             .save(consumer, "statue_cloning")
     }

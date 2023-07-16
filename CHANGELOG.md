@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Alloy forgery integration for fabric
 - Universal shop integration for fabric
 - Powah integration for forge and fabric
+- More reality flexible anchor blocklist items
+
+### Fixed
+
+- Various scanner problems (see #22)
+- Missed tooltips
 
 ## [1.0.0] - 2023-07-09
 

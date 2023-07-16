@@ -156,6 +156,8 @@ object ModTagsProvider {
         Supplier { net.minecraft.world.level.block.Blocks.GREEN_WALL_BANNER },
         Supplier { net.minecraft.world.level.block.Blocks.RED_WALL_BANNER },
         Supplier { net.minecraft.world.level.block.Blocks.BLACK_WALL_BANNER },
+        Blocks.FLEXIBLE_REALITY_ANCHOR,
+        Blocks.FLEXIBLE_STATUE,
     )
 
     @JvmStatic

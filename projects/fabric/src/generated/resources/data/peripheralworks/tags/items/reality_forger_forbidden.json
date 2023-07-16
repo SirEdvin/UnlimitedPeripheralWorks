@@ -139,6 +139,8 @@
     "minecraft:brown_banner",
     "minecraft:green_banner",
     "minecraft:red_banner",
-    "minecraft:black_banner"
+    "minecraft:black_banner",
+    "peripheralworks:flexible_reality_anchor",
+    "peripheralworks:flexible_statue"
   ]
 }

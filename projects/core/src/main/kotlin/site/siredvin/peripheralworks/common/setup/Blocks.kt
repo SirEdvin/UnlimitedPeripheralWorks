@@ -168,11 +168,10 @@ object Blocks {
         "statue_workbench",
         { StatueWorkbench() },
     ) {
-        // TODO: adapt
         PeripheralBlockItem(
             it,
             Item.Properties(),
-            PeripheralWorksConfig::enableRealityForger,
+            PeripheralWorksConfig::enableStatueWorkbench,
             alwaysShow = true,
             TooltipCollection::isDisabled,
         )

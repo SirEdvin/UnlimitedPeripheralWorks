@@ -5,19 +5,13 @@ import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraft.world.level.block.state.properties.BooleanProperty
-import net.minecraft.world.level.block.state.properties.EnumProperty
-import net.minecraft.world.level.block.state.properties.IntegerProperty
-import net.minecraft.world.level.block.state.properties.Property
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralium.util.radiusCorrect
 import site.siredvin.peripheralium.util.representation.LuaInterpretation
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.util.world.ScanUtils
-import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RealityForgerBlockEntity
@@ -51,71 +45,6 @@ class RealityForgerPeripheral(
             data["interactionRadius"] = interactionRadius
             return data
         }
-
-    //     Please, don't blame me for this untyped garbage code
-    //     If you can handle it better, you're welcome
-    @Throws(LuaException::class)
-    private fun applyBlockAttrs(state: BlockState, blockAttrs: Map<*, *>): BlockState {
-        var changeableState: BlockState = state
-        blockAttrs.forEach { attr ->
-            val property = state.properties.find { it.name.equals(attr.key) }
-                ?: throw LuaException(String.format("Unknown property name %s", attr.key))
-            when (property) {
-                is EnumProperty -> {
-                    val value = attr.value.toString().lowercase()
-                    val targetValue = property.getPossibleValues().find { it.toString().lowercase() == value }
-                        ?: throw LuaException(
-                            java.lang.String.format(
-                                "Incorrect value %s, only %s is allowed",
-                                attr.key,
-                                property.getPossibleValues().joinToString(", "),
-                            ),
-                        )
-                    // AAAAAAAAAAAAAAAAAA
-                    // WHAT THE HELL IS THIS CASTING
-                    // YOU TELL ME
-                    val trickedProperty = property as Property<Comparable<Any>>
-                    changeableState = changeableState.setValue(trickedProperty, targetValue as Comparable<Any>)
-                }
-
-                is BooleanProperty -> {
-                    if (attr.value !is Boolean) {
-                        throw LuaException(String.format("Incorrect value %s, should be boolean", attr.key))
-                    }
-                    changeableState = changeableState.setValue(property, attr.value as Boolean)
-                }
-
-                is IntegerProperty -> {
-                    if (attr.value !is Number) {
-                        throw LuaException(String.format("Incorrect value %s, should be boolean", attr.key))
-                    }
-                    changeableState = changeableState.setValue(property, (attr.value as Number).toInt())
-                }
-            }
-        }
-        return changeableState
-    }
-
-    @Throws(LuaException::class)
-    private fun findBlock(table: Map<*, *>): BlockState? {
-        if (table.containsKey("block")) {
-            val blockID = table["block"].toString()
-            val block = XplatRegistries.BLOCKS.get(ResourceLocation(blockID))
-            if (block == net.minecraft.world.level.block.Blocks.AIR) {
-                throw LuaException(String.format("Cannot find block %s", table["block"]))
-            }
-            if (block.defaultBlockState().`is`(BlockTags.REALITY_FORGER_FORBIDDEN)) {
-                throw LuaException("You cannot use this block, is blocklisted")
-            }
-            var targetState = block.defaultBlockState()
-            if (table.containsKey("attrs")) {
-                val blockAttrs = table["attrs"] as? Map<*, *> ?: throw LuaException("attrs should be a table")
-                targetState = applyBlockAttrs(targetState, blockAttrs)
-            }
-            return targetState
-        }
-        return null
-    }
 
     private fun forgeRealityTileEntity(
         realityMirror: FlexibleRealityAnchorBlockEntity,
@@ -152,6 +81,29 @@ class RealityForgerPeripheral(
     }
 
     @LuaFunction(mainThread = true)
+    fun clearAnchors(arguments: IArguments): MethodResult {
+        val poses: MutableList<BlockPos> = mutableListOf()
+        val posesTable = arguments.optTable(0)
+        if (posesTable.isEmpty) {
+            ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { _, pos ->
+                val blockEntity = level!!.getBlockEntity(pos)
+                if (blockEntity is FlexibleRealityAnchorBlockEntity) {
+                    poses.add(pos)
+                }
+            })
+        } else {
+            for (value in posesTable.get().values) {
+                if (value !is Map<*, *>) throw LuaException("First argument should be list of block positions")
+                poses.add(LuaInterpretation.asBlockPos(peripheralOwner.pos, value, peripheralOwner.facing))
+            }
+        }
+        poses.forEach {
+            (level?.getBlockEntity(it) as? FlexibleRealityAnchorBlockEntity)?.setMimic(null)
+        }
+        return MethodResult.of(true)
+    }
+
+    @LuaFunction(mainThread = true)
     @Throws(LuaException::class)
     fun forgeRealityPieces(arguments: IArguments): MethodResult {
         val poses: MutableList<BlockPos> = mutableListOf()
@@ -172,7 +124,10 @@ class RealityForgerPeripheral(
             entities.add(entity)
         }
         val table = arguments.getTable(1)
-        val targetState = findBlock(table)
+        val targetState = LuaInterpretation.asBlockState(table)
+        if (targetState.`is`(BlockTags.REALITY_FORGER_FORBIDDEN)) {
+            throw LuaException("You cannot use this block, is blocklisted")
+        }
         entities.forEach {
             forgeRealityTileEntity(
                 it,
@@ -187,9 +142,12 @@ class RealityForgerPeripheral(
     @Throws(LuaException::class)
     fun forgeReality(arguments: IArguments): MethodResult {
         val table = arguments.getTable(0)
-        val targetState = findBlock(table)
+        val targetState = LuaInterpretation.asBlockState(table)
         if (level == null) {
             return MethodResult.of(null, "Level is not loaded, what?")
+        }
+        if (targetState.`is`(BlockTags.REALITY_FORGER_FORBIDDEN)) {
+            throw LuaException("You cannot use this block, is blocklisted")
         }
         ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { blockState, blockPos ->
             val blockEntity = level!!.getBlockEntity(blockPos)

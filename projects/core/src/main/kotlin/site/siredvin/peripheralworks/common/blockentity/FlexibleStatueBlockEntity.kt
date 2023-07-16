@@ -86,13 +86,14 @@ class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mu
         }
     }
 
-    fun clear(state: BlockState, skipUpdate: Boolean) {
+    fun clear(state: BlockState? = null, skipUpdate: Boolean) {
         _bakedQuads = null
         refreshShape()
+        val realState = state ?: blockState
         if (!skipUpdate) {
-            pushInternalDataChangeToClient(state.setValue(FlexibleStatue.CONFIGURED, false))
+            pushInternalDataChangeToClient(realState.setValue(FlexibleStatue.CONFIGURED, false))
         } else {
-            if (pendingState == null) pendingState = state
+            if (pendingState == null) pendingState = realState
             pendingState = pendingState!!.setValue(FlexibleStatue.CONFIGURED, false)
         }
     }

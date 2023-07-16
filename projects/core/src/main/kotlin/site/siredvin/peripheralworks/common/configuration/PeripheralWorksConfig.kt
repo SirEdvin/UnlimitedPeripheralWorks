@@ -93,6 +93,12 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
     val enableInformativeRegistry: Boolean
         get() = ConfigHolder.COMMON_CONFIG.ENABLE_INFORMATIVE_REGISTRY.get()
 
+    val enableStatueWorkbench: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_STATUE_WORKBENCH.get()
+
+    val flexibleStatueMaxQuads: Int
+        get() = ConfigHolder.COMMON_CONFIG.FLEXIBLE_STATUE_MAX_QUADS.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -136,6 +142,8 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
         val REALITY_FORGER_MAX_RANGE: ForgeConfigSpec.IntValue
         val ENABLE_RECIPE_REGISTRY: ForgeConfigSpec.BooleanValue
         val ENABLE_INFORMATIVE_REGISTRY: ForgeConfigSpec.BooleanValue
+        val ENABLE_STATUE_WORKBENCH: ForgeConfigSpec.BooleanValue
+        val FLEXIBLE_STATUE_MAX_QUADS: ForgeConfigSpec.IntValue
 
         init {
             builder.push("base")
@@ -206,6 +214,10 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
                 .define("enableRecipeRegistry", true)
             ENABLE_INFORMATIVE_REGISTRY = builder.comment("Enables informative registry")
                 .define("enableInformativeRegistry", true)
+            ENABLE_STATUE_WORKBENCH = builder.comment("Enables statue workbench")
+                .define("enableStatueWorkbench", true)
+            FLEXIBLE_STATUE_MAX_QUADS = builder.comment("Max quads amount for flexible statue, will be applied only for newest ones")
+                .defineInRange("flexibleStatueMaxQuads", 256, 64, Int.MAX_VALUE)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.values(), builder)
