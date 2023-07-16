@@ -12,7 +12,7 @@ import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.RecipeSerializers
 
-class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
+class StatueCleanRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
 
     companion object {
         private fun isSuitableStatue(stack: ItemStack): Boolean {
@@ -20,29 +20,21 @@ class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) 
         }
     }
 
+    private val resultItem by lazy {
+        Blocks.FLEXIBLE_STATUE.get().asItem().defaultInstance
+    }
+
     override fun matches(p0: CraftingContainer, p1: Level): Boolean {
-        var possibleCandidate = ItemStack.EMPTY
-        var copyCount = 0
-        p0.items.forEach {
-            if (isSuitableStatue(it)) {
-                if (possibleCandidate.isEmpty) {
-                    possibleCandidate = it
-                } else {
-                    return false
-                }
-            } else if (it.`is`(Blocks.FLEXIBLE_STATUE.get().asItem())) {
-                copyCount += 1
-            } else if (!it.isEmpty) {
-                return false
-            }
-        }
-        return !possibleCandidate.isEmpty && copyCount > 0
+        return p0.items.count { !it.isEmpty } == 1 && p0.items.any { isSuitableStatue(it) }
+    }
+
+    override fun getResultItem(registry: RegistryAccess): ItemStack {
+        return resultItem
     }
 
     override fun assemble(p0: CraftingContainer, p1: RegistryAccess): ItemStack {
         val firstCandidate = p0.items.find(Companion::isSuitableStatue) ?: ItemStack.EMPTY
-        val count = p0.items.count { it.`is`(Blocks.FLEXIBLE_STATUE.get().asItem()) }
-        return firstCandidate.copyWithCount(count)
+        return resultItem.copyWithCount(firstCandidate.count)
     }
 
     override fun canCraftInDimensions(p0: Int, p1: Int): Boolean {
@@ -50,6 +42,6 @@ class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) 
     }
 
     override fun getSerializer(): RecipeSerializer<*> {
-        return RecipeSerializers.STATUE_CLONING.get()
+        return RecipeSerializers.STATUE_CLEAN.get()
     }
 }

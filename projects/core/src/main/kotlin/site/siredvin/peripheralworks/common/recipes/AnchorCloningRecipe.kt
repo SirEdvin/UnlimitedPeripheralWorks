@@ -12,11 +12,11 @@ import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.RecipeSerializers
 
-class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
+class AnchorCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
 
     companion object {
-        private fun isSuitableStatue(stack: ItemStack): Boolean {
-            return stack.`is`(Blocks.FLEXIBLE_STATUE.get().asItem()) && stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG) != null
+        private fun isSuitableAnchor(stack: ItemStack): Boolean {
+            return stack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem()) && stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG) != null
         }
     }
 
@@ -24,13 +24,13 @@ class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) 
         var possibleCandidate = ItemStack.EMPTY
         var copyCount = 0
         p0.items.forEach {
-            if (isSuitableStatue(it)) {
+            if (isSuitableAnchor(it)) {
                 if (possibleCandidate.isEmpty) {
                     possibleCandidate = it
                 } else {
                     return false
                 }
-            } else if (it.`is`(Blocks.FLEXIBLE_STATUE.get().asItem())) {
+            } else if (it.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())) {
                 copyCount += 1
             } else if (!it.isEmpty) {
                 return false
@@ -40,8 +40,8 @@ class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) 
     }
 
     override fun assemble(p0: CraftingContainer, p1: RegistryAccess): ItemStack {
-        val firstCandidate = p0.items.find(Companion::isSuitableStatue) ?: ItemStack.EMPTY
-        val count = p0.items.count { it.`is`(Blocks.FLEXIBLE_STATUE.get().asItem()) }
+        val firstCandidate = p0.items.find(Companion::isSuitableAnchor) ?: ItemStack.EMPTY
+        val count = p0.items.count { it.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem()) }
         return firstCandidate.copyWithCount(count)
     }
 
@@ -50,6 +50,6 @@ class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) 
     }
 
     override fun getSerializer(): RecipeSerializer<*> {
-        return RecipeSerializers.STATUE_CLONING.get()
+        return RecipeSerializers.ANCHOR_CLONING.get()
     }
 }

@@ -165,5 +165,11 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
 
         SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLONING.get())
             .save(consumer, "statue_cloning")
+        SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLEAN.get())
+            .save(consumer, "statue_clean")
+        SpecialRecipeBuilder.special(RecipeSerializers.ANCHOR_CLONING.get())
+            .save(consumer, "anchor_cloning")
+        SpecialRecipeBuilder.special(RecipeSerializers.ANCHOR_CLEAN.get())
+            .save(consumer, "anchor_clean")
     }
 }
