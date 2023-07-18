@@ -17,6 +17,7 @@ subprojects {
 
 githubShaking {
     modBranch.set("1.20")
+    projectRepo.set("unlimitedperipheralworks")
     shake()
 }
 
