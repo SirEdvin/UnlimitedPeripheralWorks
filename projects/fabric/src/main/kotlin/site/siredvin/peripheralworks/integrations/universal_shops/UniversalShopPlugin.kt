@@ -18,15 +18,6 @@ class UniversalShopPlugin(private val blockEntity: TradeShopBlockEntity) : IPeri
         get() = "universal_shop"
 
     @LuaFunction(mainThread = true)
-    fun inspect(): Map<String, Any> {
-        return mapOf(
-            "hologramMode" to blockEntity.hologramMode.name,
-            "priceMode" to blockEntity.priceHandler.definition.type,
-            "stockMode" to blockEntity.stockHandler.definition.type,
-        )
-    }
-
-    @LuaFunction(mainThread = true)
     fun getHologramMode(): String = blockEntity.hologramMode.name
 
     @LuaFunction(mainThread = true)
