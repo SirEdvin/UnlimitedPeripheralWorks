@@ -10,11 +10,12 @@ license="MIT"
 modId="peripheralworks"
 version="${file.jarVersion}"
 displayName="UnlimitedPeripheralWorks"
-displayURL="https://github.com/SirEdvin/UnlimitedPeripheralWorks/"
+displayURL="https://docs.siredvin.site/UnlimitedPeripheralWorks/"
 
 credits=""
-authors=""
+authors="SirEdvin"
 description='''
+Peripheral mod, that provides a lot extra features, new peripherals and even some items
 '''
 
 [[dependencies.peripheralworks]]

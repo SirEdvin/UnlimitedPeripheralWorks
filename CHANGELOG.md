@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Various scanner problems (see #22)
 - Missed tooltips
+- Mod meta information
 
 ## [1.0.0] - 2023-07-09
 

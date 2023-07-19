@@ -7,6 +7,7 @@ import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import site.siredvin.peripheralium.data.blocks.LootTableHelper
 import site.siredvin.peripheralworks.common.setup.Blocks
+import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
 import java.util.function.BiConsumer
 
 object ModLootTableProvider {
@@ -21,17 +22,21 @@ object ModLootTableProvider {
     }
 
     fun registerBlocks(consumer: BiConsumer<ResourceLocation, LootTable.Builder>) {
-        LootTableHelper.dropSelf(consumer, Blocks.ULTIMATE_SENSOR)
-        LootTableHelper.dropSelf(consumer, Blocks.UNIVERSAL_SCANNER)
-        LootTableHelper.dropSelf(consumer, Blocks.PERIPHERAL_CASING)
-        LootTableHelper.dropSelf(consumer, Blocks.ITEM_PEDESTAL)
-        LootTableHelper.dropSelf(consumer, Blocks.MAP_PEDESTAL)
-        LootTableHelper.dropSelf(consumer, Blocks.DISPLAY_PEDESTAL)
-        LootTableHelper.dropSelf(consumer, Blocks.REMOTE_OBSERVER)
-        LootTableHelper.dropSelf(consumer, Blocks.PERIPHERAL_PROXY)
-        LootTableHelper.dropSelf(consumer, Blocks.REALITY_FORGER)
-        LootTableHelper.dropSelf(consumer, Blocks.RECIPE_REGISTRY)
-        LootTableHelper.dropSelf(consumer, Blocks.INFORMATIVE_REGISTRY)
-        LootTableHelper.dropSelf(consumer, Blocks.STATUE_WORKBENCH)
+        val lootTable = LootTableHelper(PeripheralWorksPlatform.holder)
+        lootTable.dropSelf(consumer, Blocks.ULTIMATE_SENSOR)
+        lootTable.dropSelf(consumer, Blocks.UNIVERSAL_SCANNER)
+        lootTable.dropSelf(consumer, Blocks.PERIPHERAL_CASING)
+        lootTable.dropSelf(consumer, Blocks.ITEM_PEDESTAL)
+        lootTable.dropSelf(consumer, Blocks.MAP_PEDESTAL)
+        lootTable.dropSelf(consumer, Blocks.DISPLAY_PEDESTAL)
+        lootTable.dropSelf(consumer, Blocks.REMOTE_OBSERVER)
+        lootTable.dropSelf(consumer, Blocks.PERIPHERAL_PROXY)
+        lootTable.dropSelf(consumer, Blocks.REALITY_FORGER)
+        lootTable.dropSelf(consumer, Blocks.RECIPE_REGISTRY)
+        lootTable.dropSelf(consumer, Blocks.INFORMATIVE_REGISTRY)
+        lootTable.dropSelf(consumer, Blocks.STATUE_WORKBENCH)
+        lootTable.computedDrop(Blocks.FLEXIBLE_REALITY_ANCHOR)
+        lootTable.computedDrop(Blocks.FLEXIBLE_STATUE)
+        lootTable.validate()
     }
 }

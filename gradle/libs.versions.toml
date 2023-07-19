@@ -1,27 +1,28 @@
 [versions]
 # Base libraries
-kotlin = "1.8.21"
+kotlin = "1.9.0"
 kotlin-coroutines = "1.6.4"
 kotlin-atomicfu = "0.20.2"
 # Gradle plugins
 sponge = "0.2.1-SNAPSHOT"
-loom = "1.1.9"
+loom = "1.2.+"
 mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.106.1"
-peripheralium = "0.6.5-pre.1"
+peripheralium = "0.6.5-pre.3"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.85.0+1.20.1"
 fabric-loader = "0.14.21"
-fabric-kotlin = "1.9.4+kotlin.1.8.21"
-forgeconfigapirt-fabric = "7.0.0"
+fabric-kotlin = "1.10.0+kotlin.1.9.0"
+forgeconfigapirt-fabric = "8.0.0"
+modmenu = "7.2.1"
 # Forge dependencies
 forge = "47.1.0"
-forge-kotlin = "4.3.0"
-parchment = "2023.03.12"
-parchmentMc = "1.19.3"
+forge-kotlin = "4.4.0"
+parchment = "2023.07.16"
+parchmentMc = "1.20.1"
 # Extra mod dependencies
 cloth-config = "11.0.99"
 architectury = "9.0.8"
@@ -94,6 +95,7 @@ fabric-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-fabric", v
 cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.20.1-fabric-api", version.ref = "cc-tweaked"}
 cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.20.1-fabric", version.ref = "cc-tweaked"}
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
+modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
 
 # Forge mod dependencies
 cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20.1-forge", version.ref="cc-tweaked"}
@@ -192,7 +194,8 @@ externalMods-forge-runtime = [
 externalMods-fabric-runtime = [
     "rei-fabric",
     "architectury-fabric",
-    "cloth-config-fabric"
+    "cloth-config-fabric",
+    "modmenu",
 ]
 
 # Integration dependencies
