@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.common.setup
 
 import net.minecraft.world.item.Item
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.item.Analyzer
 import site.siredvin.peripheralworks.common.item.PeripheraliumHub
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.utils.TooltipCollection
@@ -28,6 +29,8 @@ object Items {
     }
 
     val ULTIMATE_CONFIGURATOR = PeripheralWorksPlatform.registerItem("ultimate_configurator", ::UltimateConfigurator)
+
+    val ANALYZER = PeripheralWorksPlatform.registerItem("analyzer", ::Analyzer)
 
     fun doSomething() {
     }

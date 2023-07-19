@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-19T17:56:08.714065978	Unlimited Peripheral Works/Recipes
+// 1.20.1	2023-07-19T21:10:37.682790697	Unlimited Peripheral Works/Recipes
 4a7532586ebd2d5a239beddc5240e9416d723f4c data/peripheralworks/recipes/peripheralium_hub.json
 dbb658f37a7d8f6db0a02afd8fd24a4f978135c9 data/peripheralworks/recipes/flexible_reality_anchor.json
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data/minecraft/recipes/anchor_clean.json
@@ -10,8 +10,8 @@ dbb658f37a7d8f6db0a02afd8fd24a4f978135c9 data/peripheralworks/recipes/flexible_r
 06bd5042d86f18b9ed542713e4705dc45f330edb data/minecraft/recipes/anchor_cloning.json
 e20244a6a3e2ee660321fe0e935132060759e281 data/peripheralworks/recipes/peripheral_proxy.json
 b20284c6d66490535fa58a073c7791064f62f1cd data/peripheralworks/recipes/peripheral_casing.json
-09177d9534a5723cf4e8af294cb05de7b5b398e2 data/minecraft/recipes/statue_cloning.json
 bfdf3e78239437eae8278d73b73f1f6c479953d7 data/minecraft/recipes/statue_clean.json
+09177d9534a5723cf4e8af294cb05de7b5b398e2 data/minecraft/recipes/statue_cloning.json
 169c5991b28b93c851e46abeaefd752048626eab data/peripheralworks/recipes/item_pedestal.json
 b929cb33a2a61b583a688d95bf8534260eb9ff09 data/peripheralworks/recipes/map_pedestal.json
 76573b1e35031a89f39029ec55bc20fc827a88e7 data/peripheralworks/recipes/ultimate_configurator.json

@@ -12,6 +12,7 @@ object ModItemModelProvider {
         generators.generateFlatItem(Items.PERIPHERALIUM_HUB.get(), ModelTemplates.FLAT_ITEM)
         generators.generateFlatItem(Items.NETHERITE_PERIPHERALIUM_HUB.get(), ModelTemplates.FLAT_ITEM)
         generators.generateFlatItem(Items.ULTIMATE_CONFIGURATOR.get(), ModelTemplates.FLAT_ITEM)
+        generators.generateFlatItem(Items.ANALYZER.get(), ModelTemplates.FLAT_ITEM)
 
         turtleUpgrades(generators, Blocks.UNIVERSAL_SCANNER.get(), "_side")
         turtleUpgrades(generators, Blocks.ULTIMATE_SENSOR.get(), "_side")

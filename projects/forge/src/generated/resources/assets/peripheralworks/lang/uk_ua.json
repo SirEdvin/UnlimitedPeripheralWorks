@@ -25,6 +25,8 @@
   "block.peripheralworks.ultimate_sensor.tooltip": "§3§oБезмежні можливості вивчення світу завдякі цій маленькій коробочці. Працює також із черепашками та портативними комп'ютерами",
   "block.peripheralworks.universal_scanner": "Універсальний сканер",
   "block.peripheralworks.universal_scanner.tooltip": "§3Найкращий инструмент для дослідження навколишнього світу, особливо якщо у вас немає третього ока. Працює також із черепашками та портативними комп'ютерами",
+  "item.peripheralworks.analyzer": "Аналізатор",
+  "item.peripheralworks.analyzer.tooltip": "§3§oПредмет в розробці, який наразі показує лише сутність, що прив'язана до блоків",
   "item.peripheralworks.netherite_peripheralium_hub": "Універсальний конфігуратор",
   "item.peripheralworks.netherite_peripheralium_hub.tooltip": "§3§oУніверсальний інструмент для налаштування всього. Використайте (присівши) його на будь-якому блоку, щоб перевірити, чи можна його налаштувати",
   "item.peripheralworks.peripheralium_hub": "Незеритовий перифераліумний осередок",

@@ -24,6 +24,7 @@ class ModEnLanguageProvider(
         add(Items.ULTIMATE_CONFIGURATOR.get(), "Peripheralium hub")
         add(Items.PERIPHERALIUM_HUB.get(), "Netherite peripheralium hub")
         add(Items.NETHERITE_PERIPHERALIUM_HUB.get(), "Ultimate configurator", "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable")
+        add(Items.ANALYZER.get(), "Analyzer", "§3§oWIP tool that now can only display block entity type of blocks")
 
         add(Blocks.PERIPHERAL_CASING.get(), "Peripheral casing")
         add(Blocks.UNIVERSAL_SCANNER.get(), "Universal scanner", "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers")

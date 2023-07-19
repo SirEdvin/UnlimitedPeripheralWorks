@@ -24,6 +24,8 @@
   "block.peripheralworks.ultimate_sensor.tooltip": "§3§oLimitless possibilities for understanding world in one little box. Works with turtles and pocket computers",
   "block.peripheralworks.universal_scanner": "Universal scanner",
   "block.peripheralworks.universal_scanner.tooltip": "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers",
+  "item.peripheralworks.analyzer": "Analyzer",
+  "item.peripheralworks.analyzer.tooltip": "§3§oWIP tool that now can only display block entity type of blocks",
   "item.peripheralworks.netherite_peripheralium_hub": "Ultimate configurator",
   "item.peripheralworks.netherite_peripheralium_hub.tooltip": "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable",
   "item.peripheralworks.peripheralium_hub": "Netherite peripheralium hub",

@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-12T22:46:33.909634843	vanilla/Block State Definitions
+// 1.20.1	2023-07-19T21:10:47.90702049	vanilla/Block State Definitions
 2c78de2bc1bf6e2f3467ace2f3d867c2a405bd09 assets/peripheralworks/blockstates/display_pedestal.json
 2bba1d9924c2ab8e763485fb8bf6b73af4c4ebf5 assets/peripheralworks/blockstates/flexible_reality_anchor.json
 bdf14ae93f1b4ef4cae4508d506e3d4a9292ba4a assets/peripheralworks/blockstates/flexible_statue.json
@@ -25,6 +25,7 @@ ecc48bf8866709faa895ee4e48100c43fe539942 assets/peripheralworks/models/block/rem
 fa09940646b26b32e317d46436ba6e5708942a3d assets/peripheralworks/models/block/statue_workbench_connected.json
 1e7d0abbd9420846ff4b762521b232e9e071d12a assets/peripheralworks/models/block/ultimate_sensor.json
 6ac8890459a72e8c297d106b6eb21ecfe9130615 assets/peripheralworks/models/block/universal_scanner.json
+258f8fca9fe056f6197be045aed1b1f828662975 assets/peripheralworks/models/item/analyzer.json
 149c9550cdc2df2eba1008410e656f7ef33bfa58 assets/peripheralworks/models/item/display_pedestal.json
 767287600ba5632ed8a38b3d2675cc8ff924a609 assets/peripheralworks/models/item/flexible_reality_anchor.json
 0ec5d056eacea853ef84a051849eb92adf82ee8f assets/peripheralworks/models/item/flexible_statue.json
