@@ -102,3 +102,26 @@ modPublishing {
     )
     shake()
 }
+
+val copyPowah by tasks.register<Copy>("copyPowah") {
+    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/powah"))
+    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/powah"))
+}
+
+// TODO: make this possible, probably (?) This would be really nice
+// val copyAE2 by tasks.register<Copy>("copyAE2") {
+//    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
+//    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
+// }
+
+tasks.compileKotlin {
+    dependsOn(copyPowah)
+}
+
+tasks.spotlessJava {
+    dependsOn(copyPowah)
+}
+
+tasks.spotlessKotlin {
+    dependsOn(copyPowah)
+}
