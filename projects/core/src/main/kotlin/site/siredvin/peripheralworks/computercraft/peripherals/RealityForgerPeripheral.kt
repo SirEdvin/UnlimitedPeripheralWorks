@@ -46,12 +46,8 @@ class RealityForgerPeripheral(
             return data
         }
 
-    private fun forgeRealityTileEntity(
-        realityMirror: FlexibleRealityAnchorBlockEntity,
-        targetState: BlockState?,
-        appearanceTable: Map<*, *>,
-    ) {
-        appearanceTable.forEach {
+    private fun parseMap(realityMirror: FlexibleRealityAnchorBlockEntity, table: Map<*, *>) {
+        table.forEach {
             if (it.value is Boolean) {
                 val targetProperty = FLAG_MAPPING[it.key.toString()]
                 if (targetProperty != null) {
@@ -61,6 +57,16 @@ class RealityForgerPeripheral(
                 realityMirror.lightLevel = (it.value as Number).toInt()
             }
         }
+    }
+
+    private fun forgeRealityTileEntity(
+        realityMirror: FlexibleRealityAnchorBlockEntity,
+        targetState: BlockState?,
+        appearanceTable: Map<*, *>,
+        flagTable: Optional<Map<*, *>>
+    ) {
+        parseMap(realityMirror, appearanceTable)
+        flagTable.ifPresent { parseMap(realityMirror, it) }
         if (targetState != null) {
             realityMirror.setMimic(targetState)
         } else {
@@ -128,11 +134,13 @@ class RealityForgerPeripheral(
         if (targetState.`is`(BlockTags.REALITY_FORGER_FORBIDDEN)) {
             throw LuaException("You cannot use this block, is blocklisted")
         }
+        val flags = arguments.optTable(2)
         entities.forEach {
             forgeRealityTileEntity(
                 it,
                 targetState,
                 table,
+                flags,
             )
         }
         return MethodResult.of(true)
@@ -152,7 +160,7 @@ class RealityForgerPeripheral(
         ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { blockState, blockPos ->
             val blockEntity = level!!.getBlockEntity(blockPos)
             if (blockEntity is FlexibleRealityAnchorBlockEntity) {
-                forgeRealityTileEntity(blockEntity, targetState, table)
+                forgeRealityTileEntity(blockEntity, targetState, table, arguments.optTable(1))
             }
         })
         return MethodResult.of(true)
