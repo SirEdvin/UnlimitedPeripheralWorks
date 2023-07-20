@@ -63,7 +63,7 @@ class RealityForgerPeripheral(
         realityMirror: FlexibleRealityAnchorBlockEntity,
         targetState: BlockState?,
         appearanceTable: Map<*, *>,
-        flagTable: Optional<Map<*, *>>
+        flagTable: Optional<Map<*, *>>,
     ) {
         parseMap(realityMirror, appearanceTable)
         flagTable.ifPresent { parseMap(realityMirror, it) }

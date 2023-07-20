@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.integrations.powah
 
 import dan200.computercraft.api.lua.LuaFunction
-import dan200.computercraft.api.lua.MethodResult
 import owmii.powah.block.ender.AbstractEnderTile
 import site.siredvin.peripheralium.util.assertBetween
 

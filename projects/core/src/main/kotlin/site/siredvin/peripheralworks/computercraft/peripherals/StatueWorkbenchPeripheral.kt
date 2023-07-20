@@ -2,7 +2,6 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
-import dan200.computercraft.api.lua.MethodResult
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
