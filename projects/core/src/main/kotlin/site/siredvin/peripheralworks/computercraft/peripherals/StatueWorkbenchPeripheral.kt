@@ -33,86 +33,80 @@ class StatueWorkbenchPeripheral(
     }
 
     @LuaFunction(mainThread = true)
-    fun setStatueName(name: String?): MethodResult {
+    fun setStatueName(name: String) {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         opStatue.ifPresent { statue -> statue.name = name }
-        return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun getStatueName(): MethodResult {
+    fun getStatueName(): String {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         val tileEntity: FlexibleStatueBlockEntity = opStatue.get()
-        return MethodResult.of(tileEntity.name)
+        return tileEntity.name ?: ""
     }
 
     @LuaFunction(mainThread = true)
-    fun setAuthor(author: String?): MethodResult {
+    fun setAuthor(author: String) {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         opStatue.ifPresent { statue -> statue.author = author }
-        return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun getAuthor(): MethodResult {
+    fun getAuthor(): String {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         val tileEntity: FlexibleStatueBlockEntity = opStatue.get()
-        return MethodResult.of(tileEntity.author)
+        return tileEntity.author ?: ""
     }
 
     @LuaFunction(mainThread = true)
-    fun setLightLevel(lightLevel: Int): MethodResult {
+    fun setLightLevel(lightLevel: Int) {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         opStatue.ifPresent { statue -> statue.lightLevel = lightLevel }
-        return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun getLightLevel(): MethodResult {
+    fun getLightLevel(): Int {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         val tileEntity: FlexibleStatueBlockEntity = opStatue.get()
-        return MethodResult.of(tileEntity.lightLevel)
+        return tileEntity.lightLevel
     }
 
     @LuaFunction(mainThread = true)
-    fun getCubes(): MethodResult {
+    fun getCubes(): List<Map<*, *>> {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         val tileEntity: FlexibleStatueBlockEntity = opStatue.get()
         val quadList: QuadList = tileEntity.bakedQuads
-            ?: return MethodResult.of(emptyList<Any>())
-        return MethodResult.of(quadList.toLua())
+            ?: return emptyList()
+        return quadList.toLua()
     }
 
     @LuaFunction(mainThread = true)
     @Throws(LuaException::class)
-    fun setCubes(cubes: Map<*, *>): MethodResult {
+    fun setCubes(cubes: Map<*, *>) {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         val quadList: QuadList = convertToQuadList(cubes)
         if (quadList.list.size > PeripheralWorksConfig.flexibleStatueMaxQuads) {
-            return MethodResult.of(
-                null,
-                java.lang.String.format("You cannot send more then %d quads", PeripheralWorksConfig.flexibleStatueMaxQuads),
-            )
+            throw LuaException("You cannot send more then ${PeripheralWorksConfig.flexibleStatueMaxQuads} quads")
         }
         val tileEntity = opStatue.get()
         tileEntity.setBakedQuads(quadList, false)
-        return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun resetCubes(): MethodResult {
+    fun reset() {
         val opStatue: Optional<FlexibleStatueBlockEntity> = getStatue()
-        if (!opStatue.isPresent) return MethodResult.of(null, "Cannot find statue on top of workbench")
+        if (!opStatue.isPresent) throw LuaException("There is no statue on top of workbench")
         val tileEntity = opStatue.get()
+        tileEntity.name = null
+        tileEntity.author = null
         tileEntity.clear(skipUpdate = false)
-        return MethodResult.of(true)
     }
 }

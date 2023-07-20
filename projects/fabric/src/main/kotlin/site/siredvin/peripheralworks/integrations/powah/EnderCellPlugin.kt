@@ -13,11 +13,10 @@ class EnderCellPlugin(private val provider: AbstractEnderTile<*>) : BaseEnergySt
     }
 
     @LuaFunction(mainThread = true)
-    fun setChannel(channel: Int): MethodResult {
+    fun setChannel(channel: Int) {
         val realChannel = channel - 1
         assertBetween(channel, provider.channel.min + 1, provider.maxChannels, "channel")
         provider.channel.set(realChannel)
-        return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)

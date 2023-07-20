@@ -28,4 +28,9 @@ class ReactorPlugin(private val reactor: ReactorTile) : BaseEnergyStoragePlugin(
     fun toggleAutoMode() {
         reactor.isGenModeOn = !reactor.isGenModeOn
     }
+
+    @LuaFunction(mainThread = true)
+    fun getEnergyGeneration(): Long {
+        return reactor.calcProduction().toLong()
+    }
 }

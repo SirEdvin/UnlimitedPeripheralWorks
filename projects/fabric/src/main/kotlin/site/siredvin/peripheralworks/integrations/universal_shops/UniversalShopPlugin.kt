@@ -18,14 +18,14 @@ class UniversalShopPlugin(private val blockEntity: TradeShopBlockEntity) : IPeri
         get() = "universal_shop"
 
     @LuaFunction(mainThread = true)
-    fun getHologramMode(): String = blockEntity.hologramMode.name
+    fun getHologramMode(): String = blockEntity.hologramMode.name.lowercase()
 
     @LuaFunction(mainThread = true)
     fun setHologramMode(mode: String) {
         val enumMode = try {
-            HologramMode.valueOf(mode)
+            HologramMode.valueOf(mode.uppercase())
         } catch (ignored: IllegalArgumentException) {
-            throw LuaException("There is no hologram mode $mode, there is only: ${HologramMode.values().joinToString { it.toString() }}")
+            throw LuaException("There is no hologram mode $mode, there is only: ${HologramMode.values().joinToString { it.name.lowercase() }}")
         }
         blockEntity.hologramMode = enumMode
         blockEntity.setChanged()
