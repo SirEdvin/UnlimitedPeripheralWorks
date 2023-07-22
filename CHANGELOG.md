@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-07-22
+
+### Fixed
+
+- Radius checks for reality forger #23
+
 ## [1.1.0] - 2023-07-20
 
 ### Added

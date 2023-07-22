@@ -119,7 +119,7 @@ class RealityForgerPeripheral(
         }
         val entities: MutableList<FlexibleRealityAnchorBlockEntity> = ArrayList<FlexibleRealityAnchorBlockEntity>()
         for (pos in poses) {
-            if (radiusCorrect(pos, peripheralOwner.pos, interactionRadius)) {
+            if (!radiusCorrect(pos, peripheralOwner.pos, interactionRadius)) {
                 return MethodResult.of(null, "One of blocks are too far away")
             }
             val entity = level!!.getBlockEntity(pos) as? FlexibleRealityAnchorBlockEntity
