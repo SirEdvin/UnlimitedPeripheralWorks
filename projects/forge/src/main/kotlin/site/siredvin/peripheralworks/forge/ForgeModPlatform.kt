@@ -12,7 +12,7 @@ import site.siredvin.peripheralium.forge.ForgeBaseInnerPlatform
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
-object ForgeModPlatform: ForgeBaseInnerPlatform() {
+object ForgeModPlatform : ForgeBaseInnerPlatform() {
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID
 

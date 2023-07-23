@@ -81,7 +81,8 @@ class FlexibleStatue :
 
     @Deprecated("Deprecated in Java")
     override fun getLightBlock(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos): Int {
-        @Suppress("DEPRECATION") val blockEntity = blockGetter.getBlockEntity(blockPos) as? FlexibleStatueBlockEntity ?: return super.getLightBlock(blockState, blockGetter, blockPos)
+        @Suppress("DEPRECATION")
+        val blockEntity = blockGetter.getBlockEntity(blockPos) as? FlexibleStatueBlockEntity ?: return super.getLightBlock(blockState, blockGetter, blockPos)
         return blockEntity.lightLevel
     }
 

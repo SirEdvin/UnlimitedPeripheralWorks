@@ -19,6 +19,9 @@ enum class ModText : TextRecord {
     PERIPHERAL_PROXY_BLOCK_REMOVED,
     TECH_REBORN_ENERGY,
     DEFINITELY_NOT,
+    ENTITY_CANNOT_BE_STORED,
+    TARGET_ENTITY,
+    SOMETHING_STORED_INSIDE_CARD,
     ;
 
     override val textID: String by lazy {

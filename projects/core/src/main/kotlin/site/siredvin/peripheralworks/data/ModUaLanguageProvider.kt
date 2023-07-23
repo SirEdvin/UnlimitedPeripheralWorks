@@ -25,6 +25,7 @@ class ModUaLanguageProvider(
         add(Items.PERIPHERALIUM_HUB.get(), "Незеритовий перифераліумний осередок")
         add(Items.NETHERITE_PERIPHERALIUM_HUB.get(), "Універсальний конфігуратор", "§3§oУніверсальний інструмент для налаштування всього. Використайте (присівши) його на будь-якому блоку, щоб перевірити, чи можна його налаштувати")
         add(Items.ANALYZER.get(), "Аналізатор", "§3§oПредмет в розробці, який наразі показує лише сутність, що прив'язана до блоків")
+        add(Items.ENTITY_CARD.get(), "Карта сутності", "§3§oМоже записувати сігнатури живих або ефімерних сутностей")
 
         add(Blocks.PERIPHERAL_CASING.get(), "Оболонка периферійного пристрою")
         add(Blocks.UNIVERSAL_SCANNER.get(), "Універсальний сканер", "§3Найкращий инструмент для дослідження навколишнього світу, особливо якщо у вас немає третього ока. Працює також із черепашками та портативними комп'ютерами")
@@ -57,6 +58,9 @@ class ModUaLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "Цей периферійний пристрій тепер під'єднано до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "Цей периферійний пристрій тепер від'єднано від проксі для периферійних пристроїв")
         add(ModText.DEFINITELY_NOT, "§3§oНу точно не ")
+        add(ModText.TARGET_ENTITY, "Сутність %s записана в цій карті, наразі вона знаходиться у точці %s")
+        add(ModText.ENTITY_CANNOT_BE_STORED, "Ця сутність не може бути записана")
+        add(ModText.SOMETHING_STORED_INSIDE_CARD, "§e§oКартка вказує на сутність, використаєте, щоб дізнатися більше")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
 

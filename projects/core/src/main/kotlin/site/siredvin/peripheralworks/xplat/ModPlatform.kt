@@ -4,7 +4,7 @@ import site.siredvin.peripheralium.xplat.BaseInnerPlatform
 import site.siredvin.peripheralium.xplat.BasePlatform
 import site.siredvin.peripheralium.xplat.ModInformationTracker
 
-object ModPlatform: BasePlatform {
+object ModPlatform : BasePlatform {
     private var _IMPL: BaseInnerPlatform? = null
     private val _informationTracker = ModInformationTracker()
 

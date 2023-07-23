@@ -9,7 +9,6 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.levelgen.WorldgenRandom
 import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralium.xplat.XplatTags
 

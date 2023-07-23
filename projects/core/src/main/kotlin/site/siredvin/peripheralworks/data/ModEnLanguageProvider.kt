@@ -25,6 +25,7 @@ class ModEnLanguageProvider(
         add(Items.PERIPHERALIUM_HUB.get(), "Netherite peripheralium hub")
         add(Items.NETHERITE_PERIPHERALIUM_HUB.get(), "Ultimate configurator", "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable")
         add(Items.ANALYZER.get(), "Analyzer", "§3§oWIP tool that now can only display block entity type of blocks")
+        add(Items.ENTITY_CARD.get(), "Entity card", "§3§oCan record unique signature of some living or ephemeral entities")
 
         add(Blocks.PERIPHERAL_CASING.get(), "Peripheral casing")
         add(Blocks.UNIVERSAL_SCANNER.get(), "Universal scanner", "§3§oBest tool to inspect surroundings, if you don't have third eye. Works with turtles and pocket computers")
@@ -57,6 +58,9 @@ class ModEnLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "This peripheral is connected to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "This peripheral is disconnected from peripheral proxy")
         add(ModText.DEFINITELY_NOT, "§3§oDefinitely not a ")
+        add(ModText.TARGET_ENTITY, "Entity %s recorded in card, currently at %s")
+        add(ModText.ENTITY_CANNOT_BE_STORED, "This entity cannot be recorded inside card")
+        add(ModText.SOMETHING_STORED_INSIDE_CARD, "§e§oCard pointing at entity, use to know more")
 
         add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
 

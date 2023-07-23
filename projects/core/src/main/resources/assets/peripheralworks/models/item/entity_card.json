@@ -1,0 +1,6 @@
+{
+  "parent": "peripheralworks:item/entity_card_empty",
+  "overrides": [
+    {"predicate":  {"custom_model_data": 1}, "model": "peripheralworks:item/entity_card_active"}
+  ]
+}

@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-19T21:10:37.682790697	Unlimited Peripheral Works/Recipes
+// 1.20.1	2023-07-23T20:03:36.438017752	Unlimited Peripheral Works/Recipes
 4a7532586ebd2d5a239beddc5240e9416d723f4c data/peripheralworks/recipes/peripheralium_hub.json
 dbb658f37a7d8f6db0a02afd8fd24a4f978135c9 data/peripheralworks/recipes/flexible_reality_anchor.json
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data/minecraft/recipes/anchor_clean.json
@@ -17,5 +17,6 @@ b929cb33a2a61b583a688d95bf8534260eb9ff09 data/peripheralworks/recipes/map_pedest
 76573b1e35031a89f39029ec55bc20fc827a88e7 data/peripheralworks/recipes/ultimate_configurator.json
 8adb4992706e45866afda070248b6deb54c401cb data/peripheralworks/recipes/netherite_peripheralium_hub.json
 b4e4c663207dbc5fdd92be5957a0dc7ba675e330 data/peripheralworks/recipes/flexible_statue.json
+a2696e406e9032af7d01eb6c0b534b706f6d9f5f data/minecraft/recipes/card_clean.json
 379f6f63779c41d1be5a1de6c1315cdc0e712956 data/peripheralworks/recipes/display_pedestal.json
 420d58a1be35bf98c431344d30a117629c5cfc37 data/peripheralworks/recipes/remote_observer.json

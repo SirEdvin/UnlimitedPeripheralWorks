@@ -56,7 +56,7 @@ object RenderUtils {
         TRANSFORM_BLOCK_GUI,
         TRANSFORM_BLOCK_GROUND,
         TRANSFORM_BLOCK_FIXED,
-        ImmutableMap.of()
+        ImmutableMap.of(),
     )
 
     @Suppress("DEPRECATION")

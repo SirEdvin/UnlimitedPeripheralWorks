@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.common.setup
 import net.minecraft.world.item.Item
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.Analyzer
+import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.common.item.PeripheraliumHub
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.utils.TooltipCollection
@@ -31,6 +32,8 @@ object Items {
     val ULTIMATE_CONFIGURATOR = ModPlatform.registerItem("ultimate_configurator", ::UltimateConfigurator)
 
     val ANALYZER = ModPlatform.registerItem("analyzer", ::Analyzer)
+
+    val ENTITY_CARD = ModPlatform.registerItem("entity_card", ::EntityCard)
 
     fun doSomething() {
     }

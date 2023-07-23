@@ -171,5 +171,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .save(consumer, "anchor_cloning")
         SpecialRecipeBuilder.special(RecipeSerializers.ANCHOR_CLEAN.get())
             .save(consumer, "anchor_clean")
+        SpecialRecipeBuilder.special(RecipeSerializers.CARD_CLEAN.get())
+            .save(consumer, "card_clean")
     }
 }

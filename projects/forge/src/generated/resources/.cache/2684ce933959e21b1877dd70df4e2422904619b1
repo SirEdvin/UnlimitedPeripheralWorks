@@ -1,6 +1,7 @@
-// 1.20.1	2023-07-16T21:56:44.953301192	vanilla/Recipes
+// 1.20.1	2023-07-23T19:08:06.047885221	vanilla/Recipes
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data/minecraft/recipes/anchor_clean.json
 06bd5042d86f18b9ed542713e4705dc45f330edb data/minecraft/recipes/anchor_cloning.json
+a2696e406e9032af7d01eb6c0b534b706f6d9f5f data/minecraft/recipes/card_clean.json
 bfdf3e78239437eae8278d73b73f1f6c479953d7 data/minecraft/recipes/statue_clean.json
 09177d9534a5723cf4e8af294cb05de7b5b398e2 data/minecraft/recipes/statue_cloning.json
 379f6f63779c41d1be5a1de6c1315cdc0e712956 data/peripheralworks/recipes/display_pedestal.json
