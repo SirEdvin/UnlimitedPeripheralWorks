@@ -109,10 +109,12 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
         return access.getUpgrade(side)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun setUpgrade(side: TurtleSide, upgrade: ITurtleUpgrade?) {
         if (side == tweakedSide) {
             origin.swapUpgrade(UpgradeData.ofDefault(this.upgrade), UpgradeData.ofDefault(upgrade))
         } else {
+            @Suppress("DEPRECATION")
             access.setUpgrade(side, upgrade)
         }
     }

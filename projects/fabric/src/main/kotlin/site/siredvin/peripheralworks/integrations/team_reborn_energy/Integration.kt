@@ -12,6 +12,7 @@ import team.reborn.energy.api.EnergyStorage
 class Integration : Runnable {
 
     companion object {
+        @Suppress("UNUSED_PARAMETER")
         fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?): site.siredvin.peripheralium.storages.energy.EnergyStorage? {
             val energyStorage = EnergyStorage.SIDED.find(level, pos, Direction.NORTH) ?: return null
             return EnergyStorageWrapper(energyStorage)

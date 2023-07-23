@@ -120,21 +120,21 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         }
         val quads = entity.bakedQuads ?: return
         val mesh = meshCache.get(Pair(quads, entity.facing))
-        context.meshConsumer().accept(mesh)
+        mesh.outputTo(context.emitter)
     }
 
-    fun emitDefaultItemQuads(context: RenderContext) {
-        context.bakedModelConsumer().accept(defaultItemModel)
+    fun emitDefaultItemQuads(stack: ItemStack, randomSupplier: Supplier<RandomSource>, context: RenderContext) {
+        defaultItemModel.emitItemQuads(stack, randomSupplier, context)
     }
 
     override fun emitItemQuads(stack: ItemStack, randomSupplier: Supplier<RandomSource>, context: RenderContext) {
         if (!stack.`is`(Blocks.FLEXIBLE_STATUE.get().asItem())) {
-            return emitDefaultItemQuads(context)
+            return emitDefaultItemQuads(stack, randomSupplier, context)
         }
-        val quadList = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getList(FlexibleStatueBlockEntity.BAKED_QUADS_TAG, 10) ?: return emitDefaultItemQuads(context)
-        if (quadList.isEmpty()) return emitDefaultItemQuads(context)
+        val quadList = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getList(FlexibleStatueBlockEntity.BAKED_QUADS_TAG, 10) ?: return emitDefaultItemQuads(stack, randomSupplier, context)
+        if (quadList.isEmpty()) return emitDefaultItemQuads(stack, randomSupplier, context)
         val quads = QuadList(quadList)
         val mesh = meshCache.get(Pair(quads, Direction.SOUTH))
-        context.meshConsumer().accept(mesh)
+        mesh.outputTo(context.emitter)
     }
 }

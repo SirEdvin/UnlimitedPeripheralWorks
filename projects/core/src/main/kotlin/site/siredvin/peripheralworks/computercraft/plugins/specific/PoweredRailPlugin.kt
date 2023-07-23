@@ -42,7 +42,7 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
 
     @LuaFunction(mainThread = true)
     fun pushMinecarts(reverse: Optional<Boolean>) {
-        val orientation = blockState.getValue(PoweredRailBlock.SHAPE)!!
+        val orientation = blockState.getValue(PoweredRailBlock.SHAPE)
         val isReversed = reverse.orElse(false)
         Direction.NORTH
         val moveVector = when (orientation) {
@@ -56,6 +56,7 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
             RailShape.SOUTH_WEST -> if (isReversed) Vec3(0.0, 0.0, PUSH_POWER) else Vec3(-PUSH_POWER, 0.0, 0.0)
             RailShape.NORTH_WEST -> if (isReversed) Vec3(0.0, 0.0, -PUSH_POWER) else Vec3(-PUSH_POWER, 0.0, 0.0)
             RailShape.NORTH_EAST -> if (isReversed) Vec3(0.0, 0.0, -PUSH_POWER) else Vec3(PUSH_POWER, 0.0, 0.0)
+            else -> Vec3(0.0, 0.0, if (isReversed) PUSH_POWER else -PUSH_POWER)
         }
         MinecartUtils.getMinecarts(level, pos).filter { it.deltaMovement.length() == 0.0 }.forEach {
             it.deltaMovement = moveVector

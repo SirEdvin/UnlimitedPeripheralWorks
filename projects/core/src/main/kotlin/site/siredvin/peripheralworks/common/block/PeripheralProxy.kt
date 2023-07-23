@@ -44,10 +44,13 @@ class PeripheralProxy : BaseTileEntityBlock<PeripheralProxyBlockEntity>(true, Bl
         builder.add(FACING)
     }
 
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     override fun mirror(state: BlockState, mirror: Mirror): BlockState {
         return state.rotate(mirror.getRotation(state.getValue(FACING)))
     }
 
+    @Deprecated("Deprecated in Java")
     override fun rotate(state: BlockState, rotation: Rotation): BlockState {
         return state.setValue(FACING, rotation.rotate(state.getValue(FACING)))
     }
@@ -56,6 +59,7 @@ class PeripheralProxy : BaseTileEntityBlock<PeripheralProxyBlockEntity>(true, Bl
         return defaultBlockState().setValue(FACING, context.horizontalDirection)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getShape(
         state: BlockState,
         blockGetter: BlockGetter,

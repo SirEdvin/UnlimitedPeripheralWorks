@@ -29,6 +29,7 @@ object PeripheralWorksClientCore {
     )
     private var inited: Boolean = false
 
+    @Suppress("UNCHECKED_CAST")
     val EXTRA_BLOCK_ENTITY_RENDERERS: Array<Supplier<BlockEntityType<BlockEntity>>> = arrayOf(
         BlockEntityTypes.ITEM_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.MAP_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
@@ -36,6 +37,7 @@ object PeripheralWorksClientCore {
         BlockEntityTypes.PERIPHERAL_PROXY as Supplier<BlockEntityType<BlockEntity>>,
     )
 
+    @Suppress("UNCHECKED_CAST")
     fun getBlockEntityRendererProvider(type: BlockEntityType<BlockEntity>): BlockEntityRendererProvider<BlockEntity> {
         if (type == BlockEntityTypes.ITEM_PEDESTAL.get()) {
             return BlockEntityRendererProvider { PedestalTileRenderer<ItemPedestalBlockEntity>() } as BlockEntityRendererProvider<BlockEntity>

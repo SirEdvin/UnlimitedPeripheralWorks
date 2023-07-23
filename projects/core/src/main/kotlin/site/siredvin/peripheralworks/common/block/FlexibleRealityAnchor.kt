@@ -22,6 +22,7 @@ import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.modId
 
+@Suppress("OVERRIDE_DEPRECATION")
 class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
     false,
     BlockUtil.decoration().dynamicShape(),
@@ -75,6 +76,8 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         return ItemStack(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())
     }
 
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
     override fun getShape(
         state: BlockState,
         world: BlockGetter,
@@ -87,8 +90,9 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         return mimicState.getShape(world, pos)
     }
 
-    override fun getRenderShape(state: BlockState): RenderShape {
-        return if (state.getValue(INVISIBLE)) RenderShape.INVISIBLE else super.getRenderShape(state)
+    override fun getRenderShape(blockState: BlockState): RenderShape {
+        @Suppress("DEPRECATION")
+        return if (blockState.getValue(INVISIBLE)) RenderShape.INVISIBLE else super.getRenderShape(blockState)
     }
 
     override fun useShapeForLightOcclusion(state: BlockState): Boolean {
@@ -104,6 +108,7 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         return if (state.getValue(LIGHT_PASSABLE) || !state.getValue(CONFIGURED)) {
             Shapes.empty()
         } else {
+            @Suppress("DEPRECATION")
             super.getVisualShape(
                 state,
                 world,
@@ -117,6 +122,7 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         return if (state.getValue(LIGHT_PASSABLE) || !state.getValue(CONFIGURED)) {
             1.0f
         } else {
+            @Suppress("DEPRECATION")
             super.getShadeBrightness(
                 state,
                 world,

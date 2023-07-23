@@ -21,7 +21,7 @@ object Platform {
         return try {
             val clazz =
                 Class.forName(ForgePeripheralWorks::class.java.getPackage().name + ".integrations." + path)
-            Optional.of(clazz.newInstance())
+            Optional.of(clazz.getDeclaredConstructor().newInstance())
         } catch (ignored: InstantiationException) {
             Optional.empty()
         } catch (ignored: IllegalAccessException) {

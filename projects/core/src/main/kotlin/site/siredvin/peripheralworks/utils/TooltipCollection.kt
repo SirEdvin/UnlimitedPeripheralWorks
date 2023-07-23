@@ -28,28 +28,28 @@ object TooltipCollection {
         return Function { listOf(ModTooltip.PERIPHERALIUM_HUB_MAX_PERIPHERALS.format(maxCountSup.get())) }
     }
 
-    fun universalScanningRadius(item: PeripheralBlockItem): List<Component> {
+    fun universalScanningRadius(@Suppress("UNUSED_PARAMETER") item: PeripheralBlockItem): List<Component> {
         return listOf(
             ModTooltip.UNIVERSAL_SCANNER_FREE_RANGE.format(SphereOperations.PORTABLE_UNIVERSAL_SCAN.maxFreeRadius),
             ModTooltip.UNIVERSAL_SCANNER_MAX_RANGE.format(SphereOperations.PORTABLE_UNIVERSAL_SCAN.maxCostRadius),
         )
     }
 
-    fun remoteObserverTooptips(item: PeripheralBlockItem): List<Component> {
+    fun remoteObserverTooptips(@Suppress("UNUSED_PARAMETER") item: PeripheralBlockItem): List<Component> {
         return listOf(
             ModTooltip.REMOTE_OBSERVER_RANGE.format(PeripheralWorksConfig.remoteObserverMaxRange),
             ModTooltip.REMOTE_OBSERVER_MAX_CAPACITY.format(PeripheralWorksConfig.remoteObserverMaxCapacity),
         )
     }
 
-    fun peripheralProxyTooptips(item: PeripheralBlockItem): List<Component> {
+    fun peripheralProxyTooptips(@Suppress("UNUSED_PARAMETER") item: PeripheralBlockItem): List<Component> {
         return listOf(
             ModTooltip.PERIPHERAL_PROXY_RANGE.format(PeripheralWorksConfig.peripheralProxyMaxRange),
             ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY.format(PeripheralWorksConfig.peripheralProxyMaxCapacity),
         )
     }
 
-    fun realityForgerTooptips(item: PeripheralBlockItem): List<Component> {
+    fun realityForgerTooptips(@Suppress("UNUSED_PARAMETER") item: PeripheralBlockItem): List<Component> {
         return listOf(
             ModTooltip.REALITY_FORGER_RANGE.format(PeripheralWorksConfig.realityForgerMaxRange),
         )

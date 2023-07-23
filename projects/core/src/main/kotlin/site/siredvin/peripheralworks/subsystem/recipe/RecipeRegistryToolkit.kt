@@ -79,14 +79,17 @@ object RecipeRegistryToolkit {
     }
 
     fun <V : Container, T : Recipe<V>> registerRecipeSerializer(recipeClass: Class<T>, transformer: RecipeTransformer<V, T>) {
+        @Suppress("UNCHECKED_CAST")
         RECIPE_SERIALIZERS[recipeClass] = transformer as RecipeTransformer<*, Recipe<*>>
     }
 
     fun <V : Container, T : Recipe<V>> registerRecipeSerializerRaw(recipeClass: Class<T>, transformer: RecipeTransformer<Container, Recipe<Container>>) {
+        @Suppress("UNCHECKED_CAST")
         RECIPE_SERIALIZERS[recipeClass] = transformer as RecipeTransformer<*, Recipe<*>>
     }
 
     fun <T> registerSerializer(clazz: Class<T>, serializer: java.util.function.Function<T, Any?>) {
+        @Suppress("UNCHECKED_CAST")
         SERIALIZERS[clazz] = serializer as java.util.function.Function<Any, Any?>
     }
 
@@ -108,6 +111,7 @@ object RecipeRegistryToolkit {
             )
         }
         if (obj != null && obj.javaClass.isArray) {
+            @Suppress("UNCHECKED_CAST")
             return Arrays.stream(obj as Array<Any>).map(RecipeRegistryToolkit::serialize).collect(
                 Collectors.toList(),
             )
@@ -125,8 +129,10 @@ object RecipeRegistryToolkit {
 
     fun serializeRecipe(recipe: Recipe<*>): Map<String, Any> {
         for (recipeClass in RECIPE_SERIALIZERS.keys) {
+            @Suppress("UNCHECKED_CAST")
             if (recipeClass.isInstance(recipe)) return RECIPE_SERIALIZERS[recipeClass]!!.transform(recipe as Recipe<Container>)
         }
+        @Suppress("UNCHECKED_CAST")
         return DefaultRecipeTransformer.transform(recipe as Recipe<Container>)
     }
 
@@ -137,6 +143,7 @@ object RecipeRegistryToolkit {
     }
 
     fun getRecipesForType(recipeType: RecipeType<*>, level: Level): List<Recipe<*>> {
+        @Suppress("UNCHECKED_CAST")
         return level.recipeManager.getAllRecipesFor(recipeType as RecipeType<Recipe<Container>>)
     }
 
@@ -150,6 +157,7 @@ object RecipeRegistryToolkit {
             RECIPE_PREDICATES.getOrDefault(recipeType, DEFAULT_RECIPE_PREDICATE)
         val recipes: List<Recipe<*>> = getRecipesForType(recipeType, level)
         return recipes.stream().filter {
+            @Suppress("UNCHECKED_CAST")
             searchPredicate.test(
                 result,
                 it as Recipe<Container>,

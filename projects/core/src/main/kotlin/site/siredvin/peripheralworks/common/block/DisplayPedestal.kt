@@ -16,6 +16,7 @@ import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEnti
 
 class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defaultProperties()) {
 
+    @Deprecated("Deprecated in Java")
     override fun use(
         blockState: BlockState,
         level: Level,
@@ -33,18 +34,19 @@ class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defau
             )
             return InteractionResult.SUCCESS
         }
+        @Suppress("DEPRECATION")
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun attack(blockState: BlockState, level: Level, blockPos: BlockPos, player: Player) {
         val itemInHand = player.getItemInHand(InteractionHand.MAIN_HAND)
         val blockEntity = level.getBlockEntity(blockPos)
         if (blockEntity is DisplayPedestalBlockEntity) {
-            val peripheral = blockEntity.getPeripheral(Direction.EAST)
-            if (peripheral != null) {
-                peripheral.queueEvent("pedestal_left_click", LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL))
-            }
+            blockEntity.getPeripheral(Direction.EAST)
+                ?.queueEvent("pedestal_left_click", LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL))
         }
+        @Suppress("DEPRECATION")
         super.attack(blockState, level, blockPos, player)
     }
 

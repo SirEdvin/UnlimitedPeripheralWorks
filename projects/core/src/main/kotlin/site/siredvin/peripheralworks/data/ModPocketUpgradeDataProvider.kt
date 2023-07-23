@@ -7,11 +7,11 @@ import site.siredvin.peripheralium.data.blocks.LibPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.PocketUpgradeSerializers
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.Consumer
 import java.util.function.Function
 
-class ModPocketUpgradeDataProvider(output: PackOutput) : LibPocketUpgradeDataProvider(output, PeripheralWorksPlatform.holder.pocketSerializers) {
+class ModPocketUpgradeDataProvider(output: PackOutput) : LibPocketUpgradeDataProvider(output, ModPlatform.holder.pocketSerializers) {
     companion object {
         private val REGISTERED_BUILDERS: MutableList<Function<PocketUpgradeDataProvider, Upgrade<PocketUpgradeSerialiser<*>>>> = mutableListOf()
 

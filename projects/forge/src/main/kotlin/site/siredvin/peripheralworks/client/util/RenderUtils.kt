@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.client.util
 
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
+import com.google.common.collect.ImmutableMap
 import com.mojang.math.Transformation
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.block.model.ItemTransform
@@ -55,8 +56,10 @@ object RenderUtils {
         TRANSFORM_BLOCK_GUI,
         TRANSFORM_BLOCK_GROUND,
         TRANSFORM_BLOCK_FIXED,
+        ImmutableMap.of()
     )
 
+    @Suppress("DEPRECATION")
     val TEXTURE_ATLAS by lazy {
         Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
     }

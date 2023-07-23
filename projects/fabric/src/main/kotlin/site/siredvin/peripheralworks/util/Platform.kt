@@ -24,7 +24,7 @@ object Platform {
     private fun maybeLoadIntegration(path: String): Optional<Any> {
         return try {
             val clazz = Class.forName(FabricPeripheralWorks::class.java.getPackage().name + ".integrations." + path)
-            Optional.of(clazz.newInstance())
+            Optional.of(clazz.getDeclaredConstructor().newInstance())
         } catch (ignored: InstantiationException) {
             PeripheralWorksCore.LOGGER.info("Exception when loading integration $ignored")
             Optional.empty()

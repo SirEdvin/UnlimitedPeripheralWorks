@@ -54,6 +54,7 @@ class StatueWorkbench : BaseTileEntityBlock<StatueWorkbenchBlockEntity>(false, B
                 pushChangeToClient(level, blockPos, blockState, blockState.setValue(CONNECTED, true))
             }
         }
+        @Suppress("DEPRECATION")
         super.neighborChanged(blockState, level, blockPos, neighbourBlock, neighbourPos, bl)
     }
 }

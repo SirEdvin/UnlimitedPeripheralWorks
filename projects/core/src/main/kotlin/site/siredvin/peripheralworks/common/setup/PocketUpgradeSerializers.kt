@@ -7,11 +7,11 @@ import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubP
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import site.siredvin.peripheralworks.computercraft.pocket.PeripheraliumHubPocketUpgrade
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.ModPlatform
 
 object PocketUpgradeSerializers {
 
-    val PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerPocketUpgrade(
+    val PERIPHERALIUM_HUB = ModPlatform.registerPocketUpgrade(
         PeripheraliumHubPeripheral.ID,
         PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
             PeripheraliumHubPocketUpgrade(
@@ -22,7 +22,7 @@ object PocketUpgradeSerializers {
         },
     )
 
-    val NETHERITE_PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerPocketUpgrade(
+    val NETHERITE_PERIPHERALIUM_HUB = ModPlatform.registerPocketUpgrade(
         PeripheraliumHubPeripheral.NETHERITE_ID,
         PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
             PeripheraliumHubPocketUpgrade(
@@ -33,14 +33,14 @@ object PocketUpgradeSerializers {
         },
     )
 
-    val UNIVERSAL_SCANNER = PeripheralWorksPlatform.registerPocketUpgrade(
+    val UNIVERSAL_SCANNER = ModPlatform.registerPocketUpgrade(
         UniversalScannerPeripheral.UPGRADE_ID,
         PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
             StatefulPeripheralPocketUpgrade(id, stack, UniversalScannerPeripheral::of)
         },
     )
 
-    val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerPocketUpgrade(
+    val ULTIMATE_SENSOR = ModPlatform.registerPocketUpgrade(
         UltimateSensorPeripheral.UPGRADE_ID,
         PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
             StatefulPeripheralPocketUpgrade(id, stack, UltimateSensorPeripheral::of)

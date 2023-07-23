@@ -7,11 +7,11 @@ import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubP
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import site.siredvin.peripheralworks.computercraft.turtles.PeripheraliumHubTurtleUpgrade
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.ModPlatform
 
 object TurtleUpgradeSerializers {
 
-    val PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerTurtleUpgrade(
+    val PERIPHERALIUM_HUB = ModPlatform.registerTurtleUpgrade(
         PeripheraliumHubPeripheral.ID,
         TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
             PeripheraliumHubTurtleUpgrade(
@@ -22,7 +22,7 @@ object TurtleUpgradeSerializers {
         },
     )
 
-    val NETHERITE_PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerTurtleUpgrade(
+    val NETHERITE_PERIPHERALIUM_HUB = ModPlatform.registerTurtleUpgrade(
         PeripheraliumHubPeripheral.NETHERITE_ID,
         TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
             PeripheraliumHubTurtleUpgrade(
@@ -33,7 +33,7 @@ object TurtleUpgradeSerializers {
         },
     )
 
-    val UNIVERSAL_SCANNER = PeripheralWorksPlatform.registerTurtleUpgrade(
+    val UNIVERSAL_SCANNER = ModPlatform.registerTurtleUpgrade(
         UniversalScannerPeripheral.UPGRADE_ID,
         TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack ->
             StatefulPeripheralTurtleUpgrade.dynamic(
@@ -43,7 +43,7 @@ object TurtleUpgradeSerializers {
         },
     )
 
-    val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerTurtleUpgrade(
+    val ULTIMATE_SENSOR = ModPlatform.registerTurtleUpgrade(
         UltimateSensorPeripheral.UPGRADE_ID,
         TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack ->
             StatefulPeripheralTurtleUpgrade.dynamic(

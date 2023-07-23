@@ -16,6 +16,7 @@ import site.siredvin.peripheralworks.api.IItemStackStorage
 
 abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil.defaultProperties()) {
 
+    @Deprecated("Deprecated in Java")
     override fun use(
         blockState: BlockState,
         level: Level,
@@ -37,9 +38,11 @@ abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil
                 }
             }
         }
+        @Suppress("DEPRECATION")
         return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRemove(blockState: BlockState, level: Level, blockPos: BlockPos, replace: BlockState, bl: Boolean) {
         if (blockState.block !== replace.block) {
             val blockEntity = level.getBlockEntity(blockPos)
@@ -55,9 +58,11 @@ abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil
                 }
             }
         }
+        @Suppress("DEPRECATION")
         super.onRemove(blockState, level, blockPos, replace, bl)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun attack(blockState: BlockState, level: Level, blockPos: BlockPos, player: Player) {
         val itemInHand = player.getItemInHand(InteractionHand.MAIN_HAND)
         if (itemInHand.isEmpty) {
@@ -71,6 +76,7 @@ abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil
                 }
             }
         }
+        @Suppress("DEPRECATION")
         super.attack(blockState, level, blockPos, player)
     }
 }

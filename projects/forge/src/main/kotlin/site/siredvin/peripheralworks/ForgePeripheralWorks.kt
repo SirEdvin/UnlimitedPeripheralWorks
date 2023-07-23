@@ -25,8 +25,8 @@ import site.siredvin.peripheralworks.client.geometry.FlexibleStatueGeometryLoade
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
+import site.siredvin.peripheralworks.forge.ForgeModPlatform
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
-import site.siredvin.peripheralworks.forge.ForgePeripheralWorksPlatform
 import site.siredvin.peripheralworks.utils.Platform
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
@@ -45,11 +45,11 @@ object ForgePeripheralWorks {
         DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), PeripheralWorksCore.MOD_ID)
     val recipeSerializers: DeferredRegister<RecipeSerializer<*>> =
         DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, PeripheralWorksCore.MOD_ID)
-    val turtleSerializers = DeferredRegister.create(
+    val turtleSerializers: DeferredRegister<TurtleUpgradeSerialiser<*>> = DeferredRegister.create(
         TurtleUpgradeSerialiser.registryId(),
         PeripheralWorksCore.MOD_ID,
     )
-    val pocketSerializers = DeferredRegister.create(
+    val pocketSerializers: DeferredRegister<PocketUpgradeSerialiser<*>> = DeferredRegister.create(
         PocketUpgradeSerialiser.registryId(),
         PeripheralWorksCore.MOD_ID,
     )
@@ -59,7 +59,7 @@ object ForgePeripheralWorks {
         // Configure configuration
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC, "${PeripheralWorksCore.MOD_ID}.toml")
-        PeripheralWorksCore.configure(ForgePeripheralWorksPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
+        PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
         val eventBus = MOD_CONTEXT.getKEventBus()
         eventBus.addListener(this::commonSetup)
         eventBus.addListener(this::registrySetup)
@@ -75,6 +75,7 @@ object ForgePeripheralWorks {
         pocketSerializers.register(eventBus)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun commonSetup(event: FMLCommonSetupEvent) {
         // Load all integrations
         Platform.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
@@ -99,11 +100,13 @@ object ForgePeripheralWorks {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun registrySetup(event: NewRegistryEvent) {
         Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     fun registryModel(event: ModelEvent.RegisterGeometryLoaders) {
         event.register("flexible_reality_anchor", FlexibleRealityAnchorGeometryLoader)
         event.register("flexible_statue", FlexibleStatueGeometryLoader)

@@ -63,21 +63,21 @@ object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
         }
         val mimicBlockState = entity.mimic ?: return
         val bakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState)
-        context.bakedModelConsumer().accept(bakedModel, mimicBlockState)
+        bakedModel.emitBlockQuads(blockView, mimicBlockState, pos, randomSupplier, context)
     }
 
-    fun emitDefaultItemQuads(context: RenderContext) {
-        context.bakedModelConsumer().accept(defaultItemModel)
+    fun emitDefaultItemQuads(stack: ItemStack, randomSupplier: Supplier<RandomSource>, context: RenderContext) {
+        defaultItemModel.emitItemQuads(stack, randomSupplier, context)
     }
 
     override fun emitItemQuads(stack: ItemStack, randomSupplier: Supplier<RandomSource>, context: RenderContext) {
         if (!stack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())) {
-            return emitDefaultItemQuads(context)
+            return emitDefaultItemQuads(stack, randomSupplier, context)
         }
-        val mimicBlockStateTag = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG) ?: return emitDefaultItemQuads(context)
+        val mimicBlockStateTag = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG) ?: return emitDefaultItemQuads(stack, randomSupplier, context)
         val mimicBlockState = NbtUtils.readBlockState(XplatRegistries.BLOCKS, mimicBlockStateTag)
-        if (mimicBlockState.isAir) return emitDefaultItemQuads(context)
+        if (mimicBlockState.isAir) return emitDefaultItemQuads(stack, randomSupplier, context)
         val bakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState)
-        context.bakedModelConsumer().accept(bakedModel)
+        bakedModel.emitItemQuads(mimicBlockState.block.asItem().defaultInstance, randomSupplier, context)
     }
 }

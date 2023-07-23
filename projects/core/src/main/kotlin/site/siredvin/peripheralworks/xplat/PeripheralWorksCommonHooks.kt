@@ -17,20 +17,20 @@ object PeripheralWorksCommonHooks {
         RecipeSerializers.doSomething()
         PocketUpgradeSerializers.doSomething()
         TurtleUpgradeSerializers.doSomething()
-        PeripheralWorksPlatform.registerCreativeTab(
+        ModPlatform.registerCreativeTab(
             ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
             PeripheralWorksCore.configureCreativeTab(PeripheraliumPlatform.createTabBuilder()).build(),
         )
     }
 
     fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
-        PeripheralWorksPlatform.holder.turtleSerializers.forEach {
+        ModPlatform.holder.turtleSerializers.forEach {
             val upgrade = PeripheraliumPlatform.getTurtleUpgrade(XplatRegistries.TURTLE_SERIALIZERS.getKey(it.get()).toString())
             if (upgrade != null) {
                 PeripheraliumPlatform.createTurtlesWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)
             }
         }
-        PeripheralWorksPlatform.holder.pocketSerializers.forEach {
+        ModPlatform.holder.pocketSerializers.forEach {
             val upgrade = PeripheraliumPlatform.getPocketUpgrade(XplatRegistries.POCKET_SERIALIZERS.getKey(it.get()).toString())
             if (upgrade != null) {
                 PeripheraliumPlatform.createPocketsWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)

@@ -3,6 +3,7 @@ import net.minecraft.world.item.CreativeModeTab
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
+import site.siredvin.peripheralium.xplat.BaseInnerPlatform
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
@@ -12,10 +13,7 @@ import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPlug
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.utils.MinecartUtils
-import site.siredvin.peripheralworks.xplat.ModBlocksReference
-import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
-import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.*
 
 @Suppress("UNUSED")
 object PeripheralWorksCore {
@@ -27,14 +25,14 @@ object PeripheralWorksCore {
         return builder.icon { Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance }
             .title(ModText.CREATIVE_TAB.text)
             .displayItems { _, output ->
-                PeripheralWorksPlatform.holder.blocks.forEach { output.accept(it.get()) }
-                PeripheralWorksPlatform.holder.items.forEach { output.accept(it.get()) }
+                ModPlatform.holder.blocks.forEach { output.accept(it.get()) }
+                ModPlatform.holder.items.forEach { output.accept(it.get()) }
                 PeripheralWorksCommonHooks.registerUpgradesInCreativeTab(output)
             }
     }
 
-    fun configure(platform: PeripheralWorksPlatform, ingredients: ModRecipeIngredients, blocks: ModBlocksReference) {
-        PeripheralWorksPlatform.configure(platform)
+    fun configure(platform: BaseInnerPlatform, ingredients: ModRecipeIngredients, blocks: ModBlocksReference) {
+        ModPlatform.configure(platform)
         ModRecipeIngredients.configure(ingredients)
         ModBlocksReference.configure(blocks)
         ItemStorageExtractor.addStorageExtractor(MinecartUtils::minecartExtractor)

@@ -113,14 +113,14 @@ abstract class ModemPeripheral<O : IPeripheralOwner>(peripheralType: String, own
 
     @Suppress("unused")
     @LuaFunction
-    fun getTypeRemote(computer: IComputerAccess?, name: String): Array<Any>? {
+    fun getTypeRemote(@Suppress("UNUSED_PARAMETER") computer: IComputerAccess?, name: String): Array<Any>? {
         val record = peripheralsRecord[name] ?: return null
         return arrayOf(record.peripheral.type)
     }
 
     @Suppress("unused")
     @LuaFunction
-    fun getMethodsRemote(computer: IComputerAccess?, name: String): Array<Any>? {
+    fun getMethodsRemote(@Suppress("UNUSED_PARAMETER") computer: IComputerAccess?, name: String): Array<Any>? {
         val record = peripheralsRecord[name] ?: return null
         return arrayOf(record.methodNames)
     }

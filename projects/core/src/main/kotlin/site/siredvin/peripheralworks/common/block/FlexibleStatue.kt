@@ -62,6 +62,8 @@ class FlexibleStatue :
         return ItemStack(Blocks.FLEXIBLE_STATUE.get().asItem())
     }
 
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
     override fun getShape(
         state: BlockState,
         world: BlockGetter,
@@ -72,15 +74,18 @@ class FlexibleStatue :
         return blockEntity.blockShape ?: super.getShape(state, world, pos, context)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun useShapeForLightOcclusion(blockState: BlockState): Boolean {
         return true
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getLightBlock(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos): Int {
-        val blockEntity = blockGetter.getBlockEntity(blockPos) as? FlexibleStatueBlockEntity ?: return super.getLightBlock(blockState, blockGetter, blockPos)
+        @Suppress("DEPRECATION") val blockEntity = blockGetter.getBlockEntity(blockPos) as? FlexibleStatueBlockEntity ?: return super.getLightBlock(blockState, blockGetter, blockPos)
         return blockEntity.lightLevel
     }
 
+    @Deprecated("Deprecated in Java")
     override fun rotate(state: BlockState, rot: Rotation): BlockState {
         return state.setValue(
             FACING,
@@ -88,6 +93,8 @@ class FlexibleStatue :
         )
     }
 
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     override fun mirror(state: BlockState, mirrorIn: Mirror): BlockState {
         return state.rotate(mirrorIn.getRotation(state.getValue(FACING)))
     }

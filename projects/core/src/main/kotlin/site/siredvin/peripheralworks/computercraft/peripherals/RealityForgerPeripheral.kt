@@ -77,7 +77,7 @@ class RealityForgerPeripheral(
     @LuaFunction(mainThread = true)
     fun detectAnchors(): List<Map<String, Any>> {
         val data = mutableListOf<Map<String, Any>>()
-        ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { blockState, pos ->
+        ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { _, pos ->
             val blockEntity = level!!.getBlockEntity(pos)
             if (blockEntity is FlexibleRealityAnchorBlockEntity) {
                 data.add(LuaRepresentation.forBlockPos(pos, this.peripheralOwner.facing, this.pos))
@@ -157,7 +157,7 @@ class RealityForgerPeripheral(
         if (targetState.`is`(BlockTags.REALITY_FORGER_FORBIDDEN)) {
             throw LuaException("You cannot use this block, is blocklisted")
         }
-        ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { blockState, blockPos ->
+        ScanUtils.traverseBlocks(level!!, pos, interactionRadius, { _, blockPos ->
             val blockEntity = level!!.getBlockEntity(blockPos)
             if (blockEntity is FlexibleRealityAnchorBlockEntity) {
                 forgeRealityTileEntity(blockEntity, targetState, table, arguments.optTable(1))

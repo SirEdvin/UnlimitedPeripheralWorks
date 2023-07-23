@@ -7,7 +7,7 @@ import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import site.siredvin.peripheralium.data.blocks.LootTableHelper
 import site.siredvin.peripheralworks.common.setup.Blocks
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.BiConsumer
 
 object ModLootTableProvider {
@@ -22,7 +22,7 @@ object ModLootTableProvider {
     }
 
     fun registerBlocks(consumer: BiConsumer<ResourceLocation, LootTable.Builder>) {
-        val lootTable = LootTableHelper(PeripheralWorksPlatform.holder)
+        val lootTable = LootTableHelper(ModPlatform.holder)
         lootTable.dropSelf(consumer, Blocks.ULTIMATE_SENSOR)
         lootTable.dropSelf(consumer, Blocks.UNIVERSAL_SCANNER)
         lootTable.dropSelf(consumer, Blocks.PERIPHERAL_CASING)

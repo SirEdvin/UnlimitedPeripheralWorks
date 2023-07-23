@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.WorldgenRandom
 import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.peripheralium.xplat.XplatTags
 
 object SensorCollection {
 
@@ -103,7 +104,7 @@ object SensorCollection {
             for (z in chunkPos.minBlockZ..chunkPos.maxBlockZ) {
                 for (y in MIN_Y..MAX_Y) {
                     val blockState = level.getBlockState(BlockPos(x, y, z))
-                    if (!blockState.isAir && PeripheraliumPlatform.isOre(blockState)) {
+                    if (!blockState.isAir && XplatTags.isOre(blockState)) {
                         val key = XplatRegistries.BLOCKS.getKey(blockState.block).toString()
                         if (!ores.containsKey(key)) {
                             ores[key] = 0

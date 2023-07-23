@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 
 object RenderUtils {
 
+    @Suppress("DEPRECATION")
     val TEXTURE_ATLAS by lazy {
         Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS)
     }

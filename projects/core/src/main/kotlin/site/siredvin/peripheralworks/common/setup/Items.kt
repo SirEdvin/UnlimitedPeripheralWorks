@@ -6,10 +6,10 @@ import site.siredvin.peripheralworks.common.item.Analyzer
 import site.siredvin.peripheralworks.common.item.PeripheraliumHub
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.utils.TooltipCollection
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.ModPlatform
 
 object Items {
-    val PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerItem("peripheralium_hub") {
+    val PERIPHERALIUM_HUB = ModPlatform.registerItem("peripheralium_hub") {
         PeripheraliumHub(
             Item.Properties(),
             PeripheralWorksConfig::enablePeripheraliumHubs,
@@ -18,7 +18,7 @@ object Items {
             TooltipCollection.buildMaxPeripheralsCount(PeripheralWorksConfig::peripheraliumHubUpgradeCount),
         )
     }
-    val NETHERITE_PERIPHERALIUM_HUB = PeripheralWorksPlatform.registerItem("netherite_peripheralium_hub") {
+    val NETHERITE_PERIPHERALIUM_HUB = ModPlatform.registerItem("netherite_peripheralium_hub") {
         PeripheraliumHub(
             Item.Properties(),
             PeripheralWorksConfig::enablePeripheraliumHubs,
@@ -28,9 +28,9 @@ object Items {
         )
     }
 
-    val ULTIMATE_CONFIGURATOR = PeripheralWorksPlatform.registerItem("ultimate_configurator", ::UltimateConfigurator)
+    val ULTIMATE_CONFIGURATOR = ModPlatform.registerItem("ultimate_configurator", ::UltimateConfigurator)
 
-    val ANALYZER = PeripheralWorksPlatform.registerItem("analyzer", ::Analyzer)
+    val ANALYZER = ModPlatform.registerItem("analyzer", ::Analyzer)
 
     fun doSomething() {
     }

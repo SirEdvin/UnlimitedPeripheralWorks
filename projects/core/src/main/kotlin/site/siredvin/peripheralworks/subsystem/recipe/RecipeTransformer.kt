@@ -13,7 +13,7 @@ abstract class RecipeTransformer<V : Container, T : Recipe<V>> {
 
     abstract fun getOutputs(recipe: T): List<*>
 
-    fun getExtraData(recipe: T): MutableMap<String, Any>? {
+    fun getExtraData(@Suppress("UNUSED_PARAMETER") recipe: T): MutableMap<String, Any>? {
         return null
     }
 

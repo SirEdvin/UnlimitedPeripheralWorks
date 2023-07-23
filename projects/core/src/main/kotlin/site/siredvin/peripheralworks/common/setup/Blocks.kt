@@ -10,14 +10,14 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.FlexibleRealityAnchorItem
 import site.siredvin.peripheralworks.common.item.FlexibleStatueItem
 import site.siredvin.peripheralworks.utils.TooltipCollection
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.ModPlatform
 
 object Blocks {
-    val PERIPHERAL_CASING = PeripheralWorksPlatform.registerBlock(
+    val PERIPHERAL_CASING = ModPlatform.registerBlock(
         "peripheral_casing",
         { Block(BlockUtil.defaultProperties()) },
     )
-    val UNIVERSAL_SCANNER = PeripheralWorksPlatform.registerBlock(
+    val UNIVERSAL_SCANNER = ModPlatform.registerBlock(
         "universal_scanner",
         { GenericBlockEntityBlock({ BlockEntityTypes.UNIVERSAL_SCANNER.get() }, true) },
         {
@@ -31,7 +31,7 @@ object Blocks {
             )
         },
     )
-    val ULTIMATE_SENSOR = PeripheralWorksPlatform.registerBlock(
+    val ULTIMATE_SENSOR = ModPlatform.registerBlock(
         "ultimate_sensor",
         { GenericBlockEntityBlock({ BlockEntityTypes.ULTIMATE_SENSOR.get() }, true) },
         {
@@ -45,7 +45,7 @@ object Blocks {
         },
     )
 
-    val ITEM_PEDESTAL = PeripheralWorksPlatform.registerBlock(
+    val ITEM_PEDESTAL = ModPlatform.registerBlock(
         "item_pedestal",
         ::ItemPedestal,
     ) {
@@ -58,7 +58,7 @@ object Blocks {
         )
     }
 
-    val MAP_PEDESTAL = PeripheralWorksPlatform.registerBlock(
+    val MAP_PEDESTAL = ModPlatform.registerBlock(
         "map_pedestal",
         ::MapPedestal,
     ) {
@@ -71,7 +71,7 @@ object Blocks {
         )
     }
 
-    val DISPLAY_PEDESTAL = PeripheralWorksPlatform.registerBlock(
+    val DISPLAY_PEDESTAL = ModPlatform.registerBlock(
         "display_pedestal",
         ::DisplayPedestal,
     ) {
@@ -84,7 +84,7 @@ object Blocks {
         )
     }
 
-    val REMOTE_OBSERVER = PeripheralWorksPlatform.registerBlock(
+    val REMOTE_OBSERVER = ModPlatform.registerBlock(
         "remote_observer",
         { GenericBlockEntityBlock({ BlockEntityTypes.REMOTE_OBSERVER.get() }, true, belongToTickingEntity = true) },
         {
@@ -99,7 +99,7 @@ object Blocks {
         },
     )
 
-    val PERIPHERAL_PROXY = PeripheralWorksPlatform.registerBlock(
+    val PERIPHERAL_PROXY = ModPlatform.registerBlock(
         "peripheral_proxy",
         ::PeripheralProxy,
     ) {
@@ -112,13 +112,13 @@ object Blocks {
             TooltipCollection::peripheralProxyTooptips,
         )
     }
-    val FLEXIBLE_REALITY_ANCHOR = PeripheralWorksPlatform.registerBlock(
+    val FLEXIBLE_REALITY_ANCHOR = ModPlatform.registerBlock(
         "flexible_reality_anchor",
         ::FlexibleRealityAnchor,
     ) {
         FlexibleRealityAnchorItem(it)
     }
-    val REALITY_FORGER = PeripheralWorksPlatform.registerBlock(
+    val REALITY_FORGER = ModPlatform.registerBlock(
         "reality_forger",
         { GenericBlockEntityBlock({ BlockEntityTypes.REALITY_FORGER.get() }, isRotatable = true, belongToTickingEntity = false) },
     ) {
@@ -131,7 +131,7 @@ object Blocks {
             TooltipCollection::realityForgerTooptips,
         )
     }
-    val RECIPE_REGISTRY = PeripheralWorksPlatform.registerBlock(
+    val RECIPE_REGISTRY = ModPlatform.registerBlock(
         "recipe_registry",
         { GenericBlockEntityBlock({ BlockEntityTypes.RECIPE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
     ) {
@@ -144,7 +144,7 @@ object Blocks {
         )
     }
 
-    val INFORMATIVE_REGISTRY = PeripheralWorksPlatform.registerBlock(
+    val INFORMATIVE_REGISTRY = ModPlatform.registerBlock(
         "informative_registry",
         { GenericBlockEntityBlock({ BlockEntityTypes.INFORMATIVE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
     ) {
@@ -157,14 +157,14 @@ object Blocks {
         )
     }
 
-    val FLEXIBLE_STATUE = PeripheralWorksPlatform.registerBlock(
+    val FLEXIBLE_STATUE = ModPlatform.registerBlock(
         "flexible_statue",
         ::FlexibleStatue,
     ) {
         FlexibleStatueItem(it)
     }
 
-    val STATUE_WORKBENCH = PeripheralWorksPlatform.registerBlock(
+    val STATUE_WORKBENCH = ModPlatform.registerBlock(
         "statue_workbench",
         { StatueWorkbench() },
     ) {

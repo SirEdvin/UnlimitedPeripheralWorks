@@ -15,18 +15,21 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 class Integration : Runnable {
 
     companion object {
+        @Suppress("UNUSED_PARAMETER")
         fun extractItemStorage(level: Level, pos: BlockPos, entity: BlockEntity?): ItemStorage? {
             if (entity !is AENetworkBlockEntity) return null
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: return null
             return AEItemStorage(inventory, entity)
         }
 
+        @Suppress("UNUSED_PARAMETER")
         fun extractFluidStorage(level: Level, pos: BlockPos, entity: BlockEntity?): FluidStorage? {
             if (entity !is AENetworkBlockEntity) return null
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: return null
             return AEFluidStorage(inventory, entity)
         }
 
+        @Suppress("UNUSED_PARAMETER")
         fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?): EnergyStorage? {
             if (entity !is AENetworkBlockEntity) return null
             val energyService = entity.mainNode.grid?.energyService ?: return null

@@ -44,7 +44,7 @@ class RecipeRegistryPeripheral(
     @Throws(LuaException::class)
     fun getAllRecipesForType(arguments: IArguments): MethodResult {
         val recipeTypeID: ResourceLocation = arguments.getResourceLocation(0)
-        val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
+        @Suppress("UNCHECKED_CAST") val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
         return MethodResult.of(level!!.recipeManager.getAllRecipesFor(type).map { it.id })
     }
 
@@ -53,7 +53,7 @@ class RecipeRegistryPeripheral(
     fun getRecipeForType(arguments: IArguments): MethodResult {
         val recipeTypeID: ResourceLocation = arguments.getResourceLocation(0)
         val recipeID: ResourceLocation = arguments.getResourceLocation(1)
-        val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
+        @Suppress("UNCHECKED_CAST") val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
         return MethodResult.of(level!!.recipeManager.getAllRecipesFor(type).filter { it.id == recipeID }.map(RecipeRegistryToolkit::serializeRecipe).toList())
     }
 
@@ -66,6 +66,7 @@ class RecipeRegistryPeripheral(
         val recipeTypes = RecipeRegistryToolkit.collectRecipeTypes(types)
         return MethodResult.of(
             recipeTypes.flatMap {
+                @Suppress("UNCHECKED_CAST")
                 level!!.recipeManager.getAllRecipesFor(it as RecipeType<Recipe<Container>>).stream().filter { recipe ->
                     recipe.getResultItem(RegistryAccess.EMPTY).`is`(targetItem)
                 }.toList()

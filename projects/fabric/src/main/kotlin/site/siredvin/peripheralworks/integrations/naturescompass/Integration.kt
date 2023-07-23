@@ -17,7 +17,7 @@ import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
-import site.siredvin.peripheralworks.xplat.PeripheralWorksPlatform
+import site.siredvin.peripheralworks.xplat.ModPlatform
 
 class Integration : Runnable {
 
@@ -30,7 +30,7 @@ class Integration : Runnable {
     }
 
     override fun run() {
-        val turtleUpgradeSup = PeripheralWorksPlatform.registerTurtleUpgrade(
+        val turtleUpgradeSup = ModPlatform.registerTurtleUpgrade(
             UPGRADE_ID,
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PeripheralTurtleUpgrade.dynamic(stack.item, ::forTurtle) {
@@ -52,7 +52,7 @@ class Integration : Runnable {
             )
         }
 
-        val pocketUpgrade = PeripheralWorksPlatform.registerPocketUpgrade(
+        val pocketUpgrade = ModPlatform.registerPocketUpgrade(
             UPGRADE_ID,
             PocketUpgradeSerialiser.simpleWithCustomItem { _, stack ->
                 return@simpleWithCustomItem PocketNaturesCompassUpgrade(stack)
