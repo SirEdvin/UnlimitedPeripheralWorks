@@ -1,6 +1,8 @@
 {
   "block.peripheralworks.display_pedestal": "Display pedestal",
   "block.peripheralworks.display_pedestal.tooltip": "§3§oCute pedestal, that cannot store anything, but can display literally anything",
+  "block.peripheralworks.entity_link": "Entity link",
+  "block.peripheralworks.entity_link.tooltip": "§3§oCan help you to create interspace link to any entity, you just need to insert card",
   "block.peripheralworks.flexible_reality_anchor": "Flexible reality anchor",
   "block.peripheralworks.flexible_statue": "Flexible statue",
   "block.peripheralworks.informative_registry": "Informative registry",

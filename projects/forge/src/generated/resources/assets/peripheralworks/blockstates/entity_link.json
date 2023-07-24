@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "configured=false": {
+      "model": "peripheralworks:block/entity_link"
+    },
+    "configured=true": {
+      "model": "peripheralworks:block/entity_link_filled"
+    }
+  }
+}

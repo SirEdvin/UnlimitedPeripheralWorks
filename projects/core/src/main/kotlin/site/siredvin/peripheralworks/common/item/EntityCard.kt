@@ -8,8 +8,12 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.HitResult
 import site.siredvin.peripheralium.common.items.DescriptiveItem
+import site.siredvin.peripheralworks.common.block.EntityLink
+import site.siredvin.peripheralworks.common.blockentity.EntityLinkBlockEntity
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheralLookup
 import java.util.UUID
@@ -58,16 +62,32 @@ class EntityCard : DescriptiveItem(Properties().stacksTo(1)) {
 
     override fun use(level: Level, player: Player, interactionHand: InteractionHand): InteractionResultHolder<ItemStack> {
         val itemInHand = player.getItemInHand(interactionHand)
-        if (level is ServerLevel && interactionHand == InteractionHand.MAIN_HAND && !isEmpty(itemInHand)) {
-            val entityUUID = getEntityUUID(itemInHand) ?: return InteractionResultHolder.pass(itemInHand)
-            val entity = level.getEntity(entityUUID) ?: return InteractionResultHolder.pass(itemInHand)
-            player.displayClientMessage(
-                ModText.TARGET_ENTITY.format(
-                    entity.name.string,
-                    entity.blockPosition().toString(),
-                ),
-                false,
-            )
+        val blockHitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE)
+        if (!isEmpty(itemInHand) && interactionHand == InteractionHand.MAIN_HAND) {
+            // TODO: So ... this part is not working nice on forge for some reason (?)
+            // it is called only for client side
+            if (blockHitResult.type == HitResult.Type.BLOCK) {
+                val blockEntity = level.getBlockEntity(blockHitResult.blockPos) as? EntityLinkBlockEntity
+                    ?: return InteractionResultHolder.pass(itemInHand)
+                if (blockEntity.blockState.getValue(EntityLink.CONFIGURED)) {
+                    return InteractionResultHolder.pass(
+                        itemInHand,
+                    )
+                }
+                blockEntity.storedStack = itemInHand
+                return InteractionResultHolder.consume(ItemStack.EMPTY)
+            }
+            if (level is ServerLevel) {
+                val entityUUID = getEntityUUID(itemInHand) ?: return InteractionResultHolder.pass(itemInHand)
+                val entity = level.getEntity(entityUUID) ?: return InteractionResultHolder.pass(itemInHand)
+                player.displayClientMessage(
+                    ModText.TARGET_ENTITY.format(
+                        entity.name.string,
+                        entity.blockPosition().toString(),
+                    ),
+                    false,
+                )
+            }
         }
         return InteractionResultHolder.pass(itemInHand)
     }

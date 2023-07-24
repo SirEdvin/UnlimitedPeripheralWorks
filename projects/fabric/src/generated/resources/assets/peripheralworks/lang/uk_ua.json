@@ -1,6 +1,8 @@
 {
   "block.peripheralworks.display_pedestal": "П'єдестал для демонстрацій",
   "block.peripheralworks.display_pedestal.tooltip": "§3§oМиленький п'єдестал, який не може зберігати предмети, але може показати будь-який предмет",
+  "block.peripheralworks.entity_link": "Коннектор до сутності",
+  "block.peripheralworks.entity_link.tooltip": "§3§oДопомагає утворити з'єднання із будь-якою сутністю, потрібно лише вставити карту",
   "block.peripheralworks.flexible_reality_anchor": "Гнучкий якор реальності",
   "block.peripheralworks.flexible_statue": "Гнучка статуя",
   "block.peripheralworks.informative_registry": "Реєстр інформації",

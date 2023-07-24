@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.api.blockentities.IObservingBlockEntity
 import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
-import site.siredvin.peripheralium.common.blocks.GenericBlockEntityBlock
+import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralium.util.representation.stateProperties
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -29,7 +29,7 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     private val trackedBlocks: MutableList<BlockPos> = mutableListOf()
 
     private val facing: Direction
-        get() = blockState.getValue(GenericBlockEntityBlock.FACING)
+        get() = blockState.getValue(FacingBlockEntityBlock.FACING)
 
     val trackedBlocksView: List<BlockPos>
         get() = trackedBlocks

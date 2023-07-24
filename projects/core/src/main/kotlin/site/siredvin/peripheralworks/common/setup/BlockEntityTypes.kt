@@ -127,5 +127,14 @@ object BlockEntityTypes {
         )
     }
 
+    val ENTITY_LINK: Supplier<BlockEntityType<EntityLinkBlockEntity>> = ModPlatform.registerBlockEntity(
+        modId("entity_link"),
+    ) {
+        PeripheraliumPlatform.createBlockEntityType(
+            ::EntityLinkBlockEntity,
+            Blocks.ENTITY_LINK.get(),
+        )
+    }
+
     fun doSomething() {}
 }

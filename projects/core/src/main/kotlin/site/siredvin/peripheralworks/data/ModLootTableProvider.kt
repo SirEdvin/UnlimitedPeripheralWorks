@@ -35,6 +35,7 @@ object ModLootTableProvider {
         lootTable.dropSelf(consumer, Blocks.RECIPE_REGISTRY)
         lootTable.dropSelf(consumer, Blocks.INFORMATIVE_REGISTRY)
         lootTable.dropSelf(consumer, Blocks.STATUE_WORKBENCH)
+        lootTable.dropSelf(consumer, Blocks.ENTITY_LINK)
         lootTable.computedDrop(Blocks.FLEXIBLE_REALITY_ANCHOR)
         lootTable.computedDrop(Blocks.FLEXIBLE_STATUE)
         lootTable.validate()

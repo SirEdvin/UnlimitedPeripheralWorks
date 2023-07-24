@@ -177,5 +177,19 @@ object Blocks {
         )
     }
 
+    val ENTITY_LINK = ModPlatform.registerBlock(
+        "entity_link",
+        { EntityLink() },
+    ) {
+        PeripheralBlockItem(
+            it,
+            Item.Properties(),
+            // TODO: update
+            { true },
+            alwaysShow = true,
+            TooltipCollection::isDisabled,
+        )
+    }
+
     fun doSomething() {}
 }

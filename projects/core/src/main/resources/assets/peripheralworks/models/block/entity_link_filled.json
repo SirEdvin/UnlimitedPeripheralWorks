@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "peripheralworks:block/peripheral_casing",
-		"1": "peripheralworks:item/player_chip_active",
-		"2": "peripheralworks:item/player_chip_not_active",
-		"3": "peripheralworks:block/creature_link",
+		"1": "peripheralworks:item/entity_card_active",
+		"2": "peripheralworks:item/entity_card",
+		"3": "peripheralworks:block/entity_link",
 		"particle": "peripheralworks:block/peripheral_casing"
 	},
 	"elements": [

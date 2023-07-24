@@ -16,6 +16,7 @@ import site.siredvin.peripheralium.data.blocks.genericBlock
 import site.siredvin.peripheralium.data.blocks.horizontalOrientatedBlock
 import site.siredvin.peripheralium.data.blocks.horizontalOrientedModel
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.block.StatueWorkbench
@@ -244,6 +245,14 @@ object ModBlockModelProvider {
                 suffix = "_connected",
             ),
             StatueWorkbench.CONNECTED,
+        )
+
+        simpleBlockSwitch(
+            generators,
+            Blocks.ENTITY_LINK.get(),
+            ModelLocationUtils.getModelLocation(Blocks.ENTITY_LINK.get()),
+            ModelLocationUtils.getModelLocation(Blocks.ENTITY_LINK.get()).withSuffix("_filled"),
+            EntityLink.CONFIGURED,
         )
 
         facingBlockSwitch(

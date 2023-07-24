@@ -41,6 +41,7 @@ class ModEnLanguageProvider(
         add(Blocks.INFORMATIVE_REGISTRY.get(), "Informative registry", "§3§oKnowledge device, that holds power to list all items in existence")
         add(Blocks.FLEXIBLE_STATUE.get(), "Flexible statue")
         add(Blocks.STATUE_WORKBENCH.get(), "Statue workbench", "§3§oImagination your only limit. And also 48 point size limit, but this is not so important")
+        add(Blocks.ENTITY_LINK.get(), "Entity link", "§3§oCan help you to create interspace link to any entity, you just need to insert card")
 
         add(ModText.CREATIVE_TAB, "UnlimitedPeripheralWorks")
 

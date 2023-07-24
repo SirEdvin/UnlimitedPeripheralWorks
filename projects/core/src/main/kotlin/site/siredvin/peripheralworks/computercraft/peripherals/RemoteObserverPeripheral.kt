@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
-import site.siredvin.peripheralium.common.blocks.GenericBlockEntityBlock
+import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralium.util.representation.LuaInterpretation
@@ -28,7 +28,7 @@ class RemoteObserverPeripheral(
 
     @LuaFunction(mainThread = true)
     fun addPosition(pos: Map<*, *>): MethodResult {
-        val targetPos = LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(GenericBlockEntityBlock.FACING))
+        val targetPos = LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(FacingBlockEntityBlock.FACING))
         if (!blockEntity.isPosApplicable(targetPos)) {
             return MethodResult.of(false, "Position too far away")
         }
@@ -39,7 +39,7 @@ class RemoteObserverPeripheral(
     @LuaFunction(mainThread = true)
     fun removePosition(pos: Map<*, *>): MethodResult {
         blockEntity.removePosToTrack(
-            LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(GenericBlockEntityBlock.FACING)),
+            LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(FacingBlockEntityBlock.FACING)),
         )
         return MethodResult.of(true)
     }
@@ -49,7 +49,7 @@ class RemoteObserverPeripheral(
         return blockEntity.trackedBlocksView.map {
             LuaRepresentation.forBlockPos(
                 it,
-                blockEntity.blockState.getValue(GenericBlockEntityBlock.FACING),
+                blockEntity.blockState.getValue(FacingBlockEntityBlock.FACING),
                 peripheralOwner.pos,
             )
         }
