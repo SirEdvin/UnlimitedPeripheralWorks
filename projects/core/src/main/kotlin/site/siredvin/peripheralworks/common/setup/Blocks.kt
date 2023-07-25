@@ -184,8 +184,7 @@ object Blocks {
         PeripheralBlockItem(
             it,
             Item.Properties(),
-            // TODO: update
-            { true },
+            PeripheralWorksConfig::enableEntityLink,
             alwaysShow = true,
             TooltipCollection::isDisabled,
         )

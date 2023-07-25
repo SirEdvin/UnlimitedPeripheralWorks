@@ -99,6 +99,9 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
     val flexibleStatueMaxQuads: Int
         get() = ConfigHolder.COMMON_CONFIG.FLEXIBLE_STATUE_MAX_QUADS.get()
 
+    val enableEntityLink: Boolean
+        get() = ConfigHolder.COMMON_CONFIG.ENABLE_ENTITY_LINK.get()
+
     fun registerIntegrationConfiguration(configuration: IConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -144,6 +147,7 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
         val ENABLE_INFORMATIVE_REGISTRY: ForgeConfigSpec.BooleanValue
         val ENABLE_STATUE_WORKBENCH: ForgeConfigSpec.BooleanValue
         val FLEXIBLE_STATUE_MAX_QUADS: ForgeConfigSpec.IntValue
+        val ENABLE_ENTITY_LINK: ForgeConfigSpec.BooleanValue
 
         init {
             builder.push("base")
@@ -218,6 +222,8 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
                 .define("enableStatueWorkbench", true)
             FLEXIBLE_STATUE_MAX_QUADS = builder.comment("Max quads amount for flexible statue, will be applied only for newest ones")
                 .defineInRange("flexibleStatueMaxQuads", 256, 64, Int.MAX_VALUE)
+            ENABLE_ENTITY_LINK = builder.comment("Enables entity link")
+                .define("enableEntityLink", true)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.values(), builder)
