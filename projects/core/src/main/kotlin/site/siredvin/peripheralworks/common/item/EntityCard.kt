@@ -16,6 +16,7 @@ import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.blockentity.EntityLinkBlockEntity
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheralLookup
+import site.siredvin.peripheralworks.tags.EntityTags
 import java.util.UUID
 
 class EntityCard : DescriptiveItem(Properties().stacksTo(1)) {
@@ -28,6 +29,7 @@ class EntityCard : DescriptiveItem(Properties().stacksTo(1)) {
         }
 
         fun isEntityMatching(entity: Entity): Boolean {
+            if (entity.type.`is`(EntityTags.LINK_BLOCKLIST)) return false
             return EntityPeripheralLookup.collectPlugins(entity).isNotEmpty()
         }
 

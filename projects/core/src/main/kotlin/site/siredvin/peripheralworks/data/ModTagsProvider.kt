@@ -1,10 +1,12 @@
 package site.siredvin.peripheralworks.data
 
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Block
 import site.siredvin.peripheralium.data.blocks.ItemTagConsumer
 import site.siredvin.peripheralium.data.blocks.TagConsumer
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.tags.BlockTags
+import site.siredvin.peripheralworks.tags.EntityTags
 import site.siredvin.peripheralworks.tags.ItemTags
 import site.siredvin.peripheralworks.xplat.ModBlocksReference
 import java.util.function.Supplier
@@ -170,5 +172,14 @@ object ModTagsProvider {
     fun itemTags(consumer: ItemTagConsumer) {
         DEFAULT_PERIPHERAL_PROXY_BLOCKED_BLOCKS.forEach { consumer.tag(ItemTags.PERIPHERAL_PROXY_FORBIDDEN).add(it.get().asItem()) }
         DEFAULT_MIMIC_BLOCKED_BLOCKS.forEach { consumer.tag(ItemTags.REALITY_FORGER_FORBIDDEN).add(it.get().asItem()) }
+    }
+
+    @JvmStatic
+    fun entityTypeTags(consumer: TagConsumer<EntityType<*>>) {
+        consumer.tag(EntityTags.LINK_BLOCKLIST).add(
+            EntityType.ENDER_DRAGON,
+            EntityType.WITHER,
+            EntityType.WARDEN,
+        )
     }
 }

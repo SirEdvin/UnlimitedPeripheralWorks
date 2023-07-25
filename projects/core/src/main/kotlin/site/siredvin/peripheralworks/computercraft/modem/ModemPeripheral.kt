@@ -118,6 +118,12 @@ abstract class ModemPeripheral<O : IPeripheralOwner>(peripheralType: String, own
         return arrayOf(record.peripheral.type)
     }
 
+    @LuaFunction
+    fun hasTypeRemote(@Suppress("UNUSED_PARAMETER") computer: IComputerAccess, name: String, type: String): Boolean {
+        val record = peripheralsRecord[name] ?: return false
+        return record.peripheral.type == type || record.peripheral.additionalTypes.contains(type)
+    }
+
     @Suppress("unused")
     @LuaFunction
     fun getMethodsRemote(@Suppress("UNUSED_PARAMETER") computer: IComputerAccess?, name: String): Array<Any>? {

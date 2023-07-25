@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Entity link blocklist
+
+### Fixed
+
+- Peripheralium hub with `find` interaction
+
 ## [1.2.0] - 2023-07-25
 
 ### Added

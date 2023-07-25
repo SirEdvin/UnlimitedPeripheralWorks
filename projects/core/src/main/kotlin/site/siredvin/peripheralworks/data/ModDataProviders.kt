@@ -16,6 +16,7 @@ object ModDataProviders {
         }
         generator.lootTable(ModLootTableProvider.getTables())
         generator.models(ModBlockModelProvider::addModels, ModItemModelProvider::addModels)
+        generator.entityTags(PeripheralWorksCore.MOD_ID, ModTagsProvider::entityTypeTags)
         generator.add(::ModEnLanguageProvider)
         generator.add(::ModUaLanguageProvider)
         generator.itemTags(
