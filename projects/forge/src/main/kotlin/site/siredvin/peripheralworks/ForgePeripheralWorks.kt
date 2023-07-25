@@ -20,6 +20,7 @@ import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.NewRegistryEvent
 import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
+import site.siredvin.peripheralium.loader.ForgeIntegrationLoader
 import site.siredvin.peripheralworks.client.geometry.FlexibleRealityAnchorGeometryLoader
 import site.siredvin.peripheralworks.client.geometry.FlexibleStatueGeometryLoader
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
@@ -27,7 +28,6 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModPlatform
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
-import site.siredvin.peripheralworks.utils.Platform
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
@@ -54,6 +54,11 @@ object ForgePeripheralWorks {
         PeripheralWorksCore.MOD_ID,
     )
 
+    val loader = ForgeIntegrationLoader(
+        ForgePeripheralWorks::class.java.getPackage().name,
+        PeripheralWorksCore.LOGGER,
+    )
+
     init {
         ForgePeripheralium.sayHi()
         // Configure configuration
@@ -78,13 +83,13 @@ object ForgePeripheralWorks {
     @Suppress("UNUSED_PARAMETER")
     fun commonSetup(event: FMLCommonSetupEvent) {
         // Load all integrations
-        Platform.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)
@@ -102,8 +107,8 @@ object ForgePeripheralWorks {
 
     @Suppress("UNUSED_PARAMETER")
     fun registrySetup(event: NewRegistryEvent) {
-        Platform.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

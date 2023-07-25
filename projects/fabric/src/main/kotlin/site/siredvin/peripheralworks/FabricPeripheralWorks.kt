@@ -16,17 +16,22 @@ import net.minecraft.world.phys.EntityHitResult
 import net.minecraftforge.fml.config.ModConfig
 import site.siredvin.peripheralium.FabricPeripheralium
 import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
+import site.siredvin.peripheralium.loader.FabricIntegrationLoader
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModPlatform
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
-import site.siredvin.peripheralworks.util.Platform
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 
 @Suppress("UNUSED")
 object FabricPeripheralWorks : ModInitializer {
+
+    val loader = FabricIntegrationLoader(
+        FabricPeripheralWorks::class.java.getPackage().name,
+        PeripheralWorksCore.LOGGER,
+    )
 
     override fun onInitialize() {
         // Register configuration
@@ -35,14 +40,14 @@ object FabricPeripheralWorks : ModInitializer {
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         // Load all integrations
-        Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("alloy_forgery").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("universal_shops").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("alloy_forgery").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("universal_shops").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)
         // Register block lookup
