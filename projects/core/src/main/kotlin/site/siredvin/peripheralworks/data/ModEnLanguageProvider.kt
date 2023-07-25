@@ -21,9 +21,9 @@ class ModEnLanguageProvider(
     }
 
     override fun addTranslations() {
+        add(Items.ULTIMATE_CONFIGURATOR.get(), "Ultimate configurator", "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable")
         add(Items.PERIPHERALIUM_HUB.get(), "Peripheralium hub")
         add(Items.NETHERITE_PERIPHERALIUM_HUB.get(), "Netherite peripheralium hub")
-        add(Items.ULTIMATE_CONFIGURATOR.get(), "Ultimate configurator", "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable")
         add(Items.ANALYZER.get(), "Analyzer", "§3§oWIP tool that now can only display block entity type of blocks")
         add(Items.ENTITY_CARD.get(), "Entity card", "§3§oCan record unique signature of some living or ephemeral entities")
 
