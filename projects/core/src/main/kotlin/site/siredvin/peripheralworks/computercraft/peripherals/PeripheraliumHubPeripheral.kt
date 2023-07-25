@@ -24,6 +24,21 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         val ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
         val NETHERITE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
         const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
+
+        fun getActiveUpgrades(dataStorage: CompoundTag): List<String> {
+            return dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
+        }
+
+        fun getDataForUpgrade(id: String, dataStorage: CompoundTag): CompoundTag {
+            if (!dataStorage.contains(TWEAKED_STORAGES)) {
+                dataStorage.put(TWEAKED_STORAGES, CompoundTag())
+            }
+            val tweakedStorages = dataStorage.getCompound(TWEAKED_STORAGES)
+            if (!tweakedStorages.contains(id)) {
+                tweakedStorages.put(id, CompoundTag())
+            }
+            return tweakedStorages.getCompound(id)
+        }
     }
 
     /**
@@ -37,7 +52,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         get() = PeripheralWorksConfig.enablePeripheraliumHubs
 
     protected val activeUpgrades: List<String>
-        get() = peripheralOwner.dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
+        get() = getActiveUpgrades(peripheralOwner.dataStorage)
 
     abstract val activeMode: String
 
@@ -64,15 +79,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
     }
 
     fun getDataForUpgrade(id: String): CompoundTag {
-        val base = peripheralOwner.dataStorage
-        if (!base.contains(TWEAKED_STORAGES)) {
-            base.put(TWEAKED_STORAGES, CompoundTag())
-        }
-        val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
-        if (!tweakedStorages.contains(id)) {
-            tweakedStorages.put(id, CompoundTag())
-        }
-        return tweakedStorages.getCompound(id)
+        return getDataForUpgrade(id, peripheralOwner.dataStorage)
     }
 
     fun setDataForUpdate(id: String, data: CompoundTag?) {

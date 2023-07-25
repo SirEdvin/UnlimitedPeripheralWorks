@@ -4,6 +4,7 @@ import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.upgrades.UpgradeData
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripheralOwner
 import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
@@ -14,6 +15,13 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
 
     companion object {
         const val TURTLE_MODE = "turtle"
+
+        fun collectUpgradesData(dataStorage: CompoundTag): List<UpgradeData<ITurtleUpgrade>> {
+            return getActiveUpgrades(dataStorage).mapNotNull {
+                val upgrade = PeripheraliumPlatform.getTurtleUpgrade(it) ?: return@mapNotNull null
+                return@mapNotNull UpgradeData(upgrade, getDataForUpgrade(upgrade.upgradeID.toString(), dataStorage))
+            }
+        }
     }
 
     val activeTurtleUpgrades: MutableList<LocalTurtleWrapper> = mutableListOf()
