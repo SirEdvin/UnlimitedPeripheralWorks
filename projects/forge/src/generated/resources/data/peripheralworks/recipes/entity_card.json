@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:blackstone"
+    },
+    "D": {
+      "tag": "forge:gems/diamond"
+    },
+    "O": {
+      "item": "peripheralium:peripheralium_dust"
+    }
+  },
+  "pattern": [
+    "D O",
+    " B ",
+    "D O"
+  ],
+  "result": {
+    "count": 4,
+    "item": "peripheralworks:entity_card"
+  }
+}

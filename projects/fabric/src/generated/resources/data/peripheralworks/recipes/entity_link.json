@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "peripheralworks:entity_card"
+    },
+    "D": {
+      "tag": "c:diamonds"
+    },
+    "O": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "P": {
+      "item": "peripheralworks:peripheral_casing"
+    }
+  },
+  "pattern": [
+    "COC",
+    "DPD",
+    "COC"
+  ],
+  "result": {
+    "item": "peripheralworks:entity_link"
+  }
+}

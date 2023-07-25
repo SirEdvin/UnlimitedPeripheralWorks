@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.xplat
 
 import net.minecraft.world.item.crafting.Ingredient
+import net.minecraft.world.level.block.Blocks
 
 interface ModRecipeIngredients {
 
@@ -18,6 +19,12 @@ interface ModRecipeIngredients {
             return _IMPL!!
         }
     }
+
+    val daylightDetector: Ingredient
+        get() = Ingredient.of(Blocks.DAYLIGHT_DETECTOR.asItem())
+
+    val blackstone: Ingredient
+        get() = Ingredient.of(Blocks.BLACKSTONE.asItem())
 
     val enderModem: Ingredient
     val printer: Ingredient
