@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Entity card
 
+### Fixed
+
+- Incorrect item localization
+
 ## [1.1.1] - 2023-07-22
 
 ### Fixed
