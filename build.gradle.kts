@@ -154,6 +154,20 @@ repositories {
             includeGroup("com.jozufozu.flywheel")
         }
     }
+    maven("https://mvn.siredvin.site/minecraft") {
+        name = "SirEdvin's Minecraft repository"
+        content {
+            includeGroup("siredvin.site")
+            includeGroup("site.siredvin")
+        }
+    }
+    maven("https://mvn.siredvin.site/snapshots") {
+        name = "SirEdvin's Minecraft repository"
+        content {
+            includeGroup("siredvin.site")
+            includeGroup("site.siredvin")
+        }
+    }
 
     mavenLocal()
 }
@@ -197,20 +211,20 @@ dependencies {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("curse.maven:modernindust-405388:4118259") {
+    modCompileOnly("curse.maven:modernindust-405388:4118259") {
         exclude(group="net.fabricmc.fabric-api")
     }
-
-    modImplementation("com.github.Technici4n:magna:1.7.1-1.18") {
-        exclude(group="io.github.prospector")
-        exclude(group="me.shedaniel.cloth")
-        exclude(group="net.fabricmc.fabric-api")
-    }
-
-    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.5.0") {
-        exclude(group="net.fabricmc.fabric-api")
-    }
-
+//
+//    modImplementation("com.github.Technici4n:magna:1.7.1-1.18") {
+//        exclude(group="io.github.prospector")
+//        exclude(group="me.shedaniel.cloth")
+//        exclude(group="net.fabricmc.fabric-api")
+//    }
+//
+//    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.5.0") {
+//        exclude(group="net.fabricmc.fabric-api")
+//    }
+//
     modImplementation("com.simibubi.create:create-fabric-${minecraftVersion}:0.5.0.i-999+1.18.2")
 
 
@@ -250,8 +264,6 @@ tasks {
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions { jvmTarget = javaVersion.toString() }
-//        sourceCompatibility = javaVersion.toString()
-//        targetCompatibility = javaVersion.toString()
     }
     jar { from("LICENSE") { rename { "${it}_${base.archivesName}" } } }
     processResources {

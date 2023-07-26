@@ -1,5 +1,4 @@
 package site.siredvin.peripheralworks
-import aztech.modern_industrialization.ModernIndustrialization
 import dan200.computercraft.api.ComputerCraftAPI
 import net.fabricmc.api.ModInitializer
 import net.minecraftforge.api.ModLoadingContext
