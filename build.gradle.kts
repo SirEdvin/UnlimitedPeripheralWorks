@@ -161,6 +161,20 @@ repositories {
             includeGroup("com.jozufozu.flywheel")
         }
     }
+    maven("https://mvn.siredvin.site/minecraft") {
+        name = "SirEdvin's Minecraft repository"
+        content {
+            includeGroup("siredvin.site")
+            includeGroup("site.siredvin")
+        }
+    }
+    maven("https://mvn.siredvin.site/snapshots") {
+        name = "SirEdvin's Minecraft repository"
+        content {
+            includeGroup("siredvin.site")
+            includeGroup("site.siredvin")
+        }
+    }
 
     mavenLocal()
 }
@@ -204,19 +218,19 @@ dependencies {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("curse.maven:modernindust-405388:4494075") {
+    modCompileOnly("curse.maven:modernindust-405388:4494075") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modImplementation("com.github.Technici4n:magna:1.8.1-1.19") {
-        exclude(group="io.github.prospector")
-        exclude(group="me.shedaniel.cloth")
-        exclude(group="net.fabricmc.fabric-api")
-    }
-
-    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.6.0") {
-        exclude(group="net.fabricmc.fabric-api")
-    }
+//    modImplementation("com.github.Technici4n:magna:1.8.1-1.19") {
+//        exclude(group="io.github.prospector")
+//        exclude(group="me.shedaniel.cloth")
+//        exclude(group="net.fabricmc.fabric-api")
+//    }
+//
+//    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.6.0") {
+//        exclude(group="net.fabricmc.fabric-api")
+//    }
 
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:7.0.72") {
         exclude(group="net.fabricmc.fabric-api")
@@ -261,8 +275,6 @@ tasks {
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions { jvmTarget = javaVersion.toString() }
-//        sourceCompatibility = javaVersion.toString()
-//        targetCompatibility = javaVersion.toString()
     }
     jar { from("LICENSE") { rename { "${it}_${base.archivesName}" } } }
     processResources {
