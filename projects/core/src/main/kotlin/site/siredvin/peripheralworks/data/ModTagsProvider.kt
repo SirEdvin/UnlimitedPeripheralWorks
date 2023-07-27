@@ -180,6 +180,7 @@ object ModTagsProvider {
             EntityType.ENDER_DRAGON,
             EntityType.WITHER,
             EntityType.WARDEN,
+            EntityType.PLAYER,
         )
     }
 }

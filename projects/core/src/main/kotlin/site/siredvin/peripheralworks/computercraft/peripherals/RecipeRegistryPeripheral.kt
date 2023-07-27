@@ -77,4 +77,24 @@ class RecipeRegistryPeripheral(
             },
         )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is RecipeRegistryPeripheral) return false
+        if (!super.equals(other)) return false
+
+        if (isEnabled != other.isEnabled) return false
+        if (peripheralOwner != other.peripheralOwner) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + isEnabled.hashCode()
+        result = 31 * result + peripheralOwner.hashCode()
+        return result
+    }
+
+
 }

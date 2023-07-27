@@ -86,4 +86,22 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
         detachPocketUpgrade(upgrade.upgradeData)
         return upgradeStack
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PocketPeripheraliumHubPeripheral) return false
+        if (!super.equals(other)) return false
+
+        if (activePocketUpgrades != other.activePocketUpgrades) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + activePocketUpgrades.hashCode()
+        return result
+    }
+
+
 }

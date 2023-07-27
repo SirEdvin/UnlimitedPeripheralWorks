@@ -100,4 +100,22 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
         detachTurtleUpgrade(upgrade.upgradeData)
         return upgradeStack
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TurtlePeripheraliumHubPeripheral) return false
+        if (!super.equals(other)) return false
+
+        if (activeTurtleUpgrades != other.activeTurtleUpgrades) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + activeTurtleUpgrades.hashCode()
+        return result
+    }
+
+
 }

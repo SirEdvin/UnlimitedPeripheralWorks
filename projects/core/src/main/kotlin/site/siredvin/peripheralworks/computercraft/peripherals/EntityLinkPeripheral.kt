@@ -50,6 +50,24 @@ class EntityLinkPeripheral(private val blockEntity: EntityLinkBlockEntity) : Own
         return LuaRepresentation.withPos(entity, blockEntity.facing, blockEntity.blockPos, LuaRepresentation::forEntity)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is EntityLinkPeripheral) return false
+        if (!super.equals(other)) return false
+
+        if (blockEntity != other.blockEntity) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + blockEntity.hashCode()
+        return result
+    }
+
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enableEntityLink
+
+
 }

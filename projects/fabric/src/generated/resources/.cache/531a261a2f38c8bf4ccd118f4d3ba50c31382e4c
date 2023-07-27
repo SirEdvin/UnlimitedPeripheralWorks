@@ -1,8 +1,8 @@
-// 1.20.1	2023-07-25T17:53:05.665379046	Unlimited Peripheral Works/Recipes
+// 1.20.1	2023-07-27T11:21:14.626324488	Unlimited Peripheral Works/Recipes
 555bce600855adba123d7ce53aba512c936ec217 data/peripheralworks/recipes/universal_scanner.json
 22cc7e6a4efec8feb43df96730280fa9d6de9e26 data/peripheralworks/recipes/statue_workbench.json
-e20244a6a3e2ee660321fe0e935132060759e281 data/peripheralworks/recipes/peripheral_proxy.json
 adf5bf621f241034fc11c5239ed396ca04e35041 data/peripheralworks/recipes/ultimate_sensor.json
+e20244a6a3e2ee660321fe0e935132060759e281 data/peripheralworks/recipes/peripheral_proxy.json
 b20284c6d66490535fa58a073c7791064f62f1cd data/peripheralworks/recipes/peripheral_casing.json
 bfdf3e78239437eae8278d73b73f1f6c479953d7 data/minecraft/recipes/statue_clean.json
 169c5991b28b93c851e46abeaefd752048626eab data/peripheralworks/recipes/item_pedestal.json

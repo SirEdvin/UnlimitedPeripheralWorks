@@ -70,4 +70,22 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) : O
             return@withOperation MethodResult.of(true)
         })
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is MapPedestalPeripheral) return false
+        if (!super.equals(other)) return false
+
+        if (blockEntity != other.blockEntity) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + blockEntity.hashCode()
+        return result
+    }
+
+
 }

@@ -89,4 +89,24 @@ class InformativeRegistryPeripheral(
         val descriptor = DESCRIPTORS[target] ?: throw LuaException("Cannot describe $target, there is not function for it")
         return descriptor.apply(id)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is InformativeRegistryPeripheral) return false
+        if (!super.equals(other)) return false
+
+        if (isEnabled != other.isEnabled) return false
+        if (peripheralOwner != other.peripheralOwner) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = super.hashCode()
+        result = 31 * result + isEnabled.hashCode()
+        result = 31 * result + peripheralOwner.hashCode()
+        return result
+    }
+
+
 }
