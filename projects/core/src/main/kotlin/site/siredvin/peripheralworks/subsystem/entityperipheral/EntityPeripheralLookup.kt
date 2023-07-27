@@ -12,6 +12,8 @@ object EntityPeripheralLookup {
     }
 
     fun collectPlugins(entity: Entity): Map<String, IPeripheralPlugin> {
+        if (entity.isRemoved) return emptyMap()
+
         val plugins: MutableMap<String, IPeripheralPlugin> = mutableMapOf()
         val deniedPluginTypes: MutableSet<String> = mutableSetOf()
 

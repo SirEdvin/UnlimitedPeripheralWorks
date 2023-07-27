@@ -10,7 +10,7 @@ mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.106.1"
-peripheralium = "0.6.8"
+peripheralium = "0.6.9-pre.3"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.85.0+1.20.1"
@@ -53,6 +53,8 @@ polymer-cprotection = "1.0.0"
 polymer-ceconomy = "1.1.1"
 fabric-permissions = "0.2-SNAPSHOT"
 universal-shops = "1.3.2+1.20.1"
+jsonem = "0.2.1+1.20"
+automobility-fabric = "0.4.2+1.20.1-fabric"
 
 # Integration mod dependencies (forge)
 occultism = "1.20.1-1.80.12"
@@ -72,6 +74,7 @@ supermartijn642s-core-lib-forge = "1.1.10-forge-mc1.20"
 integrateddynamics = "1.20.1-1.16.7"  # IntegratedDynamics-1.19.4-1.16.2.jar
 commoncapabilites = "1.20.1-2.9.0"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "1.20.1-1.18.4"  # CyclopsCore-1.19.4-1.18.2.jar
+automobility-forge = "0.4.2+1.20.1-forge"
 
 [libraries]
 # Base libraries
@@ -142,6 +145,8 @@ fabric-permissions = {module = "me.lucko:fabric-permissions-api", version.ref="f
 universal-shops = {module = "maven.modrinth:universal-shops", version.ref="universal-shops"}
 
 powah-fabric = {module = "maven.modrinth:powah", version.ref="powah-fabric"}
+automobility-fabric = {module = "maven.modrinth:automobility", version.ref="automobility-fabric"}
+jsonem = {module = "maven.modrinth:jsonem", version.ref = "jsonem"}
 
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
@@ -169,6 +174,7 @@ additional-lanterns-forge = {module = "maven.modrinth:additional-lanterns", vers
 supermartijn642s-core-lib-forge = {module = "maven.modrinth:supermartijn642s-core-lib", version.ref="supermartijn642s-core-lib-forge"}
 
 powah-forge = {module = "maven.modrinth:powah", version.ref="powah-forge"}
+automobility-forge = {module = "maven.modrinth:automobility", version.ref="automobility-forge"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -221,6 +227,8 @@ externalMods-fabric-integrations-full = [
     "polymer-sgui",  # required by universal-shops,
     "fabric-permissions",  # required by universal-shops,
     "powah-fabric",
+    "automobility-fabric",
+    "jsonem", # required by automobility
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -231,6 +239,8 @@ externalMods-fabric-integrations-active = [
     "alloy-forgery",
     "owo-lib",  # required by alloy-forgery
     "powah-fabric",
+    "automobility-fabric",
+    "jsonem", # required by automobility
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn

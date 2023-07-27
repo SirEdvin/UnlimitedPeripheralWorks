@@ -80,23 +80,28 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         }
     }
 
-    private fun refreshEntity() {
+    private fun calculateEntity(): Entity? {
         if (_entity?.isRemoved == true) {
-            updateEntity(null)
+            return null
         } else {
             if (!_storedStack.isEmpty && !EntityCard.isEmpty(_storedStack)) {
-                val serverLevel = level as? ServerLevel ?: return
+                val serverLevel = level as? ServerLevel ?: return _entity
                 val entityUUID = EntityCard.getEntityUUID(_storedStack)
                 if (entityUUID == null) {
-                    updateEntity(null)
+                    return null
                 } else {
-                    val newEntity = serverLevel.getEntity(entityUUID) ?: return
-                    updateEntity(newEntity)
+                    return serverLevel.getEntity(entityUUID) ?: return _entity
                 }
             } else if (_entity != null) {
-                updateEntity(null)
+                return null
             }
         }
+        return _entity
+    }
+
+    private fun refreshEntity() {
+        val newEntity = calculateEntity()
+        if (newEntity != _entity) updateEntity(_entity)
     }
 
     override fun handleTick(level: Level, pos: BlockPos, state: BlockState) {
@@ -115,6 +120,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         } else {
             resultState = resultState.setValue(EntityLink.CONFIGURED, false)
         }
+        resultState = resultState.setValue(EntityLink.ENTITY_FOUND, calculateEntity() != null)
         return resultState
     }
 

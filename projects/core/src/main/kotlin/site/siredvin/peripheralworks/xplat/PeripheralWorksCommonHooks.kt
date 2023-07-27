@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.xplat
 
 import dan200.computercraft.api.upgrades.UpgradeData
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
@@ -53,10 +54,18 @@ object PeripheralWorksCommonHooks {
             if (EntityCard.isEntityMatching(entity)) {
                 EntityCard.storeEntity(itemInHand, entity)
                 player.setItemInHand(InteractionHand.MAIN_HAND, itemInHand)
-                return true
             } else {
-                player.displayClientMessage(ModText.ENTITY_CANNOT_BE_STORED.text, false)
+                if (!player.level().isClientSide)
+                    player.displayClientMessage(ModText.ENTITY_CANNOT_BE_STORED.text, false)
             }
+            return true
+        }
+        if (itemInHand.`is`(Items.ANALYZER.get())) {
+            player.displayClientMessage(
+                Component.literal("Entity class: ${entity.javaClass}, entityType: ${entity.type}"),
+                false
+            )
+            return true
         }
         return false
     }

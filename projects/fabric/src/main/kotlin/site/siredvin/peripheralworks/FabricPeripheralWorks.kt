@@ -40,6 +40,7 @@ object FabricPeripheralWorks : ModInitializer {
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         // Load all integrations
+        loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
@@ -63,7 +64,7 @@ object FabricPeripheralWorks : ModInitializer {
         }
 
         UseEntityCallback.EVENT.register(
-            UseEntityCallback { player: Player, _: Level, _: InteractionHand, entity: Entity, _: EntityHitResult? ->
+            UseEntityCallback { player: Player, _: Level, hand: InteractionHand, entity: Entity, _: EntityHitResult? ->
                 if (player is ServerPlayer) {
                     if (player.gameMode.gameModeForPlayer == GameType.SPECTATOR) {
                         return@UseEntityCallback InteractionResult.PASS
@@ -73,9 +74,11 @@ object FabricPeripheralWorks : ModInitializer {
                         return@UseEntityCallback InteractionResult.PASS
                     }
                 }
-                val shouldCancel = PeripheralWorksCommonHooks.onEntityRightClick(player, entity)
-                if (shouldCancel) {
-                    return@UseEntityCallback InteractionResult.SUCCESS
+                if (hand == InteractionHand.MAIN_HAND) {
+                    val shouldCancel = PeripheralWorksCommonHooks.onEntityRightClick(player, entity)
+                    if (shouldCancel) {
+                        return@UseEntityCallback InteractionResult.SUCCESS
+                    }
                 }
                 return@UseEntityCallback InteractionResult.PASS
             },
