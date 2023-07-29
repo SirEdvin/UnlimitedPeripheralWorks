@@ -55,15 +55,16 @@ object PeripheralWorksCommonHooks {
                 EntityCard.storeEntity(itemInHand, entity)
                 player.setItemInHand(InteractionHand.MAIN_HAND, itemInHand)
             } else {
-                if (!player.level().isClientSide)
+                if (!player.level().isClientSide) {
                     player.displayClientMessage(ModText.ENTITY_CANNOT_BE_STORED.text, false)
+                }
             }
             return true
         }
         if (itemInHand.`is`(Items.ANALYZER.get())) {
             player.displayClientMessage(
                 Component.literal("Entity class: ${entity.javaClass}, entityType: ${entity.type}"),
-                false
+                false,
             )
             return true
         }

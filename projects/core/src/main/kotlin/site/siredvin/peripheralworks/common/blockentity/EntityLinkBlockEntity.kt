@@ -42,8 +42,9 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         }
 
         fun load(tag: CompoundTag) {
-            if (tag.contains(SCANNER_TAG))
+            if (tag.contains(SCANNER_TAG)) {
                 scanner = tag.getBoolean(SCANNER_TAG)
+            }
         }
     }
 
@@ -69,8 +70,9 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     val entity: Entity?
         get() {
-            if (!_storedStack.isEmpty && !EntityCard.isEmpty(_storedStack) && _entity == null)
+            if (!_storedStack.isEmpty && !EntityCard.isEmpty(_storedStack) && _entity == null) {
                 refreshEntity()
+            }
             return _entity
         }
 
@@ -78,7 +80,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         get() = blockState.getValue(FacingBlockEntityBlock.FACING)
 
     override fun createPeripheral(side: Direction): EntityLinkPeripheral {
-        if (_entity == null)  return EntityLinkPeripheral(this, BlockEntityPeripheralOwner(this))
+        if (_entity == null) return EntityLinkPeripheral(this, BlockEntityPeripheralOwner(this))
         val owner = EntityProxyPeripheralOwner(this, _entity!!)
 
         if (upgrades.scanner) {

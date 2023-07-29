@@ -70,6 +70,4 @@ class RemoteObserverPeripheral(
         result = 31 * result + blockEntity.hashCode()
         return result
     }
-
-
 }

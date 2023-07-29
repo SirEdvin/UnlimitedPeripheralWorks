@@ -75,6 +75,7 @@ integrateddynamics = "1.20.1-1.16.7"  # IntegratedDynamics-1.19.4-1.16.2.jar
 commoncapabilites = "1.20.1-2.9.0"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "1.20.1-1.18.4"  # CyclopsCore-1.19.4-1.18.2.jar
 automobility-forge = "0.4.2+1.20.1-forge"
+flux-networks = "4651164"  # Flux-Networks-1.20.1-7.2.0
 
 [libraries]
 # Base libraries
@@ -175,6 +176,7 @@ supermartijn642s-core-lib-forge = {module = "maven.modrinth:supermartijn642s-cor
 
 powah-forge = {module = "maven.modrinth:powah", version.ref="powah-forge"}
 automobility-forge = {module = "maven.modrinth:automobility", version.ref="automobility-forge"}
+flux-networks = {module = "curse.maven:flux-networks-248020", version.ref="flux-networks"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -261,6 +263,7 @@ externalMods-forge-integrations-full = [
     "additional-lanterns-forge",
     "powah-forge",
     "automobility-forge",
+    "flux-networks",
 ]
 externalMods-forge-integrations-active = [
     "occultism",
@@ -276,6 +279,7 @@ externalMods-forge-integrations-active = [
     "additional-lanterns-forge",
     "powah-forge",
     "automobility-forge",
+    "flux-networks",
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now

@@ -116,6 +116,4 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
         result = 31 * result + activeTurtleUpgrades.hashCode()
         return result
     }
-
-
 }

@@ -102,6 +102,4 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
         result = 31 * result + activePocketUpgrades.hashCode()
         return result
     }
-
-
 }

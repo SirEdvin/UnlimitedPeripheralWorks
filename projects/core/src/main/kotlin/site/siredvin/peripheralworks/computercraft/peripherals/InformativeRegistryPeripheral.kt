@@ -107,6 +107,4 @@ class InformativeRegistryPeripheral(
         result = 31 * result + peripheralOwner.hashCode()
         return result
     }
-
-
 }

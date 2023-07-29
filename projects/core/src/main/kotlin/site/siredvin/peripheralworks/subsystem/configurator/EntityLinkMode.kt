@@ -15,7 +15,7 @@ import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.utils.modId
 
-object EntityLinkMode: ConfigurationMode {
+object EntityLinkMode : ConfigurationMode {
     override val modeID: ResourceLocation
         get() = modId("entity_link")
     override val description: Component
@@ -26,7 +26,7 @@ object EntityLinkMode: ConfigurationMode {
         stack: ItemStack,
         player: Player,
         hit: BlockHitResult,
-        level: Level
+        level: Level,
     ): InteractionResultHolder<ItemStack> {
         val itemInOffhand = player.getItemInHand(InteractionHand.OFF_HAND)
         val blockEntity = level.getBlockEntity(configurationTarget) as? EntityLinkBlockEntity ?: return InteractionResultHolder.pass(stack)
@@ -37,8 +37,9 @@ object EntityLinkMode: ConfigurationMode {
             } else {
                 ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES.text
             }
-            if (level.isClientSide)
+            if (level.isClientSide) {
                 player.sendSystemMessage(message)
+            }
             return InteractionResultHolder.success(stack)
         }
         if (!itemInOffhand.isEmpty) {
@@ -47,8 +48,9 @@ object EntityLinkMode: ConfigurationMode {
                 blockEntity.injectUpgrade(itemInOffhand)
                 InteractionResultHolder.success(stack)
             } else {
-                if (level.isClientSide)
+                if (level.isClientSide) {
                     player.displayClientMessage(ModText.ITEM_IS_NOT_SUITABLE_FOR_UPGRADE.text, false)
+                }
                 InteractionResultHolder.success(stack)
             }
         }
@@ -57,8 +59,9 @@ object EntityLinkMode: ConfigurationMode {
             player.setItemInHand(InteractionHand.OFF_HAND, ejectedUpdate)
             InteractionResultHolder.success(stack)
         } else {
-            if (level.isClientSide)
+            if (level.isClientSide) {
                 player.displayClientMessage(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES.text, false)
+            }
             InteractionResultHolder.success(stack)
         }
     }

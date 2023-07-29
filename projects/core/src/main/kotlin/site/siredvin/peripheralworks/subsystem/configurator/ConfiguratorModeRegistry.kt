@@ -2,7 +2,6 @@ package site.siredvin.peripheralworks.subsystem.configurator
 
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.setup.Blocks
 import java.util.function.Predicate
 

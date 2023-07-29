@@ -136,6 +136,4 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPerip
         result = 31 * result + peripheralOwner.hashCode()
         return result
     }
-
-
 }

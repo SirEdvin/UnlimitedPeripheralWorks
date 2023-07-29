@@ -34,6 +34,4 @@ class PeripheralProxyPeripheral(private val blockEntity: PeripheralProxyBlockEnt
         result = 31 * result + blockEntity.hashCode()
         return result
     }
-
-
 }

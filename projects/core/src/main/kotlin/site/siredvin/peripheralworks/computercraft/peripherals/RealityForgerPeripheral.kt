@@ -185,6 +185,4 @@ class RealityForgerPeripheral(
         result = 31 * result + peripheralOwner.hashCode()
         return result
     }
-
-
 }

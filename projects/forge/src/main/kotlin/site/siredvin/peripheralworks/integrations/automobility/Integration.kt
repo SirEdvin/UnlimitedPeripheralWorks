@@ -17,8 +17,6 @@ class Integration : Runnable {
             if (entity is AutomobileEntity) return AutomobilePlugin(entity)
             return null
         }
-
-
     }
     override fun run() {
         EntityPeripheralLookup.addProvider(AutomobilePluginProvider)

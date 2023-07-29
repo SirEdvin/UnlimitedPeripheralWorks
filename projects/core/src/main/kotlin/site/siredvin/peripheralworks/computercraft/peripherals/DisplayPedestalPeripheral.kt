@@ -88,6 +88,4 @@ class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEnt
         result = 31 * result + blockEntity.hashCode()
         return result
     }
-
-
 }

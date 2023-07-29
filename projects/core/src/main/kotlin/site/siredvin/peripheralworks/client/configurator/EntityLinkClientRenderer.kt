@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
 
-object EntityLinkClientRenderer: ConfigurationModeRender {
+object EntityLinkClientRenderer : ConfigurationModeRender {
     private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
     override fun render(
         minecraft: Minecraft,
@@ -16,7 +16,7 @@ object EntityLinkClientRenderer: ConfigurationModeRender {
         partialTick: Float,
         camera: Camera,
         gameRenderer: GameRenderer,
-        projectionMatrix: Matrix4f
+        projectionMatrix: Matrix4f,
     ) {
         FlareRenderer.initFlareRenderer(poseStack, camera)
         FlareRenderer.renderFlare(

@@ -86,6 +86,4 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) : O
         result = 31 * result + blockEntity.hashCode()
         return result
     }
-
-
 }

@@ -18,10 +18,12 @@ class EntityLinkPeripheral(private val blockEntity: EntityLinkBlockEntity, owner
         val ENRICHERS: MutableList<BiConsumer<Entity, MutableMap<String, Any>>> = mutableListOf()
 
         init {
-            ENRICHERS.add(BiConsumer<Entity, MutableMap<String, Any>>{entity, data ->
-                data["yRot"] = entity.yRot
-                data["xRot"] = entity.xRot
-            })
+            ENRICHERS.add(
+                BiConsumer<Entity, MutableMap<String, Any>> { entity, data ->
+                    data["yRot"] = entity.yRot
+                    data["xRot"] = entity.xRot
+                },
+            )
         }
     }
 
@@ -63,7 +65,6 @@ class EntityLinkPeripheral(private val blockEntity: EntityLinkBlockEntity, owner
         return baseData
     }
 
-
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + blockEntity.hashCode()
@@ -83,6 +84,4 @@ class EntityLinkPeripheral(private val blockEntity: EntityLinkBlockEntity, owner
 
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enableEntityLink
-
-
 }
