@@ -31,7 +31,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         const val UPGRADES_TAG = "upgrades"
     }
 
-    internal data class Upgrades(var scanner: Boolean = false) {
+    data class Upgrades(var scanner: Boolean = false) {
         companion object {
             const val SCANNER_TAG = "scanner"
         }
@@ -49,7 +49,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     private var _storedStack = ItemStack.EMPTY
     private var _entity: Entity? = null
-    private val upgrades: Upgrades = Upgrades()
+    val upgrades: Upgrades = Upgrades()
 
     var storedStack: ItemStack
         get() = _storedStack

@@ -62,6 +62,10 @@ class ModEnLanguageProvider(
         add(ModText.TARGET_ENTITY, "Entity %s recorded in card, currently at %s")
         add(ModText.ENTITY_CANNOT_BE_STORED, "This entity cannot be recorded inside card")
         add(ModText.SOMETHING_STORED_INSIDE_CARD, "§e§oCard pointing at entity, use to know more")
+        add(ModText.ITEM_IS_NOT_SUITABLE_FOR_UPGRADE, "Item is not suitable for upgrade")
+        add(ModText.ENTITY_LINK_UPGRADES, "List of entity link upgrades:")
+        add(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES, "Entity link doesn't have any upgrades")
+        add(ModText.ENTITY_LINK_UPGRADE_SCANNER, "Scanner")
 
         add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
 
@@ -82,6 +86,7 @@ class ModEnLanguageProvider(
         add(ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY, "  §6Max connected peripherals count: %s")
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Max forging range: %s")
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Author: %s")
+        add(ModTooltip.ENTITY_LINK_MODE, "  Entity link configuration")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "Hub")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "Netherite Hub")

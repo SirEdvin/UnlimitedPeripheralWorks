@@ -62,6 +62,10 @@ class ModUaLanguageProvider(
         add(ModText.TARGET_ENTITY, "Сутність %s записана в цій карті, наразі вона знаходиться у точці %s")
         add(ModText.ENTITY_CANNOT_BE_STORED, "Ця сутність не може бути записана")
         add(ModText.SOMETHING_STORED_INSIDE_CARD, "§e§oКартка вказує на сутність, використаєте, щоб дізнатися більше")
+        add(ModText.ITEM_IS_NOT_SUITABLE_FOR_UPGRADE, "Цей предмет не підходить у якості покращення")
+        add(ModText.ENTITY_LINK_UPGRADES, "Список покращень:")
+        add(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES, "Коннектор до сутності наразі немає покращень")
+        add(ModText.ENTITY_LINK_UPGRADE_SCANNER, "Сканер")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
 
@@ -82,6 +86,7 @@ class ModUaLanguageProvider(
         add(ModTooltip.PERIPHERAL_PROXY_MAX_CAPACITY, "  §6Максимальна кількість під'єднаних перифейрійних пристроїв: %s")
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Максимальна дальність ковання: %s")
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Автор: %s")
+        add(ModTooltip.ENTITY_LINK_MODE, "  Налаштування коннектора до сутності")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "З вбудованим осередком")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "З вбудованим незеритовим осередком")
