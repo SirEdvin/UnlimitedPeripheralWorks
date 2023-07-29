@@ -10,6 +10,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
 import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
+import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.peripheralium.computercraft.peripheral.owner.EntityProxyPeripheralOwner
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.item.EntityCard
@@ -32,24 +34,29 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             if (value.isEmpty) {
                 _storedStack = ItemStack.EMPTY
                 refreshEntity()
-                pushInternalDataChangeToClient(blockState.setValue(EntityLink.CONFIGURED, false).setValue(EntityLink.ENTITY_FOUND, _entity != null))
+                pushInternalDataChangeToClient(blockState.setValue(EntityLink.CONFIGURED, false))
             } else if (value.`is`(Items.ENTITY_CARD.get())) {
                 _storedStack = value
                 refreshEntity()
-                pushInternalDataChangeToClient(blockState.setValue(EntityLink.CONFIGURED, true).setValue(EntityLink.ENTITY_FOUND, _entity != null))
+                pushInternalDataChangeToClient(blockState.setValue(EntityLink.CONFIGURED, true))
             } else {
                 PeripheralWorksCore.LOGGER.warn("Something trying to set item that is not entity card to entity link!")
             }
         }
 
     val entity: Entity?
-        get() = _entity
+        get() {
+            if (!_storedStack.isEmpty && !EntityCard.isEmpty(_storedStack) && _entity == null)
+                refreshEntity()
+            return _entity
+        }
 
     val facing: Direction
         get() = blockState.getValue(FacingBlockEntityBlock.FACING)
 
     override fun createPeripheral(side: Direction): EntityLinkPeripheral {
-        return EntityLinkPeripheral(this)
+        if (_entity == null)  return EntityLinkPeripheral(this, BlockEntityPeripheralOwner(this))
+        return EntityLinkPeripheral(this, EntityProxyPeripheralOwner(this, _entity!!))
     }
 
     private fun isSameEntity(first: Entity?, second: Entity?): Boolean {
@@ -71,42 +78,32 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             // Reset peripheral
             peripheral = null
             // Validate entity found block property
-            if (blockState.getValue(EntityLink.CONFIGURED)) {
-                val realEntityState = blockState.getValue(EntityLink.ENTITY_FOUND)
-                if (realEntityState != (_entity != null)) {
-                    pushInternalDataChangeToClient(blockState.setValue(EntityLink.ENTITY_FOUND, _entity != null))
-                }
-            }
+            pushInternalDataChangeToClient(blockState.setValue(EntityLink.ENTITY_TRIGGER, (blockState.getValue(EntityLink.ENTITY_TRIGGER) + 1) % 4))
         }
-    }
-
-    private fun calculateEntity(): Entity? {
-        if (_entity?.isRemoved == true) {
-            return null
-        } else {
-            if (!_storedStack.isEmpty && !EntityCard.isEmpty(_storedStack)) {
-                val serverLevel = level as? ServerLevel ?: return _entity
-                val entityUUID = EntityCard.getEntityUUID(_storedStack)
-                if (entityUUID == null) {
-                    return null
-                } else {
-                    return serverLevel.getEntity(entityUUID) ?: return _entity
-                }
-            } else if (_entity != null) {
-                return null
-            }
-        }
-        return _entity
     }
 
     private fun refreshEntity() {
-        val newEntity = calculateEntity()
-        if (newEntity != _entity) updateEntity(_entity)
+        if (_entity?.isRemoved == true) {
+            updateEntity(null)
+        } else {
+            if (!_storedStack.isEmpty && !EntityCard.isEmpty(_storedStack)) {
+                val serverLevel = level as? ServerLevel ?: return
+                val entityUUID = EntityCard.getEntityUUID(_storedStack)
+                if (entityUUID == null) {
+                    updateEntity(null)
+                } else {
+                    val newEntity = serverLevel.getEntity(entityUUID) ?: return
+                    updateEntity(newEntity)
+                }
+            } else if (_entity != null) {
+                updateEntity(null)
+            }
+        }
     }
 
     override fun handleTick(level: Level, pos: BlockPos, state: BlockState) {
         if (peripheral != null && !peripheral!!.configured) {
-            peripheral!!.recollectPlugins()
+            peripheral!!.configure()
         }
         refreshEntity()
         super.handleTick(level, pos, state)
@@ -120,7 +117,6 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         } else {
             resultState = resultState.setValue(EntityLink.CONFIGURED, false)
         }
-        resultState = resultState.setValue(EntityLink.ENTITY_FOUND, calculateEntity() != null)
         return resultState
     }
 

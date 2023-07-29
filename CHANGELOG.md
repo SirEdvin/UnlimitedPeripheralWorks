@@ -6,9 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Automobility integration for entity link
+
 ### Fixed
 
 - Entity card message only on server side
+- Entity link (again!)
 
 ## [1.2.2] - 2023-07-27
 

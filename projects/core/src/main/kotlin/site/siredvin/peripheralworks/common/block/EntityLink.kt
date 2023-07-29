@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
+import net.minecraft.world.level.block.state.properties.IntegerProperty
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -25,7 +26,7 @@ import java.util.stream.Stream
 class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTypes.ENTITY_LINK.get() }, true, true, BlockUtil.defaultProperties()) {
     companion object {
         val CONFIGURED: BooleanProperty = BooleanProperty.create("configured")
-        val ENTITY_FOUND: BooleanProperty = BooleanProperty.create("entity_found")
+        val ENTITY_TRIGGER: IntegerProperty = IntegerProperty.create("entity_trigger", 0, 3)
         val SHAPE = Stream.of(
             box(0.0, 0.0, 0.0, 16.0, 10.0, 16.0),
             box(0.0, 10.0, 0.0, 16.0, 13.0, 3.0),
@@ -41,13 +42,13 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTy
     }
 
     init {
-        registerDefaultState(stateDefinition.any().setValue(CONFIGURED, false).setValue(ENTITY_FOUND, false))
+        registerDefaultState(stateDefinition.any().setValue(CONFIGURED, false).setValue(ENTITY_TRIGGER, 0))
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
         builder.add(CONFIGURED)
-        builder.add(ENTITY_FOUND)
+        builder.add(ENTITY_TRIGGER)
     }
 
     @Deprecated("Deprecated in Java")
