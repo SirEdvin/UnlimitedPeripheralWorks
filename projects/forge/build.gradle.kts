@@ -113,6 +113,11 @@ val copyLanterns by tasks.register<Copy>("copyAdditionalLanterns") {
     into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/additionallanterns"))
 }
 
+val copyAutomobility by tasks.register<Copy>("copyAutomobility") {
+    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/automobility"))
+    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/automobility"))
+}
+
 // TODO: make this possible, probably (?) This would be really nice
 // val copyAE2 by tasks.register<Copy>("copyAE2") {
 //    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
@@ -120,13 +125,13 @@ val copyLanterns by tasks.register<Copy>("copyAdditionalLanterns") {
 // }
 
 tasks.compileKotlin {
-    dependsOn(copyPowah, copyLanterns)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility)
 }
 
 tasks.spotlessJava {
-    dependsOn(copyPowah, copyLanterns)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility)
 }
 
 tasks.spotlessKotlin {
-    dependsOn(copyPowah, copyLanterns)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility)
 }

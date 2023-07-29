@@ -89,6 +89,13 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                 PeripheralOwnerAbility.SCANNING,
                 ScanningAbility(owner, maxRadius).attachBlockScan(
                     operation,
+                ).attachLivingEntityScan(
+                    operation,
+                    { true },
+                ).attachItemScan(
+                    operation,
+                ).attachPlayerScan(
+                    operation,
                 ),
             )
         }

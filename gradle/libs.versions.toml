@@ -260,6 +260,7 @@ externalMods-forge-integrations-full = [
     "mcjtylib", # by deepresonance, required for class typing
     "additional-lanterns-forge",
     "powah-forge",
+    "automobility-forge",
 ]
 externalMods-forge-integrations-active = [
     "occultism",
@@ -274,6 +275,7 @@ externalMods-forge-integrations-active = [
     "mcjtylib", # by deepresonance, required for class typing
     "additional-lanterns-forge",
     "powah-forge",
+    "automobility-forge",
 ]
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now
