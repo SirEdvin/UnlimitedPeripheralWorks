@@ -16,8 +16,8 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import site.siredvin.peripheralium.common.items.DescriptiveItem
 import site.siredvin.peripheralworks.data.ModTooltip
-import site.siredvin.peripheralworks.toolkit.configurator.ConfigurationMode
-import site.siredvin.peripheralworks.toolkit.configurator.ConfiguratorModeRegistry
+import site.siredvin.peripheralworks.subsystem.configurator.ConfigurationMode
+import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorModeRegistry
 
 class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
 

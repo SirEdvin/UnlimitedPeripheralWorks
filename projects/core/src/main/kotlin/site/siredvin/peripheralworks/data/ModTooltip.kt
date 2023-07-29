@@ -21,6 +21,7 @@ enum class ModTooltip : TextRecord {
     PERIPHERAL_PROXY_MAX_CAPACITY,
     REALITY_FORGER_RANGE,
     FLEXIBLE_STATUE_AUTHOR,
+    ENTITY_LINK_MODE,
     ;
 
     override val textID: String by lazy {

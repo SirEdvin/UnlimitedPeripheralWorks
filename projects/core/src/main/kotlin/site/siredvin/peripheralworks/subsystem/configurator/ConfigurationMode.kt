@@ -1,4 +1,4 @@
-package site.siredvin.peripheralworks.toolkit.configurator
+package site.siredvin.peripheralworks.subsystem.configurator
 
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component

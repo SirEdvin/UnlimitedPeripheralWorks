@@ -1,7 +1,8 @@
-package site.siredvin.peripheralworks.toolkit.configurator
+package site.siredvin.peripheralworks.subsystem.configurator
 
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.state.BlockState
+import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.setup.Blocks
 import java.util.function.Predicate
 
@@ -12,6 +13,7 @@ object ConfiguratorModeRegistry {
     init {
         register(RemoteObserverMode.modeID, RemoteObserverMode) { it.`is`(Blocks.REMOTE_OBSERVER.get()) }
         register(PeripheralProxyMode.modeID, PeripheralProxyMode) { it.`is`(Blocks.PERIPHERAL_PROXY.get()) }
+        register(EntityLinkMode.modeID, EntityLinkMode) { it.`is`(Blocks.ENTITY_LINK.get()) }
     }
 
     fun register(modeID: ResourceLocation, builder: ConfigurationMode, condition: Predicate<BlockState>) {

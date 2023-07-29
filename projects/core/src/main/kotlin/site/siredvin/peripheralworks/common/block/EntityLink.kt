@@ -88,6 +88,17 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTy
                 )
                 itemDrop.setDefaultPickUpDelay()
                 level.addFreshEntity(itemDrop)
+                blockEntity.collectUpgrades().forEach {
+                    val upgradeDrop = ItemEntity(
+                        level,
+                        pos.x.toDouble() + 0.5,
+                        pos.y.toDouble() + 0.5,
+                        pos.z.toDouble() + 0.5,
+                        it,
+                    )
+                    upgradeDrop.setDefaultPickUpDelay()
+                    level.addFreshEntity(upgradeDrop)
+                }
             }
         }
         super.playerWillDestroy(level, pos, state, player)

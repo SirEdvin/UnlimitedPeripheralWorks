@@ -10,23 +10,46 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
 import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
+import site.siredvin.peripheralium.computercraft.peripheral.ability.PeripheralOwnerAbility
+import site.siredvin.peripheralium.computercraft.peripheral.ability.ScanningAbility
 import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralium.computercraft.peripheral.owner.EntityProxyPeripheralOwner
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.EntityLink
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
+import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 import site.siredvin.peripheralworks.computercraft.peripherals.EntityLinkPeripheral
 
 class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     MutableNBTBlockEntity<EntityLinkPeripheral>(BlockEntityTypes.ENTITY_LINK.get(), blockPos, blockState) {
     companion object {
         const val STORED_CARD_TAG = "storedCard"
+        const val UPGRADES_TAG = "upgrades"
+    }
+
+    internal data class Upgrades(var scanner: Boolean = false) {
+        companion object {
+            const val SCANNER_TAG = "scanner"
+        }
+        fun save(): CompoundTag {
+            val tag = CompoundTag()
+            tag.putBoolean(SCANNER_TAG, scanner)
+            return tag
+        }
+
+        fun load(tag: CompoundTag) {
+            if (tag.contains(SCANNER_TAG))
+                scanner = tag.getBoolean(SCANNER_TAG)
+        }
     }
 
     private var _storedStack = ItemStack.EMPTY
     private var _entity: Entity? = null
+    private val upgrades: Upgrades = Upgrades()
 
     var storedStack: ItemStack
         get() = _storedStack
@@ -56,7 +79,20 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     override fun createPeripheral(side: Direction): EntityLinkPeripheral {
         if (_entity == null)  return EntityLinkPeripheral(this, BlockEntityPeripheralOwner(this))
-        return EntityLinkPeripheral(this, EntityProxyPeripheralOwner(this, _entity!!))
+        val owner = EntityProxyPeripheralOwner(this, _entity!!)
+
+        if (upgrades.scanner) {
+            owner.attachOperations(config = PeripheralWorksConfig)
+            val operation = SphereOperations.PORTABLE_UNIVERSAL_SCAN
+            val maxRadius = operation.maxFreeRadius
+            owner.attachAbility(
+                PeripheralOwnerAbility.SCANNING,
+                ScanningAbility(owner, maxRadius).attachBlockScan(
+                    operation,
+                ),
+            )
+        }
+        return EntityLinkPeripheral(this, owner)
     }
 
     private fun isSameEntity(first: Entity?, second: Entity?): Boolean {
@@ -67,6 +103,11 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         return first.uuid == second.uuid
     }
 
+    private fun resetPeripheral() {
+        peripheral = null
+        pushInternalDataChangeToClient(blockState.setValue(EntityLink.ENTITY_TRIGGER, (blockState.getValue(EntityLink.ENTITY_TRIGGER) + 1) % 4))
+    }
+
     private fun updateEntity(newEntity: Entity?) {
         if (!isSameEntity(_entity, newEntity)) {
             val isNull = newEntity == null || newEntity.isRemoved
@@ -75,10 +116,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             } else {
                 newEntity
             }
-            // Reset peripheral
-            peripheral = null
-            // Validate entity found block property
-            pushInternalDataChangeToClient(blockState.setValue(EntityLink.ENTITY_TRIGGER, (blockState.getValue(EntityLink.ENTITY_TRIGGER) + 1) % 4))
+            resetPeripheral()
         }
     }
 
@@ -109,6 +147,30 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         super.handleTick(level, pos, state)
     }
 
+    fun isSuitableUpgrade(stack: ItemStack): Boolean {
+        return stack.`is`(Blocks.UNIVERSAL_SCANNER.get().asItem()) && !upgrades.scanner
+    }
+
+    fun injectUpgrade(stack: ItemStack): Boolean {
+        if (stack.`is`(Blocks.UNIVERSAL_SCANNER.get().asItem()) && !upgrades.scanner) {
+            upgrades.scanner = true
+            resetPeripheral()
+        }
+        return false
+    }
+
+    fun ejectUpgrade(): ItemStack {
+        if (!upgrades.scanner) return ItemStack.EMPTY
+        upgrades.scanner = false
+        resetPeripheral()
+        return Blocks.UNIVERSAL_SCANNER.get().asItem().defaultInstance
+    }
+
+    fun collectUpgrades(): List<ItemStack> {
+        if (upgrades.scanner) return listOf(Blocks.UNIVERSAL_SCANNER.get().asItem().defaultInstance)
+        return emptyList()
+    }
+
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         var resultState = state ?: blockState
         if (data.contains(STORED_CARD_TAG)) {
@@ -117,6 +179,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         } else {
             resultState = resultState.setValue(EntityLink.CONFIGURED, false)
         }
+        if (data.contains(UPGRADES_TAG)) upgrades.load(data.getCompound(UPGRADES_TAG))
         return resultState
     }
 
@@ -124,6 +187,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         if (!_storedStack.isEmpty) {
             data.put(STORED_CARD_TAG, _storedStack.save(CompoundTag()))
         }
+        data.put(UPGRADES_TAG, upgrades.save())
         return data
     }
 }

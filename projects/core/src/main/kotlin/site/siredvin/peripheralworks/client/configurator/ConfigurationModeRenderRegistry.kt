@@ -7,8 +7,9 @@ import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.resources.ResourceLocation
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.setup.Items
-import site.siredvin.peripheralworks.toolkit.configurator.PeripheralProxyMode
-import site.siredvin.peripheralworks.toolkit.configurator.RemoteObserverMode
+import site.siredvin.peripheralworks.subsystem.configurator.EntityLinkMode
+import site.siredvin.peripheralworks.subsystem.configurator.PeripheralProxyMode
+import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
 
 object ConfigurationModeRenderRegistry {
     private val REGISTRY = mutableMapOf<ResourceLocation, ConfigurationModeRender>()
@@ -16,6 +17,7 @@ object ConfigurationModeRenderRegistry {
     init {
         register(RemoteObserverMode.modeID, RemoteObserverClientRender)
         register(PeripheralProxyMode.modeID, PeripheralProxyClientRender)
+        register(EntityLinkMode.modeID, EntityLinkClientRenderer)
     }
 
     fun register(modeID: ResourceLocation, render: ConfigurationModeRender) {
