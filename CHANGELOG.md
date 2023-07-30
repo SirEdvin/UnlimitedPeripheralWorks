@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Automobility integration for entity link
 - Flux networks integration
+- Occultism entity integration
 
 ### Fixed
 

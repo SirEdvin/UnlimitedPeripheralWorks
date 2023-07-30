@@ -10,7 +10,7 @@ mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.106.1"
-peripheralium = "0.6.9-pre.5"
+peripheralium = "0.6.9-pre.6"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.85.0+1.20.1"
@@ -251,6 +251,7 @@ externalMods-fabric-integrations-activedep = [
 
 externalMods-forge-integrations-full = [
     "occultism",
+    "smartbrainlib",  # by occultism right now
     "easyvillagers",
     "ae2-forge",
     "integrateddynamics",
@@ -267,6 +268,7 @@ externalMods-forge-integrations-full = [
 ]
 externalMods-forge-integrations-active = [
     "occultism",
+    "smartbrainlib",  # by occultism right now
     "easyvillagers",
     "ae2-forge",
     "integrateddynamics",
@@ -284,7 +286,6 @@ externalMods-forge-integrations-active = [
 externalMods-forge-integrations-activedep = [
     "curios-forge", # by occultism right now
     "gecolib-forge", # by occultism right now
-    "smartbrainlib",  # by occultism right now
     "modonomicon",  # by occultism right now
     "commoncapabilities", # by integrateddynamics,
     "supermartijn642s-core-lib-forge",  # required by additional-lanterns

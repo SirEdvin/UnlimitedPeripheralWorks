@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.xplat
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
@@ -62,10 +63,12 @@ object PeripheralWorksCommonHooks {
             return true
         }
         if (itemInHand.`is`(Items.ANALYZER.get())) {
-            player.displayClientMessage(
-                Component.literal("Entity class: ${entity.javaClass}, entityType: ${entity.type}"),
-                false,
-            )
+            if (player is ServerPlayer) {
+                player.displayClientMessage(
+                    Component.literal("Entity class: ${entity.javaClass}, entityType: ${entity.type}"),
+                    false,
+                )
+            }
             return true
         }
         return false
