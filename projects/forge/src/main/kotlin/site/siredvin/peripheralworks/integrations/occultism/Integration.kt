@@ -3,16 +3,13 @@ package site.siredvin.peripheralworks.integrations.occultism
 import com.klikli_dev.occultism.api.common.blockentity.IStorageController
 import com.klikli_dev.occultism.api.common.blockentity.IStorageControllerProxy
 import com.klikli_dev.occultism.common.blockentity.GoldenSacrificialBowlBlockEntity
-import com.klikli_dev.occultism.common.entity.spirit.MaridEntity
 import com.klikli_dev.occultism.common.entity.spirit.SpiritEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
-import site.siredvin.peripheralium.storages.ForgeStorageUtils
 import site.siredvin.peripheralium.storages.item.ItemHandlerWrapper
-import site.siredvin.peripheralium.storages.item.ItemStorage
 import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -84,18 +81,21 @@ class Integration : Runnable {
             },
         )
         ItemStorageExtractor.addStorageExtractor(
-            ItemStorageExtractor.StorageEntityExtractor {_, entity ->
-                if (entity is SpiritEntity)
+            ItemStorageExtractor.StorageEntityExtractor { _, entity ->
+                if (entity is SpiritEntity) {
                     return@StorageEntityExtractor ItemHandlerWrapper(entity.inventory)
+                }
                 return@StorageEntityExtractor null
-            }
+            },
         )
-        EntityLinkPeripheral.ENRICHERS.add(BiConsumer { entity, data ->
-            if (entity is SpiritEntity) {
-                data["age"] = entity.spiritAge
-                data["maxAge"] = entity.spiritMaxAge
-            }
-        })
+        EntityLinkPeripheral.ENRICHERS.add(
+            BiConsumer { entity, data ->
+                if (entity is SpiritEntity) {
+                    data["age"] = entity.spiritAge
+                    data["maxAge"] = entity.spiritMaxAge
+                }
+            },
+        )
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }
