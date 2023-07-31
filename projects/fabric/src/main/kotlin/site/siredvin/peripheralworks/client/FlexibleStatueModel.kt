@@ -68,8 +68,8 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         // Render inspired by https://github.com/SwitchCraftCC/sc-peripherals/blob/1.20.1/src/main/kotlin/io/sc3/peripherals/client/block/PrintBakedModel.kt logic
         val bounds = quad.toAABB().rotateTowards(facing)
 
-        // Discard original alpha component, then set it back to full alpha
-        val tint = (quad.tint and 0xFFFFFF) or 0xFF000000.toInt()
+        val alpha = ((quad.opacity * 255f) + 0.5).toInt()
+        val tint = (quad.tint and 0xFFFFFF) or (alpha shl 24)
         val material = Material(BLOCK_ATLAS, quad.texture)
         val sprite = material.sprite()
 
@@ -87,11 +87,11 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
                 .pos(1, face[1])
                 .pos(2, face[2])
                 .pos(3, face[3])
-                .spriteBake(sprite, BAKE_LOCK_UV)
                 .color(0, tint)
                 .color(1, tint)
                 .color(2, tint)
                 .color(3, tint)
+                .spriteBake(sprite, BAKE_LOCK_UV)
                 .emit()
         }
     }
@@ -120,6 +120,7 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         }
         val quads = entity.bakedQuads ?: return
         val mesh = meshCache.get(Pair(quads, entity.facing))
+
         mesh.outputTo(context.emitter)
     }
 

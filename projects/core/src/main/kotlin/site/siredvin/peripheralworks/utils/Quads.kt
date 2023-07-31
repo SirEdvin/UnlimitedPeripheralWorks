@@ -12,9 +12,9 @@ import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import java.io.*
 
-data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, val z1: Float, val z2: Float, val texture: ResourceLocation, val tint: Int) {
+data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, val z1: Float, val z2: Float, val texture: ResourceLocation, val tint: Int, val opacity: Float) {
 
-    constructor(start: Vector3f, end: Vector3f, texture: ResourceLocation, tint: Int) : this(
+    constructor(start: Vector3f, end: Vector3f, texture: ResourceLocation, tint: Int, opacity: Float) : this(
         start.x,
         end.x,
         start.y,
@@ -23,6 +23,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
         end.z,
         texture,
         tint,
+        opacity,
     )
 
     constructor(data: CompoundTag) : this(
@@ -34,6 +35,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
         data.getFloat("z2"),
         ResourceLocation(data.getString("texture")),
         data.getInt("tint"),
+        if (data.contains("opacity")) data.getFloat("opacity") else 1f,
     )
 
     val start: Vector3f
@@ -65,6 +67,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
             "z2" to z2,
             "texture" to texture.toString(),
             "tint" to PeripheraliumPlatform.reverseTintConvert(tint),
+            "opacity" to opacity,
         )
     }
 
@@ -78,6 +81,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
         data.putFloat("z2", z2)
         data.putInt("tint", tint)
         data.putString("texture", texture.toString())
+        data.putFloat("opacity", opacity.coerceAtMost(1f))
         return data
     }
 
@@ -116,7 +120,8 @@ data class QuadList(val list: List<QuadData>) {
     }
 }
 
-private const val MAX_QUAD_VECTOR = 64.0f
+private const val MAX_QUAD_VECTOR = 32.0f
+private const val MIN_QUAD_VECTOR = -32.0f
 
 @Throws(LuaException::class)
 private fun buildVector(x: Float, y: Float, z: Float, min: Float, max: Float): Vector3f {
@@ -147,8 +152,8 @@ fun convertToEndVector(table: Map<*, *>, min: Float, max: Float): Vector3f {
 
 @Throws(LuaException::class)
 fun convertToQuadData(table: Map<*, *>): QuadData {
-    val startVector = convertToStartVector(table, 0f, MAX_QUAD_VECTOR)
-    val endVector = convertToEndVector(table, 0f, MAX_QUAD_VECTOR)
+    val startVector = convertToStartVector(table, MIN_QUAD_VECTOR, MAX_QUAD_VECTOR)
+    val endVector = convertToEndVector(table, MIN_QUAD_VECTOR, MAX_QUAD_VECTOR)
     val texture = if (table.containsKey("texture")) {
         ResourceLocation(table["texture"].toString())
     } else {
@@ -159,7 +164,12 @@ fun convertToQuadData(table: Map<*, *>): QuadData {
     } else {
         0xFFFFFF
     }
-    return QuadData(startVector, endVector, texture, tint)
+    val opacity = if (table.containsKey("opacity")) {
+        (table["opacity"] as Number).toFloat().coerceAtMost(1f)
+    } else {
+        1f
+    }
+    return QuadData(startVector, endVector, texture, tint, opacity)
 }
 
 @Throws(LuaException::class)

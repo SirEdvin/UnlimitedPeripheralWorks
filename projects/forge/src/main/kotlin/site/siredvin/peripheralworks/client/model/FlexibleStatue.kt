@@ -18,6 +18,8 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraftforge.client.ChunkRenderTypeSet
+import net.minecraftforge.client.model.ForgeFaceData
 import net.minecraftforge.client.model.IDynamicBakedModel
 import net.minecraftforge.client.model.data.ModelData
 import net.minecraftforge.client.model.data.ModelProperty
@@ -58,21 +60,19 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
         }
 
         protected fun bake(data: QuadData, side: Direction, modelState: ModelState = identityModel): BakedQuad {
+            val alpha = ((data.opacity * 255f) + 0.5).toInt()
+            val tint = (data.tint and 0xFFFFFF) or (alpha shl 24)
             val face = BlockElementFace(
                 null,
-                -1,
-                "",
+                tint,
+                data.texture.toString(),
                 BlockFaceUV(data.uv, 0),
+                ForgeFaceData(tint, 0, 0, true),
             )
-            val quad = bakery.bakeQuad(
+            return bakery.bakeQuad(
                 data.start, data.end, face, getTexture(data.texture), side,
                 modelState, null, true, DUMMY,
             )
-            quad.vertices[3] = data.tint
-            quad.vertices[11] = data.tint
-            quad.vertices[19] = data.tint
-            quad.vertices[27] = data.tint
-            return quad
         }
     }
 
@@ -81,6 +81,10 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
     override fun isGui3d(): Boolean = true
     override fun usesBlockLight(): Boolean = false
     override fun isCustomRenderer(): Boolean = false
+
+    override fun getRenderTypes(state: BlockState, rand: RandomSource, data: ModelData): ChunkRenderTypeSet {
+        return ChunkRenderTypeSet.of(RenderType.translucent())
+    }
 }
 
 object FlexibleStatueModel : AbstractFlexibleStatueModel() {
