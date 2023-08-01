@@ -55,7 +55,7 @@ object FlexibleRealityAnchorModel : IDynamicBakedModel {
     override fun usesBlockLight(): Boolean = false
     override fun isCustomRenderer(): Boolean = false
     override fun getRenderTypes(state: BlockState, rand: RandomSource, data: ModelData): ChunkRenderTypeSet {
-        return ChunkRenderTypeSet.of(RenderType.cutout())
+        return ChunkRenderTypeSet.of(RenderType.translucent())
     }
 
     @Deprecated("Deprecated in Java")

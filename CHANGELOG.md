@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Flexible reality anchor now use translucent
+
 ## [1.3.1] - 2023-07-31
 
 ### Added
