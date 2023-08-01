@@ -109,41 +109,66 @@ class RealityForgerPeripheral(
         return MethodResult.of(true)
     }
 
-    @LuaFunction(mainThread = true)
-    @Throws(LuaException::class)
-    fun forgeRealityPieces(arguments: IArguments): MethodResult {
+    fun forgeRealityPiecesInner(posesMap: Map<*, *>, stateTable: Map<*, *>, flags: Optional<Map<*, *>>): Pair<Boolean?, String?> {
         val poses: MutableList<BlockPos> = mutableListOf()
-        for (value in arguments.getTable(0).values) {
+        for (value in posesMap.values) {
             if (value !is Map<*, *>) throw LuaException("First argument should be list of block positions")
             poses.add(LuaInterpretation.asBlockPos(peripheralOwner.pos, value, peripheralOwner.facing))
         }
         val entities: MutableList<FlexibleRealityAnchorBlockEntity> = ArrayList<FlexibleRealityAnchorBlockEntity>()
         for (pos in poses) {
             if (!radiusCorrect(pos, peripheralOwner.pos, interactionRadius)) {
-                return MethodResult.of(null, "One of blocks are too far away")
+                return Pair(null, "One of blocks are too far away")
             }
             val entity = level!!.getBlockEntity(pos) as? FlexibleRealityAnchorBlockEntity
-                ?: return MethodResult.of(
-                    false,
+                ?: return Pair(
+                    null,
                     "One of provided coordinate are not correct",
                 )
             entities.add(entity)
         }
-        val table = arguments.getTable(1)
-        val targetState = LuaInterpretation.asBlockState(table)
+        val targetState = LuaInterpretation.asBlockState(stateTable)
         if (targetState.`is`(BlockTags.REALITY_FORGER_FORBIDDEN)) {
             throw LuaException("You cannot use this block, is blocklisted")
         }
-        val flags = arguments.optTable(2)
         entities.forEach {
             forgeRealityTileEntity(
                 it,
                 targetState,
-                table,
+                stateTable,
                 flags,
             )
         }
+        return Pair(true, null)
+    }
+
+    @LuaFunction(mainThread = true)
+    @Throws(LuaException::class)
+    fun batchForgeRealityPieces(batch: Map<*, *>): MethodResult {
+        for (batchRecord in batch.values) {
+            val recordMap: Map<*, *> = batchRecord as? Map<*, *> ?: throw LuaException("Element of batch should be maps")
+            val poses = recordMap[1.0] as? Map<*, *> ?: throw LuaException("First element of batch should be table with poses")
+            val state = recordMap[2.0] as? Map<*, *> ?: throw LuaException("Second element of batch should be table with block state")
+            val possibleFlags = recordMap[3.0]
+            val flags: Optional<Map<*, *>> = if (possibleFlags == null) {
+                Optional.empty<Map<*, *>>()
+            } else {
+                Optional.of(possibleFlags as? Map<*, *> ?: throw LuaException("Thrid element of batch should be table with flags or null"))
+            }
+            val result = forgeRealityPiecesInner(poses, state, flags)
+            if (result.first != true) {
+                return MethodResult.of(result.first, result.second)
+            }
+        }
         return MethodResult.of(true)
+    }
+
+    @LuaFunction(mainThread = true)
+    @Throws(LuaException::class)
+    fun forgeRealityPieces(arguments: IArguments): MethodResult {
+        val result = forgeRealityPiecesInner(arguments.getTable(0), arguments.getTable(1), arguments.optTable(2))
+        if (result.first == true) return MethodResult.of(true)
+        return MethodResult.of(result.first, result.second)
     }
 
     @LuaFunction(mainThread = true)
