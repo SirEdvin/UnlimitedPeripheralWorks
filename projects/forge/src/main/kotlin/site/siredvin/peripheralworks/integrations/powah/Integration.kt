@@ -7,14 +7,15 @@ import owmii.powah.block.ender.AbstractEnderTile
 import owmii.powah.block.reactor.ReactorPartTile
 import owmii.powah.block.reactor.ReactorTile
 import owmii.powah.lib.block.AbstractEnergyProvider
+import owmii.powah.lib.block.AbstractEnergyStorage
 import owmii.powah.lib.logistics.IRedstoneInteract
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.peripheralium.storages.energy.EnergyStorageExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 
 class Integration : Runnable {
-
     object GeneratorPluginProvider : PeripheralPluginProvider {
         override val pluginType: String
             get() = "powah_extra"
@@ -63,5 +64,21 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(GeneratorPluginProvider)
         ComputerCraftProxy.addProvider(RedstonePluginProvider)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
+        if (Configuration.enableEnergy) {
+            EnergyStorageExtractor.addEnergyStorageExtractor(
+                EnergyStorageExtractor.EnergyStorageExtractor { _, _, blockEntity ->
+                    if (blockEntity is ReactorPartTile) {
+                        val reactorTile = blockEntity.core()
+                        if (reactorTile.isPresent) {
+                            return@EnergyStorageExtractor PowahEnergyStorageWrapper(reactorTile.get())
+                        }
+                    }
+                    if (blockEntity is AbstractEnergyStorage<*, *>) {
+                        return@EnergyStorageExtractor PowahEnergyStorageWrapper(blockEntity)
+                    }
+                    return@EnergyStorageExtractor null
+                },
+            )
+        }
     }
 }

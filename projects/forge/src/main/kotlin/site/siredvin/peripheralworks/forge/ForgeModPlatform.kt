@@ -9,10 +9,15 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraftforge.registries.DeferredRegister
 import site.siredvin.peripheralium.forge.ForgeBaseInnerPlatform
+import site.siredvin.peripheralium.storages.energy.EnergyUnit
+import site.siredvin.peripheralium.storages.energy.ForgeEnergies
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.xplat.ModInnerPlatform
 
-object ForgeModPlatform : ForgeBaseInnerPlatform() {
+object ForgeModPlatform : ForgeBaseInnerPlatform(), ModInnerPlatform {
+    override val commonEnergy: EnergyUnit
+        get() = ForgeEnergies.FORGE
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID
 

@@ -3,7 +3,6 @@ import net.minecraft.world.item.CreativeModeTab
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
-import site.siredvin.peripheralium.xplat.BaseInnerPlatform
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
@@ -33,7 +32,7 @@ object PeripheralWorksCore {
             }
     }
 
-    fun configure(platform: BaseInnerPlatform, ingredients: ModRecipeIngredients, blocks: ModBlocksReference) {
+    fun configure(platform: ModInnerPlatform, ingredients: ModRecipeIngredients, blocks: ModBlocksReference) {
         ModPlatform.configure(platform)
         ModRecipeIngredients.configure(ingredients)
         ModBlocksReference.configure(blocks)

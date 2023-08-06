@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `tint` logic for forge version
 - particles for flexible statue
+- Powah energy storage integration
 
 ## [1.3.2] - 2023-08-01
 

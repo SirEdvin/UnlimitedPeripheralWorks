@@ -5,10 +5,14 @@ import site.siredvin.peripheralium.api.config.IConfigHandler
 
 object Configuration : IConfigHandler {
 
+    private var ENABLE_ENERGY: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_GENERATOR: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_ENDER_CELL: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_REACTOR: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_REDSTONE_CONTROL: ForgeConfigSpec.BooleanValue? = null
+
+    val enableEnergy: Boolean
+        get() = ENABLE_ENERGY?.get() ?: true
 
     val enableGenerator: Boolean
         get() = ENABLE_GENERATOR?.get() ?: true
@@ -26,6 +30,8 @@ object Configuration : IConfigHandler {
         get() = "powah"
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+        ENABLE_ENERGY = builder.comment("Enabled energy integration")
+            .define("enableEnergy", true)
         ENABLE_GENERATOR = builder.comment("Enables generators integration")
             .define("enableGenerator", true)
         ENABLE_ENDER_CELL = builder.comment("Enables ender cell integration")
