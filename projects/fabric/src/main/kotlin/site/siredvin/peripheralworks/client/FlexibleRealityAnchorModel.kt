@@ -23,15 +23,17 @@ import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
 import site.siredvin.peripheralium.xplat.XplatRegistries
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
-import java.util.*
 import java.util.function.Supplier
 
 @Environment(EnvType.CLIENT)
 object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
 
-    val refererTexture = ResourceLocation("minecraft:block/stone")
+    val particleTextureId = ResourceLocation("minecraft:block/stone")
     val defaultItemModel by lazy {
         Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState())
+    }
+    val particleTexture by lazy {
+        RenderUtils.getTexture(particleTextureId)
     }
 
     override fun getQuads(
@@ -45,7 +47,7 @@ object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
     override fun isGui3d(): Boolean = false
     override fun usesBlockLight(): Boolean = true
     override fun isCustomRenderer(): Boolean = false
-    override fun getParticleIcon(): TextureAtlasSprite = RenderUtils.getTexture(refererTexture)
+    override fun getParticleIcon(): TextureAtlasSprite = particleTexture
     override fun getTransforms(): ItemTransforms = ModelHelper.MODEL_TRANSFORM_BLOCK
     override fun getOverrides(): ItemOverrides = ItemOverrides.EMPTY
     override fun isVanillaAdapter(): Boolean = false

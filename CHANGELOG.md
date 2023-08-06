@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `tint` logic for forge version
+- particles for flexible statue
+
 ## [1.3.2] - 2023-08-01
 
 ### Added

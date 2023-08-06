@@ -34,7 +34,7 @@ import java.util.function.Supplier
 
 @Environment(EnvType.CLIENT)
 object FlexibleStatueModel : BakedModel, FabricBakedModel {
-    private val EMPTY_TEXTURE = modId("block/flexible_statue_empty")
+    private val EMPTY_TEXTURE = modId("block/white")
     private val meshCache = CacheBuilder.newBuilder()
         .concurrencyLevel(1).expireAfterAccess(30, TimeUnit.SECONDS)
         .maximumSize(2_000).build(CacheLoader.from(::buildPrintMesh))

@@ -148,4 +148,13 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         }
         return state.getShape(world, pos)
     }
+
+    override fun getCloneItemStack(blockGetter: BlockGetter, blockPos: BlockPos, blockState: BlockState): ItemStack {
+        val blockEntity = blockGetter.getBlockEntity(blockPos)
+        if (blockEntity is FlexibleRealityAnchorBlockEntity) {
+            return prepareItemStack(blockEntity, blockState)
+        }
+        @Suppress("DEPRECATION")
+        return super.getCloneItemStack(blockGetter, blockPos, blockState)
+    }
 }
