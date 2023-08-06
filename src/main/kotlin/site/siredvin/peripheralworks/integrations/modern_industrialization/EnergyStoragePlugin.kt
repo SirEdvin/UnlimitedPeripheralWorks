@@ -1,8 +1,6 @@
 package site.siredvin.peripheralworks.integrations.modern_industrialization
 
-import aztech.modern_industrialization.compat.megane.holder.EnergyComponentHolder
-import aztech.modern_industrialization.machines.blockentities.EnergyFromFluidMachineBlockEntity
-import aztech.modern_industrialization.machines.blockentities.multiblocks.ElectricBlastFurnaceBlockEntity
+import aztech.modern_industrialization.compat.waila.holder.EnergyComponentHolder
 import aztech.modern_industrialization.machines.components.EnergyComponent
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.core.BlockPos
@@ -10,7 +8,6 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import team.reborn.energy.api.EnergyStorage
 
 class EnergyStoragePlugin(private val energyStorage: EnergyComponent): IPeripheralPlugin {
 

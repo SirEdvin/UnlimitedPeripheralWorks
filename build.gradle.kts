@@ -127,7 +127,7 @@ repositories {
     }
     maven {
         name = "Ladysnake Mods"
-        url = uri("https://ladysnake.jfrog.io/artifactory/mods")
+        url = uri("https://maven.ladysnake.org/releases")
         content {
             includeGroup("io.github.ladysnake")
             includeGroupByRegex("io\\.github\\.onyxstudios.*")
@@ -218,19 +218,19 @@ dependencies {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-    modCompileOnly("curse.maven:modernindust-405388:4494075") {
+    modImplementation("curse.maven:modernindust-405388:4673551") {
         exclude(group="net.fabricmc.fabric-api")
     }
 
-//    modImplementation("com.github.Technici4n:magna:1.8.1-1.19") {
-//        exclude(group="io.github.prospector")
-//        exclude(group="me.shedaniel.cloth")
-//        exclude(group="net.fabricmc.fabric-api")
-//    }
-//
-//    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.6.0") {
-//        exclude(group="net.fabricmc.fabric-api")
-//    }
+    modImplementation("com.github.Technici4n:magna:1.8.1-1.19") {
+        exclude(group="io.github.prospector")
+        exclude(group="me.shedaniel.cloth")
+        exclude(group="net.fabricmc.fabric-api")
+    }
+
+    modImplementation("io.github.ladysnake:PlayerAbilityLib:1.6.0") {
+        exclude(group="net.fabricmc.fabric-api")
+    }
 
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:7.0.72") {
         exclude(group="net.fabricmc.fabric-api")

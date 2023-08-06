@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.modern_industrialization
 
-import aztech.modern_industrialization.compat.megane.holder.CrafterComponentHolder
+import aztech.modern_industrialization.compat.waila.holder.CrafterComponentHolder
 import aztech.modern_industrialization.machines.components.CrafterComponent
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
