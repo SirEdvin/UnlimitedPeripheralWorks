@@ -12,8 +12,8 @@ enum class SphereOperations(
     private val defaultMaxCostRadius: Int,
     private val defaultExtraBlockCost: Double,
 ) : IPeripheralOperation<SphereOperationContext> {
-    PORTABLE_UNIVERSAL_SCAN(2000, 8, 16, 0.17),
-    STATIONARY_UNIVERSAL_SCAN(2000, 24, 24, 0.0),
+    PORTABLE_UNIVERSAL_SCAN(1000, 8, 16, 0.17),
+    STATIONARY_UNIVERSAL_SCAN(500, 24, 24, 0.0),
     ;
 
     private var cooldown: ForgeConfigSpec.IntValue? = null

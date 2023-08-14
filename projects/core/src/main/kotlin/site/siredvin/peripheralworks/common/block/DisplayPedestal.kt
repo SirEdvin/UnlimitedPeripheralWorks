@@ -31,6 +31,7 @@ class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defau
             blockEntity.getPeripheral(Direction.EAST)?.queueEvent(
                 "pedestal_right_click",
                 LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL),
+                LuaRepresentation.forItemStack(blockEntity.storedStack, RepresentationMode.FULL)
             )
             return InteractionResult.SUCCESS
         }
@@ -44,7 +45,11 @@ class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defau
         val blockEntity = level.getBlockEntity(blockPos)
         if (blockEntity is DisplayPedestalBlockEntity) {
             blockEntity.getPeripheral(Direction.EAST)
-                ?.queueEvent("pedestal_left_click", LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL))
+                ?.queueEvent(
+                    "pedestal_left_click",
+                    LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL),
+                    LuaRepresentation.forItemStack(blockEntity.storedStack, RepresentationMode.FULL)
+                )
         }
         @Suppress("DEPRECATION")
         super.attack(blockState, level, blockPos, player)

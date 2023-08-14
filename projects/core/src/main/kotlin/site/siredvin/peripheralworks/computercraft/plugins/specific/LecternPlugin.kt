@@ -118,7 +118,7 @@ class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripher
     @LuaFunction(mainThread = true)
     fun addPage(text: Optional<String>): MethodResult {
         assertEditableBook()
-        val pagesData = target.book.tag!!.getList("pages", 8)
+        val pagesData = target.book.orCreateTag.getList("pages", 8)
         pagesData.add(StringTag.valueOf(TextBookUtils.stripText(text.orElse(""))))
         target.book.tag!!.put("pages", pagesData)
         target.pageCount += 1
