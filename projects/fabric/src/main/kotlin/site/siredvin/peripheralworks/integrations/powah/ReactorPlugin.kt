@@ -19,6 +19,7 @@ class ReactorPlugin(private val reactor: ReactorTile) : BaseEnergyStoragePlugin(
             "currentSolidCoolant" to reactor.solidCoolant.ticks,
             "maxSolidCoolant" to reactor.solidCoolant.max,
             "coolantTemp" to reactor.solidCoolantTemp,
+            "solidCoolantTemp" to reactor.solidCoolantTemp,
             "currentTemp" to reactor.temp.ticks,
             "maxTemp" to reactor.temp.ticks,
         )
