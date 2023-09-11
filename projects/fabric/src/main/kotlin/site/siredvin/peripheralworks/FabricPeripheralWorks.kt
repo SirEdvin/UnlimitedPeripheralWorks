@@ -23,6 +23,7 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModPlatform
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
+import site.siredvin.peripheralworks.subsystem.recipe.FabricRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 
 @Suppress("UNUSED")
@@ -84,5 +85,7 @@ object FabricPeripheralWorks : ModInitializer {
                 return@UseEntityCallback InteractionResult.PASS
             },
         )
+
+        FabricRecipeTransformers.init()
     }
 }

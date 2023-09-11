@@ -28,6 +28,7 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModPlatform
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
+import site.siredvin.peripheralworks.subsystem.recipe.ForgeRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
@@ -78,6 +79,8 @@ object ForgePeripheralWorks {
         recipeSerializers.register(eventBus)
         turtleSerializers.register(eventBus)
         pocketSerializers.register(eventBus)
+
+        ForgeRecipeTransformers.init()
     }
 
     @Suppress("UNUSED_PARAMETER")
