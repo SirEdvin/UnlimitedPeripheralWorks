@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### BREAKING CHANGE
+
+- Peripheral proxy now generate peripheral names in same way as CC:T modems.
+  They will be unique, but numbers will raise significantly.
+
 ### Fixed
 
 - Peripheral names are always sorted

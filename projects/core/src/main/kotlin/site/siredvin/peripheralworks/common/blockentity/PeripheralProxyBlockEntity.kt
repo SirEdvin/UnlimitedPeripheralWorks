@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.common.blockentity
 
 import dan200.computercraft.api.peripheral.IPeripheral
+import dan200.computercraft.shared.computer.core.ServerContext
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -27,11 +28,18 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         const val REMOTE_PERIPHERALS_TAG = "remotePeripherals"
         const val TARGET_BLOCK_TAG = "targetBlock"
         const val DIRECTION_TAG = "direction"
+        const val PERIPHERAL_NAME_TAG = "peripheralName"
+        const val RESERVED_IDS_TAG = "reservedIds"
 
         fun fromTag(tag: CompoundTag): RemotePeripheralRecord {
             val targetBlock = NbtUtils.readBlockPos(tag.getCompound(TARGET_BLOCK_TAG))
             val direction = Direction.CODEC.byName(tag.getString(DIRECTION_TAG), Direction.NORTH)
-            return RemotePeripheralRecord(targetBlock, null, direction)
+            val peripheralName: String? = if (tag.contains(PERIPHERAL_NAME_TAG)) {
+                tag.getString(PERIPHERAL_NAME_TAG)
+            } else {
+                null
+            }
+            return RemotePeripheralRecord(targetBlock, peripheralName, direction)
         }
     }
 
@@ -47,7 +55,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             val tag = CompoundTag()
             tag.put(TARGET_BLOCK_TAG, NbtUtils.writeBlockPos(targetBlock))
             tag.putString(DIRECTION_TAG, direction.serializedName)
-
+            if (peripheralName != null) tag.putString(PERIPHERAL_NAME_TAG, peripheralName!!)
             return tag
         }
     }
@@ -73,15 +81,9 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         return remotePeripherals.contains(pos)
     }
 
-    fun buildPeripheralName(targetPeripheral: IPeripheral): String {
-        val naiveName = targetPeripheral.type
-        val maxNumber = remotePeripherals.mapNotNull {
-            if (it.value.peripheralName?.startsWith(naiveName) == true) {
-                return@mapNotNull Integer.parseInt(it.value.peripheralName!!.split("_").last())
-            }
-            return@mapNotNull null
-        }.maxOrNull() ?: -1
-        return "${naiveName}_${maxNumber + 1}"
+    private fun buildPeripheralName(targetPeripheral: IPeripheral): String {
+        val newPeripheralID = ServerContext.get(PeripheraliumPlatform.minecraftServer!!).getNextId("peripheral.${targetPeripheral.type}")
+        return "${targetPeripheral.type}_$newPeripheralID"
     }
 
     /**
@@ -108,7 +110,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             if (record.peripheralName == null) {
                 record.peripheralName = buildPeripheralName(targetPeripheral)
             }
-            peripheral!!.attachRemotePeripheral(targetPeripheral, record.peripheralName!!)
+            peripheral!!.attachRemotePeripheral(targetPeripheral, record.peripheralName!!, useInternalID = true)
             record.connectedToPeripheral = true
         } else if (!record.connectedToPeripheral) {
             peripheralConnectionIncomplete = true
@@ -150,15 +152,6 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         BlockStateUpdateEventBus.removeBlockPos(remotePeripherals.keys)
     }
 
-    override fun saveInternalData(data: CompoundTag): CompoundTag {
-        val trackedBlockTag = ListTag()
-        remotePeripherals.forEach {
-            trackedBlockTag.add(it.value.toTag())
-        }
-        data.put(REMOTE_PERIPHERALS_TAG, trackedBlockTag)
-        return data
-    }
-
     fun connectBlockPos(level: Level, record: RemotePeripheralRecord) {
         val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, record.targetBlock, Direction.NORTH)
         if (targetPeripheral == null) {
@@ -185,6 +178,15 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                 }
             }
         }
+    }
+
+    override fun saveInternalData(data: CompoundTag): CompoundTag {
+        val trackedBlockTag = ListTag()
+        remotePeripherals.forEach {
+            trackedBlockTag.add(it.value.toTag())
+        }
+        data.put(REMOTE_PERIPHERALS_TAG, trackedBlockTag)
+        return data
     }
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {

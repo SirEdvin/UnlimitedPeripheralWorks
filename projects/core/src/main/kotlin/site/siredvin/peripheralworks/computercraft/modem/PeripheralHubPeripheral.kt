@@ -31,11 +31,11 @@ abstract class PeripheralHubPeripheral<O : IPeripheralOwner>(peripheralType: Str
         return peripheral.type + "_" + (maxIndex + 1)
     }
 
-    open fun attachRemotePeripheral(peripheral: IPeripheral, internalID: String) {
+    open fun attachRemotePeripheral(peripheral: IPeripheral, internalID: String, useInternalID: Boolean = false) {
         synchronized(peripheralsRecord) {
             connectedComputersLock.withLock {
                 if (remotePeripherals.contains(peripheral)) return
-                val peripheralName = selectName(peripheral)
+                val peripheralName = if (useInternalID) { internalID } else { selectName(peripheral) }
                 val record = PeripheralRecord(peripheral, peripheralName, internalID, this)
                 connectedComputers.forEach { computer: IComputerAccess -> record.attach(computer) }
                 remotePeripherals.add(peripheral)
