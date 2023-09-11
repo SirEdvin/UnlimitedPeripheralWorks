@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Peripheral names are always sorted
+
 ## [1.3.4] - 2023-08-14
 
 ### Changed

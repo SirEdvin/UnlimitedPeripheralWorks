@@ -13,7 +13,7 @@ import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class PeripheralRecord<O : IPeripheralOwner>(val peripheral: IPeripheral, val name: String, val internalID: String, private val modelPeripheral: ModemPeripheral<O>) {
+class PeripheralRecord<O : IPeripheralOwner>(val peripheral: IPeripheral, val name: String, val internalID: String, private val modelPeripheral: PeripheralHubPeripheral<O>) {
     private val methodMap: Map<String, PeripheralMethod>
     private val wrappers: ConcurrentMap<IComputerAccess, RemoteComputerWrapper<O>>
 

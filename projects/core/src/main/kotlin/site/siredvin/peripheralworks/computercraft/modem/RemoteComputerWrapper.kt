@@ -11,7 +11,7 @@ import javax.annotation.Nonnull
 class RemoteComputerWrapper<O : IPeripheralOwner>(
     private val computer: IComputerAccess,
     private val record: PeripheralRecord<O>,
-    private val modemPeripheral: ModemPeripheral<O>,
+    private val peripheralHubPeripheral: PeripheralHubPeripheral<O>,
 ) : IComputerAccess {
     override fun mount(desiredLocation: String, mount: Mount): String? {
         return computer.mount(desiredLocation, mount, record.name)
@@ -60,16 +60,16 @@ class RemoteComputerWrapper<O : IPeripheralOwner>(
     }
 
     override fun getAvailablePeripherals(): Map<String, IPeripheral> {
-        synchronized(modemPeripheral.peripheralsRecord) {
-            return modemPeripheral.peripheralsRecord.entries.associate {
+        synchronized(peripheralHubPeripheral.peripheralsRecord) {
+            return peripheralHubPeripheral.peripheralsRecord.entries.associate {
                 it.key to it.value.peripheral
             }
         }
     }
 
     override fun getAvailablePeripheral(name: String): IPeripheral? {
-        synchronized(modemPeripheral.peripheralsRecord) {
-            val record: PeripheralRecord<O> = modemPeripheral.peripheralsRecord[name] ?: return null
+        synchronized(peripheralHubPeripheral.peripheralsRecord) {
+            val record: PeripheralRecord<O> = peripheralHubPeripheral.peripheralsRecord[name] ?: return null
             return record.peripheral
         }
     }

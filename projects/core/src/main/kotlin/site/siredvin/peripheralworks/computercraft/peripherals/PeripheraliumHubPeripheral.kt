@@ -12,9 +12,9 @@ import site.siredvin.peripheralium.storages.item.ItemStorageUtils
 import site.siredvin.peripheralium.util.assertBetween
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
-import site.siredvin.peripheralworks.computercraft.modem.ModemPeripheral
+import site.siredvin.peripheralworks.computercraft.modem.PeripheralHubPeripheral
 
-abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxUpdateCount: Int, owner: O, type: String) : ModemPeripheral<O>(type, owner) {
+abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxUpdateCount: Int, owner: O, type: String) : PeripheralHubPeripheral<O>(type, owner) {
 
     companion object {
         const val TYPE = "peripheralium_hub"

@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 import java.util.function.Consumer
 
-abstract class ModemPeripheral<O : IPeripheralOwner>(peripheralType: String, owner: O) : OwnedPeripheral<O>(peripheralType, owner) {
+abstract class PeripheralHubPeripheral<O : IPeripheralOwner>(peripheralType: String, owner: O) : OwnedPeripheral<O>(peripheralType, owner) {
 
     val peripheralsRecord: ConcurrentMap<String, PeripheralRecord<O>> = ConcurrentHashMap()
     private val remotePeripherals =
@@ -96,19 +96,13 @@ abstract class ModemPeripheral<O : IPeripheralOwner>(peripheralType: String, own
     @Suppress("unused")
     @LuaFunction
     fun getNamesRemote(): Collection<String> {
-        return peripheralsRecord.keys
+        return peripheralsRecord.keys.sorted()
     }
 
     @Suppress("unused")
     @LuaFunction
     fun isPresentRemote(name: String): Boolean {
         return peripheralsRecord.containsKey(name)
-    }
-
-    @Suppress("unused")
-    @LuaFunction
-    fun isWireless(): Boolean {
-        return false
     }
 
     @Suppress("unused")
