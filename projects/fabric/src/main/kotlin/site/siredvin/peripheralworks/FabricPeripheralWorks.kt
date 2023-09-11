@@ -49,6 +49,7 @@ object FabricPeripheralWorks : ModInitializer {
         loader.maybeLoadIntegration("alloy_forgery").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("universal_shops").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("modern_industrialization").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)
         // Register block lookup

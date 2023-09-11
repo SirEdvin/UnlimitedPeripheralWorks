@@ -13,7 +13,7 @@ cc-tweaked = "1.106.1"
 peripheralium = "0.6.10"
 mixin = "0.8.5"
 # Fabric dependencies
-fabric-api = "0.85.0+1.20.1"
+fabric-api = "0.87.0+1.20.1"
 fabric-loader = "0.14.21"
 fabric-kotlin = "1.10.0+kotlin.1.9.0"
 forgeconfigapirt-fabric = "8.0.0"
@@ -55,6 +55,9 @@ fabric-permissions = "0.2-SNAPSHOT"
 universal-shops = "1.3.2+1.20.1"
 jsonem = "0.2.1+1.20"
 automobility-fabric = "0.4.2+1.20.1-fabric"
+modern-industrialization = "4721852" # Modern Industrialization v1.7.3
+magna = "1.10.1+1.20.1"
+pal = "1.8.0"
 
 # Integration mod dependencies (forge)
 occultism = "1.20.1-1.80.12"
@@ -149,6 +152,10 @@ powah-fabric = {module = "maven.modrinth:powah", version.ref="powah-fabric"}
 automobility-fabric = {module = "maven.modrinth:automobility", version.ref="automobility-fabric"}
 jsonem = {module = "maven.modrinth:jsonem", version.ref = "jsonem"}
 
+modern-industrialization = {module = "curse.maven:modernindust-405388", version.ref="modern-industrialization"}
+magna = {module = "dev.draylar:magna", version.ref="magna"}
+pal = {module = "io.github.ladysnake:PlayerAbilityLib", version.ref="pal"}
+
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
@@ -231,6 +238,9 @@ externalMods-fabric-integrations-full = [
     "powah-fabric",
     "automobility-fabric",
     "jsonem", # required by automobility
+    "modern-industrialization",
+    "magna",  # required by MI
+    "pal",  # required by MI
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -243,6 +253,9 @@ externalMods-fabric-integrations-active = [
     "powah-fabric",
     "automobility-fabric",
     "jsonem", # required by automobility
+    "modern-industrialization",
+    "magna",  # required by MI
+    "pal",  # required by MI
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn

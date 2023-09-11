@@ -21,7 +21,7 @@ import java.util.function.Supplier
 
 object PeripheralWorksClientCore {
     private val HOOKS = mutableListOf<Runnable>()
-    private val EXTRA_MODELS = arrayOf(
+    val EXTRA_MODELS = arrayOf(
         "turtle/universal_scanner_left",
         "turtle/universal_scanner_right",
         "turtle/ultimate_sensor_left",

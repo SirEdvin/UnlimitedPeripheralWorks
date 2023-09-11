@@ -11,9 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Peripheral proxy now generate peripheral names in same way as CC:T modems.
   They will be unique, but numbers will raise significantly.
 
+### Added
+
+- Integration for Modern Industrialization
+
 ### Changed
 
 - `solidCoolantTemp` now exists for powah, actually same as `coolantTemp`
+- Minimal fabric API version now 87
 
 ### Fixed
 

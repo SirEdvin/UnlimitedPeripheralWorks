@@ -67,6 +67,35 @@ repositories {
             includeGroup("com.terraformersmc")
         }
     }
+    // for reach entity attributes, required by Magna
+    maven {
+        url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
+        content {
+            includeGroup("com.jamieswhiteshirt")
+        }
+    }
+    maven {
+        url = uri("https://maven.draylar.dev/releases")
+        content {
+            includeGroup("dev.draylar")
+        }
+    }
+    maven {
+        name = "Jitpack for MI"
+        url = uri("https://jitpack.io")
+        content {
+            /* For Magna */
+            includeGroup("com.github.Draylar.omega-config")
+        }
+    }
+    maven {
+        name = "Ladysnake Mods"
+        url = uri("https://maven.ladysnake.org/releases")
+        content {
+            includeGroup("io.github.ladysnake")
+            includeGroupByRegex("io\\.github\\.onyxstudios.*")
+        }
+    }
 }
 
 dependencies {
