@@ -43,7 +43,7 @@ class Integration : Runnable {
                 ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
                 turtleUpgradeSup.get(),
                 NaturesCompass.naturesCompass,
-            )
+            ).requireMod(NaturesCompass.MODID)
         }
         PeripheralWorksClientCore.addHook {
             ComputerCraftAPIClient.registerTurtleUpgradeModeller(
@@ -63,7 +63,7 @@ class Integration : Runnable {
                 PocketNaturesCompassUpgrade.TYPE,
                 pocketUpgrade.get(),
                 NaturesCompass.naturesCompass,
-            )
+            ).requireMod(NaturesCompass.MODID)
         }
 
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)

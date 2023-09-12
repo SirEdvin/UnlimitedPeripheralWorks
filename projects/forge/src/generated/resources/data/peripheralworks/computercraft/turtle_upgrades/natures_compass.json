@@ -1,5 +1,10 @@
 {
-  "forge:conditions": [{"type": "forge:mod_loaded", "modid": "naturescompass"}],
   "type": "peripheralworks:natures_compass",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "naturescompass"
+    }
+  ],
   "item": "naturescompass:naturescompass"
 }
