@@ -166,6 +166,7 @@ object ModTagsProvider {
     fun blockTags(consumer: TagConsumer<Block>) {
         DEFAULT_PERIPHERAL_PROXY_BLOCKED_BLOCKS.forEach { consumer.tag(BlockTags.PERIPHERAL_PROXY_FORBIDDEN).add(it.get()) }
         DEFAULT_MIMIC_BLOCKED_BLOCKS.forEach { consumer.tag(BlockTags.REALITY_FORGER_FORBIDDEN).add(it.get()) }
+        consumer.tag(BlockTags.CCT_PERIPHERAL_HUB_IGNORE).add(Blocks.PERIPHERAL_PROXY.get())
     }
 
     @JvmStatic
