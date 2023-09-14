@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2023-09-14
+
 ### BREAKING CHANGE
 
 - Peripheral proxy now generate peripheral names in same way as CC:T modems.
