@@ -10,6 +10,7 @@ import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.utils.QuadList
+import site.siredvin.peripheralworks.utils.rotate
 
 class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<OwnedPeripheral<*>>(BlockEntityTypes.FLEXIBLE_STATUE.get(), blockPos, blockState) {
     companion object {
@@ -75,7 +76,7 @@ class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mu
         setBakedQuads(bakedQuads, blockState, skipUpdate)
     }
 
-    fun setBakedQuads(bakedQuads: QuadList, state: BlockState, skipUpdate: Boolean) {
+    private fun setBakedQuads(bakedQuads: QuadList, state: BlockState, skipUpdate: Boolean) {
         this._bakedQuads = bakedQuads
         refreshShape()
         if (!skipUpdate) {
@@ -99,6 +100,6 @@ class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mu
     }
 
     fun refreshShape() {
-        _blockShape = _bakedQuads?.shape
+        _blockShape = _bakedQuads?.shape?.rotate(Direction.NORTH, facing)
     }
 }

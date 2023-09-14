@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Peripheral names are always sorted
+- Flexible statues shapes now rotate correctly
 
 ## [1.3.4] - 2023-08-14
 
