@@ -26,13 +26,13 @@ class PeripheralRecord<O : IPeripheralOwner>(val peripheral: IPeripheral, val na
         get() = methodMap.keys
 
     fun attach(computer: IComputerAccess) {
-        peripheral.attach(computer)
-        computer.queueEvent("peripheral", name)
         wrappers[computer] = RemoteComputerWrapper(computer, this, modelPeripheral)
+        peripheral.attach(wrappers[computer])
+        computer.queueEvent("peripheral", name)
     }
 
     fun detach(computer: IComputerAccess) {
-        peripheral.detach(computer)
+        peripheral.detach(wrappers[computer])
         computer.queueEvent("peripheral_detach", name)
         wrappers.remove(computer)
     }

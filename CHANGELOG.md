@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Peripheral names are always sorted
 - Flexible statues shapes now rotate correctly
+- Attach wrapper instead of peripheral in peripheral_hub (fixes #26)
 
 ## [1.3.4] - 2023-08-14
 
