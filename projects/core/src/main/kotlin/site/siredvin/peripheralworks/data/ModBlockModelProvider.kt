@@ -16,10 +16,7 @@ import site.siredvin.peripheralium.data.blocks.genericBlock
 import site.siredvin.peripheralium.data.blocks.horizontalOrientatedBlock
 import site.siredvin.peripheralium.data.blocks.horizontalOrientedModel
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.common.block.EntityLink
-import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
-import site.siredvin.peripheralworks.common.block.FlexibleStatue
-import site.siredvin.peripheralworks.common.block.StatueWorkbench
+import site.siredvin.peripheralworks.common.block.*
 import site.siredvin.peripheralworks.common.setup.Blocks
 import java.util.*
 
@@ -68,6 +65,20 @@ object ModBlockModelProvider {
         return dispatch
     }
 
+    private fun createPeripheralProxyDispatch(): PropertyDispatch {
+        val dispatch = PropertyDispatch.property(PeripheralProxy.ORIENTATION)
+        for (direction in PeripheralProxy.ORIENTATION.possibleValues) {
+            dispatch.select(
+                direction,
+                Variant.variant().with(
+                    VariantProperties.Y_ROT,
+                    toYAnglePedestal(direction),
+                ).with(VariantProperties.X_ROT, toXAnglePedestal(direction)),
+            )
+        }
+        return dispatch
+    }
+
     private fun createBooleanDispatching(offVariant: ResourceLocation, onVariant: ResourceLocation, property: BooleanProperty): PropertyDispatch {
         val dispatch = PropertyDispatch.property(property)
         dispatch.select(false, Variant.variant().with(VariantProperties.MODEL, offVariant))
@@ -90,6 +101,16 @@ object ModBlockModelProvider {
                 block,
                 Variant.variant().with(VariantProperties.MODEL, model),
             ).with(createPedestalFacingDispatch()),
+        )
+        generators.delegateItemModel(block, ModelLocationUtils.getModelLocation(block))
+    }
+
+    fun peripheralProxyBlock(generators: BlockModelGenerators, block: Block) {
+        generators.blockStateOutput.accept(
+            MultiVariantGenerator.multiVariant(
+                block,
+                Variant.variant().with(VariantProperties.MODEL, ModelLocationUtils.getModelLocation(block)),
+            ).with(createPeripheralProxyDispatch()),
         )
         generators.delegateItemModel(block, ModelLocationUtils.getModelLocation(block))
     }
@@ -181,7 +202,7 @@ object ModBlockModelProvider {
             TextureMapping.getBlockTexture(net.minecraft.world.level.block.Blocks.SMOOTH_STONE),
             TextureMapping.getBlockTexture(Blocks.MAP_PEDESTAL.get(), "_top"),
         )
-        horizontalOrientatedBlock(generators, Blocks.PERIPHERAL_PROXY.get())
+        peripheralProxyBlock(generators, Blocks.PERIPHERAL_PROXY.get())
         horizontalOrientatedBlock(
             generators,
             Blocks.REALITY_FORGER.get(),

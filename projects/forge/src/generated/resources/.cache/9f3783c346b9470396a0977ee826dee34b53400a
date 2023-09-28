@@ -1,4 +1,4 @@
-// 1.20.1	2023-07-24T22:13:48.206781525	vanilla/Block State Definitions
+// 1.20.1	2023-09-28T18:54:29.244222476	vanilla/Block State Definitions
 2c78de2bc1bf6e2f3467ace2f3d867c2a405bd09 assets/peripheralworks/blockstates/display_pedestal.json
 8933da812303de26cbf34418c010500f4a177d6e assets/peripheralworks/blockstates/entity_link.json
 2bba1d9924c2ab8e763485fb8bf6b73af4c4ebf5 assets/peripheralworks/blockstates/flexible_reality_anchor.json
@@ -7,7 +7,7 @@ d51f30f284b2cf682dcc04372764ce53718de77c assets/peripheralworks/blockstates/info
 3dcf6aaa434ae731ee96a4ddc791b10735a9acb2 assets/peripheralworks/blockstates/item_pedestal.json
 c23515b1dd22a9ab692eb1d023862f1e952c93ff assets/peripheralworks/blockstates/map_pedestal.json
 36c244142cb28bcce875cbcb68f6102141bf78d5 assets/peripheralworks/blockstates/peripheral_casing.json
-344a405ddd0219fd7c33dda8cd1b314fe46c9a36 assets/peripheralworks/blockstates/peripheral_proxy.json
+5555cb604075f3f3b8b34f6db0639cf9df04f7ff assets/peripheralworks/blockstates/peripheral_proxy.json
 60b1cbffc25a889c95d8ec0314fddc4043deea3f assets/peripheralworks/blockstates/reality_forger.json
 a7e0f551427f49c65ecbdb9e52c1fc6953064308 assets/peripheralworks/blockstates/recipe_registry.json
 b5fc0840ecfe842a51f14d18c421dfaf6a604eeb assets/peripheralworks/blockstates/remote_observer.json
