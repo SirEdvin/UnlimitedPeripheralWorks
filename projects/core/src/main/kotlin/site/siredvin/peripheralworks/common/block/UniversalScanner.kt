@@ -23,15 +23,18 @@ class UniversalScanner : FacingBlockEntityBlock<UniversalScannerBlockEntity>(
 
     companion object {
         val SHAPE = Stream.of(
-            Block.box(0.0, 0.0, 0.0, 6.0, 6.0, 6.0),
-            Block.box(10.0, 0.0, 0.0, 16.0, 6.0, 6.0),
-            Block.box(0.0, 0.0, 10.0, 6.0, 6.0, 16.0),
-            Block.box(10.0, 0.0, 10.0, 16.0, 6.0, 16.0),
-            Block.box(10.0, 10.0, 0.0, 16.0, 16.0, 6.0),
-            Block.box(0.0, 10.0, 0.0, 6.0, 16.0, 6.0),
-            Block.box(0.0, 10.0, 10.0, 6.0, 16.0, 16.0),
-            Block.box(10.0, 10.0, 10.0, 16.0, 16.0, 16.0),
-            Block.box(5.0, 5.0, 5.0, 11.0, 11.0, 11.0),
+            Block.box(0.0, 0.0, 0.0, 3.0, 16.0, 3.0),
+            Block.box(13.0, 0.0, 0.0, 16.0, 16.0, 3.0),
+            Block.box(13.0, 0.0, 13.0, 16.0, 16.0, 16.0),
+            Block.box(0.0, 0.0, 13.0, 3.0, 16.0, 16.0),
+            Block.box(3.0, 0.0, 0.0, 13.0, 3.0, 3.0),
+            Block.box(3.0, 0.0, 13.0, 13.0, 3.0, 16.0),
+            Block.box(13.0, 0.0, 3.0, 16.0, 3.0, 13.0),
+            Block.box(0.0, 0.0, 3.0, 3.0, 3.0, 13.0),
+            Block.box(3.0, 13.0, 0.0, 13.0, 16.0, 3.0),
+            Block.box(3.0, 13.0, 13.0, 13.0, 16.0, 16.0),
+            Block.box(13.0, 13.0, 3.0, 16.0, 16.0, 13.0),
+            Block.box(0.0, 13.0, 3.0, 3.0, 16.0, 13.0),
         ).reduce { v1, v2 -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
     }
 
