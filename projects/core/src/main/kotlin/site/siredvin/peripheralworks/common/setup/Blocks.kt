@@ -19,7 +19,7 @@ object Blocks {
     )
     val UNIVERSAL_SCANNER = ModPlatform.registerBlock(
         "universal_scanner",
-        { GenericBlockEntityBlock({ BlockEntityTypes.UNIVERSAL_SCANNER.get() }, true) },
+        { UniversalScanner() },
         {
             PeripheralBlockItem(
                 it,
