@@ -1,5 +1,5 @@
 {
-  "aspect.integrateddynamics.read.list.cc_folder": "Directory inside computer",
+  "aspect.integrateddynamics.read.nbt.cc_folder": "Directory inside computer",
   "block.peripheralworks.display_pedestal": "Display pedestal",
   "block.peripheralworks.display_pedestal.tooltip": "§3§oCute pedestal, that cannot store anything, but can display literally anything",
   "block.peripheralworks.entity_link": "Entity link",

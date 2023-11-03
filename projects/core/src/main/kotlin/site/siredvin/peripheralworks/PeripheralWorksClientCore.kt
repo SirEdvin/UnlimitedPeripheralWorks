@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.peripheralworks.client.renderer.PedestalTileRenderer
 import site.siredvin.peripheralworks.client.renderer.PeripheralProxyRenderer
-import site.siredvin.peripheralworks.client.renderer.UniversalScannerRenderer
 import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
 import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
@@ -36,7 +35,7 @@ object PeripheralWorksClientCore {
         BlockEntityTypes.MAP_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.DISPLAY_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.PERIPHERAL_PROXY as Supplier<BlockEntityType<BlockEntity>>,
-        BlockEntityTypes.UNIVERSAL_SCANNER as Supplier<BlockEntityType<BlockEntity>>,
+//        BlockEntityTypes.UNIVERSAL_SCANNER as Supplier<BlockEntityType<BlockEntity>>,
     )
 
     @Suppress("UNCHECKED_CAST")
@@ -53,9 +52,9 @@ object PeripheralWorksClientCore {
         if (type == BlockEntityTypes.PERIPHERAL_PROXY.get()) {
             return BlockEntityRendererProvider { PeripheralProxyRenderer() } as BlockEntityRendererProvider<BlockEntity>
         }
-        if (type == BlockEntityTypes.UNIVERSAL_SCANNER.get()) {
-            return BlockEntityRendererProvider { UniversalScannerRenderer() } as BlockEntityRendererProvider<BlockEntity>
-        }
+//        if (type == BlockEntityTypes.UNIVERSAL_SCANNER.get()) {
+//            return BlockEntityRendererProvider { UniversalScannerRenderer() } as BlockEntityRendererProvider<BlockEntity>
+//        }
         throw IllegalArgumentException("There is no extra renderer for $type")
     }
 

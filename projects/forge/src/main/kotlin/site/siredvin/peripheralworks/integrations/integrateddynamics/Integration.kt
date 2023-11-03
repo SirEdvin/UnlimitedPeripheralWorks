@@ -94,7 +94,7 @@ class Integration : Runnable {
 
     override fun run() {
         ComputerCraftProxy.addProvider(VariableStoreProvider)
-        val ccAspect = AspectBuilder.forReadType(ValueTypes.LIST).byMod(IntegratedDynamics._instance)
+        val ccAspect = AspectBuilder.forReadType(ValueTypes.NBT).byMod(IntegratedDynamics._instance)
             .handle(AspectReadBuilders.Block.PROP_GET, "cc_folder")
             .handle {
                 ValueTypeNbt.ValueNbt.of(collectFileValues(it))
@@ -102,12 +102,12 @@ class Integration : Runnable {
         AspectRegistry.getInstance().register(PartTypes.MACHINE_READER, ccAspect)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
 
-        ModLanguageProvider.addExpectedKey("aspect.integrateddynamics.read.list.cc_folder")
+        ModLanguageProvider.addExpectedKey("aspect.integrateddynamics.read.nbt.cc_folder")
         ModEnLanguageProvider.addHook {
-            it.add("aspect.integrateddynamics.read.list.cc_folder", "Directory inside computer")
+            it.add("aspect.integrateddynamics.read.nbt.cc_folder", "Directory inside computer")
         }
         ModUaLanguageProvider.addHook {
-            it.add("aspect.integrateddynamics.read.list.cc_folder", "Директорія всередині комп'ютера")
+            it.add("aspect.integrateddynamics.read.nbt.cc_folder", "Директорія всередині комп'ютера")
         }
     }
 }

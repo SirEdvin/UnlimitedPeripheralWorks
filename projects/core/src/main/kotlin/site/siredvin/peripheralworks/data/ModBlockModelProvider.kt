@@ -191,7 +191,7 @@ object ModBlockModelProvider {
         horizontalOrientatedBlock(
             generators,
             Blocks.UNIVERSAL_SCANNER.get(),
-//            horizontalOrientedModel(generators, Blocks.UNIVERSAL_SCANNER.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture),
+            horizontalOrientedModel(generators, Blocks.UNIVERSAL_SCANNER.get(), overwriteBottom = peripheralCasingTexture, overwriteTop = peripheralCasingTexture),
         )
 
         pedestalBlock(generators, Blocks.ITEM_PEDESTAL.get(), TextureMapping.getBlockTexture(net.minecraft.world.level.block.Blocks.SMOOTH_STONE))
