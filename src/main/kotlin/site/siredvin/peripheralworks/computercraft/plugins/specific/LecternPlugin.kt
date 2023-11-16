@@ -14,17 +14,14 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IObservingPeripheralPlugin
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.api.peripheral.IPluggablePeripheral
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.TextBookUtils
 import site.siredvin.peripheralium.util.assertBetween
-import java.lang.ref.WeakReference
 import java.util.*
 import java.util.function.Predicate
 
-
-class LecternPlugin(private val target: LecternBlockEntity): IObservingPeripheralPlugin {
+class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripheralPlugin {
 
     companion object {
         val OBSERVED_LECTERNS: MutableMap<BlockPos, WeakHashMap<IPluggablePeripheral, Boolean>> = mutableMapOf()
@@ -43,14 +40,16 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
         }
 
         fun subscribe(pos: BlockPos, peripheral: IPluggablePeripheral) {
-            if (!OBSERVED_LECTERNS.containsKey(pos))
+            if (!OBSERVED_LECTERNS.containsKey(pos)) {
                 OBSERVED_LECTERNS[pos] = WeakHashMap()
+            }
             OBSERVED_LECTERNS[pos]!![peripheral] = true
         }
 
         fun unsubscribe(pos: BlockPos, peripheral: IPluggablePeripheral) {
-            if (OBSERVED_LECTERNS.containsKey(pos))
+            if (OBSERVED_LECTERNS.containsKey(pos)) {
                 OBSERVED_LECTERNS[pos]!!.remove(peripheral)
+            }
         }
     }
 
@@ -62,20 +61,22 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
         }
 
     private fun assertBook() {
-        if (!target.hasBook())
+        if (!target.hasBook()) {
             throw LuaException("Lectern should contain book")
+        }
     }
 
     private fun assertNoBook() {
-        if (target.hasBook())
+        if (target.hasBook()) {
             throw LuaException("Lectern shouldn't contain book")
+        }
     }
 
     private fun assertEditableBook() {
-        if (!isBookEditable())
+        if (!isBookEditable()) {
             throw LuaException("Book should be editable")
+        }
     }
-
 
     @LuaFunction(mainThread = true)
     fun hasBook(): Boolean {
@@ -179,17 +180,19 @@ class LecternPlugin(private val target: LecternBlockEntity): IObservingPeriphera
 
         var predicate: Predicate<ItemVariant> = Predicate { it.isOf(Items.WRITABLE_BOOK) || it.isOf(Items.WRITTEN_BOOK) }
 
-        if (bookName.isPresent)
+        if (bookName.isPresent) {
             predicate = predicate.and {
                 val stack = it.toStack()
                 stack.item.getName(stack).string == bookName.get()
             }
+        }
 
         Transaction.openOuter().use {
             val extractionTarget = StorageUtil.findExtractableContent(fromStorage, predicate, it)
                 ?: return MethodResult.of(null, "Cannot find book in desired inventory")
-            if (extractionTarget.amount == 0L)
+            if (extractionTarget.amount == 0L) {
                 return MethodResult.of(null, "Cannot find book in desired inventory")
+            }
             val amount = fromStorage.extract(extractionTarget.resource, 1, it)
             if (amount != 1L) {
                 it.abort()

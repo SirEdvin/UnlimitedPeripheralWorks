@@ -15,22 +15,24 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.util.assertBetween
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 
-class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
+class LiftPlugin(private val entity: LiftBlockEntity) : IPeripheralPlugin {
 
     companion object {
         const val PLUGIN_TYPE = "lift"
     }
 
-    class Provider: PeripheralPluginProvider {
+    class Provider : PeripheralPluginProvider {
         override val pluginType: String
             get() = PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableLift)
+            if (!Configuration.enableLift) {
                 return null
+            }
             val entity = level.getBlockEntity(pos)
-            if (entity !is LiftBlockEntity)
+            if (entity !is LiftBlockEntity) {
                 return null
+            }
             return LiftPlugin(entity)
         }
     }
@@ -49,12 +51,13 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
         }
 
         return TextComponent(floor.toString()).append(TranslatableComponent("screen.lifts.number.$suffix"))
-            .append(" ").append(TranslatableComponent("screen.lifts.common.floor") )
+            .append(" ").append(TranslatableComponent("screen.lifts.common.floor"))
     }
 
     private fun getLiftName(index: Int, lift: LiftBlockEntity): Component {
-        if (lift.liftName != null)
+        if (lift.liftName != null) {
             return TextComponent(lift.liftName!!)
+        }
         return getLiftNameRaw(index)
     }
 
@@ -62,7 +65,7 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
         return hashMapOf(
             "name" to getLiftName(index, lift).string,
             "ready" to lift.ready,
-            "number" to reverseNumber(index)
+            "number" to reverseNumber(index),
         )
     }
 
@@ -70,7 +73,7 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
         val base = toLuaBase(index, lift)
         base["energy"] = hashMapOf(
             "amount" to lift.energyStorage.amount,
-            "capacity" to lift.energyStorage.capacity
+            "capacity" to lift.energyStorage.capacity,
         )
         return base
     }
@@ -80,16 +83,18 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
         lift.propertyDelegate
         base["generator"] = hashMapOf(
             "burningTicks" to lift.propertyDelegate.get(1),
-            "storedTicks" to lift.propertyDelegate.get(2)
+            "storedTicks" to lift.propertyDelegate.get(2),
         )
         return base
     }
 
     private fun toLua(index: Int, lift: LiftBlockEntity): MutableMap<String, Any?> {
-        if (lift is StirlingLiftBlockEntity)
+        if (lift is StirlingLiftBlockEntity) {
             return toLuaStirling(index, lift)
-        if (lift is ElectricLiftBlockEntity)
+        }
+        if (lift is ElectricLiftBlockEntity) {
             return toLuaElectric(index, lift)
+        }
         return toLuaBase(index, lift)
     }
 
@@ -105,25 +110,29 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
     fun getFloorName(index: Int): String {
         assertBetween(index, 1, Int.MAX_VALUE, "Floor should be positive integer")
         val realIndex = reverseNumber(index)
-        if (entity.liftShaft == null)
+        if (entity.liftShaft == null) {
             return getLiftNameRaw(realIndex).string
+        }
         val maxFloor = entity.liftShaft!!.lifts.size
         assertBetween(index, 1, maxFloor, "There is only $maxFloor present")
         entity.liftShaft!!.lifts.forEachIndexed { internal_index, liftBlockEntity ->
-            if (internal_index == realIndex)
+            if (internal_index == realIndex) {
                 return getLiftName(realIndex, liftBlockEntity).string
+            }
         }
         return getLiftNameRaw(realIndex).string
     }
 
     @LuaFunction(mainThread = true)
     fun getCurrentFloor(): MethodResult {
-        if (entity.liftShaft == null)
+        if (entity.liftShaft == null) {
             return MethodResult.of(null, "Lift shaft are not exists")
+        }
 
         entity.liftShaft!!.lifts.forEachIndexed { index, liftBlockEntity ->
-            if (liftBlockEntity.isPlatformHere)
+            if (liftBlockEntity.isPlatformHere) {
                 return MethodResult.of(reverseNumber(index))
+            }
         }
         return MethodResult.of(null, "Seems platform on the way")
     }
@@ -134,8 +143,9 @@ class LiftPlugin(private val entity: LiftBlockEntity): IPeripheralPlugin {
         val targetLift = entity.liftShaft!!.lifts.elementAtOrNull(index)
             ?: return MethodResult.of(null, "Floor should be from 1 to ${entity.liftShaft!!.size}")
         val result = entity.liftShaft!!.sendPlatformTo(entity.level!!, targetLift, false)
-        if (!result.isAccepted())
+        if (!result.isAccepted()) {
             return MethodResult.of(null, result.name.lowercase())
+        }
         return MethodResult.of(true)
     }
 }

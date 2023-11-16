@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.modern_industrialization
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private var ENABLE_ENERGY_STORAGE: ForgeConfigSpec.BooleanValue? = null
     private var ENABLE_CRAFTING_MACHINE: ForgeConfigSpec.BooleanValue? = null

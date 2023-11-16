@@ -9,9 +9,8 @@ import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.util.Platform
 
-
 @Suppress("UNUSED")
-object PeripheralWorks: ModInitializer {
+object PeripheralWorks : ModInitializer {
     const val MOD_ID = "peripheralworks"
 
     var LOGGER: Logger = LogManager.getLogger(MOD_ID)
@@ -22,8 +21,8 @@ object PeripheralWorks: ModInitializer {
         Platform.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("lifts").ifPresent { (it as Runnable).run() }
         Platform.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
-        Platform.maybeLoadIntegration("modern_industrialization").ifPresent {(it as Runnable).run()}
-        Platform.maybeLoadIntegration("create").ifPresent {(it as Runnable).run()}
+        Platform.maybeLoadIntegration("modern_industrialization").ifPresent { (it as Runnable).run() }
+        Platform.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         // Register configuration
         // Pretty important to setup configuration after integration loading!
         ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.COMMON, ConfigHolder.COMMON_SPEC)

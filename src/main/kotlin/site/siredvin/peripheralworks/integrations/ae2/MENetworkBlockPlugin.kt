@@ -26,10 +26,9 @@ import net.minecraft.world.level.material.Fluids
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.common.configuration.PeripheraliumConfig
-import site.siredvin.peripheralium.extra.plugins.FluidStoragePlugin
+import site.siredvin.peripheralium.extra.plugins.AbstractFluidStoragePlugin
 import site.siredvin.peripheralium.extra.plugins.ItemStoragePlugin
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralworks.PeripheralWorks
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMap
@@ -39,27 +38,29 @@ import java.util.function.Predicate
 import kotlin.NoSuchElementException
 import kotlin.math.min
 
-class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity): IPeripheralPlugin {
+class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity) : IPeripheralPlugin {
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }
 
-    class Provider: PeripheralPluginProvider {
+    class Provider : PeripheralPluginProvider {
         override val pluginType: String
             get() = PLUGIN_TYPE
 
         override val conflictWith: Set<String>
-            get() = setOf(ItemStoragePlugin.PLUGIN_TYPE, FluidStoragePlugin.PLUGIN_TYPE)
+            get() = setOf(ItemStoragePlugin.PLUGIN_TYPE, AbstractFluidStoragePlugin.PLUGIN_TYPE)
 
         override val priority: Int
             get() = 1000
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableMEInterface)
+            if (!Configuration.enableMEInterface) {
                 return null
+            }
             val entity = level.getBlockEntity(pos)
-            if (entity !is AENetworkBlockEntity)
+            if (entity !is AENetworkBlockEntity) {
                 return null
+            }
             return MENetworkBlockPlugin(level, entity)
         }
     }
@@ -67,13 +68,14 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
     @LuaFunction(mainThread = true)
     fun items(): MethodResult {
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
-        return MethodResult.of(keyCounterToLua(inventory.availableStacks, {it is AEItemKey}))
+        return MethodResult.of(keyCounterToLua(inventory.availableStacks, { it is AEItemKey }))
     }
 
     @LuaFunction(mainThread = true)
     fun pushItem(computer: IComputerAccess, toName: String, itemName: Optional<String>, limit: Optional<Long>): Long {
-        if (limit.isPresent && limit.get() == 0.toLong())
+        if (limit.isPresent && limit.get() == 0.toLong()) {
             return 0
+        }
 
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
@@ -85,20 +87,23 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             Predicate { true }
         } else {
             val item = Registry.ITEM.get(ResourceLocation(itemName.get()))
-            if (item == Items.AIR)
+            if (item == Items.AIR) {
                 throw LuaException("There is no item ${itemName.get()}")
+            }
             Predicate { it.item == item }
         }
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
         // search for item to push
         val itemToTransfer = inventory.availableStacks.find {
             val aeKey = it.key
-            if (aeKey !is AEItemKey)
+            if (aeKey !is AEItemKey) {
                 return@find false
+            }
             return@find predicate.test(aeKey)
         } ?: return 0
-        if (itemToTransfer.key !is AEItemKey)
+        if (itemToTransfer.key !is AEItemKey) {
             return 0
+        }
         val realLimit = min(min(PeripheraliumConfig.itemStorageTransferLimit, limit.orElse(Long.MAX_VALUE)), itemToTransfer.longValue)
         val extractedLimit = inventory.extract(itemToTransfer.key, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
         val transferStack = (itemToTransfer.key as AEItemKey).toStack(extractedLimit.toInt())
@@ -121,8 +126,9 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun pullItem(computer: IComputerAccess, fromName: String, itemName: Optional<String>, limit: Optional<Long>): Long {
-        if (limit.isPresent && limit.get() == 0.toLong())
+        if (limit.isPresent && limit.get() == 0.toLong()) {
             return 0
+        }
 
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
@@ -134,8 +140,9 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             Predicate { true }
         } else {
             val item = Registry.ITEM.get(ResourceLocation(itemName.get()))
-            if (item == Items.AIR)
+            if (item == Items.AIR) {
                 throw LuaException("There is no item ${itemName.get()}")
+            }
             Predicate { it.isOf(item) }
         }
 
@@ -165,17 +172,17 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         }
     }
 
-
     @LuaFunction(mainThread = true)
     fun tanks(): List<Map<String, *>> {
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
-        return keyCounterToLua(inventory.availableStacks, {it is AEFluidKey})
+        return keyCounterToLua(inventory.availableStacks, { it is AEFluidKey })
     }
 
     @LuaFunction(mainThread = true)
     fun pushFluid(computer: IComputerAccess, toName: String, limit: Optional<Long>, fluidName: Optional<String>): Double {
-        if (limit.isPresent && limit.get() == 0.toLong())
+        if (limit.isPresent && limit.get() == 0.toLong()) {
             return 0.0
+        }
 
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
@@ -187,23 +194,32 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             Predicate { true }
         } else {
             val fluid = Registry.FLUID.get(ResourceLocation(fluidName.get()))
-            if (fluid == Fluids.EMPTY)
+            if (fluid == Fluids.EMPTY) {
                 throw LuaException("There is no fluid ${fluidName.get()}")
+            }
             Predicate { it.fluid.isSame(fluid) }
         }
         val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
         // search for item to push
         val fluidToTransfer = inventory.availableStacks.find {
             val aeKey = it.key
-            if (aeKey !is AEFluidKey)
+            if (aeKey !is AEFluidKey) {
                 return@find false
+            }
             return@find predicate.test(aeKey)
         } ?: return 0.0
-        if (fluidToTransfer.key !is AEFluidKey)
+        if (fluidToTransfer.key !is AEFluidKey) {
             return 0.0
-        val realLimit = min(min(PeripheraliumConfig.fluidStorageTransferLimit, limit.map {
-            (FluidStoragePlugin.FORGE_COMPACT_DEVIDER * it).toLong()
-        }.orElse(Long.MAX_VALUE)), fluidToTransfer.longValue)
+        }
+        val realLimit = min(
+            min(
+                PeripheraliumConfig.fluidStorageTransferLimit,
+                limit.map {
+                    (AbstractFluidStoragePlugin.FORGE_COMPACT_DEVIDER * it).toLong()
+                }.orElse(Long.MAX_VALUE),
+            ),
+            fluidToTransfer.longValue,
+        )
         val extractedLimit = inventory.extract(fluidToTransfer.key, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
         val transferVariant = (fluidToTransfer.key as AEFluidKey).toVariant()
         return Transaction.openOuter().use {
@@ -219,14 +235,15 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
                 return@use 0.0
             }
             it.commit()
-            return@use extractedAmount / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
+            return@use extractedAmount / AbstractFluidStoragePlugin.FORGE_COMPACT_DEVIDER
         }
     }
 
     @LuaFunction(mainThread = true)
     fun pullFluid(computer: IComputerAccess, fromName: String, limit: Optional<Long>, fluidName: Optional<String>): Double {
-        if (limit.isPresent && limit.get() == 0.toLong())
+        if (limit.isPresent && limit.get() == 0.toLong()) {
             return 0.0
+        }
 
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
@@ -238,8 +255,9 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             Predicate { true }
         } else {
             val fluid = Registry.FLUID.get(ResourceLocation(fluidName.get()))
-            if (fluid == Fluids.EMPTY)
+            if (fluid == Fluids.EMPTY) {
                 throw LuaException("There is no fluid ${fluidName.get()}")
+            }
             Predicate { it.isOf(fluid) }
         }
 
@@ -247,9 +265,15 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             val extractableResource = StorageUtil.findExtractableContent(fromStorage, predicate, it) ?: return 0.0
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: throw LuaException("Not correctly configured AE2 Network")
             val aeKey = AEFluidKey.of(extractableResource.resource)
-            val realLimit = min(min(PeripheraliumConfig.fluidStorageTransferLimit, limit.map {limit ->
-                (FluidStoragePlugin.FORGE_COMPACT_DEVIDER * limit).toLong()
-            }.orElse(Long.MAX_VALUE)), extractableResource.amount)
+            val realLimit = min(
+                min(
+                    PeripheraliumConfig.fluidStorageTransferLimit,
+                    limit.map { limit ->
+                        (AbstractFluidStoragePlugin.FORGE_COMPACT_DEVIDER * limit).toLong()
+                    }.orElse(Long.MAX_VALUE),
+                ),
+                extractableResource.amount,
+            )
             val insertLimit = inventory.insert(aeKey, realLimit, Actionable.SIMULATE, IActionSource.ofMachine(entity))
             if (insertLimit == 0L) {
                 it.abort()
@@ -267,7 +291,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
                 return@use 0.0
             }
             it.commit()
-            return@use insertedAmount / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
+            return@use insertedAmount / AbstractFluidStoragePlugin.FORGE_COMPACT_DEVIDER
         }
     }
 
@@ -316,8 +340,9 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         val data: MutableList<Map<String, *>> = mutableListOf()
         craftingService.cpus.forEach {
             val cpuInformation = mutableMapOf<String, Any>()
-            if (it.name != null)
+            if (it.name != null) {
                 cpuInformation["name"] = it.name!!.string
+            }
             cpuInformation["capacity"] = 1 + it.coProcessors
             cpuInformation["storage"] = it.availableStorage
             cpuInformation["isBusy"] = it.isBusy
@@ -341,9 +366,11 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
         val data: MutableList<Map<String, *>> = mutableListOf()
         craftingService.getCraftables { it is AEFluidKey }.forEach {
-            data.add(mapOf(
-                "name" to Registry.FLUID.getKey((it as AEFluidKey).fluid).toString(),
-            ))
+            data.add(
+                mapOf(
+                    "name" to Registry.FLUID.getKey((it as AEFluidKey).fluid).toString(),
+                ),
+            )
         }
         return data
     }
@@ -358,7 +385,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             val patternRepresentation = mutableMapOf<String, Any>()
             val outputs = mutableListOf<Map<String, Any>>()
             val inputs = mutableListOf<Map<String, Any>>()
-            pattern.outputs.forEach {outputs.add(genericStackToMap(it))}
+            pattern.outputs.forEach { outputs.add(genericStackToMap(it)) }
             pattern.inputs.forEach {
                 val inputData: MutableMap<String, Any>
                 if (it.possibleInputs.size == 1) {
@@ -366,13 +393,13 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
                     inputData["count"] = (inputData["count"] as Int) * it.multiplier
                 } else {
                     val inputVariants = mutableListOf<Map<String, Any>>()
-                    it.possibleInputs.forEach {pInput ->
+                    it.possibleInputs.forEach { pInput ->
                         val pInputResult = genericStackToMap(pInput)
                         pInputResult["count"] = (pInputResult["count"] as Int) * it.multiplier
                         inputVariants.add(pInputResult)
                     }
                     inputData = mutableMapOf(
-                        "variants" to inputVariants
+                        "variants" to inputVariants,
                     )
                 }
                 inputs.add(inputData)
@@ -394,7 +421,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
                 val baseMap = mutableMapOf(
                     "target" to genericStackToMap(jobStatus.crafting),
                     "amount" to jobStatus.totalItems,
-                    "progress" to jobStatus.progress
+                    "progress" to jobStatus.progress,
                 )
                 if (it.name != null) {
                     baseMap["CPU"] = it.name!!.string
@@ -414,11 +441,14 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         val realAmount = if (mode == "item") {
             amount.orElse(1)
         } else {
-            amount.orElse(1000) * FluidStoragePlugin.FORGE_COMPACT_DEVIDER
+            amount.orElse(1000) * AbstractFluidStoragePlugin.FORGE_COMPACT_DEVIDER
         }.toLong()
         val future = craftingService.beginCraftingCalculation(
-            level, { source }, key, realAmount,
-            CalculationStrategy.REPORT_MISSING_ITEMS
+            level,
+            { source },
+            key,
+            realAmount,
+            CalculationStrategy.REPORT_MISSING_ITEMS,
         )
         val plan = future.get()
 

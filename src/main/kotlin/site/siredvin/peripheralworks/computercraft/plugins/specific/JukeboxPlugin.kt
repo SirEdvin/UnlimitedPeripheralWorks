@@ -18,23 +18,26 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 
-class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
+class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin {
 
     private fun assertDisc() {
-        if (target.record.isEmpty)
+        if (target.record.isEmpty) {
             throw LuaException("Disc should present in jukebox")
+        }
     }
 
     private fun assertNoDisc() {
-        if (!target.record.isEmpty)
+        if (!target.record.isEmpty) {
             throw LuaException("Jukebox should be empty")
+        }
     }
 
     @LuaFunction(mainThread = true)
     fun getDisc(): Map<String, Any>? {
         val record = target.record
-        if (record.isEmpty)
+        if (record.isEmpty) {
             return null
+        }
         return LuaRepresentation.forItemStack(record)
     }
 
@@ -84,10 +87,12 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity): IPeripheralPlugin {
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         val item = Registry.ITEM.get(ResourceLocation(targetItem))
-        if (item == Items.AIR)
+        if (item == Items.AIR) {
             throw LuaException("Cannot find item $targetItem")
-        if (item !is RecordItem)
+        }
+        if (item !is RecordItem) {
             throw LuaException("Item should be a valid disc item")
+        }
 
         Transaction.openOuter().use {
             val amount = fromStorage.extract(ItemVariant.of(item), 1, it)

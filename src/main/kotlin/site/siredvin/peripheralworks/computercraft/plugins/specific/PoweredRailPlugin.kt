@@ -15,7 +15,7 @@ import site.siredvin.peripheralium.util.MergedContainer
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import java.util.*
 
-class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): AbstractInventoryPlugin()  {
+class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : AbstractInventoryPlugin() {
 
     companion object {
         const val PUSH_POWER = 5.0
@@ -24,14 +24,14 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos): A
     private val blockState: BlockState
         get() {
             val state = level.getBlockState(pos)
-            if (state.block !is PoweredRailBlock)
+            if (state.block !is PoweredRailBlock) {
                 throw LuaException("Target block is not note block at all!")
+            }
             return state
         }
 
     override val itemStorage: dan200.computercraft.shared.util.ItemStorage
         get() = dan200.computercraft.shared.util.ItemStorage.wrap(MergedContainer(MinecartHelpers.getContainerMinecarts(level, pos)))
-
 
     @LuaFunction(mainThread = true)
     fun isPowered(): Boolean {

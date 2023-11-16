@@ -4,17 +4,14 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
-import net.minecraft.world.level.block.DetectorRailBlock
-import net.minecraft.world.level.block.PoweredRailBlock
 import net.minecraft.world.level.block.entity.BeaconBlockEntity
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralworks.PeripheralWorks
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-class SpecificPluginProvider: PeripheralPluginProvider {
+class SpecificPluginProvider : PeripheralPluginProvider {
     override val pluginType: String
         get() = "minecraft"
 

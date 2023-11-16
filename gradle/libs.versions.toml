@@ -1,4 +1,22 @@
 [versions]
+# Gradle plugins
+sponge = "0.2.1-SNAPSHOT"
+loom = "1.2.+"
+mixinGradle = "0.8.+"
+forgegradle = "6.+"
+# Core mod dependencies
+cc-restitched = "v1.18.2-1.100.5-ccr"
+mixin = "0.8.5"
+night-config = "3.6.3"
+# Fabric dependencies
+fabric-api = "0.55.1+1.18.2"
+fabric-loader = "0.14.19"
+fabric-kotlin = "1.8.5+kotlin.1.7.20"
+forgeconfigapirt-fabric = "3.2.4"
+rei = "8.1.449"
+peripheralium = "0.4.23-pre.1"
+# Integration dependencies
+modern-industrialization = "1.2.3"
 # Testing
 autoService = "1.0.1"
 byteBuddy = "1.14.2"
@@ -8,6 +26,22 @@ junit = "5.9.2"
 
 
 [libraries]
+# Core dependencies
+night-config-core = {module = "com.electronwill.night-config:core", version.ref="night-config"}
+night-config-toml = {module = "com.electronwill.night-config:toml", version.ref="night-config"}
+# Fabric mod dependencies
+cc-restitched = {module = "com.github.cc-tweaked:cc-restitched", version.ref = "cc-restitched"}
+fabric-loader = {module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader"}
+fabric-api = {module = "net.fabricmc.fabric-api:fabric-api", version.ref="fabric-api"}
+fabric-kotlin = {module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin"}
+fabric-config = {module = "maven.modrinth:forge-config-api-port", version.ref = "forgeconfigapirt-fabric"}
+peripheralium = {module = "site.siredvin:peripheralium-fabric-1.18.2", version.ref="peripheralium"}
+
+# Integration dependencies
+modern-industrialization = {module = "maven.modrinth:modern-industrialization", version.ref="modern-industrialization"}
+
+# Dev mod dependencies
+rei-fabric = {module = "me.shedaniel:RoughlyEnoughItems-fabric", version.ref = "rei"}
 # Testing
 autoService = { module = "com.google.auto.service:auto-service", version.ref = "autoService" }
 byteBuddyAgent = { module = "net.bytebuddy:byte-buddy-agent", version.ref = "byteBuddy" }
@@ -19,6 +53,40 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
 
+[plugins]
+vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
+loom = {id = "fabric-loom", version.ref = "loom"}
+mixinGradle = { id = "org.spongepowered.mixin", version.ref = "mixinGradle" }
+
 [bundles]
+java = ["night-config-core", "night-config-toml"]
+ccfabric = ["cc-restitched"]
+fabric-core = ["fabric-loader"]
+fabric = ["fabric-api", "fabric-kotlin", "fabric-config", "peripheralium"]
+
+# Minecraft
+externalMods-fabric-runtime = [
+    "rei-fabric",
+]
+
+# Integration dependencies
+externalMods-fabric-integrations-api = []
+
+externalMods-fabric-integrations-full = [
+    "modern-industrialization"
+]
+externalMods-fabric-integrations-active = [
+    "modern-industrialization"
+]
+externalMods-fabric-integrations-activedep = [
+]
+
+externalMods-forge-integrations-full = [
+]
+externalMods-forge-integrations-active = [
+]
+externalMods-forge-integrations-activedep = [
+]
+
 ## Testing
 test = ["junit-jupiter-api", "junit-jupiter-params", "hamcrest", "jqwik-api"]

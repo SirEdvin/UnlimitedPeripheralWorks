@@ -58,8 +58,9 @@ class CreateCCItemStorage(private val handlers: List<ItemStackHandler>) : ItemSt
     }
 
     override fun store(slot: Int, stack: ItemStack, simulate: Boolean): ItemStack {
-        if (stack.isEmpty)
+        if (stack.isEmpty) {
             return stack
+        }
 
         val existing: ItemStack = getStack(slot)
         return if (existing.isEmpty) {

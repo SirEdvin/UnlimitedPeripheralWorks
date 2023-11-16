@@ -4,16 +4,13 @@ import appeng.api.stacks.*
 import dan200.computercraft.api.lua.LuaException
 import net.minecraft.core.Registry
 import net.minecraft.resources.ResourceLocation
-import site.siredvin.peripheralium.extra.plugins.FluidStoragePlugin
+import site.siredvin.peripheralium.extra.plugins.AbstractFluidStoragePlugin
 import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import java.util.concurrent.ThreadFactory
 import java.util.function.Predicate
 
 object AE2Helper {
 
-    private val ALWAYS: Predicate<AEKey> = Predicate{ true }
+    private val ALWAYS: Predicate<AEKey> = Predicate { true }
 
     init {
     }
@@ -27,7 +24,7 @@ object AE2Helper {
         val base = mutableMapOf<String, Any>()
         base["type"] = "fluid"
         base["name"] = Registry.FLUID.getKey((stack.what as AEFluidKey).fluid).toString()
-        base["count"] = stack.amount.toInt() / FluidStoragePlugin.FORGE_COMPACT_DEVIDER
+        base["count"] = stack.amount.toInt() / AbstractFluidStoragePlugin.FORGE_COMPACT_DEVIDER
         return base
     }
 
@@ -40,17 +37,19 @@ object AE2Helper {
                     aeKey is AEItemKey -> {
                         val data = LuaRepresentation.forItemStack(aeKey.toStack(entry.longValue.toInt()))
                         data.remove("maxStackSize")
-                        if (displayType)
+                        if (displayType) {
                             data["type"] = "item"
+                        }
                         data
                     }
                     aeKey is AEFluidKey -> {
                         val data = mutableMapOf(
                             "name" to Registry.FLUID.getKey(aeKey.fluid).toString(),
-                            "amount" to entry.longValue / FluidStoragePlugin.FORGE_COMPACT_DEVIDER,
+                            "amount" to entry.longValue / AbstractFluidStoragePlugin.FORGE_COMPACT_DEVIDER,
                         )
-                        if (displayType)
+                        if (displayType) {
                             data["type"] = "fluid"
+                        }
                         data
                     }
                     else -> null
