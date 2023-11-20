@@ -16,7 +16,7 @@ forgeconfigapirt-fabric = "4.2.11"
 rei = "9.1.595"
 peripheralium = "0.4.23"
 # Integration dependencies
-modern-industrialization = "1.3.2"
+modern-industrialization = "1.6.16"
 # Testing
 autoService = "1.0.1"
 byteBuddy = "1.14.2"
