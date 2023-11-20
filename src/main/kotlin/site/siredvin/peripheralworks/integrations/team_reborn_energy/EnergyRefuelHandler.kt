@@ -11,7 +11,7 @@ import site.siredvin.peripheralium.util.LimitedInventory
 import team.reborn.energy.api.EnergyStorage
 import kotlin.math.min
 
-object EnergyRefuelHandler: TurtleRefuelEvent.Handler {
+object EnergyRefuelHandler : TurtleRefuelEvent.Handler {
     override fun refuel(turtle: ITurtleAccess, stack: ItemStack, slot: Int, limit: Int): Int {
         val inventory = LimitedInventory(turtle.inventory, intArrayOf(slot))
         val storage = InventoryStorage.of(inventory, null)
@@ -21,7 +21,7 @@ object EnergyRefuelHandler: TurtleRefuelEvent.Handler {
         var extractedAmount = 0L
         Transaction.openOuter().use {
             val realLimit = min(limit.toLong(), energyStorage.amount)
-            while (extractedAmount < realLimit && energyStorage.amount != 0L){
+            while (extractedAmount < realLimit && energyStorage.amount != 0L) {
                 extractedAmount += energyStorage.extract(realLimit - extractedAmount, it)
             }
             val leftEnergy = extractedAmount % Configuration.energyToFuelRate
@@ -38,8 +38,9 @@ object EnergyRefuelHandler: TurtleRefuelEvent.Handler {
     fun onTurtleRefuel(event: TurtleRefuelEvent) {
         if (event.handler == null && Configuration.enableTurtleRefulWithEnergy) {
             val storage = EnergyStorage.ITEM.find(event.stack, ContainerItemContext.withConstant(event.stack))
-            if (storage != null && storage.amount > 0)
+            if (storage != null && storage.amount > 0) {
                 event.handler = this
+            }
         }
     }
 }

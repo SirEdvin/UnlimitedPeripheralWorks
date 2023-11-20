@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 
-class Integration: Runnable {
+class Integration : Runnable {
     override fun run() {
         PeripheralWorksConfig.registerIntegrationConfiguration("create", Configuration)
         ExtractorProxy.addCCItemStorageExtractor { level, obj ->
@@ -18,10 +18,10 @@ class Integration: Runnable {
             } ?: return@addCCItemStorageExtractor null
             val extractedStorage = extractionTarget.getItemStorage(null) as? CombinedStorage<*, *> ?: return@addCCItemStorageExtractor null
             // Making sure that all of parts are slotted variants
-            if (extractedStorage.parts.any { it !is ItemStackHandler })
+            if (extractedStorage.parts.any { it !is ItemStackHandler }) {
                 return@addCCItemStorageExtractor null
+            }
             return@addCCItemStorageExtractor CreateCCItemStorage(extractedStorage.parts.map { it as ItemStackHandler })
         }
     }
-
 }

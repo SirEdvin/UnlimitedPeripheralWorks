@@ -37,6 +37,7 @@ object PeripheralWorksConfig {
         var ENABLE_GENERIC_FLUID_STORAGE: ForgeConfigSpec.BooleanValue
         val ITEM_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.LongValue
         val FLUID_STORAGE_TRANSFER_LIMIT: ForgeConfigSpec.LongValue
+
         // Specific plugins
         var ENABLE_BEACON: ForgeConfigSpec.BooleanValue
         var ENABLE_NOTEBLOCK: ForgeConfigSpec.BooleanValue

@@ -11,12 +11,15 @@ import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.common.ExtractorProxy
 import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
+import site.siredvin.peripheralium.extra.plugins.AbstractFluidStoragePlugin
 import site.siredvin.peripheralium.extra.plugins.FluidStoragePlugin
 import site.siredvin.peripheralium.extra.plugins.InventoryPlugin
 import site.siredvin.peripheralium.extra.plugins.ItemStoragePlugin
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.computercraft.plugins.generic.DeferredFluidStoragePlugin
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
+import site.siredvin.peripheralworks.tags.BlockTags
 
 object ComputerCraftProxy {
     private val PLUGIN_PROVIDERS: MutableList<PeripheralPluginProvider> = mutableListOf()
@@ -26,36 +29,43 @@ object ComputerCraftProxy {
         PLUGIN_PROVIDERS.sort()
     }
 
-    class FluidStorageProvider: PeripheralPluginProvider {
+    class FluidStorageProvider : PeripheralPluginProvider {
         override val pluginType: String
-            get() = FluidStoragePlugin.PLUGIN_TYPE
+            get() = AbstractFluidStoragePlugin.PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!PeripheralWorksConfig.enableGenericFluidStorage)
+            if (!PeripheralWorksConfig.enableGenericFluidStorage) {
                 return null
+            }
             val fluidStorage = FluidStorage.SIDED.find(level, pos, side) ?: return null
+            val blockState = level.getBlockState(pos)
+            if (blockState.`is`(BlockTags.DEFERRED_FLUID_STORAGE)) {
+                return DeferredFluidStoragePlugin(level, pos, side)
+            }
             return FluidStoragePlugin(level, fluidStorage)
         }
     }
 
-    class InventoryProvider: PeripheralPluginProvider {
+    class InventoryProvider : PeripheralPluginProvider {
         override val pluginType: String
             get() = InventoryPlugin.PLUGIN_TYPE
         override val conflictWith: Set<String>
             get() = setOf(ItemStoragePlugin.PLUGIN_TYPE)
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!PeripheralWorksConfig.enableGenericInventory)
+            if (!PeripheralWorksConfig.enableGenericInventory) {
                 return null
+            }
             val blockEntity = level.getBlockEntity(pos) ?: return null
             val itemStorage = ExtractorProxy.extractCCItemStorage(level, blockEntity) ?: return null
-            if (itemStorage.size() == 0)
+            if (itemStorage.size() == 0) {
                 return null
+            }
             return InventoryPlugin(level, itemStorage)
         }
     }
 
-    class ItemStorageProvider: PeripheralPluginProvider {
+    class ItemStorageProvider : PeripheralPluginProvider {
         override val pluginType: String
             get() = ItemStoragePlugin.PLUGIN_TYPE
         override val priority: Int
@@ -64,16 +74,18 @@ object ComputerCraftProxy {
             get() = setOf(InventoryPlugin.PLUGIN_TYPE)
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!PeripheralWorksConfig.enableGenericItemStorage)
+            if (!PeripheralWorksConfig.enableGenericItemStorage) {
                 return null
+            }
             val itemStorage = ItemStorage.SIDED.find(level, pos, side) ?: return null
             Transaction.openOuter().use {
                 var counting = 0
                 itemStorage.iterator().forEach { _ ->
                     counting++
                 }
-                if (counting == 0)
+                if (counting == 0) {
                     return null
+                }
             }
             return ItemStoragePlugin(level, itemStorage)
         }
@@ -102,8 +114,9 @@ object ComputerCraftProxy {
             }
         }
 
-        if (plugins.isEmpty())
+        if (plugins.isEmpty()) {
             return null
+        }
 
         val peripheral = PluggablePeripheral(Registry.BLOCK.getKey(state.block).toString(), entity ?: pos)
         plugins.values.forEach { peripheral.addPlugin(it) }

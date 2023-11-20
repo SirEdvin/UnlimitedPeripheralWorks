@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import site.siredvin.peripheralium.tests.WithMinecraft
-import java.util.List
 import kotlin.test.assertEquals
-
 
 @WithMinecraft
 internal class NBTests {
@@ -42,8 +40,9 @@ internal class NBTests {
         val nbt1 = makeCompoundTag(false)
         val nbt2 = makeCompoundTag(true)
         assertNotEquals(
-            List.copyOf(nbt1.allKeys), List.copyOf(nbt2.allKeys),
-            "Expected makeCompoundTag to return keys with different orders."
+            nbt1.allKeys.toList(),
+            nbt2.allKeys.toList(),
+            "Expected makeCompoundTag to return keys with different orders.",
         )
     }
 

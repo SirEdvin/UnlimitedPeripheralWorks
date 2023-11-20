@@ -5,7 +5,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 
-interface PeripheralPluginProvider: Comparable<PeripheralPluginProvider> {
+interface PeripheralPluginProvider : Comparable<PeripheralPluginProvider> {
     val pluginType: String
 
     /**

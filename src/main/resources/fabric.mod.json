@@ -22,6 +22,12 @@
         "adapter": "kotlin",
         "value": "site.siredvin.peripheralworks.PeripheralWorks"
       }
+    ],
+    "fabric-datagen": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.data.ModDataGenerationEntrypoint"
+      }
     ]
   },
   "mixins": [

@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.modern_industrialization
 
-import aztech.modern_industrialization.compat.waila.holder.EnergyComponentHolder
+import aztech.modern_industrialization.compat.megane.holder.EnergyComponentHolder
 import aztech.modern_industrialization.machines.components.EnergyComponent
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.core.BlockPos
@@ -9,27 +9,27 @@ import net.minecraft.world.level.Level
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 
-class EnergyStoragePlugin(private val energyStorage: EnergyComponent): IPeripheralPlugin {
+class EnergyStoragePlugin(private val energyStorage: EnergyComponent) : IPeripheralPlugin {
 
     companion object {
         const val PLUGIN_TYPE = "energy_storage"
     }
 
-    class Provider: PeripheralPluginProvider {
+    class Provider : PeripheralPluginProvider {
         override val pluginType: String
             get() = PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableEnergyStorage)
+            if (!Configuration.enableEnergyStorage) {
                 return null
+            }
             val blockEntity = level.getBlockEntity(pos) ?: return null
-            if (blockEntity is EnergyComponentHolder)
+            if (blockEntity is EnergyComponentHolder) {
                 return EnergyStoragePlugin(blockEntity.energyComponent)
+            }
             return null
         }
-
     }
-
 
     override val additionalType: String
         get() = PLUGIN_TYPE

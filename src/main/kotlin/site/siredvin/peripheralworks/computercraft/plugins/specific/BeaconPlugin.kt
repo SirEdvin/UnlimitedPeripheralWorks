@@ -23,7 +23,7 @@ import java.util.*
 import java.util.function.Predicate
 import kotlin.math.min
 
-class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
+class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
 
     @LuaFunction(mainThread = true)
     fun getLevel(): Int {
@@ -42,22 +42,34 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
     @LuaFunction(mainThread = true)
     fun getPowers(): List<Map<String, Any>> {
         val effectTime: Int = (9 + target.levels * 2) * 20
-        if (target.primaryPower == null)
+        if (target.primaryPower == null) {
             return emptyList()
+        }
         val effects: MutableList<Map<String, Any>> = mutableListOf()
         effects.add(
-            LuaRepresentation.forMobEffectInstance(MobEffectInstance(
-                target.primaryPower!!, effectTime,
-                if (target.secondaryPower == target.primaryPower) 1 else 0,
-                true, true
-            ))
-        )
-        if (target.secondaryPower != null && target.secondaryPower != target.primaryPower)
-            effects.add(LuaRepresentation.forMobEffectInstance(
+            LuaRepresentation.forMobEffectInstance(
                 MobEffectInstance(
-                target.secondaryPower!!, effectTime, 0, true, true
+                    target.primaryPower!!,
+                    effectTime,
+                    if (target.secondaryPower == target.primaryPower) 1 else 0,
+                    true,
+                    true,
+                ),
+            ),
+        )
+        if (target.secondaryPower != null && target.secondaryPower != target.primaryPower) {
+            effects.add(
+                LuaRepresentation.forMobEffectInstance(
+                    MobEffectInstance(
+                        target.secondaryPower!!,
+                        effectTime,
+                        0,
+                        true,
+                        true,
+                    ),
+                ),
             )
-            ))
+        }
         return effects
     }
 
@@ -66,11 +78,13 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
         var primaryEffect: MobEffect? = null
         for (i in 0..min(target.levels - 1, 2)) {
             primaryEffect = BeaconBlockEntity.BEACON_EFFECTS[i].find { it.descriptionId == primaryPower }
-            if (primaryEffect != null)
+            if (primaryEffect != null) {
                 break
+            }
         }
-        if (primaryEffect == null)
+        if (primaryEffect == null) {
             return MethodResult.of(null, "Cannot find desired effect in list of available effects")
+        }
 
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
@@ -80,8 +94,9 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
 
         val itemPredicate = if (itemHint.isPresent) {
             val item = Registry.ITEM.get(ResourceLocation(itemHint.get()))
-            if (item == Items.AIR)
+            if (item == Items.AIR) {
                 throw LuaException("Cannot find item ${itemHint.get()}")
+            }
             Predicate<ItemVariant> { it.isOf(item) }
         } else {
             Predicate<ItemVariant> { it.toStack().`is`(ItemTags.BEACON_PAYMENT_ITEMS) }
@@ -91,19 +106,21 @@ class BeaconPlugin(private val target: BeaconBlockEntity): IPeripheralPlugin {
             val extractableResource = StorageUtil.findExtractableResource(fromStorage, itemPredicate, it)
                 ?: return MethodResult.of(null, "Target storage cannot provide desired items")
             val amount = fromStorage.extract(extractableResource, 1, it)
-            if (amount != 1L)
+            if (amount != 1L) {
                 return MethodResult.of(null, "Target storage cannot provide desired items")
+            }
             it.commit()
         }
 
         target.primaryPower = primaryEffect
 
-        if (target.levels == 4)
+        if (target.levels == 4) {
             if (regenerationSecondary.orElse(false)) {
                 target.secondaryPower = MobEffects.REGENERATION
             } else {
                 target.secondaryPower = primaryEffect
             }
+        }
 
         target.level!!.blockEntityChanged(target.blockPos)
 

@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.create
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralium.api.IConfigHandler
 
-object Configuration: IConfigHandler {
+object Configuration : IConfigHandler {
 
     private var ENABLE_STORAGE: ForgeConfigSpec.BooleanValue? = null
 
