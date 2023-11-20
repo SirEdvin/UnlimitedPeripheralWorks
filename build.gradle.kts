@@ -201,6 +201,8 @@ githubShaking {
     useForge.set(false)
     useFabric.set(false)
     useRoot.set(true)
+    projectRepo.set("unlimitedperipheralworks")
+    mastodonProjectName.set("UnlimitedPeripheralWorks")
     shake()
 }
 
