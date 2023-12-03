@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "ducky-periphs:weather_machine_block", "required":  false},
+    { "id": "ducky-periphs:sculkophone_block", "required":  false},
+    { "id": "ducky-periphs:entity_detector_block", "required":  false},
+    { "id": "ducky-periphs:focal_port_block", "required":  false}
+  ]
+}

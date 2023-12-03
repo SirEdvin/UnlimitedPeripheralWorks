@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2023-12-03
+
+### Added
+
+- `peripheralworks:ignore` tag to add ignore for any integrations for specific block
+
 ## [1.4.1] - 2023-11-03
 
 ### Changed

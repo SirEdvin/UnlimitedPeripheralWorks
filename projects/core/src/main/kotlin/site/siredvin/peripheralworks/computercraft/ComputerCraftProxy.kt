@@ -9,7 +9,9 @@ import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
 import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.tags.BlockTags
 import java.util.function.Supplier
 
 object ComputerCraftProxy {
@@ -51,6 +53,7 @@ object ComputerCraftProxy {
     }
 
     fun peripheralProvider(level: Level, pos: BlockPos, state: BlockState, entity: BlockEntity?, side: Direction): IPeripheral? {
+        if (state.`is`(BlockTags.IGNORE)) return null
         val plugins = collectPlugins(level, pos, side)
         if (plugins.isEmpty()) {
             return null
