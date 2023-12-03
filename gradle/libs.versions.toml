@@ -17,6 +17,9 @@ rei = "9.1.595"
 peripheralium = "0.4.23"
 # Integration dependencies
 modern-industrialization = "1.6.16"
+ducky-peripherals = "1.19.2-1.2.3-fabric"
+architectury = "6.5.85"
+hex-casting = "0.10.3"
 # Testing
 autoService = "1.0.1"
 byteBuddy = "1.14.2"
@@ -39,7 +42,9 @@ peripheralium = {module = "site.siredvin:peripheralium-fabric-1.19.2", version.r
 
 # Integration dependencies
 modern-industrialization = {module = "maven.modrinth:modern-industrialization", version.ref="modern-industrialization"}
-
+ducky-peripherals = {module = "maven.modrinth:ducky-periphs", version.ref="ducky-peripherals"}
+architectury = {module = "dev.architectury:architectury-fabric", version.ref="architectury"}
+hex-casting = {module = "maven.modrinth:hex-casting", version.ref="hex-casting"}
 # Dev mod dependencies
 rei-fabric = {module = "me.shedaniel:RoughlyEnoughItems-fabric", version.ref = "rei"}
 # Testing
@@ -67,6 +72,8 @@ fabric = ["fabric-api", "fabric-kotlin", "fabric-config"]
 # Minecraft
 externalMods-fabric-runtime = [
     "rei-fabric",
+    "ducky-peripherals",
+    "architectury",
 ]
 
 # Integration dependencies
@@ -76,7 +83,7 @@ externalMods-fabric-integrations-full = [
     "modern-industrialization"
 ]
 externalMods-fabric-integrations-active = [
-    "modern-industrialization"
+#    "modern-industrialization"
 ]
 externalMods-fabric-integrations-activedep = [
 ]

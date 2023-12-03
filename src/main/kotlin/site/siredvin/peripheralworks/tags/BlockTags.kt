@@ -10,4 +10,8 @@ object BlockTags {
         Registry.BLOCK_REGISTRY,
         ResourceLocation(PeripheralWorks.MOD_ID, "deferred_fluid_storage"),
     )
+    val IGNORE = TagKey.create(
+        Registry.BLOCK_REGISTRY,
+        ResourceLocation(PeripheralWorks.MOD_ID, "ignore"),
+    )
 }

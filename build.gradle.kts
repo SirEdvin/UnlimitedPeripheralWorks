@@ -133,6 +133,11 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
+    modRuntimeOnly("teamreborn:energy:2.2.0") {
+        exclude(group = "net.fabricmc.fabric-api")
+        exclude("net.fabricmc", "fabric-loader")
+    }
+
     modImplementation("curse.maven:reborncore-237903:3958647") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude("net.fabricmc", "fabric-loader")
@@ -161,7 +166,7 @@ dependencies {
         exclude(group = "net.fabricmc.fabric-api")
     }
 
-    modImplementation("me.shedaniel.cloth:cloth-config-fabric:7.0.72") {
+    modImplementation("me.shedaniel.cloth:cloth-config-fabric:8.2.88") {
         exclude(group = "net.fabricmc.fabric-api")
         exclude("net.fabricmc", "fabric-loader")
     }

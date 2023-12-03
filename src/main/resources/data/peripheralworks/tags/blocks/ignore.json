@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "ducky-periphs:weather_machine_block",
+    "ducky-periphs:sculkophone_block",
+    "ducky-periphs:entity_detector_block",
+    "ducky-periphs:focal_port_block"
+  ]
+}

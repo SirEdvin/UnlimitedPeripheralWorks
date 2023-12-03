@@ -101,6 +101,7 @@ object ComputerCraftProxy {
     fun peripheralProvider(level: Level, pos: BlockPos, side: Direction): IPeripheral? {
         val entity = level.getBlockEntity(pos)
         val state = level.getBlockState(pos)
+        if (state.`is`(BlockTags.IGNORE)) return null
         val plugins: MutableMap<String, IPeripheralPlugin> = mutableMapOf()
         val deniedPluginTypes: MutableSet<String> = mutableSetOf()
 
