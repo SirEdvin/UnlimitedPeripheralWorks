@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.integrateddynamics
 
-import dan200.computercraft.core.apis.handles.EncodedReadableHandle
+import dan200.computercraft.core.apis.handles.ReadHandle
 import dan200.computercraft.core.filesystem.FileSystemException
 import dan200.computercraft.shared.computer.blocks.AbstractComputerBlockEntity
 import net.minecraft.core.BlockPos
@@ -26,6 +26,7 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModLanguageProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
+import java.nio.charset.StandardCharsets
 
 class Integration : Runnable {
 
@@ -71,10 +72,17 @@ class Integration : Runnable {
             }
             val buffer = CompoundTag()
             fileSystem.list(FILESYSTEM_PATH).forEach { filePath ->
-                val wrapper = fileSystem.openForRead("$FILESYSTEM_PATH/$filePath", EncodedReadableHandle::openUtf8)
-                val handle = EncodedReadableHandle(wrapper.get(), wrapper)
+                val wrapper = fileSystem.openForRead("$FILESYSTEM_PATH/$filePath")
+                val handle = ReadHandle(wrapper.get(), true)
                 val stringBuilder = StringBuilder()
-                handle.readAll()?.forEach { line -> stringBuilder.append(line) }
+                val readData = handle.readAll()
+                readData?.forEach { line ->
+                    if (line is ByteArray) {
+                        stringBuilder.append(String(line, StandardCharsets.UTF_8))
+                    } else {
+                        stringBuilder.append(line)
+                    }
+                }
                 buffer.putString(filePath, stringBuilder.toString())
                 wrapper.close()
             }

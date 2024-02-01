@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralium.computercraft.peripheral.PluggablePeripheral
 import site.siredvin.peripheralium.xplat.XplatRegistries
-import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.tags.BlockTags
 import java.util.function.Supplier

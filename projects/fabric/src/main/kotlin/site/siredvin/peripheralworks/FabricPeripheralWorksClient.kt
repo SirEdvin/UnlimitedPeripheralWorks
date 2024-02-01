@@ -1,5 +1,9 @@
 package site.siredvin.peripheralworks
 
+import dan200.computercraft.api.client.FabricComputerCraftAPIClient
+import dan200.computercraft.api.turtle.ITurtleUpgrade
+import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import kotlinx.serialization.serializer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
@@ -36,5 +40,10 @@ object FabricPeripheralWorksClient : ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.translucent())
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_STATUE.get(), RenderType.translucent())
+
+        PeripheralWorksClientCore.onModelRegister { serializer, modeller ->
+            @Suppress("UNCHECKED_CAST")
+            FabricComputerCraftAPIClient.registerTurtleUpgradeModeller(serializer as TurtleUpgradeSerialiser<ITurtleUpgrade>, modeller)
+        }
     }
 }

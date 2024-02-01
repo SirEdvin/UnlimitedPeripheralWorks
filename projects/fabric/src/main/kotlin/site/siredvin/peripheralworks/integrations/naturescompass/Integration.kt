@@ -1,10 +1,10 @@
 package site.siredvin.peripheralworks.integrations.naturescompass
 
 import com.chaosthedude.naturescompass.NaturesCompass
-import dan200.computercraft.api.client.ComputerCraftAPIClient
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleAccess
+import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
@@ -45,11 +45,9 @@ class Integration : Runnable {
                 NaturesCompass.NATURES_COMPASS_ITEM,
             ).requireMod(NaturesCompass.MODID)
         }
-        PeripheralWorksClientCore.addHook {
-            ComputerCraftAPIClient.registerTurtleUpgradeModeller(
-                turtleUpgradeSup.get(),
-                TurtleUpgradeModeller.flatItem(),
-            )
+        PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
+            @Suppress("UNCHECKED_CAST")
+            Pair(turtleUpgradeSup.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, TurtleUpgradeModeller.flatItem())
         }
 
         val pocketUpgrade = ModPlatform.registerPocketUpgrade(

@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.Tag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
@@ -153,16 +154,18 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     fun connectBlockPos(level: Level, record: RemotePeripheralRecord) {
-        val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, record.targetBlock, Direction.NORTH)
-        if (targetPeripheral == null) {
-            PeripheralWorksCore.LOGGER.debug(
-                "Postpone {} for peripheral proxing, it doesn't contains any peripheral for now",
-                record.targetBlock,
-            )
-            peripheralConnectionIncomplete = true
-        } else {
-            trackRecord(record, targetPeripheral)
-            pushInternalDataChangeToClient()
+        if (level is ServerLevel) {
+            val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, record.targetBlock, Direction.NORTH)
+            if (targetPeripheral == null) {
+                PeripheralWorksCore.LOGGER.debug(
+                    "Postpone {} for peripheral proxing, it doesn't contains any peripheral for now",
+                    record.targetBlock,
+                )
+                peripheralConnectionIncomplete = true
+            } else {
+                trackRecord(record, targetPeripheral)
+                pushInternalDataChangeToClient()
+            }
         }
     }
 
@@ -229,14 +232,19 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                 PeripheralWorksCore.LOGGER.debug("Extracted record {} for {}", record, it.pos)
                 if (record != null) {
                     untrackRecord(record)
-                    val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, it.pos, record.direction)
-                    if (targetPeripheral == null) {
-                        PeripheralWorksCore.LOGGER.debug("Cannot find peripheral for {} purging it completely", it.pos)
-                        dataModified = true
-                        remotePeripherals.remove(it.pos)
-                    } else {
-                        PeripheralWorksCore.LOGGER.debug("Find peripheral {} for {}", targetPeripheral, it.pos)
-                        trackRecord(record, targetPeripheral)
+                    if (level is ServerLevel) {
+                        val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, it.pos, record.direction)
+                        if (targetPeripheral == null) {
+                            PeripheralWorksCore.LOGGER.debug(
+                                "Cannot find peripheral for {} purging it completely",
+                                it.pos,
+                            )
+                            dataModified = true
+                            remotePeripherals.remove(it.pos)
+                        } else {
+                            PeripheralWorksCore.LOGGER.debug("Find peripheral {} for {}", targetPeripheral, it.pos)
+                            trackRecord(record, targetPeripheral)
+                        }
                     }
                 }
             }

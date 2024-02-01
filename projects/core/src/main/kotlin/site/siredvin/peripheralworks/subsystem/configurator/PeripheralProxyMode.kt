@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.subsystem.configurator
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
@@ -21,7 +22,7 @@ object PeripheralProxyMode : ConfigurationMode {
     override val description: Component = ModTooltip.PERIPHERAL_PROXY_MODE.text
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
-        if (level.isClientSide) {
+        if (level.isClientSide || level !is ServerLevel) {
             return InteractionResultHolder.consume(stack)
         }
         val entity = level.getBlockEntity(configurationTarget)

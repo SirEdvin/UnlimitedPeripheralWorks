@@ -1,7 +1,8 @@
 package site.siredvin.peripheralworks
 
-import dan200.computercraft.api.client.ComputerCraftAPIClient
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller
+import dan200.computercraft.api.turtle.ITurtleUpgrade
+import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -16,6 +17,7 @@ import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.TurtleUpgradeSerializers
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
+import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.Supplier
 
@@ -27,6 +29,7 @@ object PeripheralWorksClientCore {
         "turtle/ultimate_sensor_left",
         "turtle/ultimate_sensor_right",
     )
+    val EXTRA_TURTLE_MODEL_PROVIDERS: MutableList<Supplier<Pair<TurtleUpgradeSerialiser<ITurtleUpgrade>, TurtleUpgradeModeller<ITurtleUpgrade>>>> = mutableListOf()
     private var inited: Boolean = false
 
     @Suppress("UNCHECKED_CAST")
@@ -70,30 +73,37 @@ object PeripheralWorksClientCore {
         }
     }
 
-    fun onInit() {
-        inited = true
-        HOOKS.forEach(Runnable::run)
-        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+    fun onModelRegister(consumer: BiConsumer<TurtleUpgradeSerialiser<*>, TurtleUpgradeModeller<ITurtleUpgrade>>) {
+        consumer.accept(
             TurtleUpgradeSerializers.PERIPHERALIUM_HUB.get(),
             ScaledItemModeller(0.5f),
         )
-        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+        consumer.accept(
             TurtleUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB.get(),
             ScaledItemModeller(0.5f),
         )
-        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+        consumer.accept(
             TurtleUpgradeSerializers.UNIVERSAL_SCANNER.get(),
             TurtleUpgradeModeller.sided(
                 ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${UniversalScannerPeripheral.UPGRADE_ID.path}_left"),
                 ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${UniversalScannerPeripheral.UPGRADE_ID.path}_right"),
             ),
         )
-        ComputerCraftAPIClient.registerTurtleUpgradeModeller(
+        consumer.accept(
             TurtleUpgradeSerializers.ULTIMATE_SENSOR.get(),
             TurtleUpgradeModeller.sided(
                 ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${UltimateSensorPeripheral.UPGRADE_ID.path}_left"),
                 ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${UltimateSensorPeripheral.UPGRADE_ID.path}_right"),
             ),
         )
+        EXTRA_TURTLE_MODEL_PROVIDERS.forEach {
+            val pair = it.get()
+            consumer.accept(pair.first, pair.second)
+        }
+    }
+
+    fun onInit() {
+        inited = true
+        HOOKS.forEach(Runnable::run)
     }
 }

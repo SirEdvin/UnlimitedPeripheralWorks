@@ -5,12 +5,12 @@ kotlin-coroutines = "1.6.4"
 kotlin-atomicfu = "0.20.2"
 # Gradle plugins
 sponge = "0.2.1-SNAPSHOT"
-loom = "1.2.+"
+loom = "1.4.+"
 mixinGradle = "0.8.+"
 forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.108.1"
-peripheralium = "0.6.13"
+cc-tweaked = "1.109.5"
+peripheralium = "0.6.15"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.87.0+1.20.1"
@@ -88,7 +88,7 @@ kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = 
 
 # Core mod dependencies
 cc-tweaked-common-api = {module = "cc.tweaked:cc-tweaked-1.20.1-common-api", version.ref = "cc-tweaked"}
-cc-tweaked-common = {module = "cc.tweaked:common", version.ref = "cc-tweaked"}
+cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.20.1-common", version.ref = "cc-tweaked"}
 cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.20.1-core", version.ref = "cc-tweaked"}
 common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
 peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20.1", version.ref = "peripheralium"}
