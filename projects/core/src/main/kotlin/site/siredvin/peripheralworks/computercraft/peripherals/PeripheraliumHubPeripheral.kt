@@ -25,9 +25,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         val NETHERITE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
         const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
 
-        fun getActiveUpgrades(dataStorage: CompoundTag): List<String> {
-            return dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
-        }
+        fun getActiveUpgrades(dataStorage: CompoundTag): List<String> = dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
 
         fun getDataForUpgrade(id: String, dataStorage: CompoundTag): CompoundTag {
             if (!dataStorage.contains(TWEAKED_STORAGES)) {
@@ -45,9 +43,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
      * So, we don't expect this peripheral to really use plugins for now
      * and with this in mind, any additional type will be rejected
      */
-    override fun getAdditionalTypes(): Set<String> {
-        return setOf("peripheral_hub")
-    }
+    override fun getAdditionalTypes(): Set<String> = setOf("peripheral_hub")
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enablePeripheraliumHubs
 
@@ -69,6 +65,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         upgradeList.add(StringTag.valueOf(id.toString()))
         peripheralOwner.dataStorage.put(UPGRADES_TAG, upgradeList)
         if (upgradeList.isNotEmpty()) peripheralOwner.dataStorage.putString(MODE_TAG, activeMode)
+        peripheralOwner.markDataStorageDirty()
     }
 
     protected fun detachUpgrade(id: ResourceLocation) {
@@ -76,11 +73,10 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         upgradeList.remove(StringTag.valueOf(id.toString()))
         peripheralOwner.dataStorage.put(UPGRADES_TAG, upgradeList)
         if (upgradeList.isEmpty()) peripheralOwner.dataStorage.remove(MODE_TAG)
+        peripheralOwner.markDataStorageDirty()
     }
 
-    fun getDataForUpgrade(id: String): CompoundTag {
-        return getDataForUpgrade(id, peripheralOwner.dataStorage)
-    }
+    fun getDataForUpgrade(id: String): CompoundTag = getDataForUpgrade(id, peripheralOwner.dataStorage)
 
     fun setDataForUpdate(id: String, data: CompoundTag?) {
         val base = peripheralOwner.dataStorage
@@ -142,7 +138,5 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
     }
 
     @LuaFunction(mainThread = true)
-    fun getUpgrades(): List<String> {
-        return activeUpgrades
-    }
+    fun getUpgrades(): List<String> = activeUpgrades
 }
