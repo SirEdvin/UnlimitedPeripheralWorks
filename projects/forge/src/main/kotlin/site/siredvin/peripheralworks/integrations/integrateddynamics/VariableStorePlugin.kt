@@ -32,11 +32,9 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         return dataMap
     }
 
-    fun extractFacade(stack: ItemStack): IVariableFacade? {
-        return stack.getCapability(VariableFacadeHolderConfig.CAPABILITY).map {
-            it.getVariableFacade(context)
-        }.orElse(null)
-    }
+    fun extractFacade(stack: ItemStack): IVariableFacade? = stack.getCapability(VariableFacadeHolderConfig.CAPABILITY).map {
+        it.getVariableFacade(context)
+    }.orElse(null)
 
     override fun listImpl(): Map<Int, Map<String, *>> {
         val records = mutableMapOf<Int, Map<String, *>>()

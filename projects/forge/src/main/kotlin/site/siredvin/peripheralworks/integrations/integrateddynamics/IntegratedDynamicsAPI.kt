@@ -9,9 +9,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.TagParser
 
 class IntegratedDynamicsAPI(private val computerID: Int) : ILuaAPI {
-    override fun getNames(): Array<String> {
-        return arrayOf("integrated_dynamics")
-    }
+    override fun getNames(): Array<String> = arrayOf("integrated_dynamics")
 
     @LuaFunction
     fun getInput(): MethodResult {

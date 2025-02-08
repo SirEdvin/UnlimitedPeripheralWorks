@@ -6,7 +6,7 @@ import site.siredvin.peripheralium.xplat.ModInformationTracker
 
 object ModPlatform : BasePlatform {
     private var impl: ModInnerPlatform? = null
-    private val _informationTracker = ModInformationTracker()
+    private val innerModInformationTracker = ModInformationTracker()
 
     fun configure(impl: ModInnerPlatform) {
         this.impl = impl
@@ -21,7 +21,7 @@ object ModPlatform : BasePlatform {
         }
 
     override val modInformationTracker: ModInformationTracker
-        get() = _informationTracker
+        get() = innerModInformationTracker
 
     val commonEnergy: EnergyUnit
         get() = baseInnerPlatform.commonEnergy

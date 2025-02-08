@@ -20,7 +20,5 @@ object FlexibleRealityAnchorGeometry : IUnbakedGeometry<FlexibleRealityAnchorGeo
         modelState: ModelState,
         overrides: ItemOverrides,
         modelLocation: ResourceLocation,
-    ): BakedModel {
-        return FlexibleRealityAnchorModel
-    }
+    ): BakedModel = FlexibleRealityAnchorModel
 }

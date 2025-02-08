@@ -16,14 +16,10 @@ class OccultismItemStoragePlugin(private val storageController: IStorageControll
         get() = PeripheralWorksConfig.itemStorageTransferLimit
 
     @LuaFunction(mainThread = true)
-    fun getMaxSlots(): Int {
-        return storageController.maxSlots
-    }
+    fun getMaxSlots(): Int = storageController.maxSlots
 
     @LuaFunction(mainThread = true)
-    fun getUsedSlots(): Int {
-        return storageController.usedSlots
-    }
+    fun getUsedSlots(): Int = storageController.usedSlots
 
     @LuaFunction(mainThread = true)
     fun isBlacklisted(item: String): Boolean {

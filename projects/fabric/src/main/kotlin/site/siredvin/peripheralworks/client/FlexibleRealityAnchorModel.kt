@@ -40,9 +40,7 @@ object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
         blockState: BlockState?,
         direction: Direction?,
         randomSource: RandomSource,
-    ): MutableList<BakedQuad> {
-        return mutableListOf()
-    }
+    ): MutableList<BakedQuad> = mutableListOf()
     override fun useAmbientOcclusion(): Boolean = true
     override fun isGui3d(): Boolean = false
     override fun usesBlockLight(): Boolean = true

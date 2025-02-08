@@ -9,9 +9,7 @@ import java.util.function.Function
 
 @Environment(EnvType.CLIENT)
 object FlexibleStatueUnbakedModel : UnbakedModel {
-    override fun getDependencies(): MutableCollection<ResourceLocation> {
-        return mutableListOf()
-    }
+    override fun getDependencies(): MutableCollection<ResourceLocation> = mutableListOf()
 
     override fun resolveParents(function: Function<ResourceLocation, UnbakedModel>) {
     }
@@ -21,7 +19,5 @@ object FlexibleStatueUnbakedModel : UnbakedModel {
         function: Function<Material, TextureAtlasSprite>,
         modelState: ModelState,
         resourceLocation: ResourceLocation,
-    ): BakedModel {
-        return FlexibleStatueModel
-    }
+    ): BakedModel = FlexibleStatueModel
 }

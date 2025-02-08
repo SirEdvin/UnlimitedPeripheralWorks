@@ -8,7 +8,5 @@ object FlexibleRealityAnchorGeometryLoader : IGeometryLoader<FlexibleRealityAnch
     override fun read(
         jsonObject: JsonObject,
         deserializationContext: JsonDeserializationContext,
-    ): FlexibleRealityAnchorGeometry {
-        return FlexibleRealityAnchorGeometry
-    }
+    ): FlexibleRealityAnchorGeometry = FlexibleRealityAnchorGeometry
 }

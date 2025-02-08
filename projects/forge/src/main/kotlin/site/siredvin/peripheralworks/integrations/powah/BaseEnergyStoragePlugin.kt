@@ -8,7 +8,5 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 
 open class BaseEnergyStoragePlugin(private val storage: AbstractEnergyStorage<*, *>) : IPeripheralPlugin {
     @LuaFunction(mainThread = true)
-    fun getEnergyTransfer(): Long {
-        return ((storage.block as AbstractEnergyBlock<*, *>).config as IEnergyConfig).getTransfer(storage.variant)
-    }
+    fun getEnergyTransfer(): Long = ((storage.block as AbstractEnergyBlock<*, *>).config as IEnergyConfig).getTransfer(storage.variant)
 }

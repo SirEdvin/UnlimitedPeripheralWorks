@@ -44,22 +44,20 @@ class UniversalShopPlugin(private val blockEntity: TradeShopBlockEntity) : IPeri
     }
 
     @LuaFunction(mainThread = true)
-    fun setPrice(type: String, itemHint: Any?): MethodResult {
-        return when (type) {
-            "free" -> {
-                blockEntity.priceHandler = Free.DEFINITION.createInitial(blockEntity)
-                MethodResult.of(true)
-            }
-            "single_item" -> {
-                if (itemHint == null) throw LuaException("With type $type you should use second argument that describes item")
-                val item = LuaInterpretation.asItemStack(itemHint)
-                val newPriceHandler = SingleItem.DEFINITION.createInitial(blockEntity) as SingleItem
-                newPriceHandler.itemStack = item
-                blockEntity.priceHandler = newPriceHandler
-                MethodResult.of(true)
-            }
-            else -> MethodResult.of(null, "For now only free and single_item type are supported")
+    fun setPrice(type: String, itemHint: Any?): MethodResult = when (type) {
+        "free" -> {
+            blockEntity.priceHandler = Free.DEFINITION.createInitial(blockEntity)
+            MethodResult.of(true)
         }
+        "single_item" -> {
+            if (itemHint == null) throw LuaException("With type $type you should use second argument that describes item")
+            val item = LuaInterpretation.asItemStack(itemHint)
+            val newPriceHandler = SingleItem.DEFINITION.createInitial(blockEntity) as SingleItem
+            newPriceHandler.itemStack = item
+            blockEntity.priceHandler = newPriceHandler
+            MethodResult.of(true)
+        }
+        else -> MethodResult.of(null, "For now only free and single_item type are supported")
     }
 
     @LuaFunction(mainThread = true)
@@ -75,21 +73,19 @@ class UniversalShopPlugin(private val blockEntity: TradeShopBlockEntity) : IPeri
     }
 
     @LuaFunction(mainThread = true)
-    fun setStock(type: String, itemHint: Any?): MethodResult {
-        return when (type) {
-            "selected_item" -> {
-                blockEntity.stockHandler = SelectedItem.DEFINITION.createInitial(blockEntity)
-                MethodResult.of(true)
-            }
-            "single_item" -> {
-                if (itemHint == null) throw LuaException("With type $type you should use second argument that describes item")
-                val item = LuaInterpretation.asItemStack(itemHint)
-                val newStockHandler = StockHandler.SingleItem.DEFINITION.createInitial(blockEntity) as StockHandler.SingleItem
-                newStockHandler.itemStack = item
-                blockEntity.stockHandler = newStockHandler
-                MethodResult.of(true)
-            }
-            else -> MethodResult.of(null, "For now only free and single_item type are supported")
+    fun setStock(type: String, itemHint: Any?): MethodResult = when (type) {
+        "selected_item" -> {
+            blockEntity.stockHandler = SelectedItem.DEFINITION.createInitial(blockEntity)
+            MethodResult.of(true)
         }
+        "single_item" -> {
+            if (itemHint == null) throw LuaException("With type $type you should use second argument that describes item")
+            val item = LuaInterpretation.asItemStack(itemHint)
+            val newStockHandler = StockHandler.SingleItem.DEFINITION.createInitial(blockEntity) as StockHandler.SingleItem
+            newStockHandler.itemStack = item
+            blockEntity.stockHandler = newStockHandler
+            MethodResult.of(true)
+        }
+        else -> MethodResult.of(null, "For now only free and single_item type are supported")
     }
 }

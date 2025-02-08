@@ -31,27 +31,15 @@ object RenderUtils {
         .concurrencyLevel(1).expireAfterAccess(2, TimeUnit.MINUTES)
         .build(CacheLoader.from(::buildModelState))
 
-    private fun buildTransformation(rotation: Quaternionf): Transformation {
-        return Transformation(Matrix4f().rotate(rotation))
+    private fun buildTransformation(rotation: Quaternionf): Transformation = Transformation(Matrix4f().rotate(rotation))
+
+    private fun buildModelState(transformation: Transformation): ModelState = object : ModelState {
+        override fun getRotation(): Transformation = transformation
     }
 
-    private fun buildModelState(transformation: Transformation): ModelState {
-        return object : ModelState {
-            override fun getRotation(): Transformation {
-                return transformation
-            }
-        }
-    }
+    private fun getTextureRaw(id: ResourceLocation): TextureAtlasSprite = TEXTURE_ATLAS.apply(id)
 
-    private fun getTextureRaw(id: ResourceLocation): TextureAtlasSprite {
-        return TEXTURE_ATLAS.apply(id)
-    }
+    fun getTexture(id: ResourceLocation): TextureAtlasSprite = TEXTURE_CACHE[id]
 
-    fun getTexture(id: ResourceLocation): TextureAtlasSprite {
-        return TEXTURE_CACHE[id]
-    }
-
-    fun getModelState(rotation: Quaternionf): ModelState {
-        return MODEL_STATE_CACHE.get(TRANSFORMATION_CACHE.get(rotation))
-    }
+    fun getModelState(rotation: Quaternionf): ModelState = MODEL_STATE_CACHE.get(TRANSFORMATION_CACHE.get(rotation))
 }

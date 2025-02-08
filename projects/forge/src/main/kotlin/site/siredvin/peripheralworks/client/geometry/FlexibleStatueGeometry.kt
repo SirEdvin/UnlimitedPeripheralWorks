@@ -20,7 +20,5 @@ object FlexibleStatueGeometry : IUnbakedGeometry<FlexibleStatueGeometry> {
         modelState: ModelState?,
         overrides: ItemOverrides?,
         modelLocation: ResourceLocation?,
-    ): BakedModel {
-        return FlexibleStatueModel
-    }
+    ): BakedModel = FlexibleStatueModel
 }

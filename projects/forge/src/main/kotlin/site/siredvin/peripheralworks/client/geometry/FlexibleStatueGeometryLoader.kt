@@ -8,7 +8,5 @@ object FlexibleStatueGeometryLoader : IGeometryLoader<FlexibleStatueGeometry> {
     override fun read(
         jsonObject: JsonObject,
         deserializationContext: JsonDeserializationContext,
-    ): FlexibleStatueGeometry {
-        return FlexibleStatueGeometry
-    }
+    ): FlexibleStatueGeometry = FlexibleStatueGeometry
 }

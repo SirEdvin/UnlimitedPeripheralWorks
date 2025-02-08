@@ -6,7 +6,5 @@ import owmii.powah.lib.block.AbstractEnergyProvider
 class GeneratorPlugin(private val provider: AbstractEnergyProvider<*>) : BaseEnergyStoragePlugin(provider) {
 
     @LuaFunction(mainThread = true)
-    fun getEnergyGeneration(): Long {
-        return provider.generation
-    }
+    fun getEnergyGeneration(): Long = provider.generation
 }

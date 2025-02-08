@@ -14,13 +14,11 @@ class CreateFilterableBehaviorPeripheralPlugin(
     private val filterableBehavior: FilteringBehaviour,
 ) : CreateSmartBlockPeripheralPlugin<SmartBlockEntity>(blockEntity) {
     @LuaFunction(mainThread = true)
-    fun getFilterName(): MethodResult {
-        return MethodResult.of(
-            filterableBehavior.filter?.item?.let {
-                XplatRegistries.ITEMS.getKey(it).toString()
-            },
-        )
-    }
+    fun getFilterName(): MethodResult = MethodResult.of(
+        filterableBehavior.filter?.item?.let {
+            XplatRegistries.ITEMS.getKey(it).toString()
+        },
+    )
 
     @LuaFunction(mainThread = true)
     fun setFilterItem(itemId: String): MethodResult {
@@ -38,7 +36,5 @@ class CreateFilterableBehaviorPeripheralPlugin(
     }
 
     @LuaFunction(mainThread = true)
-    fun clearFilterItem(): MethodResult {
-        return setFilterItem("minecraft:air")
-    }
+    fun clearFilterItem(): MethodResult = setFilterItem("minecraft:air")
 }

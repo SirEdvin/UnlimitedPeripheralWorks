@@ -8,9 +8,7 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 
 class RedstoneControlPlugin(private val something: IRedstoneInteract) : IPeripheralPlugin {
     @LuaFunction(mainThread = true)
-    fun getRedstoneMode(): String {
-        return something.redstoneMode.name.lowercase()
-    }
+    fun getRedstoneMode(): String = something.redstoneMode.name.lowercase()
 
     @LuaFunction(mainThread = true)
     fun setRedstoneMode(value: String) {

@@ -11,19 +11,13 @@ class FluxControllerPlugin(private val blockEntity: TileFluxController) : IPerip
         get() = "flux_controller"
 
     @LuaFunction(mainThread = true)
-    fun getEnergy(): Long {
-        return blockEntity.network.statistics.totalEnergy
-    }
+    fun getEnergy(): Long = blockEntity.network.statistics.totalEnergy
 
     @LuaFunction(mainThread = true)
-    fun getEnergyCapacity(): Long {
-        return blockEntity.network.getLogicalDevices(FluxNetwork.STORAGE).sumOf { it.maxTransferLimit }
-    }
+    fun getEnergyCapacity(): Long = blockEntity.network.getLogicalDevices(FluxNetwork.STORAGE).sumOf { it.maxTransferLimit }
 
     @LuaFunction(mainThread = true)
-    fun getEnergyUnit(): String {
-        return ForgeEnergies.FORGE.name
-    }
+    fun getEnergyUnit(): String = ForgeEnergies.FORGE.name
 
     @LuaFunction(mainThread = true)
     fun getStatistic(): Map<String, Any> {

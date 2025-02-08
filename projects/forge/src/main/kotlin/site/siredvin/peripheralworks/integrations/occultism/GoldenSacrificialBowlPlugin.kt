@@ -7,9 +7,7 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 class GoldenSacrificialBowlPlugin(private val bowl: GoldenSacrificialBowlBlockEntity) : IPeripheralPlugin {
 
     @LuaFunction(mainThread = true)
-    fun isBusy(): Boolean {
-        return bowl.currentRitualRecipe != null
-    }
+    fun isBusy(): Boolean = bowl.currentRitualRecipe != null
 
     @LuaFunction(mainThread = true)
     fun getCraftingInformation(): Map<String, Any>? {

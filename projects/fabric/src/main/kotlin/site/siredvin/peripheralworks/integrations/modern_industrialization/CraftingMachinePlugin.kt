@@ -35,9 +35,7 @@ class CraftingMachinePlugin(private val crafter: CrafterAccess) : IPeripheralPlu
         get() = PLUGIN_TYPE
 
     @LuaFunction(mainThread = true)
-    fun isBusy(): Boolean {
-        return crafter.hasActiveRecipe()
-    }
+    fun isBusy(): Boolean = crafter.hasActiveRecipe()
 
     @LuaFunction(mainThread = true)
     fun getCraftingInformation(): MethodResult {

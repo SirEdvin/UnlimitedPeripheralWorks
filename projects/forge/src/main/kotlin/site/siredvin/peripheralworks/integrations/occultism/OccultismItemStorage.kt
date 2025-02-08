@@ -6,9 +6,7 @@ import site.siredvin.peripheralium.storages.item.ItemStorage
 import java.util.function.Predicate
 
 class OccultismItemStorage(private val storageController: IStorageController) : ItemStorage {
-    override fun getItems(): Iterator<ItemStack> {
-        return storageController.stacks.iterator()
-    }
+    override fun getItems(): Iterator<ItemStack> = storageController.stacks.iterator()
 
     override fun setChanged() {
         storageController.onContentsChanged()
@@ -19,7 +17,5 @@ class OccultismItemStorage(private val storageController: IStorageController) : 
         return stack.copyWithCount(returnedAmount)
     }
 
-    override fun takeItems(predicate: Predicate<ItemStack>, limit: Int): ItemStack {
-        return storageController.getItemStack(predicate, limit, false)
-    }
+    override fun takeItems(predicate: Predicate<ItemStack>, limit: Int): ItemStack = storageController.getItemStack(predicate, limit, false)
 }

@@ -25,48 +25,44 @@ object AE2Helper {
         return base
     }
 
-    fun keyCounterToLua(counter: KeyCounter, predicate: Predicate<AEKey> = ALWAYS, displayType: Boolean = false): List<Map<String, Any>> {
-        return counter
-            .mapNotNull { entry ->
-                val aeKey = entry.key
-                when {
-                    !predicate.test(aeKey) -> null
-                    aeKey is AEItemKey -> {
-                        val data = LuaRepresentation.forItemStack(aeKey.toStack(entry.longValue.toInt()))
-                        data.remove("maxStackSize")
-                        if (displayType) {
-                            data["type"] = "item"
-                        }
-                        data
+    fun keyCounterToLua(counter: KeyCounter, predicate: Predicate<AEKey> = ALWAYS, displayType: Boolean = false): List<Map<String, Any>> = counter
+        .mapNotNull { entry ->
+            val aeKey = entry.key
+            when {
+                !predicate.test(aeKey) -> null
+                aeKey is AEItemKey -> {
+                    val data = LuaRepresentation.forItemStack(aeKey.toStack(entry.longValue.toInt()))
+                    data.remove("maxStackSize")
+                    if (displayType) {
+                        data["type"] = "item"
                     }
-                    aeKey is AEFluidKey -> {
-                        val data = mutableMapOf(
-                            "name" to XplatRegistries.FLUIDS.getKey(aeKey.fluid).toString(),
-                            "amount" to entry.longValue / PeripheraliumPlatform.fluidCompactDivider,
-                        )
-                        if (displayType) {
-                            data["type"] = "fluid"
-                        }
-                        data
-                    }
-                    else -> null
+                    data
                 }
+                aeKey is AEFluidKey -> {
+                    val data = mutableMapOf(
+                        "name" to XplatRegistries.FLUIDS.getKey(aeKey.fluid).toString(),
+                        "amount" to entry.longValue / PeripheraliumPlatform.fluidCompactDivider,
+                    )
+                    if (displayType) {
+                        data["type"] = "fluid"
+                    }
+                    data
+                }
+                else -> null
             }
-    }
+        }
 
-    fun buildKey(mode: String, id_key: String): AEKey {
-        return when (mode) {
-            "fluid" -> {
-                val fluid = XplatRegistries.FLUIDS.get(ResourceLocation(id_key))
-                AEFluidKey.of(fluid)
-            }
-            "item" -> {
-                val item = XplatRegistries.ITEMS.get(ResourceLocation(id_key))
-                AEItemKey.of(item)
-            }
-            else -> {
-                throw LuaException("first argument should be 'fluid' or 'item'")
-            }
+    fun buildKey(mode: String, id_key: String): AEKey = when (mode) {
+        "fluid" -> {
+            val fluid = XplatRegistries.FLUIDS.get(ResourceLocation(id_key))
+            AEFluidKey.of(fluid)
+        }
+        "item" -> {
+            val item = XplatRegistries.ITEMS.get(ResourceLocation(id_key))
+            AEItemKey.of(item)
+        }
+        else -> {
+            throw LuaException("first argument should be 'fluid' or 'item'")
         }
     }
 }

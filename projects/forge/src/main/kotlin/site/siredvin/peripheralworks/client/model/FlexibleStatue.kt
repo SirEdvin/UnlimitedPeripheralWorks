@@ -52,12 +52,9 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
             .expireAfterAccess(30, TimeUnit.SECONDS).build(CacheLoader.from(::bakeQuads))
         val bakery by lazy { FaceBakery() }
 
-        private fun bakeQuads(triple: Triple<QuadList, Direction, ModelState>): MutableList<BakedQuad> {
-            return triple.first.list.stream().map {
-                    data ->
-                bake(data, triple.second, triple.third)
-            }.collect(Collectors.toList())
-        }
+        private fun bakeQuads(triple: Triple<QuadList, Direction, ModelState>): MutableList<BakedQuad> = triple.first.list.stream().map { data ->
+            bake(data, triple.second, triple.third)
+        }.collect(Collectors.toList())
 
         protected fun bake(data: QuadData, side: Direction, modelState: ModelState = identityModel): BakedQuad {
             val alpha = ((data.opacity * 255f) + 0.5).toInt()
@@ -77,15 +74,14 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
     }
 
     override fun useAmbientOcclusion(): Boolean = true
+
     @Deprecated("Deprecated in Java")
     override fun getParticleIcon(): TextureAtlasSprite = getTexture(DEFAULT_TEXTURE)
     override fun isGui3d(): Boolean = true
     override fun usesBlockLight(): Boolean = false
     override fun isCustomRenderer(): Boolean = false
 
-    override fun getRenderTypes(state: BlockState, rand: RandomSource, data: ModelData): ChunkRenderTypeSet {
-        return ChunkRenderTypeSet.of(RenderType.translucent())
-    }
+    override fun getRenderTypes(state: BlockState, rand: RandomSource, data: ModelData): ChunkRenderTypeSet = ChunkRenderTypeSet.of(RenderType.translucent())
 }
 
 object FlexibleStatueModel : AbstractFlexibleStatueModel() {
@@ -112,6 +108,7 @@ object FlexibleStatueModel : AbstractFlexibleStatueModel() {
 
     @Deprecated("Deprecated in Java")
     override fun getOverrides(): ItemOverrides = FlexibleStatueItemOverrides
+
     @Deprecated("Deprecated in Java")
     override fun getTransforms(): ItemTransforms = RenderUtils.MODEL_TRANSFORM_BLOCK
 
@@ -152,11 +149,10 @@ class ItemFlexibleStatueModel(private val quads: QuadList) : AbstractFlexibleSta
         rand: RandomSource,
         extraData: ModelData,
         renderType: RenderType?,
-    ): MutableList<BakedQuad> {
-        return quadsCache.get(Triple(quads, side ?: Direction.SOUTH, identityModel))
-    }
+    ): MutableList<BakedQuad> = quadsCache.get(Triple(quads, side ?: Direction.SOUTH, identityModel))
 
     override fun getOverrides(): ItemOverrides = ItemOverrides.EMPTY
+
     @Deprecated("Deprecated in Java")
     override fun getTransforms(): ItemTransforms = RenderUtils.MODEL_TRANSFORM_BLOCK
 }

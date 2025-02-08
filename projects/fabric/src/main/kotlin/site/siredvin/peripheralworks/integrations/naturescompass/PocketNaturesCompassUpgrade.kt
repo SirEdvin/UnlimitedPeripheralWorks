@@ -7,16 +7,15 @@ import site.siredvin.peripheralium.computercraft.peripheral.owner.PocketPeripher
 import site.siredvin.peripheralium.computercraft.pocket.BasePocketUpgrade
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
-class PocketNaturesCompassUpgrade(stack: ItemStack) : BasePocketUpgrade<NaturesCompassPeripheral<PocketPeripheralOwner>>(
-    TYPE,
-    stack,
-) {
+class PocketNaturesCompassUpgrade(stack: ItemStack) :
+    BasePocketUpgrade<NaturesCompassPeripheral<PocketPeripheralOwner>>(
+        TYPE,
+        stack,
+    ) {
 
     companion object {
         val TYPE = ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
     }
 
-    override fun getPeripheral(access: IPocketAccess): NaturesCompassPeripheral<PocketPeripheralOwner> {
-        return NaturesCompassPeripheral(PocketPeripheralOwner(access), Configuration.enableNaturesCompassPocketUpgrade)
-    }
+    override fun getPeripheral(access: IPocketAccess): NaturesCompassPeripheral<PocketPeripheralOwner> = NaturesCompassPeripheral(PocketPeripheralOwner(access), Configuration.enableNaturesCompassPocketUpgrade)
 }

@@ -14,8 +14,7 @@ import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
 import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralium.ext.toRelative
 
-class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, override val isEnabled: Boolean) :
-    OwnedPeripheral<O>(TYPE, peripheralOwner) {
+class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, override val isEnabled: Boolean) : OwnedPeripheral<O>(TYPE, peripheralOwner) {
     companion object {
         const val TYPE = "natures_compass"
     }
@@ -26,9 +25,7 @@ class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, overrid
         get() = NaturesCompass.NATURES_COMPASS_ITEM
 
     @LuaFunction
-    fun getBiomes(): List<String> {
-        return BiomeUtils.getAllowedBiomeIDs(peripheralOwner.level).map { it.toString() }
-    }
+    fun getBiomes(): List<String> = BiomeUtils.getAllowedBiomeIDs(peripheralOwner.level).map { it.toString() }
 
     @LuaFunction
     fun scheduleSearch(biome: String): MethodResult {
@@ -47,9 +44,7 @@ class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, overrid
     }
 
     @LuaFunction
-    fun getState(): String {
-        return compass.getState(compassStack).name
-    }
+    fun getState(): String = compass.getState(compassStack).name
 
     @LuaFunction
     fun getResult(): Map<String, Any>? {

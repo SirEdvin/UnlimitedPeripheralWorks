@@ -7,9 +7,7 @@ import site.siredvin.peripheralium.util.assertBetween
 class EnderCellPlugin(private val provider: AbstractEnderTile<*>) : BaseEnergyStoragePlugin(provider) {
 
     @LuaFunction(mainThread = true)
-    fun getChannel(): Int {
-        return provider.channel.get() + 1
-    }
+    fun getChannel(): Int = provider.channel.get() + 1
 
     @LuaFunction(mainThread = true)
     fun setChannel(channel: Int) {
@@ -19,7 +17,5 @@ class EnderCellPlugin(private val provider: AbstractEnderTile<*>) : BaseEnergySt
     }
 
     @LuaFunction(mainThread = true)
-    fun getMaxChannel(): Int {
-        return provider.maxChannels
-    }
+    fun getMaxChannel(): Int = provider.maxChannels
 }

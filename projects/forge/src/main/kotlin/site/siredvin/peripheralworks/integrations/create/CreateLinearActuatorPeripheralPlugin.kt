@@ -8,10 +8,8 @@ class CreateLinearActuatorPeripheralPlugin(
 ) : CreateSmartBlockPeripheralPlugin<LinearActuatorBlockEntity>(blockEntity) {
 
     @LuaFunction(mainThread = true)
-    fun inspect(): Map<String, Any> {
-        return mapOf(
-            "movementSpeed" to blockEntity.movementSpeed,
-            "isRunning" to blockEntity.running,
-        )
-    }
+    fun inspect(): Map<String, Any> = mapOf(
+        "movementSpeed" to blockEntity.movementSpeed,
+        "isRunning" to blockEntity.running,
+    )
 }

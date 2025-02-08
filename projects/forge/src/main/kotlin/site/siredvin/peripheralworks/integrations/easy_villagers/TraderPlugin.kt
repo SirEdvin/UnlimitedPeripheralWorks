@@ -12,9 +12,7 @@ open class TraderPlugin(private val trader: TraderTileentityBase) : IPeripheralP
         get() = "easy_trader"
 
     @LuaFunction(mainThread = true)
-    fun hasVillager(): Boolean {
-        return trader.hasVillager()
-    }
+    fun hasVillager(): Boolean = trader.hasVillager()
 
     @LuaFunction(mainThread = true)
     fun inspect(): Map<String, Any>? {
