@@ -7,9 +7,6 @@ import site.siredvin.peripheralium.common.blockentities.PeripheralBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 
-class UniversalScannerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    PeripheralBlockEntity<UniversalScannerPeripheral>(BlockEntityTypes.UNIVERSAL_SCANNER.get(), blockPos, blockState) {
-    override fun createPeripheral(side: Direction): UniversalScannerPeripheral {
-        return UniversalScannerPeripheral.of(this)
-    }
+class UniversalScannerBlockEntity(blockPos: BlockPos, blockState: BlockState) : PeripheralBlockEntity<UniversalScannerPeripheral>(BlockEntityTypes.UNIVERSAL_SCANNER.get(), blockPos, blockState) {
+    override fun createPeripheral(side: Direction): UniversalScannerPeripheral = UniversalScannerPeripheral.of(this)
 }

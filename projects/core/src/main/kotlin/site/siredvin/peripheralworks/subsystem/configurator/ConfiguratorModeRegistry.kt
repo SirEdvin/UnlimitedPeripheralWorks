@@ -20,9 +20,7 @@ object ConfiguratorModeRegistry {
         CONDITION_REGISTRY[condition] = modeID
     }
 
-    fun get(modeID: ResourceLocation): ConfigurationMode? {
-        return REGISTRY[modeID]
-    }
+    fun get(modeID: ResourceLocation): ConfigurationMode? = REGISTRY[modeID]
 
     fun get(state: BlockState): ConfigurationMode? {
         CONDITION_REGISTRY.forEach { (predicate, modID) ->

@@ -17,10 +17,11 @@ import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEnti
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import java.util.*
 
-class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEntity) : OwnedPeripheral<BlockEntityPeripheralOwner<DisplayPedestalBlockEntity>>(
-    TYPE,
-    BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING),
-) {
+class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEntity) :
+    OwnedPeripheral<BlockEntityPeripheralOwner<DisplayPedestalBlockEntity>>(
+        TYPE,
+        BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING),
+    ) {
     companion object {
         const val TYPE = "display_pedestal"
     }
@@ -54,14 +55,10 @@ class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEnt
     }
 
     @LuaFunction(mainThread = true)
-    fun isLabelRendered(): Boolean {
-        return blockEntity.renderLabel
-    }
+    fun isLabelRendered(): Boolean = blockEntity.renderLabel
 
     @LuaFunction(mainThread = true)
-    fun isItemRendered(): Boolean {
-        return blockEntity.renderItem
-    }
+    fun isItemRendered(): Boolean = blockEntity.renderItem
 
     @LuaFunction(mainThread = true)
     fun setLabelRendered(value: Boolean) {

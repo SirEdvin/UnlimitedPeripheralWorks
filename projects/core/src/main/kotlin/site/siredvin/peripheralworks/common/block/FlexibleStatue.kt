@@ -23,8 +23,7 @@ import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.modId
 
-class FlexibleStatue :
-    BaseNBTBlock<FlexibleStatueBlockEntity>(false, BlockUtil.decoration().dynamicShape()) {
+class FlexibleStatue : BaseNBTBlock<FlexibleStatueBlockEntity>(false, BlockUtil.decoration().dynamicShape()) {
     companion object {
         val WHITE_TEXTURE = modId("block/white")
         val CONFIGURED = BooleanProperty.create("configured")
@@ -54,13 +53,9 @@ class FlexibleStatue :
     override val savableProperties: List<Property<*>>
         get() = SAVABLE_PROPERTIES
 
-    override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity {
-        return BlockEntityTypes.FLEXIBLE_STATUE.get().create(blockPos, blockState)!!
-    }
+    override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = BlockEntityTypes.FLEXIBLE_STATUE.get().create(blockPos, blockState)!!
 
-    override fun createItemStack(): ItemStack {
-        return ItemStack(Blocks.FLEXIBLE_STATUE.get().asItem())
-    }
+    override fun createItemStack(): ItemStack = ItemStack(Blocks.FLEXIBLE_STATUE.get().asItem())
 
     @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION")
@@ -75,9 +70,7 @@ class FlexibleStatue :
     }
 
     @Deprecated("Deprecated in Java")
-    override fun useShapeForLightOcclusion(blockState: BlockState): Boolean {
-        return true
-    }
+    override fun useShapeForLightOcclusion(blockState: BlockState): Boolean = true
 
     @Deprecated("Deprecated in Java")
     override fun getLightBlock(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos): Int {
@@ -87,26 +80,21 @@ class FlexibleStatue :
     }
 
     @Deprecated("Deprecated in Java")
-    override fun rotate(state: BlockState, rot: Rotation): BlockState {
-        return state.setValue(
-            FACING,
-            rot.rotate(state.getValue(FACING)),
-        )
-    }
+    override fun rotate(state: BlockState, rot: Rotation): BlockState = state.setValue(
+        FACING,
+        rot.rotate(state.getValue(FACING)),
+    )
 
     @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
-    override fun mirror(state: BlockState, mirrorIn: Mirror): BlockState {
-        return state.rotate(mirrorIn.getRotation(state.getValue(FACING)))
-    }
+    override fun mirror(state: BlockState, mirrorIn: Mirror): BlockState = state.rotate(mirrorIn.getRotation(state.getValue(FACING)))
 
-    override fun getStateForPlacement(context: BlockPlaceContext): BlockState {
-        return defaultBlockState().setValue(
-            FACING,
-            context.horizontalDirection.opposite,
-        )
-    }
+    override fun getStateForPlacement(context: BlockPlaceContext): BlockState = defaultBlockState().setValue(
+        FACING,
+        context.horizontalDirection.opposite,
+    )
 
+    @Deprecated("Deprecated in Java")
     override fun getCloneItemStack(blockGetter: BlockGetter, blockPos: BlockPos, blockState: BlockState): ItemStack {
         val blockEntity = blockGetter.getBlockEntity(blockPos)
         if (blockEntity is FlexibleStatueBlockEntity) {

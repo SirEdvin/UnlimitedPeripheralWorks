@@ -45,14 +45,12 @@ object SensorCollection {
         return MethodResult.of("stable")
     }
 
-    fun inspectOrientationAngle(owner: IPeripheralOwner): MethodResult {
-        return when (owner.facing) {
-            Direction.NORTH -> MethodResult.of(0)
-            Direction.SOUTH -> MethodResult.of(180)
-            Direction.WEST -> MethodResult.of(270)
-            Direction.EAST -> MethodResult.of(90)
-            else -> MethodResult.of(null, "Cannot determinate angle to north pole")
-        }
+    fun inspectOrientationAngle(owner: IPeripheralOwner): MethodResult = when (owner.facing) {
+        Direction.NORTH -> MethodResult.of(0)
+        Direction.SOUTH -> MethodResult.of(180)
+        Direction.WEST -> MethodResult.of(270)
+        Direction.EAST -> MethodResult.of(90)
+        else -> MethodResult.of(null, "Cannot determinate angle to north pole")
     }
 
     fun inspectTime(owner: IPeripheralOwner): MethodResult {
@@ -70,18 +68,16 @@ object SensorCollection {
         )
     }
 
-    private fun decodeMoonPhase(level: Level): String {
-        return when (level.moonPhase) {
-            0 -> "Full moon"
-            1 -> "Waning gibbous"
-            2 -> "Third quarter"
-            3 -> "Waning crescent"
-            4 -> "New moon"
-            5 -> "Waxing crescent"
-            6 -> "First quarter"
-            7 -> "Waxing gibbous"
-            else -> "Unknown moon phase"
-        }
+    private fun decodeMoonPhase(level: Level): String = when (level.moonPhase) {
+        0 -> "Full moon"
+        1 -> "Waning gibbous"
+        2 -> "Third quarter"
+        3 -> "Waning crescent"
+        4 -> "New moon"
+        5 -> "Waxing crescent"
+        6 -> "First quarter"
+        7 -> "Waxing gibbous"
+        else -> "Unknown moon phase"
     }
 
     fun inspectCalendar(owner: IPeripheralOwner): MethodResult {

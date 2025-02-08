@@ -32,14 +32,12 @@ class RecipeRegistryPeripheral(
 
     @LuaFunction
     @Throws(LuaException::class)
-    fun getRecipeTypes(): MethodResult {
-        return MethodResult.of(
-            XplatRegistries.RECIPE_TYPES.keySet().stream().filter {
-                !RecipeRegistryToolkit.excludedRecipeTypes.contains(it)
-            }.map(ResourceLocation::toString)
-                .collect(Collectors.toList()),
-        )
-    }
+    fun getRecipeTypes(): MethodResult = MethodResult.of(
+        XplatRegistries.RECIPE_TYPES.keySet().stream().filter {
+            !RecipeRegistryToolkit.excludedRecipeTypes.contains(it)
+        }.map(ResourceLocation::toString)
+            .collect(Collectors.toList()),
+    )
 
     @LuaFunction
     @Throws(LuaException::class)

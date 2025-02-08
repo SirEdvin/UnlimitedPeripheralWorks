@@ -15,10 +15,11 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 import site.siredvin.peripheralworks.computercraft.plugins.PedestalInventoryPlugin
 
-class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) : OwnedPeripheral<BlockEntityPeripheralOwner<MapPedestalBlockEntity>>(
-    TYPE,
-    BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING),
-) {
+class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) :
+    OwnedPeripheral<BlockEntityPeripheralOwner<MapPedestalBlockEntity>>(
+        TYPE,
+        BlockEntityPeripheralOwner(blockEntity, facingProperty = BasePedestal.FACING),
+    ) {
     companion object {
         const val TYPE = "map_pedestal"
     }

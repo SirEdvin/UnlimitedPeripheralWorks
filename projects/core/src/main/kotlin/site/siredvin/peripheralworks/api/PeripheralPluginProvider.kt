@@ -19,7 +19,5 @@ interface PeripheralPluginProvider : Comparable<PeripheralPluginProvider> {
 
     fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin?
 
-    override operator fun compareTo(other: PeripheralPluginProvider): Int {
-        return priority - other.priority
-    }
+    override operator fun compareTo(other: PeripheralPluginProvider): Int = priority - other.priority
 }

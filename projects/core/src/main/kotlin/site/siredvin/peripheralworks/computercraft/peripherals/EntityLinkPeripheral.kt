@@ -47,9 +47,7 @@ class EntityLinkPeripheral(private val blockEntity: EntityLinkBlockEntity, owner
     }
 
     @LuaFunction(mainThread = true)
-    fun isEntityFound(): Boolean {
-        return blockEntity.entity != null
-    }
+    fun isEntityFound(): Boolean = blockEntity.entity != null
 
     @LuaFunction(mainThread = true)
     fun inspect(): Map<String, Any>? {

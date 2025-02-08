@@ -47,9 +47,7 @@ enum class SphereOperations(
         )
     }
 
-    override fun getCooldown(context: SphereOperationContext): Int {
-        return cooldown!!.get()
-    }
+    override fun getCooldown(context: SphereOperationContext): Int = cooldown!!.get()
 
     override fun getCost(context: SphereOperationContext): Int {
         if (context.radius <= maxFreeRadiusConfig!!.get()) return 0
@@ -74,11 +72,7 @@ enum class SphereOperations(
         return data
     }
 
-    fun free(): SphereOperationContext {
-        return SphereOperationContext(maxFreeRadius)
-    }
+    fun free(): SphereOperationContext = SphereOperationContext(maxFreeRadius)
 
-    fun cost(): SphereOperationContext {
-        return SphereOperationContext(maxCostRadius)
-    }
+    fun cost(): SphereOperationContext = SphereOperationContext(maxCostRadius)
 }

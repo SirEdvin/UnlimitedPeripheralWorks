@@ -102,7 +102,5 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         }
     }
 
-    override fun isFoil(itemStack: ItemStack): Boolean {
-        return getActiveMode(itemStack) != null
-    }
+    override fun isFoil(itemStack: ItemStack): Boolean = getActiveMode(itemStack) != null
 }

@@ -34,9 +34,7 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
             itemPedestalBlockEntity.pushInternalDataChangeToClient()
         }
 
-        override fun canPlaceItem(slot: Int, stack: ItemStack): Boolean {
-            return itemPedestalBlockEntity.itemFilter.test(stack)
-        }
+        override fun canPlaceItem(slot: Int, stack: ItemStack): Boolean = itemPedestalBlockEntity.itemFilter.test(stack)
     }
 
     protected val inventory = ExtraSimpleStorage(this)
@@ -68,31 +66,19 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
         inventory.clearContent()
     }
 
-    override fun getContainerSize(): Int {
-        return inventory.containerSize
-    }
+    override fun getContainerSize(): Int = inventory.containerSize
 
-    override fun isEmpty(): Boolean {
-        return inventory.isEmpty
-    }
+    override fun isEmpty(): Boolean = inventory.isEmpty
 
-    override fun getItem(p0: Int): ItemStack {
-        return inventory.getItem(p0)
-    }
+    override fun getItem(p0: Int): ItemStack = inventory.getItem(p0)
 
-    override fun removeItem(p0: Int, p1: Int): ItemStack {
-        return inventory.removeItem(p0, p1)
-    }
+    override fun removeItem(p0: Int, p1: Int): ItemStack = inventory.removeItem(p0, p1)
 
-    override fun removeItemNoUpdate(p0: Int): ItemStack {
-        return inventory.removeItemNoUpdate(p0)
-    }
+    override fun removeItemNoUpdate(p0: Int): ItemStack = inventory.removeItemNoUpdate(p0)
 
     override fun setItem(p0: Int, p1: ItemStack) {
         inventory.setItem(p0, p1)
     }
 
-    override fun stillValid(p0: Player): Boolean {
-        return inventory.stillValid(p0)
-    }
+    override fun stillValid(p0: Player): Boolean = inventory.stillValid(p0)
 }

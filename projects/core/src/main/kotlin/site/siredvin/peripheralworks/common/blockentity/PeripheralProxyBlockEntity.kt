@@ -67,9 +67,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     private var listenerConnectionIncomplete: Boolean = false
     var itemStackCacheBuilt: Boolean = false
 
-    override fun createPeripheral(side: Direction): PeripheralProxyPeripheral {
-        return PeripheralProxyPeripheral(this)
-    }
+    override fun createPeripheral(side: Direction): PeripheralProxyPeripheral = PeripheralProxyPeripheral(this)
 
     fun isPosApplicable(pos: BlockPos): Boolean {
         if (pos == this.blockPos) {
@@ -78,9 +76,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         return pos.closerThan(this.blockPos, PeripheralWorksConfig.peripheralProxyMaxRange.toDouble())
     }
 
-    fun containsPos(pos: BlockPos): Boolean {
-        return remotePeripherals.contains(pos)
-    }
+    fun containsPos(pos: BlockPos): Boolean = remotePeripherals.contains(pos)
 
     private fun buildPeripheralName(targetPeripheral: IPeripheral): String {
         val newPeripheralID = ServerContext.get(PeripheraliumPlatform.minecraftServer!!).getNextId("peripheral.${targetPeripheral.type}")

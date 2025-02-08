@@ -37,14 +37,12 @@ fun VoxelShape.rotate(rotation: Rotation): VoxelShape {
     return movingShape
 }
 
-fun Direction.getRotation(to: Direction): Rotation {
-    return when (to) {
-        this -> Rotation.R0
-        this.clockWise -> Rotation.R270
-        this.counterClockWise -> Rotation.R90
-        this.opposite -> Rotation.R180
-        else -> throw IllegalArgumentException("Only horizontal rotation are supported")
-    }
+fun Direction.getRotation(to: Direction): Rotation = when (to) {
+    this -> Rotation.R0
+    this.clockWise -> Rotation.R270
+    this.counterClockWise -> Rotation.R90
+    this.opposite -> Rotation.R180
+    else -> throw IllegalArgumentException("Only horizontal rotation are supported")
 }
 
 fun VoxelShape.rotate(from: Direction, to: Direction): VoxelShape {

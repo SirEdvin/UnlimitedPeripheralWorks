@@ -80,9 +80,7 @@ class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripher
     }
 
     @LuaFunction(mainThread = true)
-    fun hasBook(): Boolean {
-        return target.hasBook()
-    }
+    fun hasBook(): Boolean = target.hasBook()
 
     @LuaFunction(mainThread = true)
     fun getPageCount(): Int {

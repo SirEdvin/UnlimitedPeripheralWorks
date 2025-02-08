@@ -19,9 +19,7 @@ class StatueWorkbench : BaseTileEntityBlock<StatueWorkbenchBlockEntity>(false, B
         val CONNECTED: BooleanProperty = BooleanProperty.create("connected")
     }
 
-    override fun newBlockEntity(p0: BlockPos, p1: BlockState): BlockEntity? {
-        return BlockEntityTypes.STATUE_WORKBENCH.get().create(p0, p1)
-    }
+    override fun newBlockEntity(p0: BlockPos, p1: BlockState): BlockEntity? = BlockEntityTypes.STATUE_WORKBENCH.get().create(p0, p1)
 
     init {
         registerDefaultState(stateDefinition.any().setValue(CONNECTED, false))

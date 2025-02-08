@@ -13,10 +13,6 @@ import net.minecraft.world.phys.EntityHitResult
 interface ConfigurationMode {
     val modeID: ResourceLocation
     val description: Component
-    fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
-        return InteractionResultHolder.pass(stack)
-    }
-    fun onEntityClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: EntityHitResult, level: Level): InteractionResultHolder<ItemStack> {
-        return InteractionResultHolder.pass(stack)
-    }
+    fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> = InteractionResultHolder.pass(stack)
+    fun onEntityClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: EntityHitResult, level: Level): InteractionResultHolder<ItemStack> = InteractionResultHolder.pass(stack)
 }

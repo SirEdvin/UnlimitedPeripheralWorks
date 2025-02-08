@@ -14,12 +14,13 @@ import site.siredvin.peripheralworks.common.blockentity.UniversalScannerBlockEnt
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import java.util.stream.Stream
 
-class UniversalScanner : FacingBlockEntityBlock<UniversalScannerBlockEntity>(
-    { BlockEntityTypes.UNIVERSAL_SCANNER.get() },
-    true,
-    false,
-    BlockUtil.defaultProperties(),
-) {
+class UniversalScanner :
+    FacingBlockEntityBlock<UniversalScannerBlockEntity>(
+        { BlockEntityTypes.UNIVERSAL_SCANNER.get() },
+        true,
+        false,
+        BlockUtil.defaultProperties(),
+    ) {
 
     companion object {
         val SHAPE = Stream.of(
@@ -38,12 +39,11 @@ class UniversalScanner : FacingBlockEntityBlock<UniversalScannerBlockEntity>(
         ).reduce { v1, v2 -> Shapes.join(v1, v2, BooleanOp.OR) }.get()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getShape(
         blockState: BlockState,
         blockGetter: BlockGetter,
         blockPos: BlockPos,
         collisionContext: CollisionContext,
-    ): VoxelShape {
-        return SHAPE
-    }
+    ): VoxelShape = SHAPE
 }

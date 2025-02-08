@@ -73,9 +73,7 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
         disconnectTurtleUpgrade(upgrade)
     }
 
-    override fun isUpgradeImpl(stack: ItemStack): Boolean {
-        return PeripheraliumPlatform.getTurtleUpgrade(stack) != null
-    }
+    override fun isUpgradeImpl(stack: ItemStack): Boolean = PeripheraliumPlatform.getTurtleUpgrade(stack) != null
 
     override fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = PeripheraliumPlatform.getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")

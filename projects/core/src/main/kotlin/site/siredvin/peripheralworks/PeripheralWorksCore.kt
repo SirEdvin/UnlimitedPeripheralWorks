@@ -22,15 +22,13 @@ object PeripheralWorksCore {
 
     var logger: Logger = LogManager.getLogger(MOD_ID)
 
-    fun configureCreativeTab(builder: CreativeModeTab.Builder): CreativeModeTab.Builder {
-        return builder.icon { Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance }
-            .title(ModText.CREATIVE_TAB.text)
-            .displayItems { _, output ->
-                ModPlatform.holder.blocks.forEach { output.accept(it.get()) }
-                ModPlatform.holder.items.forEach { output.accept(it.get()) }
-                PeripheralWorksCommonHooks.registerUpgradesInCreativeTab(output)
-            }
-    }
+    fun configureCreativeTab(builder: CreativeModeTab.Builder): CreativeModeTab.Builder = builder.icon { Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance }
+        .title(ModText.CREATIVE_TAB.text)
+        .displayItems { _, output ->
+            ModPlatform.holder.blocks.forEach { output.accept(it.get()) }
+            ModPlatform.holder.items.forEach { output.accept(it.get()) }
+            PeripheralWorksCommonHooks.registerUpgradesInCreativeTab(output)
+        }
 
     fun configure(platform: ModInnerPlatform, ingredients: ModRecipeIngredients, blocks: ModBlocksReference) {
         ModPlatform.configure(platform)

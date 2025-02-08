@@ -22,7 +22,5 @@ class MapPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     override val itemFilter: Predicate<ItemStack> = Predicate { it.`is`(Items.MAP) || it.`is`(Items.FILLED_MAP) }
 
-    override fun createPeripheral(side: Direction): MapPedestalPeripheral {
-        return MapPedestalPeripheral(this)
-    }
+    override fun createPeripheral(side: Direction): MapPedestalPeripheral = MapPedestalPeripheral(this)
 }

@@ -18,45 +18,29 @@ class LocalPocketWrapper(val access: IPocketAccess, val upgrade: IPocketUpgrade,
     val upgradeData: UpgradeData<IPocketUpgrade>
         get() = UpgradeData.of(upgrade, upgradeNBTData)
 
-    override fun getLevel(): ServerLevel {
-        return access.level
-    }
+    override fun getLevel(): ServerLevel = access.level
 
-    override fun getPosition(): Vec3 {
-        return access.position
-    }
+    override fun getPosition(): Vec3 = access.position
 
-    override fun getEntity(): Entity? {
-        return access.entity
-    }
+    override fun getEntity(): Entity? = access.entity
 
-    override fun getColour(): Int {
-        return access.colour
-    }
+    override fun getColour(): Int = access.colour
 
     override fun setColour(colour: Int) {
         access.colour = colour
     }
 
-    override fun getLight(): Int {
-        return access.light
-    }
+    override fun getLight(): Int = access.light
 
     override fun setLight(colour: Int) {
         access.light = colour
     }
 
-    override fun getUpgrade(): UpgradeData<IPocketUpgrade> {
-        return upgradeData
-    }
+    override fun getUpgrade(): UpgradeData<IPocketUpgrade> = upgradeData
 
-    override fun setUpgrade(p0: UpgradeData<IPocketUpgrade>?) {
-        throw IllegalArgumentException("You should not set upgrade for this wrapper")
-    }
+    override fun setUpgrade(p0: UpgradeData<IPocketUpgrade>?): Unit = throw IllegalArgumentException("You should not set upgrade for this wrapper")
 
-    override fun getUpgradeNBTData(): CompoundTag {
-        return origin.getDataForUpgrade(id)
-    }
+    override fun getUpgradeNBTData(): CompoundTag = origin.getDataForUpgrade(id)
 
     override fun updateUpgradeNBTData() {
         access.updateUpgradeNBTData()

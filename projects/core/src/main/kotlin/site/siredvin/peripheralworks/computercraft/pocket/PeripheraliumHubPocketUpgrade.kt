@@ -19,9 +19,7 @@ class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, p
         item,
     ),
     PocketUpgradeHolder {
-    override fun getPeripheral(access: IPocketAccess): PocketPeripheraliumHubPeripheral {
-        return PocketPeripheraliumHubPeripheral(maxUpdateCount.get(), access, type)
-    }
+    override fun getPeripheral(access: IPocketAccess): PocketPeripheraliumHubPeripheral = PocketPeripheraliumHubPeripheral(maxUpdateCount.get(), access, type)
 
     override fun update(access: IPocketAccess, peripheral: IPeripheral?) {
         super.update(access, peripheral)

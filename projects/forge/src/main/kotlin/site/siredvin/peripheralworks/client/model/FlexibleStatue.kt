@@ -77,6 +77,7 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
     }
 
     override fun useAmbientOcclusion(): Boolean = true
+    @Deprecated("Deprecated in Java")
     override fun getParticleIcon(): TextureAtlasSprite = getTexture(DEFAULT_TEXTURE)
     override fun isGui3d(): Boolean = true
     override fun usesBlockLight(): Boolean = false
@@ -109,7 +110,9 @@ object FlexibleStatueModel : AbstractFlexibleStatueModel() {
         return quadsCache.get(Triple(quadsData, safeSide, getModelState(rotation)))
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getOverrides(): ItemOverrides = FlexibleStatueItemOverrides
+    @Deprecated("Deprecated in Java")
     override fun getTransforms(): ItemTransforms = RenderUtils.MODEL_TRANSFORM_BLOCK
 
     override fun getModelData(
@@ -154,5 +157,6 @@ class ItemFlexibleStatueModel(private val quads: QuadList) : AbstractFlexibleSta
     }
 
     override fun getOverrides(): ItemOverrides = ItemOverrides.EMPTY
+    @Deprecated("Deprecated in Java")
     override fun getTransforms(): ItemTransforms = RenderUtils.MODEL_TRANSFORM_BLOCK
 }

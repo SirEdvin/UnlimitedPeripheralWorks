@@ -6,14 +6,15 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.stream.Stream
 
-abstract class ModLanguageProvider(output: PackOutput, locale: String) : LanguageProvider(
-    output,
-    PeripheralWorksCore.MOD_ID,
-    locale,
-    ModPlatform.holder,
-    *ModText.values(),
-    *ModTooltip.values(),
-) {
+abstract class ModLanguageProvider(output: PackOutput, locale: String) :
+    LanguageProvider(
+        output,
+        PeripheralWorksCore.MOD_ID,
+        locale,
+        ModPlatform.holder,
+        *ModText.values(),
+        *ModTooltip.values(),
+    ) {
 
     companion object {
         private val extraExpectedKeys: MutableList<String> = mutableListOf()
@@ -23,7 +24,5 @@ abstract class ModLanguageProvider(output: PackOutput, locale: String) : Languag
         }
     }
 
-    override fun getExpectedKeys(): Stream<String> {
-        return Stream.concat(super.getExpectedKeys(), extraExpectedKeys.stream())
-    }
+    override fun getExpectedKeys(): Stream<String> = Stream.concat(super.getExpectedKeys(), extraExpectedKeys.stream())
 }

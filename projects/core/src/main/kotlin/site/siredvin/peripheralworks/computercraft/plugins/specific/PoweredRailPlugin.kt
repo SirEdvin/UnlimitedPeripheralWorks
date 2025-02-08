@@ -36,9 +36,7 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
         get() = ContainerWrapper(MergedContainer(MinecartUtils.getContainerMinecarts(level, pos)))
 
     @LuaFunction(mainThread = true)
-    fun isPowered(): Boolean {
-        return blockState.getValue(PoweredRailBlock.POWERED)
-    }
+    fun isPowered(): Boolean = blockState.getValue(PoweredRailBlock.POWERED)
 
     @LuaFunction(mainThread = true)
     fun pushMinecarts(reverse: Optional<Boolean>) {
@@ -64,7 +62,5 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
     }
 
     @LuaFunction(mainThread = true, value = ["getMinecarts"])
-    fun getMinecartsLua(): List<Map<String, Any>> {
-        return MinecartUtils.getMinecarts(level, pos).map { LuaRepresentation.forEntity(it) }
-    }
+    fun getMinecartsLua(): List<Map<String, Any>> = MinecartUtils.getMinecarts(level, pos).map { LuaRepresentation.forEntity(it) }
 }

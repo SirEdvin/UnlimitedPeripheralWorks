@@ -15,8 +15,7 @@ import site.siredvin.peripheralworks.tags.BlockTags
 import kotlin.math.max
 import kotlin.math.min
 
-open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    MutableNBTBlockEntity<OwnedPeripheral<*>>(BlockEntityTypes.FLEXIBLE_REALITY_ANCHOR.get(), blockPos, blockState) {
+open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<OwnedPeripheral<*>>(BlockEntityTypes.FLEXIBLE_REALITY_ANCHOR.get(), blockPos, blockState) {
 
     companion object {
         const val MIMIC_TAG = "mimic"
@@ -53,13 +52,9 @@ open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: Bloc
         return true
     }
 
-    override fun getPeripheral(side: Direction): OwnedPeripheral<*>? {
-        return null
-    }
+    override fun getPeripheral(side: Direction): OwnedPeripheral<*>? = null
 
-    override fun createPeripheral(side: Direction): OwnedPeripheral<*> {
-        throw IllegalCallerException("You should not call this function at all")
-    }
+    override fun createPeripheral(side: Direction): OwnedPeripheral<*> = throw IllegalCallerException("You should not call this function at all")
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         if (data.contains(MIMIC_TAG)) {

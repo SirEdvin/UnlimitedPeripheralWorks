@@ -24,9 +24,7 @@ object ConfigurationModeRenderRegistry {
         REGISTRY[modeID] = render
     }
 
-    fun get(modeID: ResourceLocation): ConfigurationModeRender? {
-        return REGISTRY[modeID]
-    }
+    fun get(modeID: ResourceLocation): ConfigurationModeRender? = REGISTRY[modeID]
 
     fun render(minecraft: Minecraft, poseStack: PoseStack, partialTick: Float, camera: Camera, gameRenderer: GameRenderer, projectionMatrix: Matrix4f) {
         val player = minecraft.player ?: return

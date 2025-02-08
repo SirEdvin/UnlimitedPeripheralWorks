@@ -105,9 +105,7 @@ object RecipeRegistryToolkit {
         RECIPE_PREDICATES[recipeType] = searchFunction
     }
 
-    fun serializeJson(obj: JsonObject?): Any? {
-        return GSON.fromJson(obj, HashMap::class.java)
-    }
+    fun serializeJson(obj: JsonObject?): Any? = GSON.fromJson(obj, HashMap::class.java)
 
     fun serializePossibleCollection(obj: Any?): Any? {
         if (obj is Collection<*>) {
@@ -142,10 +140,8 @@ object RecipeRegistryToolkit {
     }
 
     @Throws(LuaException::class)
-    fun getRecipeType(type: ResourceLocation): RecipeType<*> {
-        return XplatRegistries.RECIPE_TYPES.tryGet(type)
-            ?: throw LuaException(String.format("Incorrect recipe type %s", type))
-    }
+    fun getRecipeType(type: ResourceLocation): RecipeType<*> = XplatRegistries.RECIPE_TYPES.tryGet(type)
+        ?: throw LuaException(String.format("Incorrect recipe type %s", type))
 
     fun getRecipesForType(recipeType: RecipeType<*>, level: Level): List<Recipe<*>> {
         @Suppress("UNCHECKED_CAST")

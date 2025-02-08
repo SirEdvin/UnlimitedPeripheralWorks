@@ -19,7 +19,8 @@ import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.RemoteObserverPeripheral
 
 class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    MutableNBTBlockEntity<RemoteObserverPeripheral>(BlockEntityTypes.REMOTE_OBSERVER.get(), blockPos, blockState), IObservingBlockEntity {
+    MutableNBTBlockEntity<RemoteObserverPeripheral>(BlockEntityTypes.REMOTE_OBSERVER.get(), blockPos, blockState),
+    IObservingBlockEntity {
 
     companion object {
         const val TRACKED_BLOCKS_TAG = "trackedBlocks"
@@ -34,9 +35,7 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     val trackedBlocksView: List<BlockPos>
         get() = trackedBlocks
 
-    override fun createPeripheral(side: Direction): RemoteObserverPeripheral {
-        return RemoteObserverPeripheral(this)
-    }
+    override fun createPeripheral(side: Direction): RemoteObserverPeripheral = RemoteObserverPeripheral(this)
 
     fun isPosApplicable(pos: BlockPos): Boolean {
         if (pos == this.blockPos) {

@@ -5,8 +5,7 @@ import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEnti
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.modem.PeripheralHubPeripheral
 
-class PeripheralProxyPeripheral(private val blockEntity: PeripheralProxyBlockEntity) :
-    PeripheralHubPeripheral<BlockEntityPeripheralOwner<PeripheralProxyBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
+class PeripheralProxyPeripheral(private val blockEntity: PeripheralProxyBlockEntity) : PeripheralHubPeripheral<BlockEntityPeripheralOwner<PeripheralProxyBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
 
     companion object {
         const val TYPE = "peripheral_proxy"
@@ -15,9 +14,7 @@ class PeripheralProxyPeripheral(private val blockEntity: PeripheralProxyBlockEnt
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enablePeripheralProxy
 
-    override fun getAdditionalTypes(): Set<String> {
-        return setOf("peripheral_hub")
-    }
+    override fun getAdditionalTypes(): Set<String> = setOf("peripheral_hub")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

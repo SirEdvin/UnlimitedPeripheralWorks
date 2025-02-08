@@ -46,9 +46,7 @@ class EntityCard : DescriptiveItem(Properties().stacksTo(1)) {
         }
     }
 
-    override fun isFoil(stack: ItemStack): Boolean {
-        return !isEmpty(stack)
-    }
+    override fun isFoil(stack: ItemStack): Boolean = !isEmpty(stack)
 
     override fun appendHoverText(
         itemStack: ItemStack,

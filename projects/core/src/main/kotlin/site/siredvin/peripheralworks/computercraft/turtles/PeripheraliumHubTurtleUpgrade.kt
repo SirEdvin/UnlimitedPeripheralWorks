@@ -18,16 +18,15 @@ import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
 class PeripheraliumHubTurtleUpgrade(private val maxUpdateCount: Supplier<Int>, private val type: String, item: ItemStack) :
-    StatefulPeripheralTurtleUpgrade<TurtlePeripheraliumHubPeripheral>(ResourceLocation(PeripheralWorksCore.MOD_ID, type), item), TurtleUpgradeHolder {
+    StatefulPeripheralTurtleUpgrade<TurtlePeripheraliumHubPeripheral>(ResourceLocation(PeripheralWorksCore.MOD_ID, type), item),
+    TurtleUpgradeHolder {
 
     companion object {
         private val internalDataCache = CacheBuilder.newBuilder()
             .expireAfterAccess(30, TimeUnit.SECONDS).build<CompoundTag, List<UpgradeData<ITurtleUpgrade>>>().asMap()
     }
 
-    override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): TurtlePeripheraliumHubPeripheral {
-        return TurtlePeripheraliumHubPeripheral(maxUpdateCount.get(), turtle, side, type)
-    }
+    override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): TurtlePeripheraliumHubPeripheral = TurtlePeripheraliumHubPeripheral(maxUpdateCount.get(), turtle, side, type)
 
     override fun update(turtle: ITurtleAccess, side: TurtleSide) {
         super.update(turtle, side)

@@ -28,14 +28,10 @@ class NoteBlockPlugin(private val level: Level, private val pos: BlockPos) : IPe
         }
 
     @LuaFunction(mainThread = true)
-    fun getNote(): Int {
-        return blockState.getValue(NoteBlock.NOTE)
-    }
+    fun getNote(): Int = blockState.getValue(NoteBlock.NOTE)
 
     @LuaFunction(mainThread = true)
-    fun getInstrument(): String {
-        return blockState.getValue(NoteBlock.INSTRUMENT).name.lowercase()
-    }
+    fun getInstrument(): String = blockState.getValue(NoteBlock.INSTRUMENT).name.lowercase()
 
     @LuaFunction(mainThread = true)
     fun setNote(note: Int) {

@@ -31,18 +31,12 @@ abstract class BasePedestal<T : BlockEntity>(properties: Properties) : BaseTileE
 
     @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
-    override fun mirror(state: BlockState, mirror: Mirror): BlockState {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)))
-    }
+    override fun mirror(state: BlockState, mirror: Mirror): BlockState = state.rotate(mirror.getRotation(state.getValue(FACING)))
 
     @Deprecated("Deprecated in Java")
-    override fun rotate(state: BlockState, rotation: Rotation): BlockState {
-        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)))
-    }
+    override fun rotate(state: BlockState, rotation: Rotation): BlockState = state.setValue(FACING, rotation.rotate(state.getValue(FACING)))
 
-    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? {
-        return defaultBlockState().setValue(FACING, context.clickedFace)
-    }
+    override fun getStateForPlacement(context: BlockPlaceContext): BlockState? = defaultBlockState().setValue(FACING, context.clickedFace)
 
     @Deprecated("Deprecated in Java")
     override fun getShape(
@@ -50,15 +44,13 @@ abstract class BasePedestal<T : BlockEntity>(properties: Properties) : BaseTileE
         blockGetter: BlockGetter,
         blockPos: BlockPos,
         collisionContext: CollisionContext,
-    ): VoxelShape {
-        return when (state.getValue(FACING)) {
-            Direction.SOUTH -> SOUTH_PEDESTAL
-            Direction.NORTH -> NORTH_PEDESTAL
-            Direction.EAST -> EAST_PEDESTAL
-            Direction.WEST -> WEST_PEDESTAL
-            Direction.DOWN -> DOWN_PEDESTAL
-            else -> PEDESTAL
-        }
+    ): VoxelShape = when (state.getValue(FACING)) {
+        Direction.SOUTH -> SOUTH_PEDESTAL
+        Direction.NORTH -> NORTH_PEDESTAL
+        Direction.EAST -> EAST_PEDESTAL
+        Direction.WEST -> WEST_PEDESTAL
+        Direction.DOWN -> DOWN_PEDESTAL
+        else -> PEDESTAL
     }
 
     companion object {

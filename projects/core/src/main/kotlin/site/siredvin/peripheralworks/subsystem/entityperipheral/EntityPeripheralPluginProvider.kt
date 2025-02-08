@@ -17,7 +17,5 @@ interface EntityPeripheralPluginProvider : Comparable<EntityPeripheralPluginProv
 
     fun provide(entity: Entity): IPeripheralPlugin?
 
-    override operator fun compareTo(other: EntityPeripheralPluginProvider): Int {
-        return priority - other.priority
-    }
+    override operator fun compareTo(other: EntityPeripheralPluginProvider): Int = priority - other.priority
 }

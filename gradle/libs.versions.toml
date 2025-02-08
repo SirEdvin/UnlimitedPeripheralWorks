@@ -9,7 +9,7 @@ loom = "1.4.+"
 mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.112.0"
+cc-tweaked = "1.113.0"
 peripheralium = "0.7.0"
 mixin = "0.8.5"
 # Fabric dependencies

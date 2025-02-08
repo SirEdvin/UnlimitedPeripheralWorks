@@ -36,13 +36,9 @@ class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mu
     val facing: Direction
         get() = blockState.getValue(FlexibleStatue.FACING)
 
-    override fun getPeripheral(side: Direction): OwnedPeripheral<*>? {
-        return null
-    }
+    override fun getPeripheral(side: Direction): OwnedPeripheral<*>? = null
 
-    override fun createPeripheral(side: Direction): OwnedPeripheral<*> {
-        throw IllegalCallerException("You should not call this function at all")
-    }
+    override fun createPeripheral(side: Direction): OwnedPeripheral<*> = throw IllegalCallerException("You should not call this function at all")
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         val mutableState = state ?: blockState

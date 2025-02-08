@@ -15,9 +15,7 @@ import site.siredvin.peripheralworks.common.setup.RecipeSerializers
 class AnchorCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
 
     companion object {
-        private fun isSuitableAnchor(stack: ItemStack): Boolean {
-            return stack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem()) && stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG) != null
-        }
+        private fun isSuitableAnchor(stack: ItemStack): Boolean = stack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem()) && stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG) != null
     }
 
     override fun matches(p0: CraftingContainer, p1: Level): Boolean {
@@ -45,11 +43,7 @@ class AnchorCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) 
         return firstCandidate.copyWithCount(count)
     }
 
-    override fun canCraftInDimensions(p0: Int, p1: Int): Boolean {
-        return true
-    }
+    override fun canCraftInDimensions(p0: Int, p1: Int): Boolean = true
 
-    override fun getSerializer(): RecipeSerializer<*> {
-        return RecipeSerializers.ANCHOR_CLONING.get()
-    }
+    override fun getSerializer(): RecipeSerializer<*> = RecipeSerializers.ANCHOR_CLONING.get()
 }

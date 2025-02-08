@@ -99,15 +99,11 @@ abstract class PeripheralHubPeripheral<O : IPeripheralOwner>(peripheralType: Str
 
     @Suppress("unused")
     @LuaFunction
-    fun getNamesRemote(): Collection<String> {
-        return peripheralsRecord.keys.sorted()
-    }
+    fun getNamesRemote(): Collection<String> = peripheralsRecord.keys.sorted()
 
     @Suppress("unused")
     @LuaFunction
-    fun isPresentRemote(name: String): Boolean {
-        return peripheralsRecord.containsKey(name)
-    }
+    fun isPresentRemote(name: String): Boolean = peripheralsRecord.containsKey(name)
 
     @Suppress("unused")
     @LuaFunction

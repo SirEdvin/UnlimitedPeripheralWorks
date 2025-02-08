@@ -23,9 +23,7 @@ import kotlin.math.min
 class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
 
     @LuaFunction(mainThread = true)
-    fun getLevel(): Int {
-        return target.levels
-    }
+    fun getLevel(): Int = target.levels
 
     @LuaFunction(mainThread = true)
     fun getPossiblePowers(): List<String> {

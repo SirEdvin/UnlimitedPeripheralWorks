@@ -7,9 +7,6 @@ import site.siredvin.peripheralium.common.blockentities.PeripheralBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 
-class UltimateSensorBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    PeripheralBlockEntity<UltimateSensorPeripheral>(BlockEntityTypes.ULTIMATE_SENSOR.get(), blockPos, blockState) {
-    override fun createPeripheral(side: Direction): UltimateSensorPeripheral {
-        return UltimateSensorPeripheral.of(this)
-    }
+class UltimateSensorBlockEntity(blockPos: BlockPos, blockState: BlockState) : PeripheralBlockEntity<UltimateSensorPeripheral>(BlockEntityTypes.ULTIMATE_SENSOR.get(), blockPos, blockState) {
+    override fun createPeripheral(side: Direction): UltimateSensorPeripheral = UltimateSensorPeripheral.of(this)
 }

@@ -44,7 +44,5 @@ class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize:
         upgrade: T,
         turtle: ITurtleAccess?,
         side: TurtleSide,
-    ): TransformedModel {
-        return TransformedModel.of(upgrade.craftingItem, if (side == TurtleSide.LEFT) leftTransformation else rightTransformation)
-    }
+    ): TransformedModel = TransformedModel.of(upgrade.craftingItem, if (side == TurtleSide.LEFT) leftTransformation else rightTransformation)
 }

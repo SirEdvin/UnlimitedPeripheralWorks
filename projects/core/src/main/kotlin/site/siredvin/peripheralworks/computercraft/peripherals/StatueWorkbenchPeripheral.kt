@@ -27,9 +27,7 @@ class StatueWorkbenchPeripheral(
     }
 
     @LuaFunction(mainThread = true)
-    fun isPresent(): Boolean {
-        return getStatue().isPresent
-    }
+    fun isPresent(): Boolean = getStatue().isPresent
 
     @LuaFunction(mainThread = true)
     fun setStatueName(name: String) {

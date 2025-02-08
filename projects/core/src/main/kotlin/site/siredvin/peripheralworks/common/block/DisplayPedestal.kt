@@ -55,7 +55,5 @@ class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defau
         super.attack(blockState, level, blockPos, player)
     }
 
-    override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity {
-        return DisplayPedestalBlockEntity(blockPos, blockState)
-    }
+    override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = DisplayPedestalBlockEntity(blockPos, blockState)
 }

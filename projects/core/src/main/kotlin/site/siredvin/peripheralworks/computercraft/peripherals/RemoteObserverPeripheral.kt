@@ -45,14 +45,12 @@ class RemoteObserverPeripheral(
     }
 
     @LuaFunction(mainThread = true)
-    fun getPositions(): List<Map<String, Any>> {
-        return blockEntity.trackedBlocksView.map {
-            LuaRepresentation.forBlockPos(
-                it,
-                blockEntity.blockState.getValue(FacingBlockEntityBlock.FACING),
-                peripheralOwner.pos,
-            )
-        }
+    fun getPositions(): List<Map<String, Any>> = blockEntity.trackedBlocksView.map {
+        LuaRepresentation.forBlockPos(
+            it,
+            blockEntity.blockState.getValue(FacingBlockEntityBlock.FACING),
+            peripheralOwner.pos,
+        )
     }
 
     override fun equals(other: Any?): Boolean {

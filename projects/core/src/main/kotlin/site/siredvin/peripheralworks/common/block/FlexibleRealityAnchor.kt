@@ -23,10 +23,11 @@ import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.modId
 
 @Suppress("OVERRIDE_DEPRECATION")
-class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
-    false,
-    BlockUtil.decoration().dynamicShape(),
-) {
+class FlexibleRealityAnchor :
+    BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
+        false,
+        BlockUtil.decoration().dynamicShape(),
+    ) {
     companion object {
         val CONFIGURED: BooleanProperty = BooleanProperty.create("configured")
         val PLAYER_PASSABLE: BooleanProperty = BooleanProperty.create("player_passable")
@@ -54,9 +55,7 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
     override val savableProperties: List<Property<*>>
         get() = SAVABLE_PROPERTIES
 
-    override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity {
-        return BlockEntityTypes.FLEXIBLE_REALITY_ANCHOR.get().create(blockPos, blockState)!!
-    }
+    override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = BlockEntityTypes.FLEXIBLE_REALITY_ANCHOR.get().create(blockPos, blockState)!!
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
@@ -72,9 +71,7 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         return if (blockEntity is FlexibleRealityAnchorBlockEntity) blockEntity.lightLevel else 0
     }
 
-    override fun createItemStack(): ItemStack {
-        return ItemStack(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())
-    }
+    override fun createItemStack(): ItemStack = ItemStack(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())
 
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
@@ -95,45 +92,37 @@ class FlexibleRealityAnchor : BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         return if (blockState.getValue(INVISIBLE)) RenderShape.INVISIBLE else super.getRenderShape(blockState)
     }
 
-    override fun useShapeForLightOcclusion(state: BlockState): Boolean {
-        return true
-    }
+    override fun useShapeForLightOcclusion(state: BlockState): Boolean = true
 
     override fun getVisualShape(
         state: BlockState,
         world: BlockGetter,
         pos: BlockPos,
         context: CollisionContext,
-    ): VoxelShape {
-        return if (state.getValue(LIGHT_PASSABLE) || !state.getValue(CONFIGURED)) {
-            Shapes.empty()
-        } else {
-            @Suppress("DEPRECATION")
-            super.getVisualShape(
-                state,
-                world,
-                pos,
-                context,
-            )
-        }
+    ): VoxelShape = if (state.getValue(LIGHT_PASSABLE) || !state.getValue(CONFIGURED)) {
+        Shapes.empty()
+    } else {
+        @Suppress("DEPRECATION")
+        super.getVisualShape(
+            state,
+            world,
+            pos,
+            context,
+        )
     }
 
-    override fun getShadeBrightness(state: BlockState, world: BlockGetter, pos: BlockPos): Float {
-        return if (state.getValue(LIGHT_PASSABLE) || !state.getValue(CONFIGURED)) {
-            1.0f
-        } else {
-            @Suppress("DEPRECATION")
-            super.getShadeBrightness(
-                state,
-                world,
-                pos,
-            )
-        }
+    override fun getShadeBrightness(state: BlockState, world: BlockGetter, pos: BlockPos): Float = if (state.getValue(LIGHT_PASSABLE) || !state.getValue(CONFIGURED)) {
+        1.0f
+    } else {
+        @Suppress("DEPRECATION")
+        super.getShadeBrightness(
+            state,
+            world,
+            pos,
+        )
     }
 
-    override fun propagatesSkylightDown(state: BlockState, world: BlockGetter, pos: BlockPos): Boolean {
-        return state.getValue(SKY_LIGHT_PASSABLE) || !state.getValue(CONFIGURED)
-    }
+    override fun propagatesSkylightDown(state: BlockState, world: BlockGetter, pos: BlockPos): Boolean = state.getValue(SKY_LIGHT_PASSABLE) || !state.getValue(CONFIGURED)
 
     override fun getCollisionShape(
         state: BlockState,

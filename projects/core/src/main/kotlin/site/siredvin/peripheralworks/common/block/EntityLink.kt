@@ -105,7 +105,5 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTy
     }
 
     @Deprecated("Deprecated in Java")
-    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape {
-        return SHAPE
-    }
+    override fun getShape(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos, collisionContext: CollisionContext): VoxelShape = SHAPE
 }

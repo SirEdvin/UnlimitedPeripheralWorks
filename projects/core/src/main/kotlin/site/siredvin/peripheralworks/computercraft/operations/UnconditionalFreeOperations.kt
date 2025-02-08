@@ -30,11 +30,7 @@ enum class UnconditionalFreeOperations(
         return data
     }
 
-    override fun getCooldown(context: Any?): Int {
-        return cooldown!!.get()
-    }
+    override fun getCooldown(context: Any?): Int = cooldown!!.get()
 
-    override fun getCost(context: Any?): Int {
-        return 0
-    }
+    override fun getCost(context: Any?): Int = 0
 }

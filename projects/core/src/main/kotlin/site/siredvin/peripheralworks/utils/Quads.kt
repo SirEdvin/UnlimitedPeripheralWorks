@@ -56,19 +56,17 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
             (z2 / 16).toDouble(),
         )
 
-    fun toLua(): Map<String, Any> {
-        return mapOf(
-            "x1" to x1,
-            "x2" to x2,
-            "y1" to y1,
-            "y2" to y2,
-            "z1" to z1,
-            "z2" to z2,
-            "texture" to texture.toString(),
-            "tint" to tint,
-            "opacity" to opacity,
-        )
-    }
+    fun toLua(): Map<String, Any> = mapOf(
+        "x1" to x1,
+        "x2" to x2,
+        "y1" to y1,
+        "y2" to y2,
+        "z1" to z1,
+        "z2" to z2,
+        "texture" to texture.toString(),
+        "tint" to tint,
+        "opacity" to opacity,
+    )
 
     fun toTag(): CompoundTag {
         val data = CompoundTag()
@@ -84,16 +82,14 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
         return data
     }
 
-    fun toAABB(): AABB {
-        return AABB(
-            x1.toDouble(),
-            y1.toDouble(),
-            z1.toDouble(),
-            x2.toDouble(),
-            y2.toDouble(),
-            z2.toDouble(),
-        )
-    }
+    fun toAABB(): AABB = AABB(
+        x1.toDouble(),
+        y1.toDouble(),
+        z1.toDouble(),
+        x2.toDouble(),
+        y2.toDouble(),
+        z2.toDouble(),
+    )
 }
 
 data class QuadList(val list: List<QuadData>) {
@@ -108,9 +104,7 @@ data class QuadList(val list: List<QuadData>) {
     val shape: VoxelShape
         get() = list.stream().map(QuadData::shape).reduce(Shapes::or).orElse(Shapes.empty())
 
-    fun toLua(): List<Map<String, Any>> {
-        return list.map(QuadData::toLua)
-    }
+    fun toLua(): List<Map<String, Any>> = list.map(QuadData::toLua)
 
     fun toTag(): ListTag {
         val base = ListTag()

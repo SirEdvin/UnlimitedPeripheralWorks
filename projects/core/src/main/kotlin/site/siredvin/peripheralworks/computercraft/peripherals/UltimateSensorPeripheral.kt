@@ -110,14 +110,10 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPerip
     }
 
     @LuaFunction(mainThread = true)
-    fun listAnalyzers(): Set<String> {
-        return ANALYZERS.keys
-    }
+    fun listAnalyzers(): Set<String> = ANALYZERS.keys
 
     @LuaFunction(mainThread = true)
-    fun listInspectors(): Set<String> {
-        return INSPECTORS.keys
-    }
+    fun listInspectors(): Set<String> = INSPECTORS.keys
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

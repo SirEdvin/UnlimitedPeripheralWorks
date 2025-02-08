@@ -11,15 +11,13 @@ import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.BiConsumer
 
 object ModLootTableProvider {
-    fun getTables(): List<LootTableProvider.SubProviderEntry> {
-        return listOf(
-            LootTableProvider.SubProviderEntry({
-                LootTableSubProvider {
-                    registerBlocks(it)
-                }
-            }, LootContextParamSets.BLOCK),
-        )
-    }
+    fun getTables(): List<LootTableProvider.SubProviderEntry> = listOf(
+        LootTableProvider.SubProviderEntry({
+            LootTableSubProvider {
+                registerBlocks(it)
+            }
+        }, LootContextParamSets.BLOCK),
+    )
 
     fun registerBlocks(consumer: BiConsumer<ResourceLocation, LootTable.Builder>) {
         val lootTable = LootTableHelper(ModPlatform.holder)

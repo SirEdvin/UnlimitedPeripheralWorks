@@ -30,25 +30,21 @@ object ModBlockModelProvider {
         TextureSlot.PARTICLE,
     )
 
-    private fun toYAnglePedestal(direction: Direction): VariantProperties.Rotation {
-        return when (direction) {
-            Direction.NORTH -> VariantProperties.Rotation.R0
-            Direction.SOUTH -> VariantProperties.Rotation.R180
-            Direction.EAST -> VariantProperties.Rotation.R90
-            Direction.WEST -> VariantProperties.Rotation.R270
-            else -> VariantProperties.Rotation.R0
-        }
+    private fun toYAnglePedestal(direction: Direction): VariantProperties.Rotation = when (direction) {
+        Direction.NORTH -> VariantProperties.Rotation.R0
+        Direction.SOUTH -> VariantProperties.Rotation.R180
+        Direction.EAST -> VariantProperties.Rotation.R90
+        Direction.WEST -> VariantProperties.Rotation.R270
+        else -> VariantProperties.Rotation.R0
     }
 
-    private fun toXAnglePedestal(direction: Direction): VariantProperties.Rotation {
-        return when (direction) {
-            Direction.NORTH -> VariantProperties.Rotation.R90
-            Direction.SOUTH -> VariantProperties.Rotation.R90
-            Direction.EAST -> VariantProperties.Rotation.R90
-            Direction.WEST -> VariantProperties.Rotation.R90
-            Direction.DOWN -> VariantProperties.Rotation.R180
-            Direction.UP -> VariantProperties.Rotation.R0
-        }
+    private fun toXAnglePedestal(direction: Direction): VariantProperties.Rotation = when (direction) {
+        Direction.NORTH -> VariantProperties.Rotation.R90
+        Direction.SOUTH -> VariantProperties.Rotation.R90
+        Direction.EAST -> VariantProperties.Rotation.R90
+        Direction.WEST -> VariantProperties.Rotation.R90
+        Direction.DOWN -> VariantProperties.Rotation.R180
+        Direction.UP -> VariantProperties.Rotation.R0
     }
 
     private fun createPedestalFacingDispatch(): PropertyDispatch {

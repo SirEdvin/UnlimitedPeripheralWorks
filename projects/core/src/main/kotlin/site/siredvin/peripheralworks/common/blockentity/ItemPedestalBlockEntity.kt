@@ -21,7 +21,5 @@ class ItemPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     override val itemFilter: Predicate<ItemStack> = Predicate { true }
 
-    override fun createPeripheral(side: Direction): ItemPedestalPeripheral {
-        return ItemPedestalPeripheral(this)
-    }
+    override fun createPeripheral(side: Direction): ItemPedestalPeripheral = ItemPedestalPeripheral(this)
 }

@@ -70,7 +70,5 @@ class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         return data
     }
 
-    override fun createPeripheral(side: Direction): DisplayPedestalPeripheral {
-        return DisplayPedestalPeripheral(this)
-    }
+    override fun createPeripheral(side: Direction): DisplayPedestalPeripheral = DisplayPedestalPeripheral(this)
 }

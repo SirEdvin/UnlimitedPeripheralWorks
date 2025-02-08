@@ -19,46 +19,38 @@ import site.siredvin.peripheralworks.common.block.BasePedestal.Companion.FACING
 import java.util.*
 
 class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T : IItemStackHolder {
-    fun getItemTranslate(direction: Direction): Vector3d {
-        return when (direction) {
-            Direction.DOWN -> ITEM_TRANSLATE_DOWN
-            Direction.NORTH -> ITEM_TRANSLATE_NORTH
-            Direction.SOUTH -> ITEM_TRANSLATE_SOUTH
-            Direction.EAST -> ITEM_TRANSLATE_EAST
-            Direction.WEST -> ITEM_TRANSLATE_WEST
-            else -> ITEM_TRANSLATE_UP
-        }
+    fun getItemTranslate(direction: Direction): Vector3d = when (direction) {
+        Direction.DOWN -> ITEM_TRANSLATE_DOWN
+        Direction.NORTH -> ITEM_TRANSLATE_NORTH
+        Direction.SOUTH -> ITEM_TRANSLATE_SOUTH
+        Direction.EAST -> ITEM_TRANSLATE_EAST
+        Direction.WEST -> ITEM_TRANSLATE_WEST
+        else -> ITEM_TRANSLATE_UP
     }
 
-    fun getLabelTranslate(direction: Direction): Vector3d {
-        return when (direction) {
-            Direction.DOWN -> LABEL_TRANSLATE_DOWN
-            Direction.NORTH -> LABEL_TRANSLATE_NORTH
-            Direction.SOUTH -> LABEL_TRANSLATE_SOUTH
-            Direction.EAST -> LABEL_TRANSLATE_EAST
-            Direction.WEST -> LABEL_TRANSLATE_WEST
-            Direction.UP -> LABEL_TRANSLATE_UP
-        }
+    fun getLabelTranslate(direction: Direction): Vector3d = when (direction) {
+        Direction.DOWN -> LABEL_TRANSLATE_DOWN
+        Direction.NORTH -> LABEL_TRANSLATE_NORTH
+        Direction.SOUTH -> LABEL_TRANSLATE_SOUTH
+        Direction.EAST -> LABEL_TRANSLATE_EAST
+        Direction.WEST -> LABEL_TRANSLATE_WEST
+        Direction.UP -> LABEL_TRANSLATE_UP
     }
 
-    fun itemRotation(direction: Direction): Quaternionf? {
-        return when (direction) {
-            Direction.NORTH -> Axis.YP.rotationDegrees(90f)
-            Direction.SOUTH -> Axis.YP.rotationDegrees(270f)
-            Direction.WEST -> Axis.ZP.rotationDegrees(90f)
-            Direction.DOWN -> Axis.XP.rotationDegrees(180f)
-            else -> null
-        }
+    fun itemRotation(direction: Direction): Quaternionf? = when (direction) {
+        Direction.NORTH -> Axis.YP.rotationDegrees(90f)
+        Direction.SOUTH -> Axis.YP.rotationDegrees(270f)
+        Direction.WEST -> Axis.ZP.rotationDegrees(90f)
+        Direction.DOWN -> Axis.XP.rotationDegrees(180f)
+        else -> null
     }
 
-    fun itemTimeRotation(direction: Direction, time: Float): Quaternionf {
-        return if (direction == Direction.WEST) {
-            Axis.XP.rotationDegrees(time % 360)
-        } else {
-            Axis.YP.rotationDegrees(
-                time % 360,
-            )
-        }
+    fun itemTimeRotation(direction: Direction, time: Float): Quaternionf = if (direction == Direction.WEST) {
+        Axis.XP.rotationDegrees(time % 360)
+    } else {
+        Axis.YP.rotationDegrees(
+            time % 360,
+        )
     }
 
     override fun render(

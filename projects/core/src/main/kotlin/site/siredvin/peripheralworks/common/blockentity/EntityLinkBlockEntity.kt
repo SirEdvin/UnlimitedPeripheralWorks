@@ -24,8 +24,7 @@ import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 import site.siredvin.peripheralworks.computercraft.peripherals.EntityLinkPeripheral
 
-class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    MutableNBTBlockEntity<EntityLinkPeripheral>(BlockEntityTypes.ENTITY_LINK.get(), blockPos, blockState) {
+class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<EntityLinkPeripheral>(BlockEntityTypes.ENTITY_LINK.get(), blockPos, blockState) {
     companion object {
         const val STORED_CARD_TAG = "storedCard"
         const val UPGRADES_TAG = "upgrades"
@@ -156,9 +155,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         super.handleTick(level, pos, state)
     }
 
-    fun isSuitableUpgrade(stack: ItemStack): Boolean {
-        return stack.`is`(Blocks.UNIVERSAL_SCANNER.get().asItem()) && !upgrades.scanner
-    }
+    fun isSuitableUpgrade(stack: ItemStack): Boolean = stack.`is`(Blocks.UNIVERSAL_SCANNER.get().asItem()) && !upgrades.scanner
 
     fun injectUpgrade(stack: ItemStack): Boolean {
         if (stack.`is`(Blocks.UNIVERSAL_SCANNER.get().asItem()) && !upgrades.scanner) {

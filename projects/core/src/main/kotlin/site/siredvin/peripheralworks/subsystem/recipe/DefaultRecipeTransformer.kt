@@ -5,11 +5,7 @@ import net.minecraft.world.Container
 import net.minecraft.world.item.crafting.Recipe
 
 object DefaultRecipeTransformer : RecipeTransformer<Container, Recipe<Container>>() {
-    override fun getInputs(recipe: Recipe<Container>, registryAccess: RegistryAccess): List<*> {
-        return recipe.ingredients
-    }
+    override fun getInputs(recipe: Recipe<Container>, registryAccess: RegistryAccess): List<*> = recipe.ingredients
 
-    override fun getOutputs(recipe: Recipe<Container>, registryAccess: RegistryAccess): List<*> {
-        return listOf(recipe.getResultItem(registryAccess))
-    }
+    override fun getOutputs(recipe: Recipe<Container>, registryAccess: RegistryAccess): List<*> = listOf(recipe.getResultItem(registryAccess))
 }

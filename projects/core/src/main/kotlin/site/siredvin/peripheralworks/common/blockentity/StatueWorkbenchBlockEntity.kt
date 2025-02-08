@@ -7,9 +7,6 @@ import site.siredvin.peripheralium.common.blockentities.PeripheralBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.StatueWorkbenchPeripheral
 
-class StatueWorkbenchBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    PeripheralBlockEntity<StatueWorkbenchPeripheral>(BlockEntityTypes.STATUE_WORKBENCH.get(), blockPos, blockState) {
-    override fun createPeripheral(side: Direction): StatueWorkbenchPeripheral {
-        return StatueWorkbenchPeripheral(this)
-    }
+class StatueWorkbenchBlockEntity(blockPos: BlockPos, blockState: BlockState) : PeripheralBlockEntity<StatueWorkbenchPeripheral>(BlockEntityTypes.STATUE_WORKBENCH.get(), blockPos, blockState) {
+    override fun createPeripheral(side: Direction): StatueWorkbenchPeripheral = StatueWorkbenchPeripheral(this)
 }

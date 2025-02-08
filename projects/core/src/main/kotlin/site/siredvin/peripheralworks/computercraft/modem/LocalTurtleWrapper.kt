@@ -22,33 +22,21 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
     val upgradeData: UpgradeData<ITurtleUpgrade>
         get() = UpgradeData.of(upgrade, tweakedData)
 
-    override fun getLevel(): Level {
-        return access.level
-    }
+    override fun getLevel(): Level = access.level
 
-    override fun getPosition(): BlockPos {
-        return access.position
-    }
+    override fun getPosition(): BlockPos = access.position
 
-    override fun isRemoved(): Boolean {
-        return access.isRemoved
-    }
+    override fun isRemoved(): Boolean = access.isRemoved
 
-    override fun teleportTo(world: Level, pos: BlockPos): Boolean {
-        return access.teleportTo(world, pos)
-    }
+    override fun teleportTo(world: Level, pos: BlockPos): Boolean = access.teleportTo(world, pos)
 
-    override fun getDirection(): Direction {
-        return access.direction
-    }
+    override fun getDirection(): Direction = access.direction
 
     override fun setDirection(dir: Direction) {
         access.direction = dir
     }
 
-    override fun getSelectedSlot(): Int {
-        return access.selectedSlot
-    }
+    override fun getSelectedSlot(): Int = access.selectedSlot
 
     override fun setSelectedSlot(slot: Int) {
         access.selectedSlot = slot
@@ -58,49 +46,31 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
         access.colour = colour
     }
 
-    override fun getColour(): Int {
-        return access.colour
-    }
+    override fun getColour(): Int = access.colour
 
-    override fun getOwningPlayer(): GameProfile? {
-        return access.owningPlayer
-    }
+    override fun getOwningPlayer(): GameProfile? = access.owningPlayer
 
-    override fun getInventory(): Container {
-        return access.inventory
-    }
+    override fun getInventory(): Container = access.inventory
 
-    override fun isFuelNeeded(): Boolean {
-        return access.isFuelNeeded
-    }
+    override fun isFuelNeeded(): Boolean = access.isFuelNeeded
 
-    override fun getFuelLevel(): Int {
-        return access.fuelLevel
-    }
+    override fun getFuelLevel(): Int = access.fuelLevel
 
     override fun setFuelLevel(fuel: Int) {
         access.fuelLevel = fuel
     }
 
-    override fun getFuelLimit(): Int {
-        return access.fuelLimit
-    }
+    override fun getFuelLimit(): Int = access.fuelLimit
 
-    override fun consumeFuel(fuel: Int): Boolean {
-        return access.consumeFuel(fuel)
-    }
+    override fun consumeFuel(fuel: Int): Boolean = access.consumeFuel(fuel)
 
     override fun addFuel(fuel: Int) {
         access.addFuel(fuel)
     }
 
-    override fun executeCommand(command: TurtleCommand): MethodResult {
-        return access.executeCommand(command)
-    }
+    override fun executeCommand(command: TurtleCommand): MethodResult = access.executeCommand(command)
 
-    override fun playAnimation(animation: TurtleAnimation) {
-        return access.playAnimation(animation)
-    }
+    override fun playAnimation(animation: TurtleAnimation) = access.playAnimation(animation)
 
     override fun getUpgrade(side: TurtleSide): ITurtleUpgrade? {
         if (side == tweakedSide) {

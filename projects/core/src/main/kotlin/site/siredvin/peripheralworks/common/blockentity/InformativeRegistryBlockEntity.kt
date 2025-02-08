@@ -7,9 +7,6 @@ import site.siredvin.peripheralium.common.blockentities.PeripheralBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.InformativeRegistryPeripheral
 
-class InformativeRegistryBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    PeripheralBlockEntity<InformativeRegistryPeripheral>(BlockEntityTypes.INFORMATIVE_REGISTRY.get(), blockPos, blockState) {
-    override fun createPeripheral(side: Direction): InformativeRegistryPeripheral {
-        return InformativeRegistryPeripheral(this)
-    }
+class InformativeRegistryBlockEntity(blockPos: BlockPos, blockState: BlockState) : PeripheralBlockEntity<InformativeRegistryPeripheral>(BlockEntityTypes.INFORMATIVE_REGISTRY.get(), blockPos, blockState) {
+    override fun createPeripheral(side: Direction): InformativeRegistryPeripheral = InformativeRegistryPeripheral(this)
 }

@@ -9,11 +9,12 @@ import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.computercraft.modem.LocalPocketWrapper
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 
-class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAccess, type: String) : PeripheraliumHubPeripheral<PocketPeripheralOwner>(
-    maxUpdateCount,
-    PocketPeripheralOwner(access),
-    type,
-) {
+class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAccess, type: String) :
+    PeripheraliumHubPeripheral<PocketPeripheralOwner>(
+        maxUpdateCount,
+        PocketPeripheralOwner(access),
+        type,
+    ) {
 
     companion object {
         const val POCKET_MODE = "pocket"
@@ -59,9 +60,7 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
         disconnectPocketUpgrade(upgrade)
     }
 
-    override fun isUpgradeImpl(stack: ItemStack): Boolean {
-        return PeripheraliumPlatform.getPocketUpgrade(stack) != null
-    }
+    override fun isUpgradeImpl(stack: ItemStack): Boolean = PeripheraliumPlatform.getPocketUpgrade(stack) != null
 
     override fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = PeripheraliumPlatform.getPocketUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
