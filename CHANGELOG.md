@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Pocket computer peripheralium hub data storing #48
+
 ## [1.4.4] - 2024-08-20
 
 ### Breaking Changed
