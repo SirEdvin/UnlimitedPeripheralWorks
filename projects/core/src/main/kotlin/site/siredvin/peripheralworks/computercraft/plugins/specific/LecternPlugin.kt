@@ -6,7 +6,9 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import net.minecraft.core.BlockPos
-import net.minecraft.nbt.StringTag
+import net.minecraft.core.component.DataComponents
+import net.minecraft.server.network.Filterable
+import net.minecraft.server.network.FilteredText
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.LecternBlock
@@ -116,10 +118,10 @@ class LecternPlugin(private val target: LecternBlockEntity) : IPeripheralPlugin 
     @LuaFunction(mainThread = true)
     fun addPage(text: Optional<String>): MethodResult {
         assertEditableBook()
-        val pagesData = target.book.orCreateTag.getList("pages", 8)
-        pagesData.add(StringTag.valueOf(TextBookUtils.stripText(text.orElse(""))))
-        target.book.tag!!.put("pages", pagesData)
+        val pagesData = target.book.get(DataComponents.WRITABLE_BOOK_CONTENT) ?: return MethodResult.of(null, "Book is not writable")
+        pagesData.pages().add(Filterable.from(FilteredText.passThrough(TextBookUtils.stripText(text.orElse("")))))
         target.pageCount += 1
+        target.book.set(DataComponents.WRITABLE_BOOK_CONTENT, pagesData)
         return MethodResult.of(true)
     }
 
@@ -127,9 +129,9 @@ class LecternPlugin(private val target: LecternBlockEntity) : IPeripheralPlugin 
     fun removePage(page: Int): MethodResult {
         assertEditableBook()
         assertBetween(page, 1, target.pageCount, "page")
-        val pagesData = target.book.tag!!.getList("pages", 8)
-        pagesData.removeAt(page - 1)
-        target.book.tag!!.put("pages", pagesData)
+        val pagesData = target.book.get(DataComponents.WRITABLE_BOOK_CONTENT) ?: return MethodResult.of(null, "Book is not writable")
+        pagesData.pages().removeAt(page - 1)
+        target.book.set(DataComponents.WRITABLE_BOOK_CONTENT, pagesData)
         target.pageCount -= 1
         return MethodResult.of(true)
     }
@@ -138,9 +140,9 @@ class LecternPlugin(private val target: LecternBlockEntity) : IPeripheralPlugin 
     fun editPage(page: Int, text: String): MethodResult {
         assertEditableBook()
         assertBetween(page, 1, target.pageCount, "page")
-        val pagesData = target.book.tag!!.getList("pages", 8)
-        pagesData[page - 1] = StringTag.valueOf(TextBookUtils.stripText(text))
-        target.book.tag!!.put("pages", pagesData)
+        val pagesData = target.book.get(DataComponents.WRITABLE_BOOK_CONTENT) ?: return MethodResult.of(null, "Book is not writable")
+        pagesData.pages()[page - 1] = Filterable.from(FilteredText.passThrough(TextBookUtils.stripText(text)))
+        target.book.set(DataComponents.WRITABLE_BOOK_CONTENT, pagesData)
         return MethodResult.of(true)
     }
 

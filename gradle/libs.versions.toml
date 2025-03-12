@@ -10,28 +10,28 @@ mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.113.0"
-broccolium = "1.0.0-rc.4"
-tweakium = "1.0.0-rc.4"
-peripheralium = "1.0.0-rc.4"
+broccolium = "1.0.0-rc.9"
+tweakium = "1.0.0-rc.9"
+peripheralium = "1.0.0-rc.9"
 mixin = "0.8.5"
 # Fabric dependencies
-fabric-api = "0.92.0+1.20.1"
-fabric-loader = "0.15.11"
+fabric-api = "0.115.1+1.21.1"
+fabric-loader = "0.16.10"
 fabric-kotlin = "1.11.0+kotlin.2.0.0"
-forgeconfigapirt-fabric = "8.0.0"
-modmenu = "7.2.1"
+forgeconfigapirt-fabric = "21.1.3"
+modmenu = "11.0.1"
 # Forge dependencies
 forge = "47.1.0"
 forge-kotlin = "4.11.0"
 parchment = "2023.09.03"
 parchmentMc = "1.20.1"
 # Extra mod dependencies
-cloth-config = "11.0.99"
-architectury = "9.0.8"
+cloth-config = "15.0.140"
+architectury = "13.0.8"
 
 # Dev mod dependenceis
 jei = "15.1.0.19"
-rei = "12.0.625"
+rei = "16.0.799"
 
 # Shared integration mod dependency
 
@@ -94,13 +94,13 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = "kotlin-atomicfu"}
 
 # Core mod dependencies
-cc-tweaked-common-api = {module = "cc.tweaked:cc-tweaked-1.20.1-common-api", version.ref = "cc-tweaked"}
-cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.20.1-common", version.ref = "cc-tweaked"}
-cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.20.1-core", version.ref = "cc-tweaked"}
-common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
-broccolium-core = {module = "site.siredvin:broccolium-common-1.20.1", version.ref = "broccolium"}
-tweakium-core = {module = "site.siredvin:tweakium-common-1.20.1", version.ref = "tweakium"}
-peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20.1", version.ref = "peripheralium"}
+cc-tweaked-common-api = {module = "cc.tweaked:cc-tweaked-1.21.1-common-api", version.ref = "cc-tweaked"}
+cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.21.1-common", version.ref = "cc-tweaked"}
+cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.21.1-core", version.ref = "cc-tweaked"}
+common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi", version.ref = "forgeconfigapirt-fabric"}
+broccolium-core = {module = "site.siredvin:broccolium-common-1.21.1", version.ref = "broccolium"}
+tweakium-core = {module = "site.siredvin:tweakium-common-1.21.1", version.ref = "tweakium"}
+peripheralium-core = {module = "site.siredvin:peripheralium-common-1.21.1", version.ref = "peripheralium"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 # Fabric mod dependencies
@@ -108,19 +108,19 @@ fabric-loader = {module = "net.fabricmc:fabric-loader", version.ref = "fabric-lo
 fabric-api = {module = "net.fabricmc.fabric-api:fabric-api", version.ref="fabric-api"}
 fabric-kotlin = {module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-kotlin"}
 fabric-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-fabric", version.ref = "forgeconfigapirt-fabric"}
-cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.20.1-fabric-api", version.ref = "cc-tweaked"}
-cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.20.1-fabric", version.ref = "cc-tweaked"}
-broccolium-fabric = {module = "site.siredvin:broccolium-fabric-1.20.1", version.ref = "broccolium"}
-tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.20.1", version.ref = "tweakium"}
-peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
+cc-tweaked-fabric-api = {module = "cc.tweaked:cc-tweaked-1.21.1-fabric-api", version.ref = "cc-tweaked"}
+cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.21.1-fabric", version.ref = "cc-tweaked"}
+broccolium-fabric = {module = "site.siredvin:broccolium-fabric-1.21.1", version.ref = "broccolium"}
+tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.21.1", version.ref = "tweakium"}
+peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.21.1", version.ref = "peripheralium"}
 modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
 
 # Forge mod dependencies
-cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20.1-forge", version.ref="cc-tweaked"}
+cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.21.1-forge", version.ref="cc-tweaked"}
 forge-kotlin = {module = "thedarkcolour:kotlinforforge", version.ref = "forge-kotlin"}
-broccolium-forge = {module = "site.siredvin:broccolium-forge-1.20.1", version.ref = "broccolium"}
-tweakium-forge = {module = "site.siredvin:tweakium-forge-1.20.1", version.ref = "tweakium"}
-peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium"}
+broccolium-forge = {module = "site.siredvin:broccolium-forge-1.21.1", version.ref = "broccolium"}
+tweakium-forge = {module = "site.siredvin:tweakium-forge-1.21.1", version.ref = "tweakium"}
+peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.21.1", version.ref = "peripheralium"}
 
 # Dev mod dependencies
 jei-forge = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
@@ -239,49 +239,49 @@ externalMods-fabric-integrations-api = [
 ]
 
 externalMods-fabric-integrations-full = [
-    "nature-compass-fabric",
-    "tomstorage-fabric",
-    "techreborn",
-    "ae2-fabric",
-    "additional-lanterns-fabric",
-    "alloy-forgery",
-    "owo-lib",  # required by alloy-forgery
-    "universal-shops",
-    "polymer-core",  # required by universal-shops
-    "polymer-virtual-entity",  # required by universal-shops
-    "polymer-ceconomy",  # required by universal-shops
-    "polymer-cprotection",  # required by universal-shops
-    "polymer-placeholder",  # required by universal-shops
-    "polymer-resource-pack",  # required by universal-shops
-    "polymer-sgui",  # required by universal-shops,
-    "fabric-permissions",  # required by universal-shops,
-    "powah-fabric",
-    "automobility-fabric",
-    "create-fabric",
-    "jsonem", # required by automobility
-    "modern-industrialization",
-    "magna",  # required by MI
-    "pal",  # required by MI,
+#    "nature-compass-fabric",
+#    "tomstorage-fabric",
+#    "techreborn",
+#    "ae2-fabric",
+#    "additional-lanterns-fabric",
+#    "alloy-forgery",
+#    "owo-lib",  # required by alloy-forgery
+#    "universal-shops",
+#    "polymer-core",  # required by universal-shops
+#    "polymer-virtual-entity",  # required by universal-shops
+#    "polymer-ceconomy",  # required by universal-shops
+#    "polymer-cprotection",  # required by universal-shops
+#    "polymer-placeholder",  # required by universal-shops
+#    "polymer-resource-pack",  # required by universal-shops
+#    "polymer-sgui",  # required by universal-shops,
+#    "fabric-permissions",  # required by universal-shops,
+#    "powah-fabric",
+#    "automobility-fabric",
+#    "create-fabric",
+#    "jsonem", # required by automobility
+#    "modern-industrialization",
+#    "magna",  # required by MI
+#    "pal",  # required by MI,
 ]
 externalMods-fabric-integrations-active = [
-    "nature-compass-fabric",
-    "tomstorage-fabric",
-    "techreborn",
-    "ae2-fabric",
-    "additional-lanterns-fabric",
-    "alloy-forgery",
-    "owo-lib",  # required by alloy-forgery
-    "powah-fabric",
-    "automobility-fabric",
-    "create-fabric",
-    "jsonem", # required by automobility
-    "modern-industrialization",
-    "magna",  # required by MI
-    "pal",  # required by MI
+#    "nature-compass-fabric",
+#    "tomstorage-fabric",
+#    "techreborn",
+#    "ae2-fabric",
+#    "additional-lanterns-fabric",
+#    "alloy-forgery",
+#    "owo-lib",  # required by alloy-forgery
+#    "powah-fabric",
+#    "automobility-fabric",
+#    "create-fabric",
+#    "jsonem", # required by automobility
+#    "modern-industrialization",
+#    "magna",  # required by MI
+#    "pal",  # required by MI
 ]
 externalMods-fabric-integrations-activedep = [
-    "reborncore",  # required by techreborn
-    "supermartijn642s-core-lib-fabric",  # required by additional-lanterns
+#    "reborncore",  # required by techreborn
+#    "supermartijn642s-core-lib-fabric",  # required by additional-lanterns
 ]
 
 externalMods-forge-integrations-full = [

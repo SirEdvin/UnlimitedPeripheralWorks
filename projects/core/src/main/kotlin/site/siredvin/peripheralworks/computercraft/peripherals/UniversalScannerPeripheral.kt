@@ -20,7 +20,7 @@ class UniversalScannerPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPer
 
     companion object {
         const val TYPE = "universal_scanner"
-        val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
+        val UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, TYPE)
 
         fun of(turtle: ITurtleAccess, side: TurtleSide): UniversalScannerPeripheral {
             val owner = TurtlePeripheralOwner(turtle, side)

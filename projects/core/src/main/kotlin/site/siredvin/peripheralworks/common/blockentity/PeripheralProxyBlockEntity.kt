@@ -34,7 +34,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         const val RESERVED_IDS_TAG = "reservedIds"
 
         fun fromTag(tag: CompoundTag): RemotePeripheralRecord {
-            val targetBlock = NbtUtils.readBlockPos(tag.getCompound(TARGET_BLOCK_TAG))
+            val targetBlock = NbtUtils.readBlockPos(tag, TARGET_BLOCK_TAG).get()
             val direction = Direction.CODEC.byName(tag.getString(DIRECTION_TAG), Direction.NORTH)
             val peripheralName: String? = if (tag.contains(PERIPHERAL_NAME_TAG)) {
                 tag.getString(PERIPHERAL_NAME_TAG)

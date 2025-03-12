@@ -33,7 +33,7 @@ object Blocks {
     )
     val ULTIMATE_SENSOR = ModPlatform.registerBlock(
         "ultimate_sensor",
-        { GenericBlockEntityBlock({ BlockEntityTypes.ULTIMATE_SENSOR.get() }, true) },
+        { GenericBlockEntityBlock(BlockEntityTypes.ULTIMATE_SENSOR, true) },
         {
             HiddenDescriptiveBlockItem(
                 it,
@@ -86,7 +86,7 @@ object Blocks {
 
     val REMOTE_OBSERVER = ModPlatform.registerBlock(
         "remote_observer",
-        { GenericBlockEntityBlock({ BlockEntityTypes.REMOTE_OBSERVER.get() }, true, belongToTickingEntity = true) },
+        { GenericBlockEntityBlock(BlockEntityTypes.REMOTE_OBSERVER, true, belongToTickingEntity = true) },
         {
             HiddenDescriptiveBlockItem(
                 it,
@@ -120,7 +120,7 @@ object Blocks {
     }
     val REALITY_FORGER = ModPlatform.registerBlock(
         "reality_forger",
-        { GenericBlockEntityBlock({ BlockEntityTypes.REALITY_FORGER.get() }, isRotatable = true, belongToTickingEntity = false) },
+        { GenericBlockEntityBlock(BlockEntityTypes.REALITY_FORGER, isRotatable = true, belongToTickingEntity = false) },
     ) {
         HiddenDescriptiveBlockItem(
             it,
@@ -133,7 +133,7 @@ object Blocks {
     }
     val RECIPE_REGISTRY = ModPlatform.registerBlock(
         "recipe_registry",
-        { GenericBlockEntityBlock({ BlockEntityTypes.RECIPE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
+        { GenericBlockEntityBlock(BlockEntityTypes.RECIPE_REGISTRY, isRotatable = true, belongToTickingEntity = false) },
     ) {
         HiddenDescriptiveBlockItem(
             it,
@@ -146,7 +146,7 @@ object Blocks {
 
     val INFORMATIVE_REGISTRY = ModPlatform.registerBlock(
         "informative_registry",
-        { GenericBlockEntityBlock({ BlockEntityTypes.INFORMATIVE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
+        { GenericBlockEntityBlock(BlockEntityTypes.INFORMATIVE_REGISTRY, isRotatable = true, belongToTickingEntity = false) },
     ) {
         HiddenDescriptiveBlockItem(
             it,

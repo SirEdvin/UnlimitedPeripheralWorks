@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.fabric
 
 import dan200.computercraft.shared.ModRegistry.Items
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Blocks
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
@@ -19,13 +19,11 @@ object FabricModRecipeIngredients : ModRecipeIngredients {
     override val netheriteIngot: Ingredient
         get() = Ingredient.of(ConventionalItemTags.NETHERITE_INGOTS)
     override val emerald: Ingredient
-        get() = Ingredient.of(ConventionalItemTags.EMERALDS)
+        get() = Ingredient.of(ConventionalItemTags.EMERALD_GEMS)
     override val diamond: Ingredient
-        get() = Ingredient.of(ConventionalItemTags.DIAMONDS)
+        get() = Ingredient.of(ConventionalItemTags.DIAMOND_GEMS)
     override val ironIngot: Ingredient
         get() = Ingredient.of(ConventionalItemTags.IRON_INGOTS)
-    override val anyCoal: Ingredient
-        get() = Ingredient.of(ConventionalItemTags.COAL)
     override val peripheraliumBlock: Ingredient
         get() = Ingredient.of(site.siredvin.peripheralium.Blocks.PERIPHERALIUM_BLOCK.get().asItem())
     override val observer: Ingredient

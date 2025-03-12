@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -180,7 +181,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mutabl
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         var resultState = state ?: blockState
         if (data.contains(STORED_CARD_TAG)) {
-            _storedStack = ItemStack.of(data.getCompound(STORED_CARD_TAG))
+            _storedStack = ItemStack.parseOptional(PlatformToolkit.get().registries!!, data.getCompound(STORED_CARD_TAG))
             resultState = resultState.setValue(EntityLink.CONFIGURED, true)
         } else {
             resultState = resultState.setValue(EntityLink.CONFIGURED, false)
@@ -191,7 +192,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mutabl
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {
         if (!_storedStack.isEmpty) {
-            data.put(STORED_CARD_TAG, _storedStack.save(CompoundTag()))
+            data.put(STORED_CARD_TAG, _storedStack.save(PlatformToolkit.get().registries!!))
         }
         data.put(UPGRADES_TAG, upgrades.save())
         return data

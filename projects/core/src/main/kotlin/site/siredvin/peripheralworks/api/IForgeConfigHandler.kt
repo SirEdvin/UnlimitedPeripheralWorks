@@ -1,8 +1,8 @@
 package site.siredvin.peripheralworks.api
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.broccolium.modules.base.api.IConfigHandler
 
 interface IForgeConfigHandler : IConfigHandler {
-    fun addToConfig(builder: ForgeConfigSpec.Builder)
+    fun addToConfig(builder: ModConfigSpec.Builder)
 }

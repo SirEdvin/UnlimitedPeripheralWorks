@@ -30,20 +30,5 @@ object DebugCommands {
                 },
             ),
         )
-        dispatcher.register(
-            literal(COMMAND).requires { it.hasPermission(ADMIN_PERMISSION_LEVEL) }.then(
-                literal("inspectItem").executes {
-                    val player = it.source.player ?: return@executes 0
-                    val stack = player.mainHandItem
-                    player.displayClientMessage(
-                        Component.literal(
-                            "Item Data: ${stack.tag}",
-                        ),
-                        false,
-                    )
-                    0
-                },
-            ),
-        )
     }
 }

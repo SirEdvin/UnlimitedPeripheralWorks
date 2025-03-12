@@ -51,8 +51,8 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) :
             data["scale"] = savedData.scale
             data["banners"] = savedData.banners.map {
                 val mapData = mutableMapOf<String, Any>()
-                if (it.name != null) {
-                    mapData["name"] = it.name!!.string
+                if (it.name.isPresent) {
+                    mapData["name"] = it.name.get().string
                 }
                 mapData["pos"] = LuaRepresentation.forBlockPos(it.pos, facing, peripheralOwner.pos)
                 mapData["color"] = it.color.getName()

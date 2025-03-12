@@ -3,10 +3,13 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
+import net.minecraft.core.component.DataComponentPatch
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -14,6 +17,8 @@ import site.siredvin.peripheralworks.computercraft.modem.PeripheralHubPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.util.assertBetween
+import java.util.*
+import kotlin.jvm.optionals.getOrDefault
 
 abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxUpdateCount: Int, owner: O, type: String) : PeripheralHubPeripheral<O>(type, owner) {
 
@@ -22,22 +27,14 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         const val NETHERITE_TYPE = "netherite_$TYPE"
         const val UPGRADES_TAG = "connectedUpgrades"
         const val MODE_TAG = "mode"
-        val ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
-        val NETHERITE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
-        const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
+        val ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, TYPE)
+        val NETHERITE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
 
         fun getActiveUpgrades(dataStorage: IDataStorage): List<String> = dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
 
-        fun getDataForUpgrade(id: String, dataStorage: IDataStorage): CompoundTag {
-            if (!dataStorage.has(TWEAKED_STORAGES)) {
-                dataStorage.putCompound(TWEAKED_STORAGES, CompoundTag())
-            }
-            val tweakedStorages = dataStorage.getCompound(TWEAKED_STORAGES)
-            if (!tweakedStorages.contains(id)) {
-                tweakedStorages.put(id, CompoundTag())
-            }
-            return tweakedStorages.getCompound(id)
-        }
+        fun getDataForUpgrade(id: String, dataStorage: IDataStorage): CompoundTag = dataStorage.getCompound(id)
+
+        fun getDataForUpgradeAsComponent(id: String, dataStorage: IDataStorage): DataComponentPatch = DataComponentPatch.builder().set(DataComponents.CUSTOM_DATA, CustomData.of(getDataForUpgrade(id, dataStorage))).build()
     }
 
     /**
@@ -83,14 +80,19 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
 
     fun setDataForUpdate(id: String, data: CompoundTag?) {
         val base = peripheralOwner.dataStorage
-        if (!base.has(TWEAKED_STORAGES)) {
-            base.putCompound(TWEAKED_STORAGES, CompoundTag())
-        }
-        val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
         if (data == null) {
-            tweakedStorages.remove(id)
+            base.remove(id)
         } else {
-            tweakedStorages.put(id, data)
+            base.putCompound(id, data)
+        }
+    }
+    fun setDataForUpdate(id: String, data: DataComponentPatch?) {
+        val base = peripheralOwner.dataStorage
+        if (data == null) {
+            base.remove(id)
+        } else {
+            val customData = data.get(DataComponents.CUSTOM_DATA) ?: Optional.of(CustomData.EMPTY)
+            base.putCompound(id, customData.getOrDefault(CustomData.EMPTY).copyTag())
         }
     }
 

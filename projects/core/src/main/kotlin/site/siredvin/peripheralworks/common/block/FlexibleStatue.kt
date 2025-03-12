@@ -1,10 +1,14 @@
 package site.siredvin.peripheralworks.common.block
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Mirror
 import net.minecraft.world.level.block.Rotation
@@ -57,6 +61,10 @@ class FlexibleStatue : BaseNBTBlock<FlexibleStatueBlockEntity>(false, BlockUtil.
 
     override fun createItemStack(): ItemStack = ItemStack(Blocks.FLEXIBLE_STATUE.get().asItem())
 
+    override fun codec(): MapCodec<out BaseEntityBlock> = RecordCodecBuilder.mapCodec {
+        it.stable(FlexibleStatue())
+    }
+
     @Deprecated("Deprecated in Java")
     @Suppress("DEPRECATION")
     override fun getShape(
@@ -94,13 +102,12 @@ class FlexibleStatue : BaseNBTBlock<FlexibleStatueBlockEntity>(false, BlockUtil.
         context.horizontalDirection.opposite,
     )
 
-    @Deprecated("Deprecated in Java")
-    override fun getCloneItemStack(blockGetter: BlockGetter, blockPos: BlockPos, blockState: BlockState): ItemStack {
-        val blockEntity = blockGetter.getBlockEntity(blockPos)
+    override fun getCloneItemStack(levelReader: LevelReader, blockPos: BlockPos, blockState: BlockState): ItemStack {
+        val blockEntity = levelReader.getBlockEntity(blockPos)
         if (blockEntity is FlexibleStatueBlockEntity) {
             return prepareItemStack(blockEntity, blockState)
         }
         @Suppress("DEPRECATION")
-        return super.getCloneItemStack(blockGetter, blockPos, blockState)
+        return super.getCloneItemStack(levelReader, blockPos, blockState)
     }
 }

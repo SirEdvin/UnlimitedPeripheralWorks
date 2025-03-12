@@ -1,23 +1,22 @@
 package site.siredvin.peripheralworks.common.recipes
 
-import net.minecraft.core.RegistryAccess
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.inventory.CraftingContainer
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.component.DataComponents
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.CraftingBookCategory
+import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.Level
-import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.RecipeSerializers
 
-class AnchorCleanRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
+class AnchorCleanRecipe(category: CraftingBookCategory) : CustomRecipe(category) {
 
     companion object {
         private fun isSuitableAnchor(stack: ItemStack): Boolean = stack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem()) &&
-            stack.getTagElement(
-                BaseNBTBlock.INTERNAL_DATA_TAG,
+            stack.get(
+                DataComponents.CUSTOM_DATA,
             ) != null
     }
 
@@ -25,12 +24,12 @@ class AnchorCleanRecipe(id: ResourceLocation, category: CraftingBookCategory) : 
         Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem().defaultInstance
     }
 
-    override fun matches(p0: CraftingContainer, p1: Level): Boolean = p0.items.count { !it.isEmpty } == 1 && p0.items.any { isSuitableAnchor(it) }
+    override fun matches(p0: CraftingInput, p1: Level): Boolean = p0.items().count { !it.isEmpty } == 1 && p0.items().any { isSuitableAnchor(it) }
 
-    override fun getResultItem(registry: RegistryAccess): ItemStack = resultItem
+    override fun getResultItem(registry: HolderLookup.Provider): ItemStack = resultItem
 
-    override fun assemble(p0: CraftingContainer, p1: RegistryAccess): ItemStack {
-        val firstCandidate = p0.items.find(Companion::isSuitableAnchor) ?: ItemStack.EMPTY
+    override fun assemble(p0: CraftingInput, p1: HolderLookup.Provider): ItemStack {
+        val firstCandidate = p0.items().find(Companion::isSuitableAnchor) ?: ItemStack.EMPTY
         return resultItem.copyWithCount(firstCandidate.count)
     }
 

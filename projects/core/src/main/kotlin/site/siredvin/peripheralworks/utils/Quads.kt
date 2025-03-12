@@ -32,7 +32,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
         data.getFloat("y2"),
         data.getFloat("z1"),
         data.getFloat("z2"),
-        ResourceLocation(data.getString("texture")),
+        ResourceLocation.parse(data.getString("texture")),
         data.getInt("tint"),
         if (data.contains("opacity")) data.getFloat("opacity") else 1f,
     )
@@ -148,7 +148,7 @@ fun convertToQuadData(table: Map<*, *>): QuadData {
     val startVector = convertToStartVector(table, MIN_QUAD_VECTOR, MAX_QUAD_VECTOR)
     val endVector = convertToEndVector(table, MIN_QUAD_VECTOR, MAX_QUAD_VECTOR)
     val texture = if (table.containsKey("texture")) {
-        ResourceLocation(table["texture"].toString())
+        ResourceLocation.parse(table["texture"].toString())
     } else {
         FlexibleStatue.WHITE_TEXTURE
     }

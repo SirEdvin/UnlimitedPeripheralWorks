@@ -1,9 +1,13 @@
 package site.siredvin.peripheralworks.common.block
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.LevelReader
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.RenderShape
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -54,6 +58,10 @@ class FlexibleRealityAnchor :
 
     override val savableProperties: List<Property<*>>
         get() = SAVABLE_PROPERTIES
+
+    override fun codec(): MapCodec<out BaseEntityBlock> = RecordCodecBuilder.mapCodec {
+        it.stable(FlexibleRealityAnchor())
+    }
 
     override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = BlockEntityTypes.FLEXIBLE_REALITY_ANCHOR.get().create(blockPos, blockState)!!
 
@@ -138,12 +146,12 @@ class FlexibleRealityAnchor :
         return state.getShape(world, pos)
     }
 
-    override fun getCloneItemStack(blockGetter: BlockGetter, blockPos: BlockPos, blockState: BlockState): ItemStack {
-        val blockEntity = blockGetter.getBlockEntity(blockPos)
+    override fun getCloneItemStack(levelReader: LevelReader, blockPos: BlockPos, blockState: BlockState): ItemStack {
+        val blockEntity = levelReader.getBlockEntity(blockPos)
         if (blockEntity is FlexibleRealityAnchorBlockEntity) {
             return prepareItemStack(blockEntity, blockState)
         }
         @Suppress("DEPRECATION")
-        return super.getCloneItemStack(blockGetter, blockPos, blockState)
+        return super.getCloneItemStack(levelReader, blockPos, blockState)
     }
 }

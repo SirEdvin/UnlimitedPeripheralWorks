@@ -1,7 +1,10 @@
 package site.siredvin.peripheralworks.common.block
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.BooleanOp
@@ -16,7 +19,7 @@ import java.util.stream.Stream
 
 class UniversalScanner :
     FacingBlockEntityBlock<UniversalScannerBlockEntity>(
-        { BlockEntityTypes.UNIVERSAL_SCANNER.get() },
+        BlockEntityTypes.UNIVERSAL_SCANNER,
         true,
         false,
         BlockUtil.defaultProperties(),
@@ -46,4 +49,6 @@ class UniversalScanner :
         blockPos: BlockPos,
         collisionContext: CollisionContext,
     ): VoxelShape = SHAPE
+
+    override fun codec(): MapCodec<out BaseEntityBlock> = RecordCodecBuilder.mapCodec { it.stable(UniversalScanner()) }
 }

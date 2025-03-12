@@ -1,11 +1,11 @@
 package site.siredvin.peripheralworks.common.item
 
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
 import site.siredvin.broccolium.modules.base.item.DescriptiveBlockItem
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
@@ -14,7 +14,7 @@ import site.siredvin.peripheralworks.data.ModText
 class FlexibleRealityAnchorItem(block: Block) : DescriptiveBlockItem(block, Properties()) {
 
     fun extractMimicBlock(stack: ItemStack): BlockState? {
-        val internalData = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG) ?: return null
+        val internalData = stack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: return null
         val mimicTag = internalData.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG)
         if (mimicTag.isEmpty) return null
         val mimicState = NbtUtils.readBlockState(PlatformRegistries.BLOCKS, mimicTag)

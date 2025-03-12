@@ -20,7 +20,7 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 
 // Copy of https://github.com/SwitchCraftCC/Plethora-Fabric/blob/91a64b3cf9f428227425e06bbbc8aa6e9a416bee/src/main/java/io/sc3/plethora/gameplay/overlay/FlareOverlayRenderer.kt#L4
 object FlareRenderer {
-    private val flareTexture = ResourceLocation(PeripheralWorksCore.MOD_ID, "textures/misc/flare.png")
+    private val flareTexture = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "textures/misc/flare.png")
 
     fun initFlareRenderer(matrices: PoseStack, camera: Camera) {
         RenderSystem.disableDepthTest()
@@ -81,14 +81,12 @@ object FlareRenderer {
     }
 
     private fun renderQuad(tessellator: Tesselator, matrix4f: Matrix4f, size: Float) {
-        val buffer = tessellator.builder
-
-        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
-        buffer.vertex(matrix4f, -size, -size, 0f).uv(0f, 1f).endVertex()
-        buffer.vertex(matrix4f, -size, +size, 0f).uv(1f, 1f).endVertex()
-        buffer.vertex(matrix4f, +size, +size, 0f).uv(1f, 0f).endVertex()
-        buffer.vertex(matrix4f, +size, -size, 0f).uv(0f, 0f).endVertex()
-        BufferUploader.drawWithShader(buffer.end())
+        val buffer = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
+        buffer.addVertex(matrix4f, -size, -size, 0f).setUv(0f, 1f)
+        buffer.addVertex(matrix4f, -size, +size, 0f).setUv(1f, 1f)
+        buffer.addVertex(matrix4f, +size, +size, 0f).setUv(1f, 0f)
+        buffer.addVertex(matrix4f, +size, -size, 0f).setUv(0f, 0f)
+        BufferUploader.drawWithShader(buffer.buildOrThrow())
     }
     data class FlareColor(val r: Float, val g: Float, val b: Float, val offset: Float = 0.1f)
 }

@@ -5,6 +5,7 @@ import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.BlockState
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.api.IItemStackHolder
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.DisplayPedestalPeripheral
@@ -52,7 +53,7 @@ class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         if (data.contains(STORED_ITEM_STACK_TAG)) {
-            _storedStack = ItemStack.of(data.getCompound(STORED_ITEM_STACK_TAG))
+            _storedStack = ItemStack.parseOptional(PlatformToolkit.get().registries!!, data.getCompound(STORED_ITEM_STACK_TAG))
         }
         if (data.contains(RENDER_LABEL_TAG)) {
             _renderLabel = data.getBoolean(RENDER_LABEL_TAG)
@@ -64,7 +65,7 @@ class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {
-        data.put(STORED_ITEM_STACK_TAG, _storedStack.save(CompoundTag()))
+        data.put(STORED_ITEM_STACK_TAG, _storedStack.save(PlatformToolkit.get().registries!!))
         data.putBoolean(RENDER_ITEM_TAG, _renderItem)
         data.putBoolean(RENDER_LABEL_TAG, _renderLabel)
         return data

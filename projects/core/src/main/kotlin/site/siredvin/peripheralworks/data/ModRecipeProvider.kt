@@ -1,23 +1,25 @@
 package site.siredvin.peripheralworks.data
 
+import net.minecraft.core.HolderLookup
 import net.minecraft.data.PackOutput
-import net.minecraft.data.recipes.FinishedRecipe
+import net.minecraft.data.recipes.RecipeOutput
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.data.recipes.SpecialRecipeBuilder
 import net.minecraft.world.item.crafting.Ingredient
 import site.siredvin.broccolium.modules.data.recipe.TweakedShapedRecipeBuilder
 import site.siredvin.broccolium.modules.data.recipe.TweakedSmithingTransformRecipeBuilder
+import site.siredvin.peripheralworks.common.recipes.*
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
-import site.siredvin.peripheralworks.common.setup.RecipeSerializers
+import site.siredvin.peripheralworks.tags.ItemTags
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
-import java.util.function.Consumer
+import java.util.concurrent.CompletableFuture
 
-class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
-    override fun buildRecipes(consumer: Consumer<FinishedRecipe>) {
+class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<HolderLookup.Provider>) : RecipeProvider(output, registries) {
+    override fun buildRecipes(consumer: RecipeOutput) {
         val ingredients = ModRecipeIngredients.get()
 
-        TweakedShapedRecipeBuilder.shaped(Items.PERIPHERALIUM_HUB.get())
+        TweakedShapedRecipeBuilder(Items.PERIPHERALIUM_HUB.get().defaultInstance)
             .define('D', ingredients.diamond)
             .define('E', ingredients.emerald)
             .define('P', ingredients.peripheralium)
@@ -27,23 +29,23 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("PDP")
             .save(consumer)
 
-        TweakedSmithingTransformRecipeBuilder.smithingTransform(
+        TweakedSmithingTransformRecipeBuilder(
             ingredients.peripheraliumUpgrade,
             Ingredient.of(Items.PERIPHERALIUM_HUB.get()),
             ingredients.netheriteIngot,
-            Items.NETHERITE_PERIPHERALIUM_HUB.get(),
-        ).save(consumer)
+            Items.NETHERITE_PERIPHERALIUM_HUB.get().defaultInstance,
+        ).save(consumer, Items.NETHERITE_PERIPHERALIUM_HUB.get().descriptionId)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.PERIPHERAL_CASING.get().asItem())
+        TweakedShapedRecipeBuilder(Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance)
             .define('B', ingredients.peripheraliumBlock)
-            .define('C', ingredients.anyCoal)
+            .define('C', Ingredient.of(net.minecraft.tags.ItemTags.COALS))
             .define('I', ingredients.ironIngot)
             .pattern("ICI")
             .pattern("CBC")
             .pattern("ICI")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.UNIVERSAL_SCANNER.get().asItem())
+        TweakedShapedRecipeBuilder(Blocks.UNIVERSAL_SCANNER.get().asItem().defaultInstance)
             .define('O', ingredients.observer)
             .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
             .define('P', ingredients.peripheralium)
@@ -52,7 +54,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" O ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.ULTIMATE_SENSOR.get().asItem())
+        TweakedShapedRecipeBuilder(Blocks.ULTIMATE_SENSOR.get().asItem().defaultInstance)
             .define('O', ingredients.daylightDetector)
             .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
             .define('P', ingredients.peripheralium)
@@ -61,7 +63,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" O ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.ITEM_PEDESTAL.get().asItem(), 5)
+        TweakedShapedRecipeBuilder(Blocks.ITEM_PEDESTAL.get().asItem().defaultInstance.copyWithCount(5))
             .define('S', ingredients.smoothStone)
             .define('_', ingredients.smoothStoneSlab)
             .pattern("___")
@@ -69,7 +71,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("_S_")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.MAP_PEDESTAL.get().asItem())
+        TweakedShapedRecipeBuilder(Blocks.MAP_PEDESTAL.get().asItem().defaultInstance)
             .define('O', Ingredient.of(Blocks.ITEM_PEDESTAL.get()))
             .define('P', ingredients.peripheralium)
             .define('C', ingredients.compass)
@@ -78,7 +80,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" P ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.DISPLAY_PEDESTAL.get().asItem(), 4)
+        TweakedShapedRecipeBuilder(Blocks.DISPLAY_PEDESTAL.get().asItem().defaultInstance.copyWithCount(5))
             .define('O', Ingredient.of(Blocks.ITEM_PEDESTAL.get()))
             .define('P', ingredients.peripheralium)
             .define('B', ingredients.smoothBasalt)
@@ -87,7 +89,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("POP")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Items.ULTIMATE_CONFIGURATOR.get())
+        TweakedShapedRecipeBuilder(Items.ULTIMATE_CONFIGURATOR.get().defaultInstance)
             .define('I', ingredients.peripheralium)
             .define('S', ingredients.stick)
             .define('D', ingredients.diamond)
@@ -96,7 +98,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("S  ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.REMOTE_OBSERVER.get())
+        TweakedShapedRecipeBuilder(Blocks.REMOTE_OBSERVER.get().asItem().defaultInstance)
             .define('O', ingredients.observer)
             .define('c', Ingredient.of(Blocks.PERIPHERAL_CASING.get()))
             .define('d', ingredients.peripheralium)
@@ -106,7 +108,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("ici")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.PERIPHERAL_PROXY.get())
+        TweakedShapedRecipeBuilder(Blocks.PERIPHERAL_PROXY.get().asItem().defaultInstance)
             .define('O', ingredients.enderModem)
             .define('c', Ingredient.of(Blocks.PERIPHERAL_CASING.get()))
             .define('d', ingredients.peripheralium)
@@ -116,7 +118,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("ici")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), 32)
+        TweakedShapedRecipeBuilder(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem().defaultInstance.copyWithCount(32))
             .define('S', ingredients.peripheralium)
             .define('I', ingredients.ironIngot)
             .pattern("I I")
@@ -124,7 +126,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("I I")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.REALITY_FORGER.get())
+        TweakedShapedRecipeBuilder(Blocks.REALITY_FORGER.get().asItem().defaultInstance)
             .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
             .define('P', ingredients.printer)
             .define('D', ingredients.peripheralium)
@@ -134,7 +136,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" D ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.RECIPE_REGISTRY.get())
+        TweakedShapedRecipeBuilder(Blocks.RECIPE_REGISTRY.get().asItem().defaultInstance)
             .define('T', ingredients.craftingTable)
             .define('B', ingredients.book)
             .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
@@ -144,7 +146,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" D ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.INFORMATIVE_REGISTRY.get())
+        TweakedShapedRecipeBuilder(Blocks.INFORMATIVE_REGISTRY.get().asItem().defaultInstance)
             .define('T', ingredients.bookshelf)
             .define('B', ingredients.book)
             .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
@@ -154,7 +156,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern(" D ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.FLEXIBLE_STATUE.get(), 16)
+        TweakedShapedRecipeBuilder(Blocks.FLEXIBLE_STATUE.get().asItem().defaultInstance.copyWithCount(16))
             .define('S', ingredients.smoothStone)
             .define('P', ingredients.peripheralium)
             .pattern("S S")
@@ -162,7 +164,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("S S")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.STATUE_WORKBENCH.get())
+        TweakedShapedRecipeBuilder(Blocks.STATUE_WORKBENCH.get().asItem().defaultInstance)
             .define('S', Ingredient.of(Blocks.FLEXIBLE_STATUE.get()))
             .define('B', ingredients.smoothStone)
             .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
@@ -172,7 +174,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("BDB")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Blocks.ENTITY_LINK.get())
+        TweakedShapedRecipeBuilder(Blocks.ENTITY_LINK.get().asItem().defaultInstance)
             .define('C', Ingredient.of(Items.ENTITY_CARD.get()))
             .define('P', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
             .define('O', ingredients.peripheralium)
@@ -182,7 +184,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("COC")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder.shaped(Items.ENTITY_CARD.get(), 4)
+        TweakedShapedRecipeBuilder(Items.ENTITY_CARD.get().asItem().defaultInstance.copyWithCount(4))
             .define('D', ingredients.diamond)
             .define('O', ingredients.peripheralium)
             .define('B', ingredients.blackstone)
@@ -191,15 +193,15 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("D O")
             .save(consumer)
 
-        SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLONING.get())
+        SpecialRecipeBuilder.special(::StatueCloningRecipe)
             .save(consumer, "statue_cloning")
-        SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLEAN.get())
+        SpecialRecipeBuilder.special(::StatueCleanRecipe)
             .save(consumer, "statue_clean")
-        SpecialRecipeBuilder.special(RecipeSerializers.ANCHOR_CLONING.get())
+        SpecialRecipeBuilder.special(::AnchorCloningRecipe)
             .save(consumer, "anchor_cloning")
-        SpecialRecipeBuilder.special(RecipeSerializers.ANCHOR_CLEAN.get())
+        SpecialRecipeBuilder.special(::AnchorCleanRecipe)
             .save(consumer, "anchor_clean")
-        SpecialRecipeBuilder.special(RecipeSerializers.CARD_CLEAN.get())
+        SpecialRecipeBuilder.special(::CardCleanRecipe)
             .save(consumer, "card_clean")
     }
 }

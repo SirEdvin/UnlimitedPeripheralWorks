@@ -2,10 +2,7 @@ package site.siredvin.peripheralworks.common.blockentity
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.NbtUtils
-import net.minecraft.nbt.Tag
+import net.minecraft.nbt.*
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.broccolium.modules.base.api.IObservingBlockEntity
@@ -17,6 +14,7 @@ import site.siredvin.peripheralworks.computercraft.peripherals.RemoteObserverPer
 import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.peripheral.representation.stateProperties
+import java.util.*
 
 class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     MutablePeripheralBlockEntity<RemoteObserverPeripheral>(BlockEntityTypes.REMOTE_OBSERVER.get(), blockPos, blockState),
@@ -83,8 +81,11 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         if (data.contains(TRACKED_BLOCKS_TAG)) {
-            val internalList = data.getList(TRACKED_BLOCKS_TAG, Tag.TAG_COMPOUND.toInt())
-            internalList.forEach { addPosToTrack(NbtUtils.readBlockPos(it as CompoundTag)) }
+            val internalList = data.getList(TRACKED_BLOCKS_TAG, Tag.TAG_INT_ARRAY.toInt())
+            internalList.forEach {
+                val list = (it as IntArrayTag).asIntArray
+                addPosToTrack(BlockPos(list[0], list[1], list[2]))
+            }
         }
         return state ?: blockState
     }

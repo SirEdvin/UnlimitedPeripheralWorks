@@ -7,6 +7,7 @@ import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
+import net.minecraft.core.component.DataComponentPatch
 import org.joml.Quaternionf
 
 class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: Int = 16) : TurtleUpgradeModeller<T> {
@@ -40,9 +41,5 @@ class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize:
     private val leftTransformation = buildMatrix(TurtleSide.LEFT, scaleFactor, modelPixelSize)
     private val rightTransformation = buildMatrix(TurtleSide.RIGHT, scaleFactor, modelPixelSize)
 
-    override fun getModel(
-        upgrade: T,
-        turtle: ITurtleAccess?,
-        side: TurtleSide,
-    ): TransformedModel = TransformedModel.of(upgrade.craftingItem, if (side == TurtleSide.LEFT) leftTransformation else rightTransformation)
+    override fun getModel(upgrade: T, turtle: ITurtleAccess?, side: TurtleSide?, data: DataComponentPatch?): TransformedModel = TransformedModel.of(upgrade.craftingItem, if (side == TurtleSide.LEFT) leftTransformation else rightTransformation)
 }

@@ -2,8 +2,12 @@ package site.siredvin.peripheralworks.utils
 
 import net.minecraft.core.Direction
 import net.minecraft.data.models.blockstates.VariantProperties.Rotation
+import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeHolder
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
+import site.siredvin.broccolium.modules.platform.SimpleRegistryEntry
+import site.siredvin.broccolium.modules.platform.api.RegistryEntry
 import java.lang.IllegalArgumentException
 import kotlin.math.PI
 import kotlin.math.cos
@@ -51,3 +55,5 @@ fun VoxelShape.rotate(from: Direction, to: Direction): VoxelShape {
     }
     return this
 }
+
+fun <T : Recipe<*>> RecipeHolder<T>.toEntry(): RegistryEntry<Recipe<*>> = SimpleRegistryEntry(this.id, this::value)

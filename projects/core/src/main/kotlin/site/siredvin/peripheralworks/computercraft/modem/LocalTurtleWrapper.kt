@@ -7,19 +7,25 @@ import dan200.computercraft.api.turtle.*
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.core.Holder
+import net.minecraft.core.component.DataComponentPatch
+import net.minecraft.core.component.DataComponents
 import net.minecraft.world.Container
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
+import kotlin.jvm.optionals.getOrNull
 
-class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, val upgrade: ITurtleUpgrade, val id: String, private val origin: TurtlePeripheraliumHubPeripheral) : ITurtleAccess {
+class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, override val upgrade: Holder.Reference<ITurtleUpgrade>, override val id: String, private val origin: TurtlePeripheraliumHubPeripheral) :
+    ITurtleAccess,
+    LocalWrapper<ITurtleUpgrade> {
 
-    val peripheral: IPeripheral? = upgrade.createPeripheral(this, tweakedSide)
+    override val peripheral: IPeripheral? = upgrade.value().createPeripheral(this, tweakedSide)
 
-    val tweakedData: CompoundTag
-        get() = getUpgradeNBTData(tweakedSide)
+    val tweakedData: DataComponentPatch
+        get() = getUpgradeData(tweakedSide)
 
-    val upgradeData: UpgradeData<ITurtleUpgrade>
+    override val fullUpgradeData: UpgradeData<ITurtleUpgrade>
         get() = UpgradeData.of(upgrade, tweakedData)
 
     override fun getLevel(): Level = access.level
@@ -74,22 +80,12 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
 
     override fun getUpgrade(side: TurtleSide): ITurtleUpgrade? {
         if (side == tweakedSide) {
-            return upgrade
+            return upgrade.value()
         }
         return access.getUpgrade(side)
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun setUpgrade(side: TurtleSide, upgrade: ITurtleUpgrade?) {
-        if (side == tweakedSide) {
-            origin.swapUpgrade(UpgradeData.ofDefault(this.upgrade), UpgradeData.ofDefault(upgrade))
-        } else {
-            @Suppress("DEPRECATION")
-            access.setUpgrade(side, upgrade)
-        }
-    }
-
-    override fun setUpgradeWithData(side: TurtleSide?, upgrade: UpgradeData<ITurtleUpgrade>?) {
+    override fun setUpgrade(side: TurtleSide, upgrade: UpgradeData<ITurtleUpgrade>?) {
         if (side == tweakedSide) {
             if (upgrade == null) {
                 origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), null)
@@ -97,8 +93,24 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
                 origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), upgrade)
             }
         } else {
-            access.setUpgradeWithData(side, upgrade)
+            @Suppress("DEPRECATION")
+            access.setUpgrade(side, upgrade)
         }
+    }
+
+    override fun setUpgradeData(side: TurtleSide, data: DataComponentPatch) {
+        if (side == tweakedSide) {
+            origin.setDataForUpdate(id, data.get(DataComponents.CUSTOM_DATA)?.getOrNull()?.copyTag())
+        } else {
+            access.setUpgradeData(side, data)
+        }
+    }
+
+    override fun getUpgradeWithData(side: TurtleSide?): UpgradeData<ITurtleUpgrade>? {
+        if (side == tweakedSide) {
+            return fullUpgradeData
+        }
+        return access.getUpgradeWithData(side)
     }
 
     override fun getPeripheral(side: TurtleSide): IPeripheral? {
@@ -108,15 +120,11 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
         return access.getPeripheral(side)
     }
 
-    override fun getUpgradeNBTData(side: TurtleSide): CompoundTag {
-        val base = access.getUpgradeNBTData(side)
+    override fun getUpgradeData(side: TurtleSide): DataComponentPatch {
+        val base = access.getUpgradeData(side)
         if (side == tweakedSide) {
-            return origin.getDataForUpgrade(id)
+            return DataComponentPatch.builder().set(DataComponents.CUSTOM_DATA, CustomData.of(origin.getDataForUpgrade(id))).build()
         }
         return base
-    }
-
-    override fun updateUpgradeNBTData(side: TurtleSide) {
-        access.updateUpgradeNBTData(side)
     }
 }

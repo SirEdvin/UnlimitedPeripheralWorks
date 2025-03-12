@@ -3,21 +3,24 @@ package site.siredvin.peripheralworks.subsystem.recipe
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.JsonSyntaxException
+import com.mojang.serialization.JsonOps
 import dan200.computercraft.api.lua.LuaException
 import net.minecraft.core.RegistryAccess
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.Container
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeInput
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.item.crafting.ShapedRecipe
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.Fluid
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
+import site.siredvin.broccolium.modules.platform.SimpleRegistryEntry
+import site.siredvin.broccolium.modules.platform.api.RegistryEntry
 import site.siredvin.peripheralworks.subsystem.recipe.integration.ShapedCraftingRecipeTransformer
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
@@ -56,10 +59,10 @@ object RecipeRegistryToolkit {
                 return@registerSerializer SERIALIZATION_EMPTY_SLOT
             }
             try {
-                return@registerSerializer GSON.fromJson(it.toJson(), HashMap::class.java)
+                return@registerSerializer GSON.fromJson(Ingredient.CODEC.encode(it, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result().get(), HashMap::class.java)
             } catch (ignored: JsonSyntaxException) {
                 try {
-                    return@registerSerializer GSON.fromJson(it.toJson(), ArrayList::class.java)
+                    return@registerSerializer GSON.fromJson(Ingredient.CODEC.encode(it, JsonOps.INSTANCE, JsonOps.INSTANCE.empty()).result().get(), ArrayList::class.java)
                 } catch (e: JsonSyntaxException) {
                     e.printStackTrace()
                 }
@@ -83,12 +86,12 @@ object RecipeRegistryToolkit {
         registerRecipeSerializer(ShapedRecipe::class.java, ShapedCraftingRecipeTransformer)
     }
 
-    fun <V : Container, T : Recipe<V>> registerRecipeSerializer(recipeClass: Class<T>, transformer: RecipeTransformer<V, T>) {
+    fun <V : RecipeInput, T : Recipe<V>> registerRecipeSerializer(recipeClass: Class<T>, transformer: RecipeTransformer<V, T>) {
         @Suppress("UNCHECKED_CAST")
         RECIPE_SERIALIZERS[recipeClass] = transformer as RecipeTransformer<*, Recipe<*>>
     }
 
-    fun <V : Container, T : Recipe<V>> registerRecipeSerializerRaw(recipeClass: Class<T>, transformer: RecipeTransformer<Container, Recipe<Container>>) {
+    fun <V : RecipeInput, T : Recipe<V>> registerRecipeSerializerRaw(recipeClass: Class<T>, transformer: RecipeTransformer<RecipeInput, Recipe<RecipeInput>>) {
         @Suppress("UNCHECKED_CAST")
         RECIPE_SERIALIZERS[recipeClass] = transformer as RecipeTransformer<*, Recipe<*>>
     }
@@ -130,22 +133,23 @@ object RecipeRegistryToolkit {
         return obj
     }
 
-    fun serializeRecipe(recipe: Recipe<*>, registryAccess: RegistryAccess): Map<String, Any> {
+    fun serializeRecipe(recipe: RegistryEntry<Recipe<*>>, registryAccess: RegistryAccess): Map<String, Any> {
         for (recipeClass in RECIPE_SERIALIZERS.keys) {
-            @Suppress("UNCHECKED_CAST")
-            if (recipeClass.isInstance(recipe)) return RECIPE_SERIALIZERS[recipeClass]!!.transform(recipe as Recipe<Container>, registryAccess)
+            if (recipeClass.isInstance(recipe)) return RECIPE_SERIALIZERS[recipeClass]!!.transform(recipe, registryAccess)
         }
         @Suppress("UNCHECKED_CAST")
-        return DefaultRecipeTransformer.transform(recipe as Recipe<Container>, registryAccess)
+        return DefaultRecipeTransformer.transform(recipe as RegistryEntry<Recipe<RecipeInput>>, registryAccess)
     }
 
     @Throws(LuaException::class)
     fun getRecipeType(type: ResourceLocation): RecipeType<*> = PlatformRegistries.RECIPE_TYPES.tryGet(type)
         ?: throw LuaException(String.format("Incorrect recipe type %s", type))
 
-    fun getRecipesForType(recipeType: RecipeType<*>, level: Level): List<Recipe<*>> {
+    fun getRecipesForType(recipeType: RecipeType<*>, level: Level): List<RegistryEntry<Recipe<*>>> {
         @Suppress("UNCHECKED_CAST")
-        return level.recipeManager.getAllRecipesFor(recipeType as RecipeType<Recipe<Container>>)
+        return level.recipeManager.getAllRecipesFor(recipeType as RecipeType<Recipe<RecipeInput>>).map {
+            SimpleRegistryEntry(it.id) { it.value }
+        }
     }
 
     fun findRecipesForType(
@@ -156,12 +160,12 @@ object RecipeRegistryToolkit {
     ): MutableList<Any>? {
         val searchPredicate =
             RECIPE_PREDICATES.getOrDefault(recipeType, DEFAULT_RECIPE_PREDICATE)
-        val recipes: List<Recipe<*>> = getRecipesForType(recipeType, level)
+        val recipes = getRecipesForType(recipeType, level)
         return recipes.stream().filter {
             @Suppress("UNCHECKED_CAST")
             searchPredicate.test(
                 result,
-                it as Recipe<Container>,
+                it as Recipe<RecipeInput>,
                 checkMode,
             )
         }.collect(Collectors.toList())
@@ -172,7 +176,7 @@ object RecipeRegistryToolkit {
         if (types == null || types.toString() == "*") return PlatformRegistries.RECIPE_TYPES.iterator().asSequence().toList()
         if (types is String) {
             return if (types.contains(":")) {
-                listOf(getRecipeType(ResourceLocation(types.toString())))
+                listOf(getRecipeType(ResourceLocation.parse(types.toString())))
             } else {
                 PlatformRegistries.RECIPE_TYPES.iterator().asSequence()
                     .filter { p -> p.toString().startsWith(types) }.toList()
@@ -181,7 +185,7 @@ object RecipeRegistryToolkit {
         if (types is Map<*, *>) {
             val recipeTypes: MutableList<RecipeType<*>> = mutableListOf()
             for (el in types.values) {
-                recipeTypes.add(getRecipeType(ResourceLocation(el.toString())))
+                recipeTypes.add(getRecipeType(ResourceLocation.parse(el.toString())))
             }
             return recipeTypes
         }

@@ -18,7 +18,7 @@ import site.siredvin.peripheralworks.tags.BlockTags
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 object PeripheralProxyMode : ConfigurationMode {
-    override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
+    override val modeID: ResourceLocation = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
     override val description: Component = ModTooltip.PERIPHERAL_PROXY_MODE.text
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {

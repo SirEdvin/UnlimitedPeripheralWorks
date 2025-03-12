@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks
 import dan200.computercraft.api.peripheral.PeripheralLookup
-import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.GameType
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
-import net.minecraftforge.fml.config.ModConfig
+import net.neoforged.fml.config.ModConfig
 import site.siredvin.broccolium.modules.base.FabricIntegrationLoader
 import site.siredvin.peripheralium.FabricPeripheralium
 import site.siredvin.peripheralworks.common.commands.DebugCommands
@@ -41,19 +41,19 @@ object FabricPeripheralWorks : ModInitializer {
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         // Load all integrations
-        loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("alloy_forgery").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("universal_shops").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("modern_industrialization").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("alloy_forgery").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("universal_shops").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("modern_industrialization").ifPresent { (it as Runnable).run() }
+//        loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
-        ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
+        NeoForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->
             if (blockEntity is IPeripheralProvider<*>) {

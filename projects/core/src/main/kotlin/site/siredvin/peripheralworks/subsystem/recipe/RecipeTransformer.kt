@@ -1,14 +1,15 @@
 package site.siredvin.peripheralworks.subsystem.recipe
 
 import net.minecraft.core.RegistryAccess
-import net.minecraft.world.Container
 import net.minecraft.world.item.crafting.Recipe
+import net.minecraft.world.item.crafting.RecipeInput
+import site.siredvin.broccolium.modules.platform.api.RegistryEntry
 import java.util.function.Consumer
 import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-abstract class RecipeTransformer<V : Container, T : Recipe<V>> {
+abstract class RecipeTransformer<V : RecipeInput, T : Recipe<V>> {
     open fun getInputs(recipe: T, registryAccess: RegistryAccess): List<*> = recipe.ingredients
 
     open fun getOutputs(recipe: T, registryAccess: RegistryAccess): List<*> = listOf(recipe.getResultItem(registryAccess))
@@ -26,9 +27,10 @@ abstract class RecipeTransformer<V : Container, T : Recipe<V>> {
         it !== RecipeRegistryToolkit.SERIALIZATION_SKIP
     }.collect(Collectors.toList<Any>())
 
-    fun transform(recipe: T, registryAccess: RegistryAccess): Map<String, Any> {
+    fun transform(recipeEntry: RegistryEntry<T>, registryAccess: RegistryAccess): Map<String, Any> {
         val recipeData: MutableMap<String, Any> = HashMap()
-        recipeData["id"] = recipe.id.toString()
+        val recipe = recipeEntry.get()
+        recipeData["id"] = recipeEntry.id.toString()
         recipeData["type"] = recipe.type.toString()
         recipeData["output"] = serializeIngredients(getOutputs(recipe, registryAccess))
         recipeData["input"] = serializeIngredients(getInputs(recipe, registryAccess))

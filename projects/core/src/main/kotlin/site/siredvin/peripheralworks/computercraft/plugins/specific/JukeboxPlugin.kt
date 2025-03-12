@@ -5,8 +5,9 @@ import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
-import net.minecraft.tags.ItemTags
+import net.minecraft.core.Holder
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.JukeboxSong
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
@@ -18,20 +19,20 @@ import java.util.function.Predicate
 class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin {
 
     private fun assertDisc() {
-        if (target.getItem(0).isEmpty) {
+        if (target.theItem.isEmpty) {
             throw LuaException("Disc should present in jukebox")
         }
     }
 
     private fun assertNoDisc() {
-        if (!target.getItem(0).isEmpty) {
+        if (!target.theItem.isEmpty) {
             throw LuaException("Jukebox should be empty")
         }
     }
 
     @LuaFunction(mainThread = true)
     fun getDisc(): Map<String, Any>? {
-        val record = target.getItem(0)
+        val record = target.theItem
         if (record.isEmpty) {
             return null
         }
@@ -41,15 +42,21 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin 
     @LuaFunction(mainThread = true)
     fun replay() {
         assertDisc()
-        if (!target.isRecordPlaying) {
-            target.startPlaying()
+        if (!target.jukeboxSongPlayer.isPlaying) {
+            JukeboxSong.fromStack(target.level!!.registryAccess(), target.theItem)
+                .ifPresent { holder: Holder<JukeboxSong> ->
+                    target.jukeboxSongPlayer.play(
+                        target.level!!,
+                        holder,
+                    )
+                }
         }
     }
 
     @LuaFunction(mainThread = true)
     fun stop() {
-        if (target.isRecordPlaying) {
-            target.stopPlaying()
+        if (target.jukeboxSongPlayer.isPlaying) {
+            target.jukeboxSongPlayer.stop(target.level!!, target.blockState)
         }
     }
 
@@ -63,12 +70,12 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin 
         val toStorage = AgnosticItemStorageLookup.extractItemSinkFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
-        val stored = toStorage.storeItem(target.getItem(0))
+        val stored = toStorage.storeItem(target.theItem)
         if (!stored.isEmpty) {
             return MethodResult.of(null, "Not enough space in target inventory")
         }
 
-        target.removeItem(0, 1)
+        target.theItem = ItemStack.EMPTY
         return MethodResult.of(true)
     }
 
@@ -83,7 +90,7 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin 
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate: Predicate<ItemStack> = Predicate {
-            it.`is`(ItemTags.MUSIC_DISCS)
+            JukeboxSong.fromStack(target.level!!.registryAccess(), it).isPresent
         }
 
         if (itemQuery != null) {

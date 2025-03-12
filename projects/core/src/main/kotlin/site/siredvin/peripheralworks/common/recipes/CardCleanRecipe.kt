@@ -1,10 +1,9 @@
 package site.siredvin.peripheralworks.common.recipes
 
-import net.minecraft.core.RegistryAccess
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.world.inventory.CraftingContainer
+import net.minecraft.core.HolderLookup
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.CraftingBookCategory
+import net.minecraft.world.item.crafting.CraftingInput
 import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.Level
@@ -12,7 +11,7 @@ import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.RecipeSerializers
 
-class CardCleanRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
+class CardCleanRecipe(category: CraftingBookCategory) : CustomRecipe(category) {
 
     companion object {
         fun isFilledCreatureCard(stack: ItemStack): Boolean = stack.`is`(Items.ENTITY_CARD.get()) && !EntityCard.isEmpty(stack)
@@ -22,12 +21,12 @@ class CardCleanRecipe(id: ResourceLocation, category: CraftingBookCategory) : Cu
         Items.ENTITY_CARD.get().defaultInstance
     }
 
-    override fun matches(p0: CraftingContainer, p1: Level): Boolean = p0.items.count { !it.isEmpty } == 1 && p0.items.any(::isFilledCreatureCard)
+    override fun matches(p0: CraftingInput, p1: Level): Boolean = p0.items().count { !it.isEmpty } == 1 && p0.items().any(::isFilledCreatureCard)
 
-    override fun getResultItem(registry: RegistryAccess): ItemStack = resultItem
+    override fun getResultItem(registry: HolderLookup.Provider): ItemStack = resultItem
 
-    override fun assemble(p0: CraftingContainer, p1: RegistryAccess): ItemStack {
-        val firstCandidate = p0.items.find(::isFilledCreatureCard) ?: ItemStack.EMPTY
+    override fun assemble(p0: CraftingInput, p1: HolderLookup.Provider): ItemStack {
+        val firstCandidate = p0.items().find(::isFilledCreatureCard) ?: ItemStack.EMPTY
         return resultItem.copyWithCount(firstCandidate.count)
     }
 

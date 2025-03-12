@@ -1,9 +1,12 @@
 package site.siredvin.peripheralworks.common.block
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Mirror
 import net.minecraft.world.level.block.Rotation
@@ -90,4 +93,6 @@ class PeripheralProxy : BaseBlockEntityBlock<PeripheralProxyBlockEntity>(true, B
         Direction.WEST -> SHAPE_WEST
         Direction.EAST -> SHAPE_EAST
     }
+
+    override fun codec(): MapCodec<out BaseEntityBlock> = RecordCodecBuilder.mapCodec { it.stable(PeripheralProxy()) }
 }

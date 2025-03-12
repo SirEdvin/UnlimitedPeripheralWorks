@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.data
 
 import net.minecraft.data.loot.LootTableProvider
 import net.minecraft.data.loot.LootTableSubProvider
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.resources.ResourceKey
 import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets
 import site.siredvin.broccolium.modules.data.loot.LootTableHelper
@@ -19,7 +19,7 @@ object ModLootTableProvider {
         }, LootContextParamSets.BLOCK),
     )
 
-    fun registerBlocks(consumer: BiConsumer<ResourceLocation, LootTable.Builder>) {
+    fun registerBlocks(consumer: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
         val lootTable = LootTableHelper(ModPlatform.holder)
         lootTable.dropSelf(consumer, Blocks.ULTIMATE_SENSOR)
         lootTable.dropSelf(consumer, Blocks.UNIVERSAL_SCANNER)

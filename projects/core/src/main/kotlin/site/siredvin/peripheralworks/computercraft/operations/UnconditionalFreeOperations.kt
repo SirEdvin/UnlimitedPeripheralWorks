@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.computercraft.operations
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOperation
 
@@ -13,9 +13,9 @@ enum class UnconditionalFreeOperations(
     EXTRACT_MAP(10_000),
     ;
 
-    private var cooldown: ForgeConfigSpec.IntValue? = null
+    private var cooldown: ModConfigSpec.IntValue? = null
 
-    override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+    override fun addToConfig(builder: ModConfigSpec.Builder) {
         cooldown = builder.defineInRange(
             settingsName() + "Cooldown",
             defaultCooldown,

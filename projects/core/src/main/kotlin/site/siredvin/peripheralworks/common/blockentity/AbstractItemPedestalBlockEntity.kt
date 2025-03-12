@@ -8,6 +8,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
 import site.siredvin.peripheralworks.api.IItemStackStorage
 import site.siredvin.tweakium.modules.peripheral.api.IOwnedPeripheral
@@ -51,14 +52,14 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
             if (itemList.isEmpty()) {
                 inventory.clearContent()
             } else {
-                inventory.fromTag(itemList)
+                inventory.fromTag(itemList, PlatformToolkit.get().registries!!)
             }
         }
         return state ?: blockState
     }
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {
-        data.put(STORED_ITEM_STACK_TAG, inventory.createTag())
+        data.put(STORED_ITEM_STACK_TAG, inventory.createTag(PlatformToolkit.get().registries!!))
         return data
     }
 

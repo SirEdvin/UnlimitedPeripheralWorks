@@ -18,6 +18,5 @@ object FlexibleStatueUnbakedModel : UnbakedModel {
         modelBaker: ModelBaker,
         function: Function<Material, TextureAtlasSprite>,
         modelState: ModelState,
-        resourceLocation: ResourceLocation,
     ): BakedModel = FlexibleStatueModel
 }

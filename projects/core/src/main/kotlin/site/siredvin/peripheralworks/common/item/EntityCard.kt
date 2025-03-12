@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.common.item
 
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.InteractionHand
@@ -8,6 +9,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.HitResult
@@ -24,7 +26,7 @@ class EntityCard : DescriptiveItem(Properties().stacksTo(1)) {
         private val CUSTOM_MODEL_DATA_TAG = "CustomModelData"
         private val ENTITY_UUID_TAG = "entityUUID"
         fun isEmpty(itemStack: ItemStack): Boolean {
-            val itemTag = itemStack.tag ?: return true
+            val itemTag = itemStack.get(DataComponents.CUSTOM_DATA) ?: return true
             return !itemTag.contains(CUSTOM_MODEL_DATA_TAG)
         }
 
@@ -34,13 +36,14 @@ class EntityCard : DescriptiveItem(Properties().stacksTo(1)) {
         }
 
         fun storeEntity(itemStack: ItemStack, entity: Entity) {
-            val itemTag = itemStack.orCreateTag
+            val itemTag = itemStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
             itemTag.putByte(CUSTOM_MODEL_DATA_TAG, 1)
             itemTag.putUUID(ENTITY_UUID_TAG, entity.uuid)
+            itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(itemTag))
         }
 
         fun getEntityUUID(itemStack: ItemStack): UUID? {
-            val itemTag = itemStack.tag ?: return null
+            val itemTag = itemStack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: return null
             if (!itemTag.contains(ENTITY_UUID_TAG)) return null
             return itemTag.getUUID(ENTITY_UUID_TAG)
         }
@@ -50,14 +53,14 @@ class EntityCard : DescriptiveItem(Properties().stacksTo(1)) {
 
     override fun appendHoverText(
         itemStack: ItemStack,
-        level: Level?,
+        context: TooltipContext,
         list: MutableList<Component>,
         tooltipFlag: TooltipFlag,
     ) {
         if (!isEmpty(itemStack)) {
             list.add(ModText.SOMETHING_STORED_INSIDE_CARD.text)
         }
-        super.appendHoverText(itemStack, level, list, tooltipFlag)
+        super.appendHoverText(itemStack, context, list, tooltipFlag)
     }
 
     override fun use(level: Level, player: Player, interactionHand: InteractionHand): InteractionResultHolder<ItemStack> {

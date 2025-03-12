@@ -6,6 +6,7 @@ import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
+import net.minecraft.core.Holder
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
@@ -30,7 +31,7 @@ class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
         for (i in 0..min(target.levels - 1, 2)) {
             BeaconBlockEntity.BEACON_EFFECTS[i].forEach {
                 powers.add(
-                    LuaRepresentation.fromLegacyToNewID(it.descriptionId),
+                    LuaRepresentation.fromLegacyToNewID(it.value().descriptionId),
                 )
             }
         }
@@ -77,9 +78,9 @@ class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
         val fromName = arguments.getString(1)
         val itemQuery = arguments.get(2)
         val regenerationSecondary = arguments.optBoolean(3, false)
-        var primaryEffect: MobEffect? = null
+        var primaryEffect: Holder<MobEffect>? = null
         for (i in 0..min(target.levels - 1, 2)) {
-            primaryEffect = BeaconBlockEntity.BEACON_EFFECTS[i].find { LuaRepresentation.fromLegacyToNewID(it.descriptionId) == primaryPower }
+            primaryEffect = BeaconBlockEntity.BEACON_EFFECTS[i].find { LuaRepresentation.fromLegacyToNewID(it.value().descriptionId) == primaryPower }
             if (primaryEffect != null) {
                 break
             }

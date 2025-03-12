@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.common.configuration
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
@@ -105,48 +105,48 @@ object PeripheralWorksConfig {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
 
-    class CommonConfig internal constructor(builder: ForgeConfigSpec.Builder) {
+    class CommonConfig internal constructor(builder: ModConfigSpec.Builder) {
 
         // Generic configuration
-        var cooldownThresholdLevel: ForgeConfigSpec.IntValue
+        var cooldownThresholdLevel: ModConfigSpec.IntValue
 
         // Generic plugins
-        var enableGenericInventory: ForgeConfigSpec.BooleanValue
-        var enableGenericItemStorage: ForgeConfigSpec.BooleanValue
-        var enableGenericFluidStorage: ForgeConfigSpec.BooleanValue
-        var enableGenericEnergyStorage: ForgeConfigSpec.BooleanValue
-        val itemStorageTransferLimit: ForgeConfigSpec.IntValue
-        val fluidStorageTransferLimit: ForgeConfigSpec.IntValue
+        var enableGenericInventory: ModConfigSpec.BooleanValue
+        var enableGenericItemStorage: ModConfigSpec.BooleanValue
+        var enableGenericFluidStorage: ModConfigSpec.BooleanValue
+        var enableGenericEnergyStorage: ModConfigSpec.BooleanValue
+        val itemStorageTransferLimit: ModConfigSpec.IntValue
+        val fluidStorageTransferLimit: ModConfigSpec.IntValue
 
         // Specific plugins
-        var enableBeacon: ForgeConfigSpec.BooleanValue
-        var enableNotebook: ForgeConfigSpec.BooleanValue
-        var enableLentern: ForgeConfigSpec.BooleanValue
-        var enableJukebox: ForgeConfigSpec.BooleanValue
-        var enablePoweredRail: ForgeConfigSpec.BooleanValue
+        var enableBeacon: ModConfigSpec.BooleanValue
+        var enableNotebook: ModConfigSpec.BooleanValue
+        var enableLentern: ModConfigSpec.BooleanValue
+        var enableJukebox: ModConfigSpec.BooleanValue
+        var enablePoweredRail: ModConfigSpec.BooleanValue
 
         // Peripheralium hubs
-        val enablePeripheraliumHubs: ForgeConfigSpec.BooleanValue
-        val peripheraliumHubUpgradeCount: ForgeConfigSpec.IntValue
-        val netheritePeripheraliumHubUpgradeCount: ForgeConfigSpec.IntValue
-        val enableUniversalScanner: ForgeConfigSpec.BooleanValue
-        val enableUltimateSensor: ForgeConfigSpec.BooleanValue
-        val enableItemPedestal: ForgeConfigSpec.BooleanValue
-        val enableMapPedestal: ForgeConfigSpec.BooleanValue
-        val enableDisplayPedestal: ForgeConfigSpec.BooleanValue
-        val enableRemoteObserver: ForgeConfigSpec.BooleanValue
-        val removeObserverMaxRange: ForgeConfigSpec.IntValue
-        val removeObserverMaxCapacity: ForgeConfigSpec.IntValue
-        val enablePeripheralProxy: ForgeConfigSpec.BooleanValue
-        val peripheralProxyMaxRange: ForgeConfigSpec.IntValue
-        val peripheralProxyMaxCapacity: ForgeConfigSpec.IntValue
-        val enableRealityForger: ForgeConfigSpec.BooleanValue
-        val realityForgerMaxRange: ForgeConfigSpec.IntValue
-        val enableRecipeRegistry: ForgeConfigSpec.BooleanValue
-        val enableInformativeRegistry: ForgeConfigSpec.BooleanValue
-        val enableStatueWorkbench: ForgeConfigSpec.BooleanValue
-        val flexibleStatueMaxQuads: ForgeConfigSpec.IntValue
-        val enableEntityLinks: ForgeConfigSpec.BooleanValue
+        val enablePeripheraliumHubs: ModConfigSpec.BooleanValue
+        val peripheraliumHubUpgradeCount: ModConfigSpec.IntValue
+        val netheritePeripheraliumHubUpgradeCount: ModConfigSpec.IntValue
+        val enableUniversalScanner: ModConfigSpec.BooleanValue
+        val enableUltimateSensor: ModConfigSpec.BooleanValue
+        val enableItemPedestal: ModConfigSpec.BooleanValue
+        val enableMapPedestal: ModConfigSpec.BooleanValue
+        val enableDisplayPedestal: ModConfigSpec.BooleanValue
+        val enableRemoteObserver: ModConfigSpec.BooleanValue
+        val removeObserverMaxRange: ModConfigSpec.IntValue
+        val removeObserverMaxCapacity: ModConfigSpec.IntValue
+        val enablePeripheralProxy: ModConfigSpec.BooleanValue
+        val peripheralProxyMaxRange: ModConfigSpec.IntValue
+        val peripheralProxyMaxCapacity: ModConfigSpec.IntValue
+        val enableRealityForger: ModConfigSpec.BooleanValue
+        val realityForgerMaxRange: ModConfigSpec.IntValue
+        val enableRecipeRegistry: ModConfigSpec.BooleanValue
+        val enableInformativeRegistry: ModConfigSpec.BooleanValue
+        val enableStatueWorkbench: ModConfigSpec.BooleanValue
+        val flexibleStatueMaxQuads: ModConfigSpec.IntValue
+        val enableEntityLinks: ModConfigSpec.BooleanValue
 
         init {
             builder.push("base")
@@ -237,7 +237,7 @@ object PeripheralWorksConfig {
             builder.pop()
         }
 
-        private fun register(data: Array<out IForgeConfigHandler>, builder: ForgeConfigSpec.Builder) {
+        private fun register(data: Array<out IForgeConfigHandler>, builder: ModConfigSpec.Builder) {
             for (handler in data) {
                 handler.addToConfig(builder)
             }

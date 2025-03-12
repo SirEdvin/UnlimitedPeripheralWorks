@@ -23,7 +23,7 @@ import java.util.*
 object ModBlockModelProvider {
 
     val PEDESTAL = ModelTemplate(
-        Optional.of(ResourceLocation(PeripheralWorksCore.MOD_ID, "block/base_pedestal")),
+        Optional.of(ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "block/base_pedestal")),
         Optional.empty(),
         TextureSlot.TEXTURE,
         TextureSlot.TOP,

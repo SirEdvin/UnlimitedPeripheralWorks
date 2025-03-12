@@ -33,7 +33,7 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPerip
 
     companion object {
         const val TYPE = "ultimate_sensor"
-        val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
+        val UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, TYPE)
 
         private val ANALYZERS: MutableMap<String, WrappedCall> = mutableMapOf()
         private val INSPECTORS: MutableMap<String, WrappedCall> = mutableMapOf()

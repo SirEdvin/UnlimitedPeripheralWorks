@@ -3,15 +3,15 @@ package site.siredvin.peripheralworks.common.setup
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.platform.api.RegistryEntry
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.*
 import site.siredvin.peripheralworks.utils.modId
 import site.siredvin.peripheralworks.xplat.ModPlatform
-import java.util.function.Supplier
 
 object BlockEntityTypes {
-    val UNIVERSAL_SCANNER: Supplier<BlockEntityType<UniversalScannerBlockEntity>> = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "universal_scanner"),
+    val UNIVERSAL_SCANNER: RegistryEntry<BlockEntityType<UniversalScannerBlockEntity>> = ModPlatform.registerBlockEntity(
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "universal_scanner"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::UniversalScannerBlockEntity,
@@ -19,8 +19,8 @@ object BlockEntityTypes {
         )
     }
 
-    val ULTIMATE_SENSOR: Supplier<BlockEntityType<UltimateSensorBlockEntity>> = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "ultimate_sensor"),
+    val ULTIMATE_SENSOR: RegistryEntry<BlockEntityType<UltimateSensorBlockEntity>> = ModPlatform.registerBlockEntity(
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "ultimate_sensor"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::UltimateSensorBlockEntity,
@@ -28,8 +28,8 @@ object BlockEntityTypes {
         )
     }
 
-    val ITEM_PEDESTAL: Supplier<BlockEntityType<ItemPedestalBlockEntity>> = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "item_pedestal"),
+    val ITEM_PEDESTAL: RegistryEntry<BlockEntityType<ItemPedestalBlockEntity>> = ModPlatform.registerBlockEntity(
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "item_pedestal"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::ItemPedestalBlockEntity,
@@ -37,8 +37,8 @@ object BlockEntityTypes {
         )
     }
 
-    val MAP_PEDESTAL: Supplier<BlockEntityType<MapPedestalBlockEntity>> = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "map_pedestal"),
+    val MAP_PEDESTAL: RegistryEntry<BlockEntityType<MapPedestalBlockEntity>> = ModPlatform.registerBlockEntity(
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "map_pedestal"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::MapPedestalBlockEntity,
@@ -46,8 +46,8 @@ object BlockEntityTypes {
         )
     }
 
-    val DISPLAY_PEDESTAL: Supplier<BlockEntityType<DisplayPedestalBlockEntity>> = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "display_pedestal"),
+    val DISPLAY_PEDESTAL: RegistryEntry<BlockEntityType<DisplayPedestalBlockEntity>> = ModPlatform.registerBlockEntity(
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "display_pedestal"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::DisplayPedestalBlockEntity,
@@ -55,8 +55,8 @@ object BlockEntityTypes {
         )
     }
 
-    val REMOTE_OBSERVER: Supplier<BlockEntityType<RemoteObserverBlockEntity>> = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "remote_observer"),
+    val REMOTE_OBSERVER: RegistryEntry<BlockEntityType<RemoteObserverBlockEntity>> = ModPlatform.registerBlockEntity(
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "remote_observer"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::RemoteObserverBlockEntity,
@@ -64,8 +64,8 @@ object BlockEntityTypes {
         )
     }
 
-    val PERIPHERAL_PROXY: Supplier<BlockEntityType<PeripheralProxyBlockEntity>> = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy"),
+    val PERIPHERAL_PROXY: RegistryEntry<BlockEntityType<PeripheralProxyBlockEntity>> = ModPlatform.registerBlockEntity(
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "peripheral_proxy"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::PeripheralProxyBlockEntity,
@@ -74,7 +74,7 @@ object BlockEntityTypes {
     }
 
     val FLEXIBLE_REALITY_ANCHOR = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "flexible_reality_anchor"),
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "flexible_reality_anchor"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::FlexibleRealityAnchorBlockEntity,
@@ -82,7 +82,7 @@ object BlockEntityTypes {
         )
     }
 
-    val REALITY_FORGER: Supplier<BlockEntityType<RealityForgerBlockEntity>> = ModPlatform.registerBlockEntity(
+    val REALITY_FORGER: RegistryEntry<BlockEntityType<RealityForgerBlockEntity>> = ModPlatform.registerBlockEntity(
         modId("reality_forger"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
@@ -91,7 +91,7 @@ object BlockEntityTypes {
         )
     }
 
-    val RECIPE_REGISTRY: Supplier<BlockEntityType<RecipeRegistryBlockEntity>> = ModPlatform.registerBlockEntity(
+    val RECIPE_REGISTRY: RegistryEntry<BlockEntityType<RecipeRegistryBlockEntity>> = ModPlatform.registerBlockEntity(
         modId("recipe_registry"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
@@ -100,7 +100,7 @@ object BlockEntityTypes {
         )
     }
 
-    val INFORMATIVE_REGISTRY: Supplier<BlockEntityType<InformativeRegistryBlockEntity>> = ModPlatform.registerBlockEntity(
+    val INFORMATIVE_REGISTRY: RegistryEntry<BlockEntityType<InformativeRegistryBlockEntity>> = ModPlatform.registerBlockEntity(
         modId("informative_registry"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
@@ -110,7 +110,7 @@ object BlockEntityTypes {
     }
 
     val FLEXIBLE_STATUE = ModPlatform.registerBlockEntity(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, "flexible_statue"),
+        ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "flexible_statue"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
             ::FlexibleStatueBlockEntity,
@@ -118,7 +118,7 @@ object BlockEntityTypes {
         )
     }
 
-    val STATUE_WORKBENCH: Supplier<BlockEntityType<StatueWorkbenchBlockEntity>> = ModPlatform.registerBlockEntity(
+    val STATUE_WORKBENCH: RegistryEntry<BlockEntityType<StatueWorkbenchBlockEntity>> = ModPlatform.registerBlockEntity(
         modId("statue_workbench"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
@@ -127,7 +127,7 @@ object BlockEntityTypes {
         )
     }
 
-    val ENTITY_LINK: Supplier<BlockEntityType<EntityLinkBlockEntity>> = ModPlatform.registerBlockEntity(
+    val ENTITY_LINK: RegistryEntry<BlockEntityType<EntityLinkBlockEntity>> = ModPlatform.registerBlockEntity(
         modId("entity_link"),
     ) {
         PlatformToolkit.get().createBlockEntityType(

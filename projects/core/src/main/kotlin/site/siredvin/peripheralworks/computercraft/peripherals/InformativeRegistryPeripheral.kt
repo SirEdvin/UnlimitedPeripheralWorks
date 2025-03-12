@@ -37,7 +37,7 @@ class InformativeRegistryPeripheral(
                     MethodResult.of(PlatformRegistries.ITEMS.keySet().map(ResourceLocation::toString))
                 },
                 {
-                    val item = PlatformRegistries.ITEMS.get(ResourceLocation(it))
+                    val item = PlatformRegistries.ITEMS.get(ResourceLocation.parse(it))
                     val base = LuaRepresentation.forItem(item)
                     base["registryID"] = PlatformRegistries.ITEMS.getId(item)
                     return@addList MethodResult.of(base)
@@ -51,7 +51,7 @@ class InformativeRegistryPeripheral(
                     MethodResult.of(PlatformRegistries.BLOCKS.keySet().map(ResourceLocation::toString))
                 },
                 {
-                    val blockState = PlatformRegistries.BLOCKS.get(ResourceLocation(it)).defaultBlockState()
+                    val blockState = PlatformRegistries.BLOCKS.get(ResourceLocation.parse(it)).defaultBlockState()
                     val base = LuaRepresentation.forBlockState(blockState)
                     base["registryID"] = PlatformRegistries.BLOCKS.getId(blockState.block)
                     return@addList MethodResult.of(base)
@@ -65,7 +65,7 @@ class InformativeRegistryPeripheral(
                     MethodResult.of(PlatformRegistries.FLUIDS.keySet().map(ResourceLocation::toString))
                 },
                 {
-                    val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation(it))
+                    val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation.parse(it))
                     val base = LuaRepresentation.forFluid(fluid)
                     base["registryID"] = PlatformRegistries.FLUIDS.getId(fluid)
                     return@addList MethodResult.of(base)

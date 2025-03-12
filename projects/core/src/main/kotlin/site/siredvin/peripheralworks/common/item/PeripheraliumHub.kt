@@ -2,16 +2,15 @@ package site.siredvin.peripheralworks.common.item
 
 import com.mojang.blaze3d.platform.InputConstants
 import net.minecraft.client.Minecraft
+import net.minecraft.core.component.DataComponents
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
-import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.base.item.HiddenDescriptiveItemItem
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
-import site.siredvin.tweakium.modules.pocket.StatefulPocketUpgrade
 import java.util.function.Function
 import java.util.function.Supplier
 
@@ -24,14 +23,14 @@ class PeripheraliumHub(
 
     override fun appendHoverText(
         itemStack: ItemStack,
-        level: Level?,
+        context: TooltipContext,
         list: MutableList<Component>,
         tooltipFlag: TooltipFlag,
     ) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag)
+        super.appendHoverText(itemStack, context, list, tooltipFlag)
         if (InputConstants.isKeyDown(Minecraft.getInstance().window.window, InputConstants.KEY_LSHIFT)) {
-            val storedData = itemStack.getTagElement(StatefulPocketUpgrade.STORED_DATA_TAG)
-            if (storedData != null && !storedData.isEmpty) {
+            val storedData = itemStack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: return
+            if (!storedData.isEmpty) {
                 val connectedUpgrades = storedData.getList(PeripheraliumHubPeripheral.UPGRADES_TAG, 8)
                 val activeMode = storedData.getString(PeripheraliumHubPeripheral.MODE_TAG)
                 if (connectedUpgrades.isNotEmpty() && activeMode.isNotEmpty()) {

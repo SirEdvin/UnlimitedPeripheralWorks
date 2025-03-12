@@ -2,6 +2,10 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
+import net.minecraft.core.component.DataComponentPatch
+import net.minecraft.core.component.DataComponentType
+import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.TagParser
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -39,16 +43,25 @@ class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEnt
 
     @LuaFunction(mainThread = true)
     fun setItem(id: String, name: Optional<String>, nbtData: Optional<String>): MethodResult {
-        val item = PlatformRegistries.ITEMS.get(ResourceLocation(id))
+        val item = PlatformRegistries.ITEMS.get(ResourceLocation.parse(id))
         if (item == Items.AIR) {
             return MethodResult.of(null, "Cannot find item with id $id")
         }
         val stack = ItemStack(item)
         if (nbtData.isPresent) {
-            stack.tag = TagParser.parseTag(nbtData.get())
+            val componentInfo = DataComponentPatch.CODEC.decode(
+                NbtOps.INSTANCE,
+                TagParser.parseTag(nbtData.get()),
+            ).result()
+            if (componentInfo.isPresent) {
+                componentInfo.get().first.entrySet().filter { it.value.isPresent }.forEach {
+                    @Suppress("UNCHECKED_CAST")
+                    stack.set(it.key as DataComponentType<Any>, it.value.get())
+                }
+            }
         }
         if (name.isPresent) {
-            stack.setHoverName(Component.literal(name.get()))
+            stack.set(DataComponents.CUSTOM_NAME, Component.literal(name.get()))
         }
         blockEntity.storedStack = stack
         return MethodResult.of(true)

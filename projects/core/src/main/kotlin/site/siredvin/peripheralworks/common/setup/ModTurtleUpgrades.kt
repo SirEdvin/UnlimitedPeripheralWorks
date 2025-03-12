@@ -4,38 +4,44 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
-import site.siredvin.peripheralworks.computercraft.pocket.PeripheraliumHubPocketUpgrade
+import site.siredvin.peripheralworks.computercraft.turtles.PeripheraliumHubTurtleUpgrade
 import site.siredvin.peripheralworks.xplat.ModPlatform
-import site.siredvin.tweakium.modules.pocket.StatefulPeripheralPocketUpgrade
+import site.siredvin.tweakium.modules.turtle.StatefulPeripheralTurtleUpgrade
 
-object PocketUpgradeSerializers {
+object ModTurtleUpgrades {
 
-    val PERIPHERALIUM_HUB = ModPlatform.registerPocketUpgrade(
+    val PERIPHERALIUM_HUB = ModPlatform.registerTurtleUpgrade(
         PeripheraliumHubPeripheral.ID,
-        PeripheraliumHubPocketUpgrade(
+        PeripheraliumHubTurtleUpgrade(
             PeripheralWorksConfig::peripheraliumHubUpgradeCount,
             PeripheraliumHubPeripheral.TYPE,
             Items.PERIPHERALIUM_HUB.get().defaultInstance,
         ),
     )
 
-    val NETHERITE_PERIPHERALIUM_HUB = ModPlatform.registerPocketUpgrade(
+    val NETHERITE_PERIPHERALIUM_HUB = ModPlatform.registerTurtleUpgrade(
         PeripheraliumHubPeripheral.NETHERITE_ID,
-        PeripheraliumHubPocketUpgrade(
+        PeripheraliumHubTurtleUpgrade(
             PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
             PeripheraliumHubPeripheral.NETHERITE_TYPE,
             Items.NETHERITE_PERIPHERALIUM_HUB.get().defaultInstance,
         ),
     )
 
-    val UNIVERSAL_SCANNER = ModPlatform.registerPocketUpgrade(
+    val UNIVERSAL_SCANNER = ModPlatform.registerTurtleUpgrade(
         UniversalScannerPeripheral.UPGRADE_ID,
-        StatefulPeripheralPocketUpgrade(UniversalScannerPeripheral.UPGRADE_ID, Blocks.UNIVERSAL_SCANNER.get().asItem().defaultInstance, UniversalScannerPeripheral::of),
+        StatefulPeripheralTurtleUpgrade.dynamic(
+            Blocks.UNIVERSAL_SCANNER.get().asItem(),
+            UniversalScannerPeripheral::of,
+        ) { UniversalScannerPeripheral.UPGRADE_ID },
     )
 
-    val ULTIMATE_SENSOR = ModPlatform.registerPocketUpgrade(
+    val ULTIMATE_SENSOR = ModPlatform.registerTurtleUpgrade(
         UltimateSensorPeripheral.UPGRADE_ID,
-        StatefulPeripheralPocketUpgrade(UltimateSensorPeripheral.UPGRADE_ID, Blocks.ULTIMATE_SENSOR.get().asItem().defaultInstance, UltimateSensorPeripheral::of),
+        StatefulPeripheralTurtleUpgrade.dynamic(
+            Blocks.ULTIMATE_SENSOR.get().asItem(),
+            UltimateSensorPeripheral::of,
+        ) { UltimateSensorPeripheral.UPGRADE_ID },
     )
 
     fun doSomething() {}

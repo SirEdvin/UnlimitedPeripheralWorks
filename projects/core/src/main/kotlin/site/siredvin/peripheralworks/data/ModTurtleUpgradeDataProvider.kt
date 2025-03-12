@@ -1,34 +1,31 @@
 package site.siredvin.peripheralworks.data
 
-import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
-import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import net.minecraft.data.PackOutput
-import site.siredvin.peripheralworks.common.setup.Blocks
-import site.siredvin.peripheralworks.common.setup.Items
-import site.siredvin.peripheralworks.common.setup.TurtleUpgradeSerializers
+import dan200.computercraft.api.turtle.ITurtleUpgrade
+import net.minecraft.Util
+import net.minecraft.core.HolderLookup
+import net.minecraft.core.RegistrySetBuilder
+import net.minecraft.core.RegistrySetBuilder.PatchedRegistries
+import net.minecraft.data.registries.RegistryPatchGenerator
+import net.minecraft.data.worldgen.BootstrapContext
+import net.minecraft.resources.ResourceKey
 import site.siredvin.peripheralworks.xplat.ModPlatform
-import site.siredvin.tweakium.modules.data.LibTurtleUpgradeDataProvider
-import java.util.function.Consumer
-import java.util.function.Function
+import java.util.concurrent.CompletableFuture
 
-class ModTurtleUpgradeDataProvider(output: PackOutput) : LibTurtleUpgradeDataProvider(output, ModPlatform.holder.turtleSerializers) {
-    companion object {
-        private val REGISTERED_BUILDERS: MutableList<Function<TurtleUpgradeDataProvider, Upgrade<TurtleUpgradeSerialiser<*>>>> =
-            mutableListOf()
-
-        fun hookUpgrade(builder: Function<TurtleUpgradeDataProvider, Upgrade<TurtleUpgradeSerialiser<*>>>) {
-            REGISTERED_BUILDERS.add(builder)
+object ModTurtleUpgradeDataProvider {
+    fun addUpgrades(upgrades: BootstrapContext<ITurtleUpgrade>) {
+        ModPlatform.holder.turtleUpgrades.forEach {
+            upgrades.register(
+                ResourceKey.create(ITurtleUpgrade.REGISTRY, it.id),
+                it.get(),
+            )
         }
     }
 
-    override fun registerUpgrades(addUpgrade: Consumer<Upgrade<TurtleUpgradeSerialiser<*>>>) {
-        REGISTERED_BUILDERS.forEach {
-            it.apply(this).add(addUpgrade)
-        }
-
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.PERIPHERALIUM_HUB, Items.PERIPHERALIUM_HUB))
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB, Items.NETHERITE_PERIPHERALIUM_HUB))
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.UNIVERSAL_SCANNER, Blocks.UNIVERSAL_SCANNER))
-        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.ULTIMATE_SENSOR, Blocks.ULTIMATE_SENSOR))
-    }
+    // Set up the dynamic registries to contain our turtle upgrades.
+    fun makeUpgradeRegistry(registries: CompletableFuture<HolderLookup.Provider>): CompletableFuture<PatchedRegistries> = RegistryPatchGenerator.createLookup(
+        registries,
+        Util.make(RegistrySetBuilder()) { builder ->
+            builder.add(ITurtleUpgrade.REGISTRY, ::addUpgrades)
+        },
+    )
 }

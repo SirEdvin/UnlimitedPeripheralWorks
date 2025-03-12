@@ -1,14 +1,16 @@
 package site.siredvin.peripheralworks.common.configuration
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.fml.config.IConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
+
 
 object ConfigHolder {
-    var commonSpec: ForgeConfigSpec
+    var commonSpec: ModConfigSpec
     var commonConfig: PeripheralWorksConfig.CommonConfig
 
     init {
-        val (key, value) = ForgeConfigSpec.Builder()
-            .configure { builder: ForgeConfigSpec.Builder -> PeripheralWorksConfig.CommonConfig(builder) }
+        val (key, value) = ModConfigSpec.Builder()
+            .configure { builder: ModConfigSpec.Builder -> PeripheralWorksConfig.CommonConfig(builder) }
         commonConfig = key
         commonSpec = value
     }

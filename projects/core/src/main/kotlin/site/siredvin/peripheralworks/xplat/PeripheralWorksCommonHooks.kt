@@ -24,24 +24,31 @@ object PeripheralWorksCommonHooks {
         Blocks.doSomething()
         RecipeSerializers.doSomething()
         PocketUpgradeSerializers.doSomething()
-        TurtleUpgradeSerializers.doSomething()
+        ModTurtleUpgrades.doSomething()
         ModPlatform.registerCreativeTab(
-            ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
+            ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "tab"),
             PeripheralWorksCore.configureCreativeTab(PlatformToolkit.get().createTabBuilder()).build(),
         )
     }
 
     fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
-        ModPlatform.holder.turtleSerializers.forEach {
-            val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(ComputerPlatformRegistries.TURTLE_SERIALIZERS.getKey(it.get()).toString())
+        ModPlatform.holder.turtleUpgrades.forEach {
+            val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(ComputerPlatformRegistries.TURTLE_UPGRADES.getKey(it.get()).toString())
             if (upgrade != null) {
-                ComputerPlatformToolkit.get().createTurtlesWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)
+                val resourceKey = ComputerPlatformRegistries.TURTLE_UPGRADES.getResourceKey(upgrade)
+                if (resourceKey.isPresent) {
+                    ComputerPlatformToolkit.get().createTurtlesWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.TURTLE_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
+                }
             }
         }
-        ModPlatform.holder.pocketSerializers.forEach {
-            val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(ComputerPlatformRegistries.POCKET_SERIALIZERS.getKey(it.get()).toString())
+
+        ModPlatform.holder.pocketUpgrades.forEach {
+            val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(ComputerPlatformRegistries.POCKET_UPGRADES.getKey(it.get()).toString())
             if (upgrade != null) {
-                ComputerPlatformToolkit.get().createPocketsWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)
+                val resourceKey = ComputerPlatformRegistries.POCKET_UPGRADES.getResourceKey(upgrade)
+                if (resourceKey.isPresent) {
+                    ComputerPlatformToolkit.get().createPocketsWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.POCKET_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
+                }
             }
         }
     }

@@ -1,14 +1,18 @@
 package site.siredvin.peripheralworks.common.block
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
@@ -23,7 +27,7 @@ import site.siredvin.peripheralworks.common.blockentity.EntityLinkBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import java.util.stream.Stream
 
-class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTypes.ENTITY_LINK.get() }, true, true, BlockUtil.defaultProperties()) {
+class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>(BlockEntityTypes.ENTITY_LINK, true, true, BlockUtil.defaultProperties()) {
     companion object {
         val CONFIGURED: BooleanProperty = BooleanProperty.create("configured")
         val ENTITY_TRIGGER: IntegerProperty = IntegerProperty.create("entity_trigger", 0, 3)
@@ -45,21 +49,25 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTy
         registerDefaultState(stateDefinition.any().setValue(CONFIGURED, false).setValue(ENTITY_TRIGGER, 0))
     }
 
+    override fun codec(): MapCodec<out BaseEntityBlock> = RecordCodecBuilder.mapCodec {
+        it.stable(EntityLink())
+    }
+
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
         super.createBlockStateDefinition(builder)
         builder.add(CONFIGURED)
         builder.add(ENTITY_TRIGGER)
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun use(
+    override fun useItemOn(
+        itemStack: ItemStack,
         blockState: BlockState,
         level: Level,
         blockPos: BlockPos,
         player: Player,
         interactionHand: InteractionHand,
         blockHitResult: BlockHitResult,
-    ): InteractionResult {
+    ): ItemInteractionResult {
         if (interactionHand == InteractionHand.MAIN_HAND) {
             val blockEntity = level.getBlockEntity(blockPos)
             if (blockEntity is EntityLinkBlockEntity && !blockEntity.storedStack.isEmpty) {
@@ -67,16 +75,21 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTy
                 if (itemInHand.isEmpty) {
                     player.setItemInHand(interactionHand, blockEntity.storedStack)
                     blockEntity.storedStack = ItemStack.EMPTY
-                    return InteractionResult.SUCCESS
+                    return ItemInteractionResult.CONSUME
                 }
             }
         }
-        @Suppress("DEPRECATION")
-        return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult)
+        return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult)
     }
 
-    override fun playerWillDestroy(level: Level, pos: BlockPos, state: BlockState, player: Player) {
-        val blockEntity = level.getBlockEntity(pos)
+    override fun playerDestroy(
+        level: Level,
+        player: Player,
+        pos: BlockPos,
+        blockState: BlockState,
+        blockEntity: BlockEntity?,
+        itemStack: ItemStack,
+    ) {
         if (blockEntity is EntityLinkBlockEntity) {
             if (!level.isClientSide && !blockEntity.storedStack.isEmpty) {
                 val itemDrop = ItemEntity(
@@ -101,7 +114,7 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>({ BlockEntityTy
                 }
             }
         }
-        super.playerWillDestroy(level, pos, state, player)
+        super.playerDestroy(level, player, pos, blockState, blockEntity, itemStack)
     }
 
     @Deprecated("Deprecated in Java")

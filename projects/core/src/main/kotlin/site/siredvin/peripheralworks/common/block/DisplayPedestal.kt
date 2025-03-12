@@ -1,10 +1,13 @@
 package site.siredvin.peripheralworks.common.block
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -16,15 +19,15 @@ import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMo
 
 class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defaultProperties()) {
 
-    @Deprecated("Deprecated in Java")
-    override fun use(
+    override fun useItemOn(
+        itemStack: ItemStack,
         blockState: BlockState,
         level: Level,
         blockPos: BlockPos,
         player: Player,
         interactionHand: InteractionHand,
         blockHitResult: BlockHitResult,
-    ): InteractionResult {
+    ): ItemInteractionResult {
         val itemInHand = player.getItemInHand(interactionHand)
         val blockEntity = level.getBlockEntity(blockPos)
         if (blockEntity is DisplayPedestalBlockEntity) {
@@ -33,10 +36,9 @@ class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defau
                 LuaRepresentation.forItemStack(itemInHand, RepresentationMode.FULL),
                 LuaRepresentation.forItemStack(blockEntity.storedStack, RepresentationMode.FULL),
             )
-            return InteractionResult.SUCCESS
+            return ItemInteractionResult.SUCCESS
         }
-        @Suppress("DEPRECATION")
-        return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult)
+        return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult)
     }
 
     @Deprecated("Deprecated in Java")
@@ -53,6 +55,10 @@ class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defau
         }
         @Suppress("DEPRECATION")
         super.attack(blockState, level, blockPos, player)
+    }
+
+    override fun codec(): MapCodec<DisplayPedestal> = RecordCodecBuilder.mapCodec {
+        it.stable(DisplayPedestal())
     }
 
     override fun newBlockEntity(blockPos: BlockPos, blockState: BlockState): BlockEntity = DisplayPedestalBlockEntity(blockPos, blockState)

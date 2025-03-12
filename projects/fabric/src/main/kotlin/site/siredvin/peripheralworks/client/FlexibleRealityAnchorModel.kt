@@ -13,13 +13,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
@@ -28,7 +28,7 @@ import java.util.function.Supplier
 @Environment(EnvType.CLIENT)
 object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
 
-    val particleTextureId = ResourceLocation("minecraft:block/stone")
+    val particleTextureId = ResourceLocation.parse("minecraft:block/stone")
     val defaultItemModel by lazy {
         Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState())
     }
@@ -74,7 +74,7 @@ object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
         if (!stack.`is`(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())) {
             return emitDefaultItemQuads(stack, randomSupplier, context)
         }
-        val mimicBlockStateTag = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG) ?: return emitDefaultItemQuads(stack, randomSupplier, context)
+        val mimicBlockStateTag = stack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG) ?: return emitDefaultItemQuads(stack, randomSupplier, context)
         val mimicBlockState = NbtUtils.readBlockState(PlatformRegistries.BLOCKS, mimicBlockStateTag)
         if (mimicBlockState.isAir) return emitDefaultItemQuads(stack, randomSupplier, context)
         val bakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState)

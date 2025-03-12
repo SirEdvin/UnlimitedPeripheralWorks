@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.common.item
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.Pose
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
+import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
@@ -28,11 +30,11 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
 
     override fun appendHoverText(
         itemStack: ItemStack,
-        level: Level?,
+        context: TooltipContext,
         list: MutableList<Component>,
         tooltipFlag: TooltipFlag,
     ) {
-        super.appendHoverText(itemStack, level, list, tooltipFlag)
+        super.appendHoverText(itemStack, context, list, tooltipFlag)
         val activeMode = getActiveMode(itemStack)
         if (activeMode != null) {
             list.add(ModTooltip.ACTIVE_CONFIGURATION_MODE.text)
@@ -42,30 +44,32 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
     }
 
     fun getActiveMode(stack: ItemStack): Pair<ConfigurationMode, BlockPos>? {
-        val data = stack.tag ?: return null
+        val data = stack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: return null
         if (!data.contains(ACTIVE_MOD_NAME)) {
             return null
         }
         if (!data.contains(ACTIVE_MOD_POS)) {
             return null
         }
-        val configurationMode = ConfiguratorModeRegistry.get(ResourceLocation(data.getString(ACTIVE_MOD_NAME))) ?: return null
+        val configurationMode = ConfiguratorModeRegistry.get(ResourceLocation.parse(data.getString(ACTIVE_MOD_NAME))) ?: return null
         return Pair(
             configurationMode,
-            NbtUtils.readBlockPos(data.getCompound(ACTIVE_MOD_POS)),
+            NbtUtils.readBlockPos(data, ACTIVE_MOD_POS).get(),
         )
     }
 
     private fun saveActiveMode(stack: ItemStack, mode: ConfigurationMode, targetBlock: BlockPos) {
-        val data = stack.orCreateTag
+        val data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
         data.putString(ACTIVE_MOD_NAME, mode.modeID.toString())
         data.put(ACTIVE_MOD_POS, NbtUtils.writeBlockPos(targetBlock))
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data))
     }
 
     private fun clearActiveMode(stack: ItemStack): ItemStack {
-        val data = stack.tag ?: return stack
+        val data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
         data.remove(ACTIVE_MOD_NAME)
         data.remove(ACTIVE_MOD_POS)
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data))
         return stack
     }
 

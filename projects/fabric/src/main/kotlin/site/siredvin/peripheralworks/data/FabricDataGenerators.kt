@@ -8,6 +8,6 @@ class FabricDataGenerators : DataGeneratorEntrypoint {
 
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         val pack = fabricDataGenerator.createPack()
-        ModDataProviders.add(FabricGeneratorSink(pack))
+        ModDataProviders.add(FabricGeneratorSink(pack, fabricDataGenerator.registries))
     }
 }

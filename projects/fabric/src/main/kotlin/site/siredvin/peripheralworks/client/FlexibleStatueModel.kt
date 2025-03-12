@@ -17,12 +17,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.*
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
 import net.minecraft.util.RandomSource
 import net.minecraft.world.inventory.InventoryMenu.BLOCK_ATLAS
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
 import site.siredvin.broccolium.modules.base.ext.faces
 import site.siredvin.broccolium.modules.base.ext.rotateTowards
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
@@ -130,7 +130,7 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         if (!stack.`is`(Blocks.FLEXIBLE_STATUE.get().asItem())) {
             return emitDefaultItemQuads(stack, randomSupplier, context)
         }
-        val quadList = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getList(FlexibleStatueBlockEntity.BAKED_QUADS_TAG, 10) ?: return emitDefaultItemQuads(stack, randomSupplier, context)
+        val quadList = stack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getList(FlexibleStatueBlockEntity.BAKED_QUADS_TAG, 10) ?: return emitDefaultItemQuads(stack, randomSupplier, context)
         if (quadList.isEmpty()) return emitDefaultItemQuads(stack, randomSupplier, context)
         val quads = QuadList(quadList)
         val mesh = meshCache.get(Pair(quads, Direction.SOUTH))

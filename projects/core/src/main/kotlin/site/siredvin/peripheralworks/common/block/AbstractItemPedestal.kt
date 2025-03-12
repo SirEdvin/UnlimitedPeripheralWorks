@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.common.block
 import net.minecraft.core.BlockPos
 import net.minecraft.world.Containers
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.InteractionResult
+import net.minecraft.world.ItemInteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -16,15 +16,15 @@ import site.siredvin.peripheralworks.api.IItemStackStorage
 
 abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil.defaultProperties()) {
 
-    @Deprecated("Deprecated in Java")
-    override fun use(
+    override fun useItemOn(
+        itemStack: ItemStack,
         blockState: BlockState,
         level: Level,
         blockPos: BlockPos,
         player: Player,
         interactionHand: InteractionHand,
         blockHitResult: BlockHitResult,
-    ): InteractionResult {
+    ): ItemInteractionResult {
         val itemInHand = player.getItemInHand(interactionHand)
         if (!itemInHand.isEmpty) {
             val blockEntity = level.getBlockEntity(blockPos)
@@ -33,13 +33,12 @@ abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil
                     val storeResult = blockEntity.storage.storeItem(itemInHand)
                     if (storeResult.isEmpty) {
                         player.setItemInHand(interactionHand, ItemStack.EMPTY)
-                        return InteractionResult.CONSUME
+                        return ItemInteractionResult.CONSUME
                     }
                 }
             }
         }
-        @Suppress("DEPRECATION")
-        return super.use(blockState, level, blockPos, player, interactionHand, blockHitResult)
+        return super.useItemOn(itemStack, blockState, level, blockPos, player, interactionHand, blockHitResult)
     }
 
     @Deprecated("Deprecated in Java")
