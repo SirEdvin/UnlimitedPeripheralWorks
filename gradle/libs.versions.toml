@@ -10,9 +10,9 @@ mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.113.0"
-broccolium = "1.0.0-rc.9"
-tweakium = "1.0.0-rc.9"
-peripheralium = "1.0.0-rc.9"
+broccolium = "1.0.0-rc.11"
+tweakium = "1.0.0-rc.11"
+peripheralium = "1.0.0-rc.11"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.115.1+1.21.1"

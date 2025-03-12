@@ -27,7 +27,7 @@ import site.siredvin.peripheralworks.common.blockentity.EntityLinkBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import java.util.stream.Stream
 
-class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>(BlockEntityTypes.ENTITY_LINK, true, true, BlockUtil.defaultProperties()) {
+class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>(true, true, BlockUtil.defaultProperties()) {
     companion object {
         val CONFIGURED: BooleanProperty = BooleanProperty.create("configured")
         val ENTITY_TRIGGER: IntegerProperty = IntegerProperty.create("entity_trigger", 0, 3)
@@ -57,6 +57,10 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>(BlockEntityType
         super.createBlockStateDefinition(builder)
         builder.add(CONFIGURED)
         builder.add(ENTITY_TRIGGER)
+    }
+
+    override fun newBlockEntity(p0: BlockPos, p1: BlockState): BlockEntity? {
+        return BlockEntityTypes.ENTITY_LINK.get().create(p0, p1)
     }
 
     override fun useItemOn(
