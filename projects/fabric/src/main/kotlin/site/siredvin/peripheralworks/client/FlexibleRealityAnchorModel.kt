@@ -19,8 +19,8 @@ import net.minecraft.util.RandomSource
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
 import java.util.function.Supplier
@@ -75,7 +75,7 @@ object FlexibleRealityAnchorModel : BakedModel, FabricBakedModel {
             return emitDefaultItemQuads(stack, randomSupplier, context)
         }
         val mimicBlockStateTag = stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(FlexibleRealityAnchorBlockEntity.MIMIC_TAG) ?: return emitDefaultItemQuads(stack, randomSupplier, context)
-        val mimicBlockState = NbtUtils.readBlockState(XplatRegistries.BLOCKS, mimicBlockStateTag)
+        val mimicBlockState = NbtUtils.readBlockState(PlatformRegistries.BLOCKS, mimicBlockStateTag)
         if (mimicBlockState.isAir) return emitDefaultItemQuads(stack, randomSupplier, context)
         val bakedModel = Minecraft.getInstance().blockRenderer.getBlockModel(mimicBlockState)
         bakedModel.emitItemQuads(mimicBlockState.block.asItem().defaultInstance, randomSupplier, context)

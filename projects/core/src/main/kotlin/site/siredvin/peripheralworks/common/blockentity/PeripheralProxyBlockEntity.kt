@@ -12,17 +12,18 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.api.blockentities.IObservingBlockEntity
-import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
+import site.siredvin.broccolium.modules.base.api.IObservingBlockEntity
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheralProxyPeripheral
+import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    MutableNBTBlockEntity<PeripheralProxyPeripheral>(BlockEntityTypes.PERIPHERAL_PROXY.get(), blockPos, blockState),
+    MutablePeripheralBlockEntity<PeripheralProxyPeripheral>(BlockEntityTypes.PERIPHERAL_PROXY.get(), blockPos, blockState),
     IObservingBlockEntity {
 
     companion object {
@@ -79,7 +80,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     fun containsPos(pos: BlockPos): Boolean = remotePeripherals.contains(pos)
 
     private fun buildPeripheralName(targetPeripheral: IPeripheral): String {
-        val newPeripheralID = ServerContext.get(PeripheraliumPlatform.minecraftServer!!).getNextId("peripheral.${targetPeripheral.type}")
+        val newPeripheralID = ServerContext.get(PlatformToolkit.get().minecraftServer!!).getNextId("peripheral.${targetPeripheral.type}")
         return "${targetPeripheral.type}_$newPeripheralID"
     }
 
@@ -151,7 +152,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     fun connectBlockPos(level: Level, record: RemotePeripheralRecord) {
         if (level is ServerLevel) {
-            val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, record.targetBlock, Direction.NORTH)
+            val targetPeripheral = ComputerPlatformToolkit.get().getPeripheral(level, record.targetBlock, Direction.NORTH)
             if (targetPeripheral == null) {
                 PeripheralWorksCore.logger.debug(
                     "Postpone {} for peripheral proxing, it doesn't contains any peripheral for now",
@@ -229,7 +230,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                 if (record != null) {
                     untrackRecord(record)
                     if (level is ServerLevel) {
-                        val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, it.pos, record.direction)
+                        val targetPeripheral = ComputerPlatformToolkit.get().getPeripheral(level, it.pos, record.direction)
                         if (targetPeripheral == null) {
                             PeripheralWorksCore.logger.debug(
                                 "Cannot find peripheral for {} purging it completely",

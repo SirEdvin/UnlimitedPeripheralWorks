@@ -15,12 +15,12 @@ import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import site.siredvin.peripheralium.common.blocks.BaseTileEntityBlock
-import site.siredvin.peripheralium.util.BlockUtil
+import site.siredvin.broccolium.modules.base.block.BaseBlockEntityBlock
+import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import java.util.stream.Stream
 
-class PeripheralProxy : BaseTileEntityBlock<PeripheralProxyBlockEntity>(true, BlockUtil.defaultProperties()) {
+class PeripheralProxy : BaseBlockEntityBlock<PeripheralProxyBlockEntity>(true, BlockUtil.defaultProperties()) {
     companion object {
         val ORIENTATION: DirectionProperty = DirectionProperty.create("orientation")
         val SHAPE = Stream.of(

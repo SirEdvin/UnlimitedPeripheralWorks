@@ -4,21 +4,21 @@ import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.upgrades.UpgradeData
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripheralOwner
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.computercraft.modem.LocalTurtleWrapper
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
+import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAccess, side: TurtleSide, type: String) : PeripheraliumHubPeripheral<TurtlePeripheralOwner>(maxUpdateCount, TurtlePeripheralOwner(access, side), type) {
 
     companion object {
         const val TURTLE_MODE = "turtle"
 
-        fun collectUpgradesData(dataStorage: CompoundTag): List<UpgradeData<ITurtleUpgrade>> {
+        fun collectUpgradesData(dataStorage: IDataStorage): List<UpgradeData<ITurtleUpgrade>> {
             return getActiveUpgrades(dataStorage).mapNotNull {
-                val upgrade = PeripheraliumPlatform.getTurtleUpgrade(it) ?: return@mapNotNull null
+                val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(it) ?: return@mapNotNull null
                 return@mapNotNull UpgradeData(upgrade, getDataForUpgrade(upgrade.upgradeID.toString(), dataStorage))
             }
         }
@@ -31,7 +31,7 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
 
     init {
         activeUpgrades.forEach {
-            val upgrade = PeripheraliumPlatform.getTurtleUpgrade(it)
+            val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(it)
             if (upgrade != null) {
                 connectTurtleUpgrade(UpgradeData(upgrade, getDataForUpgrade(upgrade.upgradeID.toString())))
             }
@@ -73,10 +73,10 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
         disconnectTurtleUpgrade(upgrade)
     }
 
-    override fun isUpgradeImpl(stack: ItemStack): Boolean = PeripheraliumPlatform.getTurtleUpgrade(stack) != null
+    override fun isUpgradeImpl(stack: ItemStack): Boolean = ComputerPlatformToolkit.get().getTurtleUpgrade(stack) != null
 
     override fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
-        val upgrade = PeripheraliumPlatform.getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
+        val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
         if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
@@ -84,7 +84,7 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
     }
 
     override fun equipImpl(stack: ItemStack): Pair<Boolean?, String?> {
-        val upgrade = PeripheraliumPlatform.getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
+        val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
         if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }

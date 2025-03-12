@@ -6,9 +6,9 @@ import net.minecraft.world.entity.vehicle.AbstractMinecartContainer
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.AABB
-import site.siredvin.peripheralium.storages.ContainerWrapper
-import site.siredvin.peripheralium.storages.MergedContainer
-import site.siredvin.peripheralium.storages.item.SlottedItemStorage
+import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
+import site.siredvin.broccolium.modules.storage.item.MergedContainer
+import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
 
 object MinecartUtils {
     private const val SEARCH_MARGIN = 0.2
@@ -26,7 +26,7 @@ object MinecartUtils {
 
     fun getContainerMinecarts(level: Level, pos: BlockPos): List<AbstractMinecartContainer> = level.getEntitiesOfClass(AbstractMinecartContainer::class.java, getSearchShape(pos))
 
-    fun minecartExtractor(level: Level, obj: Any?): SlottedItemStorage? {
+    fun minecartExtractor(level: Level, obj: Any?): SlottedAgnosticItemStorage? {
         if (obj !is BlockPos) {
             return null
         }

@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.subsystem.entityperipheral
 
 import net.minecraft.world.entity.Entity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 interface EntityPeripheralPluginProvider : Comparable<EntityPeripheralPluginProvider> {
     val pluginType: String

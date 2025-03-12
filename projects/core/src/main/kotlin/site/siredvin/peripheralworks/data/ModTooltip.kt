@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.data
 
-import site.siredvin.peripheralium.data.language.TextRecord
+import site.siredvin.broccolium.modules.data.api.TextRecord
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
 enum class ModTooltip : TextRecord {

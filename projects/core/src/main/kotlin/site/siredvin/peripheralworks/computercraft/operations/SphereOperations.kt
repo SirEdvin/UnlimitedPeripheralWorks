@@ -2,8 +2,9 @@ package site.siredvin.peripheralworks.computercraft.operations
 
 import com.google.common.math.IntMath
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOperation
-import site.siredvin.peripheralium.computercraft.operations.SphereOperationContext
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.tweakium.modules.operation.SphereOperationContext
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOperation
 import kotlin.math.floor
 
 enum class SphereOperations(
@@ -11,7 +12,8 @@ enum class SphereOperations(
     private val defaultMaxFreeRadius: Int,
     private val defaultMaxCostRadius: Int,
     private val defaultExtraBlockCost: Double,
-) : IPeripheralOperation<SphereOperationContext> {
+) : IPeripheralOperation<SphereOperationContext>,
+    IForgeConfigHandler {
     PORTABLE_UNIVERSAL_SCAN(1000, 8, 16, 0.17),
     STATIONARY_UNIVERSAL_SCAN(500, 24, 24, 0.0),
     ;

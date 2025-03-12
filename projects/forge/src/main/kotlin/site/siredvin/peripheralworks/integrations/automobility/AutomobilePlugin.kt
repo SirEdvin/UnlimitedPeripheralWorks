@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.integrations.automobility
 
 import dan200.computercraft.api.lua.LuaFunction
 import io.github.foundationgames.automobility.entity.AutomobileEntity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class AutomobilePlugin(private val entity: AutomobileEntity) : IPeripheralPlugin {
 

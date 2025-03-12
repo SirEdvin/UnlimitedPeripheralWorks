@@ -2,12 +2,12 @@ package site.siredvin.peripheralworks.data
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
-import site.siredvin.peripheralium.data.FabricDataGenerators
+import site.siredvin.broccolium.modules.data.FabricGeneratorSink
 
 class FabricDataGenerators : DataGeneratorEntrypoint {
 
     override fun onInitializeDataGenerator(fabricDataGenerator: FabricDataGenerator) {
         val pack = fabricDataGenerator.createPack()
-        ModDataProviders.add(FabricDataGenerators.DataGeneratorWrapper(pack))
+        ModDataProviders.add(FabricGeneratorSink(pack))
     }
 }

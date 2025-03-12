@@ -2,8 +2,8 @@ package site.siredvin.peripheralworks.data
 
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.level.block.Block
-import site.siredvin.peripheralium.data.blocks.ItemTagConsumer
-import site.siredvin.peripheralium.data.blocks.TagConsumer
+import site.siredvin.broccolium.modules.data.api.ItemTagConsumer
+import site.siredvin.broccolium.modules.data.api.TagConsumer
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.tags.BlockTags
 import site.siredvin.peripheralworks.tags.EntityTags

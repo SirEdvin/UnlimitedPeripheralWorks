@@ -1,13 +1,13 @@
 package site.siredvin.peripheralworks.common.setup
 
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import site.siredvin.peripheralium.computercraft.turtle.StatefulPeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import site.siredvin.peripheralworks.computercraft.turtles.PeripheraliumHubTurtleUpgrade
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.turtle.StatefulPeripheralTurtleUpgrade
 
 object TurtleUpgradeSerializers {
 

@@ -11,10 +11,10 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import net.minecraft.world.level.block.state.properties.BooleanProperty
-import site.siredvin.peripheralium.data.blocks.createHorizontalFacingDispatch
-import site.siredvin.peripheralium.data.blocks.genericBlock
-import site.siredvin.peripheralium.data.blocks.horizontalOrientatedBlock
-import site.siredvin.peripheralium.data.blocks.horizontalOrientedModel
+import site.siredvin.broccolium.modules.data.model.createHorizontalFacingDispatch
+import site.siredvin.broccolium.modules.data.model.genericBlock
+import site.siredvin.broccolium.modules.data.model.horizontalOrientatedBlock
+import site.siredvin.broccolium.modules.data.model.horizontalOrientedModel
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.*
 import site.siredvin.peripheralworks.common.setup.Blocks

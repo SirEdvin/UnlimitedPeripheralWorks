@@ -8,19 +8,15 @@ import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.core.methods.PeripheralMethod
 import dan200.computercraft.shared.computer.core.ServerContext
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 class PeripheralRecord<O : IPeripheralOwner>(val peripheral: IPeripheral, val name: String, val internalID: String, private val modelPeripheral: PeripheralHubPeripheral<O>) {
-    private val methodMap: Map<String, PeripheralMethod>
-    private val wrappers: ConcurrentMap<IComputerAccess, RemoteComputerWrapper<O>>
-
-    init {
-        wrappers = ConcurrentHashMap()
-        methodMap = ServerContext.get(PeripheraliumPlatform.minecraftServer!!).peripheralMethods().getSelfMethods(peripheral)
-    }
+    private val methodMap: Map<String, PeripheralMethod> =
+        ServerContext.get(PlatformToolkit.get().minecraftServer!!).peripheralMethods().getSelfMethods(peripheral)
+    private val wrappers: ConcurrentMap<IComputerAccess, RemoteComputerWrapper<O>> = ConcurrentHashMap()
 
     val methodNames: Collection<String>
         get() = methodMap.keys

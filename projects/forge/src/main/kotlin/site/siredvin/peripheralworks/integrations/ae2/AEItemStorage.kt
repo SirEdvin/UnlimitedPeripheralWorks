@@ -6,10 +6,10 @@ import appeng.api.stacks.AEItemKey
 import appeng.api.storage.MEStorage
 import appeng.blockentity.grid.AENetworkBlockEntity
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.storages.item.ItemStorage
+import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorage
 import java.util.function.Predicate
 
-class AEItemStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : ItemStorage {
+class AEItemStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : AgnosticItemStorage {
     override fun getItems(): Iterator<ItemStack> {
         return storage.availableStacks.mapNotNull {
             if (it.key !is AEItemKey) return@mapNotNull null

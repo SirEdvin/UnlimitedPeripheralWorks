@@ -8,9 +8,9 @@ import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.LightLayer
 import net.minecraft.world.level.levelgen.WorldgenRandom
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.xplat.XplatRegistries
-import site.siredvin.peripheralium.xplat.XplatTags
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
+import site.siredvin.broccolium.modules.platform.PlatformTags
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
 
 object SensorCollection {
 
@@ -99,8 +99,8 @@ object SensorCollection {
             for (z in chunkPos.minBlockZ..chunkPos.maxBlockZ) {
                 for (y in MIN_Y..MAX_Y) {
                     val blockState = level.getBlockState(BlockPos(x, y, z))
-                    if (!blockState.isAir && XplatTags.isOre(blockState)) {
-                        val key = XplatRegistries.BLOCKS.getKey(blockState.block).toString()
+                    if (!blockState.isAir && PlatformTags.get().isOre(blockState)) {
+                        val key = PlatformRegistries.BLOCKS.getKey(blockState.block).toString()
                         if (!ores.containsKey(key)) {
                             ores[key] = 0
                         }

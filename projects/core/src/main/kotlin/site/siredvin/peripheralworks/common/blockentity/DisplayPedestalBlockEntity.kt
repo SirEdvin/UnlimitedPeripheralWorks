@@ -5,13 +5,13 @@ import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
 import site.siredvin.peripheralworks.api.IItemStackHolder
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.DisplayPedestalPeripheral
+import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 
 class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    MutableNBTBlockEntity<DisplayPedestalPeripheral>(
+    MutablePeripheralBlockEntity<DisplayPedestalPeripheral>(
         BlockEntityTypes.DISPLAY_PEDESTAL.get(),
         blockPos,
         blockState,

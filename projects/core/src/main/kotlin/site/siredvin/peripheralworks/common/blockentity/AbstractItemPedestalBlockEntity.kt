@@ -8,14 +8,14 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.api.peripheral.IOwnedPeripheral
-import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
-import site.siredvin.peripheralium.storages.ContainerWrapper
+import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
 import site.siredvin.peripheralworks.api.IItemStackStorage
+import site.siredvin.tweakium.modules.peripheral.api.IOwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import java.util.function.Predicate
 
 abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEntityType: BlockEntityType<*>, blockPos: BlockPos, blockState: BlockState) :
-    MutableNBTBlockEntity<T>(
+    MutablePeripheralBlockEntity<T>(
         blockEntityType,
         blockPos,
         blockState,

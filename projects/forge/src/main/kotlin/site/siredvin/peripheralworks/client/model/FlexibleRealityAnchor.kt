@@ -21,8 +21,8 @@ import net.minecraftforge.client.ChunkRenderTypeSet
 import net.minecraftforge.client.model.IDynamicBakedModel
 import net.minecraftforge.client.model.data.ModelData
 import net.minecraftforge.client.model.data.ModelProperty
-import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.client.util.RenderUtils.getTexture
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
@@ -88,7 +88,7 @@ object FlexibleRealityAnchorItemOverrides : ItemOverrides() {
             FlexibleRealityAnchorBlockEntity.MIMIC_TAG,
         ) ?: return emptyFlexibleRealityAnchorModel
         if (mimic.isEmpty) return emptyFlexibleRealityAnchorModel
-        val mimicState = NbtUtils.readBlockState(XplatRegistries.BLOCKS, mimic)
+        val mimicState = NbtUtils.readBlockState(PlatformRegistries.BLOCKS, mimic)
         if (mimicState.isAir) return emptyFlexibleRealityAnchorModel
         return Minecraft.getInstance().blockRenderer.getBlockModel(mimicState)
     }

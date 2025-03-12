@@ -7,14 +7,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.util.representation.RepresentationMode
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.block.BasePedestal
 import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
 import java.util.*
 
 class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEntity) :
@@ -39,7 +39,7 @@ class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEnt
 
     @LuaFunction(mainThread = true)
     fun setItem(id: String, name: Optional<String>, nbtData: Optional<String>): MethodResult {
-        val item = XplatRegistries.ITEMS.get(ResourceLocation(id))
+        val item = PlatformRegistries.ITEMS.get(ResourceLocation(id))
         if (item == Items.AIR) {
             return MethodResult.of(null, "Cannot find item with id $id")
         }

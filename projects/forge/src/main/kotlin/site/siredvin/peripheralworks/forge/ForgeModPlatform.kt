@@ -8,16 +8,16 @@ import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraftforge.registries.DeferredRegister
-import site.siredvin.peripheralium.forge.ForgeBaseInnerPlatform
-import site.siredvin.peripheralium.storages.energy.EnergyUnit
-import site.siredvin.peripheralium.storages.energy.ForgeEnergies
+import site.siredvin.broccolium.modules.storage.energy.Energies
+import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.ModInnerPlatform
+import site.siredvin.tweakium.modules.platform.ForgeInnerComputerBasePlatform
 
-object ForgeModPlatform : ForgeBaseInnerPlatform(), ModInnerPlatform {
+object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
     override val commonEnergy: EnergyUnit
-        get() = ForgeEnergies.FORGE
+        get() = Energies.FORGE
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID
 

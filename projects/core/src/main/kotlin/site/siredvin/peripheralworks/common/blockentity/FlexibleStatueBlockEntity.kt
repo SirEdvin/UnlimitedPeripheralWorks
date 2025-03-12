@@ -5,14 +5,14 @@ import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.VoxelShape
-import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.utils.QuadList
 import site.siredvin.peripheralworks.utils.rotate
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 
-class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<OwnedPeripheral<*>>(BlockEntityTypes.FLEXIBLE_STATUE.get(), blockPos, blockState) {
+class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutablePeripheralBlockEntity<OwnedPeripheral<*>>(BlockEntityTypes.FLEXIBLE_STATUE.get(), blockPos, blockState) {
     companion object {
         val BAKED_QUADS_TAG = "bakedQuads"
         val NAME_TAG = "statueName"

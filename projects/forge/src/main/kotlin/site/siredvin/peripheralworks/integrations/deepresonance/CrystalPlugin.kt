@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.integrations.deepresonance
 
 import dan200.computercraft.api.lua.LuaFunction
 import mcjty.deepresonance.modules.core.block.ResonatingCrystalTileEntity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class CrystalPlugin(private val crystal: ResonatingCrystalTileEntity) : IPeripheralPlugin {
     @LuaFunction(mainThread = true)

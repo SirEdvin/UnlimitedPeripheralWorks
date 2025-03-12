@@ -3,9 +3,9 @@ package site.siredvin.peripheralworks.integrations.ae2
 import appeng.api.stacks.*
 import dan200.computercraft.api.lua.LuaException
 import net.minecraft.resources.ResourceLocation
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import java.util.function.Predicate
 
 object AE2Helper {
@@ -20,8 +20,8 @@ object AE2Helper {
         }
         val base = mutableMapOf<String, Any>()
         base["type"] = "fluid"
-        base["name"] = XplatRegistries.FLUIDS.getKey((stack.what as AEFluidKey).fluid).toString()
-        base["count"] = stack.amount.toDouble() / PeripheraliumPlatform.fluidCompactDivider
+        base["name"] = PlatformRegistries.FLUIDS.getKey((stack.what as AEFluidKey).fluid).toString()
+        base["count"] = stack.amount.toDouble() / PlatformToolkit.get().fluidCompactDivider
         return base
     }
 
@@ -40,8 +40,8 @@ object AE2Helper {
                 }
                 aeKey is AEFluidKey -> {
                     val data = mutableMapOf(
-                        "name" to XplatRegistries.FLUIDS.getKey(aeKey.fluid).toString(),
-                        "amount" to entry.longValue / PeripheraliumPlatform.fluidCompactDivider,
+                        "name" to PlatformRegistries.FLUIDS.getKey(aeKey.fluid).toString(),
+                        "amount" to entry.longValue / PlatformToolkit.get().fluidCompactDivider,
                     )
                     if (displayType) {
                         data["type"] = "fluid"
@@ -54,11 +54,11 @@ object AE2Helper {
 
     fun buildKey(mode: String, id_key: String): AEKey = when (mode) {
         "fluid" -> {
-            val fluid = XplatRegistries.FLUIDS.get(ResourceLocation(id_key))
+            val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation(id_key))
             AEFluidKey.of(fluid)
         }
         "item" -> {
-            val item = XplatRegistries.ITEMS.get(ResourceLocation(id_key))
+            val item = PlatformRegistries.ITEMS.get(ResourceLocation(id_key))
             AEItemKey.of(item)
         }
         else -> {

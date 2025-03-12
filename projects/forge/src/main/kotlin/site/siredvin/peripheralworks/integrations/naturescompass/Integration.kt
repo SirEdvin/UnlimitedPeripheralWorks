@@ -8,8 +8,6 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
-import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripheralOwner
-import site.siredvin.peripheralium.computercraft.turtle.PeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -18,6 +16,8 @@ import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
+import site.siredvin.tweakium.modules.turtle.PeripheralTurtleUpgrade
 
 class Integration : Runnable {
 

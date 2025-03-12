@@ -5,7 +5,7 @@ import dan200.computercraft.api.filesystem.WritableMount
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.peripheral.WorkMonitor
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
 import javax.annotation.Nonnull
 
 class RemoteComputerWrapper<O : IPeripheralOwner>(

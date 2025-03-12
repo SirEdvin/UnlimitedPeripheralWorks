@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.subsystem.recipe
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 
 object FabricRecipeTransformers {
     fun init() {

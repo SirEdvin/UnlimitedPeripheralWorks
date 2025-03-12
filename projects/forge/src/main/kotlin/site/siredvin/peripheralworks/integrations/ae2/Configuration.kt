@@ -1,15 +1,15 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.config.IConfigHandler
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
-object Configuration : IConfigHandler {
+object Configuration : IForgeConfigHandler {
 
-    private var enableMEInterfaceConfig: ForgeConfigSpec.BooleanValue? = null
+    private var enableMeInterfaceConfig: ForgeConfigSpec.BooleanValue? = null
     private var enableStorageIntegrationConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableMEInterface: Boolean
-        get() = enableMEInterfaceConfig?.get() ?: true
+        get() = enableMeInterfaceConfig?.get() ?: true
 
     val enableStorageIntegrations: Boolean
         get() = enableStorageIntegrationConfig?.get() ?: true
@@ -18,7 +18,7 @@ object Configuration : IConfigHandler {
         get() = "ae2"
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
-        enableMEInterfaceConfig = builder.comment("Enables me blocks integration").define("enableMEInterface", true)
-        enableMEInterfaceConfig = builder.comment("Enables me integration with storages").define("enableStorageIntegrations", true)
+        enableMeInterfaceConfig = builder.comment("Enables me blocks integration").define("enableMEInterface", true)
+        enableMeInterfaceConfig = builder.comment("Enables me integration with storages").define("enableStorageIntegrations", true)
     }
 }

@@ -4,9 +4,9 @@ import net.minecraft.data.models.ItemModelGenerators
 import net.minecraft.data.models.model.ModelLocationUtils
 import net.minecraft.data.models.model.ModelTemplates
 import net.minecraft.data.models.model.TextureMapping
-import site.siredvin.peripheralium.data.blocks.turtleUpgrades
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.tweakium.modules.data.turtleUpgrades
 
 object ModItemModelProvider {
 

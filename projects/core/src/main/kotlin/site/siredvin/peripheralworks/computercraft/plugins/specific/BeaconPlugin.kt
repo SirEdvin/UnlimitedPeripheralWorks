@@ -12,11 +12,10 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BeaconBlockEntity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
-import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import java.util.*
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 import java.util.function.Predicate
 import kotlin.math.min
 
@@ -92,7 +91,7 @@ class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ItemStorageExtractor.extractStorageFromUnknown(target.level!!, location.target)
+        val fromStorage = AgnosticItemStorageLookup.extractStorageFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate = Predicate<ItemStack> { it.`is`(ItemTags.BEACON_PAYMENT_ITEMS) }

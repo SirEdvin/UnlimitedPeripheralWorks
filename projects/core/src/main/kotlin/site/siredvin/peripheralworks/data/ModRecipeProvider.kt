@@ -5,8 +5,8 @@ import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.data.recipes.SpecialRecipeBuilder
 import net.minecraft.world.item.crafting.Ingredient
-import site.siredvin.peripheralium.data.blocks.TweakedShapedRecipeBuilder
-import site.siredvin.peripheralium.data.blocks.TweakedSmithingTransformRecipeBuilder
+import site.siredvin.broccolium.modules.data.recipe.TweakedShapedRecipeBuilder
+import site.siredvin.broccolium.modules.data.recipe.TweakedSmithingTransformRecipeBuilder
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.RecipeSerializers

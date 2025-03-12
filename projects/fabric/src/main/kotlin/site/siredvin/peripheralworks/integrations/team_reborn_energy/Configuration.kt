@@ -1,9 +1,9 @@
 package site.siredvin.peripheralworks.integrations.team_reborn_energy
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.config.IConfigHandler
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
-object Configuration : IConfigHandler {
+object Configuration : IForgeConfigHandler {
 
     private const val DEFAULT_ENERGY_TO_FUEL_RATE = 50 // really calculated :) Trust me
 

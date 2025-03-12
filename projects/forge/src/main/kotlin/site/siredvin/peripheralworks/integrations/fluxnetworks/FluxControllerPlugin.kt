@@ -1,8 +1,8 @@
 package site.siredvin.peripheralworks.integrations.fluxnetworks
 
 import dan200.computercraft.api.lua.LuaFunction
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.storages.energy.ForgeEnergies
+import site.siredvin.broccolium.modules.storage.energy.Energies
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import sonar.fluxnetworks.common.connection.FluxNetwork
 import sonar.fluxnetworks.common.device.TileFluxController
 
@@ -17,7 +17,7 @@ class FluxControllerPlugin(private val blockEntity: TileFluxController) : IPerip
     fun getEnergyCapacity(): Long = blockEntity.network.getLogicalDevices(FluxNetwork.STORAGE).sumOf { it.maxTransferLimit }
 
     @LuaFunction(mainThread = true)
-    fun getEnergyUnit(): String = ForgeEnergies.FORGE.name
+    fun getEnergyUnit(): String = Energies.FORGE.name
 
     @LuaFunction(mainThread = true)
     fun getStatistic(): Map<String, Any> {

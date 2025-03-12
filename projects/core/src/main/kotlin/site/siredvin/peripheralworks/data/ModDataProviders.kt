@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.data
 
-import site.siredvin.peripheralium.data.blocks.GeneratorSink
+import site.siredvin.broccolium.modules.data.api.GeneratorSink
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
 object ModDataProviders {

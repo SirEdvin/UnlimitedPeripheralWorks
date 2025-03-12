@@ -11,14 +11,14 @@ import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMap
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import java.util.*
 import kotlin.NoSuchElementException
 
@@ -104,7 +104,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         craftingService.getCraftables { it is AEFluidKey }.forEach {
             data.add(
                 mapOf(
-                    "name" to XplatRegistries.FLUIDS.getKey((it as AEFluidKey).fluid).toString(),
+                    "name" to PlatformRegistries.FLUIDS.getKey((it as AEFluidKey).fluid).toString(),
                 ),
             )
         }
@@ -177,7 +177,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         val realAmount = if (mode == "item") {
             amount.orElse(1)
         } else {
-            amount.orElse(1000) * PeripheraliumPlatform.fluidCompactDivider
+            amount.orElse(1000) * PlatformToolkit.get().fluidCompactDivider
         }.toLong()
         val future = craftingService.beginCraftingCalculation(
             level,

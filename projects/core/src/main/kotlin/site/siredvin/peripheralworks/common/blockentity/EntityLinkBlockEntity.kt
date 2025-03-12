@@ -8,12 +8,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
-import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
-import site.siredvin.peripheralium.computercraft.peripheral.ability.PeripheralOwnerAbility
-import site.siredvin.peripheralium.computercraft.peripheral.ability.ScanningAbility
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.computercraft.peripheral.owner.EntityProxyPeripheralOwner
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -23,8 +18,13 @@ import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 import site.siredvin.peripheralworks.computercraft.peripherals.EntityLinkPeripheral
+import site.siredvin.tweakium.modules.peripheral.ability.PeripheralOwnerBoonKey
+import site.siredvin.tweakium.modules.peripheral.ability.ScanningBoon
+import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.owner.EntityProxyPeripheralOwner
 
-class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<EntityLinkPeripheral>(BlockEntityTypes.ENTITY_LINK.get(), blockPos, blockState) {
+class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutablePeripheralBlockEntity<EntityLinkPeripheral>(BlockEntityTypes.ENTITY_LINK.get(), blockPos, blockState) {
     companion object {
         const val STORED_CARD_TAG = "storedCard"
         const val UPGRADES_TAG = "upgrades"
@@ -83,12 +83,12 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mutabl
         val owner = EntityProxyPeripheralOwner(this, _entity!!)
 
         if (upgrades.scanner) {
-            owner.attachOperations(config = PeripheralWorksConfig)
+            owner.attachOperations(cooldownThreshold = PeripheralWorksConfig.cooldownTresholdLevel)
             val operation = SphereOperations.PORTABLE_UNIVERSAL_SCAN
             val maxRadius = operation.maxFreeRadius
-            owner.attachAbility(
-                PeripheralOwnerAbility.SCANNING,
-                ScanningAbility(owner, maxRadius).attachBlockScan(
+            owner.attachBoon(
+                PeripheralOwnerBoonKey.SCANNING,
+                ScanningBoon(owner, maxRadius).attachBlockScan(
                     operation,
                 ).attachLivingEntityScan(
                     operation,

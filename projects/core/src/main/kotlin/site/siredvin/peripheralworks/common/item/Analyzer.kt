@@ -7,7 +7,7 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.common.items.DescriptiveItem
+import site.siredvin.broccolium.modules.base.item.DescriptiveItem
 
 class Analyzer : DescriptiveItem(Properties().stacksTo(1)) {
     override fun use(level: Level, player: Player, interactionHand: InteractionHand): InteractionResultHolder<ItemStack> {

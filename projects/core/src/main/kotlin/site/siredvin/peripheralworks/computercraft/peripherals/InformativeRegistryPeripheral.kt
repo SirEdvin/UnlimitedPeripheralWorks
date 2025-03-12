@@ -4,12 +4,12 @@ import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.resources.ResourceLocation
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.blockentity.InformativeRegistryBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import java.util.function.Function
 import java.util.function.Supplier
 
@@ -34,12 +34,12 @@ class InformativeRegistryPeripheral(
                 "item",
                 "Minecraft items",
                 {
-                    MethodResult.of(XplatRegistries.ITEMS.keySet().map(ResourceLocation::toString))
+                    MethodResult.of(PlatformRegistries.ITEMS.keySet().map(ResourceLocation::toString))
                 },
                 {
-                    val item = XplatRegistries.ITEMS.get(ResourceLocation(it))
+                    val item = PlatformRegistries.ITEMS.get(ResourceLocation(it))
                     val base = LuaRepresentation.forItem(item)
-                    base["registryID"] = XplatRegistries.ITEMS.getId(item)
+                    base["registryID"] = PlatformRegistries.ITEMS.getId(item)
                     return@addList MethodResult.of(base)
                 },
             )
@@ -48,12 +48,12 @@ class InformativeRegistryPeripheral(
                 "block",
                 "Minecraft blocks",
                 {
-                    MethodResult.of(XplatRegistries.BLOCKS.keySet().map(ResourceLocation::toString))
+                    MethodResult.of(PlatformRegistries.BLOCKS.keySet().map(ResourceLocation::toString))
                 },
                 {
-                    val blockState = XplatRegistries.BLOCKS.get(ResourceLocation(it)).defaultBlockState()
+                    val blockState = PlatformRegistries.BLOCKS.get(ResourceLocation(it)).defaultBlockState()
                     val base = LuaRepresentation.forBlockState(blockState)
-                    base["registryID"] = XplatRegistries.BLOCKS.getId(blockState.block)
+                    base["registryID"] = PlatformRegistries.BLOCKS.getId(blockState.block)
                     return@addList MethodResult.of(base)
                 },
             )
@@ -62,12 +62,12 @@ class InformativeRegistryPeripheral(
                 "fluid",
                 "Minecraft fluids",
                 {
-                    MethodResult.of(XplatRegistries.FLUIDS.keySet().map(ResourceLocation::toString))
+                    MethodResult.of(PlatformRegistries.FLUIDS.keySet().map(ResourceLocation::toString))
                 },
                 {
-                    val fluid = XplatRegistries.FLUIDS.get(ResourceLocation(it))
+                    val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation(it))
                     val base = LuaRepresentation.forFluid(fluid)
-                    base["registryID"] = XplatRegistries.FLUIDS.getId(fluid)
+                    base["registryID"] = PlatformRegistries.FLUIDS.getId(fluid)
                     return@addList MethodResult.of(base)
                 },
             )

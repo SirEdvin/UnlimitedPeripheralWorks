@@ -17,10 +17,10 @@ import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.item.crafting.ShapedRecipe
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.material.Fluid
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.subsystem.recipe.integration.ShapedCraftingRecipeTransformer
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.HashMap
@@ -75,10 +75,10 @@ object RecipeRegistryToolkit {
         registerSerializer(JsonObject::class.java, RecipeRegistryToolkit::serializeJson)
         registerSerializer(EntityType::class.java) {
             return@registerSerializer mutableMapOf(
-                "name" to XplatRegistries.ENTITY_TYPES.getKey(it).toString(),
+                "name" to PlatformRegistries.ENTITY_TYPES.getKey(it).toString(),
             )
         }
-        registerSerializer(Tag::class.java, PeripheraliumPlatform::nbtToLua)
+        registerSerializer(Tag::class.java, ComputerPlatformToolkit.get()::nbtToLua)
 
         registerRecipeSerializer(ShapedRecipe::class.java, ShapedCraftingRecipeTransformer)
     }
@@ -140,7 +140,7 @@ object RecipeRegistryToolkit {
     }
 
     @Throws(LuaException::class)
-    fun getRecipeType(type: ResourceLocation): RecipeType<*> = XplatRegistries.RECIPE_TYPES.tryGet(type)
+    fun getRecipeType(type: ResourceLocation): RecipeType<*> = PlatformRegistries.RECIPE_TYPES.tryGet(type)
         ?: throw LuaException(String.format("Incorrect recipe type %s", type))
 
     fun getRecipesForType(recipeType: RecipeType<*>, level: Level): List<Recipe<*>> {
@@ -169,12 +169,12 @@ object RecipeRegistryToolkit {
 
     @Throws(LuaException::class)
     fun collectRecipeTypes(types: Any?): List<RecipeType<*>> {
-        if (types == null || types.toString() == "*") return XplatRegistries.RECIPE_TYPES.iterator().asSequence().toList()
+        if (types == null || types.toString() == "*") return PlatformRegistries.RECIPE_TYPES.iterator().asSequence().toList()
         if (types is String) {
             return if (types.contains(":")) {
                 listOf(getRecipeType(ResourceLocation(types.toString())))
             } else {
-                XplatRegistries.RECIPE_TYPES.iterator().asSequence()
+                PlatformRegistries.RECIPE_TYPES.iterator().asSequence()
                     .filter { p -> p.toString().startsWith(types) }.toList()
             }
         }

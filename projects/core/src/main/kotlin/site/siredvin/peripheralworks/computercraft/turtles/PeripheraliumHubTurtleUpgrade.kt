@@ -5,15 +5,16 @@ import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.upgrades.UpgradeData
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.api.turtle.TurtleUpgradeHolder
-import site.siredvin.peripheralium.computercraft.pocket.StatefulPocketUpgrade
-import site.siredvin.peripheralium.computercraft.turtle.StatefulPeripheralTurtleUpgrade
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
+import site.siredvin.tweakium.modules.peripheral.util.DataStorageUtil
+import site.siredvin.tweakium.modules.pocket.StatefulPocketUpgrade
+import site.siredvin.tweakium.modules.turtle.StatefulPeripheralTurtleUpgrade
+import site.siredvin.tweakium.modules.turtle.api.TurtleUpgradeHolder
 import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
@@ -23,7 +24,7 @@ class PeripheraliumHubTurtleUpgrade(private val maxUpdateCount: Supplier<Int>, p
 
     companion object {
         private val internalDataCache = CacheBuilder.newBuilder()
-            .expireAfterAccess(30, TimeUnit.SECONDS).build<CompoundTag, List<UpgradeData<ITurtleUpgrade>>>().asMap()
+            .expireAfterAccess(30, TimeUnit.SECONDS).build<IDataStorage, List<UpgradeData<ITurtleUpgrade>>>().asMap()
     }
 
     override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): TurtlePeripheraliumHubPeripheral = TurtlePeripheraliumHubPeripheral(maxUpdateCount.get(), turtle, side, type)
@@ -43,8 +44,5 @@ class PeripheraliumHubTurtleUpgrade(private val maxUpdateCount: Supplier<Int>, p
         return super.isItemSuitable(stack)
     }
 
-    override fun getInternalUpgrades(turtle: ITurtleAccess, side: TurtleSide): List<UpgradeData<ITurtleUpgrade>> {
-        val dataStorage = turtle.getUpgradeNBTData(side)
-        return internalDataCache.computeIfAbsent(dataStorage, TurtlePeripheraliumHubPeripheral::collectUpgradesData)
-    }
+    override fun getInternalUpgrades(turtle: ITurtleAccess, side: TurtleSide): List<UpgradeData<ITurtleUpgrade>> = internalDataCache.computeIfAbsent(DataStorageUtil.getDataStorage(turtle, side), TurtlePeripheraliumHubPeripheral::collectUpgradesData)
 }

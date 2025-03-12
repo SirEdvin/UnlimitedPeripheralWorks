@@ -89,6 +89,7 @@ repositories {
 dependencies {
     implementation(libs.bundles.forge.raw)
     libs.bundles.forge.base.get().map { implementation(fg.deobf(it)) }
+    libs.bundles.forge.include.get().map { implementation(fg.deobf(it)) }
     libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it)) }
 
     // WHY ?!?!?!
@@ -141,10 +142,14 @@ val copyCreate by tasks.register<Copy>("copyCreate") {
 }
 
 // TODO: make this possible, probably (?) This would be really nice
-// val copyAE2 by tasks.register<Copy>("copyAE2") {
-//    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
-//    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
-// }
+val copyAE2 by tasks.register<Copy>("copyAE2") {
+    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
+    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
+}
+
+val fullCopy by tasks.register("fullCopy") {
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate, copyAE2)
+}
 
 tasks.compileKotlin {
     dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate)

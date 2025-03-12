@@ -1,17 +1,17 @@
 package site.siredvin.peripheralworks.computercraft.plugins
 
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.api.peripheral.IOwnedPeripheral
-import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
-import site.siredvin.peripheralium.storages.item.SlottedItemStorage
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.util.representation.RepresentationMode
+import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
 import site.siredvin.peripheralworks.common.blockentity.AbstractItemPedestalBlockEntity
+import site.siredvin.tweakium.modules.peripheral.api.IOwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
+import site.siredvin.tweakium.modules.plugins.AbstractInventoryPlugin
 
 class PedestalInventoryPlugin<T : IOwnedPeripheral<*>>(private val blockEntity: AbstractItemPedestalBlockEntity<T>) : AbstractInventoryPlugin() {
     override val level: Level
         get() = blockEntity.level!!
-    override val storage: SlottedItemStorage
+    override val storage: SlottedAgnosticItemStorage
         get() = blockEntity.storage
 
     override fun getItemDetailImpl(slot: Int): Map<String, *>? {

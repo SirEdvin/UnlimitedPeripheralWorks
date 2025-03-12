@@ -6,14 +6,14 @@ import net.minecraft.core.Direction
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.MapItem
 import net.minecraft.world.level.material.MapColor
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralworks.common.block.BasePedestal
 import site.siredvin.peripheralworks.common.blockentity.MapPedestalBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 import site.siredvin.peripheralworks.computercraft.plugins.PedestalInventoryPlugin
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 
 class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) :
     OwnedPeripheral<BlockEntityPeripheralOwner<MapPedestalBlockEntity>>(
@@ -25,7 +25,7 @@ class MapPedestalPeripheral(private val blockEntity: MapPedestalBlockEntity) :
     }
 
     init {
-        peripheralOwner.attachOperations(config = PeripheralWorksConfig)
+        peripheralOwner.attachOperations(cooldownThreshold = PeripheralWorksConfig.cooldownTresholdLevel)
         addPlugin(PedestalInventoryPlugin(blockEntity))
         addOperations(listOf(UnconditionalFreeOperations.UPDATE_MAP, UnconditionalFreeOperations.EXTRACT_MAP))
     }

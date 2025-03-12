@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.subsystem.recipe
 
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.util.NBTUtil
+import site.siredvin.tweakium.modules.peripheral.util.NBTUtil
 
 enum class NBTCheckMode {
     FULL,

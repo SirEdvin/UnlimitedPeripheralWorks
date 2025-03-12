@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.api
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 interface PeripheralPluginProvider : Comparable<PeripheralPluginProvider> {
     val pluginType: String

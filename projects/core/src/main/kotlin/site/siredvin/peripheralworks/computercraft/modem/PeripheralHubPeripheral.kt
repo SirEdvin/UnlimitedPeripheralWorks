@@ -5,8 +5,8 @@ import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import kotlinx.atomicfu.locks.withLock
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap

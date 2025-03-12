@@ -1,8 +1,8 @@
 package site.siredvin.peripheralworks.subsystem.recipe
 
 import net.minecraftforge.fluids.FluidStack
-import site.siredvin.peripheralium.storages.fluid.toVanilla
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.broccolium.modules.storage.fluid.toVanilla
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 
 object ForgeRecipeTransformers {
     fun init() {

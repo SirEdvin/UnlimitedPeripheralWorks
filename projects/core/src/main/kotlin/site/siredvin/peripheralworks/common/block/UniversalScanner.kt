@@ -8,8 +8,8 @@ import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
-import site.siredvin.peripheralium.util.BlockUtil
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
+import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.UniversalScannerBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import java.util.stream.Stream

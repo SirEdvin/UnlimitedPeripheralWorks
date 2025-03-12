@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks
 import net.minecraft.world.item.CreativeModeTab
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
-import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
@@ -34,7 +34,7 @@ object PeripheralWorksCore {
         ModPlatform.configure(platform)
         ModRecipeIngredients.configure(ingredients)
         ModBlocksReference.configure(blocks)
-        ItemStorageExtractor.addStorageExtractor(MinecartUtils::minecartExtractor)
+        AgnosticItemStorageLookup.addItemStorageExtractor(MinecartUtils::minecartExtractor)
         ComputerCraftProxy.addProvider(StorageProvider)
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         ComputerCraftProxy.addProvider(EnergyStorageProvider)

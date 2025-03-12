@@ -1,9 +1,9 @@
 package site.siredvin.peripheralworks.integrations.occultism
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.config.IConfigHandler
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
-object Configuration : IConfigHandler {
+object Configuration : IForgeConfigHandler {
 
     private var enableOccultismStorageConfig: ForgeConfigSpec.BooleanValue? = null
     private var enableOccultismGoldenBowlConfig: ForgeConfigSpec.BooleanValue? = null

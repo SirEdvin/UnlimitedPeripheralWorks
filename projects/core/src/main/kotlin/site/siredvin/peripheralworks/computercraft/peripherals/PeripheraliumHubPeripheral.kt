@@ -7,12 +7,13 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.storages.item.ItemStorageUtils
-import site.siredvin.peripheralium.util.assertBetween
+import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.modem.PeripheralHubPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.util.assertBetween
 
 abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxUpdateCount: Int, owner: O, type: String) : PeripheralHubPeripheral<O>(type, owner) {
 
@@ -25,11 +26,11 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         val NETHERITE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
         const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
 
-        fun getActiveUpgrades(dataStorage: CompoundTag): List<String> = dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
+        fun getActiveUpgrades(dataStorage: IDataStorage): List<String> = dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
 
-        fun getDataForUpgrade(id: String, dataStorage: CompoundTag): CompoundTag {
-            if (!dataStorage.contains(TWEAKED_STORAGES)) {
-                dataStorage.put(TWEAKED_STORAGES, CompoundTag())
+        fun getDataForUpgrade(id: String, dataStorage: IDataStorage): CompoundTag {
+            if (!dataStorage.has(TWEAKED_STORAGES)) {
+                dataStorage.putCompound(TWEAKED_STORAGES, CompoundTag())
             }
             val tweakedStorages = dataStorage.getCompound(TWEAKED_STORAGES)
             if (!tweakedStorages.contains(id)) {
@@ -63,25 +64,27 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
     protected fun attachUpgrade(id: ResourceLocation) {
         val upgradeList = peripheralOwner.dataStorage.getList(UPGRADES_TAG, 8)
         upgradeList.add(StringTag.valueOf(id.toString()))
-        peripheralOwner.dataStorage.put(UPGRADES_TAG, upgradeList)
-        if (upgradeList.isNotEmpty()) peripheralOwner.dataStorage.putString(MODE_TAG, activeMode)
-        peripheralOwner.markDataStorageDirty()
+        peripheralOwner.dataStorage.mutate {
+            it.put(UPGRADES_TAG, upgradeList)
+            if (upgradeList.isNotEmpty()) it.putString(MODE_TAG, activeMode)
+        }
     }
 
     protected fun detachUpgrade(id: ResourceLocation) {
         val upgradeList = peripheralOwner.dataStorage.getList(UPGRADES_TAG, 8)
         upgradeList.remove(StringTag.valueOf(id.toString()))
-        peripheralOwner.dataStorage.put(UPGRADES_TAG, upgradeList)
-        if (upgradeList.isEmpty()) peripheralOwner.dataStorage.remove(MODE_TAG)
-        peripheralOwner.markDataStorageDirty()
+        peripheralOwner.dataStorage.mutate {
+            it.put(UPGRADES_TAG, upgradeList)
+            if (upgradeList.isEmpty()) it.remove(MODE_TAG)
+        }
     }
 
     fun getDataForUpgrade(id: String): CompoundTag = getDataForUpgrade(id, peripheralOwner.dataStorage)
 
     fun setDataForUpdate(id: String, data: CompoundTag?) {
         val base = peripheralOwner.dataStorage
-        if (!base.contains(TWEAKED_STORAGES)) {
-            base.put(TWEAKED_STORAGES, CompoundTag())
+        if (!base.has(TWEAKED_STORAGES)) {
+            base.putCompound(TWEAKED_STORAGES, CompoundTag())
         }
         val tweakedStorages = base.getCompound(TWEAKED_STORAGES)
         if (data == null) {

@@ -5,15 +5,15 @@ import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.storage.MEStorage
 import appeng.blockentity.grid.AENetworkBlockEntity
-import site.siredvin.peripheralium.storages.fluid.FluidStack
-import site.siredvin.peripheralium.storages.fluid.FluidStorage
-import site.siredvin.peripheralium.storages.fluid.toVanilla
-import site.siredvin.peripheralium.storages.fluid.toVariant
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
+import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
+import site.siredvin.broccolium.modules.storage.fluid.toVanilla
+import site.siredvin.broccolium.modules.storage.fluid.toVariant
 import java.util.function.Predicate
 
-class AEFluidStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : FluidStorage {
-    override fun getFluids(): Iterator<FluidStack> {
+class AEFluidStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : AgnosticFluidStorage {
+    override fun getFluids(): Iterator<AgnosticFluidStack> {
         return storage.availableStacks.mapNotNull {
             if (it.key !is AEFluidKey) return@mapNotNull null
             return@mapNotNull (it.key as AEFluidKey).toVariant().toVanilla(it.longValue)
@@ -24,24 +24,24 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
         entity.setChanged()
     }
 
-    override fun storeFluid(stack: FluidStack): FluidStack {
+    override fun storeFluid(stack: AgnosticFluidStack): AgnosticFluidStack {
         val insertedAmount = storage.insert(AEFluidKey.of(stack.toVariant()), stack.platformAmount, Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (insertedAmount == 0L) return stack
-        stack.shrink(insertedAmount.toInt() / PeripheraliumPlatform.fluidCompactDivider)
+        stack.shrink(insertedAmount.toInt() / PlatformToolkit.get().fluidCompactDivider)
         return stack
     }
 
-    override fun takeFluid(predicate: Predicate<FluidStack>, limit: Long): FluidStack {
-        val platformLimit = limit * PeripheraliumPlatform.fluidCompactDivider
+    override fun takeFluid(predicate: Predicate<AgnosticFluidStack>, limit: Long): AgnosticFluidStack {
+        val platformLimit = limit * PlatformToolkit.get().fluidCompactDivider
         val fluidToTransfer = storage.availableStacks.find {
             val aeKey = it.key
             if (aeKey !is AEFluidKey) {
                 return@find false
             }
             return@find predicate.test(aeKey.toVariant().toVanilla(it.longValue))
-        } ?: return FluidStack.EMPTY
+        } ?: return AgnosticFluidStack.EMPTY
         val extractedAmount = storage.extract(fluidToTransfer.key, minOf(platformLimit, fluidToTransfer.longValue), Actionable.MODULATE, IActionSource.ofMachine(entity))
-        if (extractedAmount == 0L) return FluidStack.EMPTY
+        if (extractedAmount == 0L) return AgnosticFluidStack.EMPTY
         return (fluidToTransfer.key as AEFluidKey).toVariant().toVanilla(extractedAmount)
     }
 }

@@ -12,9 +12,9 @@ object ForgeModRecipeIngredients : ModRecipeIngredients {
     override val printer: Ingredient
         get() = Ingredient.of(Items.PRINTER.get())
     override val peripheralium: Ingredient
-        get() = Ingredient.of(site.siredvin.peripheralium.common.setup.Items.PERIPHERALIUM_DUST.get())
+        get() = Ingredient.of(site.siredvin.peripheralium.Items.PERIPHERALIUM_DUST.get())
     override val peripheraliumUpgrade: Ingredient
-        get() = Ingredient.of(site.siredvin.peripheralium.common.setup.Items.PERIPHERALIUM_UPGRADE_TEMPLATE.get())
+        get() = Ingredient.of(site.siredvin.peripheralium.Items.PERIPHERALIUM_UPGRADE_TEMPLATE.get())
     override val netheriteIngot: Ingredient
         get() = Ingredient.of(Tags.Items.INGOTS_NETHERITE)
     override val emerald: Ingredient
@@ -26,7 +26,7 @@ object ForgeModRecipeIngredients : ModRecipeIngredients {
     override val anyCoal: Ingredient
         get() = Ingredient.of(net.minecraft.world.item.Items.COAL)
     override val peripheraliumBlock: Ingredient
-        get() = Ingredient.of(site.siredvin.peripheralium.common.setup.Blocks.PERIPHERALIUM_BLOCK.get())
+        get() = Ingredient.of(site.siredvin.peripheralium.Blocks.PERIPHERALIUM_BLOCK.get())
     override val observer: Ingredient
         get() = Ingredient.of(Blocks.OBSERVER)
     override val smoothStone: Ingredient

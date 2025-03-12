@@ -1,8 +1,8 @@
 package site.siredvin.peripheralworks.xplat
 
-import site.siredvin.peripheralium.storages.energy.EnergyUnit
-import site.siredvin.peripheralium.xplat.BaseInnerPlatform
+import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
+import site.siredvin.tweakium.modules.platform.api.InnerComputerBasePlatform
 
-interface ModInnerPlatform : BaseInnerPlatform {
+interface ModInnerPlatform : InnerComputerBasePlatform {
     val commonEnergy: EnergyUnit
 }

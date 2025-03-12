@@ -9,10 +9,10 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import site.siredvin.peripheralium.util.BlockUtil
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.util.representation.RepresentationMode
+import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEntity
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
 
 class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defaultProperties()) {
 

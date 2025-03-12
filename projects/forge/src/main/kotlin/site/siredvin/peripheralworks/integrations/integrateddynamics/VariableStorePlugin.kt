@@ -11,14 +11,14 @@ import org.cyclops.integrateddynamics.blockentity.BlockEntityVariablestore
 import org.cyclops.integrateddynamics.capability.variablefacade.VariableFacadeHolderConfig
 import org.cyclops.integrateddynamics.core.helper.NetworkHelpers
 import org.cyclops.integrateddynamics.core.item.OperatorVariableFacade
-import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
-import site.siredvin.peripheralium.storages.item.ItemHandlerWrapper
-import site.siredvin.peripheralium.storages.item.SlottedItemStorage
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
+import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
+import site.siredvin.tweakium.modules.plugins.AbstractInventoryPlugin
 
 class VariableStorePlugin(private val store: BlockEntityVariablestore) : AbstractInventoryPlugin() {
 
     override val level: Level = store.level!!
-    override val storage: SlottedItemStorage = ItemHandlerWrapper(store.inventory.itemHandler)
+    override val storage: SlottedAgnosticItemStorage = AgnosticItemHandlerWrapper(store.inventory.itemHandler)
     private val context: ValueDeseralizationContext = ValueDeseralizationContext.of(level)
 
     fun parseEntry(facade: IVariableFacade): Map<String, Any> {

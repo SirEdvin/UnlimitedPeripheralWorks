@@ -11,18 +11,18 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
-import site.siredvin.peripheralium.api.peripheral.IExpandedPeripheral
-import site.siredvin.peripheralium.api.peripheral.IObservingPeripheralPlugin
-import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
-import site.siredvin.peripheralium.storages.ContainerWrapper
-import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
-import site.siredvin.peripheralium.storages.item.ItemStorageUtils
-import site.siredvin.peripheralium.util.TextBookUtils
-import site.siredvin.peripheralium.util.assertBetween
+import site.siredvin.broccolium.modules.base.util.TextBookUtils
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
+import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
+import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
+import site.siredvin.tweakium.modules.peripheral.api.IExpandedPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.util.assertBetween
+import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 import java.util.*
 import java.util.function.Predicate
 
-class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripheralPlugin {
+class LecternPlugin(private val target: LecternBlockEntity) : IPeripheralPlugin {
 
     companion object {
         val OBSERVED_LECTERNS: MutableMap<BlockPos, WeakHashMap<IExpandedPeripheral, Boolean>> = mutableMapOf()
@@ -151,7 +151,7 @@ class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripher
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = ItemStorageExtractor.extractItemSinkFromUnknown(target.level!!, location.target)
+        val toStorage = AgnosticItemStorageLookup.extractItemSinkFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
         val moved = ContainerWrapper(target.bookAccess).moveTo(toStorage, 1, takePredicate = ItemStorageUtils.ALWAYS)
@@ -168,7 +168,7 @@ class LecternPlugin(private val target: LecternBlockEntity) : IObservingPeripher
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = ItemStorageExtractor.extractStorageFromUnknown(target.level!!, location.target)
+        val fromStorage = AgnosticItemStorageLookup.extractStorageFromUnknown(target.level!!, location.target)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate: Predicate<ItemStack> = Predicate { it.`is`(Items.WRITABLE_BOOK) || it.`is`(Items.WRITTEN_BOOK) }

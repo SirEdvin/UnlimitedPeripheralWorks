@@ -1,16 +1,20 @@
 package site.siredvin.peripheralworks.computercraft.pocket
 
+import com.google.common.cache.CacheBuilder
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.pocket.IPocketUpgrade
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.api.pocket.PocketUpgradeHolder
-import site.siredvin.peripheralium.computercraft.pocket.StatefulPocketUpgrade
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.pocket.PocketPeripheraliumHubPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
+import site.siredvin.tweakium.modules.peripheral.util.DataStorageUtil
+import site.siredvin.tweakium.modules.pocket.StatefulPocketUpgrade
+import site.siredvin.tweakium.modules.pocket.api.PocketUpgradeHolder
+import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
 class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, private val type: String, item: ItemStack) :
@@ -19,6 +23,11 @@ class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, p
         item,
     ),
     PocketUpgradeHolder {
+
+    companion object {
+        private val internalDataCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(30, TimeUnit.SECONDS).build<IDataStorage, List<UpgradeData<IPocketUpgrade>>>().asMap()
+    }
     override fun getPeripheral(access: IPocketAccess): PocketPeripheraliumHubPeripheral = PocketPeripheraliumHubPeripheral(maxUpdateCount.get(), access, type)
 
     override fun update(access: IPocketAccess, peripheral: IPeripheral?) {
@@ -37,8 +46,5 @@ class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, p
         return super.isItemSuitable(stack)
     }
 
-    override fun getInternalUpgrades(pocket: IPocketAccess): List<UpgradeData<IPocketUpgrade>> {
-        // TODO: wait for api to properly implement
-        return emptyList()
-    }
+    override fun getInternalUpgrades(pocket: IPocketAccess): List<UpgradeData<IPocketUpgrade>> = internalDataCache.computeIfAbsent(DataStorageUtil.getDataStorage(pocket), PocketPeripheraliumHubPeripheral::collectUpgradesData)
 }

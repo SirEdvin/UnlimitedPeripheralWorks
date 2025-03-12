@@ -23,7 +23,7 @@ import net.minecraftforge.client.model.ForgeFaceData
 import net.minecraftforge.client.model.IDynamicBakedModel
 import net.minecraftforge.client.model.data.ModelData
 import net.minecraftforge.client.model.data.ModelProperty
-import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
+import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
 import site.siredvin.peripheralworks.client.util.RenderUtils
 import site.siredvin.peripheralworks.client.util.RenderUtils.getModelState
 import site.siredvin.peripheralworks.client.util.RenderUtils.getTexture

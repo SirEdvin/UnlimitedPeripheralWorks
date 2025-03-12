@@ -1,9 +1,9 @@
 package site.siredvin.peripheralworks.integrations.naturescompass
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.config.IConfigHandler
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
-object Configuration : IConfigHandler {
+object Configuration : IForgeConfigHandler {
 
     private var enableTurtleUpgradeConfig: ForgeConfigSpec.BooleanValue? = null
     private var enablePocketUpgradeConfig: ForgeConfigSpec.BooleanValue? = null

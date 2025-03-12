@@ -4,12 +4,12 @@ import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
 import site.siredvin.peripheralworks.common.blockentity.EntityLinkBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheralLookup
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import java.util.function.BiConsumer
 
 class EntityLinkPeripheral(private val blockEntity: EntityLinkBlockEntity, owner: IPeripheralOwner) : OwnedPeripheral<IPeripheralOwner>(TYPE, owner) {

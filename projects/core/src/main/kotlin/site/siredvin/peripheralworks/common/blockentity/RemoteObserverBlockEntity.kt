@@ -8,18 +8,18 @@ import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.Tag
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.api.blockentities.IObservingBlockEntity
-import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
-import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.util.representation.stateProperties
+import site.siredvin.broccolium.modules.base.api.IObservingBlockEntity
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.RemoteObserverPeripheral
+import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.peripheral.representation.stateProperties
 
 class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
-    MutableNBTBlockEntity<RemoteObserverPeripheral>(BlockEntityTypes.REMOTE_OBSERVER.get(), blockPos, blockState),
+    MutablePeripheralBlockEntity<RemoteObserverPeripheral>(BlockEntityTypes.REMOTE_OBSERVER.get(), blockPos, blockState),
     IObservingBlockEntity {
 
     companion object {

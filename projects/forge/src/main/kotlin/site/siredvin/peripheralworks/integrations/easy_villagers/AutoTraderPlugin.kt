@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.easy_villagers
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import de.maxhenkel.easyvillagers.blocks.tileentity.AutoTraderTileentity
-import site.siredvin.peripheralium.util.assertBetween
+import site.siredvin.tweakium.modules.peripheral.util.assertBetween
 
 class AutoTraderPlugin(private val autoTrader: AutoTraderTileentity) : TraderPlugin(autoTrader) {
     override val additionalType: String

@@ -2,9 +2,9 @@ package site.siredvin.peripheralworks.common.setup
 
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
-import site.siredvin.peripheralium.common.blocks.GenericBlockEntityBlock
-import site.siredvin.peripheralium.common.items.PeripheralBlockItem
-import site.siredvin.peripheralium.util.BlockUtil
+import site.siredvin.broccolium.modules.base.block.GenericBlockEntityBlock
+import site.siredvin.broccolium.modules.base.item.HiddenDescriptiveBlockItem
+import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.block.*
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.FlexibleRealityAnchorItem
@@ -21,7 +21,7 @@ object Blocks {
         "universal_scanner",
         { UniversalScanner() },
         {
-            PeripheralBlockItem(
+            HiddenDescriptiveBlockItem(
                 it,
                 Item.Properties(),
                 PeripheralWorksConfig::enableUniversalScanner,
@@ -35,7 +35,7 @@ object Blocks {
         "ultimate_sensor",
         { GenericBlockEntityBlock({ BlockEntityTypes.ULTIMATE_SENSOR.get() }, true) },
         {
-            PeripheralBlockItem(
+            HiddenDescriptiveBlockItem(
                 it,
                 Item.Properties(),
                 PeripheralWorksConfig::enableUltimateSensor,
@@ -49,7 +49,7 @@ object Blocks {
         "item_pedestal",
         ::ItemPedestal,
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableItemPedestal,
@@ -62,7 +62,7 @@ object Blocks {
         "map_pedestal",
         ::MapPedestal,
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableMapPedestal,
@@ -75,7 +75,7 @@ object Blocks {
         "display_pedestal",
         ::DisplayPedestal,
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableDisplayPedestal,
@@ -88,7 +88,7 @@ object Blocks {
         "remote_observer",
         { GenericBlockEntityBlock({ BlockEntityTypes.REMOTE_OBSERVER.get() }, true, belongToTickingEntity = true) },
         {
-            PeripheralBlockItem(
+            HiddenDescriptiveBlockItem(
                 it,
                 Item.Properties(),
                 PeripheralWorksConfig::enableRemoteObserver,
@@ -103,7 +103,7 @@ object Blocks {
         "peripheral_proxy",
         ::PeripheralProxy,
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enablePeripheralProxy,
@@ -122,7 +122,7 @@ object Blocks {
         "reality_forger",
         { GenericBlockEntityBlock({ BlockEntityTypes.REALITY_FORGER.get() }, isRotatable = true, belongToTickingEntity = false) },
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableRealityForger,
@@ -135,7 +135,7 @@ object Blocks {
         "recipe_registry",
         { GenericBlockEntityBlock({ BlockEntityTypes.RECIPE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableRecipeRegistry,
@@ -148,7 +148,7 @@ object Blocks {
         "informative_registry",
         { GenericBlockEntityBlock({ BlockEntityTypes.INFORMATIVE_REGISTRY.get() }, isRotatable = true, belongToTickingEntity = false) },
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableInformativeRegistry,
@@ -168,7 +168,7 @@ object Blocks {
         "statue_workbench",
         { StatueWorkbench() },
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableStatueWorkbench,
@@ -181,7 +181,7 @@ object Blocks {
         "entity_link",
         { EntityLink() },
     ) {
-        PeripheralBlockItem(
+        HiddenDescriptiveBlockItem(
             it,
             Item.Properties(),
             PeripheralWorksConfig::enableEntityLink,

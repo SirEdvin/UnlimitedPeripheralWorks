@@ -1,11 +1,11 @@
 package site.siredvin.peripheralworks.computercraft.peripherals
 
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralworks.common.block.BasePedestal
 import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.plugins.PedestalInventoryPlugin
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 
 class ItemPedestalPeripheral(blockEntity: ItemPedestalBlockEntity) :
     OwnedPeripheral<BlockEntityPeripheralOwner<ItemPedestalBlockEntity>>(

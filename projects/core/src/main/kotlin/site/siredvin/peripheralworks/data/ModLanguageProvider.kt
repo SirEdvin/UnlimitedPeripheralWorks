@@ -1,19 +1,19 @@
 package site.siredvin.peripheralworks.data
 
 import net.minecraft.data.PackOutput
-import site.siredvin.peripheralium.data.language.LanguageProvider
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.data.ComputerLanguageProvider
 import java.util.stream.Stream
 
 abstract class ModLanguageProvider(output: PackOutput, locale: String) :
-    LanguageProvider(
+    ComputerLanguageProvider(
         output,
         PeripheralWorksCore.MOD_ID,
         locale,
         ModPlatform.holder,
-        *ModText.values(),
-        *ModTooltip.values(),
+        *ModText.entries.toTypedArray(),
+        *ModTooltip.entries.toTypedArray(),
     ) {
 
     companion object {

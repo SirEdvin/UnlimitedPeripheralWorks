@@ -9,8 +9,8 @@ import net.minecraft.world.level.block.NoteBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument
 import net.minecraft.world.level.gameevent.GameEvent
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.util.assertBetween
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.util.assertBetween
 
 class NoteBlockPlugin(private val level: Level, private val pos: BlockPos) : IPeripheralPlugin {
     companion object {
@@ -45,7 +45,7 @@ class NoteBlockPlugin(private val level: Level, private val pos: BlockPos) : IPe
             val instrumentValue = NoteBlockInstrument.valueOf(instrument.uppercase())
             level.setBlockAndUpdate(pos, blockState.setValue(NoteBlock.INSTRUMENT, instrumentValue))
         } catch (exc: IllegalArgumentException) {
-            val allValues = NoteBlockInstrument.values().joinToString(", ") { mode -> mode.name.lowercase() }
+            val allValues = NoteBlockInstrument.entries.joinToString(", ") { mode -> mode.name.lowercase() }
             throw LuaException("Instrument should be one of: $allValues")
         }
     }

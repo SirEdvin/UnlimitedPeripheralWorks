@@ -9,12 +9,12 @@ import net.minecraft.world.level.block.PoweredRailBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.RailShape
 import net.minecraft.world.phys.Vec3
-import site.siredvin.peripheralium.extra.plugins.AbstractInventoryPlugin
-import site.siredvin.peripheralium.storages.ContainerWrapper
-import site.siredvin.peripheralium.storages.MergedContainer
-import site.siredvin.peripheralium.storages.item.SlottedItemStorage
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
+import site.siredvin.broccolium.modules.storage.item.MergedContainer
+import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
 import site.siredvin.peripheralworks.utils.MinecartUtils
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.plugins.AbstractInventoryPlugin
 import java.util.*
 
 class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : AbstractInventoryPlugin() {
@@ -32,7 +32,7 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
             return state
         }
 
-    override val storage: SlottedItemStorage
+    override val storage: SlottedAgnosticItemStorage
         get() = ContainerWrapper(MergedContainer(MinecartUtils.getContainerMinecarts(level, pos)))
 
     @LuaFunction(mainThread = true)

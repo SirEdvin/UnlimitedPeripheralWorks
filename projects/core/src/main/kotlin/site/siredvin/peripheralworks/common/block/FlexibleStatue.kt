@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.Property
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.VoxelShape
-import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
-import site.siredvin.peripheralium.util.BlockUtil
+import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
+import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.Blocks

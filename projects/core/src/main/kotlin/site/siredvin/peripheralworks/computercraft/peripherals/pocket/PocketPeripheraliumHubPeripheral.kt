@@ -4,10 +4,11 @@ import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.pocket.IPocketUpgrade
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.computercraft.peripheral.owner.PocketPeripheralOwner
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.computercraft.modem.LocalPocketWrapper
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
+import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAccess, type: String) :
     PeripheraliumHubPeripheral<PocketPeripheralOwner>(
@@ -18,6 +19,12 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
 
     companion object {
         const val POCKET_MODE = "pocket"
+        fun collectUpgradesData(dataStorage: IDataStorage): List<UpgradeData<IPocketUpgrade>> {
+            return getActiveUpgrades(dataStorage).mapNotNull {
+                val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(it) ?: return@mapNotNull null
+                return@mapNotNull UpgradeData(upgrade, getDataForUpgrade(upgrade.upgradeID.toString(), dataStorage))
+            }
+        }
     }
 
     val activePocketUpgrades: MutableList<LocalPocketWrapper> = mutableListOf()
@@ -27,7 +34,7 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
 
     init {
         activeUpgrades.forEach {
-            val upgrade = PeripheraliumPlatform.getPocketUpgrade(it)
+            val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(it)
             if (upgrade != null) {
                 connectPocketUpgrade(UpgradeData.of(upgrade, getDataForUpgrade(upgrade.upgradeID.toString())))
             }
@@ -60,10 +67,10 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
         disconnectPocketUpgrade(upgrade)
     }
 
-    override fun isUpgradeImpl(stack: ItemStack): Boolean = PeripheraliumPlatform.getPocketUpgrade(stack) != null
+    override fun isUpgradeImpl(stack: ItemStack): Boolean = ComputerPlatformToolkit.get().getPocketUpgrade(stack) != null
 
     override fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
-        val upgrade = PeripheraliumPlatform.getPocketUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
+        val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
         if (activePocketUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
@@ -71,7 +78,7 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
     }
 
     override fun equipImpl(stack: ItemStack): Pair<Boolean?, String?> {
-        val upgrade = PeripheraliumPlatform.getPocketUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
+        val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
         if (activePocketUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }

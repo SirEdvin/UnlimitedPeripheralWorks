@@ -6,16 +6,16 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BooleanProperty
-import site.siredvin.peripheralium.common.blockentities.MutableNBTBlockEntity
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.tags.BlockTags
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import kotlin.math.max
 import kotlin.math.min
 
-open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutableNBTBlockEntity<OwnedPeripheral<*>>(BlockEntityTypes.FLEXIBLE_REALITY_ANCHOR.get(), blockPos, blockState) {
+open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutablePeripheralBlockEntity<OwnedPeripheral<*>>(BlockEntityTypes.FLEXIBLE_REALITY_ANCHOR.get(), blockPos, blockState) {
 
     companion object {
         const val MIMIC_TAG = "mimic"
@@ -58,7 +58,7 @@ open class FlexibleRealityAnchorBlockEntity(blockPos: BlockPos, blockState: Bloc
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         if (data.contains(MIMIC_TAG)) {
-            val setResult = setMimic(NbtUtils.readBlockState(XplatRegistries.BLOCKS, data.getCompound(MIMIC_TAG)), state ?: blockState, true)
+            val setResult = setMimic(NbtUtils.readBlockState(PlatformRegistries.BLOCKS, data.getCompound(MIMIC_TAG)), state ?: blockState, true)
             if (setResult && level?.isClientSide == true) triggerRenderUpdate()
         }
         if (data.contains(LIGHT_LEVEL_TAG)) {

@@ -3,11 +3,11 @@ package site.siredvin.peripheralworks.data
 import dan200.computercraft.api.turtle.TurtleUpgradeDataProvider
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.data.PackOutput
-import site.siredvin.peripheralium.data.blocks.LibTurtleUpgradeDataProvider
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.TurtleUpgradeSerializers
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.data.LibTurtleUpgradeDataProvider
 import java.util.function.Consumer
 import java.util.function.Function
 

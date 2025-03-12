@@ -11,7 +11,7 @@ import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.HitResult
-import site.siredvin.peripheralium.common.items.DescriptiveItem
+import site.siredvin.broccolium.modules.base.item.DescriptiveItem
 import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.blockentity.EntityLinkBlockEntity
 import site.siredvin.peripheralworks.data.ModText

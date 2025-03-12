@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.integrations.powah
 
 import dan200.computercraft.api.lua.LuaFunction
 import owmii.powah.block.ender.AbstractEnderTile
-import site.siredvin.peripheralium.util.assertBetween
+import site.siredvin.tweakium.modules.peripheral.util.assertBetween
 
 class EnderCellPlugin(private val provider: AbstractEnderTile<*>) : BaseEnergyStoragePlugin(provider) {
 

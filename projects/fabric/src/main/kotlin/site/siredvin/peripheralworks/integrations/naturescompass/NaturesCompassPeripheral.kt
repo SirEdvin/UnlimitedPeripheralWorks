@@ -10,9 +10,9 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.ext.toRelative
+import site.siredvin.broccolium.modules.base.ext.toRelative
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
 
 class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, override val isEnabled: Boolean) : OwnedPeripheral<O>(TYPE, peripheralOwner) {
     companion object {

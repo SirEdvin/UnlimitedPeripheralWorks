@@ -1,13 +1,13 @@
 package site.siredvin.peripheralworks.common.setup
 
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
-import site.siredvin.peripheralium.computercraft.pocket.StatefulPeripheralPocketUpgrade
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import site.siredvin.peripheralworks.computercraft.pocket.PeripheraliumHubPocketUpgrade
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.pocket.StatefulPeripheralPocketUpgrade
 
 object PocketUpgradeSerializers {
 

@@ -10,8 +10,8 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.BlockHitResult
-import site.siredvin.peripheralium.storages.item.ItemStorageUtils
-import site.siredvin.peripheralium.util.BlockUtil
+import site.siredvin.broccolium.modules.base.util.BlockUtil
+import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.peripheralworks.api.IItemStackStorage
 
 abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil.defaultProperties()) {

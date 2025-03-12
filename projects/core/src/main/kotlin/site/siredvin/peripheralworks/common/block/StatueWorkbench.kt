@@ -7,13 +7,13 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
-import site.siredvin.peripheralium.common.blocks.BaseTileEntityBlock
-import site.siredvin.peripheralium.util.BlockUtil
+import site.siredvin.broccolium.modules.base.block.BaseBlockEntityBlock
+import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.StatueWorkbenchBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.Blocks
 
-class StatueWorkbench : BaseTileEntityBlock<StatueWorkbenchBlockEntity>(false, BlockUtil.defaultProperties()) {
+class StatueWorkbench : BaseBlockEntityBlock<StatueWorkbenchBlockEntity>(false, BlockUtil.defaultProperties()) {
 
     companion object {
         val CONNECTED: BooleanProperty = BooleanProperty.create("connected")

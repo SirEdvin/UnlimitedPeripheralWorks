@@ -2,10 +2,10 @@ package site.siredvin.peripheralworks.integrations.automobility
 
 import io.github.foundationgames.automobility.entity.AutomobileEntity
 import net.minecraft.world.entity.Entity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheralLookup
 import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheralPluginProvider
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class Integration : Runnable {
 

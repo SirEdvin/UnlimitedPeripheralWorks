@@ -17,14 +17,14 @@ import org.cyclops.integrateddynamics.core.part.PartTypes
 import org.cyclops.integrateddynamics.core.part.aspect.AspectRegistry
 import org.cyclops.integrateddynamics.core.part.aspect.build.AspectBuilder
 import org.cyclops.integrateddynamics.part.aspect.read.AspectReadBuilders
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModLanguageProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 
 class Integration : Runnable {
 

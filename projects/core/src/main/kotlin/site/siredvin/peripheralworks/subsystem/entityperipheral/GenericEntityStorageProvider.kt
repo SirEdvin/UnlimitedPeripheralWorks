@@ -1,13 +1,13 @@
 package site.siredvin.peripheralworks.subsystem.entityperipheral
 
 import net.minecraft.world.entity.Entity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.extra.plugins.InventoryPlugin
-import site.siredvin.peripheralium.extra.plugins.ItemStoragePlugin
-import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
-import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
-import site.siredvin.peripheralium.storages.item.SlottedItemStorage
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
+import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.plugins.InventoryPlugin
+import site.siredvin.tweakium.modules.plugins.ItemStoragePlugin
+import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 
 object GenericEntityStorageProvider : EntityPeripheralPluginProvider {
     override val pluginType: String
@@ -16,8 +16,8 @@ object GenericEntityStorageProvider : EntityPeripheralPluginProvider {
         get() = setOf(PeripheralPluginUtils.Type.INVENTORY, PeripheralPluginUtils.Type.ITEM_STORAGE)
 
     override fun provide(entity: Entity): IPeripheralPlugin? {
-        val entityStorage = ItemStorageExtractor.extractStorage(entity.level(), entity) ?: return null
-        if (entityStorage is SlottedItemStorage) {
+        val entityStorage = AgnosticItemStorageLookup.extractStorage(entity.level(), entity) ?: return null
+        if (entityStorage is SlottedAgnosticItemStorage) {
             return InventoryPlugin(entity.level(), entityStorage)
         }
         return ItemStoragePlugin(entityStorage, entity.level(), PeripheralWorksConfig.itemStorageTransferLimit)

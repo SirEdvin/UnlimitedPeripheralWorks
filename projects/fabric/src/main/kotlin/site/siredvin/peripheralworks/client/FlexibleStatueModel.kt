@@ -22,9 +22,9 @@ import net.minecraft.world.inventory.InventoryMenu.BLOCK_ATLAS
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
-import site.siredvin.peripheralium.ext.faces
-import site.siredvin.peripheralium.ext.rotateTowards
+import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
+import site.siredvin.broccolium.modules.base.ext.faces
+import site.siredvin.broccolium.modules.base.ext.rotateTowards
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.utils.*
@@ -75,7 +75,7 @@ object FlexibleStatueModel : BakedModel, FabricBakedModel {
         val faces = bounds.faces
 
         // Render each quad of the cube
-        for (dir in Direction.values()) {
+        for (dir in Direction.entries) {
             // TODO: Since we are not using QuadEmitter.square(), we need to do the cullFace check ourselves
             val face = faces[dir.ordinal]
             emitter.cullFace(null)

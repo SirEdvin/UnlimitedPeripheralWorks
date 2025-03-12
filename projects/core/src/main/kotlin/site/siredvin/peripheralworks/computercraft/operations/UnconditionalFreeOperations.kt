@@ -1,11 +1,13 @@
 package site.siredvin.peripheralworks.computercraft.operations
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOperation
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOperation
 
 enum class UnconditionalFreeOperations(
     private val defaultCooldown: Int,
-) : IPeripheralOperation<Any?> {
+) : IPeripheralOperation<Any?>,
+    IForgeConfigHandler {
     INSPECT_CHUNK(10_000),
     UPDATE_MAP(60_000),
     EXTRACT_MAP(10_000),

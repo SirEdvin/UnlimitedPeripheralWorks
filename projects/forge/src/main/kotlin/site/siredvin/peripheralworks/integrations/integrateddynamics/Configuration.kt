@@ -1,9 +1,9 @@
 package site.siredvin.peripheralworks.integrations.integrateddynamics
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.config.IConfigHandler
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
-object Configuration : IConfigHandler {
+object Configuration : IForgeConfigHandler {
 
     private const val DEFAULT_MAX_JSON_SIZE = 4_000
 

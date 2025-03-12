@@ -6,7 +6,7 @@ import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class LanternPeripheral(private val level: Level, private val pos: BlockPos) : IPeripheralPlugin {
 

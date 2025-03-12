@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.integrations.occultism
 
 import com.klikli_dev.occultism.common.blockentity.GoldenSacrificialBowlBlockEntity
 import dan200.computercraft.api.lua.LuaFunction
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class GoldenSacrificialBowlPlugin(private val bowl: GoldenSacrificialBowlBlockEntity) : IPeripheralPlugin {
 

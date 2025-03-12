@@ -2,7 +2,7 @@ package site.siredvin.peripheralworks.integrations.alloy_forgery
 
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.nbt.CompoundTag
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import wraith.alloyforgery.block.ForgeControllerBlockEntity
 
 class ForgeControllerPlugin(private val entity: ForgeControllerBlockEntity) : IPeripheralPlugin {

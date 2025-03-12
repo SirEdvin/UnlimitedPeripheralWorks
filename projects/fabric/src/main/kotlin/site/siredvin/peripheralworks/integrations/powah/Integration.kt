@@ -9,11 +9,12 @@ import owmii.powah.block.reactor.ReactorTile
 import owmii.powah.lib.block.AbstractEnergyProvider
 import owmii.powah.lib.block.AbstractEnergyStorage
 import owmii.powah.lib.logistics.IRedstoneInteract
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.storages.energy.EnergyStorageExtractor
+import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
+import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorageExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class Integration : Runnable {
     object GeneratorPluginProvider : PeripheralPluginProvider {
@@ -65,18 +66,18 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(RedstonePluginProvider)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         if (Configuration.enableEnergy) {
-            EnergyStorageExtractor.addEnergyStorageExtractor(
-                EnergyStorageExtractor.EnergyStorageExtractor { _, _, blockEntity ->
+            AgnosticEnergyStorageLookup.addEnergyStorageExtractor(
+                AgnosticEnergyStorageExtractor { _, _, blockEntity ->
                     if (blockEntity is ReactorPartTile) {
                         val reactorTile = blockEntity.core()
                         if (reactorTile.isPresent) {
-                            return@EnergyStorageExtractor PowahEnergyStorageWrapper(reactorTile.get())
+                            return@AgnosticEnergyStorageExtractor PowahEnergyStorageWrapper(reactorTile.get())
                         }
                     }
                     if (blockEntity is AbstractEnergyStorage<*, *>) {
-                        return@EnergyStorageExtractor PowahEnergyStorageWrapper(blockEntity)
+                        return@AgnosticEnergyStorageExtractor PowahEnergyStorageWrapper(blockEntity)
                     }
-                    return@EnergyStorageExtractor null
+                    return@AgnosticEnergyStorageExtractor null
                 },
             )
         }

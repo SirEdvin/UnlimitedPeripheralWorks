@@ -5,10 +5,10 @@ import de.maxhenkel.easyvillagers.blocks.tileentity.TraderTileentityBase
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class Integration : Runnable {
 

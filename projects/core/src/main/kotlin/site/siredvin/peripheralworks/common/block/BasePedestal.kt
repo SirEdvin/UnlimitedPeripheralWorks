@@ -16,10 +16,10 @@ import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
-import site.siredvin.peripheralium.common.blocks.BaseTileEntityBlock
+import site.siredvin.broccolium.modules.base.block.BaseBlockEntityBlock
 import java.util.stream.Stream
 
-abstract class BasePedestal<T : BlockEntity>(properties: Properties) : BaseTileEntityBlock<T>(false, properties) {
+abstract class BasePedestal<T : BlockEntity>(properties: Properties) : BaseBlockEntityBlock<T>(false, properties) {
     init {
         registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.UP))
     }

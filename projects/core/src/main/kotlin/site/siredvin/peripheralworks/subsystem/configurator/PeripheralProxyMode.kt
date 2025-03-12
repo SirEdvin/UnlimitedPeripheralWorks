@@ -9,13 +9,13 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.tags.BlockTags
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 object PeripheralProxyMode : ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
@@ -47,7 +47,7 @@ object PeripheralProxyMode : ConfigurationMode {
             player.displayClientMessage(ModText.PERIPHERAL_PROXY_TOO_MANY.text, true)
             return InteractionResultHolder.consume(stack)
         }
-        val targetPeripheral = PeripheraliumPlatform.getPeripheral(level, hit.blockPos, hit.direction)
+        val targetPeripheral = ComputerPlatformToolkit.get().getPeripheral(level, hit.blockPos, hit.direction)
         if (targetPeripheral == null && !entity.containsPos(hit.blockPos)) {
             player.displayClientMessage(ModText.PERIPHERAL_PROXY_IS_NOT_A_PERIPHERAL.text, true)
             return InteractionResultHolder.consume(stack)

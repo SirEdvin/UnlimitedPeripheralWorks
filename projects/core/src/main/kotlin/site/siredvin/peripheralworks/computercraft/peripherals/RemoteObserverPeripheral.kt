@@ -2,13 +2,13 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
-import site.siredvin.peripheralium.common.blocks.FacingBlockEntityBlock
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.util.representation.LuaInterpretation
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.representation.LuaInterpretation
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 
 class RemoteObserverPeripheral(
     private val blockEntity: RemoteObserverBlockEntity,
@@ -28,7 +28,13 @@ class RemoteObserverPeripheral(
 
     @LuaFunction(mainThread = true)
     fun addPosition(pos: Map<*, *>): MethodResult {
-        val targetPos = LuaInterpretation.asBlockPos(peripheralOwner.pos, pos, blockEntity.blockState.getValue(FacingBlockEntityBlock.FACING))
+        val targetPos = LuaInterpretation.asBlockPos(
+            peripheralOwner.pos,
+            pos,
+            blockEntity.blockState.getValue(
+                FacingBlockEntityBlock.FACING,
+            ),
+        )
         if (!blockEntity.isPosApplicable(targetPos)) {
             return MethodResult.of(false, "Position too far away")
         }

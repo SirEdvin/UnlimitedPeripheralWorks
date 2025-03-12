@@ -2,13 +2,13 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.StatueWorkbenchBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.utils.QuadList
 import site.siredvin.peripheralworks.utils.convertToQuadList
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import java.util.*
 
 class StatueWorkbenchPeripheral(

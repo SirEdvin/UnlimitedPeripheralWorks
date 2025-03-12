@@ -8,14 +8,17 @@ import net.minecraft.world.item.crafting.CraftingBookCategory
 import net.minecraft.world.item.crafting.CustomRecipe
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
+import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.RecipeSerializers
 
 class StatueCloningRecipe(id: ResourceLocation, category: CraftingBookCategory) : CustomRecipe(id, category) {
 
     companion object {
-        private fun isSuitableStatue(stack: ItemStack): Boolean = stack.`is`(Blocks.FLEXIBLE_STATUE.get().asItem()) && stack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG) != null
+        private fun isSuitableStatue(stack: ItemStack): Boolean = stack.`is`(Blocks.FLEXIBLE_STATUE.get().asItem()) &&
+            stack.getTagElement(
+                BaseNBTBlock.INTERNAL_DATA_TAG,
+            ) != null
     }
 
     override fun matches(p0: CraftingContainer, p1: Level): Boolean {

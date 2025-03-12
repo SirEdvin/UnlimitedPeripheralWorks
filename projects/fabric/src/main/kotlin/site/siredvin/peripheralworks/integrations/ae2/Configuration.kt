@@ -1,9 +1,9 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.config.IConfigHandler
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
-object Configuration : IConfigHandler {
+object Configuration : IForgeConfigHandler {
 
     private var enableMeInterfaceConfig: ForgeConfigSpec.BooleanValue? = null
     private var enableStorageIntegrationConfig: ForgeConfigSpec.BooleanValue? = null

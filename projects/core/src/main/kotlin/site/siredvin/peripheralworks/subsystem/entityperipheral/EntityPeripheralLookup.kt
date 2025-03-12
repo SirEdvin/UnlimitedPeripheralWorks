@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.subsystem.entityperipheral
 
 import net.minecraft.world.entity.Entity
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 object EntityPeripheralLookup {
     private val PLUGIN_PROVIDERS: MutableList<EntityPeripheralPluginProvider> = mutableListOf()

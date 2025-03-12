@@ -8,13 +8,13 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.Container
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.ext.getResourceLocation
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.blockentity.RecipeRegistryBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.ext.getResourceLocation
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import java.util.*
 import java.util.stream.Collectors
 
@@ -25,7 +25,7 @@ class RecipeRegistryPeripheral(
         const val TYPE = "recipe_registry"
     }
 
-    val air = XplatRegistries.ITEMS.get(ResourceLocation("minecraft", "air"))
+    val air = PlatformRegistries.ITEMS.get(ResourceLocation("minecraft", "air"))
 
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enableRecipeRegistry
@@ -33,7 +33,7 @@ class RecipeRegistryPeripheral(
     @LuaFunction
     @Throws(LuaException::class)
     fun getRecipeTypes(): MethodResult = MethodResult.of(
-        XplatRegistries.RECIPE_TYPES.keySet().stream().filter {
+        PlatformRegistries.RECIPE_TYPES.keySet().stream().filter {
             !RecipeRegistryToolkit.excludedRecipeTypes.contains(it)
         }.map(ResourceLocation::toString)
             .collect(Collectors.toList()),
@@ -45,7 +45,7 @@ class RecipeRegistryPeripheral(
         val recipeTypeID: ResourceLocation = arguments.getResourceLocation(0)
 
         @Suppress("UNCHECKED_CAST")
-        val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
+        val type = PlatformRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
         return MethodResult.of(peripheralOwner.level!!.recipeManager.getAllRecipesFor(type).map { it.id.toString() })
     }
 
@@ -56,7 +56,7 @@ class RecipeRegistryPeripheral(
         val recipeID: ResourceLocation = arguments.getResourceLocation(1)
 
         @Suppress("UNCHECKED_CAST")
-        val type = XplatRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
+        val type = PlatformRegistries.RECIPE_TYPES.tryGet(recipeTypeID) as? RecipeType<Recipe<Container>> ?: return MethodResult.of(false, "Cannot find recipe type $recipeTypeID")
         return MethodResult.of(
             peripheralOwner.level!!.recipeManager.getAllRecipesFor(type)
                 .filter { it.id == recipeID }
@@ -70,7 +70,7 @@ class RecipeRegistryPeripheral(
     fun getRecipesFor(arguments: IArguments): MethodResult {
         val itemID: ResourceLocation = arguments.getResourceLocation(0)
         val types = arguments[1]
-        val targetItem = XplatRegistries.ITEMS.tryGet(itemID)
+        val targetItem = PlatformRegistries.ITEMS.tryGet(itemID)
 
         if (targetItem == null || targetItem == air) {
             // Item registry may return AIR when the item is not found, and I hope no

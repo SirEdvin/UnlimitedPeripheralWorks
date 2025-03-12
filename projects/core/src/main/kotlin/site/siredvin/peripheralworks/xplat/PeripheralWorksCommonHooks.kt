@@ -8,12 +8,13 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.CreativeModeTab
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
-import site.siredvin.peripheralium.xplat.XplatRegistries
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.common.setup.*
 import site.siredvin.peripheralworks.data.ModText
+import site.siredvin.tweakium.modules.platform.ComputerPlatformRegistries
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 object PeripheralWorksCommonHooks {
 
@@ -26,21 +27,21 @@ object PeripheralWorksCommonHooks {
         TurtleUpgradeSerializers.doSomething()
         ModPlatform.registerCreativeTab(
             ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
-            PeripheralWorksCore.configureCreativeTab(PeripheraliumPlatform.createTabBuilder()).build(),
+            PeripheralWorksCore.configureCreativeTab(PlatformToolkit.get().createTabBuilder()).build(),
         )
     }
 
     fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
         ModPlatform.holder.turtleSerializers.forEach {
-            val upgrade = PeripheraliumPlatform.getTurtleUpgrade(XplatRegistries.TURTLE_SERIALIZERS.getKey(it.get()).toString())
+            val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(ComputerPlatformRegistries.TURTLE_SERIALIZERS.getKey(it.get()).toString())
             if (upgrade != null) {
-                PeripheraliumPlatform.createTurtlesWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)
+                ComputerPlatformToolkit.get().createTurtlesWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)
             }
         }
         ModPlatform.holder.pocketSerializers.forEach {
-            val upgrade = PeripheraliumPlatform.getPocketUpgrade(XplatRegistries.POCKET_SERIALIZERS.getKey(it.get()).toString())
+            val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(ComputerPlatformRegistries.POCKET_SERIALIZERS.getKey(it.get()).toString())
             if (upgrade != null) {
-                PeripheraliumPlatform.createPocketsWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)
+                ComputerPlatformToolkit.get().createPocketsWithUpgrade(UpgradeData.ofDefault(upgrade)).forEach(output::accept)
             }
         }
     }

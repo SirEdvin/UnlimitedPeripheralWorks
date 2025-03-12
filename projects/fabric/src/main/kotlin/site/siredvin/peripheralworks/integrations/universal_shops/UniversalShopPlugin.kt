@@ -9,9 +9,9 @@ import eu.pb4.universalshops.trade.PriceHandler.Free
 import eu.pb4.universalshops.trade.PriceHandler.SingleItem
 import eu.pb4.universalshops.trade.StockHandler
 import eu.pb4.universalshops.trade.StockHandler.SelectedItem
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.util.representation.LuaInterpretation
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.representation.LuaInterpretation
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 
 class UniversalShopPlugin(private val blockEntity: TradeShopBlockEntity) : IPeripheralPlugin {
     override val additionalType: String
@@ -25,7 +25,7 @@ class UniversalShopPlugin(private val blockEntity: TradeShopBlockEntity) : IPeri
         val enumMode = try {
             HologramMode.valueOf(mode.uppercase())
         } catch (ignored: IllegalArgumentException) {
-            throw LuaException("There is no hologram mode $mode, there is only: ${HologramMode.values().joinToString { it.name.lowercase() }}")
+            throw LuaException("There is no hologram mode $mode, there is only: ${HologramMode.entries.joinToString { it.name.lowercase() }}")
         }
         blockEntity.hologramMode = enumMode
         blockEntity.setChanged()

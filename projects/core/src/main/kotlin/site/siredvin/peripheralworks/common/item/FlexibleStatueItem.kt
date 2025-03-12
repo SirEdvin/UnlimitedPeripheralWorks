@@ -5,8 +5,8 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.TooltipFlag
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
-import site.siredvin.peripheralium.common.blocks.BaseNBTBlock
-import site.siredvin.peripheralium.common.items.DescriptiveBlockItem
+import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
+import site.siredvin.broccolium.modules.base.item.DescriptiveBlockItem
 import site.siredvin.peripheralworks.common.blockentity.FlexibleStatueBlockEntity
 import site.siredvin.peripheralworks.data.ModTooltip
 

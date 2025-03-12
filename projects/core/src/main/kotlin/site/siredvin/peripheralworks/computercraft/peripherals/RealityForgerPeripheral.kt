@@ -6,17 +6,17 @@ import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.util.radiusCorrect
-import site.siredvin.peripheralium.util.representation.LuaInterpretation
-import site.siredvin.peripheralium.util.representation.LuaRepresentation
-import site.siredvin.peripheralium.util.world.ScanUtils
+import site.siredvin.broccolium.modules.base.util.world.ScanUtils
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.blockentity.FlexibleRealityAnchorBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RealityForgerBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.tags.BlockTags
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.representation.LuaInterpretation
+import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import site.siredvin.tweakium.modules.peripheral.util.radiusCorrect
 import java.util.*
 
 class RealityForgerPeripheral(

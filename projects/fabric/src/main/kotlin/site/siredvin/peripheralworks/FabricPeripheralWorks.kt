@@ -14,9 +14,8 @@ import net.minecraft.world.level.GameType
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraftforge.fml.config.ModConfig
+import site.siredvin.broccolium.modules.base.FabricIntegrationLoader
 import site.siredvin.peripheralium.FabricPeripheralium
-import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
-import site.siredvin.peripheralium.loader.FabricIntegrationLoader
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -25,6 +24,7 @@ import site.siredvin.peripheralworks.fabric.FabricModPlatform
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
 import site.siredvin.peripheralworks.subsystem.recipe.FabricRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
 
 @Suppress("UNUSED")
 object FabricPeripheralWorks : ModInitializer {

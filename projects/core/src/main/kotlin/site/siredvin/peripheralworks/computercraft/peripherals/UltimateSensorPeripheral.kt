@@ -7,17 +7,17 @@ import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.TurtleSide
 import net.minecraft.resources.ResourceLocation
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOperation
-import site.siredvin.peripheralium.api.peripheral.IPeripheralOwner
-import site.siredvin.peripheralium.computercraft.peripheral.OwnedPeripheral
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
-import site.siredvin.peripheralium.computercraft.peripheral.owner.PocketPeripheralOwner
-import site.siredvin.peripheralium.computercraft.peripheral.owner.TurtlePeripheralOwner
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.UltimateSensorBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 import site.siredvin.peripheralworks.utils.SensorCollection
+import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOperation
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
 import java.util.function.Function
 
 class UltimateSensorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPeripheralOwner>(TYPE, owner) {
@@ -67,21 +67,21 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPerip
 
         fun of(turtle: ITurtleAccess, side: TurtleSide): UltimateSensorPeripheral {
             val owner = TurtlePeripheralOwner(turtle, side)
-            owner.attachOperations(config = PeripheralWorksConfig)
+            owner.attachOperations(cooldownThreshold = PeripheralWorksConfig.cooldownTresholdLevel)
             owner.attachFuel()
             return UltimateSensorPeripheral(owner)
         }
 
         fun of(pocket: IPocketAccess): UltimateSensorPeripheral {
             val owner = PocketPeripheralOwner(pocket)
-            owner.attachOperations(config = PeripheralWorksConfig)
+            owner.attachOperations(cooldownThreshold = PeripheralWorksConfig.cooldownTresholdLevel)
             owner.attachFuel()
             return UltimateSensorPeripheral(owner)
         }
 
         fun of(blockEntity: UltimateSensorBlockEntity): UltimateSensorPeripheral {
             val owner = BlockEntityPeripheralOwner(blockEntity)
-            owner.attachOperations(config = PeripheralWorksConfig)
+            owner.attachOperations(cooldownThreshold = PeripheralWorksConfig.cooldownTresholdLevel)
             return UltimateSensorPeripheral(owner)
         }
     }

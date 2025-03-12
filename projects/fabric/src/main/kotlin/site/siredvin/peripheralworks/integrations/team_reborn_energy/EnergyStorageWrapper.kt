@@ -1,22 +1,23 @@
 package site.siredvin.peripheralworks.integrations.team_reborn_energy
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
-import site.siredvin.peripheralium.storages.energy.EnergyStack
-import site.siredvin.peripheralworks.Energies
+import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
+import site.siredvin.broccolium.modules.storage.energy.Energies
+import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import team.reborn.energy.api.EnergyStorage
 import java.util.function.Predicate
 
-class EnergyStorageWrapper(private val energyStorage: EnergyStorage) : site.siredvin.peripheralium.storages.energy.EnergyStorage {
+class EnergyStorageWrapper(private val energyStorage: EnergyStorage) : AgnosticEnergyStorage {
     override val capacity: Long
         get() = energyStorage.capacity
-    override val energy: EnergyStack
-        get() = EnergyStack(Energies.TECH_REBORN_ENERGY, energyStorage.amount)
+    override val energy: AgnosticEnergyStack
+        get() = AgnosticEnergyStack(Energies.REDSTONE_FLUX, energyStorage.amount)
 
     override fun setChanged() {
     }
 
-    override fun storeEnergy(stack: EnergyStack): EnergyStack {
-        if (stack.unit != Energies.TECH_REBORN_ENERGY) return stack
+    override fun storeEnergy(stack: AgnosticEnergyStack): AgnosticEnergyStack {
+        if (stack.unit != Energies.REDSTONE_FLUX) return stack
         Transaction.openOuter().use {
             val stored = energyStorage.insert(stack.amount, it)
             it.commit()
@@ -25,12 +26,12 @@ class EnergyStorageWrapper(private val energyStorage: EnergyStorage) : site.sire
         }
     }
 
-    override fun takeEnergy(predicate: Predicate<EnergyStack>, limit: Long): EnergyStack {
-        if (!predicate.test(energy)) return EnergyStack.EMPTY
+    override fun takeEnergy(predicate: Predicate<AgnosticEnergyStack>, limit: Long): AgnosticEnergyStack {
+        if (!predicate.test(energy)) return AgnosticEnergyStack.EMPTY
         Transaction.openOuter().use {
             val extractedAmount = energyStorage.extract(limit, it)
             it.commit()
-            return EnergyStack(Energies.TECH_REBORN_ENERGY, extractedAmount)
+            return AgnosticEnergyStack(Energies.REDSTONE_FLUX, extractedAmount)
         }
     }
 }

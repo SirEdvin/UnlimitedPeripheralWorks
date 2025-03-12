@@ -7,14 +7,16 @@ import com.klikli_dev.occultism.common.entity.spirit.SpiritEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralium.api.peripheral.IPeripheralPlugin
-import site.siredvin.peripheralium.extra.plugins.PeripheralPluginUtils
-import site.siredvin.peripheralium.storages.item.ItemHandlerWrapper
-import site.siredvin.peripheralium.storages.item.ItemStorageExtractor
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
+import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorageEntityExtractor
+import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorageExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.peripherals.EntityLinkPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 import java.util.function.BiConsumer
 
 class Integration : Runnable {
@@ -66,26 +68,26 @@ class Integration : Runnable {
     override fun run() {
         ComputerCraftProxy.addProvider(OccultismStorageProvider)
         ComputerCraftProxy.addProvider(SpecificOccultismPluginProvider)
-        ItemStorageExtractor.addStorageExtractor(
-            ItemStorageExtractor.StorageExtractor { _, _, blockEntity ->
+        AgnosticItemStorageLookup.addItemStorageExtractor(
+            AgnosticItemStorageExtractor { _, _, blockEntity ->
                 if (blockEntity == null || blockEntity.isRemoved) {
-                    return@StorageExtractor null
+                    return@AgnosticItemStorageExtractor null
                 }
                 if (blockEntity is IStorageController) {
-                    return@StorageExtractor OccultismItemStorage(blockEntity)
+                    return@AgnosticItemStorageExtractor OccultismItemStorage(blockEntity)
                 }
                 if (blockEntity is IStorageControllerProxy) {
-                    return@StorageExtractor OccultismItemStorage(blockEntity.linkedStorageController)
+                    return@AgnosticItemStorageExtractor OccultismItemStorage(blockEntity.linkedStorageController)
                 }
-                return@StorageExtractor null
+                return@AgnosticItemStorageExtractor null
             },
         )
-        ItemStorageExtractor.addStorageExtractor(
-            ItemStorageExtractor.StorageEntityExtractor { _, entity ->
+        AgnosticItemStorageLookup.addItemStorageExtractor(
+            AgnosticItemStorageEntityExtractor { _, entity ->
                 if (entity is SpiritEntity) {
-                    return@StorageEntityExtractor ItemHandlerWrapper(entity.inventory)
+                    return@AgnosticItemStorageEntityExtractor AgnosticItemHandlerWrapper(entity.inventory)
                 }
-                return@StorageEntityExtractor null
+                return@AgnosticItemStorageEntityExtractor null
             },
         )
         EntityLinkPeripheral.ENRICHERS.add(

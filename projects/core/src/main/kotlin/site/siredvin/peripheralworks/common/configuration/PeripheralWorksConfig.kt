@@ -1,17 +1,16 @@
 package site.siredvin.peripheralworks.common.configuration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralium.api.config.IConfigHandler
-import site.siredvin.peripheralium.api.config.IOperationAbilityConfig
-import site.siredvin.peripheralium.xplat.PeripheraliumPlatform
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.peripheralworks.api.IForgeConfigHandler
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeOperations
 
-object PeripheralWorksConfig : IOperationAbilityConfig {
+object PeripheralWorksConfig {
 
-    private val INTEGRATION_CONFIGURATIONS: MutableMap<String, IConfigHandler> = mutableMapOf()
+    private val INTEGRATION_CONFIGURATIONS: MutableMap<String, IForgeConfigHandler> = mutableMapOf()
 
-    override val cooldownTresholdLevel: Int
+    val cooldownTresholdLevel: Int
         get() = ConfigHolder.commonConfig.cooldownThresholdLevel.get()
 
     val enableGenericInventory: Boolean
@@ -102,7 +101,7 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
     val enableEntityLink: Boolean
         get() = ConfigHolder.commonConfig.enableEntityLinks.get()
 
-    fun registerIntegrationConfiguration(configuration: IConfigHandler) {
+    fun registerIntegrationConfiguration(configuration: IForgeConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
 
@@ -167,7 +166,7 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
             itemStorageTransferLimit = builder.comment("Limits max item transfer per one operation")
                 .defineInRange("itemStorageTransferLimit", 128, 1, Int.MAX_VALUE)
             fluidStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
-                .defineInRange("fluidStorageTransferLimit", 65500 * PeripheraliumPlatform.fluidCompactDivider.toInt(), 1, Int.MAX_VALUE)
+                .defineInRange("fluidStorageTransferLimit", 65500 * PlatformToolkit.get().fluidCompactDivider.toInt(), 1, Int.MAX_VALUE)
             builder.pop()
             builder.push("specific")
             enableBeacon = builder.comment("Enables integration for minecraft beacon")
@@ -226,8 +225,8 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
                 .define("enableEntityLink", true)
             builder.pop().pop()
             builder.push("operations")
-            register(SphereOperations.values(), builder)
-            register(UnconditionalFreeOperations.values(), builder)
+            register(SphereOperations.entries.toTypedArray(), builder)
+            register(UnconditionalFreeOperations.entries.toTypedArray(), builder)
             builder.pop()
             builder.push("integrations")
             INTEGRATION_CONFIGURATIONS.entries.forEach {
@@ -238,7 +237,7 @@ object PeripheralWorksConfig : IOperationAbilityConfig {
             builder.pop()
         }
 
-        private fun register(data: Array<out IConfigHandler>, builder: ForgeConfigSpec.Builder) {
+        private fun register(data: Array<out IForgeConfigHandler>, builder: ForgeConfigSpec.Builder) {
             for (handler in data) {
                 handler.addToConfig(builder)
             }

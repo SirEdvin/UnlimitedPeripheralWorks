@@ -1,12 +1,12 @@
 package site.siredvin.peripheralworks.xplat
 
-import site.siredvin.peripheralium.storages.energy.EnergyUnit
-import site.siredvin.peripheralium.xplat.BasePlatform
-import site.siredvin.peripheralium.xplat.ModInformationTracker
+import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
+import site.siredvin.tweakium.modules.platform.ComputerBasePlatform
+import site.siredvin.tweakium.modules.platform.ComputerModInformationTracker
 
-object ModPlatform : BasePlatform {
+object ModPlatform : ComputerBasePlatform() {
     private var impl: ModInnerPlatform? = null
-    private val innerModInformationTracker = ModInformationTracker()
+    private val innerModInformationTracker = ComputerModInformationTracker()
 
     fun configure(impl: ModInnerPlatform) {
         this.impl = impl
@@ -20,7 +20,7 @@ object ModPlatform : BasePlatform {
             return impl!!
         }
 
-    override val modInformationTracker: ModInformationTracker
+    override val modInformationTracker: ComputerModInformationTracker
         get() = innerModInformationTracker
 
     val commonEnergy: EnergyUnit

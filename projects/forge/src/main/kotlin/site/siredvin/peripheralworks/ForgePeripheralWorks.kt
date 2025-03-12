@@ -18,9 +18,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.NewRegistryEvent
+import site.siredvin.broccolium.modules.base.ForgeIntegrationLoader
 import site.siredvin.peripheralium.ForgePeripheralium
-import site.siredvin.peripheralium.api.peripheral.IPeripheralProvider
-import site.siredvin.peripheralium.loader.ForgeIntegrationLoader
 import site.siredvin.peripheralworks.client.geometry.FlexibleRealityAnchorGeometryLoader
 import site.siredvin.peripheralworks.client.geometry.FlexibleStatueGeometryLoader
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
@@ -30,6 +29,7 @@ import site.siredvin.peripheralworks.forge.ForgeModPlatform
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
 import site.siredvin.peripheralworks.subsystem.recipe.ForgeRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
 import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
 @Mod(PeripheralWorksCore.MOD_ID)

@@ -14,7 +14,7 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
-import site.siredvin.peripheralium.common.items.DescriptiveItem
+import site.siredvin.broccolium.modules.base.item.DescriptiveItem
 import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.subsystem.configurator.ConfigurationMode
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorModeRegistry

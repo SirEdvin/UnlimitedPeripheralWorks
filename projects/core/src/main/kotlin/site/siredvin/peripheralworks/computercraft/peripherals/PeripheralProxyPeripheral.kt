@@ -1,9 +1,9 @@
 package site.siredvin.peripheralworks.computercraft.peripherals
 
-import site.siredvin.peripheralium.computercraft.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.modem.PeripheralHubPeripheral
+import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 
 class PeripheralProxyPeripheral(private val blockEntity: PeripheralProxyBlockEntity) : PeripheralHubPeripheral<BlockEntityPeripheralOwner<PeripheralProxyBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
 
