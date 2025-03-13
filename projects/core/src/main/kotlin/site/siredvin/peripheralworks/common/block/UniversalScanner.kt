@@ -7,21 +7,18 @@ import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntity
-import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
-import site.siredvin.broccolium.modules.base.codec.BlockCodec
 import site.siredvin.broccolium.modules.base.util.BlockUtil
-import site.siredvin.broccolium.modules.platform.api.RegistryEntry
 import site.siredvin.peripheralworks.common.blockentity.UniversalScannerBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import java.util.stream.Stream
 
-class UniversalScanner:
+class UniversalScanner :
     FacingBlockEntityBlock<UniversalScannerBlockEntity>(
         true,
         false,
@@ -53,9 +50,7 @@ class UniversalScanner:
         collisionContext: CollisionContext,
     ): VoxelShape = SHAPE
 
-    override fun newBlockEntity(p0: BlockPos, p1: BlockState): BlockEntity? {
-        return BlockEntityTypes.UNIVERSAL_SCANNER.get().create(p0, p1)
-    }
+    override fun newBlockEntity(p0: BlockPos, p1: BlockState): BlockEntity? = BlockEntityTypes.UNIVERSAL_SCANNER.get().create(p0, p1)
 
     override fun codec(): MapCodec<out BaseEntityBlock> = RecordCodecBuilder.mapCodec { it.stable(UniversalScanner()) }
 }

@@ -6,7 +6,6 @@ import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.peripheral.WorkMonitor
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
-import javax.annotation.Nonnull
 
 class RemoteComputerWrapper<O : IPeripheralOwner>(
     private val computer: IComputerAccess,
@@ -35,14 +34,12 @@ class RemoteComputerWrapper<O : IPeripheralOwner>(
 
     override fun getID(): Int = computer.id
 
-    override fun queueEvent(@Nonnull event: String, vararg arguments: Any) {
+    override fun queueEvent(event: String, vararg arguments: Any?) {
         computer.queueEvent(event, *arguments)
     }
 
-    @Nonnull
     override fun getMainThreadMonitor(): WorkMonitor = computer.mainThreadMonitor
 
-    @Nonnull
     override fun getAttachmentName(): String = record.name
 
     override fun getAvailablePeripherals(): Map<String, IPeripheral> {

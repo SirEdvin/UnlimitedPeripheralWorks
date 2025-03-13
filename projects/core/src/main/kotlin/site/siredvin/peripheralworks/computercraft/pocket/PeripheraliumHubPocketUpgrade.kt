@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.setup.ModPocketUpgrades
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.pocket.PocketPeripheraliumHubPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
@@ -31,7 +32,12 @@ class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, p
             .expireAfterAccess(30, TimeUnit.SECONDS).build<IDataStorage, List<UpgradeData<IPocketUpgrade>>>().asMap()
     }
     override fun getPeripheral(access: IPocketAccess): PocketPeripheraliumHubPeripheral = PocketPeripheraliumHubPeripheral(maxUpdateCount.get(), access, type)
-    override fun getType(): UpgradeType<out IPocketUpgrade> = UpgradeType.simpleWithCustomItem { stack -> PeripheraliumHubPocketUpgrade(maxUpdateCount, type, stack) }
+    override fun getType(): UpgradeType<out IPocketUpgrade> {
+        if (type == PeripheraliumHubPeripheral.TYPE) {
+            return ModPocketUpgrades.PERIPHERALIUM_HUB.get()
+        }
+        return ModPocketUpgrades.NETHERITE_PERIPHERALIUM_HUB.get()
+    }
 
     override fun update(access: IPocketAccess, peripheral: IPeripheral?) {
         super.update(access, peripheral)

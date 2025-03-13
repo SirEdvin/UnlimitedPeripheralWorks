@@ -6,8 +6,8 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 object ModDataProviders {
     fun add(generator: GeneratorSink) {
         generator.add(::ModRecipeProvider)
-        generator.addRegistryPatch(ModPocketUpgradeDataProvider::makeUpgradeRegistry)
-        generator.addRegistryPatch(ModTurtleUpgradeDataProvider::makeUpgradeRegistry)
+        generator.addRegistryPatch("TurtleUpgrades", ModTurtleUpgradeDataProvider::makeUpgradeRegistry)
+        generator.addRegistryPatch("PocketUpgrades", ModPocketUpgradeDataProvider::makeUpgradeRegistry)
         generator.lootTable(ModLootTableProvider.getTables())
         generator.models(ModBlockModelProvider::addModels, ModItemModelProvider::addModels)
         generator.entityTags(PeripheralWorksCore.MOD_ID, ModTagsProvider::entityTypeTags)

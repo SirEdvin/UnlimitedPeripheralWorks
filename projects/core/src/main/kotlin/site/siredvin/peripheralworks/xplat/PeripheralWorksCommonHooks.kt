@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.xplat
 
-import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
@@ -13,8 +12,6 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.common.setup.*
 import site.siredvin.peripheralworks.data.ModText
-import site.siredvin.tweakium.modules.platform.ComputerPlatformRegistries
-import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 object PeripheralWorksCommonHooks {
 
@@ -23,7 +20,7 @@ object PeripheralWorksCommonHooks {
         Items.doSomething()
         Blocks.doSomething()
         RecipeSerializers.doSomething()
-        PocketUpgradeSerializers.doSomething()
+        ModPocketUpgrades.doSomething()
         ModTurtleUpgrades.doSomething()
         ModPlatform.registerCreativeTab(
             ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "tab"),
@@ -32,25 +29,25 @@ object PeripheralWorksCommonHooks {
     }
 
     fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
-        ModPlatform.holder.turtleUpgrades.forEach {
-            val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(ComputerPlatformRegistries.TURTLE_UPGRADES.getKey(it.get()).toString())
-            if (upgrade != null) {
-                val resourceKey = ComputerPlatformRegistries.TURTLE_UPGRADES.getResourceKey(upgrade)
-                if (resourceKey.isPresent) {
-                    ComputerPlatformToolkit.get().createTurtlesWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.TURTLE_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
-                }
-            }
-        }
-
-        ModPlatform.holder.pocketUpgrades.forEach {
-            val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(ComputerPlatformRegistries.POCKET_UPGRADES.getKey(it.get()).toString())
-            if (upgrade != null) {
-                val resourceKey = ComputerPlatformRegistries.POCKET_UPGRADES.getResourceKey(upgrade)
-                if (resourceKey.isPresent) {
-                    ComputerPlatformToolkit.get().createPocketsWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.POCKET_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
-                }
-            }
-        }
+//        ModPlatform.holder.turtleUpgrades.forEach {
+//            val upgrade = ComputerPlatformRegistries.TURTLE_UPGRADES.get(it.id)
+//            if (upgrade != null) {
+//                val resourceKey = ComputerPlatformRegistries.TURTLE_UPGRADES.getResourceKey(upgrade)
+//                if (resourceKey.isPresent) {
+//                    ComputerPlatformToolkit.get().createTurtlesWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.TURTLE_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
+//                }
+//            }
+//        }
+//
+//        ModPlatform.holder.pocketUpgrades.forEach {
+//            val upgrade = ComputerPlatformRegistries.POCKET_UPGRADES.get(it.id)
+//            if (upgrade != null) {
+//                val resourceKey = ComputerPlatformRegistries.POCKET_UPGRADES.getResourceKey(upgrade)
+//                if (resourceKey.isPresent) {
+//                    ComputerPlatformToolkit.get().createPocketsWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.POCKET_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
+//                }
+//            }
+//        }
     }
 
     /**

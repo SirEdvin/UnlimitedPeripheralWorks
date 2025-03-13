@@ -7,11 +7,13 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.client.FlexibleRealityAnchorUnbakedModel
 import site.siredvin.peripheralworks.client.FlexibleStatueUnbakedModel
+import site.siredvin.peripheralworks.client.configurator.ConfigurationModeRenderRegistry
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.setup.Blocks
@@ -42,7 +44,15 @@ object FabricPeripheralWorksClient : ClientModInitializer {
 
         PeripheralWorksClientCore.onModelRegister { upgrade, modeller ->
             @Suppress("UNCHECKED_CAST")
-            FabricComputerCraftAPIClient.registerTurtleUpgradeModeller(upgrade.type as UpgradeType<ITurtleUpgrade>, modeller)
+            FabricComputerCraftAPIClient.registerTurtleUpgradeModeller(upgrade as UpgradeType<ITurtleUpgrade>, modeller)
+        }
+
+        WorldRenderEvents.AFTER_ENTITIES.register {
+            val matrix = it.matrixStack()
+            val consumers = it.consumers()
+            if (matrix != null && consumers != null) {
+                ConfigurationModeRenderRegistry.render(matrix, consumers, it.world(), it.camera())
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.setup.ModTurtleUpgrades
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
@@ -30,7 +31,12 @@ class PeripheraliumHubTurtleUpgrade(private val maxUpdateCount: Supplier<Int>, p
 
     override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): TurtlePeripheraliumHubPeripheral = TurtlePeripheraliumHubPeripheral(maxUpdateCount.get(), turtle, side, type)
 
-    override fun getType(): UpgradeType<PeripheraliumHubTurtleUpgrade> = UpgradeType.simpleWithCustomItem { stack -> PeripheraliumHubTurtleUpgrade(maxUpdateCount, type, stack) }
+    override fun getType(): UpgradeType<PeripheraliumHubTurtleUpgrade> {
+        if (type == PeripheraliumHubPeripheral.TYPE) {
+            return ModTurtleUpgrades.PERIPHERALIUM_HUB.get()
+        }
+        return ModTurtleUpgrades.NETHERITE_PERIPHERALIUM_HUB.get()
+    }
 
     override fun update(turtle: ITurtleAccess, side: TurtleSide) {
         super.update(turtle, side)

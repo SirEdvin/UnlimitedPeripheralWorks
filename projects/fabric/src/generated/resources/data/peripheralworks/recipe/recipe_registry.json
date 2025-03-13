@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "D": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "T": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "pattern": [
+    "DTD",
+    "BCB",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:recipe_registry"
+  },
+  "show_notification": false
+}

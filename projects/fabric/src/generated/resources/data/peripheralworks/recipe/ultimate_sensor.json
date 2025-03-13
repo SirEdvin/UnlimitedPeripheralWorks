@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "O": {
+      "item": "minecraft:daylight_detector"
+    },
+    "P": {
+      "item": "peripheralium:peripheralium_dust"
+    }
+  },
+  "pattern": [
+    "POP",
+    " C ",
+    " O "
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:ultimate_sensor"
+  },
+  "show_notification": false
+}

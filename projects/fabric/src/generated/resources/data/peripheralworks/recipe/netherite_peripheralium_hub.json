@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "tag": "c:ingots/netherite"
+  },
+  "base": {
+    "item": "peripheralworks:peripheralium_hub"
+  },
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:netherite_peripheralium_hub"
+  },
+  "template": {
+    "item": "peripheralium:peripheralium_upgrade_template"
+  }
+}

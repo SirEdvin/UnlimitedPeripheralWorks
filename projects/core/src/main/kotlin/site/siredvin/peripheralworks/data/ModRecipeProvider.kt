@@ -34,7 +34,7 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
             Ingredient.of(Items.PERIPHERALIUM_HUB.get()),
             ingredients.netheriteIngot,
             Items.NETHERITE_PERIPHERALIUM_HUB.get().defaultInstance,
-        ).save(consumer, Items.NETHERITE_PERIPHERALIUM_HUB.get().descriptionId)
+        ).save(consumer, Items.NETHERITE_PERIPHERALIUM_HUB.id.toString())
 
         TweakedShapedRecipeBuilder(Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance)
             .define('B', ingredients.peripheraliumBlock)
@@ -184,7 +184,7 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
             .pattern("COC")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder(Items.ENTITY_CARD.get().asItem().defaultInstance.copyWithCount(4))
+        TweakedShapedRecipeBuilder(Items.ENTITY_CARD.get().asItem().defaultInstance)
             .define('D', ingredients.diamond)
             .define('O', ingredients.peripheralium)
             .define('B', ingredients.blackstone)

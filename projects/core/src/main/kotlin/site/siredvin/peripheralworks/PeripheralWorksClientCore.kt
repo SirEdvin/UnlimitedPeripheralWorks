@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks
 
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller
 import dan200.computercraft.api.turtle.ITurtleUpgrade
+import dan200.computercraft.api.upgrades.UpgradeType
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -28,7 +29,7 @@ object PeripheralWorksClientCore {
         "turtle/ultimate_sensor_left",
         "turtle/ultimate_sensor_right",
     )
-    val EXTRA_TURTLE_MODEL_PROVIDERS: MutableList<Supplier<Pair<ITurtleUpgrade, TurtleUpgradeModeller<ITurtleUpgrade>>>> = mutableListOf()
+    val EXTRA_TURTLE_MODEL_PROVIDERS: MutableList<Supplier<Pair<UpgradeType<out ITurtleUpgrade>, TurtleUpgradeModeller<ITurtleUpgrade>>>> = mutableListOf()
     private var inited: Boolean = false
 
     @Suppress("UNCHECKED_CAST")
@@ -72,7 +73,7 @@ object PeripheralWorksClientCore {
         }
     }
 
-    fun onModelRegister(consumer: BiConsumer<ITurtleUpgrade, TurtleUpgradeModeller<ITurtleUpgrade>>) {
+    fun onModelRegister(consumer: BiConsumer<UpgradeType<out ITurtleUpgrade>, TurtleUpgradeModeller<ITurtleUpgrade>>) {
         consumer.accept(
             ModTurtleUpgrades.PERIPHERALIUM_HUB.get(),
             ScaledItemModeller(0.5f),

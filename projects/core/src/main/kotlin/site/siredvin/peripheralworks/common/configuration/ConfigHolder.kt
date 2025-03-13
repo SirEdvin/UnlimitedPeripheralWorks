@@ -1,8 +1,6 @@
 package site.siredvin.peripheralworks.common.configuration
 
-import net.neoforged.fml.config.IConfigSpec
 import net.neoforged.neoforge.common.ModConfigSpec
-
 
 object ConfigHolder {
     var commonSpec: ModConfigSpec

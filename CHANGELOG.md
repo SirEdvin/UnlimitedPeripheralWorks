@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0-rc.1] - 2025-03-12
+
+### Added 
+- Large migration to new framework and update to 1.21
+
+
 ## [1.4.5] - 2025-02-08
 
 ### Fixed

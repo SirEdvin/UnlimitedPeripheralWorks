@@ -59,9 +59,7 @@ class EntityLink : FacingBlockEntityBlock<EntityLinkBlockEntity>(true, true, Blo
         builder.add(ENTITY_TRIGGER)
     }
 
-    override fun newBlockEntity(p0: BlockPos, p1: BlockState): BlockEntity? {
-        return BlockEntityTypes.ENTITY_LINK.get().create(p0, p1)
-    }
+    override fun newBlockEntity(p0: BlockPos, p1: BlockState): BlockEntity? = BlockEntityTypes.ENTITY_LINK.get().create(p0, p1)
 
     override fun useItemOn(
         itemStack: ItemStack,

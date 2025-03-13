@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "tag": "c:dyes/blue"
+    },
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "D": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "P": {
+      "item": "computercraft:printer"
+    }
+  },
+  "pattern": [
+    "DPD",
+    "BCB",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:reality_forger"
+  },
+  "show_notification": false
+}
