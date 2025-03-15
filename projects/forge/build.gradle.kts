@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("site.siredvin.publishing")
@@ -18,10 +20,13 @@ forgeShaking {
     commonProjectName.set("core")
     useAT.set(true)
     useMixins.set(true)
+    useJarJar.set(true)
     extraVersionMappings.set(
         mapOf(
             "computercraft" to "cc-tweaked",
             "peripheralium" to "peripheralium",
+            "broccolium" to "broccolium",
+            "tweakium" to "tweakium",
         ),
     )
     shake()
@@ -84,6 +89,21 @@ repositories {
             includeGroup("com.jozufozu.flywheel")
         }
     }
+    maven {
+        name = "Create maven"
+        url = uri("https://maven.createmod.net")
+        content {
+            includeGroup("net.createmod.ponder")
+            includeGroup("dev.engine-room.flywheel")
+        }
+    }
+    maven {
+        name = "Occultism maven"
+        url = uri("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/")
+        content {
+            includeGroup("com.klikli_dev")
+        }
+    }
 }
 
 dependencies {
@@ -92,11 +112,18 @@ dependencies {
     libs.bundles.forge.include.get().map { implementation(fg.deobf(it)) }
     libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it)) }
 
-    // WHY ?!?!?!
-    // Well, I didn't find any way to actually provide `configuration` information to
-    // a libs.version.toml, so I ended up with this garbabe of solution
-    compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.f-26:all"))
-    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.f-26:all"))
+    libs.bundles.forge.include.get().map { jarJar(fg.deobf(it)) }
+
+//    jarJar(libs.bundles.forge.include) {
+//        isTransitive = false
+//    }
+
+//    // WHY ?!?!?!
+//    // Well, I didn't find any way to actually provide `configuration` information to
+//    // a libs.version.toml, so I ended up with this garbabe of solution
+    compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
+//    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
+    compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 
     libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
     libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }

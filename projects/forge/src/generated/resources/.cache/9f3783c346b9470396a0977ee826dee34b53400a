@@ -1,4 +1,4 @@
-// 1.20.1	2023-11-03T20:25:21.98857119	vanilla/Block State Definitions
+// 1.20.1	2025-03-15T16:38:37.658148167	vanilla/Block State Definitions
 2c78de2bc1bf6e2f3467ace2f3d867c2a405bd09 assets/peripheralworks/blockstates/display_pedestal.json
 8933da812303de26cbf34418c010500f4a177d6e assets/peripheralworks/blockstates/entity_link.json
 2bba1d9924c2ab8e763485fb8bf6b73af4c4ebf5 assets/peripheralworks/blockstates/flexible_reality_anchor.json
@@ -47,7 +47,7 @@ b073cd6e922c5c57e55d9666f94e510846d07c2d assets/peripheralworks/models/item/peri
 0b77336b9f17020698a6c5745a1eabc47f3da3a0 assets/peripheralworks/models/item/ultimate_configurator.json
 76a0a59364ad940309fdabf54073f692b9924ea1 assets/peripheralworks/models/item/ultimate_sensor.json
 03f8d8391900ef012d7d1ba99077571d0647381f assets/peripheralworks/models/item/universal_scanner.json
-d95feb5488962155992a12f57104a8c205978dff assets/peripheralworks/models/turtle/ultimate_sensor_left.json
-3cb8daec3223b195d89a50a84c43e85b68f9e810 assets/peripheralworks/models/turtle/ultimate_sensor_right.json
-b7fa74e800d8717eaf90bdc2abea41923665c75e assets/peripheralworks/models/turtle/universal_scanner_left.json
-ad2c9b225b7c5d784d0b9f7fdeaa4c135418b6ed assets/peripheralworks/models/turtle/universal_scanner_right.json
+044f49f87553cb08286e37c95ab22f119a750679 assets/peripheralworks/models/turtle/ultimate_sensor_left.json
+296cfb36a328a5bbc837ea9af0586e2f2c546afb assets/peripheralworks/models/turtle/ultimate_sensor_right.json
+35bd39c6eb50b27669857c110bc9cb43bb34cfe1 assets/peripheralworks/models/turtle/universal_scanner_left.json
+0c08af2790501b232bac7b5caa1ef8242d8dd1d0 assets/peripheralworks/models/turtle/universal_scanner_right.json

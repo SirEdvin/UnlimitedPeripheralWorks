@@ -9,9 +9,9 @@ import site.siredvin.peripheralworks.common.blockentity.UniversalScannerBlockEnt
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
-import site.siredvin.tweakium.modules.peripheral.ability.PeripheralOwnerBoonKey
-import site.siredvin.tweakium.modules.peripheral.ability.ScanningBoon
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.boon.PeripheralOwnerBoonKey
+import site.siredvin.tweakium.modules.peripheral.boon.ScanningBoon
 import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner

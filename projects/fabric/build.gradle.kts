@@ -138,6 +138,7 @@ dependencies {
     modImplementation(libs.bundles.fabric.include) {
         isTransitive = false
     }
+    include(libs.bundles.fabric.include)
 
     modRuntimeOnly(libs.bundles.externalMods.fabric.runtime) {
         exclude("net.fabricmc.fabric-api")

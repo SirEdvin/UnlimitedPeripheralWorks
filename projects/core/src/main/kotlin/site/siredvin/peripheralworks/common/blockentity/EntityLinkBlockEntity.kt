@@ -18,9 +18,9 @@ import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 import site.siredvin.peripheralworks.computercraft.peripherals.EntityLinkPeripheral
-import site.siredvin.tweakium.modules.peripheral.ability.PeripheralOwnerBoonKey
-import site.siredvin.tweakium.modules.peripheral.ability.ScanningBoon
 import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
+import site.siredvin.tweakium.modules.peripheral.boon.PeripheralOwnerBoonKey
+import site.siredvin.tweakium.modules.peripheral.boon.ScanningBoon
 import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.owner.EntityProxyPeripheralOwner
 
