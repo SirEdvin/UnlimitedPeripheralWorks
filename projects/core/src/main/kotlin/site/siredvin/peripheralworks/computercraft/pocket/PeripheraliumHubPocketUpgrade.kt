@@ -6,10 +6,12 @@ import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.pocket.IPocketUpgrade
 import dan200.computercraft.api.upgrades.UpgradeData
 import dan200.computercraft.api.upgrades.UpgradeType
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.component.DataComponents
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.setup.ModDataComponents
 import site.siredvin.peripheralworks.common.setup.ModPocketUpgrades
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.pocket.PocketPeripheraliumHubPeripheral
@@ -31,6 +33,10 @@ class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, p
         private val internalDataCache = CacheBuilder.newBuilder()
             .expireAfterAccess(30, TimeUnit.SECONDS).build<IDataStorage, List<UpgradeData<IPocketUpgrade>>>().asMap()
     }
+
+    override val importantComponents: List<DataComponentType<*>>
+        get() = listOf(DataComponents.CUSTOM_DATA, ModDataComponents.POCKET_UPGRADES.get())
+
     override fun getPeripheral(access: IPocketAccess): PocketPeripheraliumHubPeripheral = PocketPeripheraliumHubPeripheral(maxUpdateCount.get(), access, type)
     override fun getType(): UpgradeType<out IPocketUpgrade> {
         if (type == PeripheraliumHubPeripheral.TYPE) {
@@ -43,15 +49,13 @@ class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, p
         super.update(access, peripheral)
         if (peripheral is PocketPeripheraliumHubPeripheral) {
             peripheral.activeWrappers.forEach {
-                it.upgrade.value().update(it, it.peripheral)
+                it.fullUpgrade.upgrade().update(it, it.peripheral)
             }
         }
     }
 
     override fun isItemSuitable(stack: ItemStack): Boolean {
-        val storedData = stack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: return super.isItemSuitable(stack)
-        val mode = storedData.getString(PeripheraliumHubPeripheral.MODE_TAG)
-        if (mode.isNotEmpty() && mode != PocketPeripheraliumHubPeripheral.POCKET_MODE) return false
+        if (stack.get(ModDataComponents.TURTLE_UPGRADES.get()) != null) return false
         return super.isItemSuitable(stack)
     }
 

@@ -15,6 +15,7 @@ import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheral
 import site.siredvin.peripheralworks.subsystem.entityperipheral.GenericEntityStorageProvider
 import site.siredvin.peripheralworks.utils.MinecartUtils
 import site.siredvin.peripheralworks.xplat.*
+import site.siredvin.tweakium.modules.peripheral.util.CreativeTabUtil
 
 @Suppress("UNUSED")
 object PeripheralWorksCore {
@@ -24,10 +25,10 @@ object PeripheralWorksCore {
 
     fun configureCreativeTab(builder: CreativeModeTab.Builder): CreativeModeTab.Builder = builder.icon { Blocks.PERIPHERAL_CASING.get().asItem().defaultInstance }
         .title(ModText.CREATIVE_TAB.text)
-        .displayItems { _, output ->
+        .displayItems { context, output ->
             ModPlatform.holder.blocks.forEach { output.accept(it.get()) }
             ModPlatform.holder.items.forEach { output.accept(it.get()) }
-            PeripheralWorksCommonHooks.registerUpgradesInCreativeTab(output)
+            CreativeTabUtil.enrichCreativeTabWithUpgrades(MOD_ID, output, context.holders)
         }
 
     fun configure(platform: ModInnerPlatform, ingredients: ModRecipeIngredients, blocks: ModBlocksReference) {

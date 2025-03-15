@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
-import net.minecraft.world.item.CreativeModeTab
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.item.EntityCard
@@ -22,32 +21,11 @@ object PeripheralWorksCommonHooks {
         RecipeSerializers.doSomething()
         ModPocketUpgrades.doSomething()
         ModTurtleUpgrades.doSomething()
+        ModDataComponents.doSomething()
         ModPlatform.registerCreativeTab(
             ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "tab"),
             PeripheralWorksCore.configureCreativeTab(PlatformToolkit.get().createTabBuilder()).build(),
         )
-    }
-
-    fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
-//        ModPlatform.holder.turtleUpgrades.forEach {
-//            val upgrade = ComputerPlatformRegistries.TURTLE_UPGRADES.get(it.id)
-//            if (upgrade != null) {
-//                val resourceKey = ComputerPlatformRegistries.TURTLE_UPGRADES.getResourceKey(upgrade)
-//                if (resourceKey.isPresent) {
-//                    ComputerPlatformToolkit.get().createTurtlesWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.TURTLE_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
-//                }
-//            }
-//        }
-//
-//        ModPlatform.holder.pocketUpgrades.forEach {
-//            val upgrade = ComputerPlatformRegistries.POCKET_UPGRADES.get(it.id)
-//            if (upgrade != null) {
-//                val resourceKey = ComputerPlatformRegistries.POCKET_UPGRADES.getResourceKey(upgrade)
-//                if (resourceKey.isPresent) {
-//                    ComputerPlatformToolkit.get().createPocketsWithUpgrade(UpgradeData.ofDefault(ComputerPlatformRegistries.POCKET_UPGRADES.get(resourceKey.get()).get())).forEach(output::accept)
-//                }
-//            }
-//        }
     }
 
     /**

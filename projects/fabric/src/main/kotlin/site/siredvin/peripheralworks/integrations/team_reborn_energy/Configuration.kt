@@ -1,15 +1,15 @@
 package site.siredvin.peripheralworks.integrations.team_reborn_energy
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object Configuration : IForgeConfigHandler {
 
     private const val DEFAULT_ENERGY_TO_FUEL_RATE = 50 // really calculated :) Trust me
 
-    private var enableEnergyStorageConfig: ForgeConfigSpec.BooleanValue? = null
-    private var enableTurtleRefuelWithEnergyConfig: ForgeConfigSpec.BooleanValue? = null
-    private var energyToFuelRateConfig: ForgeConfigSpec.IntValue? = null
+    private var enableEnergyStorageConfig: ModConfigSpec.BooleanValue? = null
+    private var enableTurtleRefuelWithEnergyConfig: ModConfigSpec.BooleanValue? = null
+    private var energyToFuelRateConfig: ModConfigSpec.IntValue? = null
 
     val enableEnergyStorage: Boolean
         get() = enableEnergyStorageConfig?.get() ?: true
@@ -21,7 +21,7 @@ object Configuration : IForgeConfigHandler {
     override val name: String
         get() = "team_reborn_energy"
 
-    override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+    override fun addToConfig(builder: ModConfigSpec.Builder) {
         enableEnergyStorageConfig = builder.comment("Enables energy storage integration").define("enableEnergyStorage", true)
         enableTurtleRefuelWithEnergyConfig = builder.comment("Enables turtle refueling with items with energy")
             .define("enableTurtleRefuelWithEnergy", true)

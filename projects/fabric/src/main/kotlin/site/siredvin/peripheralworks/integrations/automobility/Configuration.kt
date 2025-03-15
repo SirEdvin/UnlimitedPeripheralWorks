@@ -1,11 +1,11 @@
 package site.siredvin.peripheralworks.integrations.automobility
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object Configuration : IForgeConfigHandler {
 
-    private var enableAutomobilityConfig: ForgeConfigSpec.BooleanValue? = null
+    private var enableAutomobilityConfig: ModConfigSpec.BooleanValue? = null
 
     val enableAutomobile: Boolean
         get() = enableAutomobilityConfig?.get() ?: true
@@ -13,7 +13,7 @@ object Configuration : IForgeConfigHandler {
     override val name: String
         get() = "automobility"
 
-    override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+    override fun addToConfig(builder: ModConfigSpec.Builder) {
         enableAutomobilityConfig = builder.comment("Enables automobile entity integration")
             .define("enableAutomobile", true)
     }

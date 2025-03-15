@@ -7,26 +7,16 @@ import dan200.computercraft.api.turtle.*
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.core.Holder
 import net.minecraft.core.component.DataComponentPatch
-import net.minecraft.core.component.DataComponents
 import net.minecraft.world.Container
-import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
-import kotlin.jvm.optionals.getOrNull
 
-class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, override val upgrade: Holder.Reference<ITurtleUpgrade>, override val id: String, private val origin: TurtlePeripheraliumHubPeripheral) :
+class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, override val fullUpgrade: UpgradeData<ITurtleUpgrade>, private val origin: TurtlePeripheraliumHubPeripheral) :
     ITurtleAccess,
     LocalWrapper<ITurtleUpgrade> {
 
-    override val peripheral: IPeripheral? = upgrade.value().createPeripheral(this, tweakedSide)
-
-    val tweakedData: DataComponentPatch
-        get() = getUpgradeData(tweakedSide)
-
-    override val fullUpgradeData: UpgradeData<ITurtleUpgrade>
-        get() = UpgradeData.of(upgrade, tweakedData)
+    override val peripheral: IPeripheral? = fullUpgrade.upgrade().createPeripheral(this, tweakedSide)
 
     override fun getLevel(): Level = access.level
 
@@ -80,7 +70,7 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
 
     override fun getUpgrade(side: TurtleSide): ITurtleUpgrade? {
         if (side == tweakedSide) {
-            return upgrade.value()
+            return fullUpgrade.upgrade()
         }
         return access.getUpgrade(side)
     }
@@ -88,9 +78,9 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
     override fun setUpgrade(side: TurtleSide, upgrade: UpgradeData<ITurtleUpgrade>?) {
         if (side == tweakedSide) {
             if (upgrade == null) {
-                origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), null)
+                origin.swapUpgrade(this.fullUpgrade, null)
             } else {
-                origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), upgrade)
+                origin.swapUpgrade(this.fullUpgrade, upgrade)
             }
         } else {
             @Suppress("DEPRECATION")
@@ -100,7 +90,7 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
 
     override fun setUpgradeData(side: TurtleSide, data: DataComponentPatch) {
         if (side == tweakedSide) {
-            origin.setDataForUpdate(id, data.get(DataComponents.CUSTOM_DATA)?.getOrNull()?.copyTag())
+            origin.setDataForUpdate(id, data)
         } else {
             access.setUpgradeData(side, data)
         }
@@ -108,7 +98,7 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
 
     override fun getUpgradeWithData(side: TurtleSide?): UpgradeData<ITurtleUpgrade>? {
         if (side == tweakedSide) {
-            return fullUpgradeData
+            return fullUpgrade
         }
         return access.getUpgradeWithData(side)
     }
@@ -123,7 +113,7 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
     override fun getUpgradeData(side: TurtleSide): DataComponentPatch {
         val base = access.getUpgradeData(side)
         if (side == tweakedSide) {
-            return DataComponentPatch.builder().set(DataComponents.CUSTOM_DATA, CustomData.of(origin.getDataForUpgrade(id))).build()
+            return fullUpgrade.data
         }
         return base
     }

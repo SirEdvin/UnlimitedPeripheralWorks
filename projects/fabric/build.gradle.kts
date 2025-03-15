@@ -30,7 +30,15 @@ fabricShaking {
 
 sourceSets.main {
     kotlin {
-        exclude("site/siredvin/peripheralworks/integrations/**")
+        exclude("site/siredvin/peripheralworks/integrations/additionallanterns/**")
+        exclude("site/siredvin/peripheralworks/integrations/ae2/**")
+        exclude("site/siredvin/peripheralworks/integrations/alloy_forgery/**")
+        exclude("site/siredvin/peripheralworks/integrations/create/**")
+        exclude("site/siredvin/peripheralworks/integrations/modern_industrialization/**")
+        exclude("site/siredvin/peripheralworks/integrations/naturescompass/**")
+        exclude("site/siredvin/peripheralworks/integrations/powah/**")
+        exclude("site/siredvin/peripheralworks/integrations/toms_storage/**")
+        exclude("site/siredvin/peripheralworks/integrations/universal_shops/**")
     }
 }
 
