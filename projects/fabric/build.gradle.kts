@@ -23,6 +23,8 @@ fabricShaking {
         mapOf(
             "computercraft" to "cc-tweaked",
             "peripheralium" to "peripheralium",
+            "tweakium" to "tweakium",
+            "broccolium" to "broccolium",
         ),
     )
     shake()

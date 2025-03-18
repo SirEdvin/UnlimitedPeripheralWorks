@@ -22,6 +22,7 @@ githubShaking {
     modBranch.set("1.20")
     projectRepo.set("unlimitedperipheralworks")
     mastodonProjectName.set("UnlimitedPeripheralWorks")
+    useForgeJarJar.set(true)
     shake()
 }
 

@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.ir.backend.js.compile
-
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("site.siredvin.publishing")
@@ -112,7 +110,7 @@ dependencies {
     libs.bundles.forge.include.get().map { implementation(fg.deobf(it)) }
     libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it)) }
 
-    libs.bundles.forge.include.get().map { jarJar(fg.deobf(it)) }
+    libs.bundles.forge.jjar.get().map { jarJar(it) }
 
 //    jarJar(libs.bundles.forge.include) {
 //        isTransitive = false

@@ -10,9 +10,12 @@ mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.113.0"
-broccolium = "1.0.0-rc.8"
-tweakium = "1.0.0-rc.8"
-peripheralium = "1.0.0-rc.8"
+broccolium = "1.0.0"
+tweakium = "1.0.0"
+peripheralium = "1.0.0"
+broccolium-jjar = "[1.0.0, 2.0.0)"
+tweakium-jjar = "[1.0.0, 2.0.0)"
+peripheralium-jjar = "[1.0.0, 2.0.0)"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.92.0+1.20.1"
@@ -121,6 +124,9 @@ forge-kotlin = {module = "thedarkcolour:kotlinforforge", version.ref = "forge-ko
 broccolium-forge = {module = "site.siredvin:broccolium-forge-1.20.1", version.ref = "broccolium"}
 tweakium-forge = {module = "site.siredvin:tweakium-forge-1.20.1", version.ref = "tweakium"}
 peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium"}
+broccolium-jjar-forge = {module = "site.siredvin:broccolium-forge-1.20.1", version.ref = "broccolium-jjar"}
+tweakium-jjar-forge = {module = "site.siredvin:tweakium-forge-1.20.1", version.ref = "tweakium-jjar"}
+peripheralium-jjar-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium-jjar"}
 
 # Dev mod dependencies
 jei-forge = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
@@ -219,6 +225,7 @@ fabric = ["fabric-api", "fabric-kotlin", "fabric-config"]
 forge-raw = ["forge-kotlin"]
 forge-base = ["cc-tweaked-forge"]
 forge-include = ["peripheralium-forge", "tweakium-forge", "broccolium-forge"]
+forge-jjar = ["broccolium-jjar-forge", "tweakium-jjar-forge", "peripheralium-jjar-forge"]
 
 # Minecraft
 externalMods-forge-runtime = [
