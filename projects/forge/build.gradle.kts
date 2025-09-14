@@ -82,7 +82,6 @@ repositories {
         name = "tterrag maven"
         url = uri("https://maven.tterrag.com/")
         content {
-            includeGroup("com.simibubi.create")
             includeGroup("com.tterrag.registrate")
             includeGroup("com.jozufozu.flywheel")
         }
@@ -91,6 +90,7 @@ repositories {
         name = "Create maven"
         url = uri("https://maven.createmod.net")
         content {
+            includeGroup("com.simibubi.create")
             includeGroup("net.createmod.ponder")
             includeGroup("dev.engine-room.flywheel")
         }
@@ -119,7 +119,7 @@ dependencies {
 //    // WHY ?!?!?!
 //    // Well, I didn't find any way to actually provide `configuration` information to
 //    // a libs.version.toml, so I ended up with this garbabe of solution
-    compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
+    compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.6-150:all"))
 //    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
     compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 

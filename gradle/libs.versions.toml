@@ -10,16 +10,16 @@ mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.113.0"
-broccolium = "1.0.0"
-tweakium = "1.0.0"
-peripheralium = "1.0.0"
-broccolium-jjar = "[1.0.0, 2.0.0)"
-tweakium-jjar = "[1.0.0, 2.0.0)"
-peripheralium-jjar = "[1.0.0, 2.0.0)"
+broccolium = "1.0.2"
+tweakium = "1.0.2"
+peripheralium = "1.0.2"
+broccolium-jjar = "[1.0.2, 2.0.0)"
+tweakium-jjar = "[1.0.2, 2.0.0)"
+peripheralium-jjar = "[1.0.2, 2.0.0)"
 mixin = "0.8.5"
 # Fabric dependencies
-fabric-api = "0.92.0+1.20.1"
-fabric-loader = "0.15.11"
+fabric-api = "0.92.6+1.20.1"
+fabric-loader = "0.17.2"
 fabric-kotlin = "1.11.0+kotlin.2.0.0"
 forgeconfigapirt-fabric = "8.0.0"
 modmenu = "7.2.1"
@@ -33,7 +33,7 @@ cloth-config = "11.0.99"
 architectury = "9.0.8"
 
 # Dev mod dependenceis
-jei = "15.19.0.88"
+jei = "15.20.0.106"
 rei = "12.0.625"
 
 # Shared integration mod dependency
@@ -61,7 +61,7 @@ universal-shops = "1.3.2+1.20.1"
 jsonem = "0.2.1+1.20"
 automobility-fabric = "0.4.2+1.20.1-fabric"
 create-fabric = "0.5.1-g-build.1483+mc1.20.1"
-modern-industrialization = "4721852" # Modern Industrialization v1.7.3
+modern-industrialization = "5562363" # Modern Industrialization v1.8.6
 magna = "1.10.1+1.20.1"
 pal = "1.8.0"
 
@@ -86,7 +86,7 @@ cyclopscore = "1.20.1-1.18.4"  # CyclopsCore-1.19.4-1.18.2.jar
 automobility-forge = "0.4.2+1.20.1-forge"
 flux-networks = "4651164"  # Flux-Networks-1.20.1-7.2.0
 ars-nouveau = "4.7.0"
-create-forge = "6.0.0-84"
+create-forge = "6.0.5-194"
 flywheel-forge = "1.0.0-beta-88"
 registrate-forge = "MC1.20-1.3.11"
 
@@ -234,7 +234,7 @@ externalMods-forge-runtime = [
     "cloth-config-forge",
 ]
 externalMods-fabric-runtime = [
-    "rei-fabric",
+#    "rei-fabric",
     "architectury-fabric",
     "cloth-config-fabric",
     "modmenu",
@@ -267,7 +267,7 @@ externalMods-fabric-integrations-full = [
     "create-fabric",
     "jsonem", # required by automobility
     "modern-industrialization",
-    "magna",  # required by MI
+#    "magna",  # required by MI
     "pal",  # required by MI,
 ]
 externalMods-fabric-integrations-active = [
@@ -282,9 +282,9 @@ externalMods-fabric-integrations-active = [
     "automobility-fabric",
     "create-fabric",
     "jsonem", # required by automobility
-    "modern-industrialization",
-    "magna",  # required by MI
-    "pal",  # required by MI
+#    "modern-industrialization",
+#    "magna",  # required by MI
+#    "pal",  # required by MI
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn

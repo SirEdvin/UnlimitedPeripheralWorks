@@ -77,9 +77,11 @@ repositories {
         }
     }
     maven {
+        name = "Draylar maven"
         url = uri("https://maven.draylar.dev/releases")
         content {
             includeGroup("dev.draylar")
+            includeGroup("dev.draylar.omega-config")
         }
     }
     maven {
@@ -146,6 +148,16 @@ dependencies {
         exclude("net.fabricmc.fabric-api")
         exclude("net.fabricmc", "fabric-loader")
     }
+
+    // I hate this, but since someone is not clearing their mess, I need to do it
+
+    modCompileOnly("dev.draylar:magna:1.10.1+1.20.1") {
+        exclude("net.fabricmc.fabric-api")
+        exclude("net.fabricmc", "fabric-loader")
+        exclude("com.github.Draylar.omega-config", "omega-config-base")
+    }
+
+    modCompileOnly("dev.draylar.omega-config:omega-config-base:1.3.0+1.19.2")
 
     libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
     libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }

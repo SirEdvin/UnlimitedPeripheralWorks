@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2025-09-14
+
+### Fixed
+
+- Updated libs to fix `getItemLimit()` function
+
 ## [1.5.1] - 2025-03-19
 
 ### Fixed
