@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.3] - 2025-09-16
+
+### Added
+
+- Ember integration
+- Basic ars nouveau integration
+
 ## [1.5.2] - 2025-09-14
 
 ### Fixed

@@ -96,6 +96,7 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("fluxnetworks").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("embers").ifPresent { (it as Runnable).run() }
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)
@@ -115,6 +116,7 @@ object ForgePeripheralWorks {
     fun registrySetup(event: NewRegistryEvent) {
         loader.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("ars_nouveau").ifPresent { (it as Runnable).run() }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

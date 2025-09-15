@@ -1,0 +1,10 @@
+{
+  "type": "peripheralworks:magic_tome",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ars_nouveau"
+    }
+  ],
+  "item": "ars_nouveau:novice_spell_book"
+}
