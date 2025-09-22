@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
+import site.siredvin.broccolium.modules.storage.energy.EnergyRegistry
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
@@ -51,6 +52,9 @@ object EnergyStorageProvider : PeripheralPluginProvider {
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
         if (!PeripheralWorksConfig.enableGenericEnergyStorage) return null
         val storage = AgnosticEnergyStorageLookup.extractEnergyStorage(level, pos, level.getBlockEntity(pos)) ?: return null
+        if (PeripheralWorksConfig.energyAlwaysTransferable || EnergyRegistry.TRANSFERABLE.contains(storage.unit)) {
+            return FullEnergyPlugin(level, storage, PeripheralWorksConfig.energyStorageTransferLimit)
+        }
         return EnergyPlugin(storage)
     }
 }

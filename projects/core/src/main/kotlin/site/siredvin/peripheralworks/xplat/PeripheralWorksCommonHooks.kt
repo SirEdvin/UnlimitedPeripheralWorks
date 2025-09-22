@@ -25,6 +25,7 @@ object PeripheralWorksCommonHooks {
         RecipeSerializers.doSomething()
         PocketUpgradeSerializers.doSomething()
         TurtleUpgradeSerializers.doSomething()
+        ModEnergies.doSomething()
         ModPlatform.registerCreativeTab(
             ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
             PeripheralWorksCore.configureCreativeTab(PlatformToolkit.get().createTabBuilder()).build(),

@@ -10,12 +10,12 @@ mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
 cc-tweaked = "1.113.0"
-broccolium = "1.0.13"
-tweakium = "1.0.13"
-peripheralium = "1.0.13"
-broccolium-jjar = "[1.0.13, 2.0.0)"
-tweakium-jjar = "[1.0.13, 2.0.0)"
-peripheralium-jjar = "[1.0.13, 2.0.0)"
+broccolium = "1.1.5"
+tweakium = "1.1.5"
+peripheralium = "1.1.5"
+broccolium-jjar = "[1.1.5, 1.2.0)"
+tweakium-jjar = "[1.1.5, 1.2.0)"
+peripheralium-jjar = "[1.1.5, 1.2.0)"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.92.6+1.20.1"
@@ -67,6 +67,7 @@ pal = "1.8.0"
 
 # Integration mod dependencies (forge)
 occultism = "1.20.1-1.141.3"
+theurgy = "1.20.1-1.23.4"
 modonomicon = "1.77.6"
 tomstorage-forge = "1.20-1.6.1"
 easyvillagers = "4584220"  # [1.20.1] Easy Villagers 1.20.1-1.0.8
@@ -179,6 +180,7 @@ pal = {module = "io.github.ladysnake:PlayerAbilityLib", version.ref="pal"}
 
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
+theurgy = {module = "maven.modrinth:theurgy", version.ref = "theurgy"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
 gecolib-forge = {module = "software.bernie.geckolib:geckolib-forge-1.20.1", version.ref = "geckolib-forge"}
 smartbrainlib = {module = "net.tslat.smartbrainlib:SmartBrainLib-forge-1.20", version.ref = "smartbrainlib"}
@@ -311,6 +313,7 @@ externalMods-forge-integrations-full = [
     "flux-networks",
     "embers",
     "ars-nouveau",
+    "theurgy",
 #    "create-forge",
 ]
 externalMods-forge-integrations-raw-full = [
@@ -334,6 +337,7 @@ externalMods-forge-integrations-active = [
     "automobility-forge",
     "flux-networks",
     "ars-nouveau",
+    "theurgy",
 #    "create-forge",
     "embers",
 ]

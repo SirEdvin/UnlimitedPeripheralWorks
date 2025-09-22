@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.6] - 2025-09-22
+
+### Added
+
+- Ability to work with `source` in Ars Nouveau
+- Secret option to enable transfer for all energy
+
+### Changed
+- Energy storage unification, now theurgy mercury flux, ars nouveau source and ember's ember counts as energy and provide `energy_storage` 
+
 ## [1.5.5] - 2025-09-16
 
 ### Fixed

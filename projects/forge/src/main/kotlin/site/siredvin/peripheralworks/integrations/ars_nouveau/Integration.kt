@@ -1,9 +1,12 @@
 package site.siredvin.peripheralworks.integrations.ars_nouveau
 
 import com.hollingsworth.arsnouveau.ArsNouveau
+import com.hollingsworth.arsnouveau.api.source.ISourceTile
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
+import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
+import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorageExtractor
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
@@ -23,6 +26,15 @@ class Integration : Runnable {
 
     override fun run() {
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
+        if (Configuration.enableSourceStorage) {
+            AgnosticEnergyStorageLookup.addEnergyStorageExtractor(
+                AgnosticEnergyStorageExtractor { level, blockPos, blockEntity ->
+                    if (blockEntity == null) return@AgnosticEnergyStorageExtractor null
+                    val source = blockEntity as? ISourceTile ?: return@AgnosticEnergyStorageExtractor null
+                    return@AgnosticEnergyStorageExtractor AgnosticSourceStorage(source)
+                },
+            )
+        }
         val magicTomeUpgradeSerializer = ModPlatform.registerPocketUpgrade(
             MAGIC_TOME,
             PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->

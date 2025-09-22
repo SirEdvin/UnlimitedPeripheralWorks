@@ -21,11 +21,14 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.commonConfig.itemStorageTransferLimit.get()
     val enableGenericFluidStorage: Boolean
         get() = ConfigHolder.commonConfig.enableGenericFluidStorage.get()
-
-    val enableGenericEnergyStorage: Boolean
-        get() = ConfigHolder.commonConfig.enableGenericFluidStorage.get()
     val fluidStorageTransferLimit: Int
         get() = ConfigHolder.commonConfig.fluidStorageTransferLimit.get()
+    val enableGenericEnergyStorage: Boolean
+        get() = ConfigHolder.commonConfig.enableGenericFluidStorage.get()
+    val energyStorageTransferLimit: Int
+        get() = ConfigHolder.commonConfig.fluidStorageTransferLimit.get()
+    val energyAlwaysTransferable: Boolean
+        get() = ConfigHolder.commonConfig.energyAlwaysTransferable.get()
 
     val enableBeacon: Boolean
         get() = ConfigHolder.commonConfig.enableBeacon.get()
@@ -117,6 +120,8 @@ object PeripheralWorksConfig {
         var enableGenericEnergyStorage: ForgeConfigSpec.BooleanValue
         val itemStorageTransferLimit: ForgeConfigSpec.IntValue
         val fluidStorageTransferLimit: ForgeConfigSpec.IntValue
+        val energyStorageTransferLimit: ForgeConfigSpec.IntValue
+        val energyAlwaysTransferable: ForgeConfigSpec.BooleanValue
 
         // Specific plugins
         var enableBeacon: ForgeConfigSpec.BooleanValue
@@ -167,6 +172,10 @@ object PeripheralWorksConfig {
                 .defineInRange("itemStorageTransferLimit", 128, 1, Int.MAX_VALUE)
             fluidStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
                 .defineInRange("fluidStorageTransferLimit", 65500 * PlatformToolkit.get().fluidCompactDivider.toInt(), 1, Int.MAX_VALUE)
+            energyStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
+                .defineInRange("fluidStorageTransferLimit", 262144, 1, Int.MAX_VALUE)
+            energyAlwaysTransferable = builder.comment("Make any energy transferable, even if it is not usually allowed by CC:Tweaked itself")
+                .define("energyAlwaysTransferable", false)
             builder.pop()
             builder.push("specific")
             enableBeacon = builder.comment("Enables integration for minecraft beacon")
