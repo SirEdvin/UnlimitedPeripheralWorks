@@ -2,7 +2,6 @@ package site.siredvin.peripheralworks.integrations.team_reborn_energy
 
 import dan200.computercraft.api.ComputerCraftAPI
 import net.minecraft.core.BlockPos
-import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
@@ -15,7 +14,7 @@ class Integration : Runnable {
     companion object {
         @Suppress("UNUSED_PARAMETER")
         fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?): AgnosticEnergyStorage? {
-            val energyStorage = EnergyStorage.SIDED.find(level, pos, Direction.NORTH) ?: return null
+            val energyStorage = EnergyStorage.SIDED.find(level, pos, null) ?: return null
             return EnergyStorageWrapper(energyStorage)
         }
     }

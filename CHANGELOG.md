@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.7] - 2025-09-23
+
+### Fixed
+
+- TechReborn integration checks for energy slightly more correct
+
 ## [1.5.6] - 2025-09-22
 
 ### Added
