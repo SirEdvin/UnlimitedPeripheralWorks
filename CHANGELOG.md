@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.8] - 2025-09-23
+
+### Fixed
+
+- `inventory` API being broken
+
 ## [1.5.7] - 2025-09-23
 
 ### Fixed
