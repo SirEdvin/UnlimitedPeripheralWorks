@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.integrations.create
 
 import com.simibubi.create.content.contraptions.piston.LinearActuatorBlockEntity
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour
@@ -58,9 +57,7 @@ class Integration : Runnable {
             if (!Configuration.enableCreateIntegration || blockEntity == null) return null
 
             if (blockEntity is SmartBlockEntity) {
-                if (blockEntity is BlazeBurnerBlockEntity) {
-                    return CreateBlazeBurnerPeripheralPlugin(blockEntity)
-                } else if (blockEntity is LinearActuatorBlockEntity) {
+                if (blockEntity is LinearActuatorBlockEntity) {
                     return CreateLinearActuatorPeripheralPlugin(blockEntity)
                 } else {
                     val filterBehavior = blockEntity.getBehaviour(FilteringBehaviour.TYPE)

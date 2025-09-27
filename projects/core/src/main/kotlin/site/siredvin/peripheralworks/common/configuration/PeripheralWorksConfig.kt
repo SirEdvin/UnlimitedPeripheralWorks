@@ -175,7 +175,7 @@ object PeripheralWorksConfig {
             energyStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
                 .defineInRange("fluidStorageTransferLimit", 262144, 1, Int.MAX_VALUE)
             energyAlwaysTransferable = builder.comment("Make any energy transferable, even if it is not usually allowed by CC:Tweaked itself")
-                .define("energyAlwaysTransferable", false)
+                .define("energyAlwaysTransferable", true)
             builder.pop()
             builder.push("specific")
             enableBeacon = builder.comment("Enables integration for minecraft beacon")

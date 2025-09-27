@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.integrations.integrateddynamics
 
+import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.shared.util.NBTUtil
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -36,7 +37,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         it.getVariableFacade(context)
     }.orElse(null)
 
-    override fun listImpl(): Map<Int, Map<String, *>> {
+    override fun listImpl(arguments: IArguments): Map<Int, Map<String, *>> {
         val records = mutableMapOf<Int, Map<String, *>>()
         store.inventory.itemStacks.forEachIndexed { index, itemStack ->
             val facade = extractFacade(itemStack)

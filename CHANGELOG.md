@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `list()` and `items()` support filters now
+- `list()` support detailed as first argument
+- `energyAlwaysTransferable` is now true by default
+
+### Changed
+
+- Way how fake player is caching, maybe it will fix something, maybe not. Let's see
+
+### Removed
+
+- Create blaze burner integration. Create has it inside.
+
 ## [1.5.8] - 2025-09-23
 
 ### Fixed

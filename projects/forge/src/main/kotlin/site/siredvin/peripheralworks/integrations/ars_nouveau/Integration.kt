@@ -2,19 +2,40 @@ package site.siredvin.peripheralworks.integrations.ars_nouveau
 
 import com.hollingsworth.arsnouveau.ArsNouveau
 import com.hollingsworth.arsnouveau.api.source.ISourceTile
+import com.hollingsworth.arsnouveau.common.block.tile.MobJarTile
 import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorageExtractor
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class Integration : Runnable {
+
+    object MobJarPluginProvider : PeripheralPluginProvider {
+        override val pluginType: String
+            get() = "mob_jar"
+
+        override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            val blockEntity = level.getBlockEntity(pos)
+            if (!Configuration.enableMobJarPlugin || blockEntity == null) return null
+            if (blockEntity is MobJarTile) {
+                return MobJarPlugin(blockEntity)
+            }
+            return null
+        }
+    }
 
     companion object {
         val NOVICE_UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, "novice_magic_tome")
@@ -26,6 +47,7 @@ class Integration : Runnable {
 
     override fun run() {
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
+        ComputerCraftProxy.addProvider(MobJarPluginProvider)
         if (Configuration.enableSourceStorage) {
             AgnosticEnergyStorageLookup.addEnergyStorageExtractor(
                 AgnosticEnergyStorageExtractor { level, blockPos, blockEntity ->
