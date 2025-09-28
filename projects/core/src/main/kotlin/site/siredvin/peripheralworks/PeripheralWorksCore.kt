@@ -12,6 +12,7 @@ import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPlug
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheralLookup
+import site.siredvin.peripheralworks.subsystem.entityperipheral.GenericEntityFluidStorageProvider
 import site.siredvin.peripheralworks.subsystem.entityperipheral.GenericEntityStorageProvider
 import site.siredvin.peripheralworks.utils.MinecartUtils
 import site.siredvin.peripheralworks.xplat.*
@@ -41,5 +42,6 @@ object PeripheralWorksCore {
         ComputerCraftProxy.addProvider(SpecificPluginProvider)
         ComputerCraftProxy.addProvider(SpecificProtectedPluginProviders)
         EntityPeripheralLookup.addProvider(GenericEntityStorageProvider)
+        EntityPeripheralLookup.addProvider(GenericEntityFluidStorageProvider)
     }
 }

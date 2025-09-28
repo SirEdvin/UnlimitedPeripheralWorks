@@ -172,17 +172,17 @@ val copyAE2 by tasks.register<Copy>("copyAE2") {
 }
 
 val fullCopy by tasks.register("fullCopy") {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate, copyAE2)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyAE2)
 }
 
 tasks.compileKotlin {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility)
 }
 
 tasks.spotlessJava {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility)
 }
 
 tasks.spotlessKotlin {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility)
 }

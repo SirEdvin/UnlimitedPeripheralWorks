@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.10] - 2025-09-29
+
+### Added
+
+- `inventory` and `energy_storage` peripherals for turtle
+- More itemQuery and blockQuery predicates
+- Somewhat support for create contraption entities for entity link
+
 ## [1.5.9] - 2025-09-27
 
 ### Added

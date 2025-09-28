@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.integrations.create
 
+import com.simibubi.create.content.contraptions.AbstractContraptionEntity
 import com.simibubi.create.content.contraptions.piston.LinearActuatorBlockEntity
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour
@@ -7,6 +8,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOp
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
+import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
+import site.siredvin.broccolium.modules.storage.fluid.FabricAgnosticFluidStorage
+import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorageEntityExtractor
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
+import site.siredvin.broccolium.modules.storage.item.FabricStorageWrapper
+import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorageEntityExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -75,5 +82,21 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(FilteringBehaviourPluginProvider)
         ComputerCraftProxy.addProvider(ScrollingBehaviourPluginProvider)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
+        AgnosticItemStorageLookup.addItemStorageExtractor(
+            AgnosticItemStorageEntityExtractor { level, entity ->
+                if (entity is AbstractContraptionEntity) {
+                    return@AgnosticItemStorageEntityExtractor FabricStorageWrapper(entity.contraption.sharedInventory)
+                }
+                return@AgnosticItemStorageEntityExtractor null
+            },
+        )
+        AgnosticFluidStorageLookup.addFluidStorageExtractor(
+            AgnosticFluidStorageEntityExtractor { level, entity ->
+                if (entity is AbstractContraptionEntity) {
+                    return@AgnosticFluidStorageEntityExtractor FabricAgnosticFluidStorage(entity.contraption.sharedFluidTanks)
+                }
+                return@AgnosticFluidStorageEntityExtractor null
+            },
+        )
     }
 }
