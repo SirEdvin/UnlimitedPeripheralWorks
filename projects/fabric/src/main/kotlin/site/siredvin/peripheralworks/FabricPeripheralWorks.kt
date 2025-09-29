@@ -1,4 +1,5 @@
 package site.siredvin.peripheralworks
+import dan200.computercraft.api.node.wired.WiredElementLookup
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry
 import net.fabricmc.api.ModInitializer
@@ -16,8 +17,10 @@ import net.minecraft.world.phys.EntityHitResult
 import net.minecraftforge.fml.config.ModConfig
 import site.siredvin.broccolium.modules.base.FabricIntegrationLoader
 import site.siredvin.peripheralium.FabricPeripheralium
+import site.siredvin.peripheralworks.common.block.PeripheralProxy
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
+import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModPlatform
@@ -88,5 +91,11 @@ object FabricPeripheralWorks : ModInitializer {
         )
 
         FabricRecipeTransformers.init()
+
+        WiredElementLookup.get().registerForBlockEntity({it1, it2 ->
+            if (it2 == it1.blockState.getValue(PeripheralProxy.ORIENTATION).opposite)
+                return@registerForBlockEntity it1.element
+            return@registerForBlockEntity null
+        }, BlockEntityTypes.PERIPHERAL_PROXY.get())
     }
 }
