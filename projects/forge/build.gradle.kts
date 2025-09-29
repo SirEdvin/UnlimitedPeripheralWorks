@@ -120,6 +120,7 @@ dependencies {
 //    // Well, I didn't find any way to actually provide `configuration` information to
 //    // a libs.version.toml, so I ended up with this garbabe of solution
     compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.6-150:all"))
+    compileOnly(fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3"))
 //    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
     compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 
