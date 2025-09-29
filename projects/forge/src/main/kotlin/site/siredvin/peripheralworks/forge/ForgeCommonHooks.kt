@@ -1,9 +1,7 @@
 package site.siredvin.peripheralworks.forge
 
 import dan200.computercraft.api.ComputerCraftAPI
-import dan200.computercraft.api.network.wired.WiredElement
 import dan200.computercraft.shared.Capabilities.CAPABILITY_WIRED_ELEMENT
-import dan200.computercraft.shared.util.CapabilityProvider
 import dan200.computercraft.shared.util.SidedCapabilityProvider
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
@@ -38,12 +36,18 @@ object ForgeCommonHooks {
     @SubscribeEvent
     fun onCapability(event: AttachCapabilitiesEvent<BlockEntity>) {
         val be = event.`object`
-        if (be is PeripheralProxyBlockEntity)
-            SidedCapabilityProvider.attach(event,
-                ResourceLocation(ComputerCraftAPI.MOD_ID, "wired_node"), CAPABILITY_WIRED_ELEMENT, {
-                    if (it == be.blockState.getValue(PeripheralProxy.ORIENTATION).opposite)
+        if (be is PeripheralProxyBlockEntity) {
+            SidedCapabilityProvider.attach(
+                event,
+                ResourceLocation(ComputerCraftAPI.MOD_ID, "wired_node"),
+                CAPABILITY_WIRED_ELEMENT,
+                {
+                    if (it == be.blockState.getValue(PeripheralProxy.ORIENTATION).opposite) {
                         return@attach be.element
+                    }
                     return@attach null
-                })
+                },
+            )
+        }
     }
 }

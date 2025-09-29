@@ -92,9 +92,10 @@ object FabricPeripheralWorks : ModInitializer {
 
         FabricRecipeTransformers.init()
 
-        WiredElementLookup.get().registerForBlockEntity({it1, it2 ->
-            if (it2 == it1.blockState.getValue(PeripheralProxy.ORIENTATION).opposite)
+        WiredElementLookup.get().registerForBlockEntity({ it1, it2 ->
+            if (it2 == it1.blockState.getValue(PeripheralProxy.ORIENTATION).opposite) {
                 return@registerForBlockEntity it1.element
+            }
             return@registerForBlockEntity null
         }, BlockEntityTypes.PERIPHERAL_PROXY.get())
     }

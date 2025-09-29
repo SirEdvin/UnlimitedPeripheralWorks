@@ -3,13 +3,9 @@ package site.siredvin.peripheralworks.common.blockentity
 import dan200.computercraft.api.network.wired.WiredElement
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.shared.computer.core.ServerContext
-import dan200.computercraft.shared.peripheral.modem.wired.CableBlock
-import dan200.computercraft.shared.peripheral.modem.wired.CableBlockItem
 import dan200.computercraft.shared.peripheral.modem.wired.WiredModemElement
-import dan200.computercraft.shared.peripheral.modem.wired.WiredModemFullBlock
 import dan200.computercraft.shared.platform.ComponentAccess
 import dan200.computercraft.shared.platform.PlatformHelper
-import dan200.computercraft.shared.util.DirectionUtil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -57,10 +53,10 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         }
     }
 
-    class PeripheralProxyWiredElement(private val be: PeripheralProxyBlockEntity): WiredModemElement() {
+    class PeripheralProxyWiredElement(private val be: PeripheralProxyBlockEntity) : WiredModemElement() {
         override fun attachPeripheral(
             name: String,
-            peripheral: IPeripheral
+            peripheral: IPeripheral,
         ) {
             be.peripheral?.attachRemotePeripheral(peripheral, name)
         }
@@ -69,14 +65,9 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             be.peripheral?.removeRemotePeripheral(name)
         }
 
-        override fun getLevel(): Level? {
-            return be.level
-        }
+        override fun getLevel(): Level? = be.level
 
-        override fun getPosition(): Vec3 {
-            return be.blockPos.toVec3()
-        }
-
+        override fun getPosition(): Vec3 = be.blockPos.toVec3()
     }
 
     data class RemotePeripheralRecord(
@@ -99,8 +90,17 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     val remotePeripherals: MutableMap<BlockPos, RemotePeripheralRecord> = mutableMapOf()
     val element = PeripheralProxyWiredElement(this)
     private val connectedElements: ComponentAccess<WiredElement?> =
-        PlatformHelper.get().createWiredElementAccess(this, Consumer { x: Direction -> if (x == this.blockState.getValue(
-                PeripheralProxy.ORIENTATION).opposite) scheduleConnectionsChanged() })
+        PlatformHelper.get().createWiredElementAccess(
+            this,
+            Consumer { x: Direction ->
+                if (x == this.blockState.getValue(
+                        PeripheralProxy.ORIENTATION,
+                    ).opposite
+                ) {
+                    scheduleConnectionsChanged()
+                }
+            },
+        )
     private var lastConsumedEventID: Long = BlockStateUpdateEventBus.lastEventID - 1
     private var peripheralConnectionIncomplete: Boolean = false
     private var listenerConnectionIncomplete: Boolean = false
@@ -140,7 +140,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     private fun updatePeripherals() {
         if (peripheral != null) {
-            PeripheralWorksCore.logger.warn("Update peripheral called, ${peripheral!!.peripheralsRecord.keys}", )
+            PeripheralWorksCore.logger.warn("Update peripheral called, ${peripheral!!.peripheralsRecord.keys}")
             element.node.updatePeripherals(peripheral!!.peripheralsRecord.mapValues { it.value.peripheral })
         }
     }
@@ -203,8 +203,9 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     override fun onNeighbourChange(neighbour: BlockPos) {
-        if (blockPos.relative(blockState.getValue(PeripheralProxy.ORIENTATION).opposite) == neighbour)
+        if (blockPos.relative(blockState.getValue(PeripheralProxy.ORIENTATION).opposite) == neighbour) {
             refreshConnectionsRequired = true
+        }
     }
 
     fun connectBlockPos(level: Level, record: RemotePeripheralRecord) {
@@ -285,8 +286,9 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     override fun handleTick(level: Level, pos: BlockPos, state: BlockState) {
-        if (peripheral == null)
+        if (peripheral == null) {
             ensurePeripheralCreated(Direction.UP)
+        }
         if (listenerConnectionIncomplete || peripheralConnectionIncomplete) {
             remotePeripherals.values.forEach {
                 if (!it.connectedToListener || !it.connectedToPeripheral) {
@@ -326,20 +328,23 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             PeripheralWorksCore.logger.warn("$remotePeripherals")
             pushInternalDataChangeToClient()
         }
-        if (refreshConnectionsRequired)
+        if (refreshConnectionsRequired) {
             refreshConnection()
+        }
     }
 
     override fun setRemoved() {
         unload()
-        if (level == null || !level!!.isClientSide)
+        if (level == null || !level!!.isClientSide) {
             this.element.node.remove()
+        }
         super.setRemoved()
     }
 
     override fun destroy() {
-        if (level == null || !level!!.isClientSide)
+        if (level == null || !level!!.isClientSide) {
             this.element.node.remove()
+        }
         unload()
     }
 }
