@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ultimate configurator with peripheral proxy mod now show peripheral names for connected peripherals
 - M&A base integration, allows to control golem storage and some rudiment control
+- Network manager
 
 ### Fixed
 

@@ -137,5 +137,14 @@ object BlockEntityTypes {
         )
     }
 
+    val NETWORK_MANAGER: Supplier<BlockEntityType<NetworkManagerBlockEntity>> = ModPlatform.registerBlockEntity(
+        modId("network_manager"),
+    ) {
+        PlatformToolkit.get().createBlockEntityType(
+            ::NetworkManagerBlockEntity,
+            Blocks.NETWORK_MANAGER.get(),
+        )
+    }
+
     fun doSomething() {}
 }

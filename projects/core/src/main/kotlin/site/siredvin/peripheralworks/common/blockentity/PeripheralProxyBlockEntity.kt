@@ -140,7 +140,6 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     private fun updatePeripherals() {
         if (peripheral != null) {
-            PeripheralWorksCore.logger.warn("Update peripheral called, ${peripheral!!.peripheralsRecord.keys}")
             element.node.updatePeripherals(peripheral!!.peripheralsRecord.filter { remotePeripherals.any { r -> r.value.peripheralName == it.key } }.mapValues { it.value.peripheral })
         }
     }
@@ -259,7 +258,6 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         if (!level.isLoaded(offset)) return
 
         val element = connectedElements.get(direction) ?: return
-        PeripheralWorksCore.logger.warn("connection is called")
         this.element.node.connectTo(element.node)
     }
 
@@ -324,8 +322,10 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             }
         }
         if (dataModified) {
-            PeripheralWorksCore.logger.warn("Pushing information after removing some tracked position")
-            PeripheralWorksCore.logger.warn("$remotePeripherals")
+            PeripheralWorksCore.logger.debug(
+                "Pushing information after removing some tracked position, {}",
+                remotePeripherals,
+            )
             pushInternalDataChangeToClient()
         }
         if (refreshConnectionsRequired) {

@@ -16,6 +16,7 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraftforge.fml.config.ModConfig
 import site.siredvin.broccolium.modules.base.FabricIntegrationLoader
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralium.FabricPeripheralium
 import site.siredvin.peripheralworks.common.block.PeripheralProxy
 import site.siredvin.peripheralworks.common.commands.DebugCommands
@@ -98,5 +99,13 @@ object FabricPeripheralWorks : ModInitializer {
             }
             return@registerForBlockEntity null
         }, BlockEntityTypes.PERIPHERAL_PROXY.get())
+
+        WiredElementLookup.get().registerForBlockEntity({ it1, it2 ->
+            return@registerForBlockEntity if (it2 == it1.blockState.getValue(FacingBlockEntityBlock.FACING)) {
+                null
+            } else {
+                it1.element
+            }
+        }, BlockEntityTypes.NETWORK_MANAGER.get())
     }
 }

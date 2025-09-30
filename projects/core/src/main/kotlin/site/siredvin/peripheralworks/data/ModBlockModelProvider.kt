@@ -18,6 +18,7 @@ import site.siredvin.broccolium.modules.data.model.horizontalOrientedModel
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.*
 import site.siredvin.peripheralworks.common.setup.Blocks
+import site.siredvin.peripheralworks.utils.horizontalOrientedModelWithOverride
 import java.util.*
 
 object ModBlockModelProvider {
@@ -293,6 +294,34 @@ object ModBlockModelProvider {
             ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_STATUE.get(), "_empty"),
             ModelLocationUtils.getModelLocation(Blocks.FLEXIBLE_STATUE.get()),
             FlexibleStatue.CONFIGURED,
+            isItemConnected = true,
+        )
+
+        val networkManagerOnModel = horizontalOrientedModel(
+            generators,
+            Blocks.NETWORK_MANAGER.get(),
+            overwriteTop = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_side"),
+            overwriteSide = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_side"),
+            overwriteBottom = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_side"),
+            overwriteFront = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_on"),
+        )
+
+        val networkManagerOffModel = horizontalOrientedModelWithOverride(
+            generators,
+            Blocks.NETWORK_MANAGER.get(),
+            "_off",
+            overwriteTop = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_side"),
+            overwriteSide = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_side"),
+            overwriteBottom = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_side"),
+            overwriteFront = TextureMapping.getBlockTexture(Blocks.NETWORK_MANAGER.get(), "_off"),
+        )
+
+        facingBlockSwitch(
+            generators,
+            Blocks.NETWORK_MANAGER.get(),
+            networkManagerOffModel,
+            networkManagerOnModel,
+            NetworkManager.CONNECTED,
             isItemConnected = true,
         )
     }

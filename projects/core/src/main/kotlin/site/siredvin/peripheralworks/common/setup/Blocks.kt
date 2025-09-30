@@ -190,5 +190,18 @@ object Blocks {
         )
     }
 
+    val NETWORK_MANAGER = ModPlatform.registerBlock(
+        "network_manager",
+        { NetworkManager() },
+    ) {
+        HiddenDescriptiveBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableNetworkManager,
+            alwaysShow = true,
+            TooltipCollection::isDisabled,
+        )
+    }
+
     fun doSomething() {}
 }

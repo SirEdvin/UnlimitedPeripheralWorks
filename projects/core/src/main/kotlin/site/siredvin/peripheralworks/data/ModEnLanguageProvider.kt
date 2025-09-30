@@ -42,6 +42,7 @@ class ModEnLanguageProvider(
         add(Blocks.FLEXIBLE_STATUE.get(), "Flexible statue")
         add(Blocks.STATUE_WORKBENCH.get(), "Statue workbench", "§3§oImagination your only limit. And also 48 point size limit, but this is not so important")
         add(Blocks.ENTITY_LINK.get(), "Entity link", "§3§oCan help you to create interspace link to any entity, you just need to insert card")
+        add(Blocks.NETWORK_MANAGER.get(), text = "Network manager", "§3§oJust connect it to your wired network and it will become so useful!")
 
         add(ModText.CREATIVE_TAB, "UnlimitedPeripheralWorks")
 
@@ -88,6 +89,7 @@ class ModEnLanguageProvider(
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Max forging range: %s")
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Author: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Entity link configuration")
+        add(ModTooltip.NETWORK_MANAGER_MODE, "  Network manager overlay")
 
         add(ModEnergiesText.MERCURY_FLUX, "Mercury flux")
         add(ModEnergiesText.EMBER, "Ember")

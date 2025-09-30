@@ -42,6 +42,7 @@ class ModUaLanguageProvider(
         add(Blocks.FLEXIBLE_STATUE.get(), "Гнучка статуя")
         add(Blocks.STATUE_WORKBENCH.get(), "Верстак для статуй", "§3§oУява ваше єдине обмеження. Іще ліміт у розмірах на 48 точок, але це не так важливо")
         add(Blocks.ENTITY_LINK.get(), "Коннектор до сутності", "§3§oДопомагає утворити з'єднання із будь-якою сутністю, потрібно лише вставити карту")
+        add(Blocks.NETWORK_MANAGER.get(), text = "Менеджер мережі", "§3§oПросто підключіть його до вашої провідної мережі і він стане дуже корисний!")
 
         add(ModText.CREATIVE_TAB, "Перифіральних пристроїв нескінченний край")
 
@@ -88,6 +89,7 @@ class ModUaLanguageProvider(
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Максимальна дальність ковання: %s")
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Автор: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Налаштування коннектора до сутності")
+        add(ModTooltip.NETWORK_MANAGER_MODE, "  Оверлей менеджера мережі")
 
         add(ModEnergiesText.MERCURY_FLUX, "Ртутний флюс")
         add(ModEnergiesText.EMBER, "Вуглечки")

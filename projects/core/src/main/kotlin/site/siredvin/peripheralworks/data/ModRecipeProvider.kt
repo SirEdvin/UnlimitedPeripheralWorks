@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.data
 
+import dan200.computercraft.shared.ModRegistry
 import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeProvider
@@ -189,6 +190,15 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("D O")
             .pattern(" B ")
             .pattern("D O")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder.shaped(Blocks.NETWORK_MANAGER.get())
+            .define('P', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
+            .define('C', net.minecraft.world.item.Items.COBWEB)
+            .define('K', ModRegistry.Items.CABLE.get())
+            .pattern("KCK")
+            .pattern("CPC")
+            .pattern("KCK")
             .save(consumer)
 
         SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLONING.get())

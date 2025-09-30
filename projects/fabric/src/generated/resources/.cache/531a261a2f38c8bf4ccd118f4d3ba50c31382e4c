@@ -1,4 +1,4 @@
-// 1.20.1	2025-09-30T13:00:45.0333894	Unlimited Peripheral Works/Recipes
+// 1.20.1	2025-09-30T22:34:56.719049	Unlimited Peripheral Works/Recipes
 76573b1e35031a89f39029ec55bc20fc827a88e7 data\peripheralworks\recipes\ultimate_configurator.json
 8adb4992706e45866afda070248b6deb54c401cb data\peripheralworks\recipes\netherite_peripheralium_hub.json
 dbb658f37a7d8f6db0a02afd8fd24a4f978135c9 data\peripheralworks\recipes\flexible_reality_anchor.json
@@ -18,6 +18,7 @@ a2696e406e9032af7d01eb6c0b534b706f6d9f5f data\minecraft\recipes\card_clean.json
 9f3ccb014e913ed7d65b9561935a26e97885f13e data\peripheralworks\recipes\recipe_registry.json
 bfdf3e78239437eae8278d73b73f1f6c479953d7 data\minecraft\recipes\statue_clean.json
 e20244a6a3e2ee660321fe0e935132060759e281 data\peripheralworks\recipes\peripheral_proxy.json
+a2a265ea418ff34b94f24eee78d5ce76b302d05e data\peripheralworks\recipes\network_manager.json
 adf5bf621f241034fc11c5239ed396ca04e35041 data\peripheralworks\recipes\ultimate_sensor.json
 06bd5042d86f18b9ed542713e4705dc45f330edb data\minecraft\recipes\anchor_cloning.json
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data\minecraft\recipes\anchor_clean.json

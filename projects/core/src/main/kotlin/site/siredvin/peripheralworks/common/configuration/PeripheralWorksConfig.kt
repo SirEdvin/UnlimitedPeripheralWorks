@@ -104,6 +104,9 @@ object PeripheralWorksConfig {
     val enableEntityLink: Boolean
         get() = ConfigHolder.commonConfig.enableEntityLinks.get()
 
+    val enableNetworkManager: Boolean
+        get() = ConfigHolder.commonConfig.enableNetworkManager.get()
+
     fun registerIntegrationConfiguration(configuration: IForgeConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -152,6 +155,7 @@ object PeripheralWorksConfig {
         val enableStatueWorkbench: ForgeConfigSpec.BooleanValue
         val flexibleStatueMaxQuads: ForgeConfigSpec.IntValue
         val enableEntityLinks: ForgeConfigSpec.BooleanValue
+        val enableNetworkManager: ForgeConfigSpec.BooleanValue
 
         init {
             builder.push("base")
@@ -172,7 +176,7 @@ object PeripheralWorksConfig {
                 .defineInRange("itemStorageTransferLimit", 128, 1, Int.MAX_VALUE)
             fluidStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
                 .defineInRange("fluidStorageTransferLimit", 65500 * PlatformToolkit.get().fluidCompactDivider.toInt(), 1, Int.MAX_VALUE)
-            energyStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
+            energyStorageTransferLimit = builder.comment("Limits max energy transfer per one operation")
                 .defineInRange("fluidStorageTransferLimit", 262144, 1, Int.MAX_VALUE)
             energyAlwaysTransferable = builder.comment("Make any energy transferable, even if it is not usually allowed by CC:Tweaked itself")
                 .define("energyAlwaysTransferable", true)
@@ -232,6 +236,8 @@ object PeripheralWorksConfig {
                 .defineInRange("flexibleStatueMaxQuads", 256, 64, Int.MAX_VALUE)
             enableEntityLinks = builder.comment("Enables entity link")
                 .define("enableEntityLink", true)
+            enableNetworkManager = builder.comment("Enable network manager")
+                .define("enableNetworkManager", true)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.entries.toTypedArray(), builder)

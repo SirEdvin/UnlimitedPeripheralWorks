@@ -1,0 +1,27 @@
+package site.siredvin.peripheralworks.common.block
+
+import net.minecraft.core.Direction
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
+import net.minecraft.world.level.block.state.properties.BooleanProperty
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
+import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
+
+class NetworkManager : FacingBlockEntityBlock<NetworkManagerBlockEntity>({ BlockEntityTypes.NETWORK_MANAGER.get() }, true, false) {
+    companion object {
+        val TOGGLING: BooleanProperty = BooleanProperty.create("useless_toggling")
+        val CONNECTED: BooleanProperty = BooleanProperty.create("connected")
+    }
+
+    init {
+        registerDefaultState(getStateDefinition().any().setValue(TOGGLING, false).setValue(CONNECTED, false).setValue(FACING, Direction.SOUTH))
+    }
+
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+        super.createBlockStateDefinition(builder)
+        builder.add(TOGGLING)
+        builder.add(CONNECTED)
+    }
+}

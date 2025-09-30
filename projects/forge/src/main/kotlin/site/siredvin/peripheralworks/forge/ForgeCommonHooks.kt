@@ -11,8 +11,10 @@ import net.minecraftforge.event.RegisterCommandsEvent
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.PeripheralProxy
+import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
@@ -46,6 +48,19 @@ object ForgeCommonHooks {
                         return@attach be.element
                     }
                     return@attach null
+                },
+            )
+        }
+        if (be is NetworkManagerBlockEntity) {
+            SidedCapabilityProvider.attach(
+                event,
+                ResourceLocation.fromNamespaceAndPath(ComputerCraftAPI.MOD_ID, "wired_node"),
+                CAPABILITY_WIRED_ELEMENT,
+                {
+                    if (it == be.blockState.getValue(FacingBlockEntityBlock.FACING)) {
+                        return@attach null
+                    }
+                    return@attach be.element
                 },
             )
         }
