@@ -1,9 +1,12 @@
 package site.siredvin.peripheralworks.client.configurator
 
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.GameRenderer
+import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
@@ -12,6 +15,35 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
 
     private val targetFlareColor = FlareRenderer.FlareColor(0.957f, 0.635f, 0.38f)
     private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
+
+    fun renderText(
+        matrices: PoseStack,
+        camera: Camera,
+        text: String,
+        x: Double,
+        y: Double,
+        z: Double,
+        lightLevel: Int,
+        buffer: MultiBufferSource,
+        color: Int = 0x000000,
+    ) {
+        matrices.pushPose()
+
+        // Set up the view
+        matrices.translate(x, y, z)
+        matrices.mulPose(Minecraft.getInstance().entityRenderDispatcher.cameraOrientation())
+        matrices.mulPose(Axis.ZP.rotationDegrees(180f))
+        matrices.scale(0.025f, 0.025f, 0.025f)
+
+        val matrix4f = matrices.last().pose()
+
+        val font = Minecraft.getInstance().font
+        val offset = (-font.width(text) / 2).toFloat()
+        val opacity = (.4f * 255.0f).toInt() shl 24
+        font.drawInBatch(text, offset, 0f, 0xffffff, false, matrix4f, buffer, Font.DisplayMode.NORMAL, opacity, lightLevel)
+
+        matrices.popPose()
+    }
 
     override fun render(
         minecraft: Minecraft,
@@ -45,6 +77,16 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
                 it.targetBlock.z + 0.5 + 0.45 * normal.z,
                 targetFlareColor,
                 1f,
+            )
+            renderText(
+                poseStack,
+                camera,
+                it.peripheralName ?: "",
+                it.targetBlock.x + 0.5,
+                it.targetBlock.y + 1.5,
+                it.targetBlock.z + 0.5,
+                15728640,
+                minecraft.renderBuffers().bufferSource(),
             )
         }
         FlareRenderer.uninitFlareRenderer(poseStack)

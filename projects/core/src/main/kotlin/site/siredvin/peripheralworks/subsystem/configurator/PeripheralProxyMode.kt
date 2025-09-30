@@ -18,6 +18,7 @@ import site.siredvin.peripheralworks.tags.BlockTags
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 object PeripheralProxyMode : ConfigurationMode {
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
     override val description: Component = ModTooltip.PERIPHERAL_PROXY_MODE.text
 

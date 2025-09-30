@@ -58,6 +58,7 @@ class ModUaLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_FORBIDDEN, "Цей блок заборонено додавати до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "Цей периферійний пристрій тепер під'єднано до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "Цей периферійний пристрій тепер від'єднано від проксі для периферійних пристроїв")
+        add(ModText.PERIPHERAL_PROXY_CONNECTED_PERIPHERALS, "Підключені переферійні присторії:")
         add(ModText.DEFINITELY_NOT, "§3§oНу точно не ")
         add(ModText.TARGET_ENTITY, "Сутність %s записана в цій карті, наразі вона знаходиться у точці %s")
         add(ModText.ENTITY_CANNOT_BE_STORED, "Ця сутність не може бути записана")
@@ -87,6 +88,10 @@ class ModUaLanguageProvider(
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Максимальна дальність ковання: %s")
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Автор: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Налаштування коннектора до сутності")
+
+        add(ModEnergiesText.MERCURY_FLUX, "Ртутний флюс")
+        add(ModEnergiesText.EMBER, "Вуглечки")
+        add(ModEnergiesText.SOURCE, "Енергія джерела")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "З вбудованим осередком")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "З вбудованим незеритовим осередком")

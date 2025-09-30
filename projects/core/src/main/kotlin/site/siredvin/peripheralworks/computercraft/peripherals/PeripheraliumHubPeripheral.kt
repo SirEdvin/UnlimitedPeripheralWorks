@@ -22,7 +22,11 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         const val NETHERITE_TYPE = "netherite_$TYPE"
         const val UPGRADES_TAG = "connectedUpgrades"
         const val MODE_TAG = "mode"
+
+        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
         val ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
+
+        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
         val NETHERITE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
         const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
 

@@ -20,6 +20,8 @@ class UniversalScannerPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPer
 
     companion object {
         const val TYPE = "universal_scanner"
+
+        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
         val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
 
         fun of(turtle: ITurtleAccess, side: TurtleSide): UniversalScannerPeripheral {

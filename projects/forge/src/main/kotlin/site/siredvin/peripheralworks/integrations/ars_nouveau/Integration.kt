@@ -38,11 +38,11 @@ class Integration : Runnable {
     }
 
     companion object {
-        val NOVICE_UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, "novice_magic_tome")
-        val APPRENTICE_UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, "apprentice_magic_tome")
-        val ARCHMAGE_UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, "archmage_magic_tome")
-        val CASTER_TOME_UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, "caster_magic_tome")
-        val MAGIC_TOME = ResourceLocation(PeripheralWorksCore.MOD_ID, "magic_tome")
+        val NOVICE_UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "novice_magic_tome")
+        val APPRENTICE_UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "apprentice_magic_tome")
+        val ARCHMAGE_UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "archmage_magic_tome")
+        val CASTER_TOME_UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "caster_magic_tome")
+        val MAGIC_TOME = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "magic_tome")
     }
 
     override fun run() {

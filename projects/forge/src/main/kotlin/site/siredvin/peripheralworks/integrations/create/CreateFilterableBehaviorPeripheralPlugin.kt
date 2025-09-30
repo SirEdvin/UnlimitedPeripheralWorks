@@ -23,7 +23,7 @@ class CreateFilterableBehaviorPeripheralPlugin(
     @LuaFunction(mainThread = true)
     fun setFilterItem(itemId: String): MethodResult {
         val item = try {
-            PlatformRegistries.ITEMS.get(ResourceLocation(itemId))
+            PlatformRegistries.ITEMS.get(ResourceLocation.parse(itemId))
         } catch (e: Exception) {
             throw LuaException(e.message)
         }

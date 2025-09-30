@@ -141,7 +141,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     private fun updatePeripherals() {
         if (peripheral != null) {
             PeripheralWorksCore.logger.warn("Update peripheral called, ${peripheral!!.peripheralsRecord.keys}")
-            element.node.updatePeripherals(peripheral!!.peripheralsRecord.mapValues { it.value.peripheral })
+            element.node.updatePeripherals(peripheral!!.peripheralsRecord.filter { remotePeripherals.any { r -> r.value.peripheralName == it.key } }.mapValues { it.value.peripheral })
         }
     }
 

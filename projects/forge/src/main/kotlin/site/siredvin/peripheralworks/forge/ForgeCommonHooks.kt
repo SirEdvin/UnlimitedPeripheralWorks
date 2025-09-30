@@ -39,7 +39,7 @@ object ForgeCommonHooks {
         if (be is PeripheralProxyBlockEntity) {
             SidedCapabilityProvider.attach(
                 event,
-                ResourceLocation(ComputerCraftAPI.MOD_ID, "wired_node"),
+                ResourceLocation.fromNamespaceAndPath(ComputerCraftAPI.MOD_ID, "wired_node"),
                 CAPABILITY_WIRED_ELEMENT,
                 {
                     if (it == be.blockState.getValue(PeripheralProxy.ORIENTATION).opposite) {

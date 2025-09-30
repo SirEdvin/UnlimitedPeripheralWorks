@@ -57,7 +57,7 @@ object FlexibleRealityAnchorModel : IDynamicBakedModel {
     override fun getRenderTypes(state: BlockState, rand: RandomSource, data: ModelData): ChunkRenderTypeSet = ChunkRenderTypeSet.of(RenderType.translucent())
 
     @Deprecated("Deprecated in Java")
-    override fun getParticleIcon(): TextureAtlasSprite = getTexture(ResourceLocation("minecraft:block/stone"))
+    override fun getParticleIcon(): TextureAtlasSprite = getTexture(ResourceLocation.parse("minecraft:block/stone"))
 
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")

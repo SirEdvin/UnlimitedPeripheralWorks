@@ -37,6 +37,7 @@ class InformativeRegistryPeripheral(
                     MethodResult.of(PlatformRegistries.ITEMS.keySet().map(ResourceLocation::toString))
                 },
                 {
+                    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
                     val item = PlatformRegistries.ITEMS.get(ResourceLocation(it))
                     val base = LuaRepresentation.forItem(item)
                     base["registryID"] = PlatformRegistries.ITEMS.getId(item)
@@ -51,6 +52,7 @@ class InformativeRegistryPeripheral(
                     MethodResult.of(PlatformRegistries.BLOCKS.keySet().map(ResourceLocation::toString))
                 },
                 {
+                    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
                     val blockState = PlatformRegistries.BLOCKS.get(ResourceLocation(it)).defaultBlockState()
                     val base = LuaRepresentation.forBlockState(blockState)
                     base["registryID"] = PlatformRegistries.BLOCKS.getId(blockState.block)
@@ -65,6 +67,7 @@ class InformativeRegistryPeripheral(
                     MethodResult.of(PlatformRegistries.FLUIDS.keySet().map(ResourceLocation::toString))
                 },
                 {
+                    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
                     val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation(it))
                     val base = LuaRepresentation.forFluid(fluid)
                     base["registryID"] = PlatformRegistries.FLUIDS.getId(fluid)

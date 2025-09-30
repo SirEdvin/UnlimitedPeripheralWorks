@@ -16,7 +16,7 @@ class PocketMagicTomeUpgrade(type: ResourceLocation, stack: ItemStack) :
     ) {
 
     companion object {
-        val STORED_DATA_TAG = ResourceLocation("ars_nouveau", "caster").toString()
+        val STORED_DATA_TAG = ResourceLocation.fromNamespaceAndPath("ars_nouveau", "caster").toString()
     }
 
     override fun getPeripheral(access: IPocketAccess): MagicTomePeripheral = MagicTomePeripheral(PocketPeripheralOwner(access), access.upgrade!!.upgradeItem, Configuration.enableCasterTomePocketUpgrade)

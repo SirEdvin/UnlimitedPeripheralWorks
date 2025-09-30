@@ -63,6 +63,7 @@ object ForgePeripheralWorks {
     init {
         ForgePeripheralium.sayHi()
         // Configure configuration
+        @Suppress("DEPRECATION", "removal")
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
         PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
@@ -91,6 +92,7 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("mna").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }

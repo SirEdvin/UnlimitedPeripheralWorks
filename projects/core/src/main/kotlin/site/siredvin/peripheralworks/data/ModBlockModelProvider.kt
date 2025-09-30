@@ -22,6 +22,7 @@ import java.util.*
 
 object ModBlockModelProvider {
 
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     val PEDESTAL = ModelTemplate(
         Optional.of(ResourceLocation(PeripheralWorksCore.MOD_ID, "block/base_pedestal")),
         Optional.empty(),

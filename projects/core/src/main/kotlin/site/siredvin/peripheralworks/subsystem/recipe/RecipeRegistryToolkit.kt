@@ -168,6 +168,7 @@ object RecipeRegistryToolkit {
     }
 
     @Throws(LuaException::class)
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     fun collectRecipeTypes(types: Any?): List<RecipeType<*>> {
         if (types == null || types.toString() == "*") return PlatformRegistries.RECIPE_TYPES.iterator().asSequence().toList()
         if (types is String) {

@@ -49,6 +49,7 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         if (!data.contains(ACTIVE_MOD_POS)) {
             return null
         }
+        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
         val configurationMode = ConfiguratorModeRegistry.get(ResourceLocation(data.getString(ACTIVE_MOD_NAME))) ?: return null
         return Pair(
             configurationMode,

@@ -18,6 +18,7 @@ import site.siredvin.tweakium.modules.turtle.api.TurtleUpgradeHolder
 import java.util.concurrent.TimeUnit
 import java.util.function.Supplier
 
+@Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
 class PeripheraliumHubTurtleUpgrade(private val maxUpdateCount: Supplier<Int>, private val type: String, item: ItemStack) :
     StatefulPeripheralTurtleUpgrade<TurtlePeripheraliumHubPeripheral>(ResourceLocation(PeripheralWorksCore.MOD_ID, type), item),
     TurtleUpgradeHolder {

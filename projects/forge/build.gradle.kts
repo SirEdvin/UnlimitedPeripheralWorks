@@ -76,6 +76,8 @@ repositories {
         url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
         content {
             includeGroup("software.bernie.geckolib")
+            includeGroupByRegex("software\\.bernie.*")
+            includeGroup("com.eliotlash.mclib")
         }
     }
     maven {

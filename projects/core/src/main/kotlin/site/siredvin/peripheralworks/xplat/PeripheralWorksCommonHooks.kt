@@ -26,6 +26,7 @@ object PeripheralWorksCommonHooks {
         PocketUpgradeSerializers.doSomething()
         TurtleUpgradeSerializers.doSomething()
         ModEnergies.doSomething()
+        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
         ModPlatform.registerCreativeTab(
             ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
             PeripheralWorksCore.configureCreativeTab(PlatformToolkit.get().createTabBuilder()).build(),

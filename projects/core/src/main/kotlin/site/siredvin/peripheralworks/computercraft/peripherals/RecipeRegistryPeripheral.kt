@@ -25,6 +25,7 @@ class RecipeRegistryPeripheral(
         const val TYPE = "recipe_registry"
     }
 
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     val air = PlatformRegistries.ITEMS.get(ResourceLocation("minecraft", "air"))
 
     override val isEnabled: Boolean

@@ -33,6 +33,8 @@ class UltimateSensorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPerip
 
     companion object {
         const val TYPE = "ultimate_sensor"
+
+        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
         val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
 
         private val ANALYZERS: MutableMap<String, WrappedCall> = mutableMapOf()

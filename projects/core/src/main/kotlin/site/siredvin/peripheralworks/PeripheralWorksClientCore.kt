@@ -61,6 +61,7 @@ object PeripheralWorksClientCore {
         throw IllegalArgumentException("There is no extra renderer for $type")
     }
 
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     fun registerExtraModels(register: Consumer<ResourceLocation>) {
         EXTRA_MODELS.forEach { register.accept(ResourceLocation(PeripheralWorksCore.MOD_ID, it)) }
     }
@@ -73,6 +74,7 @@ object PeripheralWorksClientCore {
         }
     }
 
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     fun onModelRegister(consumer: BiConsumer<TurtleUpgradeSerialiser<*>, TurtleUpgradeModeller<ITurtleUpgrade>>) {
         consumer.accept(
             TurtleUpgradeSerializers.PERIPHERALIUM_HUB.get(),

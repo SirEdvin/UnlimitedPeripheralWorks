@@ -25,6 +25,7 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
         opacity,
     )
 
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     constructor(data: CompoundTag) : this(
         data.getFloat("x1"),
         data.getFloat("x2"),
@@ -147,6 +148,8 @@ fun convertToEndVector(table: Map<*, *>, min: Float, max: Float): Vector3f {
 fun convertToQuadData(table: Map<*, *>): QuadData {
     val startVector = convertToStartVector(table, MIN_QUAD_VECTOR, MAX_QUAD_VECTOR)
     val endVector = convertToEndVector(table, MIN_QUAD_VECTOR, MAX_QUAD_VECTOR)
+
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     val texture = if (table.containsKey("texture")) {
         ResourceLocation(table["texture"].toString())
     } else {

@@ -19,7 +19,7 @@ import java.util.function.Supplier
 
 class PeripheraliumHubPocketUpgrade(private val maxUpdateCount: Supplier<Int>, private val type: String, item: ItemStack) :
     StatefulPocketUpgrade<PocketPeripheraliumHubPeripheral>(
-        ResourceLocation(PeripheralWorksCore.MOD_ID, type),
+        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress") ResourceLocation(PeripheralWorksCore.MOD_ID, type),
         item,
     ),
     PocketUpgradeHolder {

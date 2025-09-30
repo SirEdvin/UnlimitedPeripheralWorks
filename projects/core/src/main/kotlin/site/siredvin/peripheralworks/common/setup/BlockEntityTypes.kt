@@ -9,6 +9,7 @@ import site.siredvin.peripheralworks.utils.modId
 import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.Supplier
 
+@Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
 object BlockEntityTypes {
     val UNIVERSAL_SCANNER: Supplier<BlockEntityType<UniversalScannerBlockEntity>> = ModPlatform.registerBlockEntity(
         ResourceLocation(PeripheralWorksCore.MOD_ID, "universal_scanner"),
