@@ -64,6 +64,12 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     }
 
     @LuaFunction(mainThread = true)
+    fun getGroupColor(group: String): MethodResult {
+        if (!be.peripheralGroups.contains(group)) return MethodResult.of(false, "There is no such group")
+        return MethodResult.of(be.peripheralGroups[group]!!.color)
+    }
+
+    @LuaFunction(mainThread = true)
     fun get(group: String): MethodResult {
         val group = be.peripheralGroups[group] ?: return MethodResult.of()
         return MethodResult.of(
