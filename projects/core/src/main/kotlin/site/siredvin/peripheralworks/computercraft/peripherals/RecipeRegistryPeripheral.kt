@@ -62,7 +62,7 @@ class RecipeRegistryPeripheral(
             peripheralOwner.level!!.recipeManager.getAllRecipesFor(type)
                 .filter { it.id == recipeID }
                 .map { RecipeRegistryToolkit.serializeRecipe(it, peripheralOwner.level!!.registryAccess()) }
-                .toList(),
+                .firstOrNull(),
         )
     }
 

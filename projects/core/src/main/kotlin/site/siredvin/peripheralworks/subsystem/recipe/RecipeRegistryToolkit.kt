@@ -26,7 +26,7 @@ import java.util.stream.Collectors
 import kotlin.collections.HashMap
 
 object RecipeRegistryToolkit {
-    private val GSON = Gson()
+    val GSON = Gson()
     val SERIALIZATION_SKIP = Any()
     val SERIALIZATION_EMPTY_SLOT = mapOf("type" to "empty")
 

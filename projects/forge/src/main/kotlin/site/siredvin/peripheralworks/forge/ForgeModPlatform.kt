@@ -7,6 +7,8 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraftforge.fml.ModList
+import net.minecraftforge.forgespi.language.IModInfo
 import net.minecraftforge.registries.DeferredRegister
 import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
@@ -14,10 +16,27 @@ import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.ModInnerPlatform
 import site.siredvin.tweakium.modules.platform.ForgeInnerComputerBasePlatform
+import kotlin.jvm.optionals.getOrNull
 
 object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
     override val commonEnergy: EnergyUnit
         get() = Energies.FORGE
+    override val modList: List<String>
+        get() = ModList.get().mods.filter { !it.dependencies.any { d -> d.side == IModInfo.DependencySide.SERVER } }.map { it.modId }
+
+    override fun getModInformation(mod: String): Map<String, Any>? {
+        val mod = ModList.get().getModContainerById(mod).getOrNull() ?: return null
+        if (mod.modInfo.dependencies.any { d -> d.side == IModInfo.DependencySide.SERVER }) {
+            return null
+        }
+        return mapOf(
+            "name" to mod.modInfo.modId,
+            "description" to mod.modInfo.description,
+            "version" to mod.modInfo.version.toString(),
+            "license" to mod.modInfo.owningFile.license,
+        )
+    }
+
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID
 

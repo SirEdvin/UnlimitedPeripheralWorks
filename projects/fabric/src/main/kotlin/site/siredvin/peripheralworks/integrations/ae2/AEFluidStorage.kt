@@ -1,18 +1,10 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.config.Actionable
-import appeng.api.implementations.blockentities.IChestOrDrive
 import appeng.api.networking.security.IActionSource
-import appeng.api.networking.storage.IStorageService
 import appeng.api.stacks.AEFluidKey
-import appeng.api.stacks.AEKeyType
-import appeng.api.stacks.AEKeyTypes
-import appeng.api.storage.IStorageProvider
 import appeng.api.storage.MEStorage
-import appeng.api.storage.cells.IBasicCellItem
-import appeng.blockentity.AEBaseInvBlockEntity
 import appeng.blockentity.grid.AENetworkBlockEntity
-import appeng.blockentity.storage.DriveBlockEntity
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
@@ -32,9 +24,7 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
         entity.setChanged()
     }
 
-    override fun getCapacities(): List<Double> {
-        return List(getFluids().asSequence().count() + 1, { Double.POSITIVE_INFINITY })
-    }
+    override fun getCapacities(): List<Double> = List(getFluids().asSequence().count() + 1, { Double.POSITIVE_INFINITY })
 
     override fun storeFluid(stack: AgnosticFluidStack): AgnosticFluidStack {
         val insertedAmount = storage.insert(AEFluidKey.of(stack.toVariant()), stack.platformAmount.toLong(), Actionable.MODULATE, IActionSource.ofMachine(entity))

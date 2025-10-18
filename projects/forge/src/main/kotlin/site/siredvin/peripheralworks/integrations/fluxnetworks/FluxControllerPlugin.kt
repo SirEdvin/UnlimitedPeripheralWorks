@@ -20,17 +20,20 @@ class FluxControllerPlugin(private val blockEntity: TileFluxController) : IPerip
     fun getEnergyUnit(): String = Energies.FORGE.name
 
     @LuaFunction(mainThread = true)
-    fun getConnections(): Map<String, Any> {
+    fun getConnections(): List<Map<String, Any>> {
         val connections = blockEntity.network.allConnections
-        val result = mutableMapOf<String, Any>()
+        val result = mutableListOf<Map<String, Any>>()
         connections.forEach {
-            result[it.customName] = mapOf(
-                "maxTransferLimit" to it.maxTransferLimit,
-                "transferBuffer" to it.transferBuffer,
-                "transferChange" to it.transferChange,
-                "surgeMode" to it.surgeMode,
-                "deviceType" to it.deviceType.name,
-                "isChunkLoaded" to it.isChunkLoaded
+            result.add(
+                mapOf(
+                    "customName" to it.customName,
+                    "maxTransferLimit" to it.maxTransferLimit,
+                    "transferBuffer" to it.transferBuffer,
+                    "transferChange" to it.transferChange,
+                    "surgeMode" to it.surgeMode,
+                    "deviceType" to it.deviceType.name,
+                    "isChunkLoaded" to it.isChunkLoaded,
+                ),
             )
         }
         return result
@@ -43,7 +46,7 @@ class FluxControllerPlugin(private val blockEntity: TileFluxController) : IPerip
             "name" to network.networkName,
             "id" to network.networkID,
             "color" to network.networkColor,
-            "securityLevel" to network.securityLevel.name
+            "securityLevel" to network.securityLevel.name,
         )
     }
 

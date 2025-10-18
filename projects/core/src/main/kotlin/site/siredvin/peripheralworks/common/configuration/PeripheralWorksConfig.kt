@@ -33,7 +33,7 @@ object PeripheralWorksConfig {
     val enableBeacon: Boolean
         get() = ConfigHolder.commonConfig.enableBeacon.get()
     val enableNoteBlock: Boolean
-        get() = ConfigHolder.commonConfig.enableNotebook.get()
+        get() = ConfigHolder.commonConfig.enableNoteblook.get()
     val enableLectern: Boolean
         get() = ConfigHolder.commonConfig.enableLentern.get()
     val enableJukebox: Boolean
@@ -95,6 +95,9 @@ object PeripheralWorksConfig {
     val enableInformativeRegistry: Boolean
         get() = ConfigHolder.commonConfig.enableInformativeRegistry.get()
 
+    val informativeRegistryModBlocklist: List<String>
+        get() = ConfigHolder.commonConfig.informativeRegistryModBlocklist.get()
+
     val enableStatueWorkbench: Boolean
         get() = ConfigHolder.commonConfig.enableStatueWorkbench.get()
 
@@ -128,7 +131,7 @@ object PeripheralWorksConfig {
 
         // Specific plugins
         var enableBeacon: ForgeConfigSpec.BooleanValue
-        var enableNotebook: ForgeConfigSpec.BooleanValue
+        var enableNoteblook: ForgeConfigSpec.BooleanValue
         var enableLentern: ForgeConfigSpec.BooleanValue
         var enableJukebox: ForgeConfigSpec.BooleanValue
         var enablePoweredRail: ForgeConfigSpec.BooleanValue
@@ -152,6 +155,7 @@ object PeripheralWorksConfig {
         val realityForgerMaxRange: ForgeConfigSpec.IntValue
         val enableRecipeRegistry: ForgeConfigSpec.BooleanValue
         val enableInformativeRegistry: ForgeConfigSpec.BooleanValue
+        val informativeRegistryModBlocklist: ForgeConfigSpec.ConfigValue<List<String>>
         val enableStatueWorkbench: ForgeConfigSpec.BooleanValue
         val flexibleStatueMaxQuads: ForgeConfigSpec.IntValue
         val enableEntityLinks: ForgeConfigSpec.BooleanValue
@@ -184,7 +188,7 @@ object PeripheralWorksConfig {
             builder.push("specific")
             enableBeacon = builder.comment("Enables integration for minecraft beacon")
                 .define("enableBeacon", true)
-            enableNotebook = builder.comment("Enables integration for minecraft note block")
+            enableNoteblook = builder.comment("Enables integration for minecraft note block")
                 .define("enableNoteBlock", true)
             enableLentern = builder.comment("Enables integration for minecraft lectern")
                 .define("enableLectern", true)
@@ -230,6 +234,8 @@ object PeripheralWorksConfig {
                 .define("enableRecipeRegistry", true)
             enableInformativeRegistry = builder.comment("Enables informative registry")
                 .define("enableInformativeRegistry", true)
+            informativeRegistryModBlocklist = builder.comment("Mods blocked from showing up in informative registry, mostly for security")
+                .defineList<String>("informativeRegistryModBlocklist", { listOf("verySecretMod") }) { true }
             enableStatueWorkbench = builder.comment("Enables statue workbench")
                 .define("enableStatueWorkbench", true)
             flexibleStatueMaxQuads = builder.comment("Max quads amount for flexible statue, will be applied only for newest ones")

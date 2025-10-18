@@ -6,6 +6,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Flux networks now expose network and per device information
+- Blaze burner integration returned for fabric
+- Create recipes compact added for recipe registry
+- Informative registry now has `mods` and `entity` lists
+- New item query predicates. `uwu`, `owo`, `all`, and much more
+
+### Changed
+
+- `fluid_storage_extended` now in menu. With new `precision_amount`, `capacities` and `platformDivider` in configuration
+- Informative registry now produce better results for items
+
+### Fixed
+
+- Settings for fluid and energy storages
+- Fluid limits now exposed correctly
+
 ## [1.6.1] - 2025-10-04
 
 ### Added
