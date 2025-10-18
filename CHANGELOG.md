@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.2] - 2025-10-19
+
 ### Added
 
 - Flux networks now expose network and per device information
@@ -23,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Settings for fluid and energy storages
 - Fluid limits now exposed correctly
+- Recipe registry now returns single recipe when it should
+- Jar in Jar is now just Jar in Jar, not Jar in Jar in Jar
 
 ## [1.6.1] - 2025-10-04
 
