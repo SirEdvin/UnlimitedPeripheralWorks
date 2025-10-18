@@ -112,11 +112,9 @@ dependencies {
     libs.bundles.forge.include.get().map { implementation(fg.deobf(it)) }
     libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it)) }
 
-    libs.bundles.forge.jjar.get().map { jarJar(it) }
-
-//    jarJar(libs.bundles.forge.include) {
-//        isTransitive = false
-//    }
+    jarJar(libs.bundles.forge.jjar) {
+        isTransitive = false
+    }
 
 //    // WHY ?!?!?!
 //    // Well, I didn't find any way to actually provide `configuration` information to

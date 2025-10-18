@@ -21,12 +21,12 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.commonConfig.itemStorageTransferLimit.get()
     val enableGenericFluidStorage: Boolean
         get() = ConfigHolder.commonConfig.enableGenericFluidStorage.get()
-    val fluidStorageTransferLimit: Int
+    val fluidStorageTransferLimit: Double
         get() = ConfigHolder.commonConfig.fluidStorageTransferLimit.get()
     val enableGenericEnergyStorage: Boolean
         get() = ConfigHolder.commonConfig.enableGenericFluidStorage.get()
     val energyStorageTransferLimit: Int
-        get() = ConfigHolder.commonConfig.fluidStorageTransferLimit.get()
+        get() = ConfigHolder.commonConfig.energyStorageTransferLimit.get()
     val energyAlwaysTransferable: Boolean
         get() = ConfigHolder.commonConfig.energyAlwaysTransferable.get()
 
@@ -122,7 +122,7 @@ object PeripheralWorksConfig {
         var enableGenericFluidStorage: ForgeConfigSpec.BooleanValue
         var enableGenericEnergyStorage: ForgeConfigSpec.BooleanValue
         val itemStorageTransferLimit: ForgeConfigSpec.IntValue
-        val fluidStorageTransferLimit: ForgeConfigSpec.IntValue
+        val fluidStorageTransferLimit: ForgeConfigSpec.DoubleValue
         val energyStorageTransferLimit: ForgeConfigSpec.IntValue
         val energyAlwaysTransferable: ForgeConfigSpec.BooleanValue
 
@@ -175,7 +175,7 @@ object PeripheralWorksConfig {
             itemStorageTransferLimit = builder.comment("Limits max item transfer per one operation")
                 .defineInRange("itemStorageTransferLimit", 128, 1, Int.MAX_VALUE)
             fluidStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
-                .defineInRange("fluidStorageTransferLimit", 65500 * PlatformToolkit.get().fluidCompactDivider, 1, Int.MAX_VALUE)
+                .defineInRange("fluidStorageTransferLimit", 65500.0 * PlatformToolkit.get().fluidCompactDivider, 1.0, Double.MAX_VALUE)
             energyStorageTransferLimit = builder.comment("Limits max energy transfer per one operation")
                 .defineInRange("energyStorageTransferLimit", 262144, 1, Int.MAX_VALUE)
             energyAlwaysTransferable = builder.comment("Make any energy transferable, even if it is not usually allowed by CC:Tweaked itself")
