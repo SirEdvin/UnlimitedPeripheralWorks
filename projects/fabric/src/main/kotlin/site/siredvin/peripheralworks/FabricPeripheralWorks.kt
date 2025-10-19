@@ -21,13 +21,11 @@ import site.siredvin.peripheralium.FabricPeripheralium
 import site.siredvin.peripheralworks.common.block.PeripheralProxy
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModPlatform
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
-import site.siredvin.peripheralworks.integrations.powah.BaseEnergyStoragePlugin
 import site.siredvin.peripheralworks.subsystem.recipe.FabricRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
@@ -60,7 +58,6 @@ object FabricPeripheralWorks : ModInitializer {
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
-        PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->
             if (blockEntity is IPeripheralProvider<*>) {

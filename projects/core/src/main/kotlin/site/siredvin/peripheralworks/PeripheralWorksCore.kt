@@ -1,11 +1,13 @@
 package site.siredvin.peripheralworks
-import dan200.computercraft.api.ComputerCraftAPI
 import net.minecraft.world.item.CreativeModeTab
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.peripheralworks.common.setup.Blocks
-import site.siredvin.peripheralworks.computercraft.*
+import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.computercraft.EnergyStorageProvider
+import site.siredvin.peripheralworks.computercraft.FluidStorageProvider
+import site.siredvin.peripheralworks.computercraft.StorageProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.data.ModText
@@ -41,6 +43,5 @@ object PeripheralWorksCore {
         ComputerCraftProxy.addProvider(SpecificProtectedPluginProviders)
         EntityPeripheralLookup.addProvider(GenericEntityStorageProvider)
         EntityPeripheralLookup.addProvider(GenericEntityFluidStorageProvider)
-        ComputerCraftAPI.registerRefuelHandler(EnergyRefuelHandler)
     }
 }

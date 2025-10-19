@@ -7,7 +7,6 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
-import site.siredvin.peripheralworks.computercraft.EnergyRefuelHandler
 import team.reborn.energy.api.EnergyStorage
 
 class Integration : Runnable {
@@ -24,7 +23,7 @@ class Integration : Runnable {
         if (Configuration.enableEnergyStorage) {
             AgnosticEnergyStorageLookup.addEnergyStorageExtractor(::extractEnergyStorage)
         }
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         ComputerCraftAPI.registerRefuelHandler(EnergyRefuelHandler)
+        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }
