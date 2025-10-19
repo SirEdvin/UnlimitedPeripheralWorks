@@ -7,13 +7,14 @@ import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
 import net.minecraft.world.item.ItemStack
 import site.siredvin.broccolium.modules.storage.item.LimitedInventory
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import team.reborn.energy.api.EnergyStorage
 import java.util.OptionalInt
 import kotlin.math.min
 
 object EnergyRefuelHandler : TurtleRefuelHandler {
     override fun refuel(turtle: ITurtleAccess, stack: ItemStack, slot: Int, limit: Int): OptionalInt {
-        if (!Configuration.enableTurtleRefuelWithEnergy) {
+        if (!PeripheralWorksConfig.enableTurtleRefuelWithEnergy) {
             return OptionalInt.empty()
         }
         val inventory = LimitedInventory(turtle.inventory, intArrayOf(slot))
@@ -30,13 +31,13 @@ object EnergyRefuelHandler : TurtleRefuelHandler {
             while (extractedAmount < realLimit && energyStorage.amount != 0L) {
                 extractedAmount += energyStorage.extract(realLimit - extractedAmount, it)
             }
-            val leftEnergy = extractedAmount % Configuration.energyToFuelRate
+            val leftEnergy = extractedAmount % PeripheralWorksConfig.energyToFuelRate
             if (leftEnergy != 0L) {
                 energyStorage.insert(leftEnergy, it)
                 extractedAmount -= leftEnergy
             }
             it.commit()
         }
-        return OptionalInt.of((extractedAmount / Configuration.energyToFuelRate).toInt())
+        return OptionalInt.of((extractedAmount / PeripheralWorksConfig.energyToFuelRate).toInt())
     }
 }

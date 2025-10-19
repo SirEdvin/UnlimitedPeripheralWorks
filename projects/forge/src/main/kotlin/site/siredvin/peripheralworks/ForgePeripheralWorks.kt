@@ -73,6 +73,7 @@ object ForgePeripheralWorks {
         eventBus.addListener(this::registryModel)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
+        PeripheralWorksCommonHooks.afterConfigurationLoaded()
         blocksRegistry.register(eventBus)
         itemsRegistry.register(eventBus)
         blockEntityTypesRegistry.register(eventBus)

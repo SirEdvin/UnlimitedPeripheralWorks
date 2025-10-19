@@ -29,6 +29,10 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.commonConfig.energyStorageTransferLimit.get()
     val energyAlwaysTransferable: Boolean
         get() = ConfigHolder.commonConfig.energyAlwaysTransferable.get()
+    val enableTurtleRefuelWithEnergy: Boolean
+        get() = ConfigHolder.commonConfig.enableTurtleRefuelWithEnergy.get()
+    val energyToFuelRate: Int
+        get() = ConfigHolder.commonConfig.energyToFuelRate.get()
 
     val enableBeacon: Boolean
         get() = ConfigHolder.commonConfig.enableBeacon.get()
@@ -128,6 +132,8 @@ object PeripheralWorksConfig {
         val fluidStorageTransferLimit: ForgeConfigSpec.DoubleValue
         val energyStorageTransferLimit: ForgeConfigSpec.IntValue
         val energyAlwaysTransferable: ForgeConfigSpec.BooleanValue
+        val enableTurtleRefuelWithEnergy: ForgeConfigSpec.BooleanValue
+        val energyToFuelRate: ForgeConfigSpec.IntValue
 
         // Specific plugins
         var enableBeacon: ForgeConfigSpec.BooleanValue
@@ -184,6 +190,10 @@ object PeripheralWorksConfig {
                 .defineInRange("energyStorageTransferLimit", 262144, 1, Int.MAX_VALUE)
             energyAlwaysTransferable = builder.comment("Make any energy transferable, even if it is not usually allowed by CC:Tweaked itself")
                 .define("energyAlwaysTransferable", true)
+            this@CommonConfig.enableTurtleRefuelWithEnergy = builder.comment("Enables turtle refueling with items with energy")
+                .define("enableTurtleRefuelWithEnergy", true)
+            this@CommonConfig.energyToFuelRate = builder.comment("Controls how many energy required for one fuel point")
+                .defineInRange("energyToFuelRate", 256, 1, Int.MAX_VALUE)
             builder.pop()
             builder.push("specific")
             enableBeacon = builder.comment("Enables integration for minecraft beacon")

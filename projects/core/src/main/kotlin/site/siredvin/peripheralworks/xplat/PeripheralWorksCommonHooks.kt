@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.xplat
 
+import dan200.computercraft.api.ComputerCraftAPI
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
@@ -9,7 +10,10 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.CreativeModeTab
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.storage.energy.Energies
+import site.siredvin.broccolium.modules.storage.energy.EnergyRegistry
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.common.setup.*
 import site.siredvin.peripheralworks.data.ModText
@@ -31,6 +35,12 @@ object PeripheralWorksCommonHooks {
             ResourceLocation(PeripheralWorksCore.MOD_ID, "tab"),
             PeripheralWorksCore.configureCreativeTab(PlatformToolkit.get().createTabBuilder()).build(),
         )
+    }
+
+    fun afterConfigurationLoaded() {
+        if (PeripheralWorksConfig.enableTurtleRefuelWithEnergy) {
+            EnergyRegistry.registerConversion(ModPlatform.commonEnergy, Energies.TURTLE_FUEL, 1 / PeripheralWorksConfig.energyToFuelRate.toDouble())
+        }
     }
 
     fun registerUpgradesInCreativeTab(output: CreativeModeTab.Output) {
