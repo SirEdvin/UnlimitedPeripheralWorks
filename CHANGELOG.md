@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Flexible reality anchor now transparent on the map
+- Minecarts sorted by UUID when retrieved
 
 ## [1.6.2] - 2025-10-19
 

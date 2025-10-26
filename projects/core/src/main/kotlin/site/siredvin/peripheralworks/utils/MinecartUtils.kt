@@ -22,7 +22,7 @@ object MinecartUtils {
         (pos.z + 1).toDouble() - SEARCH_MARGIN,
     )
 
-    fun getMinecarts(level: Level, pos: BlockPos): List<AbstractMinecart> = level.getEntitiesOfClass(AbstractMinecart::class.java, getSearchShape(pos))
+    fun getMinecarts(level: Level, pos: BlockPos): List<AbstractMinecart> = level.getEntitiesOfClass(AbstractMinecart::class.java, getSearchShape(pos)).sortedBy { it.uuid }
 
     fun getContainerMinecarts(level: Level, pos: BlockPos): List<AbstractMinecartContainer> = level.getEntitiesOfClass(AbstractMinecartContainer::class.java, getSearchShape(pos))
 
