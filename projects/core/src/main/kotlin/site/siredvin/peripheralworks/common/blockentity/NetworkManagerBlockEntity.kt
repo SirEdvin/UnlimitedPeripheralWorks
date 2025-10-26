@@ -130,15 +130,18 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     fun toggleGroup(name: String, peripheralName: String) {
         if (!peripherals.contains(peripheralName)) return
         if (!peripheralGroups.contains(name)) {
-            val newGroup = NetworkManagerBlockEntity.PeripheralGroup()
+            val newGroup = PeripheralGroup()
             newGroup.peripherals.add(peripheralName)
             peripheralGroups[name] = newGroup
+            peripheral?.queueEvent("network_manager_group_change", newGroup, "added", peripheralName)
         } else {
             val group = peripheralGroups[name] ?: return
             if (group.peripherals.contains(peripheralName)) {
                 group.peripherals.remove(peripheralName)
+                peripheral?.queueEvent("network_manager_group_change", name, "removed", peripheralName)
             } else {
                 group.peripherals.add(peripheralName)
+                peripheral?.queueEvent("network_manager_group_change", name, "added", peripheralName)
             }
         }
         pushData()

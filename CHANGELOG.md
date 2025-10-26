@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added 
+
+- `network_manager_group_change` event
+
 ### Changed
 
 - Flexible reality anchor now transparent on the map
