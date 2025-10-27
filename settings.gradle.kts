@@ -18,6 +18,7 @@ pluginManagement {
                 includeGroupByRegex("site.siredvin.*")
             }
         }
+        maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie Snapshots" }
     }
 
     resolutionStrategy {

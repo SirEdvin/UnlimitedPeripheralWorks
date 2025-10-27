@@ -92,6 +92,7 @@ flywheel-forge = "1.0.0-beta-88"
 registrate-forge = "MC1.20-1.3.11"
 embers = "1.20.1-1.4.2"
 mana-and-artifice = "3.1.11"
+projecte = "4901949"  # ProjectE-1.20.1-PE1.0.1.jar
 
 [libraries]
 # Base libraries
@@ -192,6 +193,7 @@ mana-and-artifice = {module = "maven.modrinth:mana-and-artifice", version.ref="m
 create-forge = {module = "com.simibubi.create:create-1.20.1", version.ref="create-forge", name="all"}
 flywheel-forge = {module = "com.jozufozu.flywheel:flywheel-forge-1.20.1", version.ref="flywheel-forge"}
 registrate-forge = {module = "com.tterrag.registrate:Registrate", version.ref="registrate-forge"}
+projecte = {module = "curse.maven:projecte-226410", version.ref="projecte"}
 
 easyvillagers = {module = "curse.maven:easyvillagers-400514", version.ref="easyvillagers"}
 
@@ -319,6 +321,7 @@ externalMods-forge-integrations-full = [
     "mana-and-artifice",
     "gecolib-forge", # by occultism right now
 #    "create-forge",
+    "projecte",
 ]
 externalMods-forge-integrations-raw-full = [
 #    "flywheel-forge",   # for create
@@ -345,6 +348,7 @@ externalMods-forge-integrations-active = [
     "mana-and-artifice",
 #    "create-forge",
     "embers",
+    "projecte",
 ]
 externalMods-forge-integrations-raw-active = [
 
