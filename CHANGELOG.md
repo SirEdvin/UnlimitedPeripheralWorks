@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.4] - 2025-10-26
+
+### Added
+
+- ProjectE transmutation tablet can be used as upgrade for turtle and pocket computer
+
+### Fixed
+
+- Network manager is not registered as peripheral by wired modem
+
 ## [1.6.3] - 2025-10-26
 
 ### Added 

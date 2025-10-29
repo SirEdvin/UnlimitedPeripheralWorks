@@ -46,6 +46,7 @@
   "pocket.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
   "pocket.peripheralworks.novice_magic_tome": "Casting",
   "pocket.peripheralworks.peripheralium_hub": "Hub",
+  "pocket.peripheralworks.transmutation_table": "Transmutating",
   "pocket.peripheralworks.ultimate_sensor": "Sensing",
   "pocket.peripheralworks.universal_scanner": "Scanning",
   "text.peripheralworks.creative_tab": "UnlimitedPeripheralWorks",
@@ -96,6 +97,7 @@
   "turtle.peripheralworks.natures_compass": "Nature Compassing",
   "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
   "turtle.peripheralworks.peripheralium_hub": "Hub",
+  "turtle.peripheralworks.transmutation_table": "Transmutating",
   "turtle.peripheralworks.ultimate_sensor": "Sensing",
   "turtle.peripheralworks.universal_scanner": "Scanning"
 }

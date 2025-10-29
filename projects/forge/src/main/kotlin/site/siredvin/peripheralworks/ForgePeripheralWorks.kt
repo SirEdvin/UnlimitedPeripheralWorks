@@ -120,6 +120,7 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ars_nouveau").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("projecte").ifPresent { (it as Runnable).run() }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

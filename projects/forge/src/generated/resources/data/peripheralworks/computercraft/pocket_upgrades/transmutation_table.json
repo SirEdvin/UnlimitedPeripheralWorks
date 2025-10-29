@@ -1,0 +1,10 @@
+{
+  "type": "peripheralworks:transmutation_table",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "projecte"
+    }
+  ],
+  "item": "projecte:transmutation_tablet"
+}
