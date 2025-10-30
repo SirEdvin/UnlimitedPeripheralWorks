@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.6] - 2025-10-30
+
+### Fixed
+
+- Limit for `syntize` method for projectE
+- Inventory changes for `syntize` now will work correctly
+
 ## [1.6.5] - 2025-10-30
 
 ### Changed

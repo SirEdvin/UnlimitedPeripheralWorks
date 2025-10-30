@@ -46,6 +46,7 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
 
     @LuaFunction(mainThread = true)
     fun syntize(id: String, amount: Int): MethodResult {
+        assertBetween(amount, 1, 1024, "amount")
         val kp = knowledge ?: return MethodResult.of(null, "Cannot find player")
         val item = PlatformRegistries.ITEMS.get(ResourceLocation.parse(id))
         if (item == Items.AIR) {
