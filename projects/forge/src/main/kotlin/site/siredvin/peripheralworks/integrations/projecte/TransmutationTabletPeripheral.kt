@@ -39,7 +39,7 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
 
     @LuaFunction(mainThread = true)
     fun getAvailableItems(): List<Map<String, Any>> = knowledge?.knowledge?.map {
-        val base = LuaRepresentation.forItemStack(it.createStack(), RepresentationMode.BASE)
+        val base = LuaRepresentation.forItemStack(it.createStack(), RepresentationMode.DETAILED)
         base.remove("count")
         base
     } ?: emptyList()

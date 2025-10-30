@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.7] - 2025-10-31
+
+### Fixed
+
+- `getAvailableItems` for transmutate table returns full info about items
+
 ## [1.6.6] - 2025-10-30
 
 ### Fixed
