@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.5] - 2025-10-30
+
+### Changed
+
+- Significantly increase limits for item, fluid and energy transfer.
+
+### Fixed
+
+- `pullItems` now works will all slots with item predicate
+
 ## [1.6.4] - 2025-10-26
 
 ### Added
