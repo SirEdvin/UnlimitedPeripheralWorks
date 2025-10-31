@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.8] - 2025-10-31
+
+### Changed
+
+- `recipe_registry` api rework, it is now fully incompatible with old version, but supports getting parsed and raw recipes just by id.
+
 ## [1.6.7] - 2025-10-31
 
 ### Fixed
