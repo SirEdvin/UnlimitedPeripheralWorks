@@ -50,7 +50,7 @@ class InformativeRegistryPeripheral(
                     val registry = level.registryAccess().registryOrThrow(key)
                     val tagID = ResourceLocation.tryParse(it) ?: return@addList MethodResult.of(null)
                     val holder = level.registryAccess().registryOrThrow(key).getTag(TagKey.create(key, tagID)).getOrNull() ?: return@addList MethodResult.of(null)
-                    return@addList MethodResult.of(holder.stream().map { x -> registry.getKey(x.value()).toString() }.filter { x -> x != null }.toList())
+                    return@addList MethodResult.of(holder.stream().map { x -> registry.getKey(x.value()!!).toString() }.filter { x -> x != null }.toList())
                 },
             )
         }
