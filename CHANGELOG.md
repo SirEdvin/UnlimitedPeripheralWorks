@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.9] - 2025-11-01
+
+### Added
+
+- Exposing information about tags with `informative_registry`
+
 ## [1.6.8] - 2025-10-31
 
 ### Changed
