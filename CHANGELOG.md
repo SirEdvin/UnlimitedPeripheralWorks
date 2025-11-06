@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Integration with EMI for recipe and ingredient pasting to computer
 - Turtle refuel handler works with any kind of energy
-- 
+- Sided peripherals!
 
 ## [1.6.9] - 2025-11-01
 
