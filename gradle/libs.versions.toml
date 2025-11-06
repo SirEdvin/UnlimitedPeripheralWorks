@@ -5,11 +5,11 @@ kotlin-coroutines = "1.6.4"
 kotlin-atomicfu = "0.20.2"
 # Gradle plugins
 sponge = "0.2.1-SNAPSHOT"
-loom = "1.4.+"
+loom = "1.12.+"
 mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.113.0"
+cc-tweaked = "1.116.1"
 broccolium = "1.2.11"
 tweakium = "1.2.11"
 peripheralium = "1.2.11"
@@ -31,10 +31,7 @@ parchmentMc = "1.20.1"
 # Extra mod dependencies
 cloth-config = "11.0.99"
 architectury = "9.0.8"
-
-# Dev mod dependenceis
-jei = "15.20.0.106"
-rei = "12.0.625"
+emi = "1.1.22+1.20.1"
 
 # Shared integration mod dependency
 
@@ -108,6 +105,7 @@ common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", v
 broccolium-core = {module = "site.siredvin:broccolium-common-1.20.1", version.ref = "broccolium"}
 tweakium-core = {module = "site.siredvin:tweakium-common-1.20.1", version.ref = "tweakium"}
 peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20.1", version.ref = "peripheralium"}
+emi-common = {module = "dev.emi:emi-xplat-mojmap", version.ref="emi"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 # Fabric mod dependencies
@@ -121,6 +119,7 @@ broccolium-fabric = {module = "site.siredvin:broccolium-fabric-1.20.1", version.
 tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.20.1", version.ref = "tweakium"}
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
 modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
+emi-fabric = {module="dev.emi:emi-fabric", version.ref="emi"}
 
 # Forge mod dependencies
 cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20.1-forge", version.ref="cc-tweaked"}
@@ -131,10 +130,7 @@ peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", vers
 broccolium-jjar-forge = {module = "site.siredvin:broccolium-forge-1.20.1", version.ref = "broccolium-jjar"}
 tweakium-jjar-forge = {module = "site.siredvin:tweakium-forge-1.20.1", version.ref = "tweakium-jjar"}
 peripheralium-jjar-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium-jjar"}
-
-# Dev mod dependencies
-jei-forge = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
-rei-fabric = {module = "me.shedaniel:RoughlyEnoughItems-fabric", version.ref = "rei"}
+emi-forge = {module="dev.emi:emi-forge", version.ref="emi"}
 
 # Extra mod dependency
 cloth-config-forge = {module = "me.shedaniel.cloth:cloth-config-forge", version.ref = "cloth-config"}
@@ -224,7 +220,7 @@ mixinGradle = { id = "org.spongepowered.mixin", version.ref = "mixinGradle" }
 
 [bundles]
 kotlin = ["kotlin-stdlib", "kotlin-coroutines", "kotlin-atomicfu"]
-cccommon = ["cc-tweaked-common", "cc-tweaked-common-api", "cc-tweaked-core", "peripheralium-core", "tweakium-core", "broccolium-core"]
+cccommon = ["cc-tweaked-common", "cc-tweaked-common-api", "cc-tweaked-core", "peripheralium-core", "tweakium-core", "broccolium-core", "emi-common"]
 apicommon = ["common-config"]
 ccfabric = ["cc-tweaked-fabric", "cc-tweaked-core", ]
 fabric-core = ["fabric-loader"]
@@ -237,12 +233,10 @@ forge-jjar = ["broccolium-jjar-forge", "tweakium-jjar-forge", "peripheralium-jja
 
 # Minecraft
 externalMods-forge-runtime = [
-    "jei-forge",
     "architectury-forge",
     "cloth-config-forge",
 ]
 externalMods-fabric-runtime = [
-#    "rei-fabric",
     "architectury-fabric",
     "cloth-config-fabric",
     "modmenu",
@@ -277,6 +271,7 @@ externalMods-fabric-integrations-full = [
     "modern-industrialization",
 #    "magna",  # required by MI
     "pal",  # required by MI,
+    "emi-fabric",
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -293,6 +288,7 @@ externalMods-fabric-integrations-active = [
 #    "modern-industrialization",
 #    "magna",  # required by MI
 #    "pal",  # required by MI
+    "emi-fabric",
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
@@ -322,6 +318,7 @@ externalMods-forge-integrations-full = [
     "gecolib-forge", # by occultism right now
 #    "create-forge",
     "projecte",
+    "emi-forge",
 ]
 externalMods-forge-integrations-raw-full = [
 #    "flywheel-forge",   # for create
@@ -349,6 +346,7 @@ externalMods-forge-integrations-active = [
 #    "create-forge",
     "embers",
     "projecte",
+#    "emi-forge",
 ]
 externalMods-forge-integrations-raw-active = [
 

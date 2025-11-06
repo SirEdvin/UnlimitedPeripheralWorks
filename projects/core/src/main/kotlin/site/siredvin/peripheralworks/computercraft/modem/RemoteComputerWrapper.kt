@@ -35,7 +35,7 @@ class RemoteComputerWrapper<O : IPeripheralOwner>(
 
     override fun getID(): Int = computer.id
 
-    override fun queueEvent(@Nonnull event: String, vararg arguments: Any) {
+    override fun queueEvent(event: String, vararg arguments: Any?) {
         computer.queueEvent(event, *arguments)
     }
 

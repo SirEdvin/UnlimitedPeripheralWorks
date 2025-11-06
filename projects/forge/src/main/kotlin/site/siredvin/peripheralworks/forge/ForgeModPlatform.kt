@@ -2,6 +2,10 @@ package site.siredvin.peripheralworks.forge
 
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ServerGamePacketListener
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.RecipeSerializer
@@ -14,6 +18,9 @@ import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.networking.MessageType
+import site.siredvin.peripheralworks.networking.NetworkMessage
+import site.siredvin.peripheralworks.networking.ServerNetworkContext
 import site.siredvin.peripheralworks.xplat.ModInnerPlatform
 import site.siredvin.tweakium.modules.platform.ForgeInnerComputerBasePlatform
 import kotlin.jvm.optionals.getOrNull
@@ -35,6 +42,19 @@ object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
             "version" to mod.modInfo.version.toString(),
             "license" to mod.modInfo.owningFile.license,
         )
+    }
+
+    override fun <T : NetworkMessage<*>> createMessageType(
+        id: Int,
+        channel: ResourceLocation,
+        klass: Class<T>,
+        reader: FriendlyByteBuf.Reader<T>
+    ): MessageType<T> {
+        return NetworkHandler.MessageTypeImpl(id, klass, reader)
+    }
+
+    override fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> {
+        return NetworkHandler.createServerboundPacket(message)
     }
 
     override val modID: String

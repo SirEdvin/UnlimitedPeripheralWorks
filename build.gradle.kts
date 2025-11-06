@@ -1,7 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("site.siredvin.root") version "0.8.24"
-    id("site.siredvin.release") version "0.8.24"
+    id("site.siredvin.root") version "0.8.26"
+    id("site.siredvin.release") version "0.8.26"
     id("com.dorongold.task-tree") version "4.0.0"
     id("com.github.ben-manes.versions") version "0.51.0"
 }

@@ -5,6 +5,7 @@ import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -23,12 +24,17 @@ import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.fabric.FabricMessageType
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModPlatform
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
+import site.siredvin.peripheralworks.networking.NetworkMessage
+import site.siredvin.peripheralworks.networking.NetworkMessages
+import site.siredvin.peripheralworks.networking.ServerNetworkContext
 import site.siredvin.peripheralworks.subsystem.recipe.FabricRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
+
 
 @Suppress("UNUSED")
 object FabricPeripheralWorks : ModInitializer {
@@ -41,7 +47,16 @@ object FabricPeripheralWorks : ModInitializer {
     override fun onInitialize() {
         // Register configuration
         FabricPeripheralium.sayHi()
+
         PeripheralWorksCore.configure(FabricModPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
+        for (type in NetworkMessages.serverbound) {
+            ServerPlayNetworking.registerGlobalReceiver(
+                FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type),
+                { packet, player, sender ->
+                    packet.payload.handle(ServerNetworkContext { player })
+                }
+            )
+        }
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         // Load all integrations

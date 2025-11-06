@@ -11,6 +11,7 @@ import site.siredvin.peripheralworks.computercraft.StorageProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificPluginProvider
 import site.siredvin.peripheralworks.computercraft.plugins.specific.SpecificProtectedPluginProviders
 import site.siredvin.peripheralworks.data.ModText
+import site.siredvin.peripheralworks.networking.NetworkMessages
 import site.siredvin.peripheralworks.subsystem.entityperipheral.EntityPeripheralLookup
 import site.siredvin.peripheralworks.subsystem.entityperipheral.GenericEntityFluidStorageProvider
 import site.siredvin.peripheralworks.subsystem.entityperipheral.GenericEntityStorageProvider
@@ -20,6 +21,7 @@ import site.siredvin.peripheralworks.xplat.*
 @Suppress("UNUSED")
 object PeripheralWorksCore {
     const val MOD_ID = "peripheralworks"
+    const val NETWORK_VERSION = "1.0"
 
     var logger: Logger = LogManager.getLogger(MOD_ID)
 

@@ -125,6 +125,13 @@ repositories {
             includeGroup("com.jozufozu.flywheel")
         }
     }
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/")
+        content {
+            includeGroup("dev.emi")
+        }
+    }
 }
 
 dependencies {

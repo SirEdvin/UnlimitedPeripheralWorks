@@ -34,6 +34,18 @@
         "adapter": "kotlin",
         "value": "site.siredvin.peripheralworks.data.FabricDataGenerators"
       }
+    ],
+    "emi": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.integrations.emi.Entrypoint"
+      }
+    ],
+    "jei_mod_plugin": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.integrations.jei.Entrypoint"
+      }
     ]
   },
   "mixins": [

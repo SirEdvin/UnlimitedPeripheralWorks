@@ -104,6 +104,13 @@ repositories {
             includeGroup("com.klikli_dev")
         }
     }
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/")
+        content {
+            includeGroup("dev.emi")
+        }
+    }
 }
 
 dependencies {
