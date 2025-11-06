@@ -4,6 +4,7 @@ import appeng.api.config.Actionable
 import appeng.api.config.PowerMultiplier
 import appeng.api.networking.energy.IEnergyService
 import appeng.blockentity.grid.AENetworkBlockEntity
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
@@ -26,7 +27,7 @@ class AEEnergyStorage(private val energyService: IEnergyService, private val ent
     override val canReceive: Boolean
         get() = true
     override val unit: EnergyUnit
-        get() = ModPlatform.commonEnergy
+        get() = PlatformToolkit.get().commonEnergy
 
     override fun storeEnergy(stack: AgnosticEnergyStack): AgnosticEnergyStack {
         if (stack.unit != Energies.REDSTONE_FLUX) return stack
@@ -35,7 +36,7 @@ class AEEnergyStorage(private val energyService: IEnergyService, private val ent
     }
 
     override fun takeEnergy(predicate: Predicate<AgnosticEnergyStack>, limit: Long): AgnosticEnergyStack {
-        if (!predicate.test(energy)) return AgnosticEnergyStack(ModPlatform.commonEnergy, 0)
+        if (!predicate.test(energy)) return AgnosticEnergyStack(PlatformToolkit.get().commonEnergy, 0)
         val extracted = energyService.extractAEPower(limit.toDouble(), Actionable.MODULATE, PowerMultiplier.CONFIG)
         return AgnosticEnergyStack(Energies.REDSTONE_FLUX, extracted.toLong())
     }

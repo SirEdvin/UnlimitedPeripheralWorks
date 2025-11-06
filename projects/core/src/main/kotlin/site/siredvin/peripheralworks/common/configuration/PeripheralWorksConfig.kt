@@ -193,7 +193,7 @@ object PeripheralWorksConfig {
             this@CommonConfig.enableTurtleRefuelWithEnergy = builder.comment("Enables turtle refueling with items with energy")
                 .define("enableTurtleRefuelWithEnergy", true)
             this@CommonConfig.energyToFuelRate = builder.comment("Controls how many energy required for one fuel point")
-                .defineInRange("energyToFuelRate", 256, 1, Int.MAX_VALUE)
+                .defineInRange("energyToFuelRate", 250, 1, Int.MAX_VALUE)
             builder.pop()
             builder.push("specific")
             enableBeacon = builder.comment("Enables integration for minecraft beacon")

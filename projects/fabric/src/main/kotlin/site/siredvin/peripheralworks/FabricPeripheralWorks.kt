@@ -62,7 +62,6 @@ object FabricPeripheralWorks : ModInitializer {
         // Load all integrations
         loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }

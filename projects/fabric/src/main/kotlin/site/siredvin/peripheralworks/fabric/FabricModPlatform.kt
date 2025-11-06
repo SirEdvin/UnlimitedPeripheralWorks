@@ -21,8 +21,6 @@ import site.siredvin.tweakium.modules.platform.FabricInnerComputerBasePlatform
 
 
 object FabricModPlatform : FabricInnerComputerBasePlatform(), ModInnerPlatform {
-    override val commonEnergy: EnergyUnit
-        get() = Energies.REDSTONE_FLUX
     override val modList: List<String>
         get() = FabricLoader.getInstance().allMods.filter { it.metadata.environment != ModEnvironment.SERVER }.map { it.metadata.name }
 

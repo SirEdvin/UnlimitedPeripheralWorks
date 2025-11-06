@@ -23,9 +23,6 @@ object ModPlatform : ComputerBasePlatform() {
     override val modInformationTracker: ComputerModInformationTracker
         get() = innerModInformationTracker
 
-    val commonEnergy: EnergyUnit
-        get() = baseInnerPlatform.commonEnergy
-
     val modList: List<String>
         get() = baseInnerPlatform.modList
     fun getModInformation(mod: String): Map<String, Any>? = baseInnerPlatform.getModInformation(mod)

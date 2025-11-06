@@ -26,8 +26,6 @@ import site.siredvin.tweakium.modules.platform.ForgeInnerComputerBasePlatform
 import kotlin.jvm.optionals.getOrNull
 
 object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
-    override val commonEnergy: EnergyUnit
-        get() = Energies.FORGE
     override val modList: List<String>
         get() = ModList.get().mods.filter { !it.dependencies.any { d -> d.side == IModInfo.DependencySide.SERVER } }.map { it.modId }
 

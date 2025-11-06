@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.CreativeModeTab
+import org.apache.commons.lang3.math.Fraction
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyRegistry
@@ -39,7 +40,7 @@ object PeripheralWorksCommonHooks {
 
     fun afterConfigurationLoaded() {
         if (PeripheralWorksConfig.enableTurtleRefuelWithEnergy) {
-            EnergyRegistry.registerConversion(ModPlatform.commonEnergy, Energies.TURTLE_FUEL, 1 / PeripheralWorksConfig.energyToFuelRate.toDouble())
+            EnergyRegistry.registerConversion(PlatformToolkit.get().commonEnergy, Energies.TURTLE_FUEL, Fraction.getFraction(1, PeripheralWorksConfig.energyToFuelRate))
         }
     }
 

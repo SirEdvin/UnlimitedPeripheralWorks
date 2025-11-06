@@ -75,7 +75,6 @@ object ForgePeripheralWorks {
         eventBus.addListener(this::registryModel)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
-        PeripheralWorksCommonHooks.afterConfigurationLoaded()
         blocksRegistry.register(eventBus)
         itemsRegistry.register(eventBus)
         blockEntityTypesRegistry.register(eventBus)
@@ -103,6 +102,7 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("embers").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("theurgy").ifPresent { (it as Runnable).run() }
+        PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)

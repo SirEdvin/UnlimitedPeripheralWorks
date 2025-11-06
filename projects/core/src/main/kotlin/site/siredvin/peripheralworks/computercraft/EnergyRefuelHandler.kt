@@ -2,12 +2,17 @@ package site.siredvin.peripheralworks.computercraft
 
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.TurtleRefuelHandler
+import dan200.computercraft.shared.turtle.core.TurtleRefuelCommand
 import net.minecraft.world.item.ItemStack
+import org.apache.commons.lang3.math.Fraction
+import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
 import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyRegistry
+import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import java.util.OptionalInt
+import kotlin.math.floor
 import kotlin.math.min
 
 object EnergyRefuelHandler : TurtleRefuelHandler {
@@ -15,32 +20,46 @@ object EnergyRefuelHandler : TurtleRefuelHandler {
         if (!PeripheralWorksConfig.enableTurtleRefuelWithEnergy) {
             return OptionalInt.empty()
         }
-        val itemInSlot = turtle.inventory.getItem(slot)
-        val energyStorage = AgnosticEnergyStorageLookup.extractEnergyStorage(turtle.level, itemInSlot) ?: return OptionalInt.empty()
+        val energyStorage = AgnosticEnergyStorageLookup.extractFromInventoryStack(turtle.level, ContainerWrapper(turtle.inventory), slot) ?: return OptionalInt.empty()
         val energy = energyStorage.energy
         if (energy.isEmpty)
             return OptionalInt.empty()
         if (energy.unit != Energies.TURTLE_FUEL && !EnergyRegistry.isConvertible(energy.unit, Energies.TURTLE_FUEL))
             return OptionalInt.empty()
 
-        val fuelLimit = if (energy.unit == Energies.TURTLE_FUEL) {
-            (turtle.fuelLimit - turtle.fuelLevel).coerceAtLeast(0)
+        val conversionRate = if (energy.unit == Energies.TURTLE_FUEL) {
+            Fraction.getFraction(1, 1)
         } else {
-            (turtle.fuelLimit - turtle.fuelLevel).coerceAtLeast(0) * (1 / EnergyRegistry.CONVERSIONS[energy.unit]!![Energies.TURTLE_FUEL]!!).toInt()
+            EnergyRegistry.CONVERSIONS[energy.unit]!![Energies.TURTLE_FUEL]!!
         }
 
-        val realLimit = min(limit, fuelLimit)
+        val fuelLimit = ((turtle.fuelLimit - turtle.fuelLevel).coerceAtLeast(0) / conversionRate.toDouble()).toInt()
+        val roundedLimit = Fraction.getFraction(conversionRate.multiplyBy(Fraction.getFraction(limit, 1)).toInt(), 1).divideBy(conversionRate).toLong()
+        val realLimit = min(roundedLimit.toInt(), fuelLimit)
 
         if (realLimit == 0)
             return OptionalInt.empty()
 
-        val extractedEnergy = energyStorage.takeEnergy({ true }, realLimit.toLong())
-        if (extractedEnergy.isEmpty)
-            return OptionalInt.empty()
-        val turtleEnergy = if (extractedEnergy.unit == Energies.TURTLE_FUEL) {
-            extractedEnergy
+        var slidingLimit = realLimit.toLong()
+        val slidingStack = AgnosticEnergyStack(energyStorage.unit, 0)
+        for (i in 1..4) {
+            val extractedEnergy = energyStorage.takeEnergy({ true }, slidingLimit)
+            if (extractedEnergy.isEmpty) {
+                if (slidingStack.isEmpty) {
+                    return OptionalInt.empty()
+                }
+                break
+            }
+            slidingStack.grow(extractedEnergy.amount)
+            slidingLimit -= extractedEnergy.amount
+            if (slidingLimit <= 0)
+                break
+        }
+
+        val turtleEnergy = if (slidingStack.unit == Energies.TURTLE_FUEL) {
+            slidingStack
         } else {
-            EnergyRegistry.convert(extractedEnergy, Energies.TURTLE_FUEL)
+            EnergyRegistry.convert(slidingStack, Energies.TURTLE_FUEL)
         }
         if (turtleEnergy.isEmpty)
             return OptionalInt.empty()
