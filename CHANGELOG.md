@@ -6,6 +6,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.10] - 2025-11-06
+
+### Added
+
+- Integration with EMI for recipe and ingredient pasting to computer
+
+## [1.6.9] - 2025-11-01
+
+### Added
+
+- Exposing information about tags with `informative_registry`
+
+## [1.6.8] - 2025-10-31
+
+### Changed
+
+- `recipe_registry` api rework, it is now fully incompatible with old version, but supports getting parsed and raw recipes just by id.
+
+## [1.6.7] - 2025-10-31
+
+### Fixed
+
+- `getAvailableItems` for transmutate table returns full info about items
+
+## [1.6.6] - 2025-10-30
+
+### Fixed
+
+- Limit for `syntize` method for projectE
+- Inventory changes for `syntize` now will work correctly
+
+## [1.6.5] - 2025-10-30
+
+### Changed
+
+- Significantly increase limits for item, fluid and energy transfer.
+
+### Fixed
+
+- `pullItems` now works will all slots with item predicate
+
+## [1.6.4] - 2025-10-26
+
+### Added
+
+- ProjectE transmutation tablet can be used as upgrade for turtle and pocket computer
+
+### Fixed
+
+- Network manager is not registered as peripheral by wired modem
+
+## [1.6.3] - 2025-10-26
+
+### Added 
+
+- `network_manager_group_change` event
+
+### Changed
+
+- Flexible reality anchor now transparent on the map
+- Minecarts sorted by UUID when retrieved
+
 ## [1.6.2] - 2025-10-19
 
 ### Added

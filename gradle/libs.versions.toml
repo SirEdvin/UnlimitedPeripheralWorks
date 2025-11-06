@@ -5,17 +5,17 @@ kotlin-coroutines = "1.6.4"
 kotlin-atomicfu = "0.20.2"
 # Gradle plugins
 sponge = "0.2.1-SNAPSHOT"
-loom = "1.4.+"
+loom = "1.12.+"
 mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.113.0"
-broccolium = "1.2.9"
-tweakium = "1.2.9"
-peripheralium = "1.2.9"
-broccolium-jjar = "[1.2.9, 1.3.0)"
-tweakium-jjar = "[1.2.9, 1.3.0)"
-peripheralium-jjar = "[1.2.9, 1.3.0)"
+cc-tweaked = "1.116.1"
+broccolium = "1.3.0"
+tweakium = "1.3.0"
+peripheralium = "1.3.0"
+broccolium-jjar = "[1.3.0, 1.4.0)"
+tweakium-jjar = "[1.3.0, 1.4.0)"
+peripheralium-jjar = "[1.3.0, 1.4.0)"
 mixin = "0.8.5"
 # Fabric dependencies
 fabric-api = "0.92.6+1.20.1"
@@ -31,10 +31,7 @@ parchmentMc = "1.20.1"
 # Extra mod dependencies
 cloth-config = "11.0.99"
 architectury = "9.0.8"
-
-# Dev mod dependenceis
-jei = "15.20.0.106"
-rei = "12.0.625"
+emi = "1.1.22+1.20.1"
 
 # Shared integration mod dependency
 
@@ -92,6 +89,7 @@ flywheel-forge = "1.0.0-beta-88"
 registrate-forge = "MC1.20-1.3.11"
 embers = "1.20.1-1.4.2"
 mana-and-artifice = "3.1.11"
+projecte = "4901949"  # ProjectE-1.20.1-PE1.0.1.jar
 
 [libraries]
 # Base libraries
@@ -107,6 +105,7 @@ common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", v
 broccolium-core = {module = "site.siredvin:broccolium-common-1.20.1", version.ref = "broccolium"}
 tweakium-core = {module = "site.siredvin:tweakium-common-1.20.1", version.ref = "tweakium"}
 peripheralium-core = {module = "site.siredvin:peripheralium-common-1.20.1", version.ref = "peripheralium"}
+emi-common = {module = "dev.emi:emi-xplat-mojmap", version.ref="emi"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 # Fabric mod dependencies
@@ -120,6 +119,7 @@ broccolium-fabric = {module = "site.siredvin:broccolium-fabric-1.20.1", version.
 tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.20.1", version.ref = "tweakium"}
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
 modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
+emi-fabric = {module="dev.emi:emi-fabric", version.ref="emi"}
 
 # Forge mod dependencies
 cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20.1-forge", version.ref="cc-tweaked"}
@@ -130,10 +130,7 @@ peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", vers
 broccolium-jjar-forge = {module = "site.siredvin:broccolium-forge-1.20.1", version.ref = "broccolium-jjar"}
 tweakium-jjar-forge = {module = "site.siredvin:tweakium-forge-1.20.1", version.ref = "tweakium-jjar"}
 peripheralium-jjar-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium-jjar"}
-
-# Dev mod dependencies
-jei-forge = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
-rei-fabric = {module = "me.shedaniel:RoughlyEnoughItems-fabric", version.ref = "rei"}
+emi-forge = {module="dev.emi:emi-forge", version.ref="emi"}
 
 # Extra mod dependency
 cloth-config-forge = {module = "me.shedaniel.cloth:cloth-config-forge", version.ref = "cloth-config"}
@@ -192,6 +189,7 @@ mana-and-artifice = {module = "maven.modrinth:mana-and-artifice", version.ref="m
 create-forge = {module = "com.simibubi.create:create-1.20.1", version.ref="create-forge", name="all"}
 flywheel-forge = {module = "com.jozufozu.flywheel:flywheel-forge-1.20.1", version.ref="flywheel-forge"}
 registrate-forge = {module = "com.tterrag.registrate:Registrate", version.ref="registrate-forge"}
+projecte = {module = "curse.maven:projecte-226410", version.ref="projecte"}
 
 easyvillagers = {module = "curse.maven:easyvillagers-400514", version.ref="easyvillagers"}
 
@@ -222,7 +220,7 @@ mixinGradle = { id = "org.spongepowered.mixin", version.ref = "mixinGradle" }
 
 [bundles]
 kotlin = ["kotlin-stdlib", "kotlin-coroutines", "kotlin-atomicfu"]
-cccommon = ["cc-tweaked-common", "cc-tweaked-common-api", "cc-tweaked-core", "peripheralium-core", "tweakium-core", "broccolium-core"]
+cccommon = ["cc-tweaked-common", "cc-tweaked-common-api", "cc-tweaked-core", "peripheralium-core", "tweakium-core", "broccolium-core", "emi-common"]
 apicommon = ["common-config"]
 ccfabric = ["cc-tweaked-fabric", "cc-tweaked-core", ]
 fabric-core = ["fabric-loader"]
@@ -235,12 +233,10 @@ forge-jjar = ["broccolium-jjar-forge", "tweakium-jjar-forge", "peripheralium-jja
 
 # Minecraft
 externalMods-forge-runtime = [
-    "jei-forge",
     "architectury-forge",
     "cloth-config-forge",
 ]
 externalMods-fabric-runtime = [
-#    "rei-fabric",
     "architectury-fabric",
     "cloth-config-fabric",
     "modmenu",
@@ -275,6 +271,7 @@ externalMods-fabric-integrations-full = [
     "modern-industrialization",
 #    "magna",  # required by MI
     "pal",  # required by MI,
+    "emi-fabric",
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -291,6 +288,7 @@ externalMods-fabric-integrations-active = [
 #    "modern-industrialization",
 #    "magna",  # required by MI
 #    "pal",  # required by MI
+    "emi-fabric",
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
@@ -319,6 +317,8 @@ externalMods-forge-integrations-full = [
     "mana-and-artifice",
     "gecolib-forge", # by occultism right now
 #    "create-forge",
+    "projecte",
+    "emi-forge",
 ]
 externalMods-forge-integrations-raw-full = [
 #    "flywheel-forge",   # for create
@@ -345,6 +345,8 @@ externalMods-forge-integrations-active = [
     "mana-and-artifice",
 #    "create-forge",
     "embers",
+    "projecte",
+    "emi-forge",
 ]
 externalMods-forge-integrations-raw-active = [
 

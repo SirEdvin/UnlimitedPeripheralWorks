@@ -10,7 +10,6 @@ import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
-import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorageExtractor
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -49,13 +48,11 @@ class Integration : Runnable {
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         ComputerCraftProxy.addProvider(MobJarPluginProvider)
         if (Configuration.enableSourceStorage) {
-            AgnosticEnergyStorageLookup.addEnergyStorageExtractor(
-                AgnosticEnergyStorageExtractor { level, blockPos, blockEntity ->
-                    if (blockEntity == null) return@AgnosticEnergyStorageExtractor null
-                    val source = blockEntity as? ISourceTile ?: return@AgnosticEnergyStorageExtractor null
-                    return@AgnosticEnergyStorageExtractor AgnosticSourceStorage(source)
-                },
-            )
+            AgnosticEnergyStorageLookup.addBlockLookup { level, blockPos, blockEntity, direction ->
+                if (blockEntity == null) return@addBlockLookup null
+                val source = blockEntity as? ISourceTile ?: return@addBlockLookup null
+                return@addBlockLookup AgnosticSourceStorage(source)
+            }
         }
         val magicTomeUpgradeSerializer = ModPlatform.registerPocketUpgrade(
             MAGIC_TOME,

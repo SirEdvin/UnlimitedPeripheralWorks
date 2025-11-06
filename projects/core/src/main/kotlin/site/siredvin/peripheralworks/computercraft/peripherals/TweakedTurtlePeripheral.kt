@@ -23,8 +23,8 @@ class TweakedTurtlePeripheral(turtle: TurtleBlockEntity) :
 
     init {
         val level = turtle.level!!
-        val itemStorage = AgnosticItemStorageLookup.extractStorage(level, turtle.blockPos, turtle) as SlottedAgnosticItemStorage
-        val energyStorage = AgnosticEnergyStorageLookup.extractEnergyStorage(level, turtle.blockPos, turtle)!!
+        val itemStorage = AgnosticItemStorageLookup.extractFromBlock(level, turtle.blockPos, turtle, null) as SlottedAgnosticItemStorage
+        val energyStorage = AgnosticEnergyStorageLookup.extractFromBlock(level, turtle.blockPos, turtle, null)!!
         addPlugin(ComputerPlugin("turtle", turtle))
         addPlugin(InventoryPlugin(level, itemStorage))
         if (PeripheralWorksConfig.energyAlwaysTransferable) {

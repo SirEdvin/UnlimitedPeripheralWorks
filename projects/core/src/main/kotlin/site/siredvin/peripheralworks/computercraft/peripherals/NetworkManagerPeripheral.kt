@@ -32,25 +32,35 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     }
 
     @LuaFunction(mainThread = true)
-    fun addPeripheralToGroup(group: String, peripheral: String): MethodResult {
+    fun removeGroup(group: String): MethodResult {
+        if (be.peripheralGroups.contains(group)) return MethodResult.of(false, "Group does not exists")
+        if (be.peripheralGroups[group]!!.peripherals.isNotEmpty()) return MethodResult.of(false, "Group is not empty")
+        be.peripheralGroups.remove(group)
+        return MethodResult.of(true)
+    }
+
+    @LuaFunction(mainThread = true)
+    fun add(group: String, peripheral: String): MethodResult {
         if (!be.peripherals.contains(peripheral)) return MethodResult.of(false, "There is no such peripheral")
-        val group = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
-        if (group.peripherals.contains(peripheral)) {
+        val groupInstance = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
+        if (groupInstance.peripherals.contains(peripheral)) {
             return MethodResult.of(false, "Peripheral already in the group")
         }
-        group.peripherals.add(peripheral)
+        groupInstance.peripherals.add(peripheral)
+        queueEvent("network_manager_group_change", group, "added", peripheral)
         be.pushData()
         return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun removePeripheralToGroup(group: String, peripheral: String): MethodResult {
+    fun remove(group: String, peripheral: String): MethodResult {
         if (!be.peripherals.contains(peripheral)) return MethodResult.of(false, "There is no such peripheral")
-        val group = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
-        if (!group.peripherals.contains(peripheral)) {
+        val groupInstance = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
+        if (!groupInstance.peripherals.contains(peripheral)) {
             return MethodResult.of(false, "Peripheral not in the group")
         }
-        group.peripherals.remove(peripheral)
+        groupInstance.peripherals.remove(peripheral)
+        queueEvent("network_manager_group_change", group, "removed", peripheral)
         be.pushData()
         return MethodResult.of(true)
     }

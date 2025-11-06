@@ -8,9 +8,11 @@ import dan200.computercraft.api.peripheral.IPeripheral
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.JukeboxBlockEntity
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemSinkLookup
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.ISidedPeripheral
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 import java.util.function.Predicate
@@ -60,7 +62,9 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin 
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = AgnosticItemStorageLookup.extractItemSinkFromUnknown(target.level!!, location.target)
+        val direction = if (location is ISidedPeripheral) location.side else null
+
+        val toStorage = AgnosticItemSinkLookup.extractFromUnknown(target.level!!, location.target, direction)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
         val stored = toStorage.storeItem(target.getItem(0))
@@ -79,7 +83,9 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin 
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = AgnosticItemStorageLookup.extractStorageFromUnknown(target.level!!, location.target)
+        val direction = if (location is ISidedPeripheral) location.side else null
+
+        val fromStorage = AgnosticItemStorageLookup.extractFromUnknown(target.level!!, location.target, direction)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate: Predicate<ItemStack> = Predicate {

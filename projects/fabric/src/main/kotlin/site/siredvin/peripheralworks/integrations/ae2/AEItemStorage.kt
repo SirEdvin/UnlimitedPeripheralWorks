@@ -21,6 +21,9 @@ class AEItemStorage(private val storage: MEStorage, private val entity: AENetwor
         entity.setChanged()
     }
 
+    override val maxStackSize: Int
+        get() = Int.MAX_VALUE
+
     override fun storeItem(stack: ItemStack): ItemStack {
         val insertedAmount = storage.insert(AEItemKey.of(stack), stack.count.toLong(), Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (insertedAmount == 0L) return stack

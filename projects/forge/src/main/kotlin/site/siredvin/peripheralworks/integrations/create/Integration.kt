@@ -22,10 +22,8 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
 import site.siredvin.broccolium.modules.storage.fluid.ForgeAgnosticFluidStorage
-import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorageEntityExtractor
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
-import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorageEntityExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.EntityCard
@@ -99,22 +97,18 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(FilteringBehaviourPluginProvider)
         ComputerCraftProxy.addProvider(ScrollingBehaviourPluginProvider)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
-        AgnosticItemStorageLookup.addItemStorageExtractor(
-            AgnosticItemStorageEntityExtractor { level, entity ->
-                if (entity is AbstractContraptionEntity) {
-                    return@AgnosticItemStorageEntityExtractor AgnosticItemHandlerWrapper(entity.contraption.storage.allItems)
-                }
-                return@AgnosticItemStorageEntityExtractor null
-            },
-        )
-        AgnosticFluidStorageLookup.addFluidStorageExtractor(
-            AgnosticFluidStorageEntityExtractor { level, entity ->
-                if (entity is AbstractContraptionEntity) {
-                    return@AgnosticFluidStorageEntityExtractor ForgeAgnosticFluidStorage(entity.contraption.storage.fluids)
-                }
-                return@AgnosticFluidStorageEntityExtractor null
-            },
-        )
+        AgnosticItemStorageLookup.addEntityLookup { level, entity, direction ->
+            if (entity is AbstractContraptionEntity) {
+                return@addEntityLookup AgnosticItemHandlerWrapper(entity.contraption.storage.allItems)
+            }
+            return@addEntityLookup null
+        }
+        AgnosticFluidStorageLookup.addEntityLookup { level, entity, direction ->
+            if (entity is AbstractContraptionEntity) {
+                return@addEntityLookup ForgeAgnosticFluidStorage(entity.contraption.storage.fluids)
+            }
+            return@addEntityLookup null
+        }
         EntityCard.EXTRA_SEARCHES[AllItems.WRENCH.get()] = Function<Player, Entity?> {
             val box = it.boundingBox.inflate(2.0)
             it.level().getEntitiesOfClass(AbstractContraptionEntity::class.java, box).firstOrNull()

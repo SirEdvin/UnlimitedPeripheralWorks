@@ -27,6 +27,7 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModPlatform
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
+import site.siredvin.peripheralworks.forge.NetworkHandler
 import site.siredvin.peripheralworks.subsystem.recipe.ForgeRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
@@ -67,6 +68,7 @@ object ForgePeripheralWorks {
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
         PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
+        NetworkHandler.setup()
         val eventBus = MOD_CONTEXT.getKEventBus()
         eventBus.addListener(this::commonSetup)
         eventBus.addListener(this::registrySetup)
@@ -121,6 +123,7 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ars_nouveau").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("projecte").ifPresent { (it as Runnable).run() }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

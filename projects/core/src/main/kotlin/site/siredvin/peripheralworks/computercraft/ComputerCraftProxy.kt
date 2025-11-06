@@ -60,7 +60,7 @@ object ComputerCraftProxy {
         return Supplier {
             val state = level.getBlockState(pos)
             val entity = level.getBlockEntity(pos)
-            val peripheral = PluggablePeripheral(PlatformRegistries.BLOCKS.getKey(state.block).toString(), selectPeripheralOwner(entity, pos, level))
+            val peripheral = PluggablePeripheral(PlatformRegistries.BLOCKS.getKey(state.block).toString(), selectPeripheralOwner(entity, pos, level), side)
             plugins.values.forEach { peripheral.addPlugin(it) }
             return@Supplier peripheral
         }
@@ -73,7 +73,7 @@ object ComputerCraftProxy {
             return null
         }
 
-        val peripheral = PluggablePeripheral(PlatformRegistries.BLOCKS.getKey(state.block).toString(), selectPeripheralOwner(entity, pos, level))
+        val peripheral = PluggablePeripheral(PlatformRegistries.BLOCKS.getKey(state.block).toString(), selectPeripheralOwner(entity, pos, level), side)
         plugins.values.forEach { peripheral.addPlugin(it) }
         return peripheral
     }
