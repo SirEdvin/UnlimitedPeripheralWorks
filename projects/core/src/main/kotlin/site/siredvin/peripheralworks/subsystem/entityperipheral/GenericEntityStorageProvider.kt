@@ -16,7 +16,7 @@ object GenericEntityStorageProvider : EntityPeripheralPluginProvider {
         get() = setOf(PeripheralPluginUtils.Type.INVENTORY, PeripheralPluginUtils.Type.ITEM_STORAGE)
 
     override fun provide(entity: Entity): IPeripheralPlugin? {
-        val entityStorage = AgnosticItemStorageLookup.extractStorage(entity.level(), entity) ?: return null
+        val entityStorage = AgnosticItemStorageLookup.extractFromUnknown(entity.level(), entity, null) ?: return null
         if (entityStorage is SlottedAgnosticItemStorage) {
             return InventoryPlugin(entity.level(), entityStorage)
         }

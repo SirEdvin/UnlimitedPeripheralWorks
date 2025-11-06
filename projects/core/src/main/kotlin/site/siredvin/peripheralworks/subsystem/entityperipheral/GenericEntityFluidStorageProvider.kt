@@ -14,7 +14,7 @@ object GenericEntityFluidStorageProvider : EntityPeripheralPluginProvider {
         get() = setOf(PeripheralPluginUtils.Type.FLUID_STORAGE)
 
     override fun provide(entity: Entity): IPeripheralPlugin? {
-        val entityStorage = AgnosticFluidStorageLookup.extractFluidStorage(entity.level(), entity) ?: return null
+        val entityStorage = AgnosticFluidStorageLookup.extractFromEntity(entity.level(), entity, null) ?: return null
         return FluidStoragePlugin(entity.level(), entityStorage, PeripheralWorksConfig.fluidStorageTransferLimit)
     }
 }

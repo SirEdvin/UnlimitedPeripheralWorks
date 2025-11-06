@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.blockentity.grid.AENetworkBlockEntity
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
@@ -16,21 +17,21 @@ class Integration : Runnable {
 
     companion object {
         @Suppress("UNUSED_PARAMETER")
-        fun extractItemStorage(level: Level, pos: BlockPos, entity: BlockEntity?): AgnosticItemStorage? {
+        fun extractItemStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticItemStorage? {
             if (entity !is AENetworkBlockEntity) return null
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: return null
             return AEItemStorage(inventory, entity)
         }
 
         @Suppress("UNUSED_PARAMETER")
-        fun extractFluidStorage(level: Level, pos: BlockPos, entity: BlockEntity?): AgnosticFluidStorage? {
+        fun extractFluidStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticFluidStorage? {
             if (entity !is AENetworkBlockEntity) return null
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: return null
             return AEFluidStorage(inventory, entity)
         }
 
         @Suppress("UNUSED_PARAMETER")
-        fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?): AgnosticEnergyStorage? {
+        fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticEnergyStorage? {
             if (entity !is AENetworkBlockEntity) return null
             val energyService = entity.mainNode.grid?.energyService ?: return null
             return AEEnergyStorage(energyService, entity)
@@ -39,9 +40,9 @@ class Integration : Runnable {
 
     override fun run() {
         if (Configuration.enableStorageIntegrations) {
-            AgnosticItemStorageLookup.addItemStorageExtractor(::extractItemStorage)
-            AgnosticFluidStorageLookup.addFluidStorageExtractor(::extractFluidStorage)
-            AgnosticEnergyStorageLookup.addEnergyStorageExtractor(::extractEnergyStorage)
+            AgnosticItemStorageLookup.addBlockLookup(::extractItemStorage)
+            AgnosticFluidStorageLookup.addBlockLookup(::extractFluidStorage)
+            AgnosticEnergyStorageLookup.addBlockLookup(::extractEnergyStorage)
         }
         if (Configuration.enableMEInterface) {
             ComputerCraftProxy.addProvider(MENetworkBlockPlugin.Provider)

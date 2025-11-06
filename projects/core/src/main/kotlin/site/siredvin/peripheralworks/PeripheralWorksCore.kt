@@ -37,7 +37,7 @@ object PeripheralWorksCore {
         ModPlatform.configure(platform)
         ModRecipeIngredients.configure(ingredients)
         ModBlocksReference.configure(blocks)
-        AgnosticItemStorageLookup.addItemStorageExtractor(MinecartUtils::minecartExtractor)
+        AgnosticItemStorageLookup.addBlockLookup(MinecartUtils::minecartExtractor)
         ComputerCraftProxy.addProvider(StorageProvider)
         ComputerCraftProxy.addProvider(FluidStorageProvider)
         ComputerCraftProxy.addProvider(EnergyStorageProvider)

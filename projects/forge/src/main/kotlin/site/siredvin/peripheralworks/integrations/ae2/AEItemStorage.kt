@@ -17,6 +17,9 @@ class AEItemStorage(private val storage: MEStorage, private val entity: AENetwor
         }.iterator()
     }
 
+    override val maxStackSize: Int
+        get() = Int.MAX_VALUE
+
     override fun setChanged() {
         entity.setChanged()
     }

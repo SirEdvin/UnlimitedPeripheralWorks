@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BeaconBlockEntity
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.ISidedPeripheral
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 import java.util.function.Predicate
@@ -91,7 +92,9 @@ class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = AgnosticItemStorageLookup.extractStorageFromUnknown(target.level!!, location.target)
+        val direction = if (location is ISidedPeripheral) location.side else null
+
+        val fromStorage = AgnosticItemStorageLookup.extractFromUnknown(target.level!!, location.target, direction)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate = Predicate<ItemStack> { it.`is`(ItemTags.BEACON_PAYMENT_ITEMS) }

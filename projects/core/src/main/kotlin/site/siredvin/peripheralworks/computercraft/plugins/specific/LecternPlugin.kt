@@ -12,11 +12,13 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.LecternBlock
 import net.minecraft.world.level.block.entity.LecternBlockEntity
 import site.siredvin.broccolium.modules.base.util.TextBookUtils
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemSinkLookup
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
 import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.tweakium.modules.peripheral.api.IExpandedPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.api.ISidedPeripheral
 import site.siredvin.tweakium.modules.peripheral.util.assertBetween
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
 import java.util.*
@@ -151,7 +153,9 @@ class LecternPlugin(private val target: LecternBlockEntity) : IPeripheralPlugin 
         val location: IPeripheral = computer.getAvailablePeripheral(toName)
             ?: throw LuaException("Target '$toName' does not exist")
 
-        val toStorage = AgnosticItemStorageLookup.extractItemSinkFromUnknown(target.level!!, location.target)
+        val direction = if (location is ISidedPeripheral) location.side else null
+
+        val toStorage = AgnosticItemSinkLookup.extractFromUnknown(target.level!!, location.target, direction)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
         val moved = ContainerWrapper(target.bookAccess).moveTo(toStorage, 1, takePredicate = ItemStorageUtils.ALWAYS)
@@ -168,7 +172,9 @@ class LecternPlugin(private val target: LecternBlockEntity) : IPeripheralPlugin 
         val location: IPeripheral = computer.getAvailablePeripheral(fromName)
             ?: throw LuaException("Target '$fromName' does not exist")
 
-        val fromStorage = AgnosticItemStorageLookup.extractStorageFromUnknown(target.level!!, location.target)
+        val direction = if (location is ISidedPeripheral) location.side else null
+
+        val fromStorage = AgnosticItemStorageLookup.extractFromUnknown(target.level!!, location.target, direction)
             ?: throw LuaException("Target '$fromName' is not an item inventory")
 
         var predicate: Predicate<ItemStack> = Predicate { it.`is`(Items.WRITABLE_BOOK) || it.`is`(Items.WRITTEN_BOOK) }

@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.integrations.team_reborn_energy
 
 import dan200.computercraft.api.ComputerCraftAPI
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
@@ -13,15 +14,18 @@ class Integration : Runnable {
 
     companion object {
         @Suppress("UNUSED_PARAMETER")
-        fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?): AgnosticEnergyStorage? {
-            val energyStorage = EnergyStorage.SIDED.find(level, pos, null) ?: return null
+        fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticEnergyStorage? {
+            var energyStorage = EnergyStorage.SIDED.find(level, pos, null)
+            if (energyStorage == null) {
+                energyStorage = EnergyStorage.SIDED.find(level, pos, direction) ?: return null
+            }
             return EnergyStorageWrapper(energyStorage)
         }
     }
 
     override fun run() {
         if (Configuration.enableEnergyStorage) {
-            AgnosticEnergyStorageLookup.addEnergyStorageExtractor(::extractEnergyStorage)
+            AgnosticEnergyStorageLookup.addBlockLookup(::extractEnergyStorage)
         }
         ComputerCraftAPI.registerRefuelHandler(EnergyRefuelHandler)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
