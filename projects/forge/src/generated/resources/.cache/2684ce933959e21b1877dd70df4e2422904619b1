@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-09T00:47:03.1388499	vanilla/Recipes
+// 1.20.1	2025-11-09T01:36:42.2386387	vanilla/Recipes
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data/minecraft/recipes/anchor_clean.json
 06bd5042d86f18b9ed542713e4705dc45f330edb data/minecraft/recipes/anchor_cloning.json
 a2696e406e9032af7d01eb6c0b534b706f6d9f5f data/minecraft/recipes/card_clean.json
@@ -9,7 +9,7 @@ bfdf3e78239437eae8278d73b73f1f6c479953d7 data/minecraft/recipes/statue_clean.jso
 ab5f4a58e91910befbcb8d93aad95cadc926e778 data/peripheralworks/recipes/entity_link.json
 8c5c46971d26fed1d80e6e61453ec66046cdd367 data/peripheralworks/recipes/flexible_reality_anchor.json
 b4e4c663207dbc5fdd92be5957a0dc7ba675e330 data/peripheralworks/recipes/flexible_statue.json
-0b0be5164c874dfadf637d34ee68dcc8f03ec5be data/peripheralworks/recipes/hologram_projector.json
+6055ea560499bc9f789c3363cbab2c35be03c5b3 data/peripheralworks/recipes/hologram_projector.json
 95d93da7ee211551dae0624f6c4f473136ec8685 data/peripheralworks/recipes/informative_registry.json
 169c5991b28b93c851e46abeaefd752048626eab data/peripheralworks/recipes/item_pedestal.json
 b929cb33a2a61b583a688d95bf8534260eb9ff09 data/peripheralworks/recipes/map_pedestal.json

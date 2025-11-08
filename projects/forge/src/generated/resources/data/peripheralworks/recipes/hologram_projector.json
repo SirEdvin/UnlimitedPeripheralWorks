@@ -17,7 +17,7 @@
   "pattern": [
     "DBD",
     "RCR",
-    "DCD"
+    "DRD"
   ],
   "result": {
     "item": "peripheralworks:hologram_projector"

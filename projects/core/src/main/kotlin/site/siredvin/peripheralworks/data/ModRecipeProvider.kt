@@ -208,7 +208,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .define('D', site.siredvin.peripheralium.Items.PERIPHERALIUM_DUST.get())
             .pattern("DBD")
             .pattern("RCR")
-            .pattern("DCD")
+            .pattern("DRD")
             .save(consumer)
 
         SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLONING.get())
