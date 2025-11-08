@@ -6,14 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.6.10] - 2025-11-06
+## [1.7.0] - 2025-11-09
 
 ### Added
 
 - Integration with EMI for recipe and ingredient pasting to computer
 - Turtle refuel handler works with any kind of energy
-- Sided peripherals!
-- Hologram projector peripheral!
+- Transfer between FE/RF storages and turtles
+- Sided peripherals
+- Hologram projector peripheral
 
 ## [1.6.9] - 2025-11-01
 
