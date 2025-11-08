@@ -16,7 +16,7 @@ import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.HologramProjectorBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
-import site.siredvin.tweakium.modules.minecraft.blockentity.StatefulPeripheralNBTBlock
+import site.siredvin.tweakium.modules.minecraft.block.StatefulPeripheralNBTBlock
 
 class HologramProjectorBlock : StatefulPeripheralNBTBlock<HologramProjectorBlockEntity, HologramProjectorPeripheral>(false, BlockUtil.defaultProperties()) {
     companion object {
