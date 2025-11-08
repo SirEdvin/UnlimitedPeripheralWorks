@@ -201,6 +201,16 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .pattern("KCK")
             .save(consumer)
 
+        TweakedShapedRecipeBuilder.shaped(Blocks.HOLOGRAM_PROJECTOR.get())
+            .define('R', net.minecraft.world.item.Items.RED_STAINED_GLASS)
+            .define('B', net.minecraft.world.item.Items.BLUE_STAINED_GLASS)
+            .define('C', Blocks.PERIPHERAL_CASING.get())
+            .define('D', site.siredvin.peripheralium.Items.PERIPHERALIUM_DUST.get())
+            .pattern("DBD")
+            .pattern("RCR")
+            .pattern("DCD")
+            .save(consumer)
+
         SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLONING.get())
             .save(consumer, "statue_cloning")
         SpecialRecipeBuilder.special(RecipeSerializers.STATUE_CLEAN.get())

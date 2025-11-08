@@ -37,8 +37,10 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val font = Minecraft.getInstance().font
         val offset = (-font.width(text) / 2).toFloat()
         val opacity = (.4f * 255.0f).toInt() shl 24
-        font.drawInBatch(text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.NORMAL, opacity,
-            LightTexture.FULL_BRIGHT)
+        font.drawInBatch(
+            text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.NORMAL, opacity,
+            LightTexture.FULL_BRIGHT,
+        )
 
         matrices.popPose()
     }

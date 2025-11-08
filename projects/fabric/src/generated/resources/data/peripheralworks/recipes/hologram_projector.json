@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "minecraft:blue_stained_glass"
+    },
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "D": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "R": {
+      "item": "minecraft:red_stained_glass"
+    }
+  },
+  "pattern": [
+    "DBD",
+    "RCR",
+    "DCD"
+  ],
+  "result": {
+    "item": "peripheralworks:hologram_projector"
+  }
+}

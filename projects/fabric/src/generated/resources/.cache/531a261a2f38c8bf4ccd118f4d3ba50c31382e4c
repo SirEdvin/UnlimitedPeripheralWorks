@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-08T19:17:46.5031435	Unlimited Peripheral Works/Recipes
+// 1.20.1	2025-11-09T00:46:33.3892579	Unlimited Peripheral Works/Recipes
 76573b1e35031a89f39029ec55bc20fc827a88e7 data\peripheralworks\recipes\ultimate_configurator.json
 8adb4992706e45866afda070248b6deb54c401cb data\peripheralworks\recipes\netherite_peripheralium_hub.json
 dbb658f37a7d8f6db0a02afd8fd24a4f978135c9 data\peripheralworks\recipes\flexible_reality_anchor.json
@@ -24,3 +24,4 @@ adf5bf621f241034fc11c5239ed396ca04e35041 data\peripheralworks\recipes\ultimate_s
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data\minecraft\recipes\anchor_clean.json
 5618908e34632044ff149ffa36e414bb89c8be45 data\peripheralworks\recipes\entity_card.json
 09177d9534a5723cf4e8af294cb05de7b5b398e2 data\minecraft\recipes\statue_cloning.json
+0b0be5164c874dfadf637d34ee68dcc8f03ec5be data\peripheralworks\recipes\hologram_projector.json
