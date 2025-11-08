@@ -37,6 +37,7 @@ object ModLootTableProvider {
         lootTable.dropSelf(consumer, Blocks.NETWORK_MANAGER)
         lootTable.computedDrop(Blocks.FLEXIBLE_REALITY_ANCHOR)
         lootTable.computedDrop(Blocks.FLEXIBLE_STATUE)
+        lootTable.computedDrop(Blocks.HOLOGRAM_PROJECTOR)
         lootTable.validate()
     }
 }

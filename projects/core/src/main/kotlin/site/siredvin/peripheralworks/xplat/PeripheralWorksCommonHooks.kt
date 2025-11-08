@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.xplat
 
-import dan200.computercraft.api.ComputerCraftAPI
 import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation

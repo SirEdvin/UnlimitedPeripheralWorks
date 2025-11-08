@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
 import net.minecraft.data.models.blockstates.VariantProperties.Rotation
+import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import site.siredvin.tweakium.modules.peripheral.representation.LuaInterpretation
@@ -61,6 +62,10 @@ fun VoxelShape.rotate(from: Direction, to: Direction): VoxelShape {
 }
 
 fun IArguments.getBlockPos(index: Int): BlockPos = LuaInterpretation.asBlockPos(this.getTable(index))
+fun IArguments.getBlockPos(index: Int, center: BlockPos, facing: Direction): BlockPos = LuaInterpretation.asBlockPos(center, this.getTable(index), facing)
+fun IArguments.getVec(index: Int): Vec3 = LuaInterpretation.asVec3(this.getTable(index))
+fun IArguments.getVec(index: Int, center: BlockPos, facing: Direction): Vec3 = LuaInterpretation.asVec3(center, this.getTable(index), facing)
+fun IArguments.getVec(index: Int, center: Vec3, facing: Direction): Vec3 = LuaInterpretation.asVec3(center, this.getTable(index), facing)
 
 fun IArguments.getVec3i(index: Int): Vec3i {
     val table = this.getTable(index)

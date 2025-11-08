@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.data
 import net.minecraft.data.PackOutput
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
@@ -43,6 +44,7 @@ class ModUaLanguageProvider(
         add(Blocks.STATUE_WORKBENCH.get(), "Верстак для статуй", "§3§oУява ваше єдине обмеження. Іще ліміт у розмірах на 48 точок, але це не так важливо")
         add(Blocks.ENTITY_LINK.get(), "Коннектор до сутності", "§3§oДопомагає утворити з'єднання із будь-якою сутністю, потрібно лише вставити карту")
         add(Blocks.NETWORK_MANAGER.get(), text = "Менеджер мережі", "§3§oПросто підключіть його до вашої провідної мережі і він стане дуже корисний!")
+        add(Blocks.HOLOGRAM_PROJECTOR.get(), "Проектор голограм", "§3§oВідтвроюй свої мрії за допомогою маленьких сутностей")
 
         add(ModText.CREATIVE_TAB, "Перифіральних пристроїв нескінченний край")
 
@@ -99,8 +101,10 @@ class ModUaLanguageProvider(
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "З вбудованим незеритовим осередком")
         addTurtle(UniversalScannerPeripheral.UPGRADE_ID, "Скануюча")
         addTurtle(UltimateSensorPeripheral.UPGRADE_ID, "Зондуюча")
+        addTurtle(HologramProjectorPeripheral.UPGRADE_ID, "Проекуюча")
         addPocket(UniversalScannerPeripheral.UPGRADE_ID, "Скануючий")
         addPocket(UltimateSensorPeripheral.UPGRADE_ID, "Зондуючий")
+        addPocket(HologramProjectorPeripheral.UPGRADE_ID, "Проекуючий")
 
         hooks.forEach { it.accept(this) }
     }

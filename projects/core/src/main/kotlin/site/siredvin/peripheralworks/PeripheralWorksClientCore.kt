@@ -15,6 +15,7 @@ import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.MapPedestalBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.TurtleUpgradeSerializers
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import java.util.function.BiConsumer
@@ -28,6 +29,8 @@ object PeripheralWorksClientCore {
         "turtle/universal_scanner_right",
         "turtle/ultimate_sensor_left",
         "turtle/ultimate_sensor_right",
+        "turtle/hologram_projector_left",
+        "turtle/hologram_projector_right",
     )
     val EXTRA_TURTLE_MODEL_PROVIDERS: MutableList<Supplier<Pair<TurtleUpgradeSerialiser<ITurtleUpgrade>, TurtleUpgradeModeller<ITurtleUpgrade>>>> = mutableListOf()
     private var inited: Boolean = false
@@ -96,6 +99,13 @@ object PeripheralWorksClientCore {
             TurtleUpgradeModeller.sided(
                 ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${UltimateSensorPeripheral.UPGRADE_ID.path}_left"),
                 ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${UltimateSensorPeripheral.UPGRADE_ID.path}_right"),
+            ),
+        )
+        consumer.accept(
+            TurtleUpgradeSerializers.HOLOGRAM_PROJECTOR.get(),
+            TurtleUpgradeModeller.sided(
+                ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${HologramProjectorPeripheral.UPGRADE_ID.path}_left"),
+                ResourceLocation(PeripheralWorksCore.MOD_ID, "turtle/${HologramProjectorPeripheral.UPGRADE_ID.path}_right"),
             ),
         )
         EXTRA_TURTLE_MODEL_PROVIDERS.forEach {

@@ -14,3 +14,7 @@ accessible method net/minecraft/world/level/block/entity/JukeboxBlockEntity stop
 # Render integration
 accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;ILnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;
 accessible method net/minecraft/client/renderer/RenderType create (Ljava/lang/String;Lcom/mojang/blaze3d/vertex/VertexFormat;Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;IZZLnet/minecraft/client/renderer/RenderType$CompositeState;)Lnet/minecraft/client/renderer/RenderType$CompositeRenderType;
+# Display entities logic
+accessible method net/minecraft/world/entity/Display$TextDisplay readAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+accessible method net/minecraft/world/entity/Display$BlockDisplay readAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V
+accessible method net/minecraft/world/entity/Display$ItemDisplay readAdditionalSaveData (Lnet/minecraft/nbt/CompoundTag;)V

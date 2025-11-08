@@ -14,8 +14,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraftforge.fml.ModList
 import net.minecraftforge.forgespi.language.IModInfo
 import net.minecraftforge.registries.DeferredRegister
-import site.siredvin.broccolium.modules.storage.energy.Energies
-import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.networking.MessageType
@@ -46,14 +44,10 @@ object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
         id: Int,
         channel: ResourceLocation,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>
-    ): MessageType<T> {
-        return NetworkHandler.MessageTypeImpl(id, klass, reader)
-    }
+        reader: FriendlyByteBuf.Reader<T>,
+    ): MessageType<T> = ForgeNetworkHandler.MessageTypeImpl(id, klass, reader)
 
-    override fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> {
-        return NetworkHandler.createServerboundPacket(message)
-    }
+    override fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> = ForgeNetworkHandler.createServerboundPacket(message)
 
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID

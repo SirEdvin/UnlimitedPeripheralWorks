@@ -2,11 +2,13 @@ package site.siredvin.peripheralworks.common.setup
 
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import site.siredvin.peripheralworks.computercraft.pocket.PeripheraliumHubPocketUpgrade
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.pocket.StatefulPeripheralPocketUpgrade
 
 object PocketUpgradeSerializers {
@@ -44,6 +46,13 @@ object PocketUpgradeSerializers {
         UltimateSensorPeripheral.UPGRADE_ID,
         PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
             StatefulPeripheralPocketUpgrade(id, stack, UltimateSensorPeripheral::of)
+        },
+    )
+
+    val HOLOGRAM_PROJECTOR = ModPlatform.registerPocketUpgrade(
+        HologramProjectorPeripheral.UPGRADE_ID,
+        PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
+            StatefulPeripheralPocketUpgrade(id, stack, { HologramProjectorPeripheral(PocketPeripheralOwner(it)) })
         },
     )
 

@@ -9,25 +9,19 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.MapBasedEventMessage
 
-class ComputerRecipeHandler: EmiRecipeHandler<ComputerMenuWithoutInventory> {
-    override fun getInventory(p0: AbstractContainerScreen<ComputerMenuWithoutInventory>): EmiPlayerInventory {
-        return EmiPlayerInventory(emptyList())
-    }
+class ComputerRecipeHandler : EmiRecipeHandler<ComputerMenuWithoutInventory> {
+    override fun getInventory(p0: AbstractContainerScreen<ComputerMenuWithoutInventory>): EmiPlayerInventory = EmiPlayerInventory(emptyList())
 
-    override fun supportsRecipe(p0: EmiRecipe): Boolean {
-        return true
-    }
+    override fun supportsRecipe(p0: EmiRecipe): Boolean = true
 
     override fun canCraft(
         p0: EmiRecipe,
-        p1: EmiCraftContext<ComputerMenuWithoutInventory>
-    ): Boolean {
-        return true
-    }
+        p1: EmiCraftContext<ComputerMenuWithoutInventory>,
+    ): Boolean = true
 
     override fun craft(
         p0: EmiRecipe,
-        p1: EmiCraftContext<ComputerMenuWithoutInventory>
+        p1: EmiCraftContext<ComputerMenuWithoutInventory>,
     ): Boolean {
         val recipe = mutableMapOf<String, Any>()
         recipe["category"] = p0.category.id.toString()

@@ -260,6 +260,12 @@ object ModBlockModelProvider {
             ),
         )
 
+        horizontalOrientatedBlock(
+            generators,
+            Blocks.HOLOGRAM_PROJECTOR.get(),
+            ModelLocationUtils.getModelLocation(Blocks.HOLOGRAM_PROJECTOR.get()),
+        )
+
         simpleBlockSwitch(
             generators,
             Blocks.STATUE_WORKBENCH.get(),

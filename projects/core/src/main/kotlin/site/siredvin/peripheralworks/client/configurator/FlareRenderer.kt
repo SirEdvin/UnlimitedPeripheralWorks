@@ -21,7 +21,7 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 // Copy of https://github.com/SwitchCraftCC/Plethora-Fabric/blob/91a64b3cf9f428227425e06bbbc8aa6e9a416bee/src/main/java/io/sc3/plethora/gameplay/overlay/FlareOverlayRenderer.kt#L4
 object FlareRenderer {
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
-    private val flareTexture = ResourceLocation(PeripheralWorksCore.MOD_ID, "textures/misc/flare.png")
+    val flareTexture = ResourceLocation(PeripheralWorksCore.MOD_ID, "textures/misc/flare.png")
 
     fun initFlareRenderer(matrices: PoseStack, camera: Camera) {
         RenderSystem.disableDepthTest()

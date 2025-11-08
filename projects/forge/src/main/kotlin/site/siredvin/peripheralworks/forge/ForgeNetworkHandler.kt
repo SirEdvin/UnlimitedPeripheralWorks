@@ -17,12 +17,10 @@ import site.siredvin.peripheralworks.networking.MessageType
 import site.siredvin.peripheralworks.networking.NetworkMessage
 import site.siredvin.peripheralworks.networking.NetworkMessages
 import site.siredvin.peripheralworks.networking.ServerNetworkContext
-import java.util.function.BiConsumer
 import java.util.function.Predicate
 import java.util.function.Supplier
 
-
-object NetworkHandler {
+object ForgeNetworkHandler {
     var logger = LogManager.getLogger("$MOD_ID.networking")
     private val network: SimpleChannel
 
@@ -41,15 +39,18 @@ object NetworkHandler {
             registerMainThread(
                 forgeType,
                 NetworkDirection.PLAY_TO_SERVER,
-                { c -> ServerNetworkContext { c.sender!! } })
+                { c -> ServerNetworkContext { c.sender!! } },
+            )
         }
 
         for (type in NetworkMessages.clientbound) {
-            @Suppress("UNCHECKED_CAST") val forgeType = type as MessageTypeImpl<out NetworkMessage<ClientNetworkContext>>
+            @Suppress("UNCHECKED_CAST")
+            val forgeType = type as MessageTypeImpl<out NetworkMessage<ClientNetworkContext>>
             registerMainThread(
                 forgeType,
                 NetworkDirection.PLAY_TO_CLIENT,
-                { x -> object: ClientNetworkContext {} })
+                { x -> object : ClientNetworkContext {} },
+            )
         }
     }
 
@@ -57,7 +58,7 @@ object NetworkHandler {
         @Suppress("UNCHECKED_CAST")
         return network.toVanillaPacket<Any?>(
             packet,
-            NetworkDirection.PLAY_TO_CLIENT
+            NetworkDirection.PLAY_TO_CLIENT,
         ) as Packet<ClientGamePacketListener>
     }
 
@@ -65,12 +66,14 @@ object NetworkHandler {
         @Suppress("UNCHECKED_CAST")
         return network.toVanillaPacket<Any>(
             packet,
-            NetworkDirection.PLAY_TO_SERVER
+            NetworkDirection.PLAY_TO_SERVER,
         ) as Packet<ServerGamePacketListener>
     }
 
     fun <H, T : NetworkMessage<H>> registerMainThread(
-        type: MessageTypeImpl<T>, direction: NetworkDirection, handler: (NetworkEvent.Context) -> H
+        type: MessageTypeImpl<T>,
+        direction: NetworkDirection,
+        handler: (NetworkEvent.Context) -> H,
     ) {
         network.messageBuilder<T?>(type.klass, type.id, direction)
             .encoder(NetworkMessage<H>::write)
@@ -90,6 +93,8 @@ object NetworkHandler {
     }
 
     class MessageTypeImpl<T : NetworkMessage<*>>(
-        val id: Int, val klass: Class<T>, val reader:  FriendlyByteBuf.Reader<T>
+        val id: Int,
+        val klass: Class<T>,
+        val reader: FriendlyByteBuf.Reader<T>,
     ) : MessageType<T>
 }

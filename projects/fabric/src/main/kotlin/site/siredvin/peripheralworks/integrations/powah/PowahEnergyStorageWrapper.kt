@@ -6,7 +6,6 @@ import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
-import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.Predicate
 
 class PowahEnergyStorageWrapper(private val storage: AbstractEnergyStorage<*, *>) : AgnosticEnergyStorage {

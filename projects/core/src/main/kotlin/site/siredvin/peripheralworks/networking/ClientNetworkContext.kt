@@ -1,4 +1,3 @@
 package site.siredvin.peripheralworks.networking
 
-interface ClientNetworkContext {
-}
+interface ClientNetworkContext

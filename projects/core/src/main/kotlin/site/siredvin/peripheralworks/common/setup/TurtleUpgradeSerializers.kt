@@ -2,11 +2,13 @@ package site.siredvin.peripheralworks.common.setup
 
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
 import site.siredvin.peripheralworks.computercraft.turtles.PeripheraliumHubTurtleUpgrade
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
 import site.siredvin.tweakium.modules.turtle.StatefulPeripheralTurtleUpgrade
 
 object TurtleUpgradeSerializers {
@@ -49,6 +51,16 @@ object TurtleUpgradeSerializers {
             StatefulPeripheralTurtleUpgrade.dynamic(
                 stack.item,
                 UltimateSensorPeripheral::of,
+            ) { id }
+        },
+    )
+
+    val HOLOGRAM_PROJECTOR = ModPlatform.registerTurtleUpgrade(
+        HologramProjectorPeripheral.UPGRADE_ID,
+        TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack ->
+            StatefulPeripheralTurtleUpgrade.dynamic(
+                stack.item,
+                { turtle, side -> HologramProjectorPeripheral(TurtlePeripheralOwner(turtle, side)) },
             ) { id }
         },
     )

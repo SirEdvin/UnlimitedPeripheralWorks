@@ -114,6 +114,15 @@ object PeripheralWorksConfig {
     val enableNetworkManager: Boolean
         get() = ConfigHolder.commonConfig.enableNetworkManager.get()
 
+    val enableHologramProjector: Boolean
+        get() = ConfigHolder.commonConfig.enableHologramProjector.get()
+
+    val hologramProjectorEntityLimit: Int
+        get() = ConfigHolder.commonConfig.hologramProjectorEntityLimit.get()
+
+    val hologramProjectorDistanceLimit: Double
+        get() = ConfigHolder.commonConfig.hologramProjectorDistanceLimit.get()
+
     fun registerIntegrationConfiguration(configuration: IForgeConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
     }
@@ -166,6 +175,9 @@ object PeripheralWorksConfig {
         val flexibleStatueMaxQuads: ForgeConfigSpec.IntValue
         val enableEntityLinks: ForgeConfigSpec.BooleanValue
         val enableNetworkManager: ForgeConfigSpec.BooleanValue
+        val enableHologramProjector: ForgeConfigSpec.BooleanValue
+        val hologramProjectorEntityLimit: ForgeConfigSpec.IntValue
+        val hologramProjectorDistanceLimit: ForgeConfigSpec.DoubleValue
 
         init {
             builder.push("base")
@@ -254,6 +266,12 @@ object PeripheralWorksConfig {
                 .define("enableEntityLink", true)
             enableNetworkManager = builder.comment("Enable network manager")
                 .define("enableNetworkManager", true)
+            enableHologramProjector = builder.comment("Enable hologram projector")
+                .define("enableHologramProjector", true)
+            hologramProjectorEntityLimit = builder.comment("Define how many entity one hologram projector can spawn")
+                .defineInRange("hologramProjectorEntityLimit", 30, 1, Int.MAX_VALUE)
+            hologramProjectorDistanceLimit = builder.comment("Define how far hologram projector can move entities")
+                .defineInRange("hologramProjectorDistanceLimit", 16.0, 1.0, Double.MAX_VALUE)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.entries.toTypedArray(), builder)

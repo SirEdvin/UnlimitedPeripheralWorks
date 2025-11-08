@@ -146,5 +146,14 @@ object BlockEntityTypes {
         )
     }
 
+    val HOLOGRAM_PROJECTOR: Supplier<BlockEntityType<HologramProjectorBlockEntity>> = ModPlatform.registerBlockEntity(
+        modId("hologram_projector"),
+    ) {
+        PlatformToolkit.get().createBlockEntityType(
+            ::HologramProjectorBlockEntity,
+            Blocks.HOLOGRAM_PROJECTOR.get(),
+        )
+    }
+
     fun doSomething() {}
 }

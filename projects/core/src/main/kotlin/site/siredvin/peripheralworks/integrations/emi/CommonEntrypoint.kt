@@ -19,10 +19,11 @@ object CommonEntrypoint {
     val GSON = Gson()
 
     fun mapStack(stack: EmiStack): MutableMap<String, Any> {
-        if (stack.isEmpty)
+        if (stack.isEmpty) {
             return mutableMapOf(
-                "type" to "empty"
+                "type" to "empty",
             )
+        }
         if (!stack.itemStack.isEmpty) {
             val base = LuaRepresentation.forItemStack(stack.itemStack, RepresentationMode.BASE)
             base["type"] = "item"
@@ -36,8 +37,9 @@ object CommonEntrypoint {
         base["chance"] = stack.chance
         if (stack.nbt != null) {
             val nbtHash = ComputerPlatformToolkit.get().nbtHash(stack.nbt)
-            if (nbtHash != null)
+            if (nbtHash != null) {
                 base["nbt"] = nbtHash
+            }
         }
         if (stack is FluidEmiStack) {
             base["type"] = "fluid"
@@ -47,17 +49,20 @@ object CommonEntrypoint {
     }
 
     fun mapIngredient(ingredient: EmiIngredient): MutableMap<String, Any> {
-        if (ingredient.isEmpty)
+        if (ingredient.isEmpty) {
             return mutableMapOf(
-                "type" to "empty"
+                "type" to "empty",
             )
+        }
         val ingredients = ingredient.emiStacks.map(::mapStack)
-        if (ingredients.isEmpty())
+        if (ingredients.isEmpty()) {
             return mutableMapOf(
-                "type" to "empty"
+                "type" to "empty",
             )
-        if (ingredients.size == 1)
+        }
+        if (ingredients.size == 1) {
             return ingredients[0]
+        }
         return mutableMapOf("candidates" to ingredients)
     }
 

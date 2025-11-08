@@ -9,7 +9,6 @@ import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
-import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.Predicate
 
 class AEEnergyStorage(private val energyService: IEnergyService, private val entity: AENetworkBlockEntity) : AgnosticEnergyStorage {

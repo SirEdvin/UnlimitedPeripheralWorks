@@ -39,6 +39,7 @@ object FabricPeripheralWorksClient : ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.translucent())
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_STATUE.get(), RenderType.translucent())
+        BlockRenderLayerMap.INSTANCE.putBlock(Blocks.HOLOGRAM_PROJECTOR.get(), RenderType.translucent())
 
         PeripheralWorksClientCore.onModelRegister { serializer, modeller ->
             @Suppress("UNCHECKED_CAST")

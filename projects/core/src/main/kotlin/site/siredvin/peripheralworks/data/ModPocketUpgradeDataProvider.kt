@@ -28,5 +28,6 @@ class ModPocketUpgradeDataProvider(output: PackOutput) : LibPocketUpgradeDataPro
         addUpgrade.accept(simpleWithCustomItem(PocketUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB, Items.NETHERITE_PERIPHERALIUM_HUB))
         addUpgrade.accept(simpleWithCustomItem(PocketUpgradeSerializers.ULTIMATE_SENSOR, Blocks.ULTIMATE_SENSOR))
         addUpgrade.accept(simpleWithCustomItem(PocketUpgradeSerializers.UNIVERSAL_SCANNER, Blocks.UNIVERSAL_SCANNER))
+        addUpgrade.accept(simpleWithCustomItem(PocketUpgradeSerializers.HOLOGRAM_PROJECTOR, Blocks.HOLOGRAM_PROJECTOR))
     }
 }

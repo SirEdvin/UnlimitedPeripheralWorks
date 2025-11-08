@@ -30,5 +30,6 @@ class ModTurtleUpgradeDataProvider(output: PackOutput) : LibTurtleUpgradeDataPro
         addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.NETHERITE_PERIPHERALIUM_HUB, Items.NETHERITE_PERIPHERALIUM_HUB))
         addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.UNIVERSAL_SCANNER, Blocks.UNIVERSAL_SCANNER))
         addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.ULTIMATE_SENSOR, Blocks.ULTIMATE_SENSOR))
+        addUpgrade.accept(simpleWithCustomItem(TurtleUpgradeSerializers.HOLOGRAM_PROJECTOR, Blocks.HOLOGRAM_PROJECTOR))
     }
 }

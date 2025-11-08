@@ -104,17 +104,17 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(ScrollingBehaviourPluginProvider)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         AgnosticItemStorageLookup.addEntityLookup { level, entity, direction ->
-                if (entity is AbstractContraptionEntity) {
-                    return@addEntityLookup FabricStorageWrapper(entity.contraption.sharedInventory)
-                }
-                return@addEntityLookup null
+            if (entity is AbstractContraptionEntity) {
+                return@addEntityLookup FabricStorageWrapper(entity.contraption.sharedInventory)
             }
+            return@addEntityLookup null
+        }
         AgnosticFluidStorageLookup.addEntityLookup { level, entity, direction ->
-                if (entity is AbstractContraptionEntity) {
-                    return@addEntityLookup FabricAgnosticFluidStorage(entity.contraption.sharedFluidTanks)
-                }
-                return@addEntityLookup null
+            if (entity is AbstractContraptionEntity) {
+                return@addEntityLookup FabricAgnosticFluidStorage(entity.contraption.sharedFluidTanks)
             }
+            return@addEntityLookup null
+        }
         EntityCard.EXTRA_SEARCHES[AllItems.WRENCH.get()] = Function<Player, Entity?> {
             val box = it.boundingBox.inflate(2.0)
             it.level().getEntitiesOfClass(AbstractContraptionEntity::class.java, box).firstOrNull()

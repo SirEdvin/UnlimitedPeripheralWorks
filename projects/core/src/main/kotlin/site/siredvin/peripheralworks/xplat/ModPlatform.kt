@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.xplat
 
-import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.tweakium.modules.platform.ComputerBasePlatform
 import site.siredvin.tweakium.modules.platform.ComputerModInformationTracker
 

@@ -8,11 +8,11 @@ import site.siredvin.peripheralworks.networking.MessageType
 import site.siredvin.peripheralworks.networking.NetworkMessage
 
 data class FabricMessageType<T : NetworkMessage<*>>(
-    val type: PacketType<PacketWrapper<T>>
+    val type: PacketType<PacketWrapper<T>>,
 ) : MessageType<T> {
 
     constructor(id: ResourceLocation, reader: FriendlyByteBuf.Reader<T>) : this(
-        PacketType.create(id) { b -> PacketWrapper(reader.apply(b)) }
+        PacketType.create(id) { b -> PacketWrapper(reader.apply(b)) },
     )
 
     companion object {
@@ -23,9 +23,7 @@ data class FabricMessageType<T : NetworkMessage<*>>(
         }
 
         @JvmStatic
-        fun toFabricPacket(message: NetworkMessage<*>): FabricPacket {
-            return PacketWrapper(message)
-        }
+        fun toFabricPacket(message: NetworkMessage<*>): FabricPacket = PacketWrapper(message)
     }
 
     data class PacketWrapper<T : NetworkMessage<*>>(val payload: T) : FabricPacket {
@@ -33,8 +31,6 @@ data class FabricMessageType<T : NetworkMessage<*>>(
             payload.write(buf)
         }
 
-        override fun getType(): PacketType<*> {
-            return toFabricType<T>(payload.type())
-        }
+        override fun getType(): PacketType<*> = toFabricType<T>(payload.type())
     }
 }

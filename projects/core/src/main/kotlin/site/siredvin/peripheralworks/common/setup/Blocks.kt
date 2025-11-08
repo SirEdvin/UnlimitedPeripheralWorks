@@ -203,5 +203,18 @@ object Blocks {
         )
     }
 
+    val HOLOGRAM_PROJECTOR = ModPlatform.registerBlock(
+        "hologram_projector",
+        ::HologramProjectorBlock,
+    ) {
+        HiddenDescriptiveBlockItem(
+            it,
+            Item.Properties(),
+            PeripheralWorksConfig::enableHologramProjector,
+            alwaysShow = true,
+            TooltipCollection::isDisabled,
+        )
+    }
+
     fun doSomething() {}
 }

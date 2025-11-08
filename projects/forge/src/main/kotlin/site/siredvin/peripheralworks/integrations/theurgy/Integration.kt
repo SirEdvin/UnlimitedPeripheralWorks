@@ -17,8 +17,9 @@ class Integration : Runnable {
                 }
                 if (direction != null) {
                     val sidedCap = blockEntity.getCapability(CapabilityRegistry.MERCURY_FLUX, direction)
-                    if (sidedCap.isPresent)
+                    if (sidedCap.isPresent) {
                         return@addBlockLookup AgnosticMercuryFluxStorage(sidedCap.resolve().get())
+                    }
                 }
                 return@addBlockLookup null
             }

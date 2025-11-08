@@ -9,7 +9,6 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.*
 
-
 object NetworkMessages {
     private val seenIds: IntSet = IntOpenHashSet()
     private val seenChannel: MutableSet<String> = mutableSetOf()
@@ -20,13 +19,15 @@ object NetworkMessages {
         601,
         "peripheralworks_generic_event",
         MapBasedEventMessage::class.java,
-        ::MapBasedEventMessage
+        ::MapBasedEventMessage,
     )
-
 
     private fun <C, T : NetworkMessage<C>> register(
         messages: MutableList<MessageType<out NetworkMessage<C>>>,
-        id: Int, channel: String, klass: Class<T>, reader: FriendlyByteBuf.Reader<T>
+        id: Int,
+        channel: String,
+        klass: Class<T>,
+        reader: FriendlyByteBuf.Reader<T>,
     ): MessageType<T> {
         require(seenIds.add(id)) { "Duplicate id $id" }
         require(seenChannel.add(channel)) { "Duplicate channel $channel" }
@@ -39,19 +40,15 @@ object NetworkMessages {
         id: Int,
         channel: String,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>
-    ): MessageType<T> {
-        return register(serverMessages, id, channel, klass, reader)
-    }
+        reader: FriendlyByteBuf.Reader<T>,
+    ): MessageType<T> = register(serverMessages, id, channel, klass, reader)
 
     private fun <T : NetworkMessage<ClientNetworkContext>> registerClientbound(
         id: Int,
         channel: String,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>
-    ): MessageType<T> {
-        return register(clientMessages, id, channel, klass, reader)
-    }
+        reader: FriendlyByteBuf.Reader<T>,
+    ): MessageType<T> = register(clientMessages, id, channel, klass, reader)
 
     val serverbound: MutableCollection<MessageType<out NetworkMessage<ServerNetworkContext>>>
         get() = Collections.unmodifiableCollection(serverMessages)

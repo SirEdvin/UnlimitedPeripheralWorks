@@ -35,7 +35,6 @@ import site.siredvin.peripheralworks.subsystem.recipe.FabricRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
 
-
 @Suppress("UNUSED")
 object FabricPeripheralWorks : ModInitializer {
 
@@ -54,7 +53,7 @@ object FabricPeripheralWorks : ModInitializer {
                 FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type),
                 { packet, player, sender ->
                     packet.payload.handle(ServerNetworkContext { player })
-                }
+                },
             )
         }
         // Register items and blocks

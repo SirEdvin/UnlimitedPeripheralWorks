@@ -5,9 +5,8 @@ import dev.emi.emi.api.EmiPlugin
 import dev.emi.emi.api.EmiRegistry
 
 @EmiEntrypoint
-class Entrypoint: EmiPlugin {
+class Entrypoint : EmiPlugin {
     override fun register(p0: EmiRegistry) {
         CommonEntrypoint.register(p0)
     }
-
 }

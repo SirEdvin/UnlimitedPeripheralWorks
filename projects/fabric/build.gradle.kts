@@ -18,6 +18,7 @@ baseShaking {
 fabricShaking {
     commonProjectName.set("core")
     createRefmap.set(true)
+    stablePlayer.set(true)
     accessWidener.set(project(":core").file("src/main/resources/peripheralworks.accesswidener"))
     extraVersionMappings.set(
         mapOf(
