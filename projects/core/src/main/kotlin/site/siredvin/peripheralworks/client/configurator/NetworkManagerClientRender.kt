@@ -6,6 +6,7 @@ import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.GameRenderer
+import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
@@ -13,18 +14,12 @@ import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntit
 
 object NetworkManagerClientRender : ConfigurationModeRender {
 
-    class DrawingInstructions(val peripheralName: String) {
-        val extraNames = mutableListOf<String>()
-        val groups = mutableListOf<String>()
-    }
-
     fun renderText(
         matrices: PoseStack,
         text: String,
         x: Double,
         y: Double,
         z: Double,
-        lightLevel: Int,
         buffer: MultiBufferSource,
         color: Int = 0xffffff,
     ) {
@@ -42,7 +37,8 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val font = Minecraft.getInstance().font
         val offset = (-font.width(text) / 2).toFloat()
         val opacity = (.4f * 255.0f).toInt() shl 24
-        font.drawInBatch(text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.NORMAL, opacity, lightLevel)
+        font.drawInBatch(text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.NORMAL, opacity,
+            LightTexture.FULL_BRIGHT)
 
         matrices.popPose()
     }
@@ -67,7 +63,6 @@ object NetworkManagerClientRender : ConfigurationModeRender {
                 it.key.x + 0.5,
                 it.key.y + baseHeight,
                 it.key.z + 0.5,
-                15728640,
                 minecraft.renderBuffers().bufferSource(),
             )
             for (extraName in it.value.extraNames) {
@@ -78,7 +73,6 @@ object NetworkManagerClientRender : ConfigurationModeRender {
                     it.key.x + 0.5,
                     it.key.y + baseHeight,
                     it.key.z + 0.5,
-                    15728640,
                     minecraft.renderBuffers().bufferSource(),
                     0xff0000,
                 )
@@ -92,7 +86,6 @@ object NetworkManagerClientRender : ConfigurationModeRender {
                     it.key.x + 0.5,
                     it.key.y + baseHeight,
                     it.key.z + 0.5,
-                    15728640,
                     minecraft.renderBuffers().bufferSource(),
                     if (color == -1) 0xffffff else color,
                 )

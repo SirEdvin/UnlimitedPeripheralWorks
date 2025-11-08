@@ -1,11 +1,13 @@
 package site.siredvin.peripheralworks.client.configurator
 
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.GameRenderer
+import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
@@ -85,7 +87,7 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
                 it.targetBlock.x + 0.5,
                 it.targetBlock.y + 1.5,
                 it.targetBlock.z + 0.5,
-                15728640,
+                LightTexture.FULL_BRIGHT,
                 minecraft.renderBuffers().bufferSource(),
             )
         }
