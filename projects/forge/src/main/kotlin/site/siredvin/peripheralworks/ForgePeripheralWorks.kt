@@ -102,6 +102,7 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("embers").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("theurgy").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("emi").ifPresent { (it as Runnable).run() }
         PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->

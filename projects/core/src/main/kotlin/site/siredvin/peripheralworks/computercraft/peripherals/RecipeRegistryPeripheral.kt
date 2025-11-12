@@ -9,6 +9,7 @@ import dan200.computercraft.shared.util.NBTUtil
 import net.minecraft.nbt.TagParser
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.Container
+import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeType
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
@@ -17,6 +18,7 @@ import site.siredvin.peripheralworks.common.blockentity.RecipeRegistryBlockEntit
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.peripheral.ext.getResourceLocation
 import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import java.io.BufferedReader
@@ -29,10 +31,18 @@ class RecipeRegistryPeripheral(
 ) : OwnedPeripheral<BlockEntityPeripheralOwner<RecipeRegistryBlockEntity>>(TYPE, BlockEntityPeripheralOwner(blockEntity)) {
     companion object {
         const val TYPE = "recipe_registry"
+        private val EXTRA_PLUGINS: MutableList<IPeripheralPlugin> = mutableListOf()
+        fun addPlugin(plugin: IPeripheralPlugin) {
+            EXTRA_PLUGINS.add(plugin)
+        }
     }
 
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
-    val air = PlatformRegistries.ITEMS.get(ResourceLocation("minecraft", "air"))
+    val air: Item = PlatformRegistries.ITEMS.get(ResourceLocation("minecraft", "air"))
+
+    init {
+        EXTRA_PLUGINS.forEach { addPlugin(it) }
+    }
 
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enableRecipeRegistry

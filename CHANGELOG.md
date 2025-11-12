@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.1] - 2025-11-12
+
+### Added
+
+- EMI integration with recipe registry
+- Catalysts to EMI recipe parsing in events and in registry
+
 ## [1.7.0] - 2025-11-09
 
 ### Added

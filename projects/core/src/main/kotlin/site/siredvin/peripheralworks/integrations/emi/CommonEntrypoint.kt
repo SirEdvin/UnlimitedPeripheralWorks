@@ -1,13 +1,14 @@
 package site.siredvin.peripheralworks.integrations.emi
 
-import com.google.gson.Gson
 import dan200.computercraft.client.gui.AbstractComputerScreen
 import dan200.computercraft.shared.ModRegistry
 import dev.emi.emi.api.EmiRegistry
+import dev.emi.emi.api.recipe.EmiRecipe
 import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.stack.FluidEmiStack
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.peripheralworks.computercraft.peripherals.RecipeRegistryPeripheral
 import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.MapBasedEventMessage
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
@@ -16,7 +17,16 @@ import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 import kotlin.collections.set
 
 object CommonEntrypoint {
-    val GSON = Gson()
+
+    fun mapRecipe(recipe: EmiRecipe): MutableMap<String, Any> {
+        val result = mutableMapOf<String, Any>()
+        result["category"] = recipe.category.id.toString()
+        result["id"] = recipe.id?.toString() ?: "unknown"
+        result["inputs"] = recipe.inputs.map(CommonEntrypoint::mapIngredient)
+        result["outputs"] = recipe.outputs.map(CommonEntrypoint::mapIngredient)
+        result["catalysts"] = recipe.catalysts.map(CommonEntrypoint::mapIngredient)
+        return result
+    }
 
     fun mapStack(stack: EmiStack): MutableMap<String, Any> {
         if (stack.isEmpty) {
@@ -66,6 +76,10 @@ object CommonEntrypoint {
         return mutableMapOf("candidates" to ingredients)
     }
 
+    fun init() {
+        RecipeRegistryPeripheral.addPlugin(EmiRecipePeripheralPlugin())
+    }
+
     fun register(registry: EmiRegistry) {
         registry.addGenericDragDropHandler { screen, stack, x, y ->
             if (screen is AbstractComputerScreen<*>) {
@@ -75,5 +89,6 @@ object CommonEntrypoint {
             return@addGenericDragDropHandler false
         }
         registry.addRecipeHandler(ModRegistry.Menus.COMPUTER.get(), ComputerRecipeHandler())
+        registry.addRecipeHandler(ModRegistry.Menus.TURTLE.get(), ComputerRecipeHandler())
     }
 }
