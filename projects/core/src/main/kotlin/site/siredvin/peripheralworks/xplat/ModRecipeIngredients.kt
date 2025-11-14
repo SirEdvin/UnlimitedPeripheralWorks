@@ -34,7 +34,6 @@ interface ModRecipeIngredients {
     val emerald: Ingredient
     val diamond: Ingredient
     val ironIngot: Ingredient
-    val anyCoal: Ingredient
     val peripheraliumBlock: Ingredient
     val observer: Ingredient
     val smoothStone: Ingredient

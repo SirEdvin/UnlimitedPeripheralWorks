@@ -1,4 +1,4 @@
-// 1.20.1	2025-11-09T01:36:42.2386387	vanilla/Recipes
+// 1.20.1	2025-11-14T16:24:10.2285825	vanilla/Recipes
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data/minecraft/recipes/anchor_clean.json
 06bd5042d86f18b9ed542713e4705dc45f330edb data/minecraft/recipes/anchor_cloning.json
 a2696e406e9032af7d01eb6c0b534b706f6d9f5f data/minecraft/recipes/card_clean.json
@@ -16,7 +16,7 @@ b929cb33a2a61b583a688d95bf8534260eb9ff09 data/peripheralworks/recipes/map_pedest
 2e8895a33da8f4660886663ac5fdc7242b0b2cd6 data/peripheralworks/recipes/netherite_peripheralium_hub.json
 a2a265ea418ff34b94f24eee78d5ce76b302d05e data/peripheralworks/recipes/network_manager.json
 18af30591547644f148c40da544bd9a5beab8e8e data/peripheralworks/recipes/peripheralium_hub.json
-d3e006255acdc2e8ad644319af644d21aa344893 data/peripheralworks/recipes/peripheral_casing.json
+ffec3efd8adf8ae72892d33215f1748e2c358104 data/peripheralworks/recipes/peripheral_casing.json
 25157ecadecc3e6f7f96009d64cf7e0e5eb542db data/peripheralworks/recipes/peripheral_proxy.json
 528b21f70573cc5974cba7c10e1a2778bb061851 data/peripheralworks/recipes/reality_forger.json
 9f3ccb014e913ed7d65b9561935a26e97885f13e data/peripheralworks/recipes/recipe_registry.json

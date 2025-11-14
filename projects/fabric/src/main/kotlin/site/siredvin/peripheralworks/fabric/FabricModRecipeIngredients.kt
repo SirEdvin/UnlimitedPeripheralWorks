@@ -24,8 +24,6 @@ object FabricModRecipeIngredients : ModRecipeIngredients {
         get() = Ingredient.of(ConventionalItemTags.DIAMONDS)
     override val ironIngot: Ingredient
         get() = Ingredient.of(ConventionalItemTags.IRON_INGOTS)
-    override val anyCoal: Ingredient
-        get() = Ingredient.of(ConventionalItemTags.COAL)
     override val peripheraliumBlock: Ingredient
         get() = Ingredient.of(site.siredvin.peripheralium.Blocks.PERIPHERALIUM_BLOCK.get().asItem())
     override val observer: Ingredient

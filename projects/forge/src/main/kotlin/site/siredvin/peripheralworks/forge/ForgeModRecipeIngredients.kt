@@ -23,8 +23,6 @@ object ForgeModRecipeIngredients : ModRecipeIngredients {
         get() = Ingredient.of(Tags.Items.GEMS_DIAMOND)
     override val ironIngot: Ingredient
         get() = Ingredient.of(Tags.Items.INGOTS_IRON)
-    override val anyCoal: Ingredient
-        get() = Ingredient.of(net.minecraft.world.item.Items.COAL)
     override val peripheraliumBlock: Ingredient
         get() = Ingredient.of(site.siredvin.peripheralium.Blocks.PERIPHERALIUM_BLOCK.get())
     override val observer: Ingredient

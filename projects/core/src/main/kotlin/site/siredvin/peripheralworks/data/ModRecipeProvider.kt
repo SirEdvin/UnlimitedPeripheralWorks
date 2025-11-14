@@ -5,6 +5,7 @@ import net.minecraft.data.PackOutput
 import net.minecraft.data.recipes.FinishedRecipe
 import net.minecraft.data.recipes.RecipeProvider
 import net.minecraft.data.recipes.SpecialRecipeBuilder
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.crafting.Ingredient
 import site.siredvin.broccolium.modules.data.recipe.TweakedShapedRecipeBuilder
 import site.siredvin.broccolium.modules.data.recipe.TweakedSmithingTransformRecipeBuilder
@@ -37,7 +38,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
 
         TweakedShapedRecipeBuilder.shaped(Blocks.PERIPHERAL_CASING.get().asItem())
             .define('B', ingredients.peripheraliumBlock)
-            .define('C', ingredients.anyCoal)
+            .define('C', ItemTags.COALS)
             .define('I', ingredients.ironIngot)
             .pattern("ICI")
             .pattern("CBC")

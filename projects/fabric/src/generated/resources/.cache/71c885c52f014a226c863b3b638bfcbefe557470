@@ -1,6 +1,6 @@
-// 1.20.1	2025-11-09T01:35:44.9878763	Unlimited Peripheral Works/minecraft:block Loot Table
-a6c257852185d4ed159fd5d346ab4b2c7fa5238e data\peripheralworks\loot_tables\blocks\remote_observer.json
+// 1.20.1	2025-11-14T16:23:46.4241607	Unlimited Peripheral Works/minecraft:block Loot Table
 c41e20b1f8780d66f6a04d3be5bd08af1a4f0067 data\peripheralworks\loot_tables\blocks\display_pedestal.json
+a6c257852185d4ed159fd5d346ab4b2c7fa5238e data\peripheralworks\loot_tables\blocks\remote_observer.json
 a1c7fd52a4c7b7e1acc47df96da67080f64f55d3 data\peripheralworks\loot_tables\blocks\network_manager.json
 0781ecc4d7caaad202150e2bbaacb435a03882ca data\peripheralworks\loot_tables\blocks\ultimate_sensor.json
 fbbfca4d72a5799857020a3d05f2541ca11c4d71 data\peripheralworks\loot_tables\blocks\item_pedestal.json
