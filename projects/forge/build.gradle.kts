@@ -130,7 +130,6 @@ dependencies {
     compileOnly(fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3"))
 //    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
     compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
-//    implementation(fg.deobf())
 
     libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
     libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
