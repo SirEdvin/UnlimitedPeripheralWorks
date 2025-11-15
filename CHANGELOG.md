@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.4] - 2025-11-15
+
+### Added
+
+- Tag information for EMI recipe ingredients
+
 ## [1.7.3] - 2025-11-15
 
 ### Added

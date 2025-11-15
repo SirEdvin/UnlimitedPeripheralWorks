@@ -7,6 +7,7 @@ import dev.emi.emi.api.recipe.EmiRecipe
 import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.stack.FluidEmiStack
+import dev.emi.emi.api.stack.TagEmiIngredient
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.computercraft.peripherals.RecipeRegistryPeripheral
 import site.siredvin.peripheralworks.networking.ClientNetworking
@@ -72,6 +73,13 @@ object CommonEntrypoint {
         }
         if (ingredients.size == 1) {
             return ingredients[0]
+        }
+        if (ingredient is TagEmiIngredient) {
+            return mutableMapOf(
+                "type" to "tag",
+                "key" to ingredient.key.location.toString(),
+                "candidates" to ingredients,
+            )
         }
         return mutableMapOf("candidates" to ingredients)
     }
