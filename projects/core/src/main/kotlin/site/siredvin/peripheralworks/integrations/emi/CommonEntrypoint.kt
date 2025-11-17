@@ -36,7 +36,7 @@ object CommonEntrypoint {
             )
         }
         if (!stack.itemStack.isEmpty) {
-            val base = LuaRepresentation.forItemStack(stack.itemStack, RepresentationMode.BASE)
+            val base = LuaRepresentation.forItemStack(stack.itemStack, RepresentationMode.DETAILED)
             base["type"] = "item"
             base["chance"] = stack.chance
             return base

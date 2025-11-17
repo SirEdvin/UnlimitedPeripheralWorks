@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.5] - 2025-11-17
+
+### Added
+
+- Controllable and Workable peripheral for GTCEU
+- Expose information about 
+- EMI recipes now expose detailed information about stacks
+
 ## [1.7.4] - 2025-11-15
 
 ### Added
