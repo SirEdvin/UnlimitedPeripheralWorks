@@ -4,13 +4,14 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.vehicle.AbstractMinecart
 import net.minecraft.world.entity.vehicle.AbstractMinecartContainer
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.phys.AABB
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
 import site.siredvin.broccolium.modules.storage.item.MergedContainer
-import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
 
 object MinecartUtils {
     private const val SEARCH_MARGIN = 0.2
@@ -28,7 +29,7 @@ object MinecartUtils {
 
     fun getContainerMinecarts(level: Level, pos: BlockPos): List<AbstractMinecartContainer> = level.getEntitiesOfClass(AbstractMinecartContainer::class.java, getSearchShape(pos))
 
-    fun minecartExtractor(level: Level, blockPos: BlockPos, blockEntity: BlockEntity?, direction: Direction?): SlottedAgnosticItemStorage? {
+    fun minecartExtractor(level: Level, blockPos: BlockPos, blockEntity: BlockEntity?, direction: Direction?): SlottedAgnosticStorage<ItemStack, Int>? {
         val state = level.getBlockState(blockPos)
         if (!state.`is`(Blocks.POWERED_RAIL)) {
             return null

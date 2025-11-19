@@ -19,7 +19,7 @@ object EnergyRefuelHandler : TurtleRefuelHandler {
             return OptionalInt.empty()
         }
         val energyStorage = AgnosticEnergyStorageLookup.extractFromInventoryStack(turtle.level, ContainerWrapper(turtle.inventory), slot) ?: return OptionalInt.empty()
-        val energy = energyStorage.energy
+        val energy = energyStorage.firstEnergy
         if (energy.isEmpty) {
             return OptionalInt.empty()
         }
@@ -42,9 +42,9 @@ object EnergyRefuelHandler : TurtleRefuelHandler {
         }
 
         var slidingLimit = realLimit.toLong()
-        val slidingStack = AgnosticEnergyStack(energyStorage.unit, 0)
+        val slidingStack = AgnosticEnergyStack(energyStorage.firstEnergy.unit, 0)
         for (i in 1..4) {
-            val extractedEnergy = energyStorage.takeEnergy({ true }, slidingLimit)
+            val extractedEnergy = energyStorage.take({ true }, slidingLimit, false)
             if (extractedEnergy.isEmpty) {
                 if (slidingStack.isEmpty) {
                     return OptionalInt.empty()

@@ -12,14 +12,15 @@ import org.cyclops.integrateddynamics.blockentity.BlockEntityVariablestore
 import org.cyclops.integrateddynamics.capability.variablefacade.VariableFacadeHolderConfig
 import org.cyclops.integrateddynamics.core.helper.NetworkHelpers
 import org.cyclops.integrateddynamics.core.item.OperatorVariableFacade
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
-import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.tweakium.modules.plugins.AbstractInventoryPlugin
 
 class VariableStorePlugin(private val store: BlockEntityVariablestore) : AbstractInventoryPlugin() {
 
     override val level: Level = store.level!!
-    override val storage: SlottedAgnosticItemStorage = AgnosticItemHandlerWrapper(store.inventory.itemHandler)
+    override val storage: SlottedAgnosticStorage<ItemStack, Int> = AgnosticItemHandlerWrapper(store.inventory.itemHandler)
     private val context: ValueDeseralizationContext = ValueDeseralizationContext.of(level)
 
     fun parseEntry(facade: IVariableFacade): Map<String, Any> {
@@ -49,7 +50,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
     }
 
     override fun getItemDetailImpl(slot: Int): Map<String, *>? {
-        val facade: IVariableFacade = extractFacade(storage.getItem(slot)) ?: return null
+        val facade: IVariableFacade = extractFacade(storage.get(slot)) ?: return null
         if (store.network == null) {
             return null
         }
@@ -70,4 +71,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         }
         return valueData
     }
+
+    override val inventoryTransferLimit: Int
+        get() = PeripheralWorksConfig.itemStorageTransferLimit
 }

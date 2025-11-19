@@ -30,7 +30,7 @@ abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil
             val blockEntity = level.getBlockEntity(blockPos)
             if (blockEntity is IItemStackStorage) {
                 if (blockEntity.storedStack.isEmpty) {
-                    val storeResult = blockEntity.storage.storeItem(itemInHand)
+                    val storeResult = blockEntity.storage.store(itemInHand, false)
                     if (storeResult.isEmpty) {
                         player.setItemInHand(interactionHand, ItemStack.EMPTY)
                         return InteractionResult.CONSUME
@@ -69,7 +69,7 @@ abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil
             val blockEntity = level.getBlockEntity(blockPos)
             if (blockEntity is IItemStackStorage) {
                 if (!blockEntity.storedStack.isEmpty) {
-                    val storedStack = blockEntity.storage.takeItems(ItemStorageUtils.ALWAYS, Int.MAX_VALUE)
+                    val storedStack = blockEntity.storage.take(ItemStorageUtils.ALWAYS, Int.MAX_VALUE, false)
                     if (!storedStack.isEmpty) {
                         player.setItemInHand(InteractionHand.MAIN_HAND, storedStack)
                     }

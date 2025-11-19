@@ -183,7 +183,7 @@ class LecternPlugin(private val target: LecternBlockEntity) : IPeripheralPlugin 
             predicate = predicate.and(PeripheralPluginUtils.itemQueryToPredicate(bookQuery))
         }
 
-        val extractedBook = fromStorage.takeItems(predicate, 1)
+        val extractedBook = fromStorage.take(predicate, 1, false)
         if (extractedBook.isEmpty) {
             return MethodResult.of(null, "Cannot find book in desired inventory")
         }

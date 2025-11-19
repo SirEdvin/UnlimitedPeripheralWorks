@@ -103,7 +103,7 @@ class BeaconPlugin(private val target: BeaconBlockEntity) : IPeripheralPlugin {
             predicate = predicate.and(PeripheralPluginUtils.itemQueryToPredicate(itemQuery))
         }
 
-        val extractedStack = fromStorage.takeItems(predicate, 1)
+        val extractedStack = fromStorage.take(predicate, 1, false)
         if (extractedStack.isEmpty) {
             return MethodResult.of(null, "Target storage cannot provide desired items")
         }

@@ -1,8 +1,9 @@
 package site.siredvin.peripheralworks.subsystem.entityperipheral
 
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.item.ItemStack
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
-import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.plugins.InventoryPlugin
@@ -17,8 +18,8 @@ object GenericEntityStorageProvider : EntityPeripheralPluginProvider {
 
     override fun provide(entity: Entity): IPeripheralPlugin? {
         val entityStorage = AgnosticItemStorageLookup.extractFromUnknown(entity.level(), entity, null) ?: return null
-        if (entityStorage is SlottedAgnosticItemStorage) {
-            return InventoryPlugin(entity.level(), entityStorage)
+        if (entityStorage is SlottedAgnosticStorage<ItemStack, Int>) {
+            return InventoryPlugin(entity.level(), entityStorage, PeripheralWorksConfig.itemStorageTransferLimit)
         }
         return ItemStoragePlugin(entityStorage, entity.level(), PeripheralWorksConfig.itemStorageTransferLimit)
     }

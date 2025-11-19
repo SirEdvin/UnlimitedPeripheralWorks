@@ -6,14 +6,16 @@ import appeng.api.stacks.AEFluidKey
 import appeng.api.storage.MEStorage
 import appeng.blockentity.grid.AENetworkBlockEntity
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
+import site.siredvin.broccolium.modules.storage.fluid.FluidStorageUtils
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.fluid.toVanilla
 import site.siredvin.broccolium.modules.storage.fluid.toVariant
 import java.util.function.Predicate
 
 class AEFluidStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : AgnosticFluidStorage {
-    override fun getFluids(): Iterator<AgnosticFluidStack> {
+    override fun getContent(): Iterator<AgnosticFluidStack> {
         return storage.availableStacks.mapNotNull {
             if (it.key !is AEFluidKey) return@mapNotNull null
             return@mapNotNull (it.key as AEFluidKey).toVariant().toVanilla(it.longValue.toDouble())
@@ -24,16 +26,20 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
         entity.setChanged()
     }
 
-    override fun getCapacities(): List<Double> = List(getFluids().asSequence().count() + 1, { Double.POSITIVE_INFINITY })
+    override fun getCapacities(): List<Double> = List(getContent().asSequence().count() + 1, { Double.POSITIVE_INFINITY })
+    override val maxStackSize: Double
+        get() = Double.MAX_VALUE
+    override val operator: SomethingOperator<AgnosticFluidStack, Double>
+        get() = FluidStorageUtils
 
-    override fun storeFluid(stack: AgnosticFluidStack): AgnosticFluidStack {
-        val insertedAmount = storage.insert(AEFluidKey.of(stack.toVariant()), stack.platformAmount.toLong(), Actionable.MODULATE, IActionSource.ofMachine(entity))
+    override fun store(stack: AgnosticFluidStack, simulate: Boolean): AgnosticFluidStack {
+        val insertedAmount = storage.insert(AEFluidKey.of(stack.toVariant()), stack.platformAmount.toLong(), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (insertedAmount == 0L) return stack
         stack.shrink(insertedAmount.toDouble() / PlatformToolkit.get().fluidCompactDivider)
         return stack
     }
 
-    override fun takeFluid(predicate: Predicate<AgnosticFluidStack>, limit: Double): AgnosticFluidStack {
+    override fun take(predicate: Predicate<AgnosticFluidStack>, limit: Double, simulate: Boolean): AgnosticFluidStack {
         val platformLimit = limit * PlatformToolkit.get().fluidCompactDivider
         val fluidToTransfer = storage.availableStacks.find {
             val aeKey = it.key
@@ -42,7 +48,7 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
             }
             return@find predicate.test(aeKey.toVariant().toVanilla(it.longValue.toDouble()))
         } ?: return AgnosticFluidStack.EMPTY
-        val extractedAmount = storage.extract(fluidToTransfer.key, minOf(platformLimit.toLong(), fluidToTransfer.longValue), Actionable.MODULATE, IActionSource.ofMachine(entity))
+        val extractedAmount = storage.extract(fluidToTransfer.key, minOf(platformLimit.toLong(), fluidToTransfer.longValue), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (extractedAmount == 0L) return AgnosticFluidStack.EMPTY
         return (fluidToTransfer.key as AEFluidKey).toVariant().toVanilla(extractedAmount.toDouble())
     }

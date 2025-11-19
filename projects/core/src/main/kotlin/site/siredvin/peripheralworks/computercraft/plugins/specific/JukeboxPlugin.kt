@@ -67,7 +67,7 @@ class JukeboxPlugin(private val target: JukeboxBlockEntity) : IPeripheralPlugin 
         val toStorage = AgnosticItemSinkLookup.extractFromUnknown(target.level!!, location.target, direction)
             ?: throw LuaException("Target '$toName' is not an item inventory")
 
-        val stored = toStorage.storeItem(target.getItem(0))
+        val stored = toStorage.store(target.getItem(0), false)
         if (!stored.isEmpty) {
             return MethodResult.of(null, "Not enough space in target inventory")
         }

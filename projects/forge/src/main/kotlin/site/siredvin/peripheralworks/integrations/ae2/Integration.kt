@@ -3,21 +3,22 @@ package site.siredvin.peripheralworks.integrations.ae2
 import appeng.blockentity.grid.AENetworkBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
+import site.siredvin.broccolium.modules.storage.base.api.AgnosticStorage
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
-import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorage
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 
 class Integration : Runnable {
 
     companion object {
         @Suppress("UNUSED_PARAMETER")
-        fun extractItemStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticItemStorage? {
+        fun extractItemStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticStorage<ItemStack, Int>? {
             if (entity !is AENetworkBlockEntity) return null
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: return null
             return AEItemStorage(inventory, entity)

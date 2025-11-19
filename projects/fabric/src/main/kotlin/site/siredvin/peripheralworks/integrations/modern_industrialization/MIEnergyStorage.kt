@@ -4,8 +4,10 @@ import aztech.modern_industrialization.api.machine.component.EnergyAccess
 import aztech.modern_industrialization.machines.components.EnergyComponent
 import aztech.modern_industrialization.util.Simulation
 import net.minecraft.network.chat.Component
+import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.EnergyRegistry
+import site.siredvin.broccolium.modules.storage.energy.EnergyStorageUtils
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import java.util.function.Predicate
@@ -15,11 +17,13 @@ class MIEnergyStorage(private val access: EnergyAccess) : AgnosticEnergyStorage 
     companion object {
         val MI_ENERGY = EnergyRegistry.register("EU", Component.literal("Modern industrialization energy"))
     }
-    override val capacity: Long
+    override val maxStackSize: Long
         get() = access.capacity
+    override val operator: SomethingOperator<AgnosticEnergyStack, Long>
+        get() = EnergyStorageUtils
     override val canExtract: Boolean
         get() = true
-    override val energy: AgnosticEnergyStack
+    override val firstEnergy: AgnosticEnergyStack
         get() = AgnosticEnergyStack(MI_ENERGY, access.eu)
 
     override fun setChanged() {
@@ -27,19 +31,23 @@ class MIEnergyStorage(private val access: EnergyAccess) : AgnosticEnergyStorage 
 
     override val canReceive: Boolean
         get() = true
-    override val unit: EnergyUnit
+    val unit: EnergyUnit
         get() = MI_ENERGY
 
-    override fun storeEnergy(stack: AgnosticEnergyStack): AgnosticEnergyStack {
+    override fun store(stack: AgnosticEnergyStack, simulate: Boolean): AgnosticEnergyStack {
         if (component == null || stack.unit != MI_ENERGY) return stack
-        val inserted = component.insertEu(stack.amount, Simulation.ACT)
+        val inserted = component.insertEu(stack.amount, if (simulate) Simulation.SIMULATE else Simulation.ACT)
         stack.shrink(inserted)
         return stack
     }
 
-    override fun takeEnergy(predicate: Predicate<AgnosticEnergyStack>, limit: Long): AgnosticEnergyStack {
-        if (component == null || !predicate.test(energy)) return AgnosticEnergyStack(unit, 0)
-        val extracted = component.consumeEu(limit, Simulation.ACT)
+    override fun getContent(): Iterator<AgnosticEnergyStack> {
+        return listOf(firstEnergy).iterator()
+    }
+
+    override fun take(predicate: Predicate<AgnosticEnergyStack>, limit: Long, simulate: Boolean): AgnosticEnergyStack {
+        if (component == null || !predicate.test(firstEnergy)) return AgnosticEnergyStack(unit, 0)
+        val extracted = component.consumeEu(limit, if (simulate) Simulation.SIMULATE else Simulation.ACT)
         return AgnosticEnergyStack(MI_ENERGY, extracted)
     }
 }

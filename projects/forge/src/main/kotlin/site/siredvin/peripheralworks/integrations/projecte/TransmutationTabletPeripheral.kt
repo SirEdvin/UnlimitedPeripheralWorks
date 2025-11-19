@@ -70,7 +70,7 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
         val inventory = peripheralOwner.storage ?: return MethodResult.of(null, "Cannot find inventory")
         assertBetween(slot, 1, inventory.size, "slot")
         val realSlot = slot - 1
-        val stack = inventory.getItem(realSlot)
+        val stack = inventory.get(realSlot)
         if (!EMCHelper.doesItemHaveEmc(stack)) {
             return MethodResult.of(null, "Cannot transmute item")
         }
@@ -78,7 +78,7 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
         if (cost == 0L) {
             return MethodResult.of(null, "Cannot transmute item")
         }
-        val realStack = inventory.takeItems(stack.count, realSlot, realSlot, ItemStorageUtils.ALWAYS)
+        val realStack = inventory.take(stack.count, realSlot, realSlot, ItemStorageUtils.ALWAYS, false)
         if (realStack.isEmpty) {
             return MethodResult.of(null, "Something gone wrong")
         }

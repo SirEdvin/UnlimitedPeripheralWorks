@@ -5,18 +5,22 @@ import appeng.api.config.PowerMultiplier
 import appeng.api.networking.energy.IEnergyService
 import appeng.blockentity.grid.AENetworkBlockEntity
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.Energies
+import site.siredvin.broccolium.modules.storage.energy.EnergyStorageUtils
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import java.util.function.Predicate
 
 class AEEnergyStorage(private val energyService: IEnergyService, private val entity: AENetworkBlockEntity) : AgnosticEnergyStorage {
-    override val capacity: Long
+    override val maxStackSize: Long
         get() = energyService.maxStoredPower.toLong()
+    override val operator: SomethingOperator<AgnosticEnergyStack, Long>
+        get() = EnergyStorageUtils
     override val canExtract: Boolean
         get() = true
-    override val energy: AgnosticEnergyStack
+    override val firstEnergy: AgnosticEnergyStack
         get() = AgnosticEnergyStack(Energies.REDSTONE_FLUX, energyService.storedPower.toLong())
 
     override fun setChanged() {
@@ -25,18 +29,20 @@ class AEEnergyStorage(private val energyService: IEnergyService, private val ent
 
     override val canReceive: Boolean
         get() = true
-    override val unit: EnergyUnit
-        get() = PlatformToolkit.get().commonEnergy
 
-    override fun storeEnergy(stack: AgnosticEnergyStack): AgnosticEnergyStack {
+    override fun store(stack: AgnosticEnergyStack, simulate: Boolean): AgnosticEnergyStack {
         if (stack.unit != Energies.REDSTONE_FLUX) return stack
-        val leftover = energyService.injectPower(stack.amount.toDouble(), Actionable.MODULATE)
+        val leftover = energyService.injectPower(stack.amount.toDouble(), if (simulate) Actionable.SIMULATE else Actionable.MODULATE)
         return stack.copyWithCount(leftover.toLong())
     }
 
-    override fun takeEnergy(predicate: Predicate<AgnosticEnergyStack>, limit: Long): AgnosticEnergyStack {
-        if (!predicate.test(energy)) return AgnosticEnergyStack(PlatformToolkit.get().commonEnergy, 0)
-        val extracted = energyService.extractAEPower(limit.toDouble(), Actionable.MODULATE, PowerMultiplier.CONFIG)
+    override fun getContent(): Iterator<AgnosticEnergyStack> {
+        return listOf(firstEnergy).iterator()
+    }
+
+    override fun take(predicate: Predicate<AgnosticEnergyStack>, limit: Long, simulate: Boolean): AgnosticEnergyStack {
+        if (!predicate.test(firstEnergy)) return AgnosticEnergyStack(PlatformToolkit.get().commonEnergy, 0)
+        val extracted = energyService.extractAEPower(limit.toDouble(), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, PowerMultiplier.CONFIG)
         return AgnosticEnergyStack(Energies.REDSTONE_FLUX, extracted.toLong())
     }
 }
