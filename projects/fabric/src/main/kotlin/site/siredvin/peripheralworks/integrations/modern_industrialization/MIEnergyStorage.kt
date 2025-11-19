@@ -41,9 +41,7 @@ class MIEnergyStorage(private val access: EnergyAccess) : AgnosticEnergyStorage 
         return stack
     }
 
-    override fun getContent(): Iterator<AgnosticEnergyStack> {
-        return listOf(firstEnergy).iterator()
-    }
+    override fun getContent(): Iterator<AgnosticEnergyStack> = listOf(firstEnergy).iterator()
 
     override fun take(predicate: Predicate<AgnosticEnergyStack>, limit: Long, simulate: Boolean): AgnosticEnergyStack {
         if (component == null || !predicate.test(firstEnergy)) return AgnosticEnergyStack(unit, 0)

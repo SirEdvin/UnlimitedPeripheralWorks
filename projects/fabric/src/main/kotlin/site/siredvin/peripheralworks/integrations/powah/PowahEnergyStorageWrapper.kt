@@ -5,7 +5,6 @@ import owmii.powah.lib.block.AbstractEnergyStorage
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
-import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyStorageUtils
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
@@ -43,9 +42,7 @@ class PowahEnergyStorageWrapper(private val storage: AbstractEnergyStorage<*, *>
         return stack.copyWithCount(stack.amount - receivedEnergy)
     }
 
-    override fun getContent(): Iterator<AgnosticEnergyStack> {
-        return listOf(firstEnergy).iterator()
-    }
+    override fun getContent(): Iterator<AgnosticEnergyStack> = listOf(firstEnergy).iterator()
 
     override fun take(predicate: Predicate<AgnosticEnergyStack>, limit: Long, simulate: Boolean): AgnosticEnergyStack {
         if (!predicate.test(firstEnergy)) return AgnosticEnergyStack(PlatformToolkit.get().commonEnergy, 0)

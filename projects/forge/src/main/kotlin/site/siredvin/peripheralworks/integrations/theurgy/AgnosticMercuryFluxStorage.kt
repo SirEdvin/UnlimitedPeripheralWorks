@@ -3,7 +3,6 @@ package site.siredvin.peripheralworks.integrations.theurgy
 import com.klikli_dev.theurgy.content.capability.MercuryFluxStorage
 import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
-import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyStorageUtils
 import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
@@ -20,14 +19,12 @@ class AgnosticMercuryFluxStorage(private val capability: MercuryFluxStorage) : A
     override val canExtract: Boolean
         get() = capability.canExtract()
 
-    override fun getContent(): Iterator<AgnosticEnergyStack> {
-        return listOf(firstEnergy).iterator()
-    }
+    override fun getContent(): Iterator<AgnosticEnergyStack> = listOf(firstEnergy).iterator()
 
     override fun take(
         predicate: Predicate<AgnosticEnergyStack>,
         limit: Long,
-        simulate: Boolean
+        simulate: Boolean,
     ): AgnosticEnergyStack {
         if (!predicate.test(firstEnergy)) return AgnosticEnergyStack(unit, 0)
         val extractedEnergy = capability.extractEnergy(limit.toInt(), simulate)

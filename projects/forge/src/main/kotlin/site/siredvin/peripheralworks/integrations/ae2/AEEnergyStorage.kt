@@ -8,7 +8,6 @@ import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.Energies
 import site.siredvin.broccolium.modules.storage.energy.EnergyStorageUtils
-import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import java.util.function.Predicate
 
@@ -22,9 +21,7 @@ class AEEnergyStorage(private val energyService: IEnergyService, private val ent
     override val firstEnergy: AgnosticEnergyStack
         get() = AgnosticEnergyStack(Energies.REDSTONE_FLUX, energyService.storedPower.toLong())
 
-    override fun getContent(): Iterator<AgnosticEnergyStack> {
-        return listOf(firstEnergy).iterator()
-    }
+    override fun getContent(): Iterator<AgnosticEnergyStack> = listOf(firstEnergy).iterator()
 
     override fun setChanged() {
         entity.setChanged()

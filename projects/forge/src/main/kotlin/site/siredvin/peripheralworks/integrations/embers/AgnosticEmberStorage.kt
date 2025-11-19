@@ -19,19 +19,18 @@ class AgnosticEmberStorage(private val capability: IEmberCapability) : AgnosticE
     override val canExtract: Boolean
         get() = true
 
-    override fun getContent(): Iterator<AgnosticEnergyStack> {
-        return listOf(firstEnergy).iterator()
-    }
+    override fun getContent(): Iterator<AgnosticEnergyStack> = listOf(firstEnergy).iterator()
 
     override fun take(
         predicate: Predicate<AgnosticEnergyStack>,
         limit: Long,
-        simulate: Boolean
+        simulate: Boolean,
     ): AgnosticEnergyStack {
         if (!predicate.test(firstEnergy)) return AgnosticEnergyStack(unit, 0)
         val actualLimit = limit.toDouble().coerceAtMost(capability.ember)
-        if (!simulate)
+        if (!simulate) {
             capability.ember -= actualLimit
+        }
         return AgnosticEnergyStack(unit, actualLimit.toLong())
     }
 
@@ -43,8 +42,9 @@ class AgnosticEmberStorage(private val capability: IEmberCapability) : AgnosticE
     override fun store(stack: AgnosticEnergyStack, simulate: Boolean): AgnosticEnergyStack {
         if (!stack.`is`(unit)) return stack
         val actualLimit = stack.amount.toDouble().coerceAtMost(capability.emberCapacity - capability.ember)
-        if (!simulate)
+        if (!simulate) {
             capability.ember += actualLimit
+        }
         return AgnosticEnergyStack(unit, stack.amount - actualLimit.toLong())
     }
 
