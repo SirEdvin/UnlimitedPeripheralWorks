@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GTCEU Recipes now will show duration, level and every consumption
 - EMI recipe will now have `extra` field with extra info
 - GTCEU machines now has `getRecipeTypes()` method
+- Network manager now has `getDistanceBetween` that return relative distance between two peripherals
 
 ## [1.7.6] - 2025-11-19
 
