@@ -2,6 +2,8 @@ package site.siredvin.peripheralworks.integrations.gtceu
 
 import com.gregtechceu.gtceu.api.capability.forge.GTCapability
 import com.gregtechceu.gtceu.api.item.IGTTool
+import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity
+import com.gregtechceu.gtceu.api.recipe.GTRecipe
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour
 import dan200.computercraft.api.detail.DetailProvider
 import dan200.computercraft.api.detail.VanillaDetailRegistries
@@ -10,6 +12,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import kotlin.math.max
 
@@ -43,9 +46,38 @@ class Integration : Runnable {
         }
     }
 
+    object MachinePeripheralPluginProvider : PeripheralPluginProvider {
+        override val pluginType: String
+            get() = MachinePlugin.TYPE
+
+        override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            val blockEntity = level.getBlockEntity(pos)
+            if (blockEntity is IMachineBlockEntity) {
+                return MachinePlugin(blockEntity.definition)
+            }
+            return null
+        }
+    }
+
     override fun run() {
         ComputerCraftProxy.addProvider(WorkablePeripheralPluginProvider)
         ComputerCraftProxy.addProvider(ControllablePeripheralPluginProvider)
+        ComputerCraftProxy.addProvider(MachinePeripheralPluginProvider)
+
+        RecipeRegistryToolkit.registerRecipeSerializer(GTRecipe::class.java, GTCEURecipeTransformer())
+
+//        InformativeRegistryPeripheral.addList("gtceuMultiblock", "GTCEU multiblock registry", { level ->
+//            MethodResult.of(GTRegistries.MACHINES.filter { it is MultiblockMachineDefinition }.map { it.id.toString() })
+//        }, { level, id ->
+//            val machine = GTRegistries.MACHINES.get(ResourceLocation.tryParse(id)) as? MultiblockMachineDefinition ?: return@addList MethodResult.of(null, "Cannot find machine " + id)
+//            val info = mutableMapOf<String, Any>()
+//            info["id"] = "id"
+//            info["isGenerator"] = machine.isGenerator
+//            info["shapes"] = machine.shapes.get().map {
+//                it.blocks.map { it1 -> it1.map { it2 -> it2.map { blockInfo -> LuaRepresentation.forBlockState(blockInfo.blockState) } } }
+//            }
+//            return@addList MethodResult.of(info)
+//        })
 
         VanillaDetailRegistries.ITEM_STACK.addProvider(
             DetailProvider { data, stack ->

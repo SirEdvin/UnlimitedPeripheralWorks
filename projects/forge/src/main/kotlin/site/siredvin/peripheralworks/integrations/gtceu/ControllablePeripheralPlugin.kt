@@ -7,7 +7,7 @@ import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class ControllablePeripheralPlugin(private val controllable: IControllable) : IPeripheralPlugin {
     companion object {
-        const val TYPE = "gtceu:workable"
+        const val TYPE = "gtceu:controllable"
     }
 
     @LuaFunction(mainThread = true)

@@ -8,10 +8,12 @@ import dev.emi.emi.api.stack.EmiIngredient
 import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.stack.FluidEmiStack
 import dev.emi.emi.api.stack.TagEmiIngredient
+import net.minecraft.core.RegistryAccess
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.computercraft.peripherals.RecipeRegistryPeripheral
 import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.MapBasedEventMessage
+import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
@@ -19,13 +21,20 @@ import kotlin.collections.set
 
 object CommonEntrypoint {
 
-    fun mapRecipe(recipe: EmiRecipe): MutableMap<String, Any> {
+    fun mapRecipe(recipe: EmiRecipe, registryAccess: RegistryAccess): MutableMap<String, Any> {
         val result = mutableMapOf<String, Any>()
         result["category"] = recipe.category.id.toString()
         result["id"] = recipe.id?.toString() ?: "unknown"
         result["inputs"] = recipe.inputs.map(CommonEntrypoint::mapIngredient)
         result["outputs"] = recipe.outputs.map(CommonEntrypoint::mapIngredient)
         result["catalysts"] = recipe.catalysts.map(CommonEntrypoint::mapIngredient)
+        val backingRecipe = recipe.backingRecipe
+        if (backingRecipe != null) {
+            val rawRecipeInfo = RecipeRegistryToolkit.serializeRecipe(backingRecipe, registryAccess)
+            if (rawRecipeInfo.contains("extra") && rawRecipeInfo["extra"] != null) {
+                result["extra"] = rawRecipeInfo["extra"]!!
+            }
+        }
         return result
     }
 
@@ -74,14 +83,15 @@ object CommonEntrypoint {
         if (ingredients.size == 1) {
             return ingredients[0]
         }
+        val base = mutableMapOf(
+            "candidates" to ingredients,
+            "amount" to ingredient.amount,
+        )
         if (ingredient is TagEmiIngredient) {
-            return mutableMapOf(
-                "type" to "tag",
-                "key" to ingredient.key.location.toString(),
-                "candidates" to ingredients,
-            )
+            base["type"] = "tag"
+            base["key"] = ingredient.key.location.toString()
         }
-        return mutableMapOf("candidates" to ingredients)
+        return base
     }
 
     fun init() {

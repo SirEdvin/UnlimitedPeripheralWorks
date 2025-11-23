@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- GTCEU Recipes now will show duration, level and every consumption
+- EMI recipe will now have `extra` field with extra info
+- GTCEU machines now has `getRecipeTypes()` method
+
 ## [1.7.6] - 2025-11-19
 
 ### Fixed
