@@ -18,7 +18,7 @@ object EntityLinkClientRenderer : ConfigurationModeRender {
         gameRenderer: GameRenderer,
         projectionMatrix: Matrix4f,
     ) {
-        FlareRenderer.initFlareRenderer(poseStack, camera)
+        FlareRenderer.initRenderer(poseStack, camera)
         FlareRenderer.renderFlare(
             poseStack,
             camera,
@@ -29,6 +29,6 @@ object EntityLinkClientRenderer : ConfigurationModeRender {
             sourceFlareColor,
             1f,
         )
-        FlareRenderer.uninitFlareRenderer(poseStack)
+        FlareRenderer.uninitRenderer(poseStack)
     }
 }

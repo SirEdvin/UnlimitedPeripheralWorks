@@ -9,7 +9,8 @@
   "mixins": [
     "LecternMixin",
     "ServerLevelMixin",
-    "CursedTurtleMixin"
+    "CursedTurtleMixin",
+    "LivingEntityMixin",
   ],
   "client": [
     "LevelRendererMixin"

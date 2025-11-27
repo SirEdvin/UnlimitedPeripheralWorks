@@ -55,7 +55,7 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         gameRenderer: GameRenderer,
         projectionMatrix: Matrix4f,
     ) {
-        FlareRenderer.initFlareRenderer(poseStack, camera)
+        FlareRenderer.initRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? PeripheralProxyBlockEntity ?: return
         FlareRenderer.renderFlare(
             poseStack,
@@ -90,6 +90,6 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
                 minecraft.renderBuffers().bufferSource(),
             )
         }
-        FlareRenderer.uninitFlareRenderer(poseStack)
+        FlareRenderer.uninitRenderer(poseStack)
     }
 }

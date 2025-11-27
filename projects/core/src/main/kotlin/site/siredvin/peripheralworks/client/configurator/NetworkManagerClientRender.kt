@@ -9,8 +9,11 @@ import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
+import net.minecraft.world.InteractionHand
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
+import kotlin.math.sqrt
 
 object NetworkManagerClientRender : ConfigurationModeRender {
 
@@ -54,46 +57,50 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         gameRenderer: GameRenderer,
         projectionMatrix: Matrix4f,
     ) {
-        FlareRenderer.initFlareRenderer(poseStack, camera)
+        CommonRenderer.initRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? NetworkManagerBlockEntity ?: return
-
+        val playerPos = minecraft.player!!.position()
+        val range = NetworkManagerMode.getRange(minecraft.player!!.getItemInHand(InteractionHand.MAIN_HAND))
         entity.clientBlockCache.entries.forEach {
-            var baseHeight = 1.2
-            renderText(
-                poseStack,
-                it.value.peripheralName,
-                it.key.x + 0.5,
-                it.key.y + baseHeight,
-                it.key.z + 0.5,
-                minecraft.renderBuffers().bufferSource(),
-            )
-            for (extraName in it.value.extraNames) {
-                baseHeight += 0.15
+            val distance = sqrt(it.key.distToCenterSqr(playerPos.x(), playerPos.y(), playerPos.z()))
+            if (distance < range) {
+                var baseHeight = 1.2
                 renderText(
                     poseStack,
-                    extraName,
+                    it.value.peripheralName,
                     it.key.x + 0.5,
                     it.key.y + baseHeight,
                     it.key.z + 0.5,
                     minecraft.renderBuffers().bufferSource(),
-                    0xff0000,
                 )
-            }
-            for (group in it.value.groups) {
-                baseHeight += 0.15
-                val color = entity.peripheralGroups[group]!!.color
-                renderText(
-                    poseStack,
-                    "group:$group",
-                    it.key.x + 0.5,
-                    it.key.y + baseHeight,
-                    it.key.z + 0.5,
-                    minecraft.renderBuffers().bufferSource(),
-                    if (color == -1) 0xffffff else color,
-                )
+                for (extraName in it.value.extraNames) {
+                    baseHeight += 0.15
+                    renderText(
+                        poseStack,
+                        extraName,
+                        it.key.x + 0.5,
+                        it.key.y + baseHeight,
+                        it.key.z + 0.5,
+                        minecraft.renderBuffers().bufferSource(),
+                        0xff0000,
+                    )
+                }
+                for (group in it.value.groups) {
+                    baseHeight += 0.15
+                    val color = entity.peripheralGroups[group]!!.color
+                    renderText(
+                        poseStack,
+                        "group:$group",
+                        it.key.x + 0.5,
+                        it.key.y + baseHeight,
+                        it.key.z + 0.5,
+                        minecraft.renderBuffers().bufferSource(),
+                        if (color == -1) 0xffffff else color,
+                    )
+                }
             }
         }
 
-        FlareRenderer.uninitFlareRenderer(poseStack)
+        CommonRenderer.uninitRenderer(poseStack)
     }
 }

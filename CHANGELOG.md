@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.8] - 2025-11-27
+
+### Added
+
+- Slot argument for `item_storage` for destinations
+- Ability to change radius of label rendering for network manager overlay
+
+### Fixed
+
+- Network manager overlay text should work with shaders now
+
 ## [1.7.7] - 2025-11-23
 
 ### Added

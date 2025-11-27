@@ -27,6 +27,7 @@ enum class ModText : TextRecord {
     ENTITY_LINK_UPGRADES,
     ENTITY_LINK_DOES_NOT_HAVE_UPGRADES,
     ENTITY_LINK_UPGRADE_SCANNER,
+    NETWORK_MANAGER_MOD_RADIUS_CHANGE,
     ;
 
     override val textID: String by lazy {

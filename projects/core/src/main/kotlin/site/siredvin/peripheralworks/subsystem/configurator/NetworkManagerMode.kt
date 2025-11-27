@@ -1,9 +1,11 @@
 package site.siredvin.peripheralworks.subsystem.configurator
 
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
@@ -13,12 +15,28 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
 
 object NetworkManagerMode : ConfigurationMode {
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "network_manager")
     override val description: Component = ModTooltip.NETWORK_MANAGER_MODE.text
+
+    const val RANGE_TAG = "networkManagerRange"
+    private const val DEFAULT_RANGE = 32
+    private val appropriateRanges = listOf(64, 32, 16, 8, 4)
+
+    fun getRange(stack: ItemStack): Int {
+        if (!stack.tag!!.contains(RANGE_TAG)) {
+            stack.tag!!.putInt(RANGE_TAG, DEFAULT_RANGE)
+        }
+        return stack.tag!!.getInt(RANGE_TAG)
+    }
+
+    override fun extraTooltips(itemStack: ItemStack, tooltip: MutableList<Component>) {
+        tooltip.add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE.format(getRange(itemStack)))
+    }
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
         if (level.isClientSide || level !is ServerLevel) {
@@ -33,5 +51,19 @@ object NetworkManagerMode : ConfigurationMode {
             return InteractionResultHolder.success(stack)
         }
         return InteractionResultHolder.consume(stack)
+    }
+
+    override fun onSwing(
+        configurationTarget: BlockPos,
+        stack: ItemStack,
+        owner: Player,
+    ): Boolean {
+        val currentRange = getRange(stack)
+        val index = (appropriateRanges.indexOf(currentRange) + 1) % appropriateRanges.size
+        stack.tag!!.putInt(RANGE_TAG, appropriateRanges[index])
+        if (owner is ServerPlayer) {
+            owner.displayClientMessage(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE.format(appropriateRanges[index]), true)
+        }
+        return false
     }
 }

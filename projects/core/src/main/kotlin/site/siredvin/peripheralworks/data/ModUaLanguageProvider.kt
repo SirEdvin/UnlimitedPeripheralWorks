@@ -70,6 +70,7 @@ class ModUaLanguageProvider(
         add(ModText.ENTITY_LINK_UPGRADES, "Список покращень:")
         add(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES, "Коннектор до сутності наразі немає покращень")
         add(ModText.ENTITY_LINK_UPGRADE_SCANNER, "Сканер")
+        add(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE, "Радіус оверлея менеджера мережі: %s")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
 
@@ -92,6 +93,7 @@ class ModUaLanguageProvider(
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Автор: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Налаштування коннектора до сутності")
         add(ModTooltip.NETWORK_MANAGER_MODE, "  Оверлей менеджера мережі")
+        add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE, "  Радіус оверлея: %s")
 
         add(ModEnergiesText.MERCURY_FLUX, "Ртутний флюс")
         add(ModEnergiesText.EMBER, "Вуглечки")
