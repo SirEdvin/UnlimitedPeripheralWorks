@@ -1,11 +1,11 @@
 package site.siredvin.peripheralworks.client.configurator
 
+import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
@@ -39,9 +39,8 @@ object NetworkManagerClientRender : ConfigurationModeRender {
 
         val font = Minecraft.getInstance().font
         val offset = (-font.width(text) / 2).toFloat()
-        val opacity = (.4f * 255.0f).toInt() shl 24
         font.drawInBatch(
-            text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.NORMAL, opacity,
+            text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.NORMAL, 0,
             LightTexture.FULL_BRIGHT,
         )
 
@@ -54,13 +53,18 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         poseStack: PoseStack,
         partialTick: Float,
         camera: Camera,
-        gameRenderer: GameRenderer,
         projectionMatrix: Matrix4f,
     ) {
         CommonRenderer.initRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? NetworkManagerBlockEntity ?: return
         val playerPos = minecraft.player!!.position()
         val range = NetworkManagerMode.getRange(minecraft.player!!.getItemInHand(InteractionHand.MAIN_HAND))
+        RenderSystem.disableDepthTest()
+        RenderSystem.disableCull()
+        RenderSystem.enableBlend()
+        RenderSystem.defaultBlendFunc()
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
+        RenderSystem.depthMask(false)
         entity.clientBlockCache.entries.forEach {
             val distance = sqrt(it.key.distToCenterSqr(playerPos.x(), playerPos.y(), playerPos.z()))
             if (distance < range) {
@@ -100,7 +104,11 @@ object NetworkManagerClientRender : ConfigurationModeRender {
                 }
             }
         }
-
+        minecraft.renderBuffers().bufferSource().endBatch()
+        RenderSystem.enableDepthTest()
+        RenderSystem.enableCull()
+        RenderSystem.disableBlend()
+        RenderSystem.depthMask(false)
         CommonRenderer.uninitRenderer(poseStack)
     }
 }

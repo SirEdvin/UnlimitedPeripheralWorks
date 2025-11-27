@@ -3,7 +3,6 @@ package site.siredvin.peripheralworks.client.configurator
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
@@ -19,7 +18,6 @@ object RemoteObserverClientRender : ConfigurationModeRender {
         poseStack: PoseStack,
         partialTick: Float,
         camera: Camera,
-        gameRenderer: GameRenderer,
         projectionMatrix: Matrix4f,
     ) {
         FlareRenderer.initRenderer(poseStack, camera)

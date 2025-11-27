@@ -3,7 +3,6 @@ package site.siredvin.peripheralworks.client.configurator
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
 
@@ -15,7 +14,6 @@ object EntityLinkClientRenderer : ConfigurationModeRender {
         poseStack: PoseStack,
         partialTick: Float,
         camera: Camera,
-        gameRenderer: GameRenderer,
         projectionMatrix: Matrix4f,
     ) {
         FlareRenderer.initRenderer(poseStack, camera)

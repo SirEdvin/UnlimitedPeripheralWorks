@@ -5,7 +5,6 @@ import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
@@ -26,7 +25,6 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         z: Double,
         lightLevel: Int,
         buffer: MultiBufferSource,
-        color: Int = 0x000000,
     ) {
         matrices.pushPose()
 
@@ -40,8 +38,7 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
 
         val font = Minecraft.getInstance().font
         val offset = (-font.width(text) / 2).toFloat()
-        val opacity = (.4f * 255.0f).toInt() shl 24
-        font.drawInBatch(text, offset, 0f, 0xffffff, false, matrix4f, buffer, Font.DisplayMode.NORMAL, opacity, lightLevel)
+        font.drawInBatch(text, offset, 0f, 0xffffff, false, matrix4f, buffer, Font.DisplayMode.NORMAL, 0, lightLevel)
 
         matrices.popPose()
     }
@@ -52,7 +49,6 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         poseStack: PoseStack,
         partialTick: Float,
         camera: Camera,
-        gameRenderer: GameRenderer,
         projectionMatrix: Matrix4f,
     ) {
         FlareRenderer.initRenderer(poseStack, camera)
@@ -90,6 +86,7 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
                 minecraft.renderBuffers().bufferSource(),
             )
         }
+        minecraft.renderBuffers().bufferSource().endBatch()
         FlareRenderer.uninitRenderer(poseStack)
     }
 }

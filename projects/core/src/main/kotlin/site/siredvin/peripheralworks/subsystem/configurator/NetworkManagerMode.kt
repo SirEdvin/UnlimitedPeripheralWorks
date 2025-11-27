@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.subsystem.configurator
 
-import net.minecraft.client.player.LocalPlayer
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation

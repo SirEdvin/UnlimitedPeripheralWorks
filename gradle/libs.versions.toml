@@ -61,6 +61,8 @@ create-fabric = "0.5.1-g-build.1483+mc1.20.1"
 modern-industrialization = "5562363" # Modern Industrialization v1.8.6
 magna = "1.10.1+1.20.1"
 pal = "1.8.0"
+iris = "1.7.6+1.20.1"
+sodium = "mc1.20.1-0.5.13-fabric"
 
 # Integration mod dependencies (forge)
 occultism = "1.20.1-1.141.3"
@@ -177,6 +179,9 @@ jsonem = {module = "maven.modrinth:jsonem", version.ref = "jsonem"}
 modern-industrialization = {module = "curse.maven:modernindust-405388", version.ref="modern-industrialization"}
 magna = {module = "dev.draylar:magna", version.ref="magna"}
 pal = {module = "io.github.ladysnake:PlayerAbilityLib", version.ref="pal"}
+
+iris = { module = "maven.modrinth:iris", version.ref = "iris" }
+sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }
 
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}

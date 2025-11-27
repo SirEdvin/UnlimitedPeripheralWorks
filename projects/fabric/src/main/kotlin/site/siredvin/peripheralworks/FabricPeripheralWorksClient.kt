@@ -7,11 +7,14 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.client.FlexibleRealityAnchorUnbakedModel
 import site.siredvin.peripheralworks.client.FlexibleStatueUnbakedModel
+import site.siredvin.peripheralworks.client.configurator.ConfigurationModeRenderRegistry
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.setup.Blocks
@@ -44,6 +47,10 @@ object FabricPeripheralWorksClient : ClientModInitializer {
         PeripheralWorksClientCore.onModelRegister { serializer, modeller ->
             @Suppress("UNCHECKED_CAST")
             FabricComputerCraftAPIClient.registerTurtleUpgradeModeller(serializer as TurtleUpgradeSerialiser<ITurtleUpgrade>, modeller)
+        }
+
+        WorldRenderEvents.END.register {
+            ConfigurationModeRenderRegistry.render(Minecraft.getInstance(), it.matrixStack(), it.tickDelta(), it.camera(), it.projectionMatrix())
         }
     }
 }
