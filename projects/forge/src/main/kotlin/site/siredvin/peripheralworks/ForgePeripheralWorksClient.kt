@@ -44,11 +44,4 @@ object ForgePeripheralWorksClient {
             event.register(serializer as TurtleUpgradeSerialiser<ITurtleUpgrade>, model)
         }
     }
-
-    @SubscribeEvent
-    fun onRender(ev: RenderLevelStageEvent) {
-        if (ev.stage == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
-            ConfigurationModeRenderRegistry.render(Minecraft.getInstance(), ev.poseStack, ev.partialTick, ev.camera, ev.projectionMatrix)
-        }
-    }
 }
