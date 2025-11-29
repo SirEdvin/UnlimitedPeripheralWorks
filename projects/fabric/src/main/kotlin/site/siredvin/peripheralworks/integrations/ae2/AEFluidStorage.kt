@@ -5,12 +5,12 @@ import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.storage.MEStorage
 import appeng.blockentity.grid.AENetworkBlockEntity
+import it.unimi.dsi.fastutil.objects.Object2LongMap
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
 import site.siredvin.broccolium.modules.storage.fluid.FluidStorageUtils
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
-import site.siredvin.broccolium.modules.storage.fluid.toVanilla
 import site.siredvin.broccolium.modules.storage.fluid.toVariant
 import java.util.function.Predicate
 
@@ -46,15 +46,17 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
 
     override fun take(predicate: Predicate<AgnosticFluidStack>, limit: Double, simulate: Boolean): AgnosticFluidStack {
         val platformLimit = limit * PlatformToolkit.get().fluidCompactDivider
+
+        @Suppress("UNCHECKED_CAST")
         val fluidToTransfer = storage.availableStacks.find {
             val aeKey = it.key
             if (aeKey !is AEFluidKey) {
                 return@find false
             }
-            return@find predicate.test(aeKey.toVariant().toVanilla(it.longValue.toDouble()))
-        } ?: return AgnosticFluidStack.EMPTY
+            return@find predicate.test(AgnosticFluidStack(aeKey.fluid, it.longValue.toDouble(), aeKey.tag))
+        } as? Object2LongMap.Entry<AEFluidKey> ?: return AgnosticFluidStack.EMPTY
         val extractedAmount = storage.extract(fluidToTransfer.key, minOf(platformLimit.toLong(), fluidToTransfer.longValue), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (extractedAmount == 0L) return AgnosticFluidStack.EMPTY
-        return (fluidToTransfer.key as AEFluidKey).toVariant().toVanilla(extractedAmount.toDouble())
+        return AgnosticFluidStack(fluidToTransfer.key.fluid, extractedAmount.toDouble(), fluidToTransfer.key.tag)
     }
 }
