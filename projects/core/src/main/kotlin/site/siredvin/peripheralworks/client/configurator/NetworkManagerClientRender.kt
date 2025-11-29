@@ -28,7 +28,7 @@ object NetworkManagerClientRender : ConfigurationModeRender {
     ) {
         matrices.pushPose()
 
-        val scaleFactor = 0.01f
+        val scaleFactor = 0.015f
         matrices.translate(x, y, z)
         matrices.mulPose(Minecraft.getInstance().entityRenderDispatcher.cameraOrientation())
         matrices.mulPose(Axis.ZP.rotationDegrees(180f))
@@ -40,8 +40,8 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val font = Minecraft.getInstance().font
         val offset = (-font.width(text) / 2).toFloat()
         font.drawInBatch(
-            text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.NORMAL, 0,
-            LightTexture.FULL_BRIGHT,
+            text, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0,
+            LightTexture.FULL_BRIGHT, true,
         )
 
         matrices.popPose()
@@ -61,8 +61,6 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val range = NetworkManagerMode.getRange(minecraft.player!!.getItemInHand(InteractionHand.MAIN_HAND))
         RenderSystem.disableDepthTest()
         RenderSystem.disableCull()
-        RenderSystem.enableBlend()
-        RenderSystem.defaultBlendFunc()
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
         RenderSystem.depthMask(false)
         entity.clientBlockCache.entries.forEach {
@@ -107,7 +105,6 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         minecraft.renderBuffers().bufferSource().endBatch()
         RenderSystem.enableDepthTest()
         RenderSystem.enableCull()
-        RenderSystem.disableBlend()
         RenderSystem.depthMask(false)
         CommonRenderer.uninitRenderer(poseStack)
     }

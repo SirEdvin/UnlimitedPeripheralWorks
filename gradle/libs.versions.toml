@@ -74,6 +74,8 @@ curios-forge = "5.14.1+1.20.1"
 geckolib-forge = "4.7"
 smartbrainlib = "1.11"
 ae2-forge = "15.2.13"
+extendedae = "1.20-1.0.9-forge"
+glodium = "1.20-1.5-forge"
 natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
 mcjtylib = "1.20-8.0.0"
 rftools-base = "1.20-5.0.0"
@@ -191,6 +193,8 @@ gecolib-forge = {module = "software.bernie.geckolib:geckolib-forge-1.20.1", vers
 smartbrainlib = {module = "net.tslat.smartbrainlib:SmartBrainLib-forge-1.20", version.ref = "smartbrainlib"}
 modonomicon = {module = "com.klikli_dev:modonomicon-1.20.1-forge", version.ref="modonomicon"}
 ae2-forge = {module = "maven.modrinth:ae2", version.ref = "ae2-forge"}
+extendedae = {module = "maven.modrinth:extended-ae", version.ref = "extendedae"}
+glodium = {module = "maven.modrinth:glodium", version.ref="glodium"}
 ars-nouveau = {module = "maven.modrinth:ars-nouveau", version.ref="ars-nouveau"}
 mana-and-artifice = {module = "maven.modrinth:mana-and-artifice", version.ref="mana-and-artifice"}
 create-forge = {module = "com.simibubi.create:create-1.20.1", version.ref="create-forge", name="all"}
@@ -329,7 +333,9 @@ externalMods-forge-integrations-full = [
     "projecte",
     "emi-forge",
     "gregetch",
-    "ldlib"  # gregtech
+    "ldlib",  # gregtech
+    "extendedae",
+    "glodium",
 ]
 externalMods-forge-integrations-raw-full = [
 #    "flywheel-forge",   # for create
@@ -359,7 +365,9 @@ externalMods-forge-integrations-active = [
     "projecte",
     "emi-forge",
     "gregetch",
-    "ldlib"  # gregtech
+    "ldlib",  # gregtech,
+    "extendedae",
+    "glodium",
 ]
 externalMods-forge-integrations-raw-active = [
 

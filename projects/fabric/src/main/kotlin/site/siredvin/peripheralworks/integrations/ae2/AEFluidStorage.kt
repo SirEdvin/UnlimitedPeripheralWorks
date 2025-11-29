@@ -18,7 +18,12 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
     override fun getContent(): Iterator<AgnosticFluidStack> {
         return storage.availableStacks.mapNotNull {
             if (it.key !is AEFluidKey) return@mapNotNull null
-            return@mapNotNull (it.key as AEFluidKey).toVariant().toVanilla(it.longValue.toDouble())
+            val fluidKey = it.key as AEFluidKey
+            return@mapNotNull AgnosticFluidStack(
+                fluidKey.fluid,
+                it.longValue.toDouble(),
+                fluidKey.tag,
+            )
         }.iterator()
     }
 

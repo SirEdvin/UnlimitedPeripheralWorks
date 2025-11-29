@@ -12,7 +12,5 @@
     "CursedTurtleMixin",
     "LivingEntityMixin"
   ],
-  "client": [
-  ],
   "refmap": "peripheralworks.refmap.json"
 }
