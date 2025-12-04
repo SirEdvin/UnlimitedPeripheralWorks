@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.12] - 2025-12-04
+
+### Fixed 
+
+- Network manager remove check one more time
+
 ## [1.7.11] - 2025-12-04
 
 ### Fixed
