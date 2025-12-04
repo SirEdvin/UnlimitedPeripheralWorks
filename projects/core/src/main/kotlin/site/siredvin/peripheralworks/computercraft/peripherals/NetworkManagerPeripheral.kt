@@ -33,15 +33,16 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     fun addGroup(group: String): MethodResult {
         if (be.peripheralGroups.contains(group)) return MethodResult.of(false, "Such group already exists")
         be.peripheralGroups[group] = NetworkManagerBlockEntity.PeripheralGroup()
-        be.pushData()
+        be.setChanged()
         return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
     fun removeGroup(group: String): MethodResult {
-        if (be.peripheralGroups.contains(group)) return MethodResult.of(false, "Group does not exists")
+        if (!be.peripheralGroups.contains(group)) return MethodResult.of(false, "Group does not exists")
         if (be.peripheralGroups[group]!!.peripherals.isNotEmpty()) return MethodResult.of(false, "Group is not empty")
         be.peripheralGroups.remove(group)
+        be.setChanged()
         return MethodResult.of(true)
     }
 
