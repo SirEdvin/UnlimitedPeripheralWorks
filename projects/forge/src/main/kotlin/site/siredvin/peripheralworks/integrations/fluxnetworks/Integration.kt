@@ -8,6 +8,7 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import sonar.fluxnetworks.common.device.TileFluxController
+import sonar.fluxnetworks.common.device.TileFluxPlug
 
 class Integration : Runnable {
 
@@ -16,6 +17,7 @@ class Integration : Runnable {
             get() = "flux_networks"
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos) ?: return null
+            TileFluxPlug
             if (blockEntity is TileFluxController && Configuration.enableFluxController) {
                 return FluxControllerPlugin(blockEntity)
             }

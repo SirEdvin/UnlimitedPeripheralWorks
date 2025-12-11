@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.13] - 2025-12-11
+
+### Added
+
+- Expose parts of gtceu multiblock that is a peripheral
+
 ## [1.7.12] - 2025-12-04
 
 ### Fixed 

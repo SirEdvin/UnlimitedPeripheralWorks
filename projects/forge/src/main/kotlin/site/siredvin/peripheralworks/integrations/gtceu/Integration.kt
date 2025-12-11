@@ -3,6 +3,8 @@ package site.siredvin.peripheralworks.integrations.gtceu
 import com.gregtechceu.gtceu.api.capability.forge.GTCapability
 import com.gregtechceu.gtceu.api.item.IGTTool
 import com.gregtechceu.gtceu.api.machine.IMachineBlockEntity
+import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition
+import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine
 import com.gregtechceu.gtceu.api.recipe.GTRecipe
 import com.gregtechceu.gtceu.common.item.IntCircuitBehaviour
 import dan200.computercraft.api.detail.DetailProvider
@@ -53,6 +55,11 @@ class Integration : Runnable {
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
             if (blockEntity is IMachineBlockEntity) {
+                val definition = blockEntity.definition
+                val metaMachine = blockEntity.metaMachine
+                if (metaMachine is MultiblockControllerMachine && definition is MultiblockMachineDefinition) {
+                    return MultiblockMachinePlugin(definition, metaMachine)
+                }
                 return MachinePlugin(blockEntity.definition)
             }
             return null

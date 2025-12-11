@@ -2,10 +2,12 @@ package site.siredvin.peripheralworks.utils
 
 import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.api.lua.LuaException
+import dan200.computercraft.api.peripheral.IPeripheral
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.Vec3i
 import net.minecraft.data.models.blockstates.VariantProperties.Rotation
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
@@ -93,4 +95,15 @@ fun IArguments.optDirection(index: Int): Direction? {
             throw LuaException("Vertical direction should be one of: $allValues")
         }
     }
+}
+
+fun IPeripheral.extractPosition(): BlockPos? {
+    val target = this.target
+    if (target is BlockPos) {
+        return target
+    }
+    if (target is BlockEntity) {
+        return target.blockPos
+    }
+    return null
 }

@@ -6,7 +6,7 @@ import dan200.computercraft.api.lua.MethodResult
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
-class MachinePlugin(private val def: MachineDefinition) : IPeripheralPlugin {
+open class MachinePlugin(private val def: MachineDefinition) : IPeripheralPlugin {
     companion object {
         val TYPE = "gtceu:machine"
     }
@@ -14,5 +14,10 @@ class MachinePlugin(private val def: MachineDefinition) : IPeripheralPlugin {
         get() = TYPE
 
     @LuaFunction
-    fun getRecipeTypes(): MethodResult = MethodResult.of(def.recipeTypes.filter { it != null }.map { PlatformRegistries.RECIPE_TYPES.getKey(it).toString() })
+    fun getRecipeTypes(): MethodResult {
+        if (def.recipeTypes == null) {
+            return MethodResult.of(emptyList<String>())
+        }
+        return MethodResult.of(def.recipeTypes.filter { it != null }.map { PlatformRegistries.RECIPE_TYPES.getKey(it).toString() })
+    }
 }

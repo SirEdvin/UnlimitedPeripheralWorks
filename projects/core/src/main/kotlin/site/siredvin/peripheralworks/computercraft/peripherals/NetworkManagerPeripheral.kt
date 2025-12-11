@@ -5,10 +5,10 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.utils.extractPosition
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
 import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
@@ -98,20 +98,8 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     fun getDistanceBetween(computer: IComputerAccess, firstName: String, secondName: String): MethodResult {
         val first = computer.getAvailablePeripheral(firstName) ?: return MethodResult.of(null, "Cannot find first peripheral")
         val second = computer.getAvailablePeripheral(secondName) ?: return MethodResult.of(null, "Cannot find second peripheral")
-        val firstTarget = first.target
-        val secondTarget = second.target
-        val firstPos = firstTarget as? BlockPos
-            ?: if (firstTarget is BlockEntity) {
-                firstTarget.blockPos
-            } else {
-                return MethodResult.of(null, "Cannot determine first target position")
-            }
-        val secondPos = secondTarget as? BlockPos
-            ?: if (secondTarget is BlockEntity) {
-                secondTarget.blockPos
-            } else {
-                return MethodResult.of(null, "Cannot determine second target position")
-            }
+        val firstPos = first.extractPosition() ?: return MethodResult.of(null, "Cannot determine first target position")
+        val secondPos = second.extractPosition() ?: return MethodResult.of(null, "Cannot determine second target position")
         val firstBlockState = peripheralOwner.level!!.getBlockState(firstPos)
         val distance = BlockPos(firstPos.x - secondPos.x, firstPos.y - secondPos.y, firstPos.z - secondPos.z)
         val facing = if (firstBlockState.properties.contains(BlockStateProperties.HORIZONTAL_FACING)) {
