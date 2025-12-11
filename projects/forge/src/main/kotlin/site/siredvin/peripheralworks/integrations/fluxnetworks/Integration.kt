@@ -17,7 +17,6 @@ class Integration : Runnable {
             get() = "flux_networks"
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos) ?: return null
-            TileFluxPlug
             if (blockEntity is TileFluxController && Configuration.enableFluxController) {
                 return FluxControllerPlugin(blockEntity)
             }
