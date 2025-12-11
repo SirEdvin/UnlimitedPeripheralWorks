@@ -8,7 +8,6 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import sonar.fluxnetworks.common.device.TileFluxController
-import sonar.fluxnetworks.common.device.TileFluxPlug
 
 class Integration : Runnable {
 
