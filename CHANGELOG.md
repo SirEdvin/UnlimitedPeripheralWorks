@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.14] - 2026-01-01
+
+### Changed
+
+- Emi recipe tag information now simplified to only tag and tag type without candidates
+
 ## [1.7.13] - 2025-12-11
 
 ### Added

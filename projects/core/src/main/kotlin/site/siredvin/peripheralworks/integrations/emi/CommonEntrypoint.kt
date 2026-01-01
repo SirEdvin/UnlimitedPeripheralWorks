@@ -90,6 +90,8 @@ object CommonEntrypoint {
         if (ingredient is TagEmiIngredient) {
             base["type"] = "tag"
             base["key"] = ingredient.key.location.toString()
+            base["tag_type"] = ingredients[0].getOrDefault("type", "unknown")
+            base.remove("candidates")
         }
         return base
     }
