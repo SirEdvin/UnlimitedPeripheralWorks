@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.integrations.gtceu
 
 import com.gregtechceu.gtceu.api.capability.recipe.EURecipeCapability
 import com.gregtechceu.gtceu.api.recipe.GTRecipe
+import com.gregtechceu.gtceu.api.recipe.ingredient.EnergyStack
 import net.minecraft.world.Container
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeTransformer
 
@@ -13,7 +14,11 @@ class GTCEURecipeTransformer : RecipeTransformer<Container, GTRecipe>() {
         base["ocLevel"] = recipe.ocLevel
         if (recipe.tickInputs.contains(EURecipeCapability.CAP)) {
             val content = recipe.tickInputs[EURecipeCapability.CAP]!!.first()
-            base["euCost"] = content.content as Long
+            if (content.content is Number) {
+                base["euCost"] = content.content as Long
+            } else {
+                base["euCost"] = (content.content as EnergyStack).totalEU
+            }
         }
         return base
     }

@@ -14,10 +14,5 @@ open class MachinePlugin(private val def: MachineDefinition) : IPeripheralPlugin
         get() = TYPE
 
     @LuaFunction
-    fun getRecipeTypes(): MethodResult {
-        if (def.recipeTypes == null) {
-            return MethodResult.of(emptyList<String>())
-        }
-        return MethodResult.of(def.recipeTypes.filter { it != null }.map { PlatformRegistries.RECIPE_TYPES.getKey(it).toString() })
-    }
+    fun getRecipeTypes(): MethodResult = MethodResult.of(def.recipeTypes.map { PlatformRegistries.RECIPE_TYPES.getKey(it).toString() })
 }
