@@ -36,7 +36,7 @@ object PeripheralWorksClientCore {
     private var inited: Boolean = false
 
     @Suppress("UNCHECKED_CAST")
-    val EXTRA_BLOCK_ENTITY_RENDERERS: Array<Supplier<BlockEntityType<BlockEntity>>> = arrayOf(
+    val EXTRA_BLOCK_ENTITY_RENDERERS: MutableList<Supplier<BlockEntityType<BlockEntity>>> = mutableListOf(
         BlockEntityTypes.ITEM_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.MAP_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.DISPLAY_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,

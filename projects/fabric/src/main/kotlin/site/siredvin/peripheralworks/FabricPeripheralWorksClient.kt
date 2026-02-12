@@ -18,6 +18,7 @@ import site.siredvin.peripheralworks.client.configurator.ConfigurationModeRender
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.setup.Blocks
+import site.siredvin.peripheralworks.xplat.PeripheralWorksClientHooks
 
 object FabricPeripheralWorksClient : ClientModInitializer {
     override fun onInitializeClient() {
@@ -38,6 +39,12 @@ object FabricPeripheralWorksClient : ClientModInitializer {
         }
         PeripheralWorksClientCore.EXTRA_BLOCK_ENTITY_RENDERERS.forEach {
             BlockEntityRenderers.register(it.get(), PeripheralWorksClientCore.getBlockEntityRendererProvider(it.get()))
+        }
+
+        PeripheralWorksClientHooks.BLOCK_ENTITY_RENDERER_SUPPLIER.forEach {
+            it.get().forEach { pair ->
+                BlockEntityRenderers.register(pair.first, pair.second)
+            }
         }
 
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.translucent())

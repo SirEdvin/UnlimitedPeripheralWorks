@@ -14,7 +14,7 @@ import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.peripheralworks.api.IItemStackStorage
 
-abstract class AbstractItemPedestal<T : BlockEntity> : BasePedestal<T>(BlockUtil.defaultProperties()) {
+abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = BlockUtil.defaultProperties()) : BasePedestal<T>(properties) {
 
     @Deprecated("Deprecated in Java")
     override fun use(

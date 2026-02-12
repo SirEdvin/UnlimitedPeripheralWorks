@@ -133,6 +133,22 @@ repositories {
             includeGroup("dev.emi")
         }
     }
+    maven {
+        name = "KubeJS's author maven"
+        url = uri("https://maven.latvian.dev/releases")
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+
+    maven {
+        name = "Jitpack for kubejs deps"
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.rtyley")
+        }
+    }
 }
 
 dependencies {

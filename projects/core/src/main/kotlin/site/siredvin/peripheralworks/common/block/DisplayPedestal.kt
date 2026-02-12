@@ -14,7 +14,7 @@ import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEnti
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
 
-class DisplayPedestal : BasePedestal<DisplayPedestalBlockEntity>(BlockUtil.defaultProperties()) {
+open class DisplayPedestal(properties: Properties = BlockUtil.defaultProperties()) : BasePedestal<DisplayPedestalBlockEntity>(properties) {
 
     @Deprecated("Deprecated in Java")
     override fun use(

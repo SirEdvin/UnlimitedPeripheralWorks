@@ -111,6 +111,22 @@ repositories {
             includeGroup("dev.emi")
         }
     }
+    maven {
+        name = "Latvian mods, mostly KubeJS"
+        url = uri("https://maven.latvian.dev/releases")
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+
+    maven {
+        name = "Dependencies for kubej"
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.rtyley")
+        }
+    }
 }
 
 dependencies {
@@ -173,6 +189,11 @@ val copyCreate by tasks.register<Copy>("copyCreate") {
     into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/create"))
 }
 
+val copyKubeJS by tasks.register<Copy>("copyKubeJS") {
+    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/kubejs"))
+    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/kubejs"))
+}
+
 // TODO: make this possible, probably (?) This would be really nice
 val copyAE2 by tasks.register<Copy>("copyAE2") {
     from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
@@ -180,17 +201,17 @@ val copyAE2 by tasks.register<Copy>("copyAE2") {
 }
 
 val fullCopy by tasks.register("fullCopy") {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyAE2)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS, copyAE2)
 }
 
 tasks.compileKotlin {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }
 
 tasks.spotlessJava {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }
 
 tasks.spotlessKotlin {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }

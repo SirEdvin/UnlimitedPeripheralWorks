@@ -63,6 +63,8 @@ magna = "1.10.1+1.20.1"
 pal = "1.8.0"
 iris = "1.7.6+1.20.1"
 sodium = "mc1.20.1-0.5.13-fabric"
+kubejs-fabric = "2001.6.5-build.20"
+rhino-fabric = "2001.2.3-build.10"
 
 # Integration mod dependencies (forge)
 occultism = "1.20.1-1.141.3"
@@ -96,6 +98,8 @@ mana-and-artifice = "3.1.11"
 projecte = "4901949"  # ProjectE-1.20.1-PE1.0.1.jar
 gregtech = "mc1.20.1-7.4.1"
 ldlib = "mc1.20.1-1.0.45-forge"
+kubejs-forge = "2001.6.5-build.20"
+rhino-forge = "2001.2.3-build.10"
 
 [libraries]
 # Base libraries
@@ -126,6 +130,8 @@ tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.20.1", version.ref 
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
 modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
 emi-fabric = {module="dev.emi:emi-fabric", version.ref="emi"}
+kubejs-fabric = {module="dev.latvian.mods:kubejs-fabric", version.ref="kubejs-fabric"}
+rhino-fabric = {module="dev.latvian.mods:rhino-fabric", version.ref="rhino-fabric"}
 
 # Forge mod dependencies
 cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.20.1-forge", version.ref="cc-tweaked"}
@@ -137,6 +143,8 @@ broccolium-jjar-forge = {module = "site.siredvin:broccolium-forge-1.20.1", versi
 tweakium-jjar-forge = {module = "site.siredvin:tweakium-forge-1.20.1", version.ref = "tweakium-jjar"}
 peripheralium-jjar-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium-jjar"}
 emi-forge = {module="dev.emi:emi-forge", version.ref="emi"}
+kubejs-forge = {module="dev.latvian.mods:kubejs-forge", version.ref="kubejs-forge"}
+rhino-forge = {module="dev.latvian.mods:rhino-forge", version.ref="rhino-forge"}
 
 # Extra mod dependency
 cloth-config-forge = {module = "me.shedaniel.cloth:cloth-config-forge", version.ref = "cloth-config"}
@@ -285,6 +293,8 @@ externalMods-fabric-integrations-full = [
 #    "magna",  # required by MI
     "pal",  # required by MI,
     "emi-fabric",
+    "rhino-fabric",
+    "kubejs-fabric",
 ]
 externalMods-fabric-integrations-active = [
     "nature-compass-fabric",
@@ -302,6 +312,8 @@ externalMods-fabric-integrations-active = [
 #    "magna",  # required by MI
 #    "pal",  # required by MI
     "emi-fabric",
+    "rhino-fabric",
+    "kubejs-fabric",
 ]
 externalMods-fabric-integrations-activedep = [
     "reborncore",  # required by techreborn
@@ -336,6 +348,8 @@ externalMods-forge-integrations-full = [
     "ldlib",  # gregtech
     "extendedae",
     "glodium",
+    "kubejs-forge",
+    "rhino-forge"
 ]
 externalMods-forge-integrations-raw-full = [
 #    "flywheel-forge",   # for create
@@ -368,6 +382,8 @@ externalMods-forge-integrations-active = [
     "ldlib",  # gregtech,
     "extendedae",
     "glodium",
+    "kubejs-forge",
+    "rhino-forge"
 ]
 externalMods-forge-integrations-raw-active = [
 
