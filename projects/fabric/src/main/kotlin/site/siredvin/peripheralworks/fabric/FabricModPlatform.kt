@@ -8,7 +8,11 @@ import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ServerGamePacketListener
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
+import site.siredvin.broccolium.modules.storage.item.FabricSlottedStorageWrapper
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.api.ISavableComponent
 import site.siredvin.peripheralworks.networking.MessageType
 import site.siredvin.peripheralworks.networking.NetworkMessage
 import site.siredvin.peripheralworks.networking.ServerNetworkContext
@@ -40,6 +44,11 @@ object FabricModPlatform : FabricInnerComputerBasePlatform(), ModInnerPlatform {
         val buf = PacketByteBufs.create()
         message.write(buf)
         return ClientPlayNetworking.createC2SPacket(FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(message.type()).getId(), buf)
+    }
+
+    override fun createSlottedItemStorage(slots: Int, slotScale: Int, trigger: Runnable): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>> {
+        val platformStorage = FabricCustomSlottedStorage(slots, slotScale, trigger)
+        return Pair(platformStorage, FabricSlottedStorageWrapper(platformStorage))
     }
 
     override val modID: String

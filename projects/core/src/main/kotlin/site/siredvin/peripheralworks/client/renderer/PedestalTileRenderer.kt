@@ -68,12 +68,17 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
             renderItem(storedStack, blockDirection, poseStack, buffer, packedOverlay, packedLight, 0.8f)
         }
         if (blockEntity.renderLabel) {
+            val text = if (storedStack.count > 1) {
+                Component.literal(storedStack.count.toString() + " of ").append(storedStack.hoverName)
+            } else {
+                storedStack.hoverName
+            }
             renderLabel(
                 poseStack,
                 buffer,
                 packedLight,
                 getLabelTranslate(blockDirection),
-                storedStack.hoverName,
+                text,
                 0xffffff,
             )
         }

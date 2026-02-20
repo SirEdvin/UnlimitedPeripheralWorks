@@ -13,6 +13,8 @@ import net.minecraft.world.phys.BlockHitResult
 import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.peripheralworks.api.IItemStackStorage
+import site.siredvin.peripheralworks.common.blockentity.AbstractItemPedestalBlockEntity
+import kotlin.math.min
 
 abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = BlockUtil.defaultProperties()) : BasePedestal<T>(properties) {
 
@@ -26,13 +28,13 @@ abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = Bl
         blockHitResult: BlockHitResult,
     ): InteractionResult {
         val itemInHand = player.getItemInHand(interactionHand)
-        if (!itemInHand.isEmpty) {
-            val blockEntity = level.getBlockEntity(blockPos)
-            if (blockEntity is IItemStackStorage) {
-                if (blockEntity.storedStack.isEmpty) {
-                    val storeResult = blockEntity.storage.store(itemInHand, false)
-                    if (storeResult.isEmpty) {
-                        player.setItemInHand(interactionHand, ItemStack.EMPTY)
+        val blockEntity = level.getBlockEntity(blockPos)
+        if (interactionHand == InteractionHand.MAIN_HAND) {
+            if (blockEntity is AbstractItemPedestalBlockEntity<*>) {
+                if (!itemInHand.isEmpty) {
+                    val leftover = blockEntity.storage.store(itemInHand, false)
+                    if (!ItemStack.matches(leftover, itemInHand)) {
+                        player.setItemInHand(interactionHand, leftover)
                         return InteractionResult.CONSUME
                     }
                 }
@@ -48,13 +50,18 @@ abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = Bl
             val blockEntity = level.getBlockEntity(blockPos)
             if (blockEntity is IItemStackStorage) {
                 if (!blockEntity.storedStack.isEmpty) {
-                    Containers.dropItemStack(
-                        level,
-                        blockPos.x.toDouble(),
-                        blockPos.y.toDouble(),
-                        blockPos.z.toDouble(),
-                        blockEntity.storedStack,
-                    )
+                    var slidingCount = blockEntity.storedStack.count
+                    while (slidingCount > 0) {
+                        val droppedCount = min(blockEntity.storedStack.maxStackSize, slidingCount)
+                        Containers.dropItemStack(
+                            level,
+                            blockPos.x.toDouble(),
+                            blockPos.y.toDouble(),
+                            blockPos.z.toDouble(),
+                            blockEntity.storedStack.copyWithCount(droppedCount),
+                        )
+                        slidingCount -= droppedCount
+                    }
                 }
             }
         }
@@ -69,7 +76,12 @@ abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = Bl
             val blockEntity = level.getBlockEntity(blockPos)
             if (blockEntity is IItemStackStorage) {
                 if (!blockEntity.storedStack.isEmpty) {
-                    val storedStack = blockEntity.storage.take(ItemStorageUtils.ALWAYS, Int.MAX_VALUE, false)
+                    val calculatedLimit = if (player.isCrouching) {
+                        blockEntity.storedStack.maxStackSize
+                    } else {
+                        1
+                    }
+                    val storedStack = blockEntity.storage.take(ItemStorageUtils.ALWAYS, calculatedLimit, false)
                     if (!storedStack.isEmpty) {
                         player.setItemInHand(InteractionHand.MAIN_HAND, storedStack)
                     }

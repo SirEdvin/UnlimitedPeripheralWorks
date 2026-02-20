@@ -77,9 +77,10 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
             val possibleMode = ConfiguratorModeRegistry.get(targetState)
             if (possibleMode != null) {
                 saveActiveMode(stack, possibleMode, hit.blockPos)
+                return InteractionResultHolder.consume(stack)
             }
         }
-        return InteractionResultHolder.consume(stack)
+        return InteractionResultHolder.pass(stack)
     }
 
     override fun use(

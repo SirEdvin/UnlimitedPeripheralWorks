@@ -6,6 +6,7 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
 import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -19,11 +20,13 @@ import net.minecraftforge.fml.config.ModConfig
 import site.siredvin.broccolium.modules.base.FabricIntegrationLoader
 import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralium.FabricPeripheralium
+import site.siredvin.peripheralworks.api.IPlatformItemStorageHolder
 import site.siredvin.peripheralworks.common.block.PeripheralProxy
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.fabric.FabricCustomSlottedStorage
 import site.siredvin.peripheralworks.fabric.FabricMessageType
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModPlatform
@@ -83,6 +86,17 @@ object FabricPeripheralWorks : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             DebugCommands.register(dispatcher)
+        }
+
+        ItemStorage.SIDED.registerFallback { level, pos, state, entity, direction ->
+            if (entity is IPlatformItemStorageHolder) {
+                val storage = entity.getPlatformItemStorage()
+                if (storage is FabricCustomSlottedStorage) {
+                    @Suppress("UNCHECKED_CAST")
+                    return@registerFallback storage
+                }
+            }
+            return@registerFallback null
         }
 
         UseEntityCallback.EVENT.register(

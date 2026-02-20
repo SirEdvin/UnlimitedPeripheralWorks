@@ -28,15 +28,20 @@ class Plugin : KubeJSPlugin() {
             RegistryInfo.BLOCK_ENTITY_TYPE.iterator().forEach {
                 if (it is PedestalBlockEntityBuilder) {
                     @Suppress("UNCHECKED_CAST")
-                    output.add(
-                        Pair(
-                            RegistryInfo.BLOCK_ENTITY_TYPE.getValue(it.id)!! as BlockEntityType<BlockEntity>,
-                            BlockEntityRendererProvider {
-                                @Suppress("UNCHECKED_CAST")
-                                PedestalTileRenderer<ItemPedestalBlockEntity>() as BlockEntityRenderer<BlockEntity>
-                            },
-                        ),
-                    )
+                    val type = RegistryInfo.BLOCK_ENTITY_TYPE.getValue(it.id)
+                    if (type != null) {
+                        output.add(
+                            Pair(
+                                type as BlockEntityType<BlockEntity>,
+                                BlockEntityRendererProvider {
+                                    @Suppress("UNCHECKED_CAST")
+                                    PedestalTileRenderer<ItemPedestalBlockEntity>() as BlockEntityRenderer<BlockEntity>
+                                },
+                            ),
+                        )
+                    } else {
+                        PeripheralWorksCore.logger.error("Block entity type for pedestal builder: ${it.id} is None for some reason")
+                    }
                 }
             }
             return@add output

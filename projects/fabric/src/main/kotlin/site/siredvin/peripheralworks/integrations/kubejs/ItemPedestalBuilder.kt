@@ -7,7 +7,14 @@ import site.siredvin.peripheralworks.common.block.CustomPedestal
 
 class ItemPedestalBuilder(i: ResourceLocation) : AbstractPedestalBuilder(i) {
 
+    private var holdingStacks: Int = 1
+
     override fun createObject(): Block = CustomPedestal(createProperties(), blockEntityInfo::createBlockEntity)
 
-    override fun buildBlockEntityInfo(): BlockEntityInfo = ItemPedestalBlockEntityInfo(this)
+    override fun buildBlockEntityInfo(): BlockEntityInfo = ItemPedestalBlockEntityInfo(this, holdingStacks)
+
+    fun stacksInside(stacks: Int): ItemPedestalBuilder {
+        this.holdingStacks = stacks
+        return this
+    }
 }

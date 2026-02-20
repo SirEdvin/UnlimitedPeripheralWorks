@@ -14,15 +14,11 @@ abstract class AbstractPedestalBuilder(i: ResourceLocation) : ShapedBlockBuilder
         val BASE_MODEL = ResourceLocation.tryBuild(PeripheralWorksCore.MOD_ID, "block/base_pedestal")
     }
 
-    private val blockEntityBuilder: PedestalBlockEntityBuilder
-
     init {
         texture("particle", "minecraft:block/smooth_stone")
         texture("texture", "minecraft:block/smooth_stone")
         texture("top", "minecraft:block/smooth_stone")
         requiresTool(false)
-        blockEntityInfo = buildBlockEntityInfo()
-        blockEntityBuilder = PedestalBlockEntityBuilder(id, blockEntityInfo)
     }
 
     abstract fun buildBlockEntityInfo(): BlockEntityInfo
@@ -38,7 +34,8 @@ abstract class AbstractPedestalBuilder(i: ResourceLocation) : ShapedBlockBuilder
         if (itemBuilder != null) {
             RegistryInfo.ITEM.addBuilder(itemBuilder)
         }
-        RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(blockEntityBuilder)
+        blockEntityInfo = buildBlockEntityInfo()
+        RegistryInfo.BLOCK_ENTITY_TYPE.addBuilder(PedestalBlockEntityBuilder(id, blockEntityInfo))
     }
 
     override fun generateBlockModelJsons(generator: AssetJsonGenerator) {
