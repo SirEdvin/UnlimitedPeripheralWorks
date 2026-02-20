@@ -18,6 +18,8 @@ import site.siredvin.peripheralworks.common.setup.TurtleUpgradeSerializers
 import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
+import site.siredvin.peripheralworks.xplat.ModClientInternalPlatform
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.Supplier
@@ -117,5 +119,9 @@ object PeripheralWorksClientCore {
     fun onInit() {
         inited = true
         HOOKS.forEach(Runnable::run)
+    }
+
+    fun configure(clientPlatform: ModClientInternalPlatform) {
+        ModClientPlatform.configure(clientPlatform)
     }
 }

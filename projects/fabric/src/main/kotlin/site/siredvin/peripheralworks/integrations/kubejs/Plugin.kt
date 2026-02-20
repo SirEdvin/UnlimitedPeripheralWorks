@@ -9,7 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.renderer.PedestalTileRenderer
 import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
-import site.siredvin.peripheralworks.xplat.PeripheralWorksClientHooks
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 class Plugin : KubeJSPlugin() {
     init {
@@ -23,28 +23,30 @@ class Plugin : KubeJSPlugin() {
     }
 
     override fun clientInit() {
-        PeripheralWorksClientHooks.BLOCK_ENTITY_RENDERER_SUPPLIER.add({
-            val output = mutableListOf<Pair<BlockEntityType<BlockEntity>, BlockEntityRendererProvider<BlockEntity>>>()
-            RegistryInfo.BLOCK_ENTITY_TYPE.iterator().forEach {
-                if (it is PedestalBlockEntityBuilder) {
-                    @Suppress("UNCHECKED_CAST")
-                    val type = RegistryInfo.BLOCK_ENTITY_TYPE.getValue(it.id)
-                    if (type != null) {
-                        output.add(
-                            Pair(
-                                type as BlockEntityType<BlockEntity>,
-                                BlockEntityRendererProvider {
-                                    @Suppress("UNCHECKED_CAST")
-                                    PedestalTileRenderer<ItemPedestalBlockEntity>() as BlockEntityRenderer<BlockEntity>
-                                },
-                            ),
-                        )
-                    } else {
-                        PeripheralWorksCore.logger.error("Block entity type for pedestal builder: ${it.id} is None for some reason")
+        ModClientPlatform.registerBlockEntityRendererCallback(
+            {
+                val output = mutableListOf<Pair<BlockEntityType<BlockEntity>, BlockEntityRendererProvider<BlockEntity>>>()
+                RegistryInfo.BLOCK_ENTITY_TYPE.iterator().forEach {
+                    if (it is PedestalBlockEntityBuilder) {
+                        @Suppress("UNCHECKED_CAST")
+                        val type = RegistryInfo.BLOCK_ENTITY_TYPE.getValue(it.id)
+                        if (type != null) {
+                            output.add(
+                                Pair(
+                                    type as BlockEntityType<BlockEntity>,
+                                    BlockEntityRendererProvider {
+                                        @Suppress("UNCHECKED_CAST")
+                                        PedestalTileRenderer<ItemPedestalBlockEntity>() as BlockEntityRenderer<BlockEntity>
+                                    },
+                                ),
+                            )
+                        } else {
+                            PeripheralWorksCore.logger.error("Block entity type for pedestal builder: ${it.id} is None for some reason")
+                        }
                     }
                 }
-            }
-            return@add output
-        })
+                return@registerBlockEntityRendererCallback output
+            },
+        )
     }
 }

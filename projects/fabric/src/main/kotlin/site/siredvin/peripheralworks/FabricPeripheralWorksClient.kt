@@ -5,6 +5,7 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
@@ -18,9 +19,10 @@ import site.siredvin.peripheralworks.client.configurator.ConfigurationModeRender
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.setup.Blocks
-import site.siredvin.peripheralworks.xplat.PeripheralWorksClientHooks
+import site.siredvin.peripheralworks.fabric.FabricModClientPlatform
 
 object FabricPeripheralWorksClient : ClientModInitializer {
+
     override fun onInitializeClient() {
         PeripheralWorksClientCore.onInit()
         ModelLoadingPlugin.register {
@@ -41,12 +43,6 @@ object FabricPeripheralWorksClient : ClientModInitializer {
             BlockEntityRenderers.register(it.get(), PeripheralWorksClientCore.getBlockEntityRendererProvider(it.get()))
         }
 
-        PeripheralWorksClientHooks.BLOCK_ENTITY_RENDERER_SUPPLIER.forEach {
-            it.get().forEach { pair ->
-                BlockEntityRenderers.register(pair.first, pair.second)
-            }
-        }
-
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.translucent())
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_STATUE.get(), RenderType.translucent())
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.HOLOGRAM_PROJECTOR.get(), RenderType.translucent())
@@ -58,6 +54,10 @@ object FabricPeripheralWorksClient : ClientModInitializer {
 
         WorldRenderEvents.END.register {
             ConfigurationModeRenderRegistry.render(Minecraft.getInstance(), it.matrixStack(), it.tickDelta(), it.camera(), it.projectionMatrix())
+        }
+
+        ClientLifecycleEvents.CLIENT_STARTED.register {
+            PeripheralWorksClientCore.configure(FabricModClientPlatform)
         }
     }
 }

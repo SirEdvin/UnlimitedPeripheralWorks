@@ -72,18 +72,24 @@ abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = Bl
     @Deprecated("Deprecated in Java")
     override fun attack(blockState: BlockState, level: Level, blockPos: BlockPos, player: Player) {
         val itemInHand = player.getItemInHand(InteractionHand.MAIN_HAND)
-        if (itemInHand.isEmpty) {
-            val blockEntity = level.getBlockEntity(blockPos)
-            if (blockEntity is IItemStackStorage) {
-                if (!blockEntity.storedStack.isEmpty) {
-                    val calculatedLimit = if (player.isCrouching) {
-                        blockEntity.storedStack.maxStackSize
-                    } else {
-                        1
-                    }
-                    val storedStack = blockEntity.storage.take(ItemStorageUtils.ALWAYS, calculatedLimit, false)
-                    if (!storedStack.isEmpty) {
-                        player.setItemInHand(InteractionHand.MAIN_HAND, storedStack)
+        val blockEntity = level.getBlockEntity(blockPos)
+        if (blockEntity is IItemStackStorage) {
+            if (!blockEntity.storedStack.isEmpty && (ItemStack.isSameItemSameTags(blockEntity.storedStack, itemInHand) || itemInHand.isEmpty)) {
+                val calculatedLimit = if (player.isCrouching) {
+                    blockEntity.storedStack.maxStackSize
+                } else {
+                    1
+                }
+                val trueLimit = calculatedLimit.coerceAtMost(blockEntity.storedStack.maxStackSize - itemInHand.count)
+                if (trueLimit > 0) {
+                    val extractedStack = blockEntity.storage.take(ItemStorageUtils.ALWAYS, trueLimit, false)
+                    if (!extractedStack.isEmpty) {
+                        if (itemInHand.isEmpty) {
+                            player.setItemInHand(InteractionHand.MAIN_HAND, extractedStack)
+                        } else {
+                            itemInHand.grow(extractedStack.count)
+                            player.setItemInHand(InteractionHand.MAIN_HAND, itemInHand)
+                        }
                     }
                 }
             }

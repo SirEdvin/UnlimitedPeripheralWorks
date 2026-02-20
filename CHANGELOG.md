@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.16] - 2026-02-20
+
+### Added
+- Ability to generate new pedestals with KubeJs
+- Pedestals now showing amount of stored items
+- Pedestal can now hold more than one regular stack, but still single item. This mostly used for KubeJS based pedestals
+
+### Changed
+
+- Internal implementation of pedestals to used platform-based storages.
+
 ## [1.7.15] - 2026-01-27
 
 ### Changed

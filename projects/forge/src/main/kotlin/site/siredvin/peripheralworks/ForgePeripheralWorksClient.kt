@@ -10,7 +10,7 @@ import net.minecraftforge.client.event.ModelEvent.RegisterAdditional
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import site.siredvin.peripheralworks.xplat.PeripheralWorksClientHooks
+import site.siredvin.peripheralworks.forge.ForgeModClientPlatform
 
 @Mod.EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, value = [Dist.CLIENT], bus = Mod.EventBusSubscriber.Bus.MOD)
 object ForgePeripheralWorksClient {
@@ -19,6 +19,7 @@ object ForgePeripheralWorksClient {
     @Suppress("UNUSED_PARAMETER")
     fun onClientSetup(event: FMLClientSetupEvent) {
         PeripheralWorksClientCore.onInit()
+        PeripheralWorksClientCore.configure(ForgeModClientPlatform)
     }
 
     @SubscribeEvent
@@ -26,7 +27,7 @@ object ForgePeripheralWorksClient {
         PeripheralWorksClientCore.EXTRA_BLOCK_ENTITY_RENDERERS.forEach {
             event.registerBlockEntityRenderer(it.get(), PeripheralWorksClientCore.getBlockEntityRendererProvider(it.get()))
         }
-        PeripheralWorksClientHooks.BLOCK_ENTITY_RENDERER_SUPPLIER.forEach {
+        ForgeModClientPlatform.BLOCK_ENTITY_RENDERER_SUPPLIER.forEach {
             it.get().forEach { pair ->
                 event.registerBlockEntityRenderer(pair.first, pair.second)
             }
