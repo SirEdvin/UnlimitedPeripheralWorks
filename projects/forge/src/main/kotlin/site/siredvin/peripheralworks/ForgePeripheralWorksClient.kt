@@ -15,11 +15,14 @@ import site.siredvin.peripheralworks.forge.ForgeModClientPlatform
 @Mod.EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, value = [Dist.CLIENT], bus = Mod.EventBusSubscriber.Bus.MOD)
 object ForgePeripheralWorksClient {
 
+    init {
+        PeripheralWorksClientCore.configure(ForgeModClientPlatform)
+    }
+
     @SubscribeEvent
     @Suppress("UNUSED_PARAMETER")
     fun onClientSetup(event: FMLClientSetupEvent) {
         PeripheralWorksClientCore.onInit()
-        PeripheralWorksClientCore.configure(ForgeModClientPlatform)
     }
 
     @SubscribeEvent
