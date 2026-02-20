@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.7.17] - 2026-02-20
+
+### Fixed
+
+- Forge block entity renderer registration for pedestals
+- Data fixing logic for existing pedestals
+
 ## [1.7.16] - 2026-02-20
 
 ### Added

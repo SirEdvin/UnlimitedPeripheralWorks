@@ -2,6 +2,7 @@ package site.siredvin.peripheralworks.common.blockentity
 
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
@@ -24,7 +25,8 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
     IPlatformItemStorageHolder {
 
     companion object {
-        private const val STORED_ITEM_STACK_TAG = "storedItemStack"
+        private const val LEGACY_STORED_ITEM_STACK_TAG = "storedItemStack"
+        private const val STORED_ITEM_STACK_TAG = "storedItemStackV2"
     }
 
     abstract val itemFilter: Predicate<ItemStack>
@@ -48,6 +50,19 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
     override fun getPlatformItemStorage(): Any = inventory
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
+        if (data.contains(LEGACY_STORED_ITEM_STACK_TAG)) {
+            val tag = data.get(LEGACY_STORED_ITEM_STACK_TAG)
+            if (tag is CompoundTag) {
+                inventory.load(tag)
+            } else if (tag is ListTag) {
+                tag.forEach {
+                    if (it is CompoundTag) {
+                        val stack = ItemStack.of(it)
+                        storage.store(stack, false)
+                    }
+                }
+            }
+        }
         if (data.contains(STORED_ITEM_STACK_TAG)) {
             inventory.load(data.get(STORED_ITEM_STACK_TAG)!!)
         }
