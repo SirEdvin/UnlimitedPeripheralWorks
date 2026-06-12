@@ -209,7 +209,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     fun connectBlockPos(level: Level, record: RemotePeripheralRecord) {
         if (level is ServerLevel) {
-            val targetPeripheral = ComputerPlatformToolkit.get().getPeripheral(level, record.targetBlock, Direction.NORTH)
+            val targetPeripheral = ComputerPlatformToolkit.get().getPeripheral(level, record.targetBlock, record.direction)
             if (targetPeripheral == null) {
                 PeripheralWorksCore.logger.debug(
                     "Postpone {} for peripheral proxing, it doesn't contains any peripheral for now",
