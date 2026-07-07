@@ -53,6 +53,10 @@ object ComputerCraftProxy {
     }
 
     fun lazyPeripheralProvider(level: Level, pos: BlockPos, side: Direction): Supplier<IPeripheral>? {
+        val state = level.getBlockState(pos)
+        if (state.`is`(BlockTags.IGNORE)) {
+            return null
+        }
         val plugins = collectPlugins(level, pos, side)
         if (plugins.isEmpty()) {
             return null
