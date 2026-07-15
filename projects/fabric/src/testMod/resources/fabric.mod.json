@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "peripheralworks_testmod",
+  "version": "1.0",
+  "name": "Unlimited Peripheral Works Testmod",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "site.siredvin.peripheralworks.testmod.PeripheralWorksGameTests"
+    ]
+  },
+  "depends": {
+    "fabricloader": "*",
+    "peripheralworks": "*",
+    "testiarium": "*"
+  }
+}
