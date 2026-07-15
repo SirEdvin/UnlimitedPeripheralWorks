@@ -1,6 +1,9 @@
 package site.siredvin.peripheralworks.integrations.create
 
 import com.google.gson.JsonSyntaxException
+import com.mojang.serialization.Codec
+import com.mojang.serialization.JsonOps
+import com.simibubi.create.AllDataComponents
 import com.simibubi.create.AllItems
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity
 import com.simibubi.create.content.contraptions.piston.LinearActuatorBlockEntity
@@ -10,16 +13,16 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour
-import com.simibubi.create.foundation.fluid.FluidIngredient
 import dan200.computercraft.api.detail.DetailProvider
 import dan200.computercraft.api.detail.VanillaDetailRegistries
-import dan200.computercraft.shared.util.NBTUtil
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.Container
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.crafting.RecipeInput
 import net.minecraft.world.level.Level
+import net.neoforged.neoforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
 import site.siredvin.broccolium.modules.storage.fluid.ForgeAgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
@@ -116,7 +119,7 @@ class Integration : Runnable {
 
         @Suppress("UNCHECKED_CAST")
         RecipeRegistryToolkit.registerRecipeSerializer(
-            ProcessingRecipe::class.java as Class<ProcessingRecipe<Container>>,
+            ProcessingRecipe::class.java as Class<ProcessingRecipe<RecipeInput, com.simibubi.create.content.processing.recipe.ProcessingRecipeParams>>,
             CreateProcessingRecipeTransformer(),
         )
 
@@ -125,32 +128,20 @@ class Integration : Runnable {
             CreateSequenceRecipeTransformer(),
         )
 
-        RecipeRegistryToolkit.registerSerializer(FluidIngredient::class.java) {
+        fun <T> serializeCodec(codec: Codec<T>, value: T): Any? {
             try {
-                return@registerSerializer GSON.fromJson(it.serialize(), HashMap::class.java)
-            } catch (ignored: JsonSyntaxException) {
-                try {
-                    return@registerSerializer GSON.fromJson(it.serialize(), ArrayList::class.java)
-                } catch (e: JsonSyntaxException) {
-                    e.printStackTrace()
-                }
-            }
-            return@registerSerializer null
-        }
-        RecipeRegistryToolkit.registerSerializer(ProcessingOutput::class.java) {
-            try {
-                return@registerSerializer GSON.fromJson(it.serialize(), HashMap::class.java)
+                return GSON.fromJson(codec.encodeStart(JsonOps.INSTANCE, value).result().get(), HashMap::class.java)
             } catch (e: JsonSyntaxException) {
-                e.printStackTrace()
+                return GSON.fromJson(codec.encodeStart(JsonOps.INSTANCE, value).result().get(), ArrayList::class.java)
             }
-            return@registerSerializer null
         }
+        RecipeRegistryToolkit.registerSerializer(SizedFluidIngredient::class.java) { serializeCodec(SizedFluidIngredient.FLAT_CODEC, it) }
+        RecipeRegistryToolkit.registerSerializer(FluidStack::class.java) { serializeCodec(FluidStack.CODEC, it) }
+        RecipeRegistryToolkit.registerSerializer(ProcessingOutput::class.java) { serializeCodec(ProcessingOutput.CODEC_NEW, it) }
         VanillaDetailRegistries.ITEM_STACK.addProvider(
             DetailProvider { data, stack ->
-                if (stack.tag != null) {
-                    if (stack.tag!!.contains("SequencedAssembly")) {
-                        data["SequencedAssembly"] = NBTUtil.toLua(stack.tag!!.getCompound("SequencedAssembly"))
-                    }
+                stack.get(AllDataComponents.SEQUENCED_ASSEMBLY)?.let {
+                    data["SequencedAssembly"] = serializeCodec(SequencedAssemblyRecipe.SequencedAssembly.CODEC, it)
                 }
             },
         )

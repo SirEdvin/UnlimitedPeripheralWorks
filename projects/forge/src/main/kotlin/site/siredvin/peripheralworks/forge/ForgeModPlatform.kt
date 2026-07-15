@@ -1,8 +1,12 @@
 package site.siredvin.peripheralworks.forge
 
-import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
-import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import dan200.computercraft.api.pocket.IPocketUpgrade
+import dan200.computercraft.api.turtle.ITurtleUpgrade
+import dan200.computercraft.api.upgrades.UpgradeType
+import net.minecraft.advancements.CriterionTrigger
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.codec.StreamDecoder
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ServerGamePacketListener
 import net.minecraft.resources.ResourceLocation
@@ -12,9 +16,9 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraftforge.fml.ModList
-import net.minecraftforge.forgespi.language.IModInfo
-import net.minecraftforge.registries.DeferredRegister
+import net.neoforged.fml.ModList
+import net.neoforged.neoforge.registries.DeferredRegister
+import net.neoforged.neoforgespi.language.IModInfo
 import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
 import site.siredvin.peripheralworks.ForgePeripheralWorks
@@ -25,6 +29,7 @@ import site.siredvin.peripheralworks.networking.NetworkMessage
 import site.siredvin.peripheralworks.networking.ServerNetworkContext
 import site.siredvin.peripheralworks.xplat.ModInnerPlatform
 import site.siredvin.tweakium.modules.platform.ForgeInnerComputerBasePlatform
+import java.util.function.Supplier
 import kotlin.jvm.optionals.getOrNull
 
 object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
@@ -48,8 +53,8 @@ object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
         id: Int,
         channel: ResourceLocation,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>,
-    ): MessageType<T> = ForgeNetworkHandler.MessageTypeImpl(id, klass, reader)
+        reader: StreamDecoder<FriendlyByteBuf, T>,
+    ): MessageType<T> = ForgeNetworkHandler.MessageTypeImpl(id, channel, klass, reader)
 
     override fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> = ForgeNetworkHandler.createServerboundPacket(message)
 
@@ -80,9 +85,19 @@ object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
     override val recipeSerializers: DeferredRegister<RecipeSerializer<*>>
         get() = ForgePeripheralWorks.recipeSerializers
 
-    override val turtleSerializers: DeferredRegister<TurtleUpgradeSerialiser<*>>
-        get() = ForgePeripheralWorks.turtleSerializers
+    override val criterionTriggers: DeferredRegister<CriterionTrigger<*>>
+        get() = ForgePeripheralWorks.criterionTriggers
 
-    override val pocketSerializers: DeferredRegister<PocketUpgradeSerialiser<*>>
-        get() = ForgePeripheralWorks.pocketSerializers
+    override val dataComponentTypesRegistry: DeferredRegister<DataComponentType<*>>
+        get() = ForgePeripheralWorks.dataComponentTypes
+
+    override fun <V : ITurtleUpgrade> registerTurtleUpgrade(key: ResourceLocation, upgrade: UpgradeType<V>): Supplier<UpgradeType<V>> {
+        @Suppress("UNCHECKED_CAST")
+        return ForgePeripheralWorks.turtleUpgradeTypes.register(key.path, Supplier { upgrade }) as Supplier<UpgradeType<V>>
+    }
+
+    override fun <V : IPocketUpgrade> registerPocketUpgrade(key: ResourceLocation, upgrade: UpgradeType<V>): Supplier<UpgradeType<V>> {
+        @Suppress("UNCHECKED_CAST")
+        return ForgePeripheralWorks.pocketUpgradeTypes.register(key.path, Supplier { upgrade }) as Supplier<UpgradeType<V>>
+    }
 }

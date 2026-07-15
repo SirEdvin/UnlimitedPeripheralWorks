@@ -1,11 +1,11 @@
 package site.siredvin.peripheralworks.integrations.additionallanterns
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object Configuration : IForgeConfigHandler {
 
-    private var enableLanternsConfig: ForgeConfigSpec.BooleanValue? = null
+    private var enableLanternsConfig: ModConfigSpec.BooleanValue? = null
 
     val enableLanterns: Boolean
         get() = enableLanternsConfig?.get() ?: true
@@ -13,7 +13,7 @@ object Configuration : IForgeConfigHandler {
     override val name: String
         get() = "additionallanterns"
 
-    override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+    override fun addToConfig(builder: ModConfigSpec.Builder) {
         enableLanternsConfig = builder.comment("Enables lanterns integration").define("enableLanterns", true)
     }
 }

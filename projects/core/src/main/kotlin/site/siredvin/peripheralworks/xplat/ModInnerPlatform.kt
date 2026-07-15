@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.xplat
 
 import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.codec.StreamDecoder
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ServerGamePacketListener
 import net.minecraft.resources.ResourceLocation
@@ -20,7 +21,7 @@ interface ModInnerPlatform : InnerComputerBasePlatform {
         id: Int,
         channel: ResourceLocation,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>,
+        reader: StreamDecoder<FriendlyByteBuf, T>,
     ): MessageType<T>
 
     // TODO: when move it to libs, split it into client code. I need to have client code at least sometimes

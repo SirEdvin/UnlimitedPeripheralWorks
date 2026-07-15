@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
-import appeng.blockentity.grid.AENetworkBlockEntity
+import appeng.me.helpers.IGridConnectedBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
@@ -19,21 +19,21 @@ class Integration : Runnable {
     companion object {
         @Suppress("UNUSED_PARAMETER")
         fun extractItemStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticStorage<ItemStack, Int>? {
-            if (entity !is AENetworkBlockEntity) return null
+            if (entity !is IGridConnectedBlockEntity) return null
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: return null
             return AEItemStorage(inventory, entity)
         }
 
         @Suppress("UNUSED_PARAMETER")
         fun extractFluidStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticFluidStorage? {
-            if (entity !is AENetworkBlockEntity) return null
+            if (entity !is IGridConnectedBlockEntity) return null
             val inventory = entity.mainNode.grid?.storageService?.inventory ?: return null
             return AEFluidStorage(inventory, entity)
         }
 
         @Suppress("UNUSED_PARAMETER")
         fun extractEnergyStorage(level: Level, pos: BlockPos, entity: BlockEntity?, direction: Direction?): AgnosticEnergyStorage? {
-            if (entity !is AENetworkBlockEntity) return null
+            if (entity !is IGridConnectedBlockEntity) return null
             val energyService = entity.mainNode.grid?.energyService ?: return null
             return AEEnergyStorage(energyService, entity)
         }

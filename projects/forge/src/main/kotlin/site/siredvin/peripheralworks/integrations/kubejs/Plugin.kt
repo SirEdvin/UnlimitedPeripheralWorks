@@ -1,48 +1,56 @@
 package site.siredvin.peripheralworks.integrations.kubejs
 
-import dev.latvian.mods.kubejs.KubeJSPlugin
-import dev.latvian.mods.kubejs.registry.RegistryInfo
+import dev.latvian.mods.kubejs.plugin.KubeJSPlugin
+import dev.latvian.mods.kubejs.registry.BuilderTypeRegistry
+import dev.latvian.mods.kubejs.registry.RegistryObjectStorage
+import dev.latvian.mods.kubejs.util.ID
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider
+import net.minecraft.core.registries.Registries
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.neoforged.api.distmarker.Dist
+import net.neoforged.fml.loading.FMLEnvironment
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.renderer.PedestalTileRenderer
 import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
 import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
-class Plugin : KubeJSPlugin() {
+class Plugin : KubeJSPlugin {
     init {
         PeripheralWorksCore.logger.info("Oh, how cute, upw kubejs integration was just created.")
     }
     override fun init() {
         PeripheralWorksCore.logger.info("Oh, how cute, upw kubejs integration started loading!")
-        RegistryInfo.BLOCK.addType("item_pedestal", ItemPedestalBuilder::class.java, ::ItemPedestalBuilder)
-        RegistryInfo.BLOCK.addType("display_pedestal", DisplayPedestalBuilder::class.java, ::DisplayPedestalBuilder)
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            registerRenderers()
+        }
         PeripheralWorksCore.logger.info("Oh, how cute, upw kubejs integration loaded just fine!")
     }
 
-    override fun clientInit() {
+    override fun registerBuilderTypes(registry: BuilderTypeRegistry) {
+        registry.of(Registries.BLOCK) {
+            it.add(ID.kjs("item_pedestal"), ItemPedestalBuilder::class.java, ::ItemPedestalBuilder)
+            it.add(ID.kjs("display_pedestal"), DisplayPedestalBuilder::class.java, ::DisplayPedestalBuilder)
+        }
+    }
+
+    private fun registerRenderers() {
         ModClientPlatform.registerBlockEntityRendererCallback(
             {
                 val output = mutableListOf<Pair<BlockEntityType<BlockEntity>, BlockEntityRendererProvider<BlockEntity>>>()
-                RegistryInfo.BLOCK_ENTITY_TYPE.iterator().forEach {
+                RegistryObjectStorage.BLOCK_ENTITY.iterator().forEach {
                     if (it is PedestalBlockEntityBuilder) {
                         @Suppress("UNCHECKED_CAST")
-                        val type = RegistryInfo.BLOCK_ENTITY_TYPE.getValue(it.id)
-                        if (type != null) {
-                            output.add(
-                                Pair(
-                                    type as BlockEntityType<BlockEntity>,
-                                    BlockEntityRendererProvider {
-                                        @Suppress("UNCHECKED_CAST")
-                                        PedestalTileRenderer<ItemPedestalBlockEntity>() as BlockEntityRenderer<BlockEntity>
-                                    },
-                                ),
-                            )
-                        } else {
-                            PeripheralWorksCore.logger.error("Block entity type for pedestal builder: ${it.id} is None for some reason")
-                        }
+                        output.add(
+                            Pair(
+                                it.get() as BlockEntityType<BlockEntity>,
+                                BlockEntityRendererProvider {
+                                    @Suppress("UNCHECKED_CAST")
+                                    PedestalTileRenderer<ItemPedestalBlockEntity>() as BlockEntityRenderer<BlockEntity>
+                                },
+                            ),
+                        )
                     }
                 }
                 return@registerBlockEntityRendererCallback output

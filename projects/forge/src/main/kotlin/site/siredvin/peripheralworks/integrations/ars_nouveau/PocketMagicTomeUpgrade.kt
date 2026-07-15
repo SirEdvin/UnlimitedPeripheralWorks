@@ -1,8 +1,11 @@
 package site.siredvin.peripheralworks.integrations.ars_nouveau
 
+import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.pocket.IPocketAccess
-import net.minecraft.nbt.CompoundTag
+import dan200.computercraft.api.pocket.IPocketUpgrade
+import dan200.computercraft.api.upgrades.UpgradeType
+import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -15,29 +18,28 @@ class PocketMagicTomeUpgrade(type: ResourceLocation, stack: ItemStack) :
         stack,
     ) {
 
-    companion object {
-        val STORED_DATA_TAG = ResourceLocation.fromNamespaceAndPath("ars_nouveau", "caster").toString()
-    }
+    override fun getType(): UpgradeType<out IPocketUpgrade> = Integration.magicTomeUpgradeType.get()
 
-    override fun getPeripheral(access: IPocketAccess): MagicTomePeripheral = MagicTomePeripheral(PocketPeripheralOwner(access), access.upgrade!!.upgradeItem, Configuration.enableCasterTomePocketUpgrade)
+    override fun getPeripheral(access: IPocketAccess): MagicTomePeripheral = MagicTomePeripheral(PocketPeripheralOwner(access), getUpgradeItem(access.upgradeData), Configuration.enableCasterTomePocketUpgrade)
 
-    override fun getUpgradeData(stack: ItemStack): CompoundTag {
-        return stack.getTagElement(STORED_DATA_TAG) ?: return CompoundTag()
-    }
+    override fun getUpgradeData(stack: ItemStack): DataComponentPatch = DataComponentPatch.builder().apply {
+        stack.get(DataComponentRegistry.SPELL_CASTER.get())?.let { set(DataComponentRegistry.SPELL_CASTER.get(), it) }
+        stack.get(DataComponentRegistry.TOME_CASTER.get())?.let { set(DataComponentRegistry.TOME_CASTER.get(), it) }
+    }.build()
 
-    override fun getUpgradeItem(upgradeData: CompoundTag): ItemStack {
+    override fun getUpgradeItem(upgradeData: DataComponentPatch): ItemStack {
         if (upgradeData.isEmpty) return craftingItem
         val base = craftingItem.copy()
-        base.addTagElement(STORED_DATA_TAG, upgradeData)
+        base.applyComponents(upgradeData)
         return base
     }
 
     override fun onRightClick(world: Level?, access: IPocketAccess?, peripheral: IPeripheral?): Boolean = super.onRightClick(world, access, peripheral)
 
     override fun isItemSuitable(stack: ItemStack): Boolean {
-        if (stack.getTagElement(STORED_DATA_TAG) == null) return super.isItemSuitable(stack)
         val tweakedStack = stack.copy()
-        tweakedStack.orCreateTag.remove(STORED_DATA_TAG)
+        tweakedStack.remove(DataComponentRegistry.SPELL_CASTER.get())
+        tweakedStack.remove(DataComponentRegistry.TOME_CASTER.get())
         return super.isItemSuitable(tweakedStack)
     }
 }

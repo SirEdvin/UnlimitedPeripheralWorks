@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import site.siredvin.peripheralworks.api.ISavableComponent
 
@@ -18,7 +19,7 @@ class FabricCustomSlottedStorage(slots: Int, slotScale: Int, trigger: Runnable) 
             if (variant.isBlank) {
                 return 64 * slotScale.toLong()
             }
-            return (variant.item.maxStackSize * slotScale).toLong()
+            return (variant.toStack().maxStackSize * slotScale).toLong()
         }
 
         override fun onFinalCommit() {
@@ -40,7 +41,7 @@ class FabricCustomSlottedStorage(slots: Int, slotScale: Int, trigger: Runnable) 
         val list = ListTag()
         for (slot in slots) {
             val tag = CompoundTag()
-            tag.put("Variant", slot.resource.toNbt())
+            tag.put("Variant", ItemVariant.CODEC.encodeStart(NbtOps.INSTANCE, slot.resource).getOrThrow())
             tag.putLong("Amount", slot.amount)
             list.add(tag)
         }
@@ -51,7 +52,7 @@ class FabricCustomSlottedStorage(slots: Int, slotScale: Int, trigger: Runnable) 
         val list = tag as ListTag
         for (i in 0 until list.size) {
             val innerTag = list.get(i) as CompoundTag
-            parts.get(i).variant = ItemVariant.fromNbt(innerTag.getCompound("Variant"))
+            parts.get(i).variant = ItemVariant.CODEC.parse(NbtOps.INSTANCE, innerTag.get("Variant")).getOrThrow()
             parts.get(i).amount = innerTag.getLong("Amount")
         }
     }

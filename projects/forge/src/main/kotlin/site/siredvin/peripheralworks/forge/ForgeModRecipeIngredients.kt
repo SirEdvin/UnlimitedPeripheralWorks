@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.forge
 import dan200.computercraft.shared.ModRegistry.Items
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Blocks
-import net.minecraftforge.common.Tags
+import net.neoforged.neoforge.common.Tags
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 
 object ForgeModRecipeIngredients : ModRecipeIngredients {

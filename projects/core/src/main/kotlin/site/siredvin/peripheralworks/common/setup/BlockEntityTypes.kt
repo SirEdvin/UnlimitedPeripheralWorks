@@ -137,7 +137,7 @@ object BlockEntityTypes {
         )
     }
 
-    val NETWORK_MANAGER: Supplier<BlockEntityType<NetworkManagerBlockEntity>> = ModPlatform.registerBlockEntity(
+    val NETWORK_MANAGER: RegistryEntry<BlockEntityType<NetworkManagerBlockEntity>> = ModPlatform.registerBlockEntity(
         modId("network_manager"),
     ) {
         PlatformToolkit.get().createBlockEntityType(
@@ -146,7 +146,7 @@ object BlockEntityTypes {
         )
     }
 
-    val HOLOGRAM_PROJECTOR: Supplier<BlockEntityType<HologramProjectorBlockEntity>> = ModPlatform.registerBlockEntity(
+    val HOLOGRAM_PROJECTOR: RegistryEntry<BlockEntityType<HologramProjectorBlockEntity>> = ModPlatform.registerBlockEntity(
         modId("hologram_projector"),
     ) {
         PlatformToolkit.get().createBlockEntityType(

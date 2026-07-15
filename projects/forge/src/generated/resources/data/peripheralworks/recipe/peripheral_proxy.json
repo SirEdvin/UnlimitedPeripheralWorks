@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": {
+      "item": "computercraft:wireless_modem_advanced"
+    },
+    "c": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "d": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "i": {
+      "tag": "c:gems/diamond"
+    }
+  },
+  "pattern": [
+    "ddd",
+    "dOd",
+    "ici"
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:peripheral_proxy"
+  },
+  "show_notification": false
+}

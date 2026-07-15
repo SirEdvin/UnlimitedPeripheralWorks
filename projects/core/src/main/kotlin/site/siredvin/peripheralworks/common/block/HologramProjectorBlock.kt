@@ -1,9 +1,12 @@
 package site.siredvin.peripheralworks.common.block
 
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
+import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.HorizontalDirectionalBlock
 import net.minecraft.world.level.block.Mirror
@@ -14,7 +17,6 @@ import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.DirectionProperty
 import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.HologramProjectorBlockEntity
-import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.tweakium.modules.minecraft.block.StatefulPeripheralNBTBlock
 
@@ -50,8 +52,10 @@ class HologramProjectorBlock : StatefulPeripheralNBTBlock<HologramProjectorBlock
 
     override fun createItemStack(): ItemStack = asItem().defaultInstance
 
+    override fun codec(): MapCodec<out BaseEntityBlock> = RecordCodecBuilder.mapCodec { it.stable(HologramProjectorBlock()) }
+
     override fun newBlockEntity(
         p0: BlockPos,
         p1: BlockState,
-    ): BlockEntity? = BlockEntityTypes.HOLOGRAM_PROJECTOR.get().create(p0, p1)
+    ): BlockEntity = HologramProjectorBlockEntity(p0, p1)
 }

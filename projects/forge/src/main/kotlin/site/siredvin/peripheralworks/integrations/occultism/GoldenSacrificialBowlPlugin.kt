@@ -11,15 +11,13 @@ class GoldenSacrificialBowlPlugin(private val bowl: GoldenSacrificialBowlBlockEn
 
     @LuaFunction(mainThread = true)
     fun getCraftingInformation(): Map<String, Any>? {
-        if (bowl.currentRitualRecipe == null) {
-            return null
-        }
+        val recipe = bowl.currentRitualRecipe?.value() ?: return null
         return mapOf(
-            "pentacle" to bowl.currentRitualRecipe.pentacleId.toString(),
-            "ritual" to bowl.currentRitualRecipe.ritual.ritualID,
+            "pentacle" to recipe.pentacleId.toString(),
+            "ritual" to recipe.ritualType.toString(),
             "itemUseFulfilled" to bowl.itemUseFulfilled(),
             "sacrificeFulfilled" to bowl.sacrificeFulfilled(),
-            "leftTime" to bowl.currentRitualRecipe.duration - bowl.currentTime,
+            "leftTime" to recipe.duration - bowl.currentTime,
         )
     }
 }

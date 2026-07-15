@@ -31,7 +31,7 @@ abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = Bl
         if (interactionHand == InteractionHand.MAIN_HAND) {
             if (blockEntity is IItemStackStorage) {
                 if (!itemInHand.isEmpty) {
-                    val leftover = blockEntity.storage.storeItem(itemInHand)
+                    val leftover = blockEntity.storage.store(itemInHand, false)
                     if (!ItemStack.matches(leftover, itemInHand)) {
                         player.setItemInHand(interactionHand, leftover)
                         return ItemInteractionResult.CONSUME
@@ -72,7 +72,7 @@ abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = Bl
         val itemInHand = player.getItemInHand(InteractionHand.MAIN_HAND)
         val blockEntity = level.getBlockEntity(blockPos)
         if (blockEntity is IItemStackStorage) {
-            if (!blockEntity.storedStack.isEmpty && (ItemStack.isSameItemSameTags(blockEntity.storedStack, itemInHand) || itemInHand.isEmpty)) {
+            if (!blockEntity.storedStack.isEmpty && (ItemStack.isSameItemSameComponents(blockEntity.storedStack, itemInHand) || itemInHand.isEmpty)) {
                 val calculatedLimit = if (player.isCrouching) {
                     blockEntity.storedStack.maxStackSize
                 } else {

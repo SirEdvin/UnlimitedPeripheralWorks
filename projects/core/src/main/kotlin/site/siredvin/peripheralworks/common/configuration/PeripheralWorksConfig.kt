@@ -257,7 +257,7 @@ object PeripheralWorksConfig {
             enableInformativeRegistry = builder.comment("Enables informative registry")
                 .define("enableInformativeRegistry", true)
             informativeRegistryModBlocklist = builder.comment("Mods blocked from showing up in informative registry, mostly for security")
-                .defineList<String>("informativeRegistryModBlocklist", { listOf("verySecretMod") }) { true }
+                .defineListAllowEmpty<String>("informativeRegistryModBlocklist", { listOf("verySecretMod") }, { "verySecretMod" }) { true }
             enableStatueWorkbench = builder.comment("Enables statue workbench")
                 .define("enableStatueWorkbench", true)
             flexibleStatueMaxQuads = builder.comment("Max quads amount for flexible statue, will be applied only for newest ones")

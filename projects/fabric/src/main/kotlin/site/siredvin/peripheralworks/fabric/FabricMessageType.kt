@@ -1,36 +1,38 @@
 package site.siredvin.peripheralworks.fabric
 
-import net.fabricmc.fabric.api.networking.v1.FabricPacket
-import net.fabricmc.fabric.api.networking.v1.PacketType
 import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.network.codec.StreamDecoder
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.networking.MessageType
 import site.siredvin.peripheralworks.networking.NetworkMessage
 
-data class FabricMessageType<T : NetworkMessage<*>>(
-    val type: PacketType<PacketWrapper<T>>,
+class FabricMessageType<T : NetworkMessage<*>>(
+    channel: ResourceLocation,
+    reader: StreamDecoder<FriendlyByteBuf, T>,
 ) : MessageType<T> {
-
-    constructor(id: ResourceLocation, reader: FriendlyByteBuf.Reader<T>) : this(
-        PacketType.create(id) { b -> PacketWrapper(reader.apply(b)) },
+    val payloadType = CustomPacketPayload.Type<PacketWrapper<T>>(channel)
+    val codec: StreamCodec<RegistryFriendlyByteBuf, PacketWrapper<T>> = StreamCodec.of(
+        { buffer, packet -> packet.payload.write(buffer) },
+        { buffer -> wrap(reader.decode(buffer)) },
     )
+
+    fun wrap(payload: T): PacketWrapper<T> = PacketWrapper(payload, payloadType)
 
     companion object {
         @JvmStatic
-        fun <T : NetworkMessage<*>> toFabricType(type: MessageType<*>): PacketType<PacketWrapper<T>> {
+        fun <T : NetworkMessage<*>> toFabricType(type: MessageType<*>): FabricMessageType<T> {
             @Suppress("UNCHECKED_CAST")
-            return (type as FabricMessageType<T>).type
+            return type as FabricMessageType<T>
         }
-
-        @JvmStatic
-        fun toFabricPacket(message: NetworkMessage<*>): FabricPacket = PacketWrapper(message)
     }
 
-    data class PacketWrapper<T : NetworkMessage<*>>(val payload: T) : FabricPacket {
-        override fun write(buf: FriendlyByteBuf) {
-            payload.write(buf)
-        }
-
-        override fun getType(): PacketType<*> = toFabricType<T>(payload.type())
+    data class PacketWrapper<T : NetworkMessage<*>>(
+        val payload: T,
+        private val payloadType: CustomPacketPayload.Type<PacketWrapper<T>>,
+    ) : CustomPacketPayload {
+        override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> = payloadType
     }
 }

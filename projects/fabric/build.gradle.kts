@@ -1,3 +1,5 @@
+import java.io.ByteArrayInputStream
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("site.siredvin.fabric")
@@ -8,6 +10,8 @@ plugins {
 val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
+
+evaluationDependsOn(":core")
 
 baseShaking {
     projectPart.set("fabric")
@@ -33,16 +37,63 @@ fabricShaking {
 
 sourceSets.main {
     kotlin {
-        exclude("site/siredvin/peripheralworks/integrations/additionallanterns/**")
         exclude("site/siredvin/peripheralworks/integrations/ae2/**")
-        exclude("site/siredvin/peripheralworks/integrations/alloy_forgery/**")
         exclude("site/siredvin/peripheralworks/integrations/create/**")
+        exclude("site/siredvin/peripheralworks/integrations/kubejs/**")
         exclude("site/siredvin/peripheralworks/integrations/modern_industrialization/**")
-        exclude("site/siredvin/peripheralworks/integrations/naturescompass/**")
         exclude("site/siredvin/peripheralworks/integrations/powah/**")
-        exclude("site/siredvin/peripheralworks/integrations/toms_storage/**")
-        exclude("site/siredvin/peripheralworks/integrations/universal_shops/**")
     }
+}
+
+val testMod = sourceSets.create("testMod") {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    compileClasspath += sourceSets.main.get().output
+    compileClasspath += project(":core").sourceSets["testMod"].output
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+    runtimeClasspath += sourceSets.main.get().output
+    runtimeClasspath += project(":core").sourceSets["testMod"].output
+}
+
+net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)
+
+val testiariumMainArtifacts = configurations.detachedConfiguration(
+    project.dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1"),
+    project.dependencies.create("site.siredvin:testiarium-fabric-1.21.1:0.1.1"),
+).apply {
+    isTransitive = false
+}
+
+val testiariumTestArtifacts = configurations.detachedConfiguration(
+    project.dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar"),
+    project.dependencies.create("site.siredvin:testiarium-fabric-1.21.1:0.1.1:test-mod@jar"),
+).apply {
+    isTransitive = false
+}
+
+loom {
+    mods {
+        register("peripheralworks-testmod") {
+            sourceSet(testMod)
+            sourceSet(project(":core").sourceSets["testMod"])
+        }
+    }
+    runs {
+        create("peripheralWorksGameTest") {
+            server()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("testiarium.tags", "peripheralworks")
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/peripheralworks-gametest")
+        }
+    }
+}
+
+tasks.named<JavaExec>("runPeripheralWorksGameTest") {
+    standardInput = ByteArrayInputStream("true\n".toByteArray())
 }
 
 repositories {
@@ -60,6 +111,7 @@ repositories {
         url = uri("https://maven.wispforest.io")
         content {
             includeGroup("io.wispforest")
+            includeGroup("io.wispforest.endec")
         }
     }
     maven {
@@ -166,6 +218,8 @@ repositories {
 }
 
 dependencies {
+    compileOnly(libs.endec)
+
     modApi(libs.bundles.externalMods.fabric.integrations.api) {
         exclude("net.fabricmc.fabric-api")
     }
@@ -187,19 +241,18 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
-    // I hate this, but since someone is not clearing their mess, I need to do it
-
-    modCompileOnly("dev.draylar:magna:1.10.1+1.20.1") {
-        exclude("net.fabricmc.fabric-api")
-        exclude("net.fabricmc", "fabric-loader")
-        exclude("com.github.Draylar.omega-config", "omega-config-base")
-    }
-
-    modCompileOnly("dev.draylar.omega-config:omega-config-base:1.3.0+1.19.2")
-
     libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
+    libs.bundles.externalMods.fabric.integrations.raw.full.get().map { compileOnly(it) }
+    runtimeOnly(libs.endec)
+    runtimeOnly(libs.endec.gson)
+    runtimeOnly(libs.endec.jankson)
+    runtimeOnly(libs.endec.netty)
     libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
     libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+    libs.bundles.externalMods.fabric.integrations.raw.active.get().map { runtimeOnly(it) }
+
+    add("modTestModImplementation", files(testiariumMainArtifacts))
+    add("modTestModImplementation", files(testiariumTestArtifacts))
 }
 
 publishingShaking {

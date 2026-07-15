@@ -19,6 +19,13 @@ vanillaShaking {
     shake()
 }
 
+val testMod = sourceSets.create("testMod") {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    compileClasspath += sourceSets.main.get().output
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+    runtimeClasspath += sourceSets.main.get().output
+}
+
 repositories {
     mavenLocal()
     maven {
@@ -41,5 +48,10 @@ dependencies {
     implementation(libs.bundles.kotlin)
     implementation(libs.bundles.cccommon)
     api(libs.bundles.apicommon)
+    compileOnly(libs.fabric.config) {
+        isTransitive = false
+    }
     compileOnly(libs.mixin)
+    add(testMod.implementationConfigurationName, libs.testiarium.core)
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar")
 }

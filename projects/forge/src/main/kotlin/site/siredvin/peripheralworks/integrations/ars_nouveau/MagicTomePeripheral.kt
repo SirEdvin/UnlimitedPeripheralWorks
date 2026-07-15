@@ -1,10 +1,8 @@
 package site.siredvin.peripheralworks.integrations.ars_nouveau
 
-import com.hollingsworth.arsnouveau.api.spell.ISpellCaster
-import com.hollingsworth.arsnouveau.common.items.CasterTome
-import com.hollingsworth.arsnouveau.common.items.SpellBook
+import com.hollingsworth.arsnouveau.api.spell.AbstractCaster
+import com.hollingsworth.arsnouveau.api.spell.ItemCasterProvider
 import com.hollingsworth.arsnouveau.setup.registry.CapabilityRegistry
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.network.chat.Component
@@ -22,15 +20,10 @@ class MagicTomePeripheral(peripheralOwner: PocketPeripheralOwner, val casterTome
         const val TYPE = "magic_tome"
     }
 
-    val spellCaster: ISpellCaster by lazy {
-        if (casterTome.`is`(ItemsRegistry.CASTER_TOME.get())) {
-            return@lazy CasterTome.TomeSpellCaster(casterTome)
-        }
-        return@lazy SpellBook.BookCaster(casterTome)
-    }
+    var spellCaster: AbstractCaster<*> = (casterTome.item as ItemCasterProvider).getSpellCaster(casterTome)
 
     @LuaFunction(mainThread = true)
-    fun getSpells(): Map<Int, MutableMap<String, Any>> = spellCaster.spells.mapKeys { it.key + 1 }.mapValues { LuaRepresentation.forSpell(it.value) }
+    fun getSpells(): Map<Int, MutableMap<String, Any>> = spellCaster.spells.slots().mapKeys { it.key + 1 }.mapValues { LuaRepresentation.forSpell(it.value) }
 
     @LuaFunction(mainThread = true)
     fun getSelectedSlot(): Int = spellCaster.currentSlot + 1
@@ -43,25 +36,28 @@ class MagicTomePeripheral(peripheralOwner: PocketPeripheralOwner, val casterTome
 
     @LuaFunction(mainThread = true)
     fun select(slot: Int) {
-        spellCaster.currentSlot = slot - 1
+        spellCaster = spellCaster.setCurrentSlot(slot - 1)
+        spellCaster.saveToStack(casterTome)
+        peripheralOwner.pocket.upgradeData = casterTome.componentsPatch
     }
 
     @LuaFunction(mainThread = true)
     fun getMana(): Map<String, Any> {
-        return CapabilityRegistry.getMana(peripheralOwner.owner).map {
-            return@map mapOf(
-                "current" to it.currentMana,
-                "max" to it.maxMana,
-                "bookTier" to it.bookTier,
-                "glyphBonus" to it.glyphBonus,
-            )
-        }.orElse(
-            mapOf(
+        val owner = peripheralOwner.owner
+        if (owner == null) {
+            return mapOf(
                 "current" to 0,
                 "max" to 0,
                 "bookTier" to 0,
                 "glyphBonus" to 0,
-            ),
+            )
+        }
+        val mana = CapabilityRegistry.getMana(owner)
+        return mapOf(
+            "current" to mana.currentMana,
+            "max" to mana.maxMana,
+            "bookTier" to mana.bookTier,
+            "glyphBonus" to mana.glyphBonus,
         )
     }
 
@@ -71,14 +67,27 @@ class MagicTomePeripheral(peripheralOwner: PocketPeripheralOwner, val casterTome
             throw LuaException("Cannot find player for some reason, so cannot cast")
         }
         val fakePlayer = TweakedForgeFakePlayer(peripheralOwner.level!! as ServerLevel, peripheralOwner.owner!!.gameProfile, peripheralOwner.owner!!)
+        val ownerMana = CapabilityRegistry.getMana(peripheralOwner.owner!!)
+        val fakeMana = CapabilityRegistry.getMana(fakePlayer)
+        fakeMana.setMana(ownerMana.currentMana)
+        fakeMana.maxMana = ownerMana.maxMana
+        fakeMana.bookTier = ownerMana.bookTier
+        fakeMana.glyphBonus = ownerMana.glyphBonus
+        fakeMana.reserve = ownerMana.reserve
         val proxy = FakePlayerProxy(fakePlayer)
-        FakePlayerProviderPocket.withPlayerTweaked(
-            peripheralOwner.pocket,
-            {
-                it.fakePlayer.moveTo(it.fakePlayer.x, it.fakePlayer.y + 0.5, it.fakePlayer.z, fakePlayer.originalPlayer!!.yRot, fakePlayer.originalPlayer.xRot)
-                spellCaster.castSpell(peripheralOwner.level!!, it.fakePlayer, InteractionHand.MAIN_HAND, Component.literal("Well, cast failed"))
-            },
-            { proxy },
-        )
+        try {
+            FakePlayerProviderPocket.withPlayerTweaked(
+                peripheralOwner.pocket,
+                {
+                    it.fakePlayer.moveTo(it.fakePlayer.x, it.fakePlayer.y + 0.5, it.fakePlayer.z, fakePlayer.originalPlayer!!.yRot, fakePlayer.originalPlayer.xRot)
+                    it.fakePlayer.setItemInHand(InteractionHand.MAIN_HAND, casterTome)
+                    spellCaster.castSpell(peripheralOwner.level!!, it.fakePlayer, InteractionHand.MAIN_HAND, Component.literal("Well, cast failed"))
+                },
+                { proxy },
+            )
+        } finally {
+            ownerMana.setMana(fakeMana.currentMana)
+            ownerMana.reserve = fakeMana.reserve
+        }
     }
 }

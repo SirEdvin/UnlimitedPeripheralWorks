@@ -30,3 +30,9 @@ githubShaking {
 repositories {
     mavenCentral()
 }
+
+tasks.register("gameTest") {
+    group = "verification"
+    description = "Runs UnlimitedPeripheralWorks GameTests on NeoForge and Fabric."
+    dependsOn(":forge:runGameTestServer", ":fabric:runPeripheralWorksGameTest")
+}

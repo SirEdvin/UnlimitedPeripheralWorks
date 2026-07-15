@@ -235,7 +235,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             val displayPeripheralsTag = data.getCompound(DISPLAY_PERIPHERALS_TAG)
             displayPeripherals.clear()
             displayPeripheralsTag.allKeys.forEach {
-                displayPeripherals[it] = NbtUtils.readBlockPos(displayPeripheralsTag.getCompound(it))
+                NbtUtils.readBlockPos(displayPeripheralsTag, it).ifPresent { pos -> displayPeripherals[it] = pos }
             }
         }
         if (data.contains(PERIPHERAL_NAME)) {

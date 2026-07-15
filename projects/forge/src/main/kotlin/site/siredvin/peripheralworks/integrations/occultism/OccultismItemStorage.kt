@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.integrations.occultism
 
-import com.klikli_dev.occultism.Occultism
 import com.klikli_dev.occultism.api.common.blockentity.IStorageController
 import net.minecraft.world.item.ItemStack
 import site.siredvin.broccolium.modules.storage.base.api.AgnosticStorage
@@ -12,7 +11,7 @@ class OccultismItemStorage(private val storageController: IStorageController) : 
     override fun getContent(): Iterator<ItemStack> = storageController.stacks.iterator()
 
     override val maxStackSize: Int
-        get() = if (Occultism.SERVER_CONFIG.storage.overrideItemStackSizes.get()) Occultism.SERVER_CONFIG.storage.controllerStackSize.get() else 64
+        get() = Int.MAX_VALUE
     override val operator: SomethingOperator<ItemStack, Int>
         get() = ItemStorageUtils
 

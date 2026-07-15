@@ -4,14 +4,14 @@ import appeng.api.config.Actionable
 import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEItemKey
 import appeng.api.storage.MEStorage
-import appeng.blockentity.grid.AENetworkBlockEntity
+import appeng.me.helpers.IGridConnectedBlockEntity
 import net.minecraft.world.item.ItemStack
 import site.siredvin.broccolium.modules.storage.base.api.AgnosticStorage
 import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import java.util.function.Predicate
 
-class AEItemStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : AgnosticStorage<ItemStack, Int> {
+class AEItemStorage(private val storage: MEStorage, private val entity: IGridConnectedBlockEntity) : AgnosticStorage<ItemStack, Int> {
     override fun getContent(): Iterator<ItemStack> {
         return storage.availableStacks.mapNotNull {
             if (it.key !is AEItemKey) return@mapNotNull null
@@ -25,7 +25,7 @@ class AEItemStorage(private val storage: MEStorage, private val entity: AENetwor
         get() = ItemStorageUtils
 
     override fun setChanged() {
-        entity.setChanged()
+        entity.saveChanges()
     }
 
     override fun store(stack: ItemStack, simulate: Boolean): ItemStack {

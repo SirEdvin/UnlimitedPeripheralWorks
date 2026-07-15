@@ -9,11 +9,13 @@ import dev.emi.emi.api.stack.EmiStack
 import dev.emi.emi.api.stack.FluidEmiStack
 import dev.emi.emi.api.stack.TagEmiIngredient
 import net.minecraft.core.RegistryAccess
+import net.minecraft.core.component.DataComponents
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.computercraft.peripherals.RecipeRegistryPeripheral
 import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.MapBasedEventMessage
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
+import site.siredvin.peripheralworks.utils.toEntry
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
@@ -30,7 +32,7 @@ object CommonEntrypoint {
         result["catalysts"] = recipe.catalysts.map(CommonEntrypoint::mapIngredient)
         val backingRecipe = recipe.backingRecipe
         if (backingRecipe != null) {
-            val rawRecipeInfo = RecipeRegistryToolkit.serializeRecipe(backingRecipe, registryAccess)
+            val rawRecipeInfo = RecipeRegistryToolkit.serializeRecipe(backingRecipe.toEntry(), registryAccess)
             if (rawRecipeInfo.contains("extra") && rawRecipeInfo["extra"] != null) {
                 result["extra"] = rawRecipeInfo["extra"]!!
             }
@@ -55,8 +57,9 @@ object CommonEntrypoint {
         base["amount"] = stack.amount
         base["displayName"] = stack.name.string
         base["chance"] = stack.chance
-        if (stack.nbt != null) {
-            val nbtHash = ComputerPlatformToolkit.get().nbtHash(stack.nbt)
+        val customData = stack.get(DataComponents.CUSTOM_DATA)?.copyTag()
+        if (customData != null) {
+            val nbtHash = ComputerPlatformToolkit.get().nbtHash(customData)
             if (nbtHash != null) {
                 base["nbt"] = nbtHash
             }

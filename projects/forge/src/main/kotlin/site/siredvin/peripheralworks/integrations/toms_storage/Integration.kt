@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.toms_storage
 
-import com.tom.storagemod.tile.InventoryConnectorBlockEntity
+import com.tom.storagemod.block.entity.InventoryConnectorBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level

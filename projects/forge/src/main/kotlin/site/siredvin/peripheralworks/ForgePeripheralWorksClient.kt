@@ -2,17 +2,21 @@ package site.siredvin.peripheralworks
 
 import dan200.computercraft.api.client.turtle.RegisterTurtleModellersEvent
 import dan200.computercraft.api.turtle.ITurtleUpgrade
-import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import dan200.computercraft.api.upgrades.UpgradeType
+import net.minecraft.client.resources.model.ModelResourceLocation
 import net.minecraft.resources.ResourceLocation
-import net.minecraftforge.api.distmarker.Dist
-import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers
-import net.minecraftforge.client.event.ModelEvent.RegisterAdditional
-import net.minecraftforge.eventbus.api.SubscribeEvent
-import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
+import net.neoforged.api.distmarker.Dist
+import net.neoforged.bus.api.SubscribeEvent
+import net.neoforged.fml.common.EventBusSubscriber
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent
+import net.neoforged.neoforge.client.event.EntityRenderersEvent.RegisterRenderers
+import net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional
+import net.neoforged.neoforge.client.event.ModelEvent.RegisterGeometryLoaders
+import site.siredvin.peripheralworks.client.geometry.FlexibleRealityAnchorGeometryLoader
+import site.siredvin.peripheralworks.client.geometry.FlexibleStatueGeometryLoader
 import site.siredvin.peripheralworks.forge.ForgeModClientPlatform
 
-@Mod.EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, value = [Dist.CLIENT], bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, value = [Dist.CLIENT])
 object ForgePeripheralWorksClient {
 
     init {
@@ -22,7 +26,7 @@ object ForgePeripheralWorksClient {
     @SubscribeEvent
     @Suppress("UNUSED_PARAMETER")
     fun onClientSetup(event: FMLClientSetupEvent) {
-        PeripheralWorksClientCore.onInit()
+        event.enqueueWork(PeripheralWorksClientCore::onInit)
     }
 
     @SubscribeEvent
@@ -40,7 +44,7 @@ object ForgePeripheralWorksClient {
     @SubscribeEvent
     fun registerModels(event: RegisterAdditional) {
         PeripheralWorksClientCore.registerExtraModels { model: ResourceLocation ->
-            event.register(model)
+            event.register(ModelResourceLocation.standalone(model))
         }
     }
 
@@ -48,7 +52,19 @@ object ForgePeripheralWorksClient {
     fun registerTurtleModels(event: RegisterTurtleModellersEvent) {
         PeripheralWorksClientCore.onModelRegister { serializer, model ->
             @Suppress("UNCHECKED_CAST")
-            event.register(serializer as TurtleUpgradeSerialiser<ITurtleUpgrade>, model)
+            event.register(serializer as UpgradeType<ITurtleUpgrade>, model)
         }
+    }
+
+    @SubscribeEvent
+    fun registerGeometryLoaders(event: RegisterGeometryLoaders) {
+        event.register(
+            ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "flexible_reality_anchor"),
+            FlexibleRealityAnchorGeometryLoader,
+        )
+        event.register(
+            ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "flexible_statue"),
+            FlexibleStatueGeometryLoader,
+        )
     }
 }

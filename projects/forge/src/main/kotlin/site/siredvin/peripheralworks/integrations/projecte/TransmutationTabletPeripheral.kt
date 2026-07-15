@@ -6,12 +6,11 @@ import moze_intel.projecte.api.ItemInfo
 import moze_intel.projecte.api.capabilities.IKnowledgeProvider
 import moze_intel.projecte.api.capabilities.PECapabilities
 import moze_intel.projecte.api.event.PlayerAttemptLearnEvent
-import moze_intel.projecte.emc.nbt.NBTManager
-import moze_intel.projecte.utils.EMCHelper
+import moze_intel.projecte.api.proxy.IEMCProxy
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.Items
-import net.minecraftforge.common.MinecraftForge
+import net.neoforged.neoforge.common.NeoForge
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
@@ -32,7 +31,7 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
     }
 
     private val knowledge: IKnowledgeProvider?
-        get() = peripheralOwner.owner?.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY)?.resolve()?.get()
+        get() = peripheralOwner.owner?.getCapability(PECapabilities.KNOWLEDGE_CAPABILITY)
 
     @LuaFunction(mainThread = true)
     fun getEMC(): BigInteger = knowledge?.emc ?: BigInteger.ZERO
@@ -52,8 +51,8 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
         if (item == Items.AIR) {
             return MethodResult.of(null, "There is no such item")
         }
-        val itemInfo = kp.knowledge.firstOrNull { it.item == item } ?: return MethodResult.of(null, "Such item is not learned")
-        val cost = EMCHelper.getEmcValue(itemInfo)
+        val itemInfo = kp.knowledge.firstOrNull { it.item.value() == item } ?: return MethodResult.of(null, "Such item is not learned")
+        val cost = IEMCProxy.INSTANCE.getValue(itemInfo)
         if (kp.emc.toLong() < cost * amount) {
             return MethodResult.of(null, "Not enough EMC")
         }
@@ -71,10 +70,10 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
         assertBetween(slot, 1, inventory.size, "slot")
         val realSlot = slot - 1
         val stack = inventory.get(realSlot)
-        if (!EMCHelper.doesItemHaveEmc(stack)) {
+        if (!IEMCProxy.INSTANCE.hasValue(stack)) {
             return MethodResult.of(null, "Cannot transmute item")
         }
-        val cost = EMCHelper.getEmcSellValue(stack) * stack.count
+        val cost = IEMCProxy.INSTANCE.getSellValue(stack) * stack.count
         if (cost == 0L) {
             return MethodResult.of(null, "Cannot transmute item")
         }
@@ -82,18 +81,13 @@ class TransmutationTabletPeripheral<O : IPeripheralOwner>(peripheralOwner: O, ov
         if (realStack.isEmpty) {
             return MethodResult.of(null, "Something gone wrong")
         }
-        kp.emc += BigInteger.valueOf(EMCHelper.getEmcSellValue(realStack) * realStack.count)
+        kp.emc += BigInteger.valueOf(IEMCProxy.INSTANCE.getSellValue(realStack) * realStack.count)
         val info = ItemInfo.fromStack(realStack)
-        val cleanedInfo = NBTManager.getPersistentInfo(info)
+        val cleanedInfo = IEMCProxy.INSTANCE.getPersistentInfo(info)
         val player = peripheralOwner.owner!! as ServerPlayer
+        val learnEvent = PlayerAttemptLearnEvent(player, info, cleanedInfo)
         if (!kp.hasKnowledge(cleanedInfo) &&
-            !MinecraftForge.EVENT_BUS.post(
-                PlayerAttemptLearnEvent(
-                    player,
-                    info,
-                    cleanedInfo,
-                ),
-            ) &&
+            !NeoForge.EVENT_BUS.post(learnEvent).isCanceled &&
             kp.addKnowledge(cleanedInfo)
         ) {
             kp.syncKnowledgeChange(player, cleanedInfo, true)

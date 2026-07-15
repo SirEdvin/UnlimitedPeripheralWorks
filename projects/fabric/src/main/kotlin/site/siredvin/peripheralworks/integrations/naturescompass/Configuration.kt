@@ -1,12 +1,12 @@
 package site.siredvin.peripheralworks.integrations.naturescompass
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object Configuration : IForgeConfigHandler {
 
-    private var enableTurtleUpgradeConfig: ForgeConfigSpec.BooleanValue? = null
-    private var enablePocketUpgradeConfig: ForgeConfigSpec.BooleanValue? = null
+    private var enableTurtleUpgradeConfig: ModConfigSpec.BooleanValue? = null
+    private var enablePocketUpgradeConfig: ModConfigSpec.BooleanValue? = null
 
     val enableNaturesCompassTurtleUpgrade: Boolean
         get() = enableTurtleUpgradeConfig?.get() ?: true
@@ -17,7 +17,7 @@ object Configuration : IForgeConfigHandler {
     override val name: String
         get() = "naturescompass"
 
-    override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+    override fun addToConfig(builder: ModConfigSpec.Builder) {
         enableTurtleUpgradeConfig = builder.comment("Enables usage of natures compass as turtle upgrade")
             .define("enableNaturesCompassTurtleUpgrade", true)
         enablePocketUpgradeConfig = builder.comment("Enables usage of natures compass as pocket upgrade")

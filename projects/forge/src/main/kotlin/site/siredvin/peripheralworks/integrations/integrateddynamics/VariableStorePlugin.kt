@@ -4,12 +4,12 @@ import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.shared.util.NBTUtil
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import org.cyclops.integrateddynamics.Capabilities
 import org.cyclops.integrateddynamics.api.evaluate.EvaluationException
 import org.cyclops.integrateddynamics.api.evaluate.variable.IValue
 import org.cyclops.integrateddynamics.api.evaluate.variable.ValueDeseralizationContext
 import org.cyclops.integrateddynamics.api.item.IVariableFacade
 import org.cyclops.integrateddynamics.blockentity.BlockEntityVariablestore
-import org.cyclops.integrateddynamics.capability.variablefacade.VariableFacadeHolderConfig
 import org.cyclops.integrateddynamics.core.helper.NetworkHelpers
 import org.cyclops.integrateddynamics.core.item.OperatorVariableFacade
 import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
@@ -34,9 +34,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         return dataMap
     }
 
-    fun extractFacade(stack: ItemStack): IVariableFacade? = stack.getCapability(VariableFacadeHolderConfig.CAPABILITY).map {
-        it.getVariableFacade(context)
-    }.orElse(null)
+    fun extractFacade(stack: ItemStack): IVariableFacade? = stack.getCapability(Capabilities.VariableFacade.ITEM)?.getVariableFacade(context)
 
     override fun listImpl(arguments: IArguments): Map<Int, Map<String, *>> {
         val records = mutableMapOf<Int, Map<String, *>>()
@@ -54,7 +52,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         if (store.network == null) {
             return null
         }
-        val variable = facade.getVariable<IValue>(NetworkHelpers.getPartNetworkChecked(store.network))
+        val variable = facade.getVariable<IValue>(store.network, NetworkHelpers.getPartNetworkChecked(store.network))
             ?: return null
         val value: IValue = try {
             variable.value
@@ -64,7 +62,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         val valueData = HashMap<String, Any?>(4)
         valueData["type"] = value.type.typeName
         valueData["id"] = facade.id
-        valueData["value"] = NBTUtil.toLua(value.type.serialize(value))
+        valueData["value"] = NBTUtil.toLua(value.type.serialize(context, value))
         valueData["dynamic"] = facade is OperatorVariableFacade
         if (facade.label != null) {
             valueData["label"] = facade.label

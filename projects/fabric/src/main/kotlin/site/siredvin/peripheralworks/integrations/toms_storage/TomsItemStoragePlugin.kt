@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.integrations.toms_storage
 
-import com.tom.storagemod.tile.InventoryConnectorBlockEntity
+import com.tom.storagemod.block.entity.InventoryConnectorBlockEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.base.api.AgnosticStorage
@@ -13,5 +13,5 @@ class TomsItemStoragePlugin(private val target: InventoryConnectorBlockEntity) :
         get() = PeripheralWorksConfig.itemStorageTransferLimit
     override val level: Level
         get() = target.level!!
-    override val storage: AgnosticStorage<ItemStack, Int> = FabricStorageWrapper(target.inventory)
+    override val storage: AgnosticStorage<ItemStack, Int> = FabricStorageWrapper(target.inventoryAccess.getPlatformHandler())
 }

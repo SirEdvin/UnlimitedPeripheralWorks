@@ -37,8 +37,7 @@ class HologramProjectorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPe
     companion object {
         const val TYPE = "hologram_projector"
 
-        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
-        val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, TYPE)
+        val UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, TYPE)
 
         object Entities : AbstractNotNullDataObject<MutableList<String>>() {
             override val nbtTag: String
@@ -291,7 +290,8 @@ class HologramProjectorPeripheral(owner: IPeripheralOwner) : OwnedPeripheral<IPe
             }
 
             is Display.ItemDisplay -> {
-                subInfo["item"] = LuaRepresentation.forItemStack(ItemStack.of(data.getCompound("item")))
+                val stack = ItemStack.parse(entity.level().registryAccess(), data.getCompound("item")).orElse(ItemStack.EMPTY)
+                subInfo["item"] = LuaRepresentation.forItemStack(stack)
                 subInfo["item_display"] = data.getString("item_display")
             }
 

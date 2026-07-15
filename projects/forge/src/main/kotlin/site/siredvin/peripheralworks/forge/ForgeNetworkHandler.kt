@@ -1,14 +1,19 @@
 package site.siredvin.peripheralworks.forge
 
 import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
+import net.minecraft.network.codec.StreamDecoder
 import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket
+import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.network.protocol.game.ClientGamePacketListener
 import net.minecraft.network.protocol.game.ServerGamePacketListener
 import net.minecraft.resources.ResourceLocation
-import net.minecraftforge.network.NetworkDirection
-import net.minecraftforge.network.NetworkEvent
-import net.minecraftforge.network.NetworkRegistry
-import net.minecraftforge.network.simple.SimpleChannel
+import net.minecraft.server.level.ServerPlayer
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
+import net.neoforged.neoforge.network.registration.PayloadRegistrar
 import org.apache.logging.log4j.LogManager
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.PeripheralWorksCore.MOD_ID
@@ -17,84 +22,80 @@ import site.siredvin.peripheralworks.networking.MessageType
 import site.siredvin.peripheralworks.networking.NetworkMessage
 import site.siredvin.peripheralworks.networking.NetworkMessages
 import site.siredvin.peripheralworks.networking.ServerNetworkContext
-import java.util.function.Predicate
-import java.util.function.Supplier
 
 object ForgeNetworkHandler {
-    var logger = LogManager.getLogger("$MOD_ID.networking")
-    private val network: SimpleChannel
+    private val logger = LogManager.getLogger("$MOD_ID.networking")
 
-    init {
-        val version = PeripheralWorksCore.NETWORK_VERSION
-        network = NetworkRegistry.ChannelBuilder.named(ResourceLocation.fromNamespaceAndPath(MOD_ID, "network"))
-            .networkProtocolVersion(Supplier { version })
-            .clientAcceptedVersions(Predicate { anObject: String -> version == anObject })
-            .serverAcceptedVersions(Predicate { anObject: String -> version == anObject })
-            .simpleChannel()
-    }
-
-    fun setup() {
-        for (type in NetworkMessages.serverbound) {
-            val forgeType = type as MessageTypeImpl<out NetworkMessage<ServerNetworkContext>>
-            registerMainThread(
-                forgeType,
-                NetworkDirection.PLAY_TO_SERVER,
-                { c -> ServerNetworkContext { c.sender!! } },
-            )
-        }
-
-        for (type in NetworkMessages.clientbound) {
+    fun setup(event: RegisterPayloadHandlersEvent) {
+        val registrar = event.registrar(PeripheralWorksCore.NETWORK_VERSION)
+        NetworkMessages.serverbound.forEach {
             @Suppress("UNCHECKED_CAST")
-            val forgeType = type as MessageTypeImpl<out NetworkMessage<ClientNetworkContext>>
-            registerMainThread(
-                forgeType,
-                NetworkDirection.PLAY_TO_CLIENT,
-                { x -> object : ClientNetworkContext {} },
-            )
+            registerServerbound(registrar, it as MessageTypeImpl<NetworkMessage<ServerNetworkContext>>)
+        }
+        NetworkMessages.clientbound.forEach {
+            @Suppress("UNCHECKED_CAST")
+            registerClientbound(registrar, it as MessageTypeImpl<NetworkMessage<ClientNetworkContext>>)
         }
     }
 
+    private fun registerServerbound(registrar: PayloadRegistrar, type: MessageTypeImpl<NetworkMessage<ServerNetworkContext>>) {
+        registrar.playToServer(type.payloadType, type.codec) { payload, context ->
+            handle(payload.message, ServerNetworkContext { context.player() as ServerPlayer })
+        }
+    }
+
+    private fun registerClientbound(registrar: PayloadRegistrar, type: MessageTypeImpl<NetworkMessage<ClientNetworkContext>>) {
+        registrar.playToClient(type.payloadType, type.codec) { payload, _ ->
+            handle(payload.message, object : ClientNetworkContext {})
+        }
+    }
+
+    private fun <H> handle(packet: NetworkMessage<H>, context: H) {
+        try {
+            packet.handle(context)
+        } catch (e: RuntimeException) {
+            logger.error("Failed handling packet", e)
+            throw e
+        } catch (e: Error) {
+            logger.error("Failed handling packet", e)
+            throw e
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
     fun createClientboundPacket(packet: NetworkMessage<ClientNetworkContext>): Packet<ClientGamePacketListener> {
-        @Suppress("UNCHECKED_CAST")
-        return network.toVanillaPacket<Any?>(
-            packet,
-            NetworkDirection.PLAY_TO_CLIENT,
-        ) as Packet<ClientGamePacketListener>
+        val type = packet.type() as MessageTypeImpl<NetworkMessage<ClientNetworkContext>>
+        return ClientboundCustomPayloadPacket(type.wrap(packet)) as Packet<ClientGamePacketListener>
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun createServerboundPacket(packet: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> {
-        @Suppress("UNCHECKED_CAST")
-        return network.toVanillaPacket<Any>(
-            packet,
-            NetworkDirection.PLAY_TO_SERVER,
-        ) as Packet<ServerGamePacketListener>
-    }
-
-    fun <H, T : NetworkMessage<H>> registerMainThread(
-        type: MessageTypeImpl<T>,
-        direction: NetworkDirection,
-        handler: (NetworkEvent.Context) -> H,
-    ) {
-        network.messageBuilder<T?>(type.klass, type.id, direction)
-            .encoder(NetworkMessage<H>::write)
-            .decoder(type.reader)
-            .consumerMainThread { packet: T, contextSup: Supplier<NetworkEvent.Context> ->
-                try {
-                    packet.handle(handler(contextSup.get()))
-                } catch (e: RuntimeException) {
-                    logger.error("Failed handling packet", e)
-                    throw e
-                } catch (e: Error) {
-                    logger.error("Failed handling packet", e)
-                    throw e
-                }
-            }
-            .add()
+        val type = packet.type() as MessageTypeImpl<NetworkMessage<ServerNetworkContext>>
+        return ServerboundCustomPayloadPacket(type.wrap(packet)) as Packet<ServerGamePacketListener>
     }
 
     class MessageTypeImpl<T : NetworkMessage<*>>(
-        val id: Int,
-        val klass: Class<T>,
-        val reader: FriendlyByteBuf.Reader<T>,
-    ) : MessageType<T>
+        @Suppress("UNUSED_PARAMETER") id: Int,
+        val channel: ResourceLocation,
+        @Suppress("UNUSED_PARAMETER") klass: Class<T>,
+        reader: StreamDecoder<FriendlyByteBuf, T>,
+    ) : MessageType<T> {
+        val payloadType = CustomPacketPayload.Type<MessagePayload<T>>(channel)
+        val codec: StreamCodec<RegistryFriendlyByteBuf, MessagePayload<T>> = object : StreamCodec<RegistryFriendlyByteBuf, MessagePayload<T>> {
+            override fun decode(buffer: RegistryFriendlyByteBuf): MessagePayload<T> = wrap(reader.decode(buffer))
+
+            override fun encode(buffer: RegistryFriendlyByteBuf, payload: MessagePayload<T>) {
+                payload.message.write(buffer)
+            }
+        }
+
+        fun wrap(message: T): MessagePayload<T> = MessagePayload(message, payloadType)
+    }
+
+    class MessagePayload<T : NetworkMessage<*>>(
+        val message: T,
+        private val payloadType: CustomPacketPayload.Type<MessagePayload<T>>,
+    ) : CustomPacketPayload {
+        override fun type(): CustomPacketPayload.Type<out CustomPacketPayload> = payloadType
+    }
 }

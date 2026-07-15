@@ -57,13 +57,14 @@ object ModTurtleUpgrades {
         UpgradeType.simpleWithCustomItem(::UltimateSensorTurtleUpgrade),
     )
 
-    val HOLOGRAM_PROJECTOR = ModPlatform.registerTurtleUpgrade(
+    val HOLOGRAM_PROJECTOR: RegistryEntry<UpgradeType<StatefulPeripheralTurtleUpgrade<HologramProjectorPeripheral>>> = ModPlatform.registerTurtleUpgrade(
         HologramProjectorPeripheral.UPGRADE_ID,
-        TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack ->
+        UpgradeType.simpleWithCustomItem { stack ->
             StatefulPeripheralTurtleUpgrade.dynamic(
                 stack.item,
                 { turtle, side -> HologramProjectorPeripheral(TurtlePeripheralOwner(turtle, side)) },
-            ) { id }
+                { HOLOGRAM_PROJECTOR.get() },
+            ) { HologramProjectorPeripheral.UPGRADE_ID }
         },
     )
 

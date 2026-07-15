@@ -1,10 +1,8 @@
 package site.siredvin.peripheralworks.integrations.ars_nouveau
 
-import com.hollingsworth.arsnouveau.ArsNouveau
 import com.hollingsworth.arsnouveau.api.source.ISourceTile
 import com.hollingsworth.arsnouveau.common.block.tile.MobJarTile
-import com.hollingsworth.arsnouveau.setup.registry.ItemsRegistry
-import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
+import dan200.computercraft.api.upgrades.UpgradeType
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.resources.ResourceLocation
@@ -15,10 +13,10 @@ import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
-import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
 import site.siredvin.peripheralworks.xplat.ModPlatform
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import java.util.function.Supplier
 
 class Integration : Runnable {
 
@@ -42,6 +40,7 @@ class Integration : Runnable {
         val ARCHMAGE_UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "archmage_magic_tome")
         val CASTER_TOME_UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "caster_magic_tome")
         val MAGIC_TOME = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "magic_tome")
+        lateinit var magicTomeUpgradeType: Supplier<UpgradeType<PocketMagicTomeUpgrade>>
     }
 
     override fun run() {
@@ -54,41 +53,13 @@ class Integration : Runnable {
                 return@addBlockLookup AgnosticSourceStorage(source)
             }
         }
-        val magicTomeUpgradeSerializer = ModPlatform.registerPocketUpgrade(
+        val upgradeType = UpgradeType.simpleWithCustomItem { stack ->
+            PocketMagicTomeUpgrade(MAGIC_TOME, stack)
+        }
+        magicTomeUpgradeType = ModPlatform.registerPocketUpgrade(
             MAGIC_TOME,
-            PocketUpgradeSerialiser.simpleWithCustomItem { id, stack ->
-                return@simpleWithCustomItem PocketMagicTomeUpgrade(id, stack)
-            },
+            upgradeType,
         )
-        ModPocketUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(
-                NOVICE_UPGRADE_ID,
-                magicTomeUpgradeSerializer.get(),
-                ItemsRegistry.NOVICE_SPELLBOOK.get(),
-            ).requireMod(ArsNouveau.MODID)
-        }
-        ModPocketUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(
-                APPRENTICE_UPGRADE_ID,
-                magicTomeUpgradeSerializer.get(),
-                ItemsRegistry.APPRENTICE_SPELLBOOK.get(),
-            ).requireMod(ArsNouveau.MODID)
-        }
-        ModPocketUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(
-                ARCHMAGE_UPGRADE_ID,
-                magicTomeUpgradeSerializer.get(),
-                ItemsRegistry.ARCHMAGE_SPELLBOOK.get(),
-            ).requireMod(ArsNouveau.MODID)
-        }
-        ModPocketUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(
-                CASTER_TOME_UPGRADE_ID,
-                magicTomeUpgradeSerializer.get(),
-                ItemsRegistry.CASTER_TOME.get(),
-            ).requireMod(ArsNouveau.MODID)
-        }
-
         ModEnLanguageProvider.addHook {
             it.addPocket(MAGIC_TOME, "Casting")
             it.addPocket(NOVICE_UPGRADE_ID, "Casting")

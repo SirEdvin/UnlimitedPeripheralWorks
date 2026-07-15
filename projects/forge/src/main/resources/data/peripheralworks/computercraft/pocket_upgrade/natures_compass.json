@@ -1,0 +1,10 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "naturescompass"
+    }
+  ],
+  "type": "peripheralworks:natures_compass",
+  "item": "naturescompass:naturescompass"
+}

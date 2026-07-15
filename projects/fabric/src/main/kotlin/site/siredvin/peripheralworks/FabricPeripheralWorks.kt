@@ -1,10 +1,11 @@
 package site.siredvin.peripheralworks
-import dan200.computercraft.api.node.wired.WiredElementLookup
+import dan200.computercraft.api.network.wired.WiredElementLookup
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
 import net.minecraft.client.player.AbstractClientPlayer
@@ -52,10 +53,12 @@ object FabricPeripheralWorks : ModInitializer {
 
         PeripheralWorksCore.configure(FabricModPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
         for (type in NetworkMessages.serverbound) {
+            val fabricType = FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type)
+            PayloadTypeRegistry.playC2S().register(fabricType.payloadType, fabricType.codec)
             ServerPlayNetworking.registerGlobalReceiver(
-                FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type),
-                { packet, player, sender ->
-                    packet.payload.handle(ServerNetworkContext { player })
+                fabricType.payloadType,
+                { packet, context ->
+                    packet.payload.handle(ServerNetworkContext(context::player))
                 },
             )
         }

@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.integrations.ae2
 import appeng.api.config.Actionable
 import appeng.api.config.PowerMultiplier
 import appeng.api.networking.energy.IEnergyService
-import appeng.blockentity.grid.AENetworkBlockEntity
+import appeng.me.helpers.IGridConnectedBlockEntity
 import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStack
 import site.siredvin.broccolium.modules.storage.energy.Energies
@@ -11,7 +11,7 @@ import site.siredvin.broccolium.modules.storage.energy.EnergyStorageUtils
 import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import java.util.function.Predicate
 
-class AEEnergyStorage(private val energyService: IEnergyService, private val entity: AENetworkBlockEntity) : AgnosticEnergyStorage {
+class AEEnergyStorage(private val energyService: IEnergyService, private val entity: IGridConnectedBlockEntity) : AgnosticEnergyStorage {
     override val maxStackSize: Long
         get() = energyService.maxStoredPower.toLong()
     override val operator: SomethingOperator<AgnosticEnergyStack, Long>
@@ -24,7 +24,7 @@ class AEEnergyStorage(private val energyService: IEnergyService, private val ent
     override fun getContent(): Iterator<AgnosticEnergyStack> = listOf(firstEnergy).iterator()
 
     override fun setChanged() {
-        entity.setChanged()
+        entity.saveChanges()
     }
 
     override val canReceive: Boolean

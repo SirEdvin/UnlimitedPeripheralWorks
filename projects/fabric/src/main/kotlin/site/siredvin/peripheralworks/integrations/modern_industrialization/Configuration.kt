@@ -1,12 +1,12 @@
 package site.siredvin.peripheralworks.integrations.modern_industrialization
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object Configuration : IForgeConfigHandler {
 
-    private var enableEnergyStorageConfig: ForgeConfigSpec.BooleanValue? = null
-    private var enableCraftingMachineConfig: ForgeConfigSpec.BooleanValue? = null
+    private var enableEnergyStorageConfig: ModConfigSpec.BooleanValue? = null
+    private var enableCraftingMachineConfig: ModConfigSpec.BooleanValue? = null
 
     val enableEnergyStorage: Boolean
         get() = enableEnergyStorageConfig?.get() ?: true
@@ -16,7 +16,7 @@ object Configuration : IForgeConfigHandler {
     override val name: String
         get() = "modern_industrialization"
 
-    override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+    override fun addToConfig(builder: ModConfigSpec.Builder) {
         enableEnergyStorageConfig = builder.comment("Enables energy storage integration").define("enableEnergyStorage", true)
         enableCraftingMachineConfig = builder.comment("Enables crafting machine integration").define("enableCraftingMachine", true)
     }

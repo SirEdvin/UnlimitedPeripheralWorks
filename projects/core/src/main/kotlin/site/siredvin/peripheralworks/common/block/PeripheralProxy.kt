@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
@@ -87,28 +86,25 @@ class PeripheralProxy : BaseBlockEntityBlock<PeripheralProxyBlockEntity>(true, B
 
     @Suppress("DEPRECATION")
     @Deprecated("Deprecated in Java")
-    override fun use(
+    override fun useWithoutItem(
         blockState: BlockState,
         level: Level,
         pos: BlockPos,
         player: Player,
-        interactionHand: InteractionHand,
         hitResult: BlockHitResult,
     ): InteractionResult {
-        if (interactionHand == InteractionHand.MAIN_HAND && player.getItemInHand(interactionHand).isEmpty) {
-            if (!level.isClientSide) {
-                val be = level.getBlockEntity(pos) as? PeripheralProxyBlockEntity
-                if (be != null) {
-                    var base = ModText.PERIPHERAL_PROXY_CONNECTED_PERIPHERALS.text.append(Component.literal("\n"))
-                    be.remotePeripherals.forEach {
-                        base = base.append(Component.literal("    ${it.value.peripheralName}\n"))
-                    }
-                    player.sendSystemMessage(base)
-                    return InteractionResult.SUCCESS
+        if (!level.isClientSide) {
+            val be = level.getBlockEntity(pos) as? PeripheralProxyBlockEntity
+            if (be != null) {
+                var base = ModText.PERIPHERAL_PROXY_CONNECTED_PERIPHERALS.text.append(Component.literal("\n"))
+                be.remotePeripherals.forEach {
+                    base = base.append(Component.literal("    ${it.value.peripheralName}\n"))
                 }
+                player.sendSystemMessage(base)
+                return InteractionResult.SUCCESS
             }
         }
-        return super.use(blockState, level, pos, player, interactionHand, hitResult)
+        return super.useWithoutItem(blockState, level, pos, player, hitResult)
     }
 
     @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")

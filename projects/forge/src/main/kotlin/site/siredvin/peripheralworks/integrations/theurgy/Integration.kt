@@ -11,15 +11,10 @@ class Integration : Runnable {
         if (Configuration.enableMercuryFluxStorage) {
             AgnosticEnergyStorageLookup.addBlockLookup { level, blockPos, blockEntity, direction ->
                 if (blockEntity == null) return@addBlockLookup null
-                val mfCapability = blockEntity.getCapability(CapabilityRegistry.MERCURY_FLUX)
-                if (mfCapability.isPresent) {
-                    return@addBlockLookup AgnosticMercuryFluxStorage(mfCapability.resolve().get())
-                }
-                if (direction != null) {
-                    val sidedCap = blockEntity.getCapability(CapabilityRegistry.MERCURY_FLUX, direction)
-                    if (sidedCap.isPresent) {
-                        return@addBlockLookup AgnosticMercuryFluxStorage(sidedCap.resolve().get())
-                    }
+                if (direction == null) return@addBlockLookup null
+                val mfCapability = level.getCapability(CapabilityRegistry.MERCURY_FLUX_HANDLER, blockPos, direction)
+                if (mfCapability != null) {
+                    return@addBlockLookup AgnosticMercuryFluxStorage(mfCapability)
                 }
                 return@addBlockLookup null
             }

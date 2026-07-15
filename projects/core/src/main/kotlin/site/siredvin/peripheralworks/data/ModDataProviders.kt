@@ -2,12 +2,16 @@ package site.siredvin.peripheralworks.data
 
 import site.siredvin.broccolium.modules.data.api.GeneratorSink
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.tweakium.modules.data.upgrades
 
 object ModDataProviders {
     fun add(generator: GeneratorSink) {
         generator.add(::ModRecipeProvider)
-        generator.addRegistryPatch("TurtleUpgrades", ModTurtleUpgradeDataProvider::makeUpgradeRegistry)
-        generator.addRegistryPatch("PocketUpgrades", ModPocketUpgradeDataProvider::makeUpgradeRegistry)
+        generator.upgrades(
+            PeripheralWorksCore.MOD_ID,
+            ModPocketUpgradeDataProvider::addUpgrades,
+            ModTurtleUpgradeDataProvider::addUpgrades,
+        )
         generator.lootTable(ModLootTableProvider.getTables())
         generator.models(ModBlockModelProvider::addModels, ModItemModelProvider::addModels)
         generator.entityTags(PeripheralWorksCore.MOD_ID, ModTagsProvider::entityTypeTags)

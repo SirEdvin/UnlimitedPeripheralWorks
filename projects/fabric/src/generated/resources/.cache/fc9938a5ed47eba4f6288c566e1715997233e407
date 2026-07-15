@@ -1,4 +1,4 @@
-// 1.21.1	2025-03-13T12:21:14.873542466	Unlimited Peripheral Works/Tags for minecraft:block
-6c2739599a1d6e5682f0e1398691c6f164d864bb data/computercraft/tags/block/peripheral_hub_ignore.json
-9e52700b3b7c82255705d9bb2aeebe59d8c17ac9 data/peripheralworks/tags/block/peripheral_proxy_forbidden.json
+// 1.21.1	2026-07-15T21:37:29.56818079	Unlimited Peripheral Works/Tags for minecraft:block
 2bfa250ddc38767e6e476a133170fdbf7a2d3c01 data/peripheralworks/tags/block/reality_forger_forbidden.json
+a2eba9680ee1b6ea9c29e8174230851b0a8c162c data/computercraft/tags/block/peripheral_hub_ignore.json
+9e52700b3b7c82255705d9bb2aeebe59d8c17ac9 data/peripheralworks/tags/block/peripheral_proxy_forbidden.json

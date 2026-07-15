@@ -1,8 +1,10 @@
 package site.siredvin.peripheralworks.integrations.create
 
+import com.mojang.serialization.JsonOps
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe
+import com.simibubi.create.content.processing.sequenced.SequencedRecipe
 import net.minecraft.core.RegistryAccess
-import net.minecraftforge.items.wrapper.RecipeWrapper
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeTransformer
 
@@ -12,6 +14,8 @@ class CreateSequenceRecipeTransformer : RecipeTransformer<RecipeWrapper, Sequenc
 
     override fun getExtraData(recipe: SequencedAssemblyRecipe): MutableMap<String, Any> = mutableMapOf(
         "loops" to recipe.loops,
-        "sequence" to recipe.sequence.map { RecipeRegistryToolkit.serializeJson(it.toJson()) },
+        "sequence" to recipe.sequence.map {
+            RecipeRegistryToolkit.serializeJson(SequencedRecipe.CODEC.encodeStart(JsonOps.INSTANCE, it).result().get().asJsonObject)
+        },
     )
 }

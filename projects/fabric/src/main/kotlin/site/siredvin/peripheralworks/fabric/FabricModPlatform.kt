@@ -1,10 +1,10 @@
 package site.siredvin.peripheralworks.fabric
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.metadata.ModEnvironment
 import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.codec.StreamDecoder
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.game.ServerGamePacketListener
 import net.minecraft.resources.ResourceLocation
@@ -37,13 +37,13 @@ object FabricModPlatform : FabricInnerComputerBasePlatform(), ModInnerPlatform {
         id: Int,
         channel: ResourceLocation,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>,
-    ): MessageType<T> = FabricMessageType<T>(channel, reader)
+        reader: StreamDecoder<FriendlyByteBuf, T>,
+    ): MessageType<T> = FabricMessageType(channel, reader)
 
+    @Suppress("UNCHECKED_CAST")
     override fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> {
-        val buf = PacketByteBufs.create()
-        message.write(buf)
-        return ClientPlayNetworking.createC2SPacket(FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(message.type()).getId(), buf)
+        val type = FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(message.type())
+        return ClientPlayNetworking.createC2SPacket(type.wrap(message)) as Packet<ServerGamePacketListener>
     }
 
     override fun createSlottedItemStorage(slots: Int, slotScale: Int, trigger: Runnable): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>> {

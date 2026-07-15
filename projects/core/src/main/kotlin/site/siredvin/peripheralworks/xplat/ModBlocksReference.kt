@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.xplat
 
+import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.Block
 
 interface ModBlocksReference {
@@ -20,4 +21,5 @@ interface ModBlocksReference {
 
     val wiredModem: Block
     val cable: Block
+    val cableItem: Item
 }

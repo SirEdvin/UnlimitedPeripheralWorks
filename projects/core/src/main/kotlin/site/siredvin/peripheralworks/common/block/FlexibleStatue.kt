@@ -102,6 +102,7 @@ class FlexibleStatue : BaseNBTBlock<FlexibleStatueBlockEntity>(false, BlockUtil.
         context.horizontalDirection.opposite,
     )
 
+    @Deprecated("Deprecated in Java")
     override fun getCloneItemStack(levelReader: LevelReader, blockPos: BlockPos, blockState: BlockState): ItemStack {
         val blockEntity = levelReader.getBlockEntity(blockPos)
         if (blockEntity is FlexibleStatueBlockEntity) {

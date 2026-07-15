@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.integrations.deepresonance
 
-import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import net.neoforged.neoforge.common.ModConfigSpec as ForgeConfigSpec
 
 object Configuration : IForgeConfigHandler {
 

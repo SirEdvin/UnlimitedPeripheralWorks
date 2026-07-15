@@ -32,7 +32,7 @@ class NaturesCompassPeripheral<O : IPeripheralOwner>(peripheralOwner: O, overrid
         if (compass.getState(compassStack) == CompassState.SEARCHING) {
             return MethodResult.of(null, "Another compass search is running, stop it to start another")
         }
-        val biomeLoc = ResourceLocation(biome)
+        val biomeLoc = ResourceLocation.tryParse(biome) ?: return MethodResult.of(null, "Incorrect biome id $biome")
         val optionalBiome = BiomeUtils.getBiomeForIdentifier(peripheralOwner.level, biomeLoc)
         if (optionalBiome.isEmpty) {
             return MethodResult.of(null, "Incorrect biome id $biome")

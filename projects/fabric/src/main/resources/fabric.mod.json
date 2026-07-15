@@ -54,8 +54,8 @@
   "depends": {
     "fabricloader": ">=0.13.3",
     "fabric": "*",
-    "minecraft": ">=1.21 <1.22",
-    "java": ">=17",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
     "computercraft": ">=${computercraftVersion}",
     "peripheralium": ">=${peripheraliumVersion}",
     "broccolium": ">=${broccoliumVersion}",

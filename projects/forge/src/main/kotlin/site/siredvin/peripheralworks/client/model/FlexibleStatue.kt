@@ -12,18 +12,18 @@ import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.client.resources.model.ModelState
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.core.component.DataComponents
 import net.minecraft.util.RandomSource
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraftforge.client.ChunkRenderTypeSet
-import net.minecraftforge.client.model.ForgeFaceData
-import net.minecraftforge.client.model.IDynamicBakedModel
-import net.minecraftforge.client.model.data.ModelData
-import net.minecraftforge.client.model.data.ModelProperty
-import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
+import net.neoforged.neoforge.client.ChunkRenderTypeSet
+import net.neoforged.neoforge.client.model.ExtraFaceData
+import net.neoforged.neoforge.client.model.IDynamicBakedModel
+import net.neoforged.neoforge.client.model.data.ModelData
+import net.neoforged.neoforge.client.model.data.ModelProperty
+import org.apache.commons.lang3.mutable.MutableObject
 import site.siredvin.peripheralworks.client.util.RenderUtils
 import site.siredvin.peripheralworks.client.util.RenderUtils.getModelState
 import site.siredvin.peripheralworks.client.util.RenderUtils.getTexture
@@ -46,7 +46,6 @@ val identityModel by lazy {
 abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
     companion object {
         val DEFAULT_TEXTURE = modId("block/white")
-        val DUMMY = ResourceLocation.parse("dummy_name")
         val quadsCache = CacheBuilder.newBuilder()
             .concurrencyLevel(1).maximumSize(2_000)
             .expireAfterAccess(30, TimeUnit.SECONDS).build(CacheLoader.from(::bakeQuads))
@@ -64,11 +63,18 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
                 tint,
                 data.texture.toString(),
                 BlockFaceUV(data.uv, 0),
-                ForgeFaceData(tint, 0, 0, true),
+                ExtraFaceData(tint, 0, 0, true),
+                MutableObject<BlockElement>(),
             )
             return bakery.bakeQuad(
-                data.start, data.end, face, getTexture(data.texture), side,
-                modelState, null, true, DUMMY,
+                data.start,
+                data.end,
+                face,
+                getTexture(data.texture),
+                side,
+                modelState,
+                null,
+                true,
             )
         }
     }
@@ -119,8 +125,9 @@ object FlexibleStatueModel : AbstractFlexibleStatueModel() {
         modelData: ModelData,
     ): ModelData {
         val blockEntity = level.getBlockEntity(pos)
-        if (blockEntity !is FlexibleStatueBlockEntity || blockEntity.bakedQuads == null) return super.getModelData(level, pos, state, modelData)
-        return modelData.derive().with(QUADS, blockEntity.bakedQuads).with(FACING, blockEntity.facing).build()
+        if (blockEntity !is FlexibleStatueBlockEntity) return super.getModelData(level, pos, state, modelData)
+        val bakedQuads = blockEntity.bakedQuads ?: return super.getModelData(level, pos, state, modelData)
+        return modelData.derive().with(QUADS, bakedQuads).with(FACING, blockEntity.facing).build()
     }
 }
 
@@ -132,7 +139,7 @@ object FlexibleStatueItemOverrides : ItemOverrides() {
         pEntity: LivingEntity?,
         pSeed: Int,
     ): BakedModel? {
-        val bakedQuadsTag = pStack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getList(
+        val bakedQuadsTag = pStack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getList(
             FlexibleStatueBlockEntity.BAKED_QUADS_TAG,
             10,
         ) ?: return emptyFlexibleStatueModel

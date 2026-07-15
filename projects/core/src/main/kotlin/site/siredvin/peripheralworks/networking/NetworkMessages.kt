@@ -4,6 +4,7 @@ import dan200.computercraft.shared.network.client.ClientNetworkContext
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import it.unimi.dsi.fastutil.ints.IntSet
 import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.codec.StreamDecoder
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.xplat.ModPlatform
@@ -27,7 +28,7 @@ object NetworkMessages {
         id: Int,
         channel: String,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>,
+        reader: StreamDecoder<FriendlyByteBuf, T>,
     ): MessageType<T> {
         require(seenIds.add(id)) { "Duplicate id $id" }
         require(seenChannel.add(channel)) { "Duplicate channel $channel" }
@@ -40,14 +41,14 @@ object NetworkMessages {
         id: Int,
         channel: String,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>,
+        reader: StreamDecoder<FriendlyByteBuf, T>,
     ): MessageType<T> = register(serverMessages, id, channel, klass, reader)
 
     private fun <T : NetworkMessage<ClientNetworkContext>> registerClientbound(
         id: Int,
         channel: String,
         klass: Class<T>,
-        reader: FriendlyByteBuf.Reader<T>,
+        reader: StreamDecoder<FriendlyByteBuf, T>,
     ): MessageType<T> = register(clientMessages, id, channel, klass, reader)
 
     val serverbound: MutableCollection<MessageType<out NetworkMessage<ServerNetworkContext>>>

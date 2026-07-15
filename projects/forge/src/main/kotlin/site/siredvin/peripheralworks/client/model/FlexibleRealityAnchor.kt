@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.util.RandomSource
@@ -17,11 +18,10 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.BlockAndTintGetter
 import net.minecraft.world.level.block.state.BlockState
-import net.minecraftforge.client.ChunkRenderTypeSet
-import net.minecraftforge.client.model.IDynamicBakedModel
-import net.minecraftforge.client.model.data.ModelData
-import net.minecraftforge.client.model.data.ModelProperty
-import site.siredvin.broccolium.modules.base.block.BaseNBTBlock
+import net.neoforged.neoforge.client.ChunkRenderTypeSet
+import net.neoforged.neoforge.client.model.IDynamicBakedModel
+import net.neoforged.neoforge.client.model.data.ModelData
+import net.neoforged.neoforge.client.model.data.ModelProperty
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.client.util.RenderUtils.getTexture
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
@@ -71,8 +71,9 @@ object FlexibleRealityAnchorModel : IDynamicBakedModel {
         modelData: ModelData,
     ): ModelData {
         val blockEntity = level.getBlockEntity(pos)
-        if (blockEntity !is FlexibleRealityAnchorBlockEntity || blockEntity.mimic == null) return super.getModelData(level, pos, state, modelData)
-        return modelData.derive().with(MIMIC, blockEntity.mimic).build()
+        if (blockEntity !is FlexibleRealityAnchorBlockEntity) return super.getModelData(level, pos, state, modelData)
+        val mimic = blockEntity.mimic ?: return super.getModelData(level, pos, state, modelData)
+        return modelData.derive().with(MIMIC, mimic).build()
     }
 }
 
@@ -84,7 +85,7 @@ object FlexibleRealityAnchorItemOverrides : ItemOverrides() {
         pEntity: LivingEntity?,
         pSeed: Int,
     ): BakedModel? {
-        val mimic = pStack.getTagElement(BaseNBTBlock.INTERNAL_DATA_TAG)?.getCompound(
+        val mimic = pStack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getCompound(
             FlexibleRealityAnchorBlockEntity.MIMIC_TAG,
         ) ?: return emptyFlexibleRealityAnchorModel
         if (mimic.isEmpty) return emptyFlexibleRealityAnchorModel

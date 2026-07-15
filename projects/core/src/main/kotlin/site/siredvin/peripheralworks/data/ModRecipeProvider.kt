@@ -184,7 +184,7 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
             .pattern("COC")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder(Items.ENTITY_CARD.get().asItem().defaultInstance.copyWithCount(4))
+        TweakedShapedRecipeBuilder(Items.ENTITY_CARD.get().asItem().defaultInstance)
             .define('D', ingredients.diamond)
             .define('O', ingredients.peripheralium)
             .define('B', ingredients.blackstone)
@@ -196,7 +196,7 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
         TweakedShapedRecipeBuilder(Blocks.NETWORK_MANAGER.get().asItem().defaultInstance)
             .define('P', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
             .define('C', Ingredient.of(net.minecraft.world.item.Items.COBWEB))
-            .define('K', Ingredient.of(ModBlocksReference.get().cable))
+            .define('K', Ingredient.of(ModBlocksReference.get().cableItem))
             .pattern("KCK")
             .pattern("CPC")
             .pattern("KCK")
