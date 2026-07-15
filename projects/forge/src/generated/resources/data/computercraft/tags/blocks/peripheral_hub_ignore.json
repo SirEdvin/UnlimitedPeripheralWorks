@@ -1,5 +1,6 @@
 {
   "values": [
-    "peripheralworks:peripheral_proxy"
+    "peripheralworks:peripheral_proxy",
+    "peripheralworks:network_manager"
   ]
 }

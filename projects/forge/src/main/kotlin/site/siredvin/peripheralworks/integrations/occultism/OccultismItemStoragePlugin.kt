@@ -23,7 +23,7 @@ class OccultismItemStoragePlugin(private val storageController: IStorageControll
 
     @LuaFunction(mainThread = true)
     fun isBlacklisted(item: String): Boolean {
-        val itemInstance = PlatformRegistries.ITEMS.get(ResourceLocation(item))
+        val itemInstance = PlatformRegistries.ITEMS.get(ResourceLocation.parse(item))
         if (itemInstance == Items.AIR) {
             throw LuaException("Cannot find item with id $item")
         }

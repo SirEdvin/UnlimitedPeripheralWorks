@@ -4,14 +4,16 @@ import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.PoweredRailBlock
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.RailShape
 import net.minecraft.world.phys.Vec3
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 import site.siredvin.broccolium.modules.storage.item.ContainerWrapper
 import site.siredvin.broccolium.modules.storage.item.MergedContainer
-import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.utils.MinecartUtils
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.plugins.AbstractInventoryPlugin
@@ -32,7 +34,7 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
             return state
         }
 
-    override val storage: SlottedAgnosticItemStorage
+    override val storage: SlottedAgnosticStorage<ItemStack, Int>
         get() = ContainerWrapper(MergedContainer(MinecartUtils.getContainerMinecarts(level, pos)))
 
     @LuaFunction(mainThread = true)
@@ -63,4 +65,6 @@ class PoweredRailPlugin(override val level: Level, private val pos: BlockPos) : 
 
     @LuaFunction(mainThread = true, value = ["getMinecarts"])
     fun getMinecartsLua(): List<Map<String, Any>> = MinecartUtils.getMinecarts(level, pos).map { LuaRepresentation.forEntity(it) }
+    override val inventoryTransferLimit: Int
+        get() = PeripheralWorksConfig.itemStorageTransferLimit
 }

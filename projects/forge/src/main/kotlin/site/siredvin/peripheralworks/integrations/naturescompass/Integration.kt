@@ -22,7 +22,7 @@ import site.siredvin.tweakium.modules.turtle.PeripheralTurtleUpgrade
 class Integration : Runnable {
 
     companion object {
-        val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
+        val UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
     }
 
     private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): NaturesCompassPeripheral<TurtlePeripheralOwner> = NaturesCompassPeripheral(TurtlePeripheralOwner(turtle, side), Configuration.enableNaturesCompassTurtleUpgrade)
@@ -38,7 +38,7 @@ class Integration : Runnable {
         )
         ModTurtleUpgradeDataProvider.hookUpgrade {
             it.simpleWithCustomItem(
-                ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
+                ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE),
                 turtleUpgradeSup.get(),
                 NaturesCompass.naturesCompass,
             ).requireMod(NaturesCompass.MODID)

@@ -11,7 +11,7 @@ import site.siredvin.broccolium.modules.data.recipe.TweakedSmithingTransformReci
 import site.siredvin.peripheralworks.common.recipes.*
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
-import site.siredvin.peripheralworks.tags.ItemTags
+import site.siredvin.peripheralworks.xplat.ModBlocksReference
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 import java.util.concurrent.CompletableFuture
 
@@ -80,7 +80,7 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
             .pattern(" P ")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder(Blocks.DISPLAY_PEDESTAL.get().asItem().defaultInstance.copyWithCount(5))
+        TweakedShapedRecipeBuilder(Blocks.DISPLAY_PEDESTAL.get().asItem().defaultInstance.copyWithCount(4))
             .define('O', Ingredient.of(Blocks.ITEM_PEDESTAL.get()))
             .define('P', ingredients.peripheralium)
             .define('B', ingredients.smoothBasalt)
@@ -184,13 +184,32 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
             .pattern("COC")
             .save(consumer)
 
-        TweakedShapedRecipeBuilder(Items.ENTITY_CARD.get().asItem().defaultInstance)
+        TweakedShapedRecipeBuilder(Items.ENTITY_CARD.get().asItem().defaultInstance.copyWithCount(4))
             .define('D', ingredients.diamond)
             .define('O', ingredients.peripheralium)
             .define('B', ingredients.blackstone)
             .pattern("D O")
             .pattern(" B ")
             .pattern("D O")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder(Blocks.NETWORK_MANAGER.get().asItem().defaultInstance)
+            .define('P', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
+            .define('C', Ingredient.of(net.minecraft.world.item.Items.COBWEB))
+            .define('K', Ingredient.of(ModBlocksReference.get().cable))
+            .pattern("KCK")
+            .pattern("CPC")
+            .pattern("KCK")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder(Blocks.HOLOGRAM_PROJECTOR.get().asItem().defaultInstance)
+            .define('R', Ingredient.of(net.minecraft.world.item.Items.RED_STAINED_GLASS))
+            .define('B', Ingredient.of(net.minecraft.world.item.Items.BLUE_STAINED_GLASS))
+            .define('C', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
+            .define('D', ingredients.peripheralium)
+            .pattern("DBD")
+            .pattern("RCR")
+            .pattern("DRD")
             .save(consumer)
 
         SpecialRecipeBuilder.special(::StatueCloningRecipe)

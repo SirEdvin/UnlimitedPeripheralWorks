@@ -14,7 +14,7 @@ class PocketNaturesCompassUpgrade(stack: ItemStack) :
     ) {
 
     companion object {
-        val TYPE = ResourceLocation(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
+        val TYPE = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
     }
 
     override fun getPeripheral(access: IPocketAccess): NaturesCompassPeripheral<PocketPeripheralOwner> = NaturesCompassPeripheral(PocketPeripheralOwner(access), Configuration.enableNaturesCompassPocketUpgrade)

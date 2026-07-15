@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.integrations.integrateddynamics
 
+import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.shared.util.NBTUtil
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
@@ -11,14 +12,15 @@ import org.cyclops.integrateddynamics.blockentity.BlockEntityVariablestore
 import org.cyclops.integrateddynamics.capability.variablefacade.VariableFacadeHolderConfig
 import org.cyclops.integrateddynamics.core.helper.NetworkHelpers
 import org.cyclops.integrateddynamics.core.item.OperatorVariableFacade
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
-import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.tweakium.modules.plugins.AbstractInventoryPlugin
 
 class VariableStorePlugin(private val store: BlockEntityVariablestore) : AbstractInventoryPlugin() {
 
     override val level: Level = store.level!!
-    override val storage: SlottedAgnosticItemStorage = AgnosticItemHandlerWrapper(store.inventory.itemHandler)
+    override val storage: SlottedAgnosticStorage<ItemStack, Int> = AgnosticItemHandlerWrapper(store.inventory.itemHandler)
     private val context: ValueDeseralizationContext = ValueDeseralizationContext.of(level)
 
     fun parseEntry(facade: IVariableFacade): Map<String, Any> {
@@ -36,7 +38,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         it.getVariableFacade(context)
     }.orElse(null)
 
-    override fun listImpl(): Map<Int, Map<String, *>> {
+    override fun listImpl(arguments: IArguments): Map<Int, Map<String, *>> {
         val records = mutableMapOf<Int, Map<String, *>>()
         store.inventory.itemStacks.forEachIndexed { index, itemStack ->
             val facade = extractFacade(itemStack)
@@ -48,7 +50,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
     }
 
     override fun getItemDetailImpl(slot: Int): Map<String, *>? {
-        val facade: IVariableFacade = extractFacade(storage.getItem(slot)) ?: return null
+        val facade: IVariableFacade = extractFacade(storage.get(slot)) ?: return null
         if (store.network == null) {
             return null
         }
@@ -69,4 +71,7 @@ class VariableStorePlugin(private val store: BlockEntityVariablestore) : Abstrac
         }
         return valueData
     }
+
+    override val inventoryTransferLimit: Int
+        get() = PeripheralWorksConfig.itemStorageTransferLimit
 }

@@ -38,3 +38,17 @@ mandatory=true
 versionRange="[${peripheraliumVersion},)"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.peripheralworks]]
+modId="broccolium"
+mandatory=true
+versionRange="[${broccoliumVersion},)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.peripheralworks]]
+modId="tweakium"
+mandatory=true
+versionRange="[${tweakiumVersion},)"
+ordering="NONE"
+side="BOTH"

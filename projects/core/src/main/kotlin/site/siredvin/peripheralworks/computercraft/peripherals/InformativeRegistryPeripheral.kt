@@ -3,15 +3,25 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
+import net.minecraft.core.Registry
+import net.minecraft.core.registries.Registries
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.material.Fluids
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.common.blockentity.InformativeRegistryBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.xplat.ModPlatform
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
 import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
+import java.util.function.BiFunction
 import java.util.function.Function
-import java.util.function.Supplier
+import kotlin.jvm.optionals.getOrNull
 
 class InformativeRegistryPeripheral(
     blockEntity: InformativeRegistryBlockEntity,
@@ -19,25 +29,83 @@ class InformativeRegistryPeripheral(
 
     companion object {
         val TYPE = "informative_registry"
-        private val EXTRACTORS = mutableMapOf<String, Supplier<MethodResult>>()
-        private val DESCRIPTORS = mutableMapOf<String, Function<String, MethodResult>>()
+        private val EXTRACTORS = mutableMapOf<String, Function<Level, MethodResult>>()
+        private val DESCRIPTORS = mutableMapOf<String, BiFunction<Level, String, MethodResult>>()
         private val LIST_DESCRIPTIONS = mutableMapOf<String, String>()
 
-        fun addList(name: String, description: String, extractor: Supplier<MethodResult>, descriptor: Function<String, MethodResult>) {
+        fun addList(name: String, description: String, extractor: Function<Level, MethodResult>, descriptor: BiFunction<Level, String, MethodResult>) {
             LIST_DESCRIPTIONS[name] = description
             DESCRIPTORS[name] = descriptor
             EXTRACTORS[name] = extractor
         }
 
+        fun <T> addTagList(name: String, description: String, key: ResourceKey<Registry<T>>) {
+            addList(
+                name,
+                description,
+                {
+                    MethodResult.of(it.registryAccess().registryOrThrow(key).tagNames.map { x -> x.location.toString() }.toList())
+                },
+                { level, it ->
+                    val registry = level.registryAccess().registryOrThrow(key)
+                    val tagID = ResourceLocation.tryParse(it) ?: return@addList MethodResult.of(null)
+                    val holder = level.registryAccess().registryOrThrow(key).getTag(TagKey.create(key, tagID)).getOrNull() ?: return@addList MethodResult.of(null)
+                    return@addList MethodResult.of(holder.stream().map { x -> registry.getKey(x.value()!!).toString() }.filter { x -> x != null }.toList())
+                },
+            )
+        }
+
         init {
+            addTagList("itemTags", "Item tags", Registries.ITEM)
+            addTagList("blockTags", "Block tags", Registries.BLOCK)
+            addTagList("entityTypeTags", "Entity type tags", Registries.ENTITY_TYPE)
+            addTagList("fluidTags", "Fluid tags", Registries.FLUID)
+            addList(
+                "mods",
+                "Minecraft mods",
+                {
+                    MethodResult.of(ModPlatform.modList.filter { !PeripheralWorksConfig.informativeRegistryModBlocklist.contains(it) })
+                },
+                { _level, it ->
+                    if (PeripheralWorksConfig.informativeRegistryModBlocklist.contains(it)) {
+                        return@addList MethodResult.of(null)
+                    }
+                    MethodResult.of(ModPlatform.getModInformation(it))
+                },
+            )
+            addList(
+                "entity",
+                "Minecraft living entities",
+                {
+                    MethodResult.of(
+                        PlatformRegistries.ENTITY_TYPES.keySet().filter {
+                            PlatformRegistries.ENTITY_TYPES.get(it)?.baseClass?.isAssignableFrom(LivingEntity::class.java) ?: false
+                        }.map(ResourceLocation::toString),
+                    )
+                },
+                { _level, it ->
+                    val id = ResourceLocation.tryParse(it) ?: return@addList MethodResult.of(null)
+                    val entityType = PlatformRegistries.ENTITY_TYPES.tryGet(id) ?: return@addList MethodResult.of(null)
+                    val data: MutableMap<String, Any> = mutableMapOf()
+                    data["category"] = entityType.category.name
+                    data["type"] = entityType.description.string
+                    data["defaultLootTable"] = entityType.defaultLootTable.toString()
+                    data["registryID"] = PlatformRegistries.ENTITY_TYPES.getId(entityType)
+                    return@addList MethodResult.of(data)
+                },
+            )
             addList(
                 "item",
                 "Minecraft items",
                 {
                     MethodResult.of(PlatformRegistries.ITEMS.keySet().map(ResourceLocation::toString))
                 },
-                {
-                    val item = PlatformRegistries.ITEMS.get(ResourceLocation.parse(it))
+                { _level, it ->
+                    val id = ResourceLocation.tryParse(it) ?: return@addList MethodResult.of(null)
+                    val item = PlatformRegistries.ITEMS.tryGet(id) ?: return@addList MethodResult.of(null)
+                    if (item == net.minecraft.world.item.Items.AIR) {
+                        return@addList MethodResult.of(null)
+                    }
                     val base = LuaRepresentation.forItem(item)
                     base["registryID"] = PlatformRegistries.ITEMS.getId(item)
                     return@addList MethodResult.of(base)
@@ -50,8 +118,12 @@ class InformativeRegistryPeripheral(
                 {
                     MethodResult.of(PlatformRegistries.BLOCKS.keySet().map(ResourceLocation::toString))
                 },
-                {
-                    val blockState = PlatformRegistries.BLOCKS.get(ResourceLocation.parse(it)).defaultBlockState()
+                { _level, it ->
+                    val id = ResourceLocation.tryParse(it) ?: return@addList MethodResult.of(null)
+                    val blockState = (PlatformRegistries.BLOCKS.tryGet(id) ?: return@addList MethodResult.of(null)).defaultBlockState()
+                    if (blockState.`is`(Blocks.AIR)) {
+                        return@addList MethodResult.of(null)
+                    }
                     val base = LuaRepresentation.forBlockState(blockState)
                     base["registryID"] = PlatformRegistries.BLOCKS.getId(blockState.block)
                     return@addList MethodResult.of(base)
@@ -64,8 +136,12 @@ class InformativeRegistryPeripheral(
                 {
                     MethodResult.of(PlatformRegistries.FLUIDS.keySet().map(ResourceLocation::toString))
                 },
-                {
-                    val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation.parse(it))
+                { _level, it ->
+                    val id = ResourceLocation.tryParse(it) ?: return@addList MethodResult.of(null)
+                    val fluid = PlatformRegistries.FLUIDS.tryGet(id) ?: return@addList MethodResult.of(null)
+                    if (fluid == Fluids.EMPTY) {
+                        return@addList MethodResult.of(null)
+                    }
                     val base = LuaRepresentation.forFluid(fluid)
                     base["registryID"] = PlatformRegistries.FLUIDS.getId(fluid)
                     return@addList MethodResult.of(base)
@@ -77,7 +153,7 @@ class InformativeRegistryPeripheral(
                 {
                     MethodResult.of(LIST_DESCRIPTIONS.keys)
                 },
-                {
+                { _level, it ->
                     MethodResult.of(LIST_DESCRIPTIONS[it])
                 },
             )
@@ -90,13 +166,13 @@ class InformativeRegistryPeripheral(
     @LuaFunction
     fun list(target: String): MethodResult {
         val extractor = EXTRACTORS[target] ?: throw LuaException("Cannot list $target, there is not function for it")
-        return extractor.get()
+        return extractor.apply(peripheralOwner.level!!)
     }
 
     @LuaFunction
     fun describe(target: String, id: String): MethodResult {
         val descriptor = DESCRIPTORS[target] ?: throw LuaException("Cannot describe $target, there is not function for it")
-        return descriptor.apply(id)
+        return descriptor.apply(peripheralOwner.level!!, id)
     }
 
     override fun equals(other: Any?): Boolean {

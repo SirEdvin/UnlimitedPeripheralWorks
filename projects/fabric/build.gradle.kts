@@ -18,11 +18,14 @@ baseShaking {
 fabricShaking {
     commonProjectName.set("core")
     createRefmap.set(true)
+    stablePlayer.set(true)
     accessWidener.set(project(":core").file("src/main/resources/peripheralworks.accesswidener"))
     extraVersionMappings.set(
         mapOf(
             "computercraft" to "cc-tweaked",
             "peripheralium" to "peripheralium",
+            "tweakium" to "tweakium",
+            "broccolium" to "broccolium",
         ),
     )
     shake()
@@ -89,9 +92,11 @@ repositories {
         }
     }
     maven {
+        name = "Draylar maven"
         url = uri("https://maven.draylar.dev/releases")
         content {
             includeGroup("dev.draylar")
+            includeGroup("dev.draylar.omega-config")
         }
     }
     maven {
@@ -135,6 +140,29 @@ repositories {
             includeGroup("com.jozufozu.flywheel")
         }
     }
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/")
+        content {
+            includeGroup("dev.emi")
+        }
+    }
+    maven {
+        name = "KubeJS's author maven"
+        url = uri("https://maven.latvian.dev/releases")
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+
+    maven {
+        name = "Jitpack for kubejs deps"
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.rtyley")
+        }
+    }
 }
 
 dependencies {
@@ -159,6 +187,16 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
+    // I hate this, but since someone is not clearing their mess, I need to do it
+
+    modCompileOnly("dev.draylar:magna:1.10.1+1.20.1") {
+        exclude("net.fabricmc.fabric-api")
+        exclude("net.fabricmc", "fabric-loader")
+        exclude("com.github.Draylar.omega-config", "omega-config-base")
+    }
+
+    modCompileOnly("dev.draylar.omega-config:omega-config-base:1.3.0+1.19.2")
+
     libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
     libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
     libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
@@ -176,7 +214,7 @@ modPublishing {
             "fabric-language-kotlin",
         ),
     )
-    requiredDependenciesCurseforge.add("forge-config-api-port-fabric")
+    requiredDependenciesCurseforge.add("forge-config-api-port")
     requiredDependenciesModrinth.add("forge-config-api-port")
     shake()
 }

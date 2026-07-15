@@ -9,6 +9,7 @@ import site.siredvin.peripheralworks.common.blockentity.*
 import site.siredvin.peripheralworks.utils.modId
 import site.siredvin.peripheralworks.xplat.ModPlatform
 
+@Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
 object BlockEntityTypes {
     val UNIVERSAL_SCANNER: RegistryEntry<BlockEntityType<UniversalScannerBlockEntity>> = ModPlatform.registerBlockEntity(
         ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "universal_scanner"),
@@ -133,6 +134,24 @@ object BlockEntityTypes {
         PlatformToolkit.get().createBlockEntityType(
             ::EntityLinkBlockEntity,
             Blocks.ENTITY_LINK.get(),
+        )
+    }
+
+    val NETWORK_MANAGER: Supplier<BlockEntityType<NetworkManagerBlockEntity>> = ModPlatform.registerBlockEntity(
+        modId("network_manager"),
+    ) {
+        PlatformToolkit.get().createBlockEntityType(
+            ::NetworkManagerBlockEntity,
+            Blocks.NETWORK_MANAGER.get(),
+        )
+    }
+
+    val HOLOGRAM_PROJECTOR: Supplier<BlockEntityType<HologramProjectorBlockEntity>> = ModPlatform.registerBlockEntity(
+        modId("hologram_projector"),
+    ) {
+        PlatformToolkit.get().createBlockEntityType(
+            ::HologramProjectorBlockEntity,
+            Blocks.HOLOGRAM_PROJECTOR.get(),
         )
     }
 

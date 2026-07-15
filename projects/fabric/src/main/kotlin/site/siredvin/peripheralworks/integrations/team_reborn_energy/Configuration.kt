@@ -5,7 +5,7 @@ import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object Configuration : IForgeConfigHandler {
 
-    private const val DEFAULT_ENERGY_TO_FUEL_RATE = 50 // really calculated :) Trust me
+    private const val DEFAULT_ENERGY_TO_FUEL_RATE = 50
 
     private var enableEnergyStorageConfig: ModConfigSpec.BooleanValue? = null
     private var enableTurtleRefuelWithEnergyConfig: ModConfigSpec.BooleanValue? = null

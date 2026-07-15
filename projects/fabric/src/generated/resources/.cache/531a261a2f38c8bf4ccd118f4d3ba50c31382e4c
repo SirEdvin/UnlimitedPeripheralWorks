@@ -1,4 +1,4 @@
-// 1.21.1	2025-03-13T12:21:14.873961702	Unlimited Peripheral Works/Recipes
+// 1.21.1	2025-11-27T14:38:08.7581447	Unlimited Peripheral Works/Recipes
 06bd5042d86f18b9ed542713e4705dc45f330edb data/minecraft/recipe/anchor_cloning.json
 8de916405b05f613e6bc6e280bc2c982499c244f data/peripheralworks/recipe/item_pedestal.json
 3ae70f8d183d3bdd277e2483d843e8d219ed9c1c data/peripheralworks/recipe/peripheral_proxy.json
@@ -23,3 +23,5 @@ f213ba8c5d4ac82f9971e47808c20decd3e51e13 data/peripheralworks/recipe/statue_work
 0f6ae4874637f3aa535562165f2f5db2f0d9aa7b data/peripheralworks/recipe/universal_scanner.json
 4fbf3726c413f40d6a20b3e8ee8ab164c34b1943 data/peripheralworks/recipe/peripheral_casing.json
 71b21beb09c97c852c4fb0ec9ffce2d21634d313 data/peripheralworks/recipe/display_pedestal.json
+a2a265ea418ff34b94f24eee78d5ce76b302d05e data/peripheralworks/recipe/network_manager.json
+6055ea560499bc9f789c3363cbab2c35be03c5b3 data/peripheralworks/recipe/hologram_projector.json

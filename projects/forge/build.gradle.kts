@@ -18,10 +18,13 @@ forgeShaking {
     commonProjectName.set("core")
     useAT.set(true)
     useMixins.set(true)
+    useJarJar.set(true)
     extraVersionMappings.set(
         mapOf(
             "computercraft" to "cc-tweaked",
             "peripheralium" to "peripheralium",
+            "broccolium" to "broccolium",
+            "tweakium" to "tweakium",
         ),
     )
     shake()
@@ -73,15 +76,55 @@ repositories {
         url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
         content {
             includeGroup("software.bernie.geckolib")
+            includeGroupByRegex("software\\.bernie.*")
+            includeGroup("com.eliotlash.mclib")
         }
     }
     maven {
         name = "tterrag maven"
         url = uri("https://maven.tterrag.com/")
         content {
-            includeGroup("com.simibubi.create")
             includeGroup("com.tterrag.registrate")
             includeGroup("com.jozufozu.flywheel")
+        }
+    }
+    maven {
+        name = "Create maven"
+        url = uri("https://maven.createmod.net")
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("net.createmod.ponder")
+            includeGroup("dev.engine-room.flywheel")
+        }
+    }
+    maven {
+        name = "Occultism maven"
+        url = uri("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/")
+        content {
+            includeGroup("com.klikli_dev")
+        }
+    }
+    maven {
+        name = "TerraformersMC"
+        url = uri("https://maven.terraformersmc.com/")
+        content {
+            includeGroup("dev.emi")
+        }
+    }
+    maven {
+        name = "Latvian mods, mostly KubeJS"
+        url = uri("https://maven.latvian.dev/releases")
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+
+    maven {
+        name = "Dependencies for kubej"
+        url = uri("https://jitpack.io")
+        content {
+            includeGroup("com.github.rtyley")
         }
     }
 }
@@ -92,11 +135,17 @@ dependencies {
     libs.bundles.forge.include.get().map { implementation(fg.deobf(it)) }
     libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it)) }
 
-    // WHY ?!?!?!
-    // Well, I didn't find any way to actually provide `configuration` information to
-    // a libs.version.toml, so I ended up with this garbabe of solution
-    compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.f-26:all"))
-    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:0.5.1.f-26:all"))
+    jarJar(libs.bundles.forge.jjar) {
+        isTransitive = false
+    }
+
+//    // WHY ?!?!?!
+//    // Well, I didn't find any way to actually provide `configuration` information to
+//    // a libs.version.toml, so I ended up with this garbabe of solution
+    compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.6-150:all"))
+    compileOnly(fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3"))
+//    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
+    compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 
     libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
     libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
@@ -110,12 +159,11 @@ publishingShaking {
 }
 
 modPublishing {
-    output.set(tasks.jar)
+    output.set(tasks.jarJar)
     requiredDependencies.set(
         listOf(
             "cc-tweaked",
             "kotlin-for-forge",
-            "peripheralium",
         ),
     )
     shake()
@@ -141,6 +189,11 @@ val copyCreate by tasks.register<Copy>("copyCreate") {
     into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/create"))
 }
 
+val copyKubeJS by tasks.register<Copy>("copyKubeJS") {
+    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/kubejs"))
+    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/kubejs"))
+}
+
 // TODO: make this possible, probably (?) This would be really nice
 val copyAE2 by tasks.register<Copy>("copyAE2") {
     from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
@@ -148,17 +201,17 @@ val copyAE2 by tasks.register<Copy>("copyAE2") {
 }
 
 val fullCopy by tasks.register("fullCopy") {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate, copyAE2)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS, copyAE2)
 }
 
 tasks.compileKotlin {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }
 
 tasks.spotlessJava {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }
 
 tasks.spotlessKotlin {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyCreate)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }

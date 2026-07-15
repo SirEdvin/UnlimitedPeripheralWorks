@@ -21,16 +21,23 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.commonConfig.itemStorageTransferLimit.get()
     val enableGenericFluidStorage: Boolean
         get() = ConfigHolder.commonConfig.enableGenericFluidStorage.get()
-
-    val enableGenericEnergyStorage: Boolean
-        get() = ConfigHolder.commonConfig.enableGenericFluidStorage.get()
-    val fluidStorageTransferLimit: Int
+    val fluidStorageTransferLimit: Double
         get() = ConfigHolder.commonConfig.fluidStorageTransferLimit.get()
+    val enableGenericEnergyStorage: Boolean
+        get() = ConfigHolder.commonConfig.enableGenericEnergyStorage.get()
+    val energyStorageTransferLimit: Int
+        get() = ConfigHolder.commonConfig.energyStorageTransferLimit.get()
+    val energyAlwaysTransferable: Boolean
+        get() = ConfigHolder.commonConfig.energyAlwaysTransferable.get()
+    val enableTurtleRefuelWithEnergy: Boolean
+        get() = ConfigHolder.commonConfig.enableTurtleRefuelWithEnergy.get()
+    val energyToFuelRate: Int
+        get() = ConfigHolder.commonConfig.energyToFuelRate.get()
 
     val enableBeacon: Boolean
         get() = ConfigHolder.commonConfig.enableBeacon.get()
     val enableNoteBlock: Boolean
-        get() = ConfigHolder.commonConfig.enableNotebook.get()
+        get() = ConfigHolder.commonConfig.enableNoteblook.get()
     val enableLectern: Boolean
         get() = ConfigHolder.commonConfig.enableLentern.get()
     val enableJukebox: Boolean
@@ -51,7 +58,7 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.commonConfig.enableUniversalScanner.get()
 
     val enableUltimateSensor: Boolean
-        get() = ConfigHolder.commonConfig.enableUniversalScanner.get()
+        get() = ConfigHolder.commonConfig.enableUltimateSensor.get()
 
     val enableItemPedestal: Boolean
         get() = ConfigHolder.commonConfig.enableItemPedestal.get()
@@ -60,7 +67,7 @@ object PeripheralWorksConfig {
         get() = ConfigHolder.commonConfig.enableMapPedestal.get()
 
     val enableDisplayPedestal: Boolean
-        get() = ConfigHolder.commonConfig.enableMapPedestal.get()
+        get() = ConfigHolder.commonConfig.enableDisplayPedestal.get()
 
     val enableRemoteObserver: Boolean
         get() = ConfigHolder.commonConfig.enableRemoteObserver.get()
@@ -92,6 +99,9 @@ object PeripheralWorksConfig {
     val enableInformativeRegistry: Boolean
         get() = ConfigHolder.commonConfig.enableInformativeRegistry.get()
 
+    val informativeRegistryModBlocklist: List<String>
+        get() = ConfigHolder.commonConfig.informativeRegistryModBlocklist.get()
+
     val enableStatueWorkbench: Boolean
         get() = ConfigHolder.commonConfig.enableStatueWorkbench.get()
 
@@ -100,6 +110,18 @@ object PeripheralWorksConfig {
 
     val enableEntityLink: Boolean
         get() = ConfigHolder.commonConfig.enableEntityLinks.get()
+
+    val enableNetworkManager: Boolean
+        get() = ConfigHolder.commonConfig.enableNetworkManager.get()
+
+    val enableHologramProjector: Boolean
+        get() = ConfigHolder.commonConfig.enableHologramProjector.get()
+
+    val hologramProjectorEntityLimit: Int
+        get() = ConfigHolder.commonConfig.hologramProjectorEntityLimit.get()
+
+    val hologramProjectorDistanceLimit: Double
+        get() = ConfigHolder.commonConfig.hologramProjectorDistanceLimit.get()
 
     fun registerIntegrationConfiguration(configuration: IForgeConfigHandler) {
         INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
@@ -116,11 +138,15 @@ object PeripheralWorksConfig {
         var enableGenericFluidStorage: ModConfigSpec.BooleanValue
         var enableGenericEnergyStorage: ModConfigSpec.BooleanValue
         val itemStorageTransferLimit: ModConfigSpec.IntValue
-        val fluidStorageTransferLimit: ModConfigSpec.IntValue
+        val fluidStorageTransferLimit: ModConfigSpec.DoubleValue
+        val energyStorageTransferLimit: ModConfigSpec.IntValue
+        val energyAlwaysTransferable: ModConfigSpec.BooleanValue
+        val enableTurtleRefuelWithEnergy: ModConfigSpec.BooleanValue
+        val energyToFuelRate: ModConfigSpec.IntValue
 
         // Specific plugins
         var enableBeacon: ModConfigSpec.BooleanValue
-        var enableNotebook: ModConfigSpec.BooleanValue
+        var enableNoteblook: ModConfigSpec.BooleanValue
         var enableLentern: ModConfigSpec.BooleanValue
         var enableJukebox: ModConfigSpec.BooleanValue
         var enablePoweredRail: ModConfigSpec.BooleanValue
@@ -144,9 +170,14 @@ object PeripheralWorksConfig {
         val realityForgerMaxRange: ModConfigSpec.IntValue
         val enableRecipeRegistry: ModConfigSpec.BooleanValue
         val enableInformativeRegistry: ModConfigSpec.BooleanValue
+        val informativeRegistryModBlocklist: ModConfigSpec.ConfigValue<List<String>>
         val enableStatueWorkbench: ModConfigSpec.BooleanValue
         val flexibleStatueMaxQuads: ModConfigSpec.IntValue
         val enableEntityLinks: ModConfigSpec.BooleanValue
+        val enableNetworkManager: ModConfigSpec.BooleanValue
+        val enableHologramProjector: ModConfigSpec.BooleanValue
+        val hologramProjectorEntityLimit: ModConfigSpec.IntValue
+        val hologramProjectorDistanceLimit: ModConfigSpec.DoubleValue
 
         init {
             builder.push("base")
@@ -164,14 +195,22 @@ object PeripheralWorksConfig {
             enableGenericEnergyStorage = builder.comment("Enables generic integration for energy storages")
                 .define("enableGenericEnergyStorage", true)
             itemStorageTransferLimit = builder.comment("Limits max item transfer per one operation")
-                .defineInRange("itemStorageTransferLimit", 128, 1, Int.MAX_VALUE)
+                .defineInRange("itemStorageTransferLimit", 1024, 1, Int.MAX_VALUE)
             fluidStorageTransferLimit = builder.comment("Limits max fluid transfer per one operation")
-                .defineInRange("fluidStorageTransferLimit", 65500 * PlatformToolkit.get().fluidCompactDivider.toInt(), 1, Int.MAX_VALUE)
+                .defineInRange("fluidStorageTransferLimit", Int.MAX_VALUE / 16.0 * PlatformToolkit.get().fluidCompactDivider, 1.0, Double.MAX_VALUE)
+            energyStorageTransferLimit = builder.comment("Limits max energy transfer per one operation")
+                .defineInRange("energyStorageTransferLimit", Int.MAX_VALUE / 16, 1, Int.MAX_VALUE)
+            energyAlwaysTransferable = builder.comment("Make any energy transferable, even if it is not usually allowed by CC:Tweaked itself")
+                .define("energyAlwaysTransferable", true)
+            this@CommonConfig.enableTurtleRefuelWithEnergy = builder.comment("Enables turtle refueling with items with energy")
+                .define("enableTurtleRefuelWithEnergy", true)
+            this@CommonConfig.energyToFuelRate = builder.comment("Controls how many energy required for one fuel point")
+                .defineInRange("energyToFuelRate", 250, 1, Int.MAX_VALUE)
             builder.pop()
             builder.push("specific")
             enableBeacon = builder.comment("Enables integration for minecraft beacon")
                 .define("enableBeacon", true)
-            enableNotebook = builder.comment("Enables integration for minecraft note block")
+            enableNoteblook = builder.comment("Enables integration for minecraft note block")
                 .define("enableNoteBlock", true)
             enableLentern = builder.comment("Enables integration for minecraft lectern")
                 .define("enableLectern", true)
@@ -217,12 +256,22 @@ object PeripheralWorksConfig {
                 .define("enableRecipeRegistry", true)
             enableInformativeRegistry = builder.comment("Enables informative registry")
                 .define("enableInformativeRegistry", true)
+            informativeRegistryModBlocklist = builder.comment("Mods blocked from showing up in informative registry, mostly for security")
+                .defineList<String>("informativeRegistryModBlocklist", { listOf("verySecretMod") }) { true }
             enableStatueWorkbench = builder.comment("Enables statue workbench")
                 .define("enableStatueWorkbench", true)
             flexibleStatueMaxQuads = builder.comment("Max quads amount for flexible statue, will be applied only for newest ones")
                 .defineInRange("flexibleStatueMaxQuads", 256, 64, Int.MAX_VALUE)
             enableEntityLinks = builder.comment("Enables entity link")
                 .define("enableEntityLink", true)
+            enableNetworkManager = builder.comment("Enable network manager")
+                .define("enableNetworkManager", true)
+            enableHologramProjector = builder.comment("Enable hologram projector")
+                .define("enableHologramProjector", true)
+            hologramProjectorEntityLimit = builder.comment("Define how many entity one hologram projector can spawn")
+                .defineInRange("hologramProjectorEntityLimit", 30, 1, Int.MAX_VALUE)
+            hologramProjectorDistanceLimit = builder.comment("Define how far hologram projector can move entities")
+                .defineInRange("hologramProjectorDistanceLimit", 16.0, 1.0, Double.MAX_VALUE)
             builder.pop().pop()
             builder.push("operations")
             register(SphereOperations.entries.toTypedArray(), builder)

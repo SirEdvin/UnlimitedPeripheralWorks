@@ -43,7 +43,6 @@ class PeripheralProxyRenderer : BlockEntityRenderer<PeripheralProxyBlockEntity> 
             Direction.WEST -> Vector3d(0.5, 0.5 + CIRCLE_RADIUS * cos(Math.toRadians(shiftedAngle)), 0.5 + CIRCLE_RADIUS * sin(Math.toRadians(shiftedAngle)))
             Direction.DOWN -> Vector3d(0.5 + CIRCLE_RADIUS * cos(Math.toRadians(shiftedAngle)), 0.4, 0.5 + CIRCLE_RADIUS * sin(Math.toRadians(shiftedAngle)))
             Direction.UP -> Vector3d(0.5 + CIRCLE_RADIUS * cos(Math.toRadians(shiftedAngle)), 0.5, 0.5 + CIRCLE_RADIUS * sin(Math.toRadians(shiftedAngle)))
-            else -> Vector3d(0.5 + CIRCLE_RADIUS * cos(Math.toRadians(shiftedAngle)), 0.5, 0.5 + CIRCLE_RADIUS * sin(Math.toRadians(shiftedAngle)))
         }
         val itemRotation = when (direction) {
             Direction.DOWN -> Axis.YP.rotationDegrees(90f)
@@ -52,7 +51,6 @@ class PeripheralProxyRenderer : BlockEntityRenderer<PeripheralProxyBlockEntity> 
             Direction.SOUTH -> Axis.YP.rotationDegrees(0f)
             Direction.EAST -> Axis.YP.rotationDegrees(90f)
             Direction.WEST -> Axis.YP.rotationDegrees(-90f)
-            else -> Axis.YP.rotationDegrees(90f)
         }
         poseStack.pushPose()
         poseStack.translate(translation.x, translation.y, translation.z)

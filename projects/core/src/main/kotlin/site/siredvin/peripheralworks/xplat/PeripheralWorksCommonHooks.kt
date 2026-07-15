@@ -6,8 +6,12 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.player.Player
+import org.apache.commons.lang3.math.Fraction
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.storage.energy.Energies
+import site.siredvin.broccolium.modules.storage.energy.EnergyRegistry
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.common.setup.*
 import site.siredvin.peripheralworks.data.ModText
@@ -22,10 +26,17 @@ object PeripheralWorksCommonHooks {
         ModPocketUpgrades.doSomething()
         ModTurtleUpgrades.doSomething()
         ModDataComponents.doSomething()
+        ModEnergies.doSomething()
         ModPlatform.registerCreativeTab(
             ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "tab"),
             PeripheralWorksCore.configureCreativeTab(PlatformToolkit.get().createTabBuilder()).build(),
         )
+    }
+
+    fun afterConfigurationLoaded() {
+        if (PeripheralWorksConfig.enableTurtleRefuelWithEnergy) {
+            EnergyRegistry.registerConversion(PlatformToolkit.get().commonEnergy, Energies.TURTLE_FUEL, Fraction.getFraction(1, PeripheralWorksConfig.energyToFuelRate))
+        }
     }
 
     /**

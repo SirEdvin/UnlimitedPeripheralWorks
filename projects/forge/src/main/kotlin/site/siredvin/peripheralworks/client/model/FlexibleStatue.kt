@@ -46,7 +46,7 @@ val identityModel by lazy {
 abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
     companion object {
         val DEFAULT_TEXTURE = modId("block/white")
-        val DUMMY = ResourceLocation("dummy_name")
+        val DUMMY = ResourceLocation.parse("dummy_name")
         val quadsCache = CacheBuilder.newBuilder()
             .concurrencyLevel(1).maximumSize(2_000)
             .expireAfterAccess(30, TimeUnit.SECONDS).build(CacheLoader.from(::bakeQuads))

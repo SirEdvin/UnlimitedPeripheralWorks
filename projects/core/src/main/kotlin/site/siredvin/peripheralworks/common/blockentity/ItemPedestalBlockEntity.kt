@@ -2,22 +2,20 @@ package site.siredvin.peripheralworks.common.blockentity
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.world.Container
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.peripheralworks.api.IItemStackHolder
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.ItemPedestalPeripheral
 import java.util.function.Predicate
 
-class ItemPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
+class ItemPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState, blockEntityType: BlockEntityType<*> = BlockEntityTypes.ITEM_PEDESTAL.get(), holdingStacks: Int = 1) :
     AbstractItemPedestalBlockEntity<ItemPedestalPeripheral>(
-        BlockEntityTypes.ITEM_PEDESTAL.get(),
+        blockEntityType,
         blockPos,
         blockState,
-    ),
-    IItemStackHolder,
-    Container {
+        holdingStacks,
+    ) {
 
     override val itemFilter: Predicate<ItemStack> = Predicate { true }
 

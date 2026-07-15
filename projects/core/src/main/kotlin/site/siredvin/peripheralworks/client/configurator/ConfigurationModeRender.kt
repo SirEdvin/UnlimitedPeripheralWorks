@@ -4,7 +4,19 @@ import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
+import org.joml.Matrix4f
 
 interface ConfigurationModeRender {
-    fun render(minecraft: Minecraft, source: BlockPos, poseStack: PoseStack, camera: Camera)
+    fun render(minecraft: Minecraft, source: BlockPos, poseStack: PoseStack, camera: Camera) {
+        render(minecraft, source, poseStack, minecraft.timer.getGameTimeDeltaPartialTick(true), camera, Matrix4f())
+    }
+
+    fun render(
+        minecraft: Minecraft,
+        source: BlockPos,
+        poseStack: PoseStack,
+        partialTick: Float,
+        camera: Camera,
+        projectionMatrix: Matrix4f,
+    ): Unit = error("Configuration mode renderer must override a render method")
 }

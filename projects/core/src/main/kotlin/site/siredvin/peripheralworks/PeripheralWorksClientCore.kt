@@ -15,8 +15,11 @@ import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.MapPedestalBlockEntity
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.common.setup.ModTurtleUpgrades
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
+import site.siredvin.peripheralworks.xplat.ModClientInternalPlatform
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 import java.util.function.Supplier
@@ -28,12 +31,14 @@ object PeripheralWorksClientCore {
         "turtle/universal_scanner_right",
         "turtle/ultimate_sensor_left",
         "turtle/ultimate_sensor_right",
+        "turtle/hologram_projector_left",
+        "turtle/hologram_projector_right",
     )
     val EXTRA_TURTLE_MODEL_PROVIDERS: MutableList<Supplier<Pair<UpgradeType<out ITurtleUpgrade>, TurtleUpgradeModeller<ITurtleUpgrade>>>> = mutableListOf()
     private var inited: Boolean = false
 
     @Suppress("UNCHECKED_CAST")
-    val EXTRA_BLOCK_ENTITY_RENDERERS: Array<Supplier<BlockEntityType<BlockEntity>>> = arrayOf(
+    val EXTRA_BLOCK_ENTITY_RENDERERS: MutableList<Supplier<BlockEntityType<BlockEntity>>> = mutableListOf(
         BlockEntityTypes.ITEM_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.MAP_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
         BlockEntityTypes.DISPLAY_PEDESTAL as Supplier<BlockEntityType<BlockEntity>>,
@@ -61,6 +66,7 @@ object PeripheralWorksClientCore {
         throw IllegalArgumentException("There is no extra renderer for $type")
     }
 
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     fun registerExtraModels(register: Consumer<ResourceLocation>) {
         EXTRA_MODELS.forEach { register.accept(ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, it)) }
     }
@@ -96,6 +102,13 @@ object PeripheralWorksClientCore {
                 ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "turtle/${UltimateSensorPeripheral.UPGRADE_ID.path}_right"),
             ),
         )
+        consumer.accept(
+            ModTurtleUpgrades.HOLOGRAM_PROJECTOR.get(),
+            TurtleUpgradeModeller.sided(
+                ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "turtle/${HologramProjectorPeripheral.UPGRADE_ID.path}_left"),
+                ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "turtle/${HologramProjectorPeripheral.UPGRADE_ID.path}_right"),
+            ),
+        )
         EXTRA_TURTLE_MODEL_PROVIDERS.forEach {
             val pair = it.get()
             consumer.accept(pair.first, pair.second)
@@ -105,5 +118,9 @@ object PeripheralWorksClientCore {
     fun onInit() {
         inited = true
         HOOKS.forEach(Runnable::run)
+    }
+
+    fun configure(clientPlatform: ModClientInternalPlatform) {
+        ModClientPlatform.configure(clientPlatform)
     }
 }

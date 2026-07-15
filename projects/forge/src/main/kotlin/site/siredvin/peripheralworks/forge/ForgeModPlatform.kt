@@ -2,22 +2,66 @@ package site.siredvin.peripheralworks.forge
 
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import net.minecraft.network.FriendlyByteBuf
+import net.minecraft.network.protocol.Packet
+import net.minecraft.network.protocol.game.ServerGamePacketListener
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraftforge.fml.ModList
+import net.minecraftforge.forgespi.language.IModInfo
 import net.minecraftforge.registries.DeferredRegister
-import site.siredvin.broccolium.modules.storage.energy.Energies
-import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
+import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
 import site.siredvin.peripheralworks.ForgePeripheralWorks
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.api.ISavableComponent
+import site.siredvin.peripheralworks.networking.MessageType
+import site.siredvin.peripheralworks.networking.NetworkMessage
+import site.siredvin.peripheralworks.networking.ServerNetworkContext
 import site.siredvin.peripheralworks.xplat.ModInnerPlatform
 import site.siredvin.tweakium.modules.platform.ForgeInnerComputerBasePlatform
+import kotlin.jvm.optionals.getOrNull
 
 object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
-    override val commonEnergy: EnergyUnit
-        get() = Energies.FORGE
+    override val modList: List<String>
+        get() = ModList.get().mods.filter { !it.dependencies.any { d -> d.side == IModInfo.DependencySide.SERVER } }.map { it.modId }
+
+    override fun getModInformation(mod: String): Map<String, Any>? {
+        val mod = ModList.get().getModContainerById(mod).getOrNull() ?: return null
+        if (mod.modInfo.dependencies.any { d -> d.side == IModInfo.DependencySide.SERVER }) {
+            return null
+        }
+        return mapOf(
+            "name" to mod.modInfo.modId,
+            "description" to mod.modInfo.description,
+            "version" to mod.modInfo.version.toString(),
+            "license" to mod.modInfo.owningFile.license,
+        )
+    }
+
+    override fun <T : NetworkMessage<*>> createMessageType(
+        id: Int,
+        channel: ResourceLocation,
+        klass: Class<T>,
+        reader: FriendlyByteBuf.Reader<T>,
+    ): MessageType<T> = ForgeNetworkHandler.MessageTypeImpl(id, klass, reader)
+
+    override fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> = ForgeNetworkHandler.createServerboundPacket(message)
+
+    override fun createSlottedItemStorage(
+        slots: Int,
+        slotScale: Int,
+        trigger: Runnable,
+    ): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>> {
+        val platformStorage = ForgeCustomSlottedStorage(slots, slotScale, trigger)
+        return Pair(platformStorage, AgnosticItemHandlerWrapper(platformStorage))
+    }
+
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID
 

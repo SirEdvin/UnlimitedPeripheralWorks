@@ -12,8 +12,8 @@ object RemoteObserverClientRender : ConfigurationModeRender {
     private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
 
     override fun render(minecraft: Minecraft, source: BlockPos, poseStack: PoseStack, camera: Camera) {
-        FlareRenderer.initFlareRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? RemoteObserverBlockEntity ?: return
+        FlareRenderer.initRenderer(poseStack, camera)
         FlareRenderer.renderFlare(
             poseStack,
             camera,
@@ -36,6 +36,6 @@ object RemoteObserverClientRender : ConfigurationModeRender {
                 1f,
             )
         }
-        FlareRenderer.uninitFlareRenderer(poseStack)
+        FlareRenderer.uninitRenderer(poseStack)
     }
 }

@@ -5,7 +5,7 @@
       "item": "peripheralium:peripheralium_block"
     },
     "C": {
-      "item": "minecraft:coal"
+      "tag": "minecraft:coals"
     },
     "I": {
       "tag": "forge:ingots/iron"

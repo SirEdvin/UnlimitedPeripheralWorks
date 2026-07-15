@@ -9,7 +9,6 @@ import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.item.ItemStorageUtils
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.components.PeripheralUpgrades
@@ -18,7 +17,6 @@ import site.siredvin.peripheralworks.computercraft.modem.LocalWrapper
 import site.siredvin.peripheralworks.computercraft.modem.PeripheralHubPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.util.assertBetween
-import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 import kotlin.jvm.optionals.getOrDefault
 
 abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase, W : LocalWrapper<T>>(private val maxUpdateCount: Int, owner: O, type: String) : PeripheralHubPeripheral<O>(type, owner) {
@@ -56,7 +54,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
     fun isUpgradeImpl(stack: ItemStack): Boolean = getUpgrade(stack) != null
 
     fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
-        val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(PlatformToolkit.get().registries!!, stack) ?: return Pair(null, "Item is not an upgrade")
+        val upgrade = getUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
         if (activeUpgrades.any { it.holder.key() == upgrade.holder.key() }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
@@ -83,13 +81,13 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
     protected fun attachUpgrade(upgrade: UpgradeData<T>) {
         var peripheralUpgrades = peripheralOwner.dataStorage.patch.get(component)?.getOrDefault(PeripheralUpgrades()) ?: PeripheralUpgrades()
         peripheralUpgrades = PeripheralUpgrades(peripheralUpgrades.upgrades + upgrade)
-        peripheralOwner.dataStorage.patch = DataComponentPatch.builder().set(component, peripheralUpgrades).build()
+        updateUpgrades(peripheralUpgrades)
     }
 
     protected fun detachUpgrade(upgrade: UpgradeData<T>) {
         var peripheralUpgrades = peripheralOwner.dataStorage.patch.get(component)?.getOrDefault(PeripheralUpgrades()) ?: PeripheralUpgrades()
-        peripheralUpgrades = PeripheralUpgrades(peripheralUpgrades.upgrades.filter { it.holder.key().equals(upgrade.holder.key()) })
-        peripheralOwner.dataStorage.patch = DataComponentPatch.builder().set(component, peripheralUpgrades).build()
+        peripheralUpgrades = PeripheralUpgrades(peripheralUpgrades.upgrades.filterNot { it.holder.key() == upgrade.holder.key() })
+        updateUpgrades(peripheralUpgrades)
     }
 
     fun connectUpgrade(upgrade: UpgradeData<T>) {
@@ -112,36 +110,50 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
         val upgradeData = peripheralUpgrades.upgrades.find { it.holder.key().location().toString() == id } ?: return
         val emptyList = peripheralUpgrades.upgrades.filterNot { it == upgradeData }
         peripheralUpgrades = PeripheralUpgrades(emptyList + UpgradeData.of(upgradeData.holder, data))
-        peripheralOwner.dataStorage.patch = DataComponentPatch.builder().set(component, peripheralUpgrades).build()
+        updateUpgrades(peripheralUpgrades)
+    }
+
+    private fun updateUpgrades(peripheralUpgrades: PeripheralUpgrades<T>) {
+        val builder = DataComponentPatch.builder()
+        peripheralOwner.dataStorage.patch.entrySet().forEach { entry ->
+            @Suppress("UNCHECKED_CAST")
+            val type = entry.key as DataComponentType<Any>
+            if (entry.value.isPresent) {
+                builder.set(type, entry.value.get())
+            } else {
+                builder.remove(type)
+            }
+        }
+        peripheralOwner.dataStorage.patch = builder.set(component, peripheralUpgrades).build()
     }
 
     @LuaFunction(mainThread = true)
     fun isUpgrade(slot: Int): Boolean {
         val storage = peripheralOwner.storage ?: return false
         assertBetween(slot, 1, storage.size, "Slot should be between 1 and ${storage.size}")
-        val stack = storage.getItem(slot - 1)
+        val stack = storage.get(slot - 1)
         return isUpgradeImpl(stack)
     }
 
     @LuaFunction(mainThread = true)
     fun equip(slot: Int): MethodResult {
-        if (activeUpgrades.size > maxUpdateCount) {
+        if (activeUpgrades.size >= maxUpdateCount) {
             throw LuaException("Cannot add new upgrade, maximum upgrade count for this hub is $maxUpdateCount")
         }
         val storage = peripheralOwner.storage ?: return MethodResult.of(null, "Cannot access inventory for some reason")
         assertBetween(slot, 1, storage.size, "Slot should be between 1 and ${storage.size}")
-        val stack = storage.getItem(slot - 1)
+        val stack = storage.get(slot - 1)
         val equipTestResult = isEquitable(stack)
         if (equipTestResult.first == null || !equipTestResult.first!!) {
             return MethodResult.of(equipTestResult.first, equipTestResult.second)
         }
-        val takenStack: ItemStack = storage.takeItems(1, slot - 1, slot - 1, ItemStorageUtils.ALWAYS)
+        val takenStack: ItemStack = storage.take(1, slot - 1, slot - 1, ItemStorageUtils.ALWAYS, false)
         if (takenStack.isEmpty) {
             return MethodResult.of(null, "Cannot extract item for equipment")
         }
         val equipResult = equipImpl(takenStack)
         if (equipResult.first == null || !equipResult.first!!) {
-            storage.storeItem(takenStack, slot - 1, slot - 1)
+            storage.store(takenStack, slot - 1, slot - 1, false)
             return MethodResult.of(equipResult.first, equipResult.second)
         }
         return MethodResult.of(true)

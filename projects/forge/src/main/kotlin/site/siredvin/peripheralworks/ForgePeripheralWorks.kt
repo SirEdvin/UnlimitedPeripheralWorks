@@ -27,6 +27,7 @@ import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModPlatform
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
+import site.siredvin.peripheralworks.forge.ForgeNetworkHandler
 import site.siredvin.peripheralworks.subsystem.recipe.ForgeRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
@@ -63,9 +64,11 @@ object ForgePeripheralWorks {
     init {
         ForgePeripheralium.sayHi()
         // Configure configuration
+        @Suppress("DEPRECATION", "removal")
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
         PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
+        ForgeNetworkHandler.setup()
         val eventBus = MOD_CONTEXT.getKEventBus()
         eventBus.addListener(this::commonSetup)
         eventBus.addListener(this::registrySetup)
@@ -91,11 +94,17 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("mna").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("fluxnetworks").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("embers").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("theurgy").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("emi").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("gtceu").ifPresent { (it as Runnable).run() }
+        PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register peripheral provider
         ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
             val entity = world.getBlockEntity(pos)
@@ -115,6 +124,8 @@ object ForgePeripheralWorks {
     fun registrySetup(event: NewRegistryEvent) {
         loader.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("ars_nouveau").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("projecte").ifPresent { (it as Runnable).run() }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

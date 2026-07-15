@@ -1,4 +1,4 @@
-// 1.21.1	2025-03-13T12:21:14.872859934	Unlimited Peripheral Works/minecraft:block Loot Table
+// 1.21.1	2025-11-27T14:38:08.7561428	Unlimited Peripheral Works/minecraft:block Loot Table
 6a921ef98ef98d9e3d0a181cd3e2f09b2d6a39dc data/peripheralworks/loot_table/blocks/entity_link.json
 fbbfca4d72a5799857020a3d05f2541ca11c4d71 data/peripheralworks/loot_table/blocks/item_pedestal.json
 320af2c7b0ae9a8a6323b415204098004eeceb0c data/peripheralworks/loot_table/blocks/statue_workbench.json
@@ -12,3 +12,4 @@ c6d8afeee6814ba651ea19fd38b4c18f1f415651 data/peripheralworks/loot_table/blocks/
 0781ecc4d7caaad202150e2bbaacb435a03882ca data/peripheralworks/loot_table/blocks/ultimate_sensor.json
 c41e20b1f8780d66f6a04d3be5bd08af1a4f0067 data/peripheralworks/loot_table/blocks/display_pedestal.json
 7ed2c59efe2eff6af7d68adf69f13b7c8b637de5 data/peripheralworks/loot_table/blocks/peripheral_proxy.json
+a1c7fd52a4c7b7e1acc47df96da67080f64f55d3 data/peripheralworks/loot_table/blocks/network_manager.json

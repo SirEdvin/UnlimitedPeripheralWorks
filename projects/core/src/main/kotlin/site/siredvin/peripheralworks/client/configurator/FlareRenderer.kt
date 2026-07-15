@@ -19,31 +19,33 @@ import org.joml.Matrix4f
 import site.siredvin.peripheralworks.PeripheralWorksCore
 
 // Copy of https://github.com/SwitchCraftCC/Plethora-Fabric/blob/91a64b3cf9f428227425e06bbbc8aa6e9a416bee/src/main/java/io/sc3/plethora/gameplay/overlay/FlareOverlayRenderer.kt#L4
-object FlareRenderer {
+object FlareRenderer : AbstractRenderer() {
     private val flareTexture = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "textures/misc/flare.png")
 
-    fun initFlareRenderer(matrices: PoseStack, camera: Camera) {
+    override fun initRenderer(matrices: PoseStack, camera: Camera) {
         RenderSystem.disableDepthTest()
         RenderSystem.disableCull()
         RenderSystem.enableBlend()
         RenderSystem.blendFuncSeparate(SRC_ALPHA, ONE_MINUS_SRC_ALPHA, ONE, ZERO)
 
-        matrices.pushPose()
-
-        matrices.translate(-camera.position.x, -camera.position.y, -camera.position.z)
+        super.initRenderer(matrices, camera)
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader)
         RenderSystem.setShaderTexture(0, flareTexture)
     }
 
-    fun uninitFlareRenderer(matrices: PoseStack) {
-        matrices.popPose()
+    override fun uninitRenderer(matrices: PoseStack) {
+        super.uninitRenderer(matrices)
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
         RenderSystem.defaultBlendFunc()
         RenderSystem.disableBlend()
         RenderSystem.enableDepthTest()
     }
+
+    fun initFlareRenderer(matrices: PoseStack, camera: Camera) = initRenderer(matrices, camera)
+
+    fun uninitFlareRenderer(matrices: PoseStack) = uninitRenderer(matrices)
 
     fun renderFlare(
         matrices: PoseStack,

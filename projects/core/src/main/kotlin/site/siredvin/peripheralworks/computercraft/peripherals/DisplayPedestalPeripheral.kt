@@ -43,7 +43,8 @@ class DisplayPedestalPeripheral(private val blockEntity: DisplayPedestalBlockEnt
 
     @LuaFunction(mainThread = true)
     fun setItem(id: String, name: Optional<String>, nbtData: Optional<String>): MethodResult {
-        val item = PlatformRegistries.ITEMS.get(ResourceLocation.parse(id))
+        val itemID = ResourceLocation.tryParse(id) ?: return MethodResult.of(null, "Cannot find item with id $id")
+        val item = PlatformRegistries.ITEMS.get(itemID)
         if (item == Items.AIR) {
             return MethodResult.of(null, "Cannot find item with id $id")
         }

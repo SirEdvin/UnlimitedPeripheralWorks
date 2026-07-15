@@ -1,0 +1,6 @@
+{
+  "parent": "tweakium:base/upgrade_base_right",
+  "textures": {
+    "texture": "peripheralworks:block/hologram_projector_side"
+  }
+}

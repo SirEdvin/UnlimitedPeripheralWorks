@@ -5,23 +5,26 @@ kotlin-coroutines = "1.6.4"
 kotlin-atomicfu = "0.20.2"
 # Gradle plugins
 sponge = "0.2.1-SNAPSHOT"
-loom = "1.9.+"
+loom = "1.12.+"
 mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.115.1"
-broccolium = "1.0.0-rc.34"
-tweakium = "1.0.0-rc.34"
-peripheralium = "1.0.0-rc.34"
+cc-tweaked = "1.116.1"
+broccolium = "1.4.6"
+tweakium = "1.4.6"
+peripheralium = "1.4.6"
+broccolium-jjar = "[1.4.6, 1.5.0)"
+tweakium-jjar = "[1.4.6, 1.5.0)"
+peripheralium-jjar = "[1.4.6, 1.5.0)"
 mixin = "0.8.5"
 # Fabric dependencies
-fabric-api = "0.115.1+1.21.1"
-fabric-loader = "0.16.10"
+fabric-api = "0.116.3+1.21.1"
+fabric-loader = "0.16.14"
 fabric-kotlin = "1.11.0+kotlin.2.0.0"
-forgeconfigapirt-fabric = "21.1.3"
+forgeconfigapirt-fabric = "21.1.6"
 modmenu = "11.0.1"
 # Forge dependencies
-forge = "47.1.0"
+forge = "47.3.39"
 forge-kotlin = "4.11.0"
 parchment = "2023.09.03"
 parchmentMc = "1.20.1"
@@ -32,6 +35,7 @@ architectury = "13.0.8"
 # Dev mod dependenceis
 jei = "15.1.0.19"
 rei = "16.0.799"
+emi = "1.1.22+1.20.1"
 
 # Shared integration mod dependency
 
@@ -53,24 +57,31 @@ polymer-sgui = "1.2.2+1.20"
 polymer-placeholder = "2.1.1+1.20"
 polymer-cprotection = "1.0.0"
 polymer-ceconomy = "1.1.1"
-fabric-permissions = "0.2-SNAPSHOT"
+fabric-permissions = "0.3.3"
 universal-shops = "1.3.2+1.20.1"
 jsonem = "0.2.1+1.20"
 automobility-fabric = "aPZ5M4XA"  # 0.5.0.c
 create-fabric = "0.5.1-g-build.1483+mc1.20.1"
-modern-industrialization = "4721852" # Modern Industrialization v1.7.3
+modern-industrialization = "5562363" # Modern Industrialization v1.8.6
 magna = "1.10.1+1.20.1"
 pal = "1.8.0"
+iris = "1.7.6+1.20.1"
+sodium = "mc1.20.1-0.5.13-fabric"
+kubejs-fabric = "2001.6.5-build.20"
+rhino-fabric = "2001.2.3-build.10"
 
 # Integration mod dependencies (forge)
-occultism = "1.20.1-1.80.12"
-modonomicon = "1.20.1-1.37.0"
+occultism = "1.20.1-1.141.3"
+theurgy = "1.20.1-1.23.4"
+modonomicon = "1.77.6"
 tomstorage-forge = "1.20-1.6.1"
 easyvillagers = "4584220"  # [1.20.1] Easy Villagers 1.20.1-1.0.8
-curios-forge = "5.2.0-beta.3+1.20.1"
-geckolib-forge = "4.4"
+curios-forge = "5.14.1+1.20.1"
+geckolib-forge = "4.7"
 smartbrainlib = "1.11"
 ae2-forge = "15.2.13"
+extendedae = "1.20-1.0.9-forge"
+glodium = "1.20-1.5-forge"
 natures-compass-forge = "4591760"  # NaturesCompass-1.20.1-1.11.1-forge.jar
 mcjtylib = "1.20-8.0.0"
 rftools-base = "1.20-5.0.0"
@@ -82,10 +93,17 @@ commoncapabilites = "1.20.1-2.9.0"  # CommonCapabilities-1.19.4-2.9.0.jar
 cyclopscore = "1.20.1-1.18.4"  # CyclopsCore-1.19.4-1.18.2.jar
 automobility-forge = "LFSvs1OB"  # 0.5.0.c
 flux-networks = "4651164"  # Flux-Networks-1.20.1-7.2.0
-ars-nouveau = "4.7.0"
-create-forge = "6.0.0-84"
+ars-nouveau = "4.12.7"
+create-forge = "6.0.5-194"
 flywheel-forge = "1.0.0-beta-88"
 registrate-forge = "MC1.20-1.3.11"
+embers = "1.20.1-1.4.2"
+mana-and-artifice = "3.1.11"
+projecte = "4901949"  # ProjectE-1.20.1-PE1.0.1.jar
+gregtech = "mc1.20.1-7.4.1"
+ldlib = "mc1.20.1-1.0.45-forge"
+kubejs-forge = "2001.6.5-build.20"
+rhino-forge = "2001.2.3-build.10"
 
 [libraries]
 # Base libraries
@@ -97,10 +115,11 @@ kotlin-atomicfu = {module = "org.jetbrains.kotlinx:atomicfu-jvm", version.ref = 
 cc-tweaked-common-api = {module = "cc.tweaked:cc-tweaked-1.21.1-common-api", version.ref = "cc-tweaked"}
 cc-tweaked-common = {module = "cc.tweaked:cc-tweaked-1.21.1-common", version.ref = "cc-tweaked"}
 cc-tweaked-core = {module = "cc.tweaked:cc-tweaked-1.21.1-core", version.ref = "cc-tweaked"}
-common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi", version.ref = "forgeconfigapirt-fabric"}
+common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common", version.ref = "forgeconfigapirt-fabric"}
 broccolium-core = {module = "site.siredvin:broccolium-common-1.21.1", version.ref = "broccolium"}
 tweakium-core = {module = "site.siredvin:tweakium-common-1.21.1", version.ref = "tweakium"}
 peripheralium-core = {module = "site.siredvin:peripheralium-common-1.21.1", version.ref = "peripheralium"}
+emi-common = {module = "dev.emi:emi-xplat-mojmap", version.ref="emi"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 # Fabric mod dependencies
@@ -114,6 +133,9 @@ broccolium-fabric = {module = "site.siredvin:broccolium-fabric-1.21.1", version.
 tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.21.1", version.ref = "tweakium"}
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.21.1", version.ref = "peripheralium"}
 modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
+emi-fabric = {module="dev.emi:emi-fabric", version.ref="emi"}
+kubejs-fabric = {module="dev.latvian.mods:kubejs-fabric", version.ref="kubejs-fabric"}
+rhino-fabric = {module="dev.latvian.mods:rhino-fabric", version.ref="rhino-fabric"}
 
 # Forge mod dependencies
 cc-tweaked-forge =  {module = "cc.tweaked:cc-tweaked-1.21.1-forge", version.ref="cc-tweaked"}
@@ -121,6 +143,12 @@ forge-kotlin = {module = "thedarkcolour:kotlinforforge", version.ref = "forge-ko
 broccolium-forge = {module = "site.siredvin:broccolium-forge-1.21.1", version.ref = "broccolium"}
 tweakium-forge = {module = "site.siredvin:tweakium-forge-1.21.1", version.ref = "tweakium"}
 peripheralium-forge = {module = "site.siredvin:peripheralium-forge-1.21.1", version.ref = "peripheralium"}
+broccolium-jjar-forge = {module = "site.siredvin:broccolium-forge-1.21.1", version.ref = "broccolium-jjar"}
+tweakium-jjar-forge = {module = "site.siredvin:tweakium-forge-1.21.1", version.ref = "tweakium-jjar"}
+peripheralium-jjar-forge = {module = "site.siredvin:peripheralium-forge-1.21.1", version.ref = "peripheralium-jjar"}
+emi-forge = {module="dev.emi:emi-forge", version.ref="emi"}
+kubejs-forge = {module="dev.latvian.mods:kubejs-forge", version.ref="kubejs-forge"}
+rhino-forge = {module="dev.latvian.mods:rhino-forge", version.ref="rhino-forge"}
 
 # Dev mod dependencies
 jei-forge = { module = "mezz.jei:jei-1.20.1-forge", version.ref = "jei" }
@@ -170,17 +198,25 @@ modern-industrialization = {module = "curse.maven:modernindust-405388", version.
 magna = {module = "dev.draylar:magna", version.ref="magna"}
 pal = {module = "io.github.ladysnake:PlayerAbilityLib", version.ref="pal"}
 
+iris = { module = "maven.modrinth:iris", version.ref = "iris" }
+sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }
+
 # Forge integration dependencies
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
+theurgy = {module = "maven.modrinth:theurgy", version.ref = "theurgy"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
 gecolib-forge = {module = "software.bernie.geckolib:geckolib-forge-1.20.1", version.ref = "geckolib-forge"}
 smartbrainlib = {module = "net.tslat.smartbrainlib:SmartBrainLib-forge-1.20", version.ref = "smartbrainlib"}
-modonomicon = {module = "com.klikli_dev:modonomicon", version.ref="modonomicon"}
+modonomicon = {module = "com.klikli_dev:modonomicon-1.20.1-forge", version.ref="modonomicon"}
 ae2-forge = {module = "maven.modrinth:ae2", version.ref = "ae2-forge"}
+extendedae = {module = "maven.modrinth:extended-ae", version.ref = "extendedae"}
+glodium = {module = "maven.modrinth:glodium", version.ref="glodium"}
 ars-nouveau = {module = "maven.modrinth:ars-nouveau", version.ref="ars-nouveau"}
+mana-and-artifice = {module = "maven.modrinth:mana-and-artifice", version.ref="mana-and-artifice"}
 create-forge = {module = "com.simibubi.create:create-1.20.1", version.ref="create-forge", name="all"}
 flywheel-forge = {module = "com.jozufozu.flywheel:flywheel-forge-1.20.1", version.ref="flywheel-forge"}
 registrate-forge = {module = "com.tterrag.registrate:Registrate", version.ref="registrate-forge"}
+projecte = {module = "curse.maven:projecte-226410", version.ref="projecte"}
 
 easyvillagers = {module = "curse.maven:easyvillagers-400514", version.ref="easyvillagers"}
 
@@ -202,6 +238,9 @@ supermartijn642s-core-lib-forge = {module = "maven.modrinth:supermartijn642s-cor
 powah-forge = {module = "maven.modrinth:powah", version.ref="powah-forge"}
 automobility-forge = {module = "maven.modrinth:automobility", version.ref="automobility-forge"}
 flux-networks = {module = "curse.maven:flux-networks-248020", version.ref="flux-networks"}
+embers = {module = "maven.modrinth:embers", version.ref="embers"}
+gregetch = {module = "maven.modrinth:gregtechceu-modern", version.ref="gregtech"}
+ldlib = {module = "maven.modrinth:ldlib", version.ref="ldlib"}
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 vanillaGradle = { id = "org.spongepowered.gradle.vanilla", version.ref = "sponge"}
@@ -210,7 +249,7 @@ mixinGradle = { id = "org.spongepowered.mixin", version.ref = "mixinGradle" }
 
 [bundles]
 kotlin = ["kotlin-stdlib", "kotlin-coroutines", "kotlin-atomicfu"]
-cccommon = ["cc-tweaked-common", "cc-tweaked-common-api", "cc-tweaked-core", "peripheralium-core", "tweakium-core", "broccolium-core"]
+cccommon = ["cc-tweaked-common", "cc-tweaked-common-api", "cc-tweaked-core", "peripheralium-core", "tweakium-core", "broccolium-core", "emi-common"]
 apicommon = ["common-config"]
 ccfabric = ["cc-tweaked-fabric", "cc-tweaked-core", ]
 fabric-core = ["fabric-loader"]
@@ -219,15 +258,14 @@ fabric = ["fabric-api", "fabric-kotlin", "fabric-config"]
 forge-raw = ["forge-kotlin"]
 forge-base = ["cc-tweaked-forge"]
 forge-include = ["peripheralium-forge", "tweakium-forge", "broccolium-forge"]
+forge-jjar = ["broccolium-jjar-forge", "tweakium-jjar-forge", "peripheralium-jjar-forge"]
 
 # Minecraft
 externalMods-forge-runtime = [
-    "jei-forge",
     "architectury-forge",
     "cloth-config-forge",
 ]
 externalMods-fabric-runtime = [
-    "rei-fabric",
     "architectury-fabric",
     "cloth-config-fabric",
     "modmenu",
@@ -257,27 +295,33 @@ externalMods-fabric-integrations-full = [
 #    "fabric-permissions",  # required by universal-shops,
 #    "powah-fabric",
     "automobility-fabric",
-#    "create-fabric",
-#    "jsonem", # required by automobility
-#    "modern-industrialization",
+    "create-fabric",
+    "jsonem", # required by automobility
+    "modern-industrialization",
 #    "magna",  # required by MI
-#    "pal",  # required by MI,
+    "pal",  # required by MI,
+    "emi-fabric",
+    "rhino-fabric",
+    "kubejs-fabric",
 ]
 externalMods-fabric-integrations-active = [
-#    "nature-compass-fabric",
-#    "tomstorage-fabric",
-#    "techreborn",
-#    "ae2-fabric",
-#    "additional-lanterns-fabric",
-#    "alloy-forgery",
-#    "owo-lib",  # required by alloy-forgery
-#    "powah-fabric",
-#    "automobility-fabric",
-#    "create-fabric",
-#    "jsonem", # required by automobility
+    "nature-compass-fabric",
+    "tomstorage-fabric",
+    "techreborn",
+    "ae2-fabric",
+    "additional-lanterns-fabric",
+    "alloy-forgery",
+    "owo-lib",  # required by alloy-forgery
+    "powah-fabric",
+    "automobility-fabric",
+    "create-fabric",
+    "jsonem", # required by automobility
 #    "modern-industrialization",
 #    "magna",  # required by MI
 #    "pal",  # required by MI
+    "emi-fabric",
+    "rhino-fabric",
+    "kubejs-fabric",
 ]
 externalMods-fabric-integrations-activedep = [
 #    "reborncore",  # required by techreborn
@@ -300,10 +344,22 @@ externalMods-forge-integrations-full = [
     "powah-forge",
     "automobility-forge",
     "flux-networks",
+    "embers",
+    "ars-nouveau",
+    "theurgy",
+    "mana-and-artifice",
+    "gecolib-forge", # by occultism right now
 #    "create-forge",
+    "projecte",
+    "emi-forge",
+    "gregetch",
+    "ldlib",  # gregtech
+    "extendedae",
+    "glodium",
+    "kubejs-forge",
+    "rhino-forge"
 ]
 externalMods-forge-integrations-raw-full = [
-
 #    "flywheel-forge",   # for create
 #    "registrate-forge",  # for create
 ]
@@ -311,7 +367,7 @@ externalMods-forge-integrations-active = [
     "occultism",
     "smartbrainlib",  # by occultism right now
     "easyvillagers",
-#    "ae2-forge",
+    "ae2-forge",
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
@@ -324,7 +380,18 @@ externalMods-forge-integrations-active = [
     "automobility-forge",
     "flux-networks",
     "ars-nouveau",
+    "theurgy",
+    "mana-and-artifice",
 #    "create-forge",
+    "embers",
+    "projecte",
+    "emi-forge",
+    "gregetch",
+    "ldlib",  # gregtech,
+    "extendedae",
+    "glodium",
+    "kubejs-forge",
+    "rhino-forge"
 ]
 externalMods-forge-integrations-raw-active = [
 

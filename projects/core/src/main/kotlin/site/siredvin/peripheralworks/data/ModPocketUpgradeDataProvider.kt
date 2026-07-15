@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.data
 
 import dan200.computercraft.api.pocket.IPocketUpgrade
+import dan200.computercraft.api.upgrades.UpgradeType
 import net.minecraft.Util
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.RegistrySetBuilder
@@ -12,10 +13,13 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.ModPocketUpgrades
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.pocket.PeripheraliumHubPocketUpgrade
 import site.siredvin.peripheralworks.computercraft.pocket.UltimateSensorPocketUpgrade
 import site.siredvin.peripheralworks.computercraft.pocket.UniversalScannerPocketUpgrade
+import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
+import site.siredvin.tweakium.modules.pocket.StatefulPeripheralPocketUpgrade
 import java.util.concurrent.CompletableFuture
 
 object ModPocketUpgradeDataProvider {
@@ -31,8 +35,8 @@ object ModPocketUpgradeDataProvider {
         upgrades.register(
             ResourceKey.create(IPocketUpgrade.REGISTRY, ModPocketUpgrades.NETHERITE_PERIPHERALIUM_HUB.id),
             PeripheraliumHubPocketUpgrade(
-                PeripheralWorksConfig::peripheraliumHubUpgradeCount,
-                PeripheraliumHubPeripheral.TYPE,
+                PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
+                PeripheraliumHubPeripheral.NETHERITE_TYPE,
                 Items.NETHERITE_PERIPHERALIUM_HUB.get().defaultInstance,
             ),
         )
@@ -44,9 +48,21 @@ object ModPocketUpgradeDataProvider {
             ResourceKey.create(IPocketUpgrade.REGISTRY, ModPocketUpgrades.ULTIMATE_SENSOR.id),
             UltimateSensorPocketUpgrade(Blocks.ULTIMATE_SENSOR.get().asItem().defaultInstance),
         )
+        upgrades.register(
+            ResourceKey.create(IPocketUpgrade.REGISTRY, ModPocketUpgrades.HOLOGRAM_PROJECTOR.id),
+            StatefulPeripheralPocketUpgrade(
+                HologramProjectorPeripheral.UPGRADE_ID,
+                Blocks.HOLOGRAM_PROJECTOR.get().asItem().defaultInstance,
+                { HologramProjectorPeripheral(PocketPeripheralOwner(it)) },
+                {
+                    @Suppress("UNCHECKED_CAST")
+                    ModPocketUpgrades.HOLOGRAM_PROJECTOR.get() as UpgradeType<StatefulPeripheralPocketUpgrade<HologramProjectorPeripheral>>
+                },
+            ),
+        )
     }
 
-    // Set up the dynamic registries to contain our turtle upgrades.
+    // Set up the dynamic registries to contain our pocket upgrades.
     fun makeUpgradeRegistry(registries: CompletableFuture<HolderLookup.Provider>): CompletableFuture<PatchedRegistries> = RegistryPatchGenerator.createLookup(
         registries,
         Util.make(RegistrySetBuilder()) { builder ->
