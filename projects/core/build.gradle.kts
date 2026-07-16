@@ -19,6 +19,13 @@ vanillaShaking {
     shake()
 }
 
+val testMod = sourceSets.create("testMod") {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    compileClasspath += sourceSets.main.get().output
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+    runtimeClasspath += sourceSets.main.get().output
+}
+
 repositories {
     mavenLocal()
     maven {
@@ -42,4 +49,15 @@ dependencies {
     implementation(libs.bundles.cccommon)
     api(libs.bundles.apicommon)
     compileOnly(libs.mixin)
+    add(testMod.implementationConfigurationName, libs.testiarium.core)
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:0.1.1:test-mod@jar")
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:0.1.1:cct-test-mod@jar")
+    add(testMod.compileOnlyConfigurationName, libs.bundles.cccommon)
+}
+
+tasks.named<ProcessResources>(testMod.processResourcesTaskName) {
+    dependsOn(":typescript-tests:compileTestLua")
+    from(project(":typescript-tests").layout.buildDirectory.dir("generated/test-lua")) {
+        into("computer/tests")
+    }
 }

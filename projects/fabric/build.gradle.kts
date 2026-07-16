@@ -31,6 +31,51 @@ fabricShaking {
     shake()
 }
 
+val testMod = sourceSets.create("testMod") {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    compileClasspath += sourceSets.main.get().output
+    compileClasspath += project(":core").sourceSets["testMod"].output
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+    runtimeClasspath += sourceSets.main.get().output
+    runtimeClasspath += project(":core").sourceSets["testMod"].output
+}
+
+net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)
+
+val testiariumCctArtifacts = configurations.detachedConfiguration(
+    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1:cct-test-mod@jar"),
+    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1:cct-test-mod@jar"),
+).apply { isTransitive = false }
+
+val testiariumMainArtifacts = configurations.detachedConfiguration(
+    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1"),
+    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1"),
+).apply { isTransitive = false }
+
+loom {
+    mods {
+        register("peripheralworks-testmod") {
+            sourceSet(testMod)
+            sourceSet(project(":core").sourceSets["testMod"])
+        }
+    }
+    runs {
+        create("peripheralWorksGameTest") {
+            server()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("fabric.debug.loadLate", "testiarium_cct_testmod")
+            property("testiarium.tags", "peripheralworks")
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
+            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/peripheralworks-gametest")
+        }
+    }
+}
+
 repositories {
     mavenLocal()
     // location of the maven that hosts JEI files since January 2023
@@ -173,19 +218,15 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
-    // I hate this, but since someone is not clearing their mess, I need to do it
-
-    modCompileOnly("dev.draylar:magna:1.10.1+1.20.1") {
-        exclude("net.fabricmc.fabric-api")
-        exclude("net.fabricmc", "fabric-loader")
-        exclude("com.github.Draylar.omega-config", "omega-config-base")
-    }
-
-    modCompileOnly("dev.draylar.omega-config:omega-config-base:1.3.0+1.19.2")
-
     libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
     libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
     libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+
+    add("modTestModImplementation", libs.bundles.kotlin)
+    add("modTestModImplementation", libs.bundles.fabric.core)
+    add("modTestModImplementation", libs.bundles.ccfabric)
+    add("modTestModImplementation", files(testiariumMainArtifacts))
+    add("modTestModImplementation", files(testiariumCctArtifacts))
 }
 
 publishingShaking {

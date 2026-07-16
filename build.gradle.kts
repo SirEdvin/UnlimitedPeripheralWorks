@@ -6,6 +6,12 @@ plugins {
     id("com.github.ben-manes.versions") version "0.51.0"
 }
 
+tasks.register("gameTest") {
+    group = "verification"
+    description = "Runs UnlimitedPeripheralWorks GameTests on Forge and Fabric."
+    dependsOn(":forge:runGameTestServer", ":fabric:runPeripheralWorksGameTest")
+}
+
 subprojectShaking {
     withKotlin.set(true)
     kotlinVersion.set("2.0.0")
@@ -15,7 +21,9 @@ val setupSubproject = subprojectShaking::setupSubproject
 
 
 subprojects {
-    setupSubproject(this)
+    if (name != "typescript-tests") {
+        setupSubproject(this)
+    }
 }
 
 githubShaking {
