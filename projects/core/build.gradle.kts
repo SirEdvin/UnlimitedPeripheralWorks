@@ -28,12 +28,8 @@ val testMod = sourceSets.create("testMod") {
 
 repositories {
     mavenLocal()
-    maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/")
-        content {
-            includeGroup("dev.emi")
-        }
+    maven("https://api.modrinth.com/maven") {
+        content { includeGroup("maven.modrinth") }
     }
     maven {
         name = "Jared's maven"

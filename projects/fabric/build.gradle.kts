@@ -108,13 +108,6 @@ repositories {
             includeGroup("me.lucko")
         }
     }
-    maven {
-        name = "ModMenu maven"
-        url = uri("https://maven.terraformersmc.com/releases")
-        content {
-            includeGroup("com.terraformersmc")
-        }
-    }
     // for reach entity attributes, required by Magna
     maven {
         url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
@@ -169,13 +162,6 @@ repositories {
         url = uri("https://modmaven.dev/")
         content {
             includeGroup("com.jozufozu.flywheel")
-        }
-    }
-    maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/")
-        content {
-            includeGroup("dev.emi")
         }
     }
     maven {

@@ -43,6 +43,9 @@ val testMod = sourceSets.create("testMod") {
 
 repositories {
     mavenLocal()
+    maven("https://api.modrinth.com/maven") {
+        content { includeGroup("maven.modrinth") }
+    }
     // location of the maven that hosts JEI files since January 2023
     maven {
         name = "Jared's maven"
@@ -113,13 +116,6 @@ repositories {
         url = uri("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/")
         content {
             includeGroup("com.klikli_dev")
-        }
-    }
-    maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/")
-        content {
-            includeGroup("dev.emi")
         }
     }
     maven {
