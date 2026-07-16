@@ -32,6 +32,7 @@ parchmentMc = "1.20.1"
 cloth-config = "11.0.99"
 architectury = "9.0.8"
 emi = "1.1.22+1.20.1"
+emi-fabric = "1.1.22+1.20.1+fabric"
 testiarium = "0.1.1"
 
 # Shared integration mod dependency
@@ -133,7 +134,7 @@ broccolium-fabric = {module = "site.siredvin:broccolium-fabric-1.20.1", version.
 tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.20.1", version.ref = "tweakium"}
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
 modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
-emi-fabric = {module="dev.emi:emi-fabric", version.ref="emi"}
+emi-fabric = {module="maven.modrinth:emi", version.ref="emi-fabric"}
 kubejs-fabric = {module="dev.latvian.mods:kubejs-fabric", version.ref="kubejs-fabric"}
 rhino-fabric = {module="dev.latvian.mods:rhino-fabric", version.ref="rhino-fabric"}
 
