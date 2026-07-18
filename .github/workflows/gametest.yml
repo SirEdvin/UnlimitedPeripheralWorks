@@ -29,7 +29,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run GameTests
-        run: timeout --foreground 1200s xvfb-run -a ./gradlew gameTest --no-daemon
+        run: |
+          # ponytail: Retry transient mod repositories; Gradle still owns the test result.
+          for attempt in 1 2 3; do
+            timeout --foreground 540s xvfb-run -a ./gradlew gameTest --no-daemon && exit 0
+          done
+          exit 1
 
       - name: Upload JUnit reports
         if: always()
