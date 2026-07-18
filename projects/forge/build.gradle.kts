@@ -9,6 +9,7 @@ plugins {
 val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
+val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
 baseShaking {
     projectPart.set("forge")
@@ -30,6 +31,11 @@ forgeShaking {
         ),
     )
     shake()
+}
+
+if (minimalTestEnvironment) {
+    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude("**/integrations/**") }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -154,11 +160,13 @@ dependencies {
 //    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
     compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 
-    libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
-    libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
-    libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }
-    libs.bundles.externalMods.forge.integrations.raw.active.get().map { runtimeOnly(it) }
-    libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(fg.deobf(it)) }
+    if (!minimalTestEnvironment) {
+        libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
+        libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
+        libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }
+        libs.bundles.externalMods.forge.integrations.raw.active.get().map { runtimeOnly(it) }
+        libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(fg.deobf(it)) }
+    }
 
     listOf(
         "site.siredvin:testiarium-forge-1.20.1:0.1.1",

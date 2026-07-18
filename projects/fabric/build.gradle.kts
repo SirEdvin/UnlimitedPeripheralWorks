@@ -8,6 +8,7 @@ plugins {
 val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
+val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
 baseShaking {
     projectPart.set("fabric")
@@ -29,6 +30,11 @@ fabricShaking {
         ),
     )
     shake()
+}
+
+if (minimalTestEnvironment) {
+    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude("**/integrations/**") }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -184,8 +190,10 @@ repositories {
 }
 
 dependencies {
-    modApi(libs.bundles.externalMods.fabric.integrations.api) {
-        exclude("net.fabricmc.fabric-api")
+    if (!minimalTestEnvironment) {
+        modApi(libs.bundles.externalMods.fabric.integrations.api) {
+            exclude("net.fabricmc.fabric-api")
+        }
     }
 
     modImplementation(libs.bundles.fabric.core)
@@ -205,9 +213,11 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
-    libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
-    libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
-    libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+    if (!minimalTestEnvironment) {
+        libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
+        libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
+        libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+    }
 
     add("modTestModImplementation", libs.bundles.kotlin)
     add("modTestModImplementation", libs.bundles.fabric.core)

@@ -26,6 +26,11 @@ val testMod = sourceSets.create("testMod") {
     runtimeClasspath += sourceSets.main.get().output
 }
 
+val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+if (minimalTestEnvironment) {
+    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
+}
+
 repositories {
     mavenLocal()
     maven("https://api.modrinth.com/maven") {
@@ -42,7 +47,7 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.kotlin)
-    implementation(libs.bundles.cccommon)
+    implementation(if (minimalTestEnvironment) libs.bundles.cccommon.minimal else libs.bundles.cccommon)
     api(libs.bundles.apicommon)
     compileOnly(libs.mixin)
     add(testMod.implementationConfigurationName, libs.testiarium.core)
