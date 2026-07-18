@@ -369,7 +369,6 @@ externalMods-forge-integrations-active = [
     "integrateddynamics",
     "cyclopscore", # by integrateddynamics, required for class typing
     "nature-compass-forge",
-    "tomstorage-forge",
     "deep-resonance",
     "rftools-base", # by deepresonance
     "mcjtylib", # by deepresonance, required for class typing

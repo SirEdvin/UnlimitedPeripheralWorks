@@ -1,7 +1,7 @@
 import { asserts, BasicTest, printReports, TestResult, TestSuite } from "@siredvin/soteria";
 
 interface UniversalScanner extends IPeripheral {
-    scan(mode: "block", radius: number): unknown[];
+    scan(this: void, mode: "block", radius: number): unknown[];
 }
 
 class UniversalScannerTest extends BasicTest {
