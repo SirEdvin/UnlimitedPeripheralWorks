@@ -27,5 +27,7 @@ githubShaking {
 }
 
 repositories {
-    mavenCentral()
+    maven("https://mvn.siredvin.site/minecraft") {
+        name = "SirEdvin's Maven proxy"
+    }
 }

@@ -22,18 +22,8 @@ vanillaShaking {
 repositories {
     mavenLocal()
     maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/")
-        content {
-            includeGroup("dev.emi")
-        }
-    }
-    maven {
-        name = "Jared's maven"
-        url = uri("https://maven.blamejared.com/")
-        content {
-            includeGroup("mezz.jei")
-        }
+        name = "SirEdvin's Maven proxy"
+        url = uri("https://mvn.siredvin.site/minecraft")
     }
 }
 
