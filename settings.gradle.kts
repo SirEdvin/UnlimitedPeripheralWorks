@@ -3,6 +3,9 @@ pluginManagement {
         maven("https://mvn.siredvin.site/minecraft") {
             name = "SirEdvin's Maven proxy"
         }
+        gradlePluginPortal {
+            content { includeGroup("com.github.node-gradle.node") }
+        }
     }
 
     resolutionStrategy {
