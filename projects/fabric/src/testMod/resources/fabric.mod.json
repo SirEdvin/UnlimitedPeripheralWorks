@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "peripheralworks_testmod",
+  "version": "1.0",
+  "name": "UnlimitedPeripheralWorks Testmod",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.testmod.FabricPeripheralWorksTestMod"
+      }
+    ]
+  },
+  "depends": {
+    "fabricloader": "*",
+    "peripheralworks": "*",
+    "testiarium": "*",
+    "computercraft": "*"
+  }
+}

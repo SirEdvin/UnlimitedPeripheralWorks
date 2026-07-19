@@ -3,6 +3,9 @@ pluginManagement {
         maven("https://mvn.siredvin.site/minecraft") {
             name = "SirEdvin's Maven proxy"
         }
+        gradlePluginPortal {
+            content { includeGroup("com.github.node-gradle.node") }
+        }
     }
 
     resolutionStrategy {
@@ -20,6 +23,7 @@ rootProject.name = "UnlimitedPeripheralWorks $minecraftVersion"
 include(":core")
 include(":forge")
 include(":fabric")
+include(":typescript-tests")
 
 
 for (project in rootProject.children) {

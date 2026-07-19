@@ -1,0 +1,19 @@
+{
+  "name": "peripheralworks-gametests",
+  "private": true,
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "@siredvin/cc-utils": "0.1.0",
+    "@siredvin/soteria": "0.1.0"
+  },
+  "devDependencies": {
+    "@jackmacwindows/lua-types": "2.13.1",
+    "@siredvin/api-types": "1.1.0",
+    "@siredvin/cc-types": "1.1.0",
+    "@siredvin/craftos-types": "1.2.0",
+    "typescript": "5.7.2",
+    "typescript-to-lua": "1.29.1"
+  }
+}

@@ -1,0 +1,16 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MPL-2.0"
+
+[[mods]]
+modId="peripheralworks_testmod"
+version="1.0"
+displayName="UnlimitedPeripheralWorks Testmod"
+description="UnlimitedPeripheralWorks peripheral GameTests."
+
+[[dependencies.peripheralworks_testmod]]
+modId="peripheralworks"
+mandatory=true
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"
