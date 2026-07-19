@@ -13,7 +13,7 @@ val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").
 
 baseShaking {
     projectPart.set("forge")
-    integrationRepositories.set(true)
+    integrationRepositories.set(false)
     shake()
 }
 
@@ -49,96 +49,9 @@ val testMod = sourceSets.create("testMod") {
 
 repositories {
     mavenLocal()
-    maven("https://api.modrinth.com/maven") {
-        content { includeGroup("maven.modrinth") }
-    }
-    // location of the maven that hosts JEI files since January 2023
     maven {
-        name = "Jared's maven"
-        url = uri("https://maven.blamejared.com/")
-        content {
-            includeGroup("mezz.jei")
-        }
-    }
-    maven {
-        name = "Kotlin for Forge"
-        url = uri("https://thedarkcolour.github.io/KotlinForForge/")
-        content {
-            includeGroup("thedarkcolour")
-        }
-    }
-    // Integration dependencies
-    maven {
-        name = "KliKli Dev Repsy Maven (Occultism)"
-        url = uri("https://repo.repsy.io/mvn/klikli-dev/mods")
-        content {
-            includeGroup("com.klikli_dev")
-        }
-    }
-
-    maven {
-        name = "Curios Maven"
-        url = uri("https://maven.theillusivec4.top/")
-        content {
-            includeGroup("top.theillusivec4.curios")
-        }
-    }
-
-    maven {
-        name = "SBL Maven"
-        url = uri("https://dl.cloudsmith.io/public/tslat/sbl/maven/")
-        content {
-            includeGroup("net.tslat.smartbrainlib")
-        }
-    }
-    maven {
-        name = "Geckolib Maven"
-        url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
-        content {
-            includeGroup("software.bernie.geckolib")
-            includeGroupByRegex("software\\.bernie.*")
-            includeGroup("com.eliotlash.mclib")
-        }
-    }
-    maven {
-        name = "tterrag maven"
-        url = uri("https://maven.tterrag.com/")
-        content {
-            includeGroup("com.tterrag.registrate")
-            includeGroup("com.jozufozu.flywheel")
-        }
-    }
-    maven {
-        name = "Create maven"
-        url = uri("https://maven.createmod.net")
-        content {
-            includeGroup("com.simibubi.create")
-            includeGroup("net.createmod.ponder")
-            includeGroup("dev.engine-room.flywheel")
-        }
-    }
-    maven {
-        name = "Occultism maven"
-        url = uri("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/")
-        content {
-            includeGroup("com.klikli_dev")
-        }
-    }
-    maven {
-        name = "Latvian mods, mostly KubeJS"
-        url = uri("https://maven.latvian.dev/releases")
-        content {
-            includeGroup("dev.latvian.mods")
-            includeGroup("dev.latvian.apps")
-        }
-    }
-
-    maven {
-        name = "Dependencies for kubej"
-        url = uri("https://jitpack.io")
-        content {
-            includeGroup("com.github.rtyley")
-        }
+        name = "SirEdvin's Maven proxy"
+        url = uri("https://mvn.siredvin.site/minecraft")
     }
 }
 

@@ -12,7 +12,7 @@ val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").
 
 baseShaking {
     projectPart.set("fabric")
-    integrationRepositories.set(true)
+    integrationRepositories.set(false)
     shake()
 }
 
@@ -85,107 +85,9 @@ loom {
 
 repositories {
     mavenLocal()
-    // location of the maven that hosts JEI files since January 2023
     maven {
-        name = "Jared's maven"
-        url = uri("https://maven.blamejared.com/")
-        content {
-            includeGroup("mezz.jei")
-        }
-    }
-    maven {
-        name = "OwO maven"
-        url = uri("https://maven.wispforest.io")
-        content {
-            includeGroup("io.wispforest")
-        }
-    }
-    maven {
-        name = "Polymer repo"
-        url = uri("https://maven.nucleoid.xyz")
-        content {
-            includeGroup("eu.pb4")
-            includeGroup("xyz.nucleoid")
-        }
-    }
-    maven {
-        name = "OSS Sonatype Repo"
-        url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-        content {
-            includeGroup("me.lucko")
-        }
-    }
-    // for reach entity attributes, required by Magna
-    maven {
-        url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
-        content {
-            includeGroup("com.jamieswhiteshirt")
-        }
-    }
-    maven {
-        name = "Draylar maven"
-        url = uri("https://maven.draylar.dev/releases")
-        content {
-            includeGroup("dev.draylar")
-            includeGroup("dev.draylar.omega-config")
-        }
-    }
-    maven {
-        name = "Jitpack for MI"
-        url = uri("https://jitpack.io")
-        content {
-            /* For Magna */
-            includeGroup("com.github.Draylar.omega-config")
-        }
-    }
-    maven {
-        name = "Ladysnake Mods"
-        url = uri("https://maven.ladysnake.org/releases")
-        content {
-            includeGroup("io.github.ladysnake")
-            includeGroupByRegex("io\\.github\\.onyxstudios.*")
-        }
-    }
-    maven {
-        name = "devOS"
-        url = uri("https://mvn.devos.one/snapshots/")
-        content {
-            includeGroup("com.simibubi.create")
-            includeGroupByRegex("io\\.github\\.fabricators_of_create.*")
-            includeGroup("com.tterrag.registrate_fabric")
-            includeGroup("io.github.tropheusj")
-        }
-    }
-    maven {
-        name = "github packages via jitpack"
-        url = uri("https://jitpack.io")
-        content {
-            includeGroup("com.github.llamalad7.mixinextras")
-            includeGroup("com.github.Chocohead")
-        }
-    }
-    maven {
-        name = "Mod maven"
-        url = uri("https://modmaven.dev/")
-        content {
-            includeGroup("com.jozufozu.flywheel")
-        }
-    }
-    maven {
-        name = "KubeJS's author maven"
-        url = uri("https://maven.latvian.dev/releases")
-        content {
-            includeGroup("dev.latvian.mods")
-            includeGroup("dev.latvian.apps")
-        }
-    }
-
-    maven {
-        name = "Jitpack for kubejs deps"
-        url = uri("https://jitpack.io")
-        content {
-            includeGroup("com.github.rtyley")
-        }
+        name = "SirEdvin's Maven proxy"
+        url = uri("https://mvn.siredvin.site/minecraft")
     }
 }
 
