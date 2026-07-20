@@ -39,6 +39,8 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     private val manager: NetworkManagerBlockEntity?
         get() = minecraft?.level?.getBlockEntity(pos) as? NetworkManagerBlockEntity
 
+    override fun isPauseScreen(): Boolean = false
+
     override fun init() {
         val level = minecraft?.level ?: return
         val manager = manager ?: return unavailable()
@@ -257,7 +259,8 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     private fun rebuild() {
         rememberFocus()
-        minecraft?.setScreen(this)
+        clearWidgets()
+        init()
     }
 
     private fun rememberFocus() {

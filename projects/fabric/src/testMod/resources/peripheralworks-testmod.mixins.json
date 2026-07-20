@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "site.siredvin.testiarium.fixture.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "StructureTemplateAccessor",
+    "StructureUtilsMixin"
+  ],
+  "client": [
+    "client.MinecraftMixin",
+    "client.WorldOpenFlowsMixin"
+  ]
+}

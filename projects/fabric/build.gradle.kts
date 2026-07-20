@@ -53,6 +53,11 @@ val testiariumCctArtifacts = configurations.detachedConfiguration(
     project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1:cct-test-mod@jar"),
 ).apply { isTransitive = false }
 
+val testiariumTestModArtifacts = configurations.detachedConfiguration(
+    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1:test-mod@jar"),
+    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1:test-mod@jar"),
+).apply { isTransitive = false }
+
 val testiariumMainArtifacts = configurations.detachedConfiguration(
     project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1"),
     project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1"),
@@ -79,6 +84,19 @@ loom {
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             vmArg("-ea")
             runDir("run/peripheralworks-gametest")
+        }
+        create("peripheralWorksClientGameTest") {
+            client()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("fabric.debug.disableModIds", "create,testiarium_testmod,testiarium_cct_testmod")
+            property("fabric.debug.loadLate", "testiarium_testmod")
+            property("testiarium.client", "true")
+            property("testiarium.tags", "network-manager-client")
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/network-manager-client-gametest")
         }
     }
 }
@@ -125,6 +143,7 @@ dependencies {
     add("modTestModImplementation", libs.bundles.fabric.core)
     add("modTestModImplementation", libs.bundles.ccfabric)
     add("modTestModImplementation", files(testiariumMainArtifacts))
+    add("modTestModImplementation", files(testiariumTestModArtifacts))
     add("modTestModImplementation", files(testiariumCctArtifacts))
 }
 

@@ -10,8 +10,17 @@
         "adapter": "kotlin",
         "value": "site.siredvin.peripheralworks.testmod.FabricPeripheralWorksTestMod"
       }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.testmod.FabricPeripheralWorksClientTestMod"
+      }
     ]
   },
+  "mixins": [
+    "peripheralworks-testmod.mixins.json"
+  ],
   "depends": {
     "fabricloader": "*",
     "peripheralworks": "*",
