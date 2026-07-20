@@ -82,6 +82,7 @@ class ModEnLanguageProvider(
         add(ModText.NETWORK_MANAGER_SCREEN_TITLE, "Network manager groups")
         add(ModText.NETWORK_MANAGER_TAB_GROUPS, "Groups")
         add(ModText.NETWORK_MANAGER_TAB_MEMBERSHIP, "Membership")
+        add(ModText.NETWORK_MANAGER_TAB_SETTINGS, "Settings")
         add(ModText.NETWORK_MANAGER_SEARCH, "Search or new full group name")
         add(ModText.NETWORK_MANAGER_CREATE, "Create")
         add(ModText.NETWORK_MANAGER_RENAME, "Rename selected group")

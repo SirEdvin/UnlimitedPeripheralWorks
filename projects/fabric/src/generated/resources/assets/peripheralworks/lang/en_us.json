@@ -84,6 +84,7 @@
   "text.peripheralworks.network_manager_settings_saved": "Local presentation settings saved",
   "text.peripheralworks.network_manager_tab_groups": "Groups",
   "text.peripheralworks.network_manager_tab_membership": "Membership",
+  "text.peripheralworks.network_manager_tab_settings": "Settings",
   "text.peripheralworks.network_manager_unavailable": "The bound network manager is unavailable",
   "text.peripheralworks.peripheral_proxy_block_added": "This peripheral is connected to peripheral proxy",
   "text.peripheralworks.peripheral_proxy_block_removed": "This peripheral is disconnected from peripheral proxy",

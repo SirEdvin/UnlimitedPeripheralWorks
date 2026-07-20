@@ -31,7 +31,10 @@ class NetworkManagerClientGameTests {
         helper.startSequence()
             .thenExecute {
                 listOf("network-manager-group-created-iron.png", "network-manager-group-hierarchy.png", "network-manager-group-memberships.png").forEach {
-                    screenshotFile(it).delete()
+                    screenshotFile(it).apply {
+                        parentFile.mkdirs()
+                        delete()
+                    }
                 }
                 helper.setBlock(managerPos, Blocks.NETWORK_MANAGER.get())
                 val manager = manager(helper, managerPos)
@@ -52,7 +55,12 @@ class NetworkManagerClientGameTests {
                 player.xRot = -90f
                 minecraft.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
                 check(minecraft.screen is NetworkManagerScreen) { "Bound configurator did not open the network manager screen" }
-                createGroup(minecraft.screen as NetworkManagerScreen, "factory/ore/iron")
+                val screen = minecraft.screen as NetworkManagerScreen
+                check(findButton(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string) == null) { "Settings leaked into the Groups tab" }
+                click(screen, button(screen, ModText.NETWORK_MANAGER_TAB_SETTINGS.text.string))
+                check(editBoxes(screen).size == 2) { "Settings tab did not expose delimiter and range" }
+                click(screen, button(screen, ModText.NETWORK_MANAGER_TAB_GROUPS.text.string))
+                createGroup(screen, "factory/ore/iron")
             }
             .thenWaitUntil { manager(helper, managerPos).requireGroup("factory/ore/iron") }
             .thenIdle(3)
@@ -66,7 +74,7 @@ class NetworkManagerClientGameTests {
                 editBoxes(screen).first().setValue("")
                 screen.tick()
                 click(screen, button(screen, "+ factory", trim = true))
-                click(screen, button(screen, ">"))
+                if (findButton(screen, "+ ore", trim = true) == null) click(screen, button(screen, ">"))
                 click(screen, button(screen, "+ ore", trim = true))
             }
             .thenOnClient { screenshot("network-manager-group-hierarchy.png") }
@@ -115,9 +123,12 @@ class NetworkManagerClientGameTests {
 
     private fun editBoxes(screen: NetworkManagerScreen) = screen.children().filterIsInstance<EditBox>().sortedWith(compareBy({ it.y }, { it.x }))
 
-    private fun button(screen: NetworkManagerScreen, label: String, trim: Boolean = false): Button = screen.children().filterIsInstance<Button>().singleOrNull {
+    private fun findButton(screen: NetworkManagerScreen, label: String, trim: Boolean = false): Button? = screen.children().filterIsInstance<Button>().singleOrNull {
         (if (trim) it.message.string.trim() else it.message.string) == label
-    } ?: error("Button '$label' not found among ${screen.children().filterIsInstance<Button>().map { it.message.string }}")
+    }
+
+    private fun button(screen: NetworkManagerScreen, label: String, trim: Boolean = false): Button = findButton(screen, label, trim)
+        ?: error("Button '$label' not found among ${screen.children().filterIsInstance<Button>().map { it.message.string }}")
 
     private fun click(screen: NetworkManagerScreen, widget: AbstractWidget) {
         check(screen.mouseClicked(widget.x + widget.width / 2.0, widget.y + widget.height / 2.0, 0)) { "Widget click was not handled: ${widget.message.string}" }

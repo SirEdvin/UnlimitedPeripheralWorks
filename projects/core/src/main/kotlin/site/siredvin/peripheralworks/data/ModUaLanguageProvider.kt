@@ -82,6 +82,7 @@ class ModUaLanguageProvider(
         add(ModText.NETWORK_MANAGER_SCREEN_TITLE, "Групи менеджера мережі")
         add(ModText.NETWORK_MANAGER_TAB_GROUPS, "Групи")
         add(ModText.NETWORK_MANAGER_TAB_MEMBERSHIP, "Членство")
+        add(ModText.NETWORK_MANAGER_TAB_SETTINGS, "Налаштування")
         add(ModText.NETWORK_MANAGER_SEARCH, "Пошук або повна назва нової групи")
         add(ModText.NETWORK_MANAGER_CREATE, "Створити")
         add(ModText.NETWORK_MANAGER_RENAME, "Перейменувати вибрану групу")

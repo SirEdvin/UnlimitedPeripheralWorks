@@ -14,8 +14,8 @@ tasks.register("gameTest") {
 
 tasks.register("clientGameTest") {
     group = "verification"
-    description = "Runs network manager client GameTests on Fabric."
-    dependsOn(":fabric:runPeripheralWorksClientGameTest")
+    description = "Runs network manager client GameTests on Forge and Fabric."
+    dependsOn(":forge:runClientGameTest", ":fabric:runPeripheralWorksClientGameTest")
 }
 
 subprojectShaking {

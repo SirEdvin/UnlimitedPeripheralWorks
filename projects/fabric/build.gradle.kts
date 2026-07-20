@@ -110,12 +110,6 @@ repositories {
     }
 }
 
-tasks.named("runPeripheralWorksClientGameTest") {
-    doFirst {
-        layout.buildDirectory.dir("screenshots/network-manager-client/screenshots").get().asFile.mkdirs()
-    }
-}
-
 dependencies {
     if (!minimalTestEnvironment) {
         modApi(libs.bundles.externalMods.fabric.integrations.api) {

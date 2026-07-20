@@ -16,7 +16,7 @@ import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.NetworkManagerGroupMessage
 
 class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_MANAGER_SCREEN_TITLE.text) {
-    private enum class Tab { GROUPS, MEMBERSHIP }
+    private enum class Tab { GROUPS, MEMBERSHIP, SETTINGS }
 
     private var tab = Tab.GROUPS
     private var selectedName: String? = null
@@ -54,11 +54,16 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
         val panelWidth = (width - 24).coerceAtMost(420)
         val left = (width - panelWidth) / 2
-        val half = (panelWidth - 4) / 2
-        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_TAB_GROUPS.text) { switchTab(Tab.GROUPS) }.bounds(left, 24, half, 20).build()).active = tab != Tab.GROUPS
-        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_TAB_MEMBERSHIP.text) { switchTab(Tab.MEMBERSHIP) }.bounds(left + half + 4, 24, half, 20).build()).active = tab != Tab.MEMBERSHIP
+        val third = (panelWidth - 8) / 3
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_TAB_GROUPS.text) { switchTab(Tab.GROUPS) }.bounds(left, 24, third, 20).build()).active = tab != Tab.GROUPS
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_TAB_MEMBERSHIP.text) { switchTab(Tab.MEMBERSHIP) }.bounds(left + third + 4, 24, third, 20).build()).active = tab != Tab.MEMBERSHIP
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_TAB_SETTINGS.text) { switchTab(Tab.SETTINGS) }.bounds(left + (third + 4) * 2, 24, third, 20).build()).active = tab != Tab.SETTINGS
 
-        if (tab == Tab.GROUPS) initGroups(manager, settings, left, panelWidth) else initMembership(manager, left, panelWidth)
+        when (tab) {
+            Tab.GROUPS -> initGroups(manager, settings, left, panelWidth)
+            Tab.MEMBERSHIP -> initMembership(manager, left, panelWidth)
+            Tab.SETTINGS -> initSettings(left, panelWidth)
+        }
         snapshot = stateSnapshot(manager)
     }
 
@@ -75,7 +80,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         } else {
             flatten(hierarchy.roots, settings.expandedPaths)
         }
-        val fieldsY = (height - 116).coerceAtLeast(120)
+        val fieldsY = (height - 92).coerceAtLeast(120)
         addPagedRows(rows, left, 76, panelWidth, (((fieldsY - 76) / 22) - 1).coerceAtLeast(1)) { value ->
             if (value.startsWith(NODE_PREFIX)) toggleExpansion(value.removePrefix(NODE_PREFIX)) else select(value)
         }
@@ -84,11 +89,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_APPLY.text) { renameSelected() }.bounds(left + panelWidth - 60, fieldsY, 60, 20).build()).active = selectedName != null
         colorBox = editBox(left, fieldsY + 24, panelWidth - 64, ModText.NETWORK_MANAGER_COLOR, color) { color = it }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_APPLY.text) { colorSelected() }.bounds(left + panelWidth - 60, fieldsY + 24, 60, 20).build()).active = selectedName != null
-        delimiterBox = editBox(left, fieldsY + 48, (panelWidth - 8) / 2, ModText.NETWORK_MANAGER_DELIMITER, delimiter) { delimiter = it }
-        delimiterBox.setMaxLength(NetworkManagerClientSettings.MAX_DELIMITER_LENGTH)
-        rangeBox = editBox(left + (panelWidth + 8) / 2, fieldsY + 48, (panelWidth - 8) / 2, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
-        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, fieldsY + 72, panelWidth - 64, 20).build())
-        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_DELETE.text) { confirmDelete() }.bounds(left + panelWidth - 60, fieldsY + 72, 60, 20).build()).apply {
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_DELETE.text) { confirmDelete() }.bounds(left + panelWidth - 60, fieldsY + 48, 60, 20).build()).apply {
             active = selectedName != null
             tooltip = Tooltip.create(ModText.NETWORK_MANAGER_DELETE_TOOLTIP.text)
         }
@@ -96,8 +97,6 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             when (focusedField) {
                 "rename" -> renameBox
                 "color" -> colorBox
-                "delimiter" -> delimiterBox
-                "range" -> rangeBox
                 else -> searchBox
             },
         )
@@ -115,6 +114,14 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             val expectedPresent = peripheral in members
             send(NetworkManagerGroupMessage.Operation.MEMBERSHIP, selected, peripheral, present = !expectedPresent, expectedPresent = expectedPresent)
         }
+    }
+
+    private fun initSettings(left: Int, panelWidth: Int) {
+        delimiterBox = editBox(left, 52, panelWidth, ModText.NETWORK_MANAGER_DELIMITER, delimiter) { delimiter = it }
+        delimiterBox.setMaxLength(NetworkManagerClientSettings.MAX_DELIMITER_LENGTH)
+        rangeBox = editBox(left, 76, panelWidth, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 100, panelWidth, 20).build())
+        setInitialFocus(if (focusedField == "range") rangeBox else delimiterBox)
     }
 
     private fun editBox(x: Int, y: Int, width: Int, hint: ModText, value: String, responder: (String) -> Unit): EditBox = addRenderableWidget(
@@ -264,13 +271,15 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     }
 
     private fun rememberFocus() {
-        if (tab != Tab.GROUPS || !::searchBox.isInitialized) return
-        focusedField = when {
-            renameBox.isFocused -> "rename"
-            colorBox.isFocused -> "color"
-            delimiterBox.isFocused -> "delimiter"
-            rangeBox.isFocused -> "range"
-            else -> "search"
+        focusedField = when (tab) {
+            Tab.GROUPS -> when {
+                !::searchBox.isInitialized -> focusedField
+                renameBox.isFocused -> "rename"
+                colorBox.isFocused -> "color"
+                else -> "search"
+            }
+            Tab.SETTINGS -> if (::rangeBox.isInitialized && rangeBox.isFocused) "range" else "delimiter"
+            Tab.MEMBERSHIP -> focusedField
         }
     }
 
@@ -296,12 +305,15 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     }
 
     override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
-        if (tab == Tab.GROUPS && (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER)) {
-            when {
-                searchBox.isFocused -> create()
-                renameBox.isFocused -> renameSelected()
-                colorBox.isFocused -> colorSelected()
-                delimiterBox.isFocused || rangeBox.isFocused -> saveSettings()
+        if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) {
+            when (tab) {
+                Tab.GROUPS -> when {
+                    searchBox.isFocused -> create()
+                    renameBox.isFocused -> renameSelected()
+                    colorBox.isFocused -> colorSelected()
+                }
+                Tab.SETTINGS -> saveSettings()
+                Tab.MEMBERSHIP -> return super.keyPressed(keyCode, scanCode, modifiers)
             }
             return true
         }

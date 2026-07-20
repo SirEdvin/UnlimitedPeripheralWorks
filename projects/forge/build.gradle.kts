@@ -90,6 +90,7 @@ dependencies {
             fg.deobf((project.dependencies.create(notation) as ExternalModuleDependency).apply { isTransitive = false }),
         )
     }
+    add(testMod.implementationConfigurationName, fg.deobf("site.siredvin:testiarium-forge-1.20.1:0.1.1:test-mod@jar"))
 }
 
 minecraft {
@@ -104,6 +105,24 @@ minecraft {
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             jvmArgs("-ea")
             args("--nogui")
+            mods {
+                create("peripheralworks") { source(sourceSets.main.get()) }
+                create("peripheralworks_testmod") {
+                    source(testMod)
+                    source(project(":core").sourceSets["testMod"])
+                }
+            }
+        }
+        create("clientGameTest") {
+            parent(runs.getByName("client"))
+            workingDirectory(file("run/network-manager-client-gametest"))
+            property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
+            property("testiarium.tags", "network-manager-client")
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
+            jvmArgs("-ea", "-Dtestiarium.client=true", "-Dforge.disableEarlyProgressWindow=true")
+            args("--mixin.config", "testiarium-testmod.mixins.json")
             mods {
                 create("peripheralworks") { source(sourceSets.main.get()) }
                 create("peripheralworks_testmod") {
