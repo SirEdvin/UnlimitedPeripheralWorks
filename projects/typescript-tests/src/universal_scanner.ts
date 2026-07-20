@@ -1,20 +1,15 @@
-import { asserts, BasicTest, printReports, TestResult, TestSuite } from "@siredvin/soteria";
+import { asserts, BasicTest, TestSuite } from "@siredvin/soteria";
+import { finish, peripheralCall } from "./test_helper";
 
-interface UniversalScanner extends IPeripheral {
-    scan(this: void, mode: "block", radius: number): unknown[];
-}
-
-class UniversalScannerTest extends BasicTest {
+class PeripheralTest extends BasicTest {
     execute(): void {
-        const [scanner] = peripheral.find("universal_scanner");
-        asserts.assertNotNull(scanner, "Universal scanner peripheral is missing");
-        asserts.assertNotNull((scanner as unknown as UniversalScanner).scan("block", 1), "Universal scanner returned no scan result");
+        const call = peripheralCall("universal_scanner");
+        asserts.assertNotNull(call("getOperations"), "scan operations are missing");
+        call("getCooldown", "STATIONARY_UNIVERSAL_SCAN");
+        asserts.assertNotNull(call("scan", "block", 1), "block scan failed");
     }
 }
 
-const suite = new TestSuite("Universal scanner");
-suite.addTest(new UniversalScannerTest("scans blocks"));
-const reports = suite.run();
-printReports(reports);
-const report = reports[0];
-if (report.result != TestResult.SUCCESS) throw report.result + ": " + report.message;
+const suite = new TestSuite("Universal scanner methods");
+suite.addTest(new PeripheralTest("executes every method"));
+finish(suite.run());
