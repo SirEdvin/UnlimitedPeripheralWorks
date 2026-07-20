@@ -4,65 +4,50 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 object NetworkManagerMode : ConfigurationMode {
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "network_manager")
     override val description: Component = ModTooltip.NETWORK_MANAGER_MODE.text
 
-    const val RANGE_TAG = "networkManagerRange"
-    private const val DEFAULT_RANGE = 32
-    private val appropriateRanges = listOf(64, 32, 16, 8, 4)
-
-    fun getRange(stack: ItemStack): Int {
-        if (!stack.tag!!.contains(RANGE_TAG)) {
-            stack.tag!!.putInt(RANGE_TAG, DEFAULT_RANGE)
-        }
-        return stack.tag!!.getInt(RANGE_TAG)
-    }
-
-    override fun extraTooltips(itemStack: ItemStack, tooltip: MutableList<Component>) {
-        tooltip.add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE.format(getRange(itemStack)))
-    }
+    const val DEFAULT_RANGE = 32
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
+        if (!UltimateConfigurator.isActiveModeDimension(stack, level)) return InteractionResultHolder.fail(stack)
         if (level.isClientSide || level !is ServerLevel) {
             return InteractionResultHolder.consume(stack)
         }
-        val offhandItem = player.getItemInHand(InteractionHand.OFF_HAND)
-        if (offhandItem.`is`(Items.NAME_TAG) && offhandItem.hoverName != offhandItem.item.getName(offhandItem)) {
-            val name = offhandItem.hoverName.string
-            val be = level.getBlockEntity(configurationTarget) as? NetworkManagerBlockEntity ?: return InteractionResultHolder.fail(stack)
-            val peripheralRecord = be.peripherals.entries.firstOrNull { it.value == hit.blockPos } ?: return InteractionResultHolder.fail(stack)
-            be.toggleGroup(name, peripheralRecord.key)
-            return InteractionResultHolder.success(stack)
+        val name = UltimateConfigurator.getSelectedNetworkGroup(stack)
+        if (name == null) {
+            player.displayClientMessage(ModText.NETWORK_MANAGER_GROUP_SELECT_REQUIRED.text, true)
+            return InteractionResultHolder.fail(stack)
         }
-        return InteractionResultHolder.consume(stack)
+        val be = level.getBlockEntity(configurationTarget) as? NetworkManagerBlockEntity
+        val peripheralRecord = be?.peripherals?.entries?.firstOrNull { it.value == hit.blockPos }
+        val result = if (peripheralRecord == null) null else be.toggleGroup(name, peripheralRecord.key)
+        val message = when (result) {
+            NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> ModText.NETWORK_MANAGER_GROUP_MEMBERSHIP_TOGGLED
+            NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> ModText.NETWORK_MANAGER_GROUP_STALE
+            else -> ModText.NETWORK_MANAGER_PERIPHERAL_MISSING
+        }
+        player.displayClientMessage(message.text, true)
+        return if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) InteractionResultHolder.success(stack) else InteractionResultHolder.fail(stack)
     }
 
-    override fun onSwing(
-        configurationTarget: BlockPos,
-        stack: ItemStack,
-        owner: Player,
-    ): Boolean {
-        val currentRange = getRange(stack)
-        val index = (appropriateRanges.indexOf(currentRange) + 1) % appropriateRanges.size
-        stack.tag!!.putInt(RANGE_TAG, appropriateRanges[index])
-        if (owner is ServerPlayer) {
-            owner.displayClientMessage(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE.format(appropriateRanges[index]), true)
-        }
-        return false
+    override fun onBlockMiss(configurationTarget: BlockPos, stack: ItemStack, player: Player, level: Level): InteractionResultHolder<ItemStack> {
+        if (!UltimateConfigurator.isActiveModeDimension(stack, level)) return InteractionResultHolder.fail(stack)
+        if (level.isClientSide) ModClientPlatform.openNetworkManagerScreen(configurationTarget)
+        return InteractionResultHolder.consume(stack)
     }
 }

@@ -24,6 +24,20 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
     companion object {
         const val ACTIVE_MOD_NAME = "activeMod"
         const val ACTIVE_MOD_POS = "activeModPos"
+        const val ACTIVE_MOD_DIMENSION = "activeModDimension"
+        const val SELECTED_NETWORK_GROUP = "selectedNetworkGroup"
+
+        fun getSelectedNetworkGroup(stack: ItemStack): String? = stack.tag?.getString(SELECTED_NETWORK_GROUP)?.takeIf(String::isNotEmpty)
+
+        fun setSelectedNetworkGroup(stack: ItemStack, group: String) {
+            stack.orCreateTag.putString(SELECTED_NETWORK_GROUP, group)
+        }
+
+        fun clearSelectedNetworkGroup(stack: ItemStack) {
+            stack.tag?.remove(SELECTED_NETWORK_GROUP)
+        }
+
+        fun isActiveModeDimension(stack: ItemStack, level: Level): Boolean = stack.tag?.getString(ACTIVE_MOD_DIMENSION) == level.dimension().location().toString()
     }
 
     override fun appendHoverText(
@@ -39,6 +53,9 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
             list.add(activeMode.first.description)
             list.add(ModTooltip.CONFIGURATION_TARGET_BLOCK.format(activeMode.second.toString()))
             activeMode.first.extraTooltips(itemStack, list)
+            if (activeMode.first.modeID.namespace == "peripheralworks" && activeMode.first.modeID.path == "network_manager") {
+                list.add(ModTooltip.NETWORK_MANAGER_SELECTED_GROUP.format(getSelectedNetworkGroup(itemStack) ?: "-"))
+            }
         }
     }
 
@@ -58,16 +75,20 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         )
     }
 
-    private fun saveActiveMode(stack: ItemStack, mode: ConfigurationMode, targetBlock: BlockPos) {
+    private fun saveActiveMode(stack: ItemStack, mode: ConfigurationMode, targetBlock: BlockPos, level: Level) {
+        clearSelectedNetworkGroup(stack)
         val data = stack.orCreateTag
         data.putString(ACTIVE_MOD_NAME, mode.modeID.toString())
         data.put(ACTIVE_MOD_POS, NbtUtils.writeBlockPos(targetBlock))
+        data.putString(ACTIVE_MOD_DIMENSION, level.dimension().location().toString())
     }
 
     private fun clearActiveMode(stack: ItemStack): ItemStack {
         val data = stack.tag ?: return stack
         data.remove(ACTIVE_MOD_NAME)
         data.remove(ACTIVE_MOD_POS)
+        data.remove(ACTIVE_MOD_DIMENSION)
+        clearSelectedNetworkGroup(stack)
         return stack
     }
 
@@ -76,7 +97,7 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
             val targetState = level.getBlockState(hit.blockPos)
             val possibleMode = ConfiguratorModeRegistry.get(targetState)
             if (possibleMode != null) {
-                saveActiveMode(stack, possibleMode, hit.blockPos)
+                saveActiveMode(stack, possibleMode, hit.blockPos, level)
                 return InteractionResultHolder.consume(stack)
             }
         }

@@ -22,6 +22,13 @@ object NetworkMessages {
         ::MapBasedEventMessage,
     )
 
+    val NETWORK_MANAGER_GROUP = registerServerbound(
+        602,
+        "network_manager_group",
+        NetworkManagerGroupMessage::class.java,
+        ::NetworkManagerGroupMessage,
+    )
+
     private fun <C, T : NetworkMessage<C>> register(
         messages: MutableList<MessageType<out NetworkMessage<C>>>,
         id: Int,

@@ -35,6 +35,18 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         const val DISPLAY_PERIPHERALS_TAG = "displayPeripherals"
         const val PERIPHERAL_GROUPS = "peripheralGroups"
         const val PERIPHERAL_NAME = "peripheralName"
+        const val MAX_GROUP_NAME_LENGTH = 64
+    }
+
+    enum class GroupOperationResult {
+        SUCCESS,
+        INVALID_NAME,
+        INVALID_COLOR,
+        GROUP_EXISTS,
+        GROUP_MISSING,
+        PERIPHERAL_MISSING,
+        PERIPHERAL_ALREADY_PRESENT,
+        PERIPHERAL_NOT_PRESENT,
     }
 
     class PeripheralGroup {
@@ -127,24 +139,55 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         satisfyBegForTicks()
     }
 
-    fun toggleGroup(name: String, peripheralName: String) {
-        if (!peripherals.contains(peripheralName)) return
-        if (!peripheralGroups.contains(name)) {
-            val newGroup = PeripheralGroup()
-            newGroup.peripherals.add(peripheralName)
-            peripheralGroups[name] = newGroup
-            peripheral?.queueEvent("network_manager_group_change", newGroup, "added", peripheralName)
-        } else {
-            val group = peripheralGroups[name] ?: return
-            if (group.peripherals.contains(peripheralName)) {
-                group.peripherals.remove(peripheralName)
-                peripheral?.queueEvent("network_manager_group_change", name, "removed", peripheralName)
-            } else {
-                group.peripherals.add(peripheralName)
-                peripheral?.queueEvent("network_manager_group_change", name, "added", peripheralName)
-            }
-        }
+    fun createGroup(name: String): GroupOperationResult {
+        if (name.isEmpty() || name.length > MAX_GROUP_NAME_LENGTH) return GroupOperationResult.INVALID_NAME
+        if (peripheralGroups.containsKey(name)) return GroupOperationResult.GROUP_EXISTS
+        peripheralGroups[name] = PeripheralGroup()
         pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun renameGroup(name: String, newName: String): GroupOperationResult {
+        if (newName.isEmpty() || newName.length > MAX_GROUP_NAME_LENGTH) return GroupOperationResult.INVALID_NAME
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        if (peripheralGroups.containsKey(newName)) return GroupOperationResult.GROUP_EXISTS
+        peripheralGroups.remove(name)
+        peripheralGroups[newName] = group
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun deleteGroup(name: String): GroupOperationResult {
+        val group = peripheralGroups.remove(name) ?: return GroupOperationResult.GROUP_MISSING
+        group.peripherals.forEach { peripheral?.queueEvent("network_manager_group_change", name, "removed", it) }
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun setGroupColor(name: String, color: Int): GroupOperationResult {
+        if (color !in -1..0xffffff) return GroupOperationResult.INVALID_COLOR
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        group.color = color
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun setGroupMembership(name: String, peripheralName: String, present: Boolean, expectedPresent: Boolean? = null): GroupOperationResult {
+        if (!peripherals.containsKey(peripheralName)) return GroupOperationResult.PERIPHERAL_MISSING
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        if (expectedPresent != null && (peripheralName in group.peripherals) != expectedPresent) {
+            return if (expectedPresent) GroupOperationResult.PERIPHERAL_NOT_PRESENT else GroupOperationResult.PERIPHERAL_ALREADY_PRESENT
+        }
+        if (present && !group.peripherals.add(peripheralName)) return GroupOperationResult.PERIPHERAL_ALREADY_PRESENT
+        if (!present && !group.peripherals.remove(peripheralName)) return GroupOperationResult.PERIPHERAL_NOT_PRESENT
+        peripheral?.queueEvent("network_manager_group_change", name, if (present) "added" else "removed", peripheralName)
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun toggleGroup(name: String, peripheralName: String): GroupOperationResult {
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        return setGroupMembership(name, peripheralName, !group.peripherals.contains(peripheralName))
     }
 
     fun pushData() {

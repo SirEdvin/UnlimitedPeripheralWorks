@@ -97,7 +97,7 @@ minecraft {
         create("gameTestServer") {
             workingDirectory(file("run/peripheralworks-gametest"))
             property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            property("testiarium.tags", "peripheralworks")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)

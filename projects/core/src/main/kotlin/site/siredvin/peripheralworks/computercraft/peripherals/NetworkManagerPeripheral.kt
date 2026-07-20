@@ -30,54 +30,41 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     fun getGroups(): List<String> = be.peripheralGroups.keys.toList()
 
     @LuaFunction(mainThread = true)
-    fun addGroup(group: String): MethodResult {
-        if (be.peripheralGroups.contains(group)) return MethodResult.of(false, "Such group already exists")
-        be.peripheralGroups[group] = NetworkManagerBlockEntity.PeripheralGroup()
-        be.setChanged()
-        return MethodResult.of(true)
+    fun addGroup(group: String): MethodResult = when (be.createGroup(group)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_EXISTS -> MethodResult.of(false, "Such group already exists")
+        else -> MethodResult.of(false, "Invalid group name")
     }
 
     @LuaFunction(mainThread = true)
     fun removeGroup(group: String): MethodResult {
         if (!be.peripheralGroups.contains(group)) return MethodResult.of(false, "Group does not exists")
         if (be.peripheralGroups[group]!!.peripherals.any { be.peripherals.contains(it) }) return MethodResult.of(false, "Group is not empty")
-        be.peripheralGroups.remove(group)
-        be.setChanged()
+        be.deleteGroup(group)
         return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun add(group: String, peripheral: String): MethodResult {
-        if (!be.peripherals.contains(peripheral)) return MethodResult.of(false, "There is no such peripheral")
-        val groupInstance = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
-        if (groupInstance.peripherals.contains(peripheral)) {
-            return MethodResult.of(false, "Peripheral already in the group")
-        }
-        groupInstance.peripherals.add(peripheral)
-        queueEvent("network_manager_group_change", group, "added", peripheral)
-        be.pushData()
-        return MethodResult.of(true)
+    fun add(group: String, peripheral: String): MethodResult = when (be.setGroupMembership(group, peripheral, true)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.PERIPHERAL_MISSING -> MethodResult.of(false, "There is no such peripheral")
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> MethodResult.of(false, "There is no such group")
+        else -> MethodResult.of(false, "Peripheral already in the group")
     }
 
     @LuaFunction(mainThread = true)
-    fun remove(group: String, peripheral: String): MethodResult {
-        if (!be.peripherals.contains(peripheral)) return MethodResult.of(false, "There is no such peripheral")
-        val groupInstance = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
-        if (!groupInstance.peripherals.contains(peripheral)) {
-            return MethodResult.of(false, "Peripheral not in the group")
-        }
-        groupInstance.peripherals.remove(peripheral)
-        queueEvent("network_manager_group_change", group, "removed", peripheral)
-        be.pushData()
-        return MethodResult.of(true)
+    fun remove(group: String, peripheral: String): MethodResult = when (be.setGroupMembership(group, peripheral, false)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.PERIPHERAL_MISSING -> MethodResult.of(false, "There is no such peripheral")
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> MethodResult.of(false, "There is no such group")
+        else -> MethodResult.of(false, "Peripheral not in the group")
     }
 
     @LuaFunction(mainThread = true)
-    fun setGroupColor(group: String, color: Int): MethodResult {
-        if (!be.peripheralGroups.contains(group)) return MethodResult.of(false, "There is no such group")
-        be.peripheralGroups[group]!!.color = color
-        be.pushData()
-        return MethodResult.of(true)
+    fun setGroupColor(group: String, color: Int): MethodResult = when (be.setGroupColor(group, color)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> MethodResult.of(false, "There is no such group")
+        else -> MethodResult.of(false, "Invalid color")
     }
 
     @LuaFunction(mainThread = true)

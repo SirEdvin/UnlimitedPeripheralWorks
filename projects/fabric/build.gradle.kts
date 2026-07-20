@@ -72,7 +72,7 @@ loom {
             property("fabric-api.gametest", "true")
             property("fabric.debug.disableModIds", "create")
             property("fabric.debug.loadLate", "testiarium_cct_testmod")
-            property("testiarium.tags", "peripheralworks")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
