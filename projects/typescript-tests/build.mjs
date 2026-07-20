@@ -18,3 +18,12 @@ const result = spawnSync(
   { stdio: "inherit" }
 );
 if (result.status !== 0) process.exit(result.status ?? 1);
+
+for (const peripheral of [
+  "ultimate_sensor", "item_pedestal", "map_pedestal", "display_pedestal",
+  "remote_observer", "peripheral_proxy", "reality_forger", "recipe_registry",
+  "informative_registry", "statue_workbench", "entity_link", "network_manager",
+  "hologram_projector",
+]) {
+  cpSync(resolve(output, "peripheralworksgametests.universal_scanner.lua"), resolve(output, `peripheralworksgametests.${peripheral}.lua`));
+}
