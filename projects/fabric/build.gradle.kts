@@ -95,6 +95,7 @@ loom {
             property("testiarium.tags", "network-manager-client")
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
             vmArg("-ea")
             runDir("run/network-manager-client-gametest")
         }
@@ -106,6 +107,12 @@ repositories {
     maven {
         name = "SirEdvin's Maven proxy"
         url = uri("https://mvn.siredvin.site/minecraft")
+    }
+}
+
+tasks.named("runPeripheralWorksClientGameTest") {
+    doFirst {
+        layout.buildDirectory.dir("screenshots/network-manager-client/screenshots").get().asFile.mkdirs()
     }
 }
 

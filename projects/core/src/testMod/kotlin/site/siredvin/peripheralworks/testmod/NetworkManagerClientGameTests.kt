@@ -19,7 +19,9 @@ import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
 import site.siredvin.testiarium.api.ClientGameTest
 import site.siredvin.testiarium.api.TestGroup
+import site.siredvin.testiarium.fixture.client.ClientTestHelper
 import site.siredvin.testiarium.fixture.client.thenOnClient
+import java.io.File
 
 @TestGroup("network-manager-client")
 class NetworkManagerClientGameTests {
@@ -28,6 +30,9 @@ class NetworkManagerClientGameTests {
         val managerPos = BlockPos(1, 1, 1)
         helper.startSequence()
             .thenExecute {
+                listOf("network-manager-group-created-iron.png", "network-manager-group-hierarchy.png", "network-manager-group-memberships.png").forEach {
+                    screenshotFile(it).delete()
+                }
                 helper.setBlock(managerPos, Blocks.NETWORK_MANAGER.get())
                 val manager = manager(helper, managerPos)
                 manager.peripherals["monitor_0"] = helper.absolutePos(BlockPos(2, 1, 1))
@@ -50,6 +55,9 @@ class NetworkManagerClientGameTests {
                 createGroup(minecraft.screen as NetworkManagerScreen, "factory/ore/iron")
             }
             .thenWaitUntil { manager(helper, managerPos).requireGroup("factory/ore/iron") }
+            .thenIdle(3)
+            .thenOnClient { screenshot("network-manager-group-created-iron.png") }
+            .thenWaitUntil { requireScreenshot("network-manager-group-created-iron.png") }
             .thenOnClient { createGroup(minecraft.screen as NetworkManagerScreen, "factory/ore/gold") }
             .thenWaitUntil { manager(helper, managerPos).requireGroup("factory/ore/gold") }
             .thenIdle(5)
@@ -60,6 +68,11 @@ class NetworkManagerClientGameTests {
                 click(screen, button(screen, "+ factory", trim = true))
                 click(screen, button(screen, ">"))
                 click(screen, button(screen, "+ ore", trim = true))
+            }
+            .thenOnClient { screenshot("network-manager-group-hierarchy.png") }
+            .thenWaitUntil { requireScreenshot("network-manager-group-hierarchy.png") }
+            .thenOnClient {
+                val screen = minecraft.screen as NetworkManagerScreen
                 editBoxes(screen).first().setValue("factory/ore/iron")
                 screen.tick()
                 click(screen, button(screen, "factory/ore/iron", trim = true))
@@ -78,6 +91,8 @@ class NetworkManagerClientGameTests {
                 val members = manager(helper, managerPos).peripheralGroups.getValue("factory/ore/iron").peripherals
                 if (members != setOf("monitor_0", "printer_0")) retry("Peripheral memberships have not synchronized")
             }
+            .thenOnClient { screenshot("network-manager-group-memberships.png") }
+            .thenWaitUntil { requireScreenshot("network-manager-group-memberships.png") }
             .thenSucceed()
     }
 
@@ -85,6 +100,14 @@ class NetworkManagerClientGameTests {
         editBoxes(screen).first().setValue(name)
         click(screen, button(screen, ModText.NETWORK_MANAGER_CREATE.text.string))
     }
+
+    private fun screenshot(name: String) = ClientTestHelper().screenshot(name)
+
+    private fun requireScreenshot(name: String) {
+        if (!screenshotFile(name).isFile) retry("Screenshot '$name' is not saved")
+    }
+
+    private fun screenshotFile(name: String) = File(System.getProperty("testiarium.screenshots"), "screenshots/$name")
 
     private fun manager(helper: GameTestHelper, pos: BlockPos) = helper.getBlockEntity(pos) as NetworkManagerBlockEntity
 
