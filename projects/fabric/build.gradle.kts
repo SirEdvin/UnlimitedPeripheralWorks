@@ -55,7 +55,6 @@ val testiariumCctArtifacts = configurations.detachedConfiguration(
 
 val testiariumTestModArtifacts = configurations.detachedConfiguration(
     project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1:test-mod@jar"),
-    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1:test-mod@jar"),
 ).apply { isTransitive = false }
 
 val testiariumMainArtifacts = configurations.detachedConfiguration(
@@ -144,7 +143,7 @@ dependencies {
     add("modTestModImplementation", libs.bundles.fabric.core)
     add("modTestModImplementation", libs.bundles.ccfabric)
     add("modTestModImplementation", files(testiariumMainArtifacts))
-    add("modTestModImplementation", files(testiariumTestModArtifacts))
+    add(testMod.implementationConfigurationName, files(testiariumTestModArtifacts))
     add("modTestModImplementation", files(testiariumCctArtifacts))
 }
 
