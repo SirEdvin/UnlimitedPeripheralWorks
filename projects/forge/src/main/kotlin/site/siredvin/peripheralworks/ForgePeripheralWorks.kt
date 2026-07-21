@@ -67,6 +67,7 @@ object ForgePeripheralWorks {
         @Suppress("DEPRECATION", "removal")
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
+        context.registerConfig(ModConfig.Type.CLIENT, ConfigHolder.clientSpec, "${PeripheralWorksCore.MOD_ID}-client.toml")
         PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
         ForgeNetworkHandler.setup()
         val eventBus = MOD_CONTEXT.getKEventBus()

@@ -1,14 +1,11 @@
 package site.siredvin.peripheralworks.client.configurator
 
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import net.minecraft.client.Minecraft
 import net.minecraft.core.BlockPos
 import net.minecraft.resources.ResourceLocation
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
+import site.siredvin.peripheralworks.common.configuration.ConfigHolder
 
 object NetworkManagerClientSettings {
     const val DEFAULT_DELIMITER = "/"
@@ -25,7 +22,6 @@ object NetworkManagerClientSettings {
         val expandedPaths: Set<String> = emptySet(),
     )
 
-    private val file by lazy { Minecraft.getInstance().gameDirectory.toPath().resolve("config/peripheralworks-network-managers.json") }
     private val values by lazy { load() }
 
     private fun key(dimension: ResourceLocation, pos: BlockPos) = "$dimension|${pos.asLong()}"
@@ -38,52 +34,33 @@ object NetworkManagerClientSettings {
             range = settings.range.coerceIn(MIN_RANGE, MAX_RANGE),
             expandedPaths = settings.expandedPaths.asSequence().filter { it.length <= MAX_EXPANDED_PATH_LENGTH }.take(MAX_EXPANDED_PATHS).toSet(),
         )
-        save()
+        ConfigHolder.clientConfig.networkManagerSettings.set(
+            values.toSortedMap().map { (key, settings) ->
+                JsonObject().apply {
+                    addProperty("key", key)
+                    addProperty("delimiter", settings.delimiter)
+                    addProperty("range", settings.range)
+                    add("expandedPaths", JsonArray().apply { settings.expandedPaths.sorted().forEach(::add) })
+                }.toString()
+            },
+        )
+        ConfigHolder.clientConfig.networkManagerSettings.save()
     }
 
-    private fun load(): MutableMap<String, Settings> {
-        if (!Files.isRegularFile(file)) return mutableMapOf()
-        return try {
-            val entries = Files.newBufferedReader(file).use { JsonParser.parseReader(it).asJsonObject.entrySet() }
-            entries.mapNotNull { (key, value) ->
-                val json = value.takeIf { it.isJsonObject }?.asJsonObject ?: return@mapNotNull null
-                val delimiter = json.get("delimiter")?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isString }?.asString?.take(MAX_DELIMITER_LENGTH) ?: DEFAULT_DELIMITER
-                val range = json.get("range")?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asInt?.coerceIn(MIN_RANGE, MAX_RANGE) ?: DEFAULT_RANGE
-                val expanded = json.get("expandedPaths")?.takeIf { it.isJsonArray }?.asJsonArray
-                    ?.asSequence()
-                    ?.mapNotNull { it.takeIf { path -> path.isJsonPrimitive && path.asJsonPrimitive.isString }?.asString?.takeIf { path -> path.length <= MAX_EXPANDED_PATH_LENGTH } }
-                    ?.take(MAX_EXPANDED_PATHS)
-                    ?.toSet() ?: emptySet()
-                key to Settings(delimiter, range, expanded)
-            }.toMap(mutableMapOf())
-        } catch (_: Exception) {
-            mutableMapOf()
-        }
-    }
-
-    private fun save() {
+    private fun load(): MutableMap<String, Settings> = ConfigHolder.clientConfig.networkManagerSettings.get().mapNotNull { entry ->
         try {
-            Files.createDirectories(file.parent)
-            val json = JsonObject()
-            values.toSortedMap().forEach { (key, settings) ->
-                json.add(
-                    key,
-                    JsonObject().apply {
-                        addProperty("delimiter", settings.delimiter)
-                        addProperty("range", settings.range)
-                        add("expandedPaths", JsonArray().apply { settings.expandedPaths.sorted().forEach(::add) })
-                    },
-                )
-            }
-            val temporary = file.resolveSibling("${file.fileName}.tmp")
-            Files.newBufferedWriter(temporary).use { GsonBuilder().setPrettyPrinting().create().toJson(json, it) }
-            try {
-                Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE)
-            } catch (_: Exception) {
-                Files.move(temporary, file, StandardCopyOption.REPLACE_EXISTING)
-            }
+            val json = JsonParser.parseString(entry).asJsonObject
+            val key = json.get("key")?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isString }?.asString ?: return@mapNotNull null
+            val delimiter = json.get("delimiter")?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isString }?.asString?.take(MAX_DELIMITER_LENGTH) ?: DEFAULT_DELIMITER
+            val range = json.get("range")?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }?.asInt?.coerceIn(MIN_RANGE, MAX_RANGE) ?: DEFAULT_RANGE
+            val expanded = json.get("expandedPaths")?.takeIf { it.isJsonArray }?.asJsonArray
+                ?.asSequence()
+                ?.mapNotNull { it.takeIf { path -> path.isJsonPrimitive && path.asJsonPrimitive.isString }?.asString?.takeIf { path -> path.length <= MAX_EXPANDED_PATH_LENGTH } }
+                ?.take(MAX_EXPANDED_PATHS)
+                ?.toSet() ?: emptySet()
+            key to Settings(delimiter, range, expanded)
         } catch (_: Exception) {
-            // Client presentation settings are optional; a read-only config directory must not break play.
+            null
         }
-    }
+    }.toMap(mutableMapOf())
 }
