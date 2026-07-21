@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -30,7 +31,7 @@ import site.siredvin.peripheralworks.utils.modId
 class FlexibleRealityAnchor :
     BaseNBTBlock<FlexibleRealityAnchorBlockEntity>(
         false,
-        BlockUtil.decoration().dynamicShape(),
+        BlockUtil.decoration().dynamicShape().mapColor(MapColor.NONE),
     ) {
     companion object {
         val CONFIGURED: BooleanProperty = BooleanProperty.create("configured")

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "O": {
+      "item": "minecraft:observer"
+    },
+    "P": {
+      "item": "peripheralium:peripheralium_dust"
+    }
+  },
+  "pattern": [
+    "POP",
+    " C ",
+    " O "
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:universal_scanner"
+  },
+  "show_notification": false
+}

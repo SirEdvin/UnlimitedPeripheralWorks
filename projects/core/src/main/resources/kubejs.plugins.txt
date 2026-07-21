@@ -1,0 +1,1 @@
+site.siredvin.peripheralworks.integrations.kubejs.Plugin

@@ -19,6 +19,6 @@ object Configuration : IForgeConfigHandler {
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
         enableMeInterfaceConfig = builder.comment("Enables me blocks integration").define("enableMEInterface", true)
-        enableMeInterfaceConfig = builder.comment("Enables me integration with storages").define("enableStorageIntegrations", true)
+        enableStorageIntegrationConfig = builder.comment("Enables me integration with storages").define("enableStorageIntegrations", true)
     }
 }

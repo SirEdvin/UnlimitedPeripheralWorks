@@ -12,10 +12,13 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.ModTurtleUpgrades
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.turtles.PeripheraliumHubTurtleUpgrade
 import site.siredvin.peripheralworks.computercraft.turtles.UltimateSensorTurtleUpgrade
 import site.siredvin.peripheralworks.computercraft.turtles.UniversalScannerTurtleUpgrade
+import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
+import site.siredvin.tweakium.modules.turtle.StatefulPeripheralTurtleUpgrade
 import java.util.concurrent.CompletableFuture
 
 object ModTurtleUpgradeDataProvider {
@@ -43,6 +46,14 @@ object ModTurtleUpgradeDataProvider {
         upgrades.register(
             ResourceKey.create(ITurtleUpgrade.REGISTRY, ModTurtleUpgrades.ULTIMATE_SENSOR.id),
             UltimateSensorTurtleUpgrade(Blocks.ULTIMATE_SENSOR.get().asItem().defaultInstance),
+        )
+        upgrades.register(
+            ResourceKey.create(ITurtleUpgrade.REGISTRY, ModTurtleUpgrades.HOLOGRAM_PROJECTOR.id),
+            StatefulPeripheralTurtleUpgrade.dynamic(
+                Blocks.HOLOGRAM_PROJECTOR.get().asItem(),
+                { turtle, side -> HologramProjectorPeripheral(TurtlePeripheralOwner(turtle, side)) },
+                ModTurtleUpgrades.HOLOGRAM_PROJECTOR::get,
+            ) { HologramProjectorPeripheral.UPGRADE_ID },
         )
     }
 

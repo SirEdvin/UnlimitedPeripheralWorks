@@ -4,6 +4,7 @@ import dan200.computercraft.api.upgrades.UpgradeType
 import net.minecraft.world.level.ItemLike
 import site.siredvin.broccolium.modules.platform.api.RegistryEntry
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
@@ -11,6 +12,7 @@ import site.siredvin.peripheralworks.computercraft.turtles.PeripheraliumHubTurtl
 import site.siredvin.peripheralworks.computercraft.turtles.UltimateSensorTurtleUpgrade
 import site.siredvin.peripheralworks.computercraft.turtles.UniversalScannerTurtleUpgrade
 import site.siredvin.peripheralworks.xplat.ModPlatform
+import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
 import site.siredvin.tweakium.modules.turtle.StatefulPeripheralTurtleUpgrade
 import java.util.function.Supplier
 
@@ -53,6 +55,17 @@ object ModTurtleUpgrades {
     val ULTIMATE_SENSOR: RegistryEntry<UpgradeType<StatefulPeripheralTurtleUpgrade<UltimateSensorPeripheral>>> = ModPlatform.registerTurtleUpgrade(
         UltimateSensorPeripheral.UPGRADE_ID,
         UpgradeType.simpleWithCustomItem(::UltimateSensorTurtleUpgrade),
+    )
+
+    val HOLOGRAM_PROJECTOR: RegistryEntry<UpgradeType<StatefulPeripheralTurtleUpgrade<HologramProjectorPeripheral>>> = ModPlatform.registerTurtleUpgrade(
+        HologramProjectorPeripheral.UPGRADE_ID,
+        UpgradeType.simpleWithCustomItem { stack ->
+            StatefulPeripheralTurtleUpgrade.dynamic(
+                stack.item,
+                { turtle, side -> HologramProjectorPeripheral(TurtlePeripheralOwner(turtle, side)) },
+                HOLOGRAM_PROJECTOR::get,
+            ) { HologramProjectorPeripheral.UPGRADE_ID }
+        },
     )
 
     fun doSomething() {}

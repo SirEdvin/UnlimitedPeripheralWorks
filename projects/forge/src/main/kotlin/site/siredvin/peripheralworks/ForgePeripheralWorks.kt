@@ -1,84 +1,83 @@
 package site.siredvin.peripheralworks
 
-import dan200.computercraft.api.ForgeComputerCraftAPI
-import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
-import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
+import dan200.computercraft.api.pocket.IPocketUpgrade
+import dan200.computercraft.api.turtle.ITurtleUpgrade
+import dan200.computercraft.api.upgrades.UpgradeType
+import net.minecraft.advancements.CriterionTrigger
+import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
-import net.minecraftforge.client.event.ModelEvent
-import net.minecraftforge.common.util.LazyOptional
-import net.minecraftforge.fml.ModLoadingContext
-import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.config.ModConfig
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
-import net.minecraftforge.registries.DeferredRegister
-import net.minecraftforge.registries.ForgeRegistries
-import net.minecraftforge.registries.NewRegistryEvent
+import net.neoforged.bus.api.IEventBus
+import net.neoforged.fml.ModContainer
+import net.neoforged.fml.common.Mod
+import net.neoforged.fml.config.ModConfig
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
+import net.neoforged.neoforge.registries.DeferredRegister
+import net.neoforged.neoforge.registries.NewRegistryEvent
 import site.siredvin.broccolium.modules.base.ForgeIntegrationLoader
 import site.siredvin.peripheralium.ForgePeripheralium
-import site.siredvin.peripheralworks.client.geometry.FlexibleRealityAnchorGeometryLoader
-import site.siredvin.peripheralworks.client.geometry.FlexibleStatueGeometryLoader
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
-import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.forge.ForgeCommonHooks
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModPlatform
 import site.siredvin.peripheralworks.forge.ForgeModRecipeIngredients
+import site.siredvin.peripheralworks.forge.ForgeNetworkHandler
 import site.siredvin.peripheralworks.subsystem.recipe.ForgeRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
-import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
-import thedarkcolour.kotlinforforge.forge.MOD_CONTEXT
 
 @Mod(PeripheralWorksCore.MOD_ID)
-@Mod.EventBusSubscriber(modid = PeripheralWorksCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-object ForgePeripheralWorks {
+class ForgePeripheralWorks(modEventBus: IEventBus, modContainer: ModContainer) {
 
-    val blocksRegistry: DeferredRegister<Block> =
-        DeferredRegister.create(ForgeRegistries.BLOCKS, PeripheralWorksCore.MOD_ID)
-    val itemsRegistry: DeferredRegister<Item> =
-        DeferredRegister.create(ForgeRegistries.ITEMS, PeripheralWorksCore.MOD_ID)
-    val blockEntityTypesRegistry: DeferredRegister<BlockEntityType<*>> =
-        DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, PeripheralWorksCore.MOD_ID)
-    val creativeTabRegistry: DeferredRegister<CreativeModeTab> =
-        DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), PeripheralWorksCore.MOD_ID)
-    val recipeSerializers: DeferredRegister<RecipeSerializer<*>> =
-        DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, PeripheralWorksCore.MOD_ID)
-    val turtleSerializers: DeferredRegister<TurtleUpgradeSerialiser<*>> = DeferredRegister.create(
-        TurtleUpgradeSerialiser.registryId(),
-        PeripheralWorksCore.MOD_ID,
-    )
-    val pocketSerializers: DeferredRegister<PocketUpgradeSerialiser<*>> = DeferredRegister.create(
-        PocketUpgradeSerialiser.registryId(),
-        PeripheralWorksCore.MOD_ID,
-    )
+    companion object {
+        val blocksRegistry: DeferredRegister<Block> =
+            DeferredRegister.create(BuiltInRegistries.BLOCK, PeripheralWorksCore.MOD_ID)
+        val itemsRegistry: DeferredRegister<Item> =
+            DeferredRegister.create(BuiltInRegistries.ITEM, PeripheralWorksCore.MOD_ID)
+        val blockEntityTypesRegistry: DeferredRegister<BlockEntityType<*>> =
+            DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, PeripheralWorksCore.MOD_ID)
+        val creativeTabRegistry: DeferredRegister<CreativeModeTab> =
+            DeferredRegister.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), PeripheralWorksCore.MOD_ID)
+        val recipeSerializers: DeferredRegister<RecipeSerializer<*>> =
+            DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, PeripheralWorksCore.MOD_ID)
+        val criterionTriggers: DeferredRegister<CriterionTrigger<*>> =
+            DeferredRegister.create(BuiltInRegistries.TRIGGER_TYPES, PeripheralWorksCore.MOD_ID)
+        val dataComponentTypes: DeferredRegister<DataComponentType<*>> =
+            DeferredRegister.create(BuiltInRegistries.DATA_COMPONENT_TYPE, PeripheralWorksCore.MOD_ID)
+        val turtleUpgradeTypes: DeferredRegister<UpgradeType<out ITurtleUpgrade>> =
+            DeferredRegister.create(ITurtleUpgrade.typeRegistry(), PeripheralWorksCore.MOD_ID)
+        val pocketUpgradeTypes: DeferredRegister<UpgradeType<out IPocketUpgrade>> =
+            DeferredRegister.create(IPocketUpgrade.typeRegistry(), PeripheralWorksCore.MOD_ID)
 
-    val loader = ForgeIntegrationLoader(
-        ForgePeripheralWorks::class.java.getPackage().name,
-        PeripheralWorksCore.logger,
-    )
+        val loader = ForgeIntegrationLoader(
+            ForgePeripheralWorks::class.java.getPackage().name,
+            PeripheralWorksCore.logger,
+        )
+    }
 
     init {
         ForgePeripheralium.sayHi()
         // Configure configuration
-        val context = ModLoadingContext.get()
-        context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
+        modContainer.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
         PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
-        val eventBus = MOD_CONTEXT.getKEventBus()
-        eventBus.addListener(this::commonSetup)
-        eventBus.addListener(this::registrySetup)
-        eventBus.addListener(this::registryModel)
+        modEventBus.addListener(this::commonSetup)
+        modEventBus.addListener(this::registrySetup)
+        modEventBus.addListener(ForgeNetworkHandler::setup)
+        modEventBus.addListener(ForgeCommonHooks::registerCapabilities)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
-        blocksRegistry.register(eventBus)
-        itemsRegistry.register(eventBus)
-        blockEntityTypesRegistry.register(eventBus)
-        creativeTabRegistry.register(eventBus)
-        recipeSerializers.register(eventBus)
-        turtleSerializers.register(eventBus)
-        pocketSerializers.register(eventBus)
+        blocksRegistry.register(modEventBus)
+        itemsRegistry.register(modEventBus)
+        blockEntityTypesRegistry.register(modEventBus)
+        creativeTabRegistry.register(modEventBus)
+        recipeSerializers.register(modEventBus)
+        criterionTriggers.register(modEventBus)
+        dataComponentTypes.register(modEventBus)
+        turtleUpgradeTypes.register(modEventBus)
+        pocketUpgradeTypes.register(modEventBus)
 
         ForgeRecipeTransformers.init()
     }
@@ -91,35 +90,24 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("mna").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("fluxnetworks").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
-        // Register peripheral provider
-        ForgeComputerCraftAPI.registerPeripheralProvider { world, pos, side ->
-            val entity = world.getBlockEntity(pos)
-            if (entity is IPeripheralProvider<*>) {
-                val foundPeripheral = entity.getPeripheral(side)
-                if (foundPeripheral != null) {
-                    return@registerPeripheralProvider LazyOptional.of { foundPeripheral }
-                }
-            }
-            val supplier = ComputerCraftProxy.lazyPeripheralProvider(world, pos, side)
-                ?: return@registerPeripheralProvider LazyOptional.empty()
-            return@registerPeripheralProvider LazyOptional.of { supplier.get() }
-        }
+        loader.maybeLoadIntegration("embers").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("theurgy").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("emi").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("gtceu").ifPresent { (it as Runnable).run() }
+        PeripheralWorksCommonHooks.afterConfigurationLoaded()
     }
 
     @Suppress("UNUSED_PARAMETER")
     fun registrySetup(event: NewRegistryEvent) {
         loader.maybeLoadIntegration("integrateddynamics").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
-    }
-
-    @Suppress("MemberVisibilityCanBePrivate")
-    fun registryModel(event: ModelEvent.RegisterGeometryLoaders) {
-        event.register("flexible_reality_anchor", FlexibleRealityAnchorGeometryLoader)
-        event.register("flexible_statue", FlexibleStatueGeometryLoader)
+        loader.maybeLoadIntegration("ars_nouveau").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("projecte").ifPresent { (it as Runnable).run() }
     }
 }

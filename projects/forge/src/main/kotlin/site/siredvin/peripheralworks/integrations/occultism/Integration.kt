@@ -9,8 +9,6 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
-import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorageEntityExtractor
-import site.siredvin.broccolium.modules.storage.item.api.AgnosticItemStorageExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -68,28 +66,24 @@ class Integration : Runnable {
     override fun run() {
         ComputerCraftProxy.addProvider(OccultismStorageProvider)
         ComputerCraftProxy.addProvider(SpecificOccultismPluginProvider)
-        AgnosticItemStorageLookup.addItemStorageExtractor(
-            AgnosticItemStorageExtractor { _, _, blockEntity ->
-                if (blockEntity == null || blockEntity.isRemoved) {
-                    return@AgnosticItemStorageExtractor null
-                }
-                if (blockEntity is IStorageController) {
-                    return@AgnosticItemStorageExtractor OccultismItemStorage(blockEntity)
-                }
-                if (blockEntity is IStorageControllerProxy) {
-                    return@AgnosticItemStorageExtractor OccultismItemStorage(blockEntity.linkedStorageController)
-                }
-                return@AgnosticItemStorageExtractor null
-            },
-        )
-        AgnosticItemStorageLookup.addItemStorageExtractor(
-            AgnosticItemStorageEntityExtractor { _, entity ->
-                if (entity is SpiritEntity) {
-                    return@AgnosticItemStorageEntityExtractor AgnosticItemHandlerWrapper(entity.inventory)
-                }
-                return@AgnosticItemStorageEntityExtractor null
-            },
-        )
+        AgnosticItemStorageLookup.addBlockLookup { _, _, blockEntity, direction ->
+            if (blockEntity == null || blockEntity.isRemoved) {
+                return@addBlockLookup null
+            }
+            if (blockEntity is IStorageController) {
+                return@addBlockLookup OccultismItemStorage(blockEntity)
+            }
+            if (blockEntity is IStorageControllerProxy) {
+                return@addBlockLookup OccultismItemStorage(blockEntity.linkedStorageController)
+            }
+            return@addBlockLookup null
+        }
+        AgnosticItemStorageLookup.addEntityLookup { _, entity, direction ->
+            if (entity is SpiritEntity) {
+                return@addEntityLookup AgnosticItemHandlerWrapper(entity.inventory)
+            }
+            return@addEntityLookup null
+        }
         EntityLinkPeripheral.ENRICHERS.add(
             BiConsumer { entity, data ->
                 if (entity is SpiritEntity) {

@@ -19,7 +19,7 @@ open class TraderPlugin(private val trader: TraderTileentityBase) : IPeripheralP
         if (!trader.hasVillager()) {
             return null
         }
-        val villager = trader.villagerEntity
+        val villager = trader.villagerEntity ?: return null
         val base = LuaRepresentation.forEntity(villager)
         merchantData.accept(villager, base)
         villagerData.accept(villager, base)

@@ -11,6 +11,323 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 - Large migration to new framework and update to 1.21
 
+## [1.7.17] - 2026-02-20
+
+### Fixed
+
+- Forge block entity renderer registration for pedestals
+- Data fixing logic for existing pedestals
+
+## [1.7.16] - 2026-02-20
+
+### Added
+- Ability to generate new pedestals with KubeJs
+- Pedestals now showing amount of stored items
+- Pedestal can now hold more than one regular stack, but still single item. This mostly used for KubeJS based pedestals
+
+### Changed
+
+- Internal implementation of pedestals to used platform-based storages.
+
+## [1.7.15] - 2026-01-27
+
+### Changed
+
+- Support for newer GTCeu versions
+
+## [1.7.14] - 2026-01-01
+
+### Changed
+
+- Emi recipe tag information now simplified to only tag and tag type without candidates
+
+## [1.7.13] - 2025-12-11
+
+### Added
+
+- Expose parts of gtceu multiblock that is a peripheral
+
+## [1.7.12] - 2025-12-04
+
+### Fixed 
+
+- Network manager remove check one more time
+
+## [1.7.11] - 2025-12-04
+
+### Fixed
+
+- Network manager now can remove groups
+
+## [1.7.10] - 2025-11-29
+
+### Fixed
+
+- AE2 integration correctly work with large amount of fluids for transfer
+
+## [1.7.9] - 2025-11-29
+
+### Fixed
+
+- AE2 integration correctly work with large amount of fluids
+
+## [1.7.8] - 2025-11-27
+
+### Added
+
+- Slot argument for `item_storage` for destinations
+- Ability to change radius of label rendering for network manager overlay
+
+### Fixed
+
+- Network manager overlay text should work with shaders now
+
+## [1.7.7] - 2025-11-23
+
+### Added
+
+- GTCEU Recipes now will show duration, level and every consumption
+- EMI recipe will now have `extra` field with extra info
+- GTCEU machines now has `getRecipeTypes()` method
+- Network manager now has `getDistanceBetween` that return relative distance between two peripherals
+
+## [1.7.6] - 2025-11-19
+
+### Fixed
+
+- Inventory and item storage peripheral no longer deletes item when transfer from storage that can't be inserted into full storage
+
+## [1.7.5] - 2025-11-17
+
+### Added
+
+- Controllable and Workable peripheral for GTCEU
+- Expose information about 
+- EMI recipes now expose detailed information about stacks
+
+## [1.7.4] - 2025-11-15
+
+### Added
+
+- Tag information for EMI recipe ingredients
+
+## [1.7.3] - 2025-11-15
+
+### Added
+
+- Tools information from GTCEU
+
+## [1.7.2] - 2025-11-14
+
+### Fixed
+
+- Tom's storage on forge now `inventory` peripheral
+- Peripheral casing recipe requires any coal on forge
+
+## [1.7.1] - 2025-11-12
+
+### Added
+
+- EMI integration with recipe registry
+- Catalysts to EMI recipe parsing in events and in registry
+
+## [1.7.0] - 2025-11-09
+
+### Added
+
+- Integration with EMI for recipe and ingredient pasting to computer
+- Turtle refuel handler works with any kind of energy
+- Transfer between FE/RF storages and turtles
+- Sided peripherals
+- Hologram projector peripheral
+
+## [1.6.9] - 2025-11-01
+
+### Added
+
+- Exposing information about tags with `informative_registry`
+
+## [1.6.8] - 2025-10-31
+
+### Changed
+
+- `recipe_registry` api rework, it is now fully incompatible with old version, but supports getting parsed and raw recipes just by id.
+
+## [1.6.7] - 2025-10-31
+
+### Fixed
+
+- `getAvailableItems` for transmutate table returns full info about items
+
+## [1.6.6] - 2025-10-30
+
+### Fixed
+
+- Limit for `syntize` method for projectE
+- Inventory changes for `syntize` now will work correctly
+
+## [1.6.5] - 2025-10-30
+
+### Changed
+
+- Significantly increase limits for item, fluid and energy transfer.
+
+### Fixed
+
+- `pullItems` now works will all slots with item predicate
+
+## [1.6.4] - 2025-10-26
+
+### Added
+
+- ProjectE transmutation tablet can be used as upgrade for turtle and pocket computer
+
+### Fixed
+
+- Network manager is not registered as peripheral by wired modem
+
+## [1.6.3] - 2025-10-26
+
+### Added 
+
+- `network_manager_group_change` event
+
+### Changed
+
+- Flexible reality anchor now transparent on the map
+- Minecarts sorted by UUID when retrieved
+
+## [1.6.2] - 2025-10-19
+
+### Added
+
+- Flux networks now expose network and per device information
+- Blaze burner integration returned for fabric
+- Create recipes compact added for recipe registry
+- Informative registry now has `mods` and `entity` lists
+- New item query predicates. `uwu`, `owo`, `all`, and much more
+
+### Changed
+
+- `fluid_storage_extended` now in menu. With new `precision_amount`, `capacities` and `platformDivider` in configuration
+- Informative registry now produce better results for items
+
+### Fixed
+
+- Settings for fluid and energy storages
+- Fluid limits now exposed correctly
+- Recipe registry now returns single recipe when it should
+- Jar in Jar is now just Jar in Jar, not Jar in Jar in Jar
+
+## [1.6.1] - 2025-10-04
+
+### Added
+
+- `getGroupColor` method
+
+## [1.6.0] - 2025-09-30
+
+### Added
+
+- Ultimate configurator with peripheral proxy mod now show peripheral names for connected peripherals
+- M&A base integration, allows to control golem storage and some rudiment control
+- Network manager
+
+### Fixed
+
+- Peripheral proxy no longer cook network with double peripheral registration
+
+## [1.5.12] - 2025-09-29
+
+### Changed
+
+- Peripheral proxy now can be connected to CC:T network
+
+## [1.5.11] - 2025-09-29
+
+### Added
+
+- `inventory` and `energy_storage` peripherals for turtle
+- More itemQuery and blockQuery predicates
+- Support for create contraption entities for entity link
+- `inventory_extended` and `energy_storage_extended` peripheral types to help differentiate between regular and UPW peripherals
+
+## [1.5.9] - 2025-09-27
+
+### Added
+
+- `list()` and `items()` support filters now
+- `list()` support detailed as first argument
+- `energyAlwaysTransferable` is now true by default
+
+### Changed
+
+- Way how fake player is caching, maybe it will fix something, maybe not. Let's see
+
+### Removed
+
+- Create blaze burner integration. Create has it inside.
+
+## [1.5.8] - 2025-09-23
+
+### Fixed
+
+- `inventory` API being broken
+
+## [1.5.7] - 2025-09-23
+
+### Fixed
+
+- TechReborn integration checks for energy slightly more correct
+
+## [1.5.6] - 2025-09-22
+
+### Added
+
+- Ability to work with `source` in Ars Nouveau
+- Secret option to enable transfer for all energy
+
+### Changed
+- Energy storage unification, now theurgy mercury flux, ars nouveau source and ember's ember counts as energy and provide `energy_storage` 
+
+## [1.5.5] - 2025-09-16
+
+### Fixed
+
+- `or` and `and` filters
+- BaCkWaRd CoMpItAbIlItI
+
+## [1.5.4] - 2025-09-16
+
+### Added
+
+- Libs update to get new complex itemQuery and also scan filtering
+
+## [1.5.3] - 2025-09-16
+
+### Added
+
+- Ember integration
+- Basic ars nouveau integration
+
+## [1.5.2] - 2025-09-14
+
+### Fixed
+
+- Updated libs to fix `getItemLimit()` function
+
+## [1.5.1] - 2025-03-19
+
+### Fixed
+
+- Dependencies for release and jarjar for forge
+
+
+## [1.5.0] - 2025-03-18
+
+### Changed
+
+- New libraries toolkit
 
 ## [1.4.5] - 2025-02-08
 

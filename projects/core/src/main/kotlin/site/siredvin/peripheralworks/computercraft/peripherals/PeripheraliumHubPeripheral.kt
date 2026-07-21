@@ -119,7 +119,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
     fun isUpgrade(slot: Int): Boolean {
         val storage = peripheralOwner.storage ?: return false
         assertBetween(slot, 1, storage.size, "Slot should be between 1 and ${storage.size}")
-        val stack = storage.getItem(slot - 1)
+        val stack = storage.get(slot - 1)
         return isUpgradeImpl(stack)
     }
 
@@ -130,18 +130,18 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
         }
         val storage = peripheralOwner.storage ?: return MethodResult.of(null, "Cannot access inventory for some reason")
         assertBetween(slot, 1, storage.size, "Slot should be between 1 and ${storage.size}")
-        val stack = storage.getItem(slot - 1)
+        val stack = storage.get(slot - 1)
         val equipTestResult = isEquitable(stack)
         if (equipTestResult.first == null || !equipTestResult.first!!) {
             return MethodResult.of(equipTestResult.first, equipTestResult.second)
         }
-        val takenStack: ItemStack = storage.takeItems(1, slot - 1, slot - 1, ItemStorageUtils.ALWAYS)
+        val takenStack: ItemStack = storage.take(1, slot - 1, slot - 1, ItemStorageUtils.ALWAYS, false)
         if (takenStack.isEmpty) {
             return MethodResult.of(null, "Cannot extract item for equipment")
         }
         val equipResult = equipImpl(takenStack)
         if (equipResult.first == null || !equipResult.first!!) {
-            storage.storeItem(takenStack, slot - 1, slot - 1)
+            storage.store(takenStack, slot - 1, slot - 1, false)
             return MethodResult.of(equipResult.first, equipResult.second)
         }
         return MethodResult.of(true)

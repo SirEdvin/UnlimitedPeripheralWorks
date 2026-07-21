@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.data
 import net.minecraft.data.PackOutput
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
@@ -42,6 +43,8 @@ class ModEnLanguageProvider(
         add(Blocks.FLEXIBLE_STATUE.get(), "Flexible statue")
         add(Blocks.STATUE_WORKBENCH.get(), "Statue workbench", "§3§oImagination your only limit. And also 48 point size limit, but this is not so important")
         add(Blocks.ENTITY_LINK.get(), "Entity link", "§3§oCan help you to create interspace link to any entity, you just need to insert card")
+        add(Blocks.NETWORK_MANAGER.get(), text = "Network manager", "§3§oJust connect it to your wired network and it will become so useful!")
+        add(Blocks.HOLOGRAM_PROJECTOR.get(), "Hologram projector", "§3§oProject your dream and desires with a little help from display entities")
 
         add(ModText.CREATIVE_TAB, "UnlimitedPeripheralWorks")
 
@@ -58,6 +61,7 @@ class ModEnLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_FORBIDDEN, "This block is forbidden to add to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "This peripheral is connected to peripheral proxy")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "This peripheral is disconnected from peripheral proxy")
+        add(ModText.PERIPHERAL_PROXY_CONNECTED_PERIPHERALS, "Connected peripherals:")
         add(ModText.DEFINITELY_NOT, "§3§oDefinitely not a ")
         add(ModText.TARGET_ENTITY, "Entity %s recorded in card, currently at %s")
         add(ModText.ENTITY_CANNOT_BE_STORED, "This entity cannot be recorded inside card")
@@ -66,6 +70,7 @@ class ModEnLanguageProvider(
         add(ModText.ENTITY_LINK_UPGRADES, "List of entity link upgrades:")
         add(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES, "Entity link doesn't have any upgrades")
         add(ModText.ENTITY_LINK_UPGRADE_SCANNER, "Scanner")
+        add(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE, "Network manager overlay radius: %s")
 
         add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
 
@@ -87,11 +92,18 @@ class ModEnLanguageProvider(
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Max forging range: %s")
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Author: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Entity link configuration")
+        add(ModTooltip.NETWORK_MANAGER_MODE, "  Network manager overlay")
+        add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE, "  Overlay radius: %s")
+
+        add(ModEnergiesText.MERCURY_FLUX, "Mercury flux")
+        add(ModEnergiesText.EMBER, "Ember")
+        add(ModEnergiesText.SOURCE, "Source")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "Hub")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "Netherite Hub")
         addUpgrades(UniversalScannerPeripheral.UPGRADE_ID, "Scanning")
         addUpgrades(UltimateSensorPeripheral.UPGRADE_ID, "Sensing")
+        addUpgrades(HologramProjectorPeripheral.UPGRADE_ID, "Projecting")
 
         hooks.forEach { it.accept(this) }
     }

@@ -4,7 +4,8 @@
 build/
 out/
 classes/
-
+.kotlin
+node_modules/
 # eclipse
 
 *.launch
@@ -34,3 +35,5 @@ run/
 
 .env
 UnlimitedPeripheralWorks-*
+.opencode
+.factorypath

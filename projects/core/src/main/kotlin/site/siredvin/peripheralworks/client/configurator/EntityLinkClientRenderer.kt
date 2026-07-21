@@ -8,7 +8,7 @@ import net.minecraft.core.BlockPos
 object EntityLinkClientRenderer : ConfigurationModeRender {
     private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
     override fun render(minecraft: Minecraft, source: BlockPos, poseStack: PoseStack, camera: Camera) {
-        FlareRenderer.initFlareRenderer(poseStack, camera)
+        FlareRenderer.initRenderer(poseStack, camera)
         FlareRenderer.renderFlare(
             poseStack,
             camera,
@@ -19,6 +19,6 @@ object EntityLinkClientRenderer : ConfigurationModeRender {
             sourceFlareColor,
             1f,
         )
-        FlareRenderer.uninitFlareRenderer(poseStack)
+        FlareRenderer.uninitRenderer(poseStack)
     }
 }

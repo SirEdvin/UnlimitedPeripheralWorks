@@ -20,6 +20,7 @@ import site.siredvin.broccolium.modules.base.block.BaseBlockEntityBlock
 import java.util.stream.Stream
 
 abstract class BasePedestal<T : BlockEntity>(properties: Properties) : BaseBlockEntityBlock<T>(false, properties) {
+
     init {
         registerDefaultState(getStateDefinition().any().setValue(FACING, Direction.UP))
     }

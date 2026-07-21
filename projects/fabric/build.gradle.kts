@@ -1,3 +1,5 @@
+import java.io.ByteArrayInputStream
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("site.siredvin.fabric")
@@ -22,7 +24,9 @@ fabricShaking {
     extraVersionMappings.set(
         mapOf(
             "computercraft" to "cc-tweaked",
+            "broccolium" to "broccolium",
             "peripheralium" to "peripheralium",
+            "tweakium" to "tweakium",
         ),
     )
     shake()
@@ -34,12 +38,61 @@ sourceSets.main {
         exclude("site/siredvin/peripheralworks/integrations/ae2/**")
         exclude("site/siredvin/peripheralworks/integrations/alloy_forgery/**")
         exclude("site/siredvin/peripheralworks/integrations/create/**")
+        exclude("site/siredvin/peripheralworks/integrations/kubejs/**")
         exclude("site/siredvin/peripheralworks/integrations/modern_industrialization/**")
         exclude("site/siredvin/peripheralworks/integrations/naturescompass/**")
         exclude("site/siredvin/peripheralworks/integrations/powah/**")
         exclude("site/siredvin/peripheralworks/integrations/toms_storage/**")
         exclude("site/siredvin/peripheralworks/integrations/universal_shops/**")
     }
+}
+
+val testMod = sourceSets.create("testMod") {
+    compileClasspath += sourceSets.main.get().compileClasspath
+    compileClasspath += sourceSets.main.get().output
+    compileClasspath += project(":core").sourceSets["testMod"].output
+    runtimeClasspath += sourceSets.main.get().runtimeClasspath
+    runtimeClasspath += sourceSets.main.get().output
+    runtimeClasspath += project(":core").sourceSets["testMod"].output
+}
+
+net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)
+
+val testiariumMainArtifacts = configurations.detachedConfiguration(
+    dependencies.create(libs.testiarium.core.get()),
+    dependencies.create(libs.testiarium.fabric.get()),
+).apply { isTransitive = false }
+
+val testiariumTestArtifacts = configurations.detachedConfiguration(
+    dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar"),
+    dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1:cct-test-mod@jar"),
+    dependencies.create("site.siredvin:testiarium-fabric-1.21.1:0.1.1:test-mod@jar"),
+).apply { isTransitive = false }
+
+loom {
+    mods {
+        register("peripheralworks-testmod") {
+            sourceSet(testMod)
+            sourceSet(project(":core").sourceSets["testMod"])
+        }
+    }
+    runs {
+        create("peripheralWorksGameTest") {
+            server()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("testiarium.tags", "peripheralworks")
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/peripheralworks-gametest")
+        }
+    }
+}
+
+tasks.named<JavaExec>("runPeripheralWorksGameTest") {
+    standardInput = ByteArrayInputStream("true\n".toByteArray())
 }
 
 repositories {
@@ -57,6 +110,7 @@ repositories {
         url = uri("https://maven.wispforest.io")
         content {
             includeGroup("io.wispforest")
+            includeGroup("io.wispforest.endec")
         }
     }
     maven {
@@ -70,37 +124,25 @@ repositories {
     maven {
         name = "OSS Sonatype Repo"
         url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-        content {
-            includeGroup("me.lucko")
-        }
+        content { includeGroup("me.lucko") }
     }
     maven {
         name = "ModMenu maven"
         url = uri("https://maven.terraformersmc.com/releases")
-        content {
-            includeGroup("com.terraformersmc")
-        }
+        content { includeGroup("com.terraformersmc") }
     }
-    // for reach entity attributes, required by Magna
     maven {
         url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
-        content {
-            includeGroup("com.jamieswhiteshirt")
-        }
+        content { includeGroup("com.jamieswhiteshirt") }
     }
     maven {
         url = uri("https://maven.draylar.dev/releases")
-        content {
-            includeGroup("dev.draylar")
-        }
+        content { includeGroup("dev.draylar") }
     }
     maven {
         name = "Jitpack for MI"
         url = uri("https://jitpack.io")
-        content {
-            /* For Magna */
-            includeGroup("com.github.Draylar.omega-config")
-        }
+        content { includeGroup("com.github.Draylar.omega-config") }
     }
     maven {
         name = "Ladysnake Mods"
@@ -131,9 +173,7 @@ repositories {
     maven {
         name = "Mod maven"
         url = uri("https://modmaven.dev/")
-        content {
-            includeGroup("com.jozufozu.flywheel")
-        }
+        content { includeGroup("com.jozufozu.flywheel") }
     }
 }
 
@@ -144,6 +184,10 @@ dependencies {
 
     modImplementation(libs.bundles.fabric.core)
     modImplementation(libs.bundles.fabric)
+    compileOnly(libs.emi.common)
+    modCompileOnly(libs.emi.fabric)
+    modCompileOnly(libs.endec)
+    modCompileOnly(libs.automobility.fabric)
     modImplementation(libs.bundles.ccfabric) {
         exclude("net.fabricmc.fabric-api")
         exclude("net.fabricmc", "fabric-loader")
@@ -160,8 +204,15 @@ dependencies {
     }
 
     libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
+    runtimeOnly(libs.endec)
+    runtimeOnly(libs.endec.gson)
+    runtimeOnly(libs.endec.jankson)
+    runtimeOnly(libs.endec.netty)
     libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
     libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+
+    add("modTestModImplementation", files(testiariumMainArtifacts))
+    add("modTestModImplementation", files(testiariumTestArtifacts))
 }
 
 publishingShaking {

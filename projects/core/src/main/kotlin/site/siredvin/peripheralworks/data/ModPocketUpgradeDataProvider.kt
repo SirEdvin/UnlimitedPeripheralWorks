@@ -12,10 +12,13 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.common.setup.ModPocketUpgrades
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.pocket.PeripheraliumHubPocketUpgrade
 import site.siredvin.peripheralworks.computercraft.pocket.UltimateSensorPocketUpgrade
 import site.siredvin.peripheralworks.computercraft.pocket.UniversalScannerPocketUpgrade
+import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
+import site.siredvin.tweakium.modules.pocket.StatefulPeripheralPocketUpgrade
 import java.util.concurrent.CompletableFuture
 
 object ModPocketUpgradeDataProvider {
@@ -43,6 +46,15 @@ object ModPocketUpgradeDataProvider {
         upgrades.register(
             ResourceKey.create(IPocketUpgrade.REGISTRY, ModPocketUpgrades.ULTIMATE_SENSOR.id),
             UltimateSensorPocketUpgrade(Blocks.ULTIMATE_SENSOR.get().asItem().defaultInstance),
+        )
+        upgrades.register(
+            ResourceKey.create(IPocketUpgrade.REGISTRY, ModPocketUpgrades.HOLOGRAM_PROJECTOR.id),
+            StatefulPeripheralPocketUpgrade(
+                HologramProjectorPeripheral.UPGRADE_ID,
+                Blocks.HOLOGRAM_PROJECTOR.get().asItem().defaultInstance,
+                { HologramProjectorPeripheral(PocketPeripheralOwner(it)) },
+                ModPocketUpgrades.HOLOGRAM_PROJECTOR::get,
+            ),
         )
     }
 

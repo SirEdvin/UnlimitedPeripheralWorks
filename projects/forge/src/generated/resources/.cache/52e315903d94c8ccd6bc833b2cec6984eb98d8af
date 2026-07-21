@@ -1,0 +1,4 @@
+// 1.21.1	2026-07-15T21:31:53.72646047	Tags for minecraft:block mod id peripheralworks
+a2eba9680ee1b6ea9c29e8174230851b0a8c162c data/computercraft/tags/block/peripheral_hub_ignore.json
+9e52700b3b7c82255705d9bb2aeebe59d8c17ac9 data/peripheralworks/tags/block/peripheral_proxy_forbidden.json
+2bfa250ddc38767e6e476a133170fdbf7a2d3c01 data/peripheralworks/tags/block/reality_forger_forbidden.json

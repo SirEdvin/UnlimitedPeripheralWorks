@@ -11,7 +11,7 @@ import site.siredvin.broccolium.modules.data.recipe.TweakedSmithingTransformReci
 import site.siredvin.peripheralworks.common.recipes.*
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
-import site.siredvin.peripheralworks.tags.ItemTags
+import site.siredvin.peripheralworks.xplat.ModBlocksReference
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 import java.util.concurrent.CompletableFuture
 
@@ -191,6 +191,25 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
             .pattern("D O")
             .pattern(" B ")
             .pattern("D O")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder(Blocks.NETWORK_MANAGER.get().asItem().defaultInstance)
+            .define('P', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
+            .define('C', net.minecraft.world.item.Items.COBWEB)
+            .define('K', ModBlocksReference.get().cable)
+            .pattern("KCK")
+            .pattern("CPC")
+            .pattern("KCK")
+            .save(consumer)
+
+        TweakedShapedRecipeBuilder(Blocks.HOLOGRAM_PROJECTOR.get().asItem().defaultInstance)
+            .define('R', net.minecraft.world.item.Items.RED_STAINED_GLASS)
+            .define('B', net.minecraft.world.item.Items.BLUE_STAINED_GLASS)
+            .define('C', Blocks.PERIPHERAL_CASING.get())
+            .define('D', ingredients.peripheralium)
+            .pattern("DBD")
+            .pattern("RCR")
+            .pattern("DRD")
             .save(consumer)
 
         SpecialRecipeBuilder.special(::StatueCloningRecipe)

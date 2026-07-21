@@ -1,7 +1,8 @@
 package site.siredvin.peripheralworks.api
 
-import site.siredvin.broccolium.modules.storage.item.api.SlottedAgnosticItemStorage
+import net.minecraft.world.item.ItemStack
+import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 
 interface IItemStackStorage : IItemStackHolder {
-    val storage: SlottedAgnosticItemStorage
+    val storage: SlottedAgnosticStorage<ItemStack, Int>
 }

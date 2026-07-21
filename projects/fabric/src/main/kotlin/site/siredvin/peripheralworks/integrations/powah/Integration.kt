@@ -10,7 +10,6 @@ import owmii.powah.lib.block.AbstractEnergyProvider
 import owmii.powah.lib.block.AbstractEnergyStorage
 import owmii.powah.lib.logistics.IRedstoneInteract
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
-import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorageExtractor
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
@@ -66,20 +65,18 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(RedstonePluginProvider)
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         if (Configuration.enableEnergy) {
-            AgnosticEnergyStorageLookup.addEnergyStorageExtractor(
-                AgnosticEnergyStorageExtractor { _, _, blockEntity ->
-                    if (blockEntity is ReactorPartTile) {
-                        val reactorTile = blockEntity.core()
-                        if (reactorTile.isPresent) {
-                            return@AgnosticEnergyStorageExtractor PowahEnergyStorageWrapper(reactorTile.get())
-                        }
+            AgnosticEnergyStorageLookup.addBlockLookup { _, _, blockEntity, _ ->
+                if (blockEntity is ReactorPartTile) {
+                    val reactorTile = blockEntity.core()
+                    if (reactorTile.isPresent) {
+                        return@addBlockLookup PowahEnergyStorageWrapper(reactorTile.get())
                     }
-                    if (blockEntity is AbstractEnergyStorage<*, *>) {
-                        return@AgnosticEnergyStorageExtractor PowahEnergyStorageWrapper(blockEntity)
-                    }
-                    return@AgnosticEnergyStorageExtractor null
-                },
-            )
+                }
+                if (blockEntity is AbstractEnergyStorage<*, *>) {
+                    return@addBlockLookup PowahEnergyStorageWrapper(blockEntity)
+                }
+                return@addBlockLookup null
+            }
         }
     }
 }

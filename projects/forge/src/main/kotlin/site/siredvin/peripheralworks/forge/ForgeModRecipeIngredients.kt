@@ -3,7 +3,7 @@ package site.siredvin.peripheralworks.forge
 import dan200.computercraft.shared.ModRegistry.Items
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.Blocks
-import net.minecraftforge.common.Tags
+import net.neoforged.neoforge.common.Tags
 import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 
 object ForgeModRecipeIngredients : ModRecipeIngredients {
@@ -23,8 +23,6 @@ object ForgeModRecipeIngredients : ModRecipeIngredients {
         get() = Ingredient.of(Tags.Items.GEMS_DIAMOND)
     override val ironIngot: Ingredient
         get() = Ingredient.of(Tags.Items.INGOTS_IRON)
-    override val anyCoal: Ingredient
-        get() = Ingredient.of(net.minecraft.world.item.Items.COAL)
     override val peripheraliumBlock: Ingredient
         get() = Ingredient.of(site.siredvin.peripheralium.Blocks.PERIPHERALIUM_BLOCK.get())
     override val observer: Ingredient

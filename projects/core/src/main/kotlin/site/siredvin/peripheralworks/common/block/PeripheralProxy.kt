@@ -4,8 +4,12 @@ import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.network.chat.Component
+import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.context.BlockPlaceContext
 import net.minecraft.world.level.BlockGetter
+import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.BaseEntityBlock
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Mirror
@@ -14,6 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.DirectionProperty
+import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.shapes.BooleanOp
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.Shapes
@@ -21,6 +26,7 @@ import net.minecraft.world.phys.shapes.VoxelShape
 import site.siredvin.broccolium.modules.base.block.BaseBlockEntityBlock
 import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
+import site.siredvin.peripheralworks.data.ModText
 import java.util.stream.Stream
 
 class PeripheralProxy : BaseBlockEntityBlock<PeripheralProxyBlockEntity>(true, BlockUtil.defaultProperties()) {
@@ -77,6 +83,29 @@ class PeripheralProxy : BaseBlockEntityBlock<PeripheralProxyBlockEntity>(true, B
     override fun rotate(state: BlockState, rotation: Rotation): BlockState = state.setValue(ORIENTATION, rotation.rotate(state.getValue(ORIENTATION)))
 
     override fun getStateForPlacement(context: BlockPlaceContext): BlockState? = defaultBlockState().setValue(ORIENTATION, context.clickedFace)
+
+    @Suppress("DEPRECATION")
+    @Deprecated("Deprecated in Java")
+    override fun useWithoutItem(
+        blockState: BlockState,
+        level: Level,
+        pos: BlockPos,
+        player: Player,
+        hitResult: BlockHitResult,
+    ): InteractionResult {
+        if (!level.isClientSide) {
+            val be = level.getBlockEntity(pos) as? PeripheralProxyBlockEntity
+            if (be != null) {
+                var base = ModText.PERIPHERAL_PROXY_CONNECTED_PERIPHERALS.text.append(Component.literal("\n"))
+                be.remotePeripherals.forEach {
+                    base = base.append(Component.literal("    ${it.value.peripheralName}\n"))
+                }
+                player.sendSystemMessage(base)
+                return InteractionResult.SUCCESS
+            }
+        }
+        return super.useWithoutItem(blockState, level, pos, player, hitResult)
+    }
 
     @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
     @Deprecated("Deprecated in Java")

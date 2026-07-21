@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+
+[[mods]]
+modId="peripheralworks_testmod"
+version="1.0"
+displayName="Unlimited Peripheral Works Testmod"
+description="Unlimited Peripheral Works GameTests."
+
+[[mixins]]
+config="peripheralworks-testmod.mixins.json"
+
+[[dependencies.peripheralworks_testmod]]
+modId="peripheralworks"
+type="required"
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.peripheralworks_testmod]]
+modId="testiarium"
+type="required"
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"

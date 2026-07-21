@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "peripheralworks:block/network_manager_on",
+    "side": "peripheralworks:block/network_manager_side",
+    "top": "peripheralworks:block/network_manager_side"
+  }
+}

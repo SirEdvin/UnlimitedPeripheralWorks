@@ -8,9 +8,9 @@
   },
   "mixins": [
     "LecternMixin",
-    "ServerLevelMixin"
-  ],
-  "client": [
+    "ServerLevelMixin",
+    "CursedTurtleMixin",
+    "LivingEntityMixin"
   ],
   "refmap": "peripheralworks.refmap.json"
 }

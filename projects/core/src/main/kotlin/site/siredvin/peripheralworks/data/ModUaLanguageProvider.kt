@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.data
 import net.minecraft.data.PackOutput
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.computercraft.peripherals.HologramProjectorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UltimateSensorPeripheral
 import site.siredvin.peripheralworks.computercraft.peripherals.UniversalScannerPeripheral
@@ -42,6 +43,8 @@ class ModUaLanguageProvider(
         add(Blocks.FLEXIBLE_STATUE.get(), "Гнучка статуя")
         add(Blocks.STATUE_WORKBENCH.get(), "Верстак для статуй", "§3§oУява ваше єдине обмеження. Іще ліміт у розмірах на 48 точок, але це не так важливо")
         add(Blocks.ENTITY_LINK.get(), "Коннектор до сутності", "§3§oДопомагає утворити з'єднання із будь-якою сутністю, потрібно лише вставити карту")
+        add(Blocks.NETWORK_MANAGER.get(), text = "Менеджер мережі", "§3§oПросто підключіть його до вашої провідної мережі і він стане дуже корисний!")
+        add(Blocks.HOLOGRAM_PROJECTOR.get(), "Проектор голограм", "§3§oВідтвроюй свої мрії за допомогою маленьких сутностей")
 
         add(ModText.CREATIVE_TAB, "Перифіральних пристроїв нескінченний край")
 
@@ -58,6 +61,7 @@ class ModUaLanguageProvider(
         add(ModText.PERIPHERAL_PROXY_FORBIDDEN, "Цей блок заборонено додавати до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_ADDED, "Цей периферійний пристрій тепер під'єднано до проксі для периферійних пристроїв")
         add(ModText.PERIPHERAL_PROXY_BLOCK_REMOVED, "Цей периферійний пристрій тепер від'єднано від проксі для периферійних пристроїв")
+        add(ModText.PERIPHERAL_PROXY_CONNECTED_PERIPHERALS, "Підключені переферійні присторії:")
         add(ModText.DEFINITELY_NOT, "§3§oНу точно не ")
         add(ModText.TARGET_ENTITY, "Сутність %s записана в цій карті, наразі вона знаходиться у точці %s")
         add(ModText.ENTITY_CANNOT_BE_STORED, "Ця сутність не може бути записана")
@@ -66,6 +70,7 @@ class ModUaLanguageProvider(
         add(ModText.ENTITY_LINK_UPGRADES, "Список покращень:")
         add(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES, "Коннектор до сутності наразі немає покращень")
         add(ModText.ENTITY_LINK_UPGRADE_SCANNER, "Сканер")
+        add(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE, "Радіус оверлея менеджера мережі: %s")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
 
@@ -87,13 +92,21 @@ class ModUaLanguageProvider(
         add(ModTooltip.REALITY_FORGER_RANGE, "  §6Максимальна дальність ковання: %s")
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Автор: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Налаштування коннектора до сутності")
+        add(ModTooltip.NETWORK_MANAGER_MODE, "  Оверлей менеджера мережі")
+        add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE, "  Радіус оверлея: %s")
+
+        add(ModEnergiesText.MERCURY_FLUX, "Ртутний флюс")
+        add(ModEnergiesText.EMBER, "Вуглечки")
+        add(ModEnergiesText.SOURCE, "Енергія джерела")
 
         addUpgrades(PeripheraliumHubPeripheral.ID, "З вбудованим осередком")
         addUpgrades(PeripheraliumHubPeripheral.NETHERITE_ID, "З вбудованим незеритовим осередком")
         addTurtle(UniversalScannerPeripheral.UPGRADE_ID, "Скануюча")
         addTurtle(UltimateSensorPeripheral.UPGRADE_ID, "Зондуюча")
+        addTurtle(HologramProjectorPeripheral.UPGRADE_ID, "Проекуюча")
         addPocket(UniversalScannerPeripheral.UPGRADE_ID, "Скануючий")
         addPocket(UltimateSensorPeripheral.UPGRADE_ID, "Зондуючий")
+        addPocket(HologramProjectorPeripheral.UPGRADE_ID, "Проекуючий")
 
         hooks.forEach { it.accept(this) }
     }
