@@ -81,6 +81,7 @@ loom {
             server()
             source(testMod)
             property("fabric-api.gametest", "true")
+            property("fabric.debug.loadLate", "testiarium_testmod")
             property("testiarium.tags", "peripheralworks")
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)

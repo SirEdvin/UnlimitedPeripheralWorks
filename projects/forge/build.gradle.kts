@@ -134,13 +134,6 @@ repositories {
         }
     }
     maven {
-        name = "TerraformersMC"
-        url = uri("https://maven.terraformersmc.com/")
-        content {
-            includeGroup("dev.emi")
-        }
-    }
-    maven {
         name = "Latvian mods, mostly KubeJS"
         url = uri("https://maven.latvian.dev/releases")
         content {

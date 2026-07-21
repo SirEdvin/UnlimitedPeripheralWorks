@@ -106,7 +106,7 @@ common-config = {module = "fuzs.forgeconfigapiport:forgeconfigapiport-common-neo
 broccolium-core = {module = "site.siredvin:broccolium-common-1.21.1", version.ref = "broccolium"}
 tweakium-core = {module = "site.siredvin:tweakium-common-1.21.1", version.ref = "tweakium"}
 peripheralium-core = {module = "site.siredvin:peripheralium-common-1.21.1", version.ref = "peripheralium"}
-emi-common = {module = "dev.emi:emi-xplat-mojmap", version.ref="emi"}
+emi-common = {module = "maven.modrinth:emi", version.ref="emi-forge"}
 mixin = { module = "org.spongepowered:mixin", version.ref = "mixin" }
 
 # Fabric mod dependencies
