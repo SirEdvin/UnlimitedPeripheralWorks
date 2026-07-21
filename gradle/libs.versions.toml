@@ -119,7 +119,7 @@ cc-tweaked-fabric = {module = "cc.tweaked:cc-tweaked-1.21.1-fabric", version.ref
 broccolium-fabric = {module = "site.siredvin:broccolium-fabric-1.21.1", version.ref = "broccolium"}
 tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.21.1", version.ref = "tweakium"}
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.21.1", version.ref = "peripheralium"}
-modmenu = {module = "com.terraformersmc:modmenu", version.ref="modmenu"}
+modmenu = {module = "maven.modrinth:modmenu", version.ref="modmenu"}
 emi-fabric = {module="maven.modrinth:emi", version.ref="emi-fabric"}
 
 # Forge mod dependencies

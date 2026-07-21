@@ -127,11 +127,6 @@ repositories {
         content { includeGroup("me.lucko") }
     }
     maven {
-        name = "ModMenu maven"
-        url = uri("https://maven.terraformersmc.com/releases")
-        content { includeGroup("com.terraformersmc") }
-    }
-    maven {
         url = uri("https://maven.jamieswhiteshirt.com/libs-release/")
         content { includeGroup("com.jamieswhiteshirt") }
     }
