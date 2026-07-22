@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.client.configurator
 
+import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
@@ -8,6 +9,7 @@ import net.minecraft.client.gui.screens.ConfirmScreen
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
+import net.minecraft.network.chat.Component
 import org.lwjgl.glfw.GLFW
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.data.ModText
@@ -21,6 +23,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     private var tab = Tab.GROUPS
     private var selectedName: String? = null
     private var search = ""
+    private var membershipSearch = ""
     private var rename = ""
     private var color = ""
     private var delimiter = ""
@@ -31,6 +34,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     private var rebuildRequested = false
     private var focusedField = "search"
     private lateinit var searchBox: EditBox
+    private lateinit var membershipSearchBox: EditBox
     private lateinit var renameBox: EditBox
     private lateinit var colorBox: EditBox
     private lateinit var delimiterBox: EditBox
@@ -77,15 +81,21 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         } else {
             flatten(hierarchy.roots, expandedPaths)
         }
-        val fieldsY = (height - 92).coerceAtLeast(120)
+        val fieldsY = (height - 122).coerceAtLeast(120)
         addPagedRows(rows, left, 76, panelWidth, (((fieldsY - 76) / 22) - 1).coerceAtLeast(1)) { value ->
             if (value.startsWith(NODE_PREFIX)) toggleExpansion(value.removePrefix(NODE_PREFIX)) else select(value)
         }
 
         renameBox = editBox(left, fieldsY, panelWidth - 64, ModText.NETWORK_MANAGER_RENAME, rename) { rename = it }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_APPLY.text) { renameSelected() }.bounds(left + panelWidth - 60, fieldsY, 60, 20).build()).active = selectedName != null
-        colorBox = editBox(left, fieldsY + 24, panelWidth - 64, ModText.NETWORK_MANAGER_COLOR, color) { color = it }
+        colorBox = editBox(left, fieldsY + 24, panelWidth - 88, ModText.NETWORK_MANAGER_COLOR, color) { color = it }
+        colorBox.setMaxLength(7)
+        addRenderableWidget(PipetteButton(left + panelWidth - 84, fieldsY + 24) { openColorPicker() }).apply {
+            active = selectedName != null
+            tooltip = Tooltip.create(ModText.NETWORK_MANAGER_COLOR_PICKER.text)
+        }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_APPLY.text) { colorSelected() }.bounds(left + panelWidth - 60, fieldsY + 24, 60, 20).build()).active = selectedName != null
+        addRenderableWidget(Button.builder(visibilityText(manager)) { cycleVisibility() }.bounds(left, fieldsY + 48, panelWidth - 64, 20).build()).active = selectedName != null
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_DELETE.text) { confirmDelete() }.bounds(left + panelWidth - 60, fieldsY + 48, 60, 20).build()).apply {
             active = selectedName != null
             tooltip = Tooltip.create(ModText.NETWORK_MANAGER_DELETE_TOOLTIP.text)
@@ -106,18 +116,28 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             return
         }
         val members = manager.peripheralGroups[selected]?.peripherals.orEmpty()
-        val rows = manager.displayPeripherals.keys.sorted().map { "${if (it in members) "[x]" else "[ ]"} $it" to it }
-        addPagedRows(rows, left, 52, panelWidth, ((height - 82) / 22).coerceAtLeast(1)) { peripheral ->
+        membershipSearchBox = editBox(left, 50, panelWidth, ModText.NETWORK_MANAGER_MEMBERSHIP_SEARCH, membershipSearch) {
+            membershipSearch = it
+            page = 0
+            rebuildRequested = true
+        }
+        val rows = manager.displayPeripherals.keys.map { peripheralType(it) to it }
+            .filter { (type, name) -> membershipSearch.isBlank() || type.contains(membershipSearch, true) || name.contains(membershipSearch, true) }
+            .sortedWith(compareBy({ it.first }, { it.second }))
+            .map { (type, name) -> "[$type] ${if (name in members) "[x]" else "[ ]"} $name" to name }
+        addPagedRows(rows, left, 76, panelWidth, ((height - 106) / 22).coerceAtLeast(1)) { peripheral ->
             val expectedPresent = peripheral in members
             send(NetworkManagerGroupMessage.Operation.MEMBERSHIP, selected, peripheral, present = !expectedPresent, expectedPresent = expectedPresent)
         }
+        setInitialFocus(membershipSearchBox)
     }
 
     private fun initSettings(left: Int, panelWidth: Int) {
         delimiterBox = editBox(left, 52, panelWidth, ModText.NETWORK_MANAGER_DELIMITER, delimiter) { delimiter = it }
         delimiterBox.setMaxLength(NetworkManagerBlockEntity.MAX_DELIMITER_LENGTH)
         rangeBox = editBox(left, 76, panelWidth, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
-        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 100, panelWidth, 20).build())
+        addRenderableWidget(Button.builder(visualizationText()) { cycleVisualization() }.bounds(left, 100, panelWidth, 20).build())
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 124, panelWidth, 20).build())
         setInitialFocus(if (focusedField == "range") rangeBox else delimiterBox)
     }
 
@@ -134,7 +154,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         val pageCount = ((rows.size + rowsPerPage - 1) / rowsPerPage).coerceAtLeast(1)
         page = page.coerceIn(0, pageCount - 1)
         rows.drop(page * rowsPerPage).take(rowsPerPage).forEachIndexed { index, (label, value) ->
-            addRenderableWidget(Button.builder(net.minecraft.network.chat.Component.literal(label)) { action(value) }.bounds(left, top + index * 22, panelWidth, 20).build())
+            addRenderableWidget(LeftAlignedButton(left, top + index * 22, panelWidth, Component.literal(label)) { action(value) })
         }
         if (pageCount > 1) {
             addRenderableWidget(
@@ -165,7 +185,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
                 "+ "
             }
             if (expandable) add("  ".repeat(depth) + marker + node.segment to NODE_PREFIX + path)
-            node.group?.let { add("  ".repeat(depth + if (expandable) 1 else 0) + "  " + it.fullName to it.fullName) }
+            node.group?.let { add("  ".repeat(depth + if (expandable) 1 else 0) + "  " + node.segment to it.fullName) }
             if (expandable && path in expanded) addAll(flatten(node.children, expanded, depth + 1))
         }
     }
@@ -205,15 +225,68 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         }
     }
 
-    private fun colorSelected() {
+    private fun setSelectedColor(color: Int) {
         val selected = selectedName ?: return
-        val parsed = if (color == "-1") -1 else color.removePrefix("#").takeIf { it.length == 6 }?.toIntOrNull(16)
-        if (parsed == null || parsed !in -1..0xffffff) {
+        send(NetworkManagerGroupMessage.Operation.COLOR, selected, color = color)
+        status = ModText.NETWORK_MANAGER_REQUEST_SENT.text
+    }
+
+    private fun colorSelected() {
+        val parsed = parseColor(color)
+        if (parsed == null) {
             status = ModText.NETWORK_MANAGER_INVALID_COLOR.text
             return
         }
-        send(NetworkManagerGroupMessage.Operation.COLOR, selected, color = parsed)
+        setSelectedColor(parsed)
+    }
+
+    private fun openColorPicker() {
+        if (selectedName == null) return
+        val initial = parseColor(color)?.takeIf { it >= 0 } ?: 0xffffff
+        minecraft?.setScreen(
+            NetworkManagerColorPickerScreen(this, initial) {
+                color = "#%06X".format(it)
+                setSelectedColor(it)
+            },
+        )
+    }
+
+    private fun cycleVisibility() {
+        val selected = selectedName ?: return
+        val group = manager?.peripheralGroups?.get(selected) ?: return unavailable()
+        val visibility = NetworkManagerBlockEntity.GroupVisibility.entries[(group.visibility.ordinal + 1) % NetworkManagerBlockEntity.GroupVisibility.entries.size]
+        send(NetworkManagerGroupMessage.Operation.VISIBILITY, selected, color = visibility.ordinal)
         status = ModText.NETWORK_MANAGER_REQUEST_SENT.text
+    }
+
+    private fun visibilityText(manager: NetworkManagerBlockEntity): Component {
+        val visibility = selectedName?.let { manager.peripheralGroups[it]?.visibility } ?: NetworkManagerBlockEntity.GroupVisibility.DEFAULT
+        val value = when (visibility) {
+            NetworkManagerBlockEntity.GroupVisibility.DEFAULT -> ModText.NETWORK_MANAGER_VISIBILITY_DEFAULT.text
+            NetworkManagerBlockEntity.GroupVisibility.SHOW -> ModText.NETWORK_MANAGER_VISIBILITY_SHOW.text
+            NetworkManagerBlockEntity.GroupVisibility.HIDE -> ModText.NETWORK_MANAGER_VISIBILITY_HIDE.text
+        }
+        return ModText.NETWORK_MANAGER_VISIBILITY.format(value)
+    }
+
+    private fun cycleVisualization() {
+        val stack = minecraft?.player?.mainHandItem ?: return
+        val modes = NetworkManagerMode.VisualizationMode.entries
+        val mode = modes[(NetworkManagerMode.getVisualizationMode(stack).ordinal + 1) % modes.size]
+        NetworkManagerMode.setVisualizationMode(stack, mode)
+        send(NetworkManagerGroupMessage.Operation.VISUALIZATION, "", color = mode.ordinal)
+        rebuild()
+    }
+
+    private fun visualizationText(): Component {
+        val mode = minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getVisualizationMode) ?: NetworkManagerMode.VisualizationMode.ALL
+        val value = when (mode) {
+            NetworkManagerMode.VisualizationMode.ALL -> ModText.NETWORK_MANAGER_VISUALIZATION_ALL.text
+            NetworkManagerMode.VisualizationMode.SELECTED -> ModText.NETWORK_MANAGER_VISUALIZATION_SELECTED.text
+            NetworkManagerMode.VisualizationMode.SELECTED_AND_UNGROUPED -> ModText.NETWORK_MANAGER_VISUALIZATION_SELECTED_AND_UNGROUPED.text
+            NetworkManagerMode.VisualizationMode.UNGROUPED -> ModText.NETWORK_MANAGER_VISUALIZATION_UNGROUPED.text
+        }
+        return ModText.NETWORK_MANAGER_VISUALIZATION.format(value)
     }
 
     private fun confirmDelete() {
@@ -272,7 +345,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
                 else -> "search"
             }
             Tab.SETTINGS -> if (::rangeBox.isInitialized && rangeBox.isFocused) "range" else "delimiter"
-            Tab.MEMBERSHIP -> focusedField
+            Tab.MEMBERSHIP -> "membership"
         }
     }
 
@@ -286,7 +359,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         onClose()
     }
 
-    private fun stateSnapshot(manager: NetworkManagerBlockEntity): String = "${manager.delimiter}:${manager.range}:" + manager.peripheralGroups.toSortedMap().entries.joinToString("|") { (name, group) -> "$name:${group.color}:${group.peripherals.sorted()}" } + manager.displayPeripherals.keys.sorted() + minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getSelectedGroup)
+    private fun stateSnapshot(manager: NetworkManagerBlockEntity): String = "${manager.delimiter}:${manager.range}:" + manager.peripheralGroups.toSortedMap().entries.joinToString("|") { (name, group) -> "$name:${group.color}:${group.visibility}:${group.peripherals.sorted()}" } + manager.displayPeripherals.keys.sorted() + minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getSelectedGroup)
 
     override fun tick() {
         val manager = manager ?: return unavailable()
@@ -323,5 +396,31 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     companion object {
         private const val NODE_PREFIX = "\u0000"
+
+        private fun parseColor(value: String): Int? = if (value == "-1") -1 else value.removePrefix("#").takeIf { it.length == 6 }?.toIntOrNull(16)
+
+        private fun peripheralType(name: String): String {
+            val suffix = name.substringAfterLast('_', "")
+            return if (suffix.isNotEmpty() && suffix.all(Char::isDigit)) name.substringBeforeLast('_') else name
+        }
+    }
+
+    private class LeftAlignedButton(x: Int, y: Int, width: Int, message: Component, onPress: () -> Unit) : Button(x, y, width, 20, message, { onPress() }, DEFAULT_NARRATION) {
+        override fun renderString(graphics: GuiGraphics, font: Font, color: Int) {
+            graphics.enableScissor(x + 4, y, x + width - 4, y + height)
+            graphics.drawString(font, message, x + 4, y + (height - 8) / 2, color)
+            graphics.disableScissor()
+        }
+    }
+
+    private class PipetteButton(x: Int, y: Int, onPress: () -> Unit) : Button(x, y, 20, 20, CommonComponents.EMPTY, { onPress() }, DEFAULT_NARRATION) {
+        override fun renderWidget(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
+            super.renderWidget(graphics, mouseX, mouseY, partialTick)
+            val color = if (active) 0xffffffff.toInt() else 0xff777777.toInt()
+            graphics.fill(x + 5, y + 4, x + 9, y + 7, color)
+            graphics.fill(x + 8, y + 6, x + 11, y + 10, color)
+            graphics.fill(x + 10, y + 9, x + 14, y + 12, color)
+            graphics.fill(x + 12, y + 11, x + 15, y + 15, color)
+        }
     }
 }

@@ -1,14 +1,18 @@
 package site.siredvin.peripheralworks.testmod
 
+import net.minecraft.client.gui.components.AbstractSliderButton
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Button
 import net.minecraft.client.gui.components.EditBox
+import net.minecraft.client.gui.screens.Screen
 import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTestAssertException
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.NbtUtils
+import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
+import site.siredvin.peripheralworks.client.configurator.NetworkManagerColorPickerScreen
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerScreen
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
@@ -59,9 +63,12 @@ class NetworkManagerClientGameTests {
                 check(editBoxes(screen).size == 2) { "Settings tab did not expose delimiter and range" }
                 editBoxes(screen)[1].setValue("64")
                 click(screen, button(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string))
+                click(screen, button(screen, ModText.NETWORK_MANAGER_VISUALIZATION.format(ModText.NETWORK_MANAGER_VISUALIZATION_ALL.text).string))
             }
             .thenWaitUntil {
-                if (manager(helper, managerPos).range != 64) retry("Manager settings have not reached the server")
+                if (manager(helper, managerPos).range != 64 || NetworkManagerMode.getVisualizationMode(player(helper).mainHandItem) != NetworkManagerMode.VisualizationMode.SELECTED) {
+                    retry("Manager settings have not reached the server")
+                }
             }
             .thenIdle(3)
             .thenOnClient {
@@ -100,12 +107,35 @@ class NetworkManagerClientGameTests {
             .thenWaitUntil {
                 if (NetworkManagerMode.getSelectedGroup(player(helper).mainHandItem) != "factory/ore/iron") retry("Selected group has not synchronized")
             }
+            .thenOnClient {
+                val screen = minecraft.screen as NetworkManagerScreen
+                val pipette = screen.children().filterIsInstance<Button>().single { it.message == CommonComponents.EMPTY && it.width == 20 }
+                click(screen, pipette)
+                val picker = minecraft.screen as? NetworkManagerColorPickerScreen ?: error("Pipette button did not open the RGB picker")
+                check(picker.children().filterIsInstance<AbstractSliderButton>().size == 3) { "RGB picker did not expose three channels" }
+                editBoxes(picker).single().setValue("#123456")
+                click(picker, button(picker, ModText.NETWORK_MANAGER_APPLY.text.string))
+            }
+            .thenWaitUntil {
+                if (manager(helper, managerPos).peripheralGroups.getValue("factory/ore/iron").color != 0x123456) retry("Picked group color has not synchronized")
+            }
+            .thenOnClient {
+                click(minecraft.screen as NetworkManagerScreen, button(minecraft.screen as NetworkManagerScreen, ModText.NETWORK_MANAGER_VISIBILITY.format(ModText.NETWORK_MANAGER_VISIBILITY_DEFAULT.text).string))
+            }
+            .thenWaitUntil {
+                if (manager(helper, managerPos).peripheralGroups.getValue("factory/ore/iron").visibility != NetworkManagerBlockEntity.GroupVisibility.SHOW) retry("Group visibility has not synchronized")
+            }
             .thenIdle(5)
             .thenOnClient {
                 val screen = minecraft.screen as NetworkManagerScreen
                 click(screen, button(screen, ModText.NETWORK_MANAGER_TAB_MEMBERSHIP.text.string))
-                click(screen, button(screen, "[ ] monitor_0"))
-                click(screen, button(screen, "[ ] printer_0"))
+                editBoxes(screen).single().setValue("monitor")
+                screen.tick()
+                check(findButton(screen, "[printer] [ ] printer_0") == null) { "Membership search did not filter by peripheral type" }
+                editBoxes(screen).single().setValue("")
+                screen.tick()
+                click(screen, button(screen, "[monitor] [ ] monitor_0"))
+                click(screen, button(screen, "[printer] [ ] printer_0"))
             }
             .thenWaitUntil {
                 val members = manager(helper, managerPos).peripheralGroups.getValue("factory/ore/iron").peripherals
@@ -133,16 +163,16 @@ class NetworkManagerClientGameTests {
 
     private fun player(helper: GameTestHelper) = helper.level.randomPlayer ?: error("Client GameTest player is missing")
 
-    private fun editBoxes(screen: NetworkManagerScreen) = screen.children().filterIsInstance<EditBox>().sortedWith(compareBy({ it.y }, { it.x }))
+    private fun editBoxes(screen: Screen) = screen.children().filterIsInstance<EditBox>().sortedWith(compareBy({ it.y }, { it.x }))
 
-    private fun findButton(screen: NetworkManagerScreen, label: String, trim: Boolean = false): Button? = screen.children().filterIsInstance<Button>().singleOrNull {
+    private fun findButton(screen: Screen, label: String, trim: Boolean = false): Button? = screen.children().filterIsInstance<Button>().singleOrNull {
         (if (trim) it.message.string.trim() else it.message.string) == label
     }
 
-    private fun button(screen: NetworkManagerScreen, label: String, trim: Boolean = false): Button = findButton(screen, label, trim)
+    private fun button(screen: Screen, label: String, trim: Boolean = false): Button = findButton(screen, label, trim)
         ?: error("Button '$label' not found among ${screen.children().filterIsInstance<Button>().map { it.message.string }}")
 
-    private fun click(screen: NetworkManagerScreen, widget: AbstractWidget) {
+    private fun click(screen: Screen, widget: AbstractWidget) {
         check(screen.mouseClicked(widget.x + widget.width / 2.0, widget.y + widget.height / 2.0, 0)) { "Widget click was not handled: ${widget.message.string}" }
     }
 

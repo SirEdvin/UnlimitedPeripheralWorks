@@ -46,7 +46,7 @@ The system SHALL toggle membership in the configurator's selected group when the
 - **THEN** the server rejects the membership change and informs the player to select a group
 
 ### Requirement: Edit groups
-The group management screen SHALL allow the selected group to be renamed, assigned a display color, or deleted after explicit confirmation. Server mutations SHALL preserve authoritative consistency and synchronize updated group data to clients.
+The group management screen SHALL allow the selected group to be renamed, assigned an exact RGB display color through a text field or native RGB picker sub-screen, given a persistent overlay visibility override, or deleted after explicit confirmation. Server mutations SHALL preserve authoritative consistency and synchronize updated group data to clients.
 
 #### Scenario: Rename a group
 - **WHEN** the player submits a valid unique name for the selected group
@@ -55,6 +55,14 @@ The group management screen SHALL allow the selected group to be renamed, assign
 #### Scenario: Change a group color
 - **WHEN** the player chooses a valid color for the selected group
 - **THEN** the server persists and synchronizes that color for overlay rendering
+
+#### Scenario: Pick an arbitrary RGB color
+- **WHEN** the player opens the pipette button beside the RGB field, adjusts the native red, green, and blue controls, and applies the result
+- **THEN** the parent screen receives the synchronized hexadecimal value and the server persists the selected color
+
+#### Scenario: Configure group overlay visibility
+- **WHEN** the player sets a group to default, always show, or always hide
+- **THEN** the manager persists and synchronizes that visibility override
 
 #### Scenario: Cancel group deletion
 - **WHEN** the player opens the deletion confirmation and cancels it
@@ -65,11 +73,15 @@ The group management screen SHALL allow the selected group to be renamed, assign
 - **THEN** the server removes the group and all memberships, emits membership removal events, and clears the current configurator selection
 
 ### Requirement: Manage membership from the UI
-The screen SHALL provide a membership view for the selected group containing every peripheral currently attached to the bound network manager and SHALL allow each membership to be toggled.
+The screen SHALL provide a searchable membership view for the selected group containing every peripheral currently attached to the bound network manager, categorized by peripheral type, and SHALL allow each membership to be toggled.
 
 #### Scenario: Display network peripherals
 - **WHEN** the player opens the membership view for a selected group
-- **THEN** the screen lists every synchronized peripheral name and indicates whether each belongs to that group
+- **THEN** the screen lists every synchronized peripheral name with its derived type and indicates whether each belongs to that group
+
+#### Scenario: Search membership by type
+- **WHEN** the player enters a peripheral type or full peripheral name in the membership search field
+- **THEN** the screen displays only matching peripherals
 
 #### Scenario: Toggle membership in the screen
 - **WHEN** the player toggles an attached peripheral in the membership view
@@ -84,7 +96,7 @@ The screen SHALL derive a client-side visual hierarchy by splitting full group n
 
 #### Scenario: Build nested paths
 - **WHEN** the delimiter is `/` and groups include `factory/ore/iron` and `factory/ore/gold`
-- **THEN** the screen displays both real groups beneath virtual `factory` and `ore` hierarchy nodes
+- **THEN** the screen displays both real groups beneath virtual `factory` and `ore` hierarchy nodes with labels left-aligned and indented by hierarchy depth
 
 #### Scenario: Disable hierarchy
 - **WHEN** the configured delimiter is empty
@@ -94,8 +106,8 @@ The screen SHALL derive a client-side visual hierarchy by splitting full group n
 - **WHEN** the player selects a leaf in the hierarchy
 - **THEN** the configurator stores the leaf's original full group name rather than a virtual path node
 
-### Requirement: Persist per-manager configuration
-The network manager SHALL persist and synchronize its delimiter and overlay range. The Ultimate Configurator SHALL store expanded hierarchy paths in its NBT.
+### Requirement: Persist manager and configurator presentation settings
+The network manager SHALL persist and synchronize its delimiter, overlay range, and per-group visibility overrides. The Ultimate Configurator SHALL store expanded hierarchy paths and its visualization mode in NBT.
 
 #### Scenario: Restore local settings
 - **WHEN** the player reopens a previously configured network manager on the same client
@@ -111,7 +123,7 @@ The network manager SHALL persist and synchronize its delimiter and overlay rang
 
 #### Scenario: Rebind configurator
 - **WHEN** the configurator is bound to another target or cleared
-- **THEN** its expanded hierarchy paths are cleared
+- **THEN** its expanded hierarchy paths and visualization mode are cleared
 
 #### Scenario: Read and change peripheral configuration
 - **WHEN** a computer calls `getConfiguration`, `setDelimiter`, or `setRange`
@@ -123,6 +135,21 @@ The settings area SHALL allow the player to configure the overlay range for the 
 #### Scenario: Change overlay range
 - **WHEN** the player changes the range in the screen settings
 - **THEN** subsequent network manager overlay rendering uses the persisted manager range
+
+### Requirement: Configure overlay visualization
+The settings area SHALL allow the player to select whether the overlay shows everything, only the selected group, the selected group plus ungrouped peripherals, or only ungrouped peripherals. The overlay renderer SHALL combine that configurator mode with synchronized per-group visibility overrides.
+
+#### Scenario: Show selected group and descendants
+- **WHEN** selected-group mode is active and the configured delimiter defines descendant groups
+- **THEN** the overlay shows peripherals in the selected group and its descendants
+
+#### Scenario: Show ungrouped peripherals
+- **WHEN** ungrouped mode is active
+- **THEN** the overlay shows peripherals without group memberships and hides other peripherals unless an always-show override applies
+
+#### Scenario: Apply persistent group override
+- **WHEN** a group is configured as always show or always hide
+- **THEN** overlay rendering honors that synchronized manager setting independently of the configurator's current visualization mode
 
 ### Requirement: Query group hierarchy
 The network manager peripheral `get` method SHALL return attached peripherals from the exact requested group and all descendant groups separated by the configured non-empty delimiter.
@@ -136,7 +163,7 @@ The network manager peripheral `get` method SHALL return attached peripherals fr
 - **THEN** the configured overlay range remains unchanged
 
 ### Requirement: Validate UI mutations on the server
-The server SHALL accept group mutation requests only when the sender holds an Ultimate Configurator in network manager mode bound to the targeted loaded network manager, and SHALL validate group names, colors, and peripheral membership against current server state.
+The server SHALL accept group mutation requests only when the sender holds an Ultimate Configurator in network manager mode bound to the targeted loaded network manager, and SHALL validate group names, colors, visibility values, visualization modes, and peripheral membership against current server state.
 
 #### Scenario: Valid mutation request
 - **WHEN** a player holding the correctly bound configurator sends a valid mutation for the loaded manager

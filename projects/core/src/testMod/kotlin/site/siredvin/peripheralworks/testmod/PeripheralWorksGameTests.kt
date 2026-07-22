@@ -29,6 +29,9 @@ class PeripheralWorksGameTests {
         check(manager.renameGroup("old", "new") == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
         check(manager.peripheralGroups["new"] === original)
         check(original.color == 0x123456 && original.peripherals == setOf("monitor_0"))
+        check(manager.setGroupVisibility("new", NetworkManagerBlockEntity.GroupVisibility.SHOW) == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
+        check(original.visibility == NetworkManagerBlockEntity.GroupVisibility.SHOW)
+        check(NetworkManagerBlockEntity.PeripheralGroup.fromNBT(original.toNBT()).visibility == NetworkManagerBlockEntity.GroupVisibility.SHOW)
         helper.succeed()
     }
 
