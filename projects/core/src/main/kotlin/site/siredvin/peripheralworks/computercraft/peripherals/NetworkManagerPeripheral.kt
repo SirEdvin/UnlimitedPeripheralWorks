@@ -26,6 +26,12 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enableNetworkManager
 
+    override val peripheralConfiguration: MutableMap<String, Any>
+        get() = super.peripheralConfiguration.apply {
+            put("delimiter", be.delimiter)
+            put("range", be.range)
+        }
+
     @LuaFunction(mainThread = true)
     fun getGroups(): List<String> = be.peripheralGroups.keys.toList()
 
@@ -74,12 +80,21 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     }
 
     @LuaFunction(mainThread = true)
-    fun get(group: String): MethodResult {
-        val group = be.peripheralGroups[group] ?: return MethodResult.of()
-        return MethodResult.of(
-            *group.peripherals.filter { be.peripherals.contains(it) }.toTypedArray(),
-        )
+    fun setDelimiter(delimiter: String): MethodResult = when (be.setDelimiter(delimiter)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        else -> MethodResult.of(false, "Delimiter is too long")
     }
+
+    @LuaFunction(mainThread = true)
+    fun setRange(range: Int): MethodResult = when (be.setRange(range)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        else -> MethodResult.of(false, "Range should be between ${NetworkManagerBlockEntity.MIN_RANGE} and ${NetworkManagerBlockEntity.MAX_RANGE}")
+    }
+
+    @LuaFunction(mainThread = true)
+    fun get(group: String): MethodResult = MethodResult.of(
+        *be.groupPeripherals(group).filter { be.peripherals.contains(it) }.toTypedArray(),
+    )
 
     @LuaFunction(mainThread = true)
     fun getDistanceBetween(computer: IComputerAccess, firstName: String, secondName: String): MethodResult {

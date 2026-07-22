@@ -59,6 +59,16 @@ class NetworkManagerClientGameTests {
                 check(findButton(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string) == null) { "Settings leaked into the Groups tab" }
                 click(screen, button(screen, ModText.NETWORK_MANAGER_TAB_SETTINGS.text.string))
                 check(editBoxes(screen).size == 2) { "Settings tab did not expose delimiter and range" }
+                editBoxes(screen)[1].setValue("64")
+                click(screen, button(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string))
+            }
+            .thenWaitUntil {
+                if (manager(helper, managerPos).range != 64) retry("Manager settings have not reached the server")
+            }
+            .thenIdle(3)
+            .thenOnClient {
+                val screen = minecraft.screen as NetworkManagerScreen
+                check(editBoxes(screen)[1].value == "64") { "Manager settings have not synchronized to the client" }
                 click(screen, button(screen, ModText.NETWORK_MANAGER_TAB_GROUPS.text.string))
                 createGroup(screen, "factory/ore/iron")
             }

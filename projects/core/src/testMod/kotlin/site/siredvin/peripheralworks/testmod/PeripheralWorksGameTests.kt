@@ -61,6 +61,23 @@ class PeripheralWorksGameTests {
     }
 
     @GameTest(template = "empty")
+    fun networkManagerConfigurationAndHierarchyQuery(helper: GameTestHelper) {
+        val manager = getNetworkManager(helper)
+        manager.peripherals["monitor_0"] = BlockPos.ZERO
+        manager.peripherals["printer_0"] = BlockPos.ZERO
+        check(manager.createGroup("test2/a1") == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
+        check(manager.createGroup("test2/a2") == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
+        check(manager.setGroupMembership("test2/a1", "monitor_0", true) == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
+        check(manager.setGroupMembership("test2/a2", "printer_0", true) == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
+        check(manager.groupPeripherals("test2") == setOf("monitor_0", "printer_0"))
+        check(manager.setDelimiter(".") == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
+        check(manager.groupPeripherals("test2").isEmpty())
+        check(manager.setRange(64) == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS)
+        check(manager.delimiter == "." && manager.range == 64)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
     @TestGroup("network-manager-hierarchy")
     fun networkManagerGroupHierarchyFlatMode(helper: GameTestHelper) {
         val hierarchy = NetworkManagerGroupHierarchy.build(listOf("factory/ore", "storage"), "")

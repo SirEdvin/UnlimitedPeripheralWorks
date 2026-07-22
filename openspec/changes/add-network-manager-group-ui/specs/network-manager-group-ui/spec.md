@@ -94,27 +94,38 @@ The screen SHALL derive a client-side visual hierarchy by splitting full group n
 - **WHEN** the player selects a leaf in the hierarchy
 - **THEN** the configurator stores the leaf's original full group name rather than a virtual path node
 
-### Requirement: Persist per-manager presentation settings locally
-The client SHALL persist delimiter, overlay range, and hierarchy presentation state by dimension and network manager block position. These settings SHALL NOT alter or synchronize authoritative server group data.
+### Requirement: Persist per-manager configuration
+The network manager SHALL persist and synchronize its delimiter and overlay range. The client SHALL persist only hierarchy expansion state by dimension and network manager block position.
 
 #### Scenario: Restore local settings
 - **WHEN** the player reopens a previously configured network manager on the same client
-- **THEN** the screen restores that manager's delimiter, overlay range, and hierarchy presentation state
+- **THEN** the screen restores the manager's synchronized delimiter and overlay range plus the client's hierarchy expansion state
 
 #### Scenario: Independent manager settings
 - **WHEN** the player configures different settings for two network managers
-- **THEN** each manager retains its own client-local settings
+- **THEN** each manager retains its own authoritative settings
 
-#### Scenario: Different clients use different hierarchy settings
-- **WHEN** two clients configure different delimiters for the same network manager
-- **THEN** each client sees its own hierarchy without changing the server's groups
+#### Scenario: Synchronize manager settings
+- **WHEN** a client or peripheral changes the delimiter or range
+- **THEN** clients tracking that manager receive and use the updated values
+
+#### Scenario: Read and change peripheral configuration
+- **WHEN** a computer calls `getConfiguration`, `setDelimiter`, or `setRange`
+- **THEN** it can inspect or update the manager's validated delimiter and range
 
 ### Requirement: Configure overlay range in the UI
-The settings area SHALL allow the player to configure the overlay range for the bound network manager, and the overlay renderer SHALL use that client-local value. Swinging the configurator SHALL NOT cycle the range.
+The settings area SHALL allow the player to configure the overlay range for the bound network manager, and the overlay renderer SHALL use that synchronized value. Swinging the configurator SHALL NOT cycle the range.
 
 #### Scenario: Change overlay range
 - **WHEN** the player changes the range in the screen settings
-- **THEN** subsequent network manager overlay rendering uses the persisted local range
+- **THEN** subsequent network manager overlay rendering uses the persisted manager range
+
+### Requirement: Query group hierarchy
+The network manager peripheral `get` method SHALL return attached peripherals from the exact requested group and all descendant groups separated by the configured non-empty delimiter.
+
+#### Scenario: Query a parent path
+- **WHEN** the delimiter is `/`, groups `test2/a1` and `test2/a2` contain peripherals, and a computer queries `test2`
+- **THEN** the result contains peripherals from both groups without duplicates
 
 #### Scenario: Swing configurator
 - **WHEN** the player swings an Ultimate Configurator in network manager mode

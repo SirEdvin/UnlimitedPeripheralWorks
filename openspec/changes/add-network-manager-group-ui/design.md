@@ -10,15 +10,15 @@ The change spans common item interaction, a client screen, local client preferen
 
 - Make all routine group management and membership assignment available from the configurator.
 - Keep group names, colors, and memberships authoritative on the server and compatible with Lua access.
-- Keep hierarchy and presentation preferences client-only.
+- Keep delimiter and range authoritative on the network manager while hierarchy expansion remains client-only.
 - Reuse the existing synchronized network manager state and loader-neutral networking abstractions.
 - Validate every UI mutation on the server against the held configurator and its bound network manager.
 
 **Non-Goals:**
 
 - Creating parent groups for hierarchy path segments.
-- Changing ComputerCraft group lookup to understand hierarchy.
-- Synchronizing delimiter, range, expansion state, or other presentation preferences between players.
+- Creating or mutating groups through virtual hierarchy nodes.
+- Synchronizing hierarchy expansion state between players.
 - Adding SFM as a dependency or duplicating its visual implementation exactly.
 - Managing peripherals outside the network attached to the selected manager.
 
@@ -42,17 +42,17 @@ Alternative: let the client edit synchronized NBT directly. Rejected because it 
 
 ### Split server data, item selection, and local presentation state
 
-- Server block entity: real group names, colors, and memberships.
+- Server block entity: real group names, colors, memberships, delimiter, and overlay range.
 - Configurator NBT: selected full group name used by subsequent in-world peripheral clicks.
-- Client-local settings keyed by dimension and network manager block position: delimiter, overlay range, and hierarchy presentation state such as expanded paths.
+- Client-local settings keyed by dimension and network manager block position: hierarchy presentation state such as expanded paths.
 
 When a selected group is renamed, a successful UI response updates the held configurator selection to the new name. When it is deleted, the selection is cleared. Other configurators with stale selections are handled safely by rejecting assignment until a valid group is selected.
 
-Alternative: store all settings on the item. Rejected because the requested visual settings belong to each network manager. Alternative: store all settings on the manager. Rejected because hierarchy is explicitly personal, client-side visual information.
+Alternative: store all settings on the item. Rejected because delimiter and range belong to each network manager. Expansion state remains client-local because it is personal visual state.
 
 ### Derive a virtual hierarchy from full group names
 
-The configured delimiter splits each real group name into path segments. Intermediate paths are generated in memory for display only; selecting a leaf always resolves to its original full group name. Empty delimiters disable hierarchy and show a flat list. Empty path segments are displayed consistently but do not create server-side groups.
+The configured delimiter splits each real group name into path segments. Intermediate paths are generated in memory for display only; selecting a leaf always resolves to its original full group name. Lua `get` queries aggregate peripherals from real groups beneath the requested path. Empty delimiters disable hierarchy and show a flat list. Empty path segments are displayed consistently but do not create server-side groups.
 
 Search matches full group names and presents matching leaves with enough path context to distinguish them. Renaming edits the full group name, so hierarchy placement changes naturally.
 
@@ -60,9 +60,9 @@ Alternative: persist a separate hierarchy model. Rejected because it duplicates 
 
 ### Move assignment and range controls into the new workflow
 
-Using the configurator on air opens the screen. Clicking an attached peripheral with a valid selected group toggles membership without requiring a name tag. Swing no longer changes range; range is edited in the settings area and consumed by the overlay renderer from local per-manager settings.
+Using the configurator on air opens the screen. Clicking an attached peripheral with a valid selected group toggles membership without requiring a name tag. Swing no longer changes range; range is edited in the settings area, stored on the manager, and consumed by the overlay renderer from synchronized state.
 
-The overlay continues to render authoritative group labels/colors and uses the selected manager's client-local range. Name-tag assignment is removed rather than retained as a second, conflicting selection mechanism.
+The overlay continues to render authoritative group labels/colors and uses the selected manager's synchronized range. Name-tag assignment is removed rather than retained as a second, conflicting selection mechanism.
 
 ## Risks / Trade-offs
 
@@ -70,12 +70,12 @@ The overlay continues to render authoritative group labels/colors and uses the s
 - [Two players edit a group concurrently] -> Validate against current server state, apply each operation atomically on the server thread, and rely on block entity synchronization to refresh both screens.
 - [Rename or deletion leaves stale selections on other configurators] -> Validate selected groups on every assignment and require reselection when stale.
 - [A delimiter produces ambiguous or empty path segments] -> Preserve full names as identity and treat hierarchy strictly as presentation.
-- [Local settings accumulate after managers are removed] -> Accept small keyed records initially; add pruning only if real-world growth becomes material.
+- [Local expansion settings accumulate after managers are removed] -> Accept small keyed records initially; add pruning only if real-world growth becomes material.
 - [Existing automation depends on non-empty group deletion being rejected] -> Keep the existing Lua `removeGroup` contract unless separately changed; confirmed destructive deletion is exposed through the validated UI mutation path.
 
 ## Migration Plan
 
-Existing block entity group NBT requires no migration. Existing configurators gain no selected group until the player chooses one in the UI. The old item-local range tag is no longer authoritative; the client-local manager setting starts from the current default range when absent.
+Existing block entity group NBT requires no migration. Existing managers use the default delimiter and range when those fields are absent. Existing configurators gain no selected group until the player chooses one in the UI.
 
 Rollback restores the old interactions without transforming server group data. Client-local presentation settings and new configurator selection tags are harmless if ignored by an older build.
 

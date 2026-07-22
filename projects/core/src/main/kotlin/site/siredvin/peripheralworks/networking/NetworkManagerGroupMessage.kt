@@ -17,7 +17,7 @@ class NetworkManagerGroupMessage(
     private val present: Boolean = false,
     private val expectedPresent: Boolean = false,
 ) : NetworkMessage<ServerNetworkContext> {
-    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, MEMBERSHIP }
+    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, MEMBERSHIP, SETTINGS }
 
     constructor(buf: FriendlyByteBuf) : this(
         buf.readBlockPos(),
@@ -63,6 +63,7 @@ class NetworkManagerGroupMessage(
             Operation.DELETE -> if (selected == group) manager.deleteGroup(group) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.COLOR -> if (selected == group) manager.setGroupColor(group, color) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.MEMBERSHIP -> if (selected == group) manager.setGroupMembership(group, value, present, expectedPresent) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            Operation.SETTINGS -> manager.setConfiguration(value, color)
         }
         if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) {
             when (operation) {

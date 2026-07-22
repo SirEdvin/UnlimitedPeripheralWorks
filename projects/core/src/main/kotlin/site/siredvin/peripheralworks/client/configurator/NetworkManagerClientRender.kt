@@ -56,7 +56,7 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         CommonRenderer.initRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? NetworkManagerBlockEntity ?: return
         val playerPos = minecraft.player!!.position()
-        val range = NetworkManagerClientSettings.get(minecraft.level!!.dimension().location(), source).range
+        val range = entity.range
         RenderSystem.disableDepthTest()
         RenderSystem.disableCull()
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)

@@ -21,7 +21,7 @@ object ConfigHolder {
 
     class ClientConfig(builder: ForgeConfigSpec.Builder) {
         val networkManagerSettings: ForgeConfigSpec.ConfigValue<List<String>> = builder
-            .comment("Client presentation settings for individual network managers")
+            .comment("Expanded group paths for individual network managers")
             .defineList<String>("networkManagerSettings", ::emptyList) { it is String }
     }
 }

@@ -45,10 +45,8 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         val level = minecraft?.level ?: return
         val manager = manager ?: return unavailable()
         val settings = NetworkManagerClientSettings.get(level.dimension().location(), pos)
-        if (delimiter.isEmpty() && range.isEmpty()) {
-            delimiter = settings.delimiter
-            range = settings.range.toString()
-        }
+        delimiter = manager.delimiter
+        range = manager.range.toString()
         selectedName = selectedName?.takeIf(manager.peripheralGroups::containsKey)
             ?: minecraft?.player?.mainHandItem?.let(UltimateConfigurator::getSelectedNetworkGroup)?.takeIf(manager.peripheralGroups::containsKey)
 
@@ -118,7 +116,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     private fun initSettings(left: Int, panelWidth: Int) {
         delimiterBox = editBox(left, 52, panelWidth, ModText.NETWORK_MANAGER_DELIMITER, delimiter) { delimiter = it }
-        delimiterBox.setMaxLength(NetworkManagerClientSettings.MAX_DELIMITER_LENGTH)
+        delimiterBox.setMaxLength(NetworkManagerBlockEntity.MAX_DELIMITER_LENGTH)
         rangeBox = editBox(left, 76, panelWidth, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 100, panelWidth, 20).build())
         setInitialFocus(if (focusedField == "range") rangeBox else delimiterBox)
@@ -233,16 +231,13 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     }
 
     private fun saveSettings() {
-        val level = minecraft?.level ?: return
         val parsedRange = range.toIntOrNull()
-        if (parsedRange == null || parsedRange !in NetworkManagerClientSettings.MIN_RANGE..NetworkManagerClientSettings.MAX_RANGE) {
-            status = ModText.NETWORK_MANAGER_INVALID_RANGE.format(NetworkManagerClientSettings.MIN_RANGE, NetworkManagerClientSettings.MAX_RANGE)
+        if (parsedRange == null || parsedRange !in NetworkManagerBlockEntity.MIN_RANGE..NetworkManagerBlockEntity.MAX_RANGE) {
+            status = ModText.NETWORK_MANAGER_INVALID_RANGE.format(NetworkManagerBlockEntity.MIN_RANGE, NetworkManagerBlockEntity.MAX_RANGE)
             return
         }
-        val old = NetworkManagerClientSettings.get(level.dimension().location(), pos)
-        NetworkManagerClientSettings.set(level.dimension().location(), pos, old.copy(delimiter = delimiter, range = parsedRange))
-        status = ModText.NETWORK_MANAGER_SETTINGS_SAVED.text
-        rebuild()
+        send(NetworkManagerGroupMessage.Operation.SETTINGS, "", delimiter, parsedRange)
+        status = ModText.NETWORK_MANAGER_REQUEST_SENT.text
     }
 
     private fun toggleExpansion(path: String) {
@@ -293,7 +288,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         onClose()
     }
 
-    private fun stateSnapshot(manager: NetworkManagerBlockEntity): String = manager.peripheralGroups.toSortedMap().entries.joinToString("|") { (name, group) -> "$name:${group.color}:${group.peripherals.sorted()}" } + manager.displayPeripherals.keys.sorted() + minecraft?.player?.mainHandItem?.let(UltimateConfigurator::getSelectedNetworkGroup)
+    private fun stateSnapshot(manager: NetworkManagerBlockEntity): String = "${manager.delimiter}:${manager.range}:" + manager.peripheralGroups.toSortedMap().entries.joinToString("|") { (name, group) -> "$name:${group.color}:${group.peripherals.sorted()}" } + manager.displayPeripherals.keys.sorted() + minecraft?.player?.mainHandItem?.let(UltimateConfigurator::getSelectedNetworkGroup)
 
     override fun tick() {
         val manager = manager ?: return unavailable()
