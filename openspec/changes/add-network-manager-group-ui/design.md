@@ -10,7 +10,7 @@ The change spans common item interaction, a client screen, local client preferen
 
 - Make all routine group management and membership assignment available from the configurator.
 - Keep group names, colors, and memberships authoritative on the server and compatible with Lua access.
-- Keep delimiter and range authoritative on the network manager while hierarchy expansion remains client-only.
+- Keep delimiter and range authoritative on the network manager while hierarchy expansion follows the Ultimate Configurator.
 - Reuse the existing synchronized network manager state and loader-neutral networking abstractions.
 - Validate every UI mutation on the server against the held configurator and its bound network manager.
 
@@ -18,7 +18,7 @@ The change spans common item interaction, a client screen, local client preferen
 
 - Creating parent groups for hierarchy path segments.
 - Creating or mutating groups through virtual hierarchy nodes.
-- Synchronizing hierarchy expansion state between players.
+- Synchronizing hierarchy expansion state between different configurators.
 - Adding SFM as a dependency or duplicating its visual implementation exactly.
 - Managing peripherals outside the network attached to the selected manager.
 
@@ -43,12 +43,11 @@ Alternative: let the client edit synchronized NBT directly. Rejected because it 
 ### Split server data, item selection, and local presentation state
 
 - Server block entity: real group names, colors, memberships, delimiter, and overlay range.
-- Configurator NBT: selected full group name used by subsequent in-world peripheral clicks.
-- Client-local settings keyed by dimension and network manager block position: hierarchy presentation state such as expanded paths.
+- Configurator NBT: selected full group name and expanded hierarchy paths.
 
 When a selected group is renamed, a successful UI response updates the held configurator selection to the new name. When it is deleted, the selection is cleared. Other configurators with stale selections are handled safely by rejecting assignment until a valid group is selected.
 
-Alternative: store all settings on the item. Rejected because delimiter and range belong to each network manager. Expansion state remains client-local because it is personal visual state.
+Alternative: store all settings on the item. Rejected because delimiter and range belong to each network manager. Expansion state remains on the configurator because it is transient UI state.
 
 ### Derive a virtual hierarchy from full group names
 
@@ -70,14 +69,14 @@ The overlay continues to render authoritative group labels/colors and uses the s
 - [Two players edit a group concurrently] -> Validate against current server state, apply each operation atomically on the server thread, and rely on block entity synchronization to refresh both screens.
 - [Rename or deletion leaves stale selections on other configurators] -> Validate selected groups on every assignment and require reselection when stale.
 - [A delimiter produces ambiguous or empty path segments] -> Preserve full names as identity and treat hierarchy strictly as presentation.
-- [Local expansion settings accumulate after managers are removed] -> Accept small keyed records initially; add pruning only if real-world growth becomes material.
+- [Expansion paths become stale after rebinding] -> Clear them whenever the configurator target changes or is removed.
 - [Existing automation depends on non-empty group deletion being rejected] -> Keep the existing Lua `removeGroup` contract unless separately changed; confirmed destructive deletion is exposed through the validated UI mutation path.
 
 ## Migration Plan
 
 Existing block entity group NBT requires no migration. Existing managers use the default delimiter and range when those fields are absent. Existing configurators gain no selected group until the player chooses one in the UI.
 
-Rollback restores the old interactions without transforming server group data. Client-local presentation settings and new configurator selection tags are harmless if ignored by an older build.
+Rollback restores the old interactions without transforming server group data. New configurator selection and expansion tags are harmless if ignored by an older build.
 
 ## Open Questions
 

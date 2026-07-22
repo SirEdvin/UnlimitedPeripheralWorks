@@ -9,7 +9,6 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
-import site.siredvin.peripheralworks.client.configurator.NetworkManagerClientSettings
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerScreen
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
@@ -50,7 +49,6 @@ class NetworkManagerClientGameTests {
             }
             .thenIdle(5)
             .thenOnClient {
-                NetworkManagerClientSettings.set(minecraft.level!!.dimension().location(), helper.absolutePos(managerPos), NetworkManagerClientSettings.Settings())
                 val player = minecraft.player ?: error("Client player is missing")
                 player.xRot = -90f
                 minecraft.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
@@ -86,6 +84,10 @@ class NetworkManagerClientGameTests {
                 click(screen, button(screen, "+ factory", trim = true))
                 if (findButton(screen, "+ ore", trim = true) == null) click(screen, button(screen, ">"))
                 click(screen, button(screen, "+ ore", trim = true))
+            }
+            .thenWaitUntil {
+                val paths = UltimateConfigurator.getExpandedNetworkGroupPaths(player(helper).mainHandItem)
+                if (!paths.containsAll(setOf("factory", "factory/ore"))) retry("Expanded hierarchy paths have not synchronized to the configurator")
             }
             .thenOnClient { screenshot("network-manager-group-hierarchy.png") }
             .thenWaitUntil { requireScreenshot("network-manager-group-hierarchy.png") }

@@ -95,11 +95,11 @@ The screen SHALL derive a client-side visual hierarchy by splitting full group n
 - **THEN** the configurator stores the leaf's original full group name rather than a virtual path node
 
 ### Requirement: Persist per-manager configuration
-The network manager SHALL persist and synchronize its delimiter and overlay range. The client SHALL persist only hierarchy expansion state by dimension and network manager block position.
+The network manager SHALL persist and synchronize its delimiter and overlay range. The Ultimate Configurator SHALL store expanded hierarchy paths in its NBT.
 
 #### Scenario: Restore local settings
 - **WHEN** the player reopens a previously configured network manager on the same client
-- **THEN** the screen restores the manager's synchronized delimiter and overlay range plus the client's hierarchy expansion state
+- **THEN** the screen restores the manager's synchronized delimiter and overlay range plus the configurator's hierarchy expansion state
 
 #### Scenario: Independent manager settings
 - **WHEN** the player configures different settings for two network managers
@@ -108,6 +108,10 @@ The network manager SHALL persist and synchronize its delimiter and overlay rang
 #### Scenario: Synchronize manager settings
 - **WHEN** a client or peripheral changes the delimiter or range
 - **THEN** clients tracking that manager receive and use the updated values
+
+#### Scenario: Rebind configurator
+- **WHEN** the configurator is bound to another target or cleared
+- **THEN** its expanded hierarchy paths are cleared
 
 #### Scenario: Read and change peripheral configuration
 - **WHEN** a computer calls `getConfiguration`, `setDelimiter`, or `setRange`

@@ -42,9 +42,8 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     override fun isPauseScreen(): Boolean = false
 
     override fun init() {
-        val level = minecraft?.level ?: return
         val manager = manager ?: return unavailable()
-        val settings = NetworkManagerClientSettings.get(level.dimension().location(), pos)
+        val expandedPaths = minecraft?.player?.mainHandItem?.let(UltimateConfigurator::getExpandedNetworkGroupPaths).orEmpty()
         delimiter = manager.delimiter
         range = manager.range.toString()
         selectedName = selectedName?.takeIf(manager.peripheralGroups::containsKey)
@@ -58,14 +57,14 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_TAB_SETTINGS.text) { switchTab(Tab.SETTINGS) }.bounds(left + (third + 4) * 2, 24, third, 20).build()).active = tab != Tab.SETTINGS
 
         when (tab) {
-            Tab.GROUPS -> initGroups(manager, settings, left, panelWidth)
+            Tab.GROUPS -> initGroups(manager, expandedPaths, left, panelWidth)
             Tab.MEMBERSHIP -> initMembership(manager, left, panelWidth)
             Tab.SETTINGS -> initSettings(left, panelWidth)
         }
         snapshot = stateSnapshot(manager)
     }
 
-    private fun initGroups(manager: NetworkManagerBlockEntity, settings: NetworkManagerClientSettings.Settings, left: Int, panelWidth: Int) {
+    private fun initGroups(manager: NetworkManagerBlockEntity, expandedPaths: Set<String>, left: Int, panelWidth: Int) {
         searchBox = editBox(left, 50, panelWidth - 64, ModText.NETWORK_MANAGER_SEARCH, search) {
             search = it
             page = 0
@@ -76,7 +75,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         val rows = if (search.isNotBlank()) {
             hierarchy.search(search).map { "  ${it.fullName}" to it.fullName }
         } else {
-            flatten(hierarchy.roots, settings.expandedPaths)
+            flatten(hierarchy.roots, expandedPaths)
         }
         val fieldsY = (height - 92).coerceAtLeast(120)
         addPagedRows(rows, left, 76, panelWidth, (((fieldsY - 76) / 22) - 1).coerceAtLeast(1)) { value ->
@@ -241,11 +240,10 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     }
 
     private fun toggleExpansion(path: String) {
-        val level = minecraft?.level ?: return
-        val settings = NetworkManagerClientSettings.get(level.dimension().location(), pos)
-        val expanded = settings.expandedPaths.toMutableSet()
-        if (!expanded.add(path)) expanded.remove(path)
-        NetworkManagerClientSettings.set(level.dimension().location(), pos, settings.copy(expandedPaths = expanded))
+        val stack = minecraft?.player?.mainHandItem ?: return
+        val expanded = path !in UltimateConfigurator.getExpandedNetworkGroupPaths(stack)
+        UltimateConfigurator.setNetworkGroupExpanded(stack, path, expanded)
+        send(NetworkManagerGroupMessage.Operation.EXPANSION, "", path, present = expanded)
         rebuild()
     }
 

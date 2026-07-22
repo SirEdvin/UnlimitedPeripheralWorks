@@ -75,7 +75,6 @@ object FabricPeripheralWorks : ModInitializer {
         loader.maybeLoadIntegration("emi").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
-        ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.CLIENT, ConfigHolder.clientSpec)
         PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->

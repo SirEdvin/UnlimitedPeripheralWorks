@@ -12,7 +12,7 @@
 
 ## 3. Client Presentation State
 
-- [x] 3.1 Persist and synchronize delimiter and overlay range on each manager; keep hierarchy expansion state client-local.
+- [x] 3.1 Persist and synchronize delimiter and overlay range on each manager; store hierarchy expansion paths on the Ultimate Configurator.
 - [x] 3.2 Implement the virtual hierarchy derivation and searchable leaf model while preserving full group names as identity.
 - [x] 3.3 Add focused tests for flat mode, nested paths, search matching, and ambiguous or empty path segments.
 - [x] 3.4 Update the network manager overlay renderer and configurator tooltip to use synchronized manager settings and selected-group state.
@@ -22,7 +22,7 @@
 - [x] 4.1 Implement the native screen shell, unavailable-manager feedback, tabs, responsive layout, keyboard handling, and synchronized-state refresh behavior.
 - [x] 4.2 Implement searchable group selection and creation plus rename, color editing, and confirmed destructive deletion.
 - [x] 4.3 Implement the membership tab listing all attached peripherals with current membership and validated toggle actions.
-- [x] 4.4 Implement server-authoritative delimiter and overlay range controls plus client-local hierarchy expansion.
+- [x] 4.4 Implement server-authoritative delimiter and overlay range controls plus configurator-backed hierarchy expansion.
 - [x] 4.5 Add English and Ukrainian localization for screen controls, validation feedback, confirmations, and updated configurator tooltips.
 
 ## 5. Verification

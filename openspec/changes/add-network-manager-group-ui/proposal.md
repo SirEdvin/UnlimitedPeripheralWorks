@@ -9,7 +9,7 @@ Network manager groups can currently be assigned in-world only by combining the 
 - Add group management for rename, confirmed deletion including memberships, and color editing.
 - Add a membership view that lists all peripherals connected to the selected network manager and allows membership changes.
 - Display groups as a client-side hierarchy derived by splitting group names with a configurable delimiter; hierarchy nodes are visual only and do not create server groups.
-- Persist and synchronize delimiter and overlay range on the network manager; keep hierarchy expansion state local to each client.
+- Persist and synchronize delimiter and overlay range on the network manager; store hierarchy expansion state on the Ultimate Configurator.
 - Expose delimiter and range through the peripheral configuration API and make group queries include descendant groups.
 - Store the selected assignment group on the Ultimate Configurator.
 - Move overlay range configuration into the UI.
@@ -27,6 +27,6 @@ None.
 ## Impact
 
 - Affects the Ultimate Configurator network manager mode, client rendering, network manager block entity group mutations, and loader-neutral networking.
-- Adds a native Minecraft screen, synchronized network manager settings, and client-local persistence for expanded hierarchy paths.
+- Adds a native Minecraft screen, synchronized network manager settings, and configurator NBT for expanded hierarchy paths.
 - Extends server validation and mutation paths for group creation, rename, deletion, color, and membership updates while preserving the existing Lua-facing group API unless explicitly superseded by the new mutation behavior.
 - Requires localized UI text and automated checks for hierarchy parsing and authoritative group mutations on both supported loaders.

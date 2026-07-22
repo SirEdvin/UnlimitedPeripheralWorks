@@ -17,7 +17,7 @@ class NetworkManagerGroupMessage(
     private val present: Boolean = false,
     private val expectedPresent: Boolean = false,
 ) : NetworkMessage<ServerNetworkContext> {
-    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, MEMBERSHIP, SETTINGS }
+    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, MEMBERSHIP, SETTINGS, EXPANSION }
 
     constructor(buf: FriendlyByteBuf) : this(
         buf.readBlockPos(),
@@ -55,6 +55,11 @@ class NetworkManagerGroupMessage(
             return
         }
 
+        if (operation == Operation.EXPANSION) {
+            UltimateConfigurator.setNetworkGroupExpanded(stack, value, present)
+            return
+        }
+
         val selected = UltimateConfigurator.getSelectedNetworkGroup(stack)
         val result = when (operation) {
             Operation.SELECT -> if (manager.peripheralGroups.containsKey(group)) NetworkManagerBlockEntity.GroupOperationResult.SUCCESS else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
@@ -64,6 +69,7 @@ class NetworkManagerGroupMessage(
             Operation.COLOR -> if (selected == group) manager.setGroupColor(group, color) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.MEMBERSHIP -> if (selected == group) manager.setGroupMembership(group, value, present, expectedPresent) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.SETTINGS -> manager.setConfiguration(value, color)
+            Operation.EXPANSION -> error("Handled above")
         }
         if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) {
             when (operation) {
