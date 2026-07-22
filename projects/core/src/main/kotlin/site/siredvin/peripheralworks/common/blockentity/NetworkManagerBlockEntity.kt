@@ -35,6 +35,27 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         const val DISPLAY_PERIPHERALS_TAG = "displayPeripherals"
         const val PERIPHERAL_GROUPS = "peripheralGroups"
         const val PERIPHERAL_NAME = "peripheralName"
+        const val DELIMITER_TAG = "delimiter"
+        const val RANGE_TAG = "range"
+        const val MAX_GROUP_NAME_LENGTH = 64
+        const val DEFAULT_DELIMITER = "/"
+        const val DEFAULT_RANGE = 32
+        const val MIN_RANGE = 4
+        const val MAX_RANGE = 128
+        const val MAX_DELIMITER_LENGTH = 16
+    }
+
+    enum class GroupOperationResult {
+        SUCCESS,
+        INVALID_NAME,
+        INVALID_COLOR,
+        INVALID_DELIMITER,
+        INVALID_RANGE,
+        GROUP_EXISTS,
+        GROUP_MISSING,
+        PERIPHERAL_MISSING,
+        PERIPHERAL_ALREADY_PRESENT,
+        PERIPHERAL_NOT_PRESENT,
     }
 
     class PeripheralGroup {
@@ -95,6 +116,10 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     val displayPeripherals: MutableMap<String, BlockPos> = mutableMapOf()
     val peripheralGroups: MutableMap<String, PeripheralGroup> = mutableMapOf()
     val clientBlockCache = mutableMapOf<BlockPos, DrawingInstructions>()
+    var delimiter: String = DEFAULT_DELIMITER
+        private set
+    var range: Int = DEFAULT_RANGE
+        private set
     val element = NetworkManagerWiredElement(this)
     private var peripheralName: String? = null
     private var refreshConnectionsRequired: Boolean = true
@@ -127,25 +152,74 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         satisfyBegForTicks()
     }
 
-    fun toggleGroup(name: String, peripheralName: String) {
-        if (!peripherals.contains(peripheralName)) return
-        if (!peripheralGroups.contains(name)) {
-            val newGroup = PeripheralGroup()
-            newGroup.peripherals.add(peripheralName)
-            peripheralGroups[name] = newGroup
-            peripheral?.queueEvent("network_manager_group_change", newGroup, "added", peripheralName)
-        } else {
-            val group = peripheralGroups[name] ?: return
-            if (group.peripherals.contains(peripheralName)) {
-                group.peripherals.remove(peripheralName)
-                peripheral?.queueEvent("network_manager_group_change", name, "removed", peripheralName)
-            } else {
-                group.peripherals.add(peripheralName)
-                peripheral?.queueEvent("network_manager_group_change", name, "added", peripheralName)
-            }
-        }
+    fun createGroup(name: String): GroupOperationResult {
+        if (name.isEmpty() || name.length > MAX_GROUP_NAME_LENGTH) return GroupOperationResult.INVALID_NAME
+        if (peripheralGroups.containsKey(name)) return GroupOperationResult.GROUP_EXISTS
+        peripheralGroups[name] = PeripheralGroup()
         pushData()
+        return GroupOperationResult.SUCCESS
     }
+
+    fun renameGroup(name: String, newName: String): GroupOperationResult {
+        if (newName.isEmpty() || newName.length > MAX_GROUP_NAME_LENGTH) return GroupOperationResult.INVALID_NAME
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        if (peripheralGroups.containsKey(newName)) return GroupOperationResult.GROUP_EXISTS
+        peripheralGroups.remove(name)
+        peripheralGroups[newName] = group
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun deleteGroup(name: String): GroupOperationResult {
+        val group = peripheralGroups.remove(name) ?: return GroupOperationResult.GROUP_MISSING
+        group.peripherals.forEach { peripheral?.queueEvent("network_manager_group_change", name, "removed", it) }
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun setGroupColor(name: String, color: Int): GroupOperationResult {
+        if (color !in -1..0xffffff) return GroupOperationResult.INVALID_COLOR
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        group.color = color
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun setGroupMembership(name: String, peripheralName: String, present: Boolean, expectedPresent: Boolean? = null): GroupOperationResult {
+        if (!peripherals.containsKey(peripheralName)) return GroupOperationResult.PERIPHERAL_MISSING
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        if (expectedPresent != null && (peripheralName in group.peripherals) != expectedPresent) {
+            return if (expectedPresent) GroupOperationResult.PERIPHERAL_NOT_PRESENT else GroupOperationResult.PERIPHERAL_ALREADY_PRESENT
+        }
+        if (present && !group.peripherals.add(peripheralName)) return GroupOperationResult.PERIPHERAL_ALREADY_PRESENT
+        if (!present && !group.peripherals.remove(peripheralName)) return GroupOperationResult.PERIPHERAL_NOT_PRESENT
+        peripheral?.queueEvent("network_manager_group_change", name, if (present) "added" else "removed", peripheralName)
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun toggleGroup(name: String, peripheralName: String): GroupOperationResult {
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        return setGroupMembership(name, peripheralName, !group.peripherals.contains(peripheralName))
+    }
+
+    fun setDelimiter(value: String): GroupOperationResult = setConfiguration(value, range)
+
+    fun setRange(value: Int): GroupOperationResult = setConfiguration(delimiter, value)
+
+    fun setConfiguration(delimiter: String, range: Int): GroupOperationResult {
+        if (delimiter.length > MAX_DELIMITER_LENGTH) return GroupOperationResult.INVALID_DELIMITER
+        if (range !in MIN_RANGE..MAX_RANGE) return GroupOperationResult.INVALID_RANGE
+        this.delimiter = delimiter
+        this.range = range
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun groupPeripherals(name: String): Set<String> = peripheralGroups.asSequence()
+        .filter { (groupName) -> groupName == name || (name.isNotEmpty() && delimiter.isNotEmpty() && groupName.startsWith(name + delimiter)) }
+        .flatMap { it.value.peripherals.asSequence() }
+        .toSet()
 
     fun pushData() {
         if (!isRemoved) {
@@ -209,13 +283,13 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         if (peripheralName != null) {
             data.putString(PERIPHERAL_NAME, peripheralName!!)
         }
-        if (peripheralGroups.isNotEmpty()) {
-            val peripheralGroupTag = CompoundTag()
-            peripheralGroups.entries.forEach {
-                peripheralGroupTag.put(it.key, it.value.toNBT())
-            }
-            data.put(PERIPHERAL_GROUPS, peripheralGroupTag)
+        data.putString(DELIMITER_TAG, delimiter)
+        data.putInt(RANGE_TAG, range)
+        val peripheralGroupTag = CompoundTag()
+        peripheralGroups.entries.forEach {
+            peripheralGroupTag.put(it.key, it.value.toNBT())
         }
+        data.put(PERIPHERAL_GROUPS, peripheralGroupTag)
         return data
     }
 
@@ -241,8 +315,10 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         if (data.contains(PERIPHERAL_NAME)) {
             peripheralName = data.getString(PERIPHERAL_NAME)
         }
+        if (data.contains(DELIMITER_TAG)) delimiter = data.getString(DELIMITER_TAG).take(MAX_DELIMITER_LENGTH)
+        if (data.contains(RANGE_TAG)) range = data.getInt(RANGE_TAG).coerceIn(MIN_RANGE, MAX_RANGE)
+        peripheralGroups.clear()
         if (data.contains(PERIPHERAL_GROUPS)) {
-            peripheralGroups.clear()
             val peripheralGroupsTag = data.getCompound(PERIPHERAL_GROUPS)
             peripheralGroupsTag.allKeys.forEach {
                 peripheralGroups[it] = PeripheralGroup.fromNBT(peripheralGroupsTag.getCompound(it))

@@ -1,7 +1,9 @@
 package site.siredvin.peripheralworks.testmod
 
+import net.fabricmc.api.EnvType
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import net.fabricmc.loader.api.FabricLoader
 import site.siredvin.testiarium.FabricTestiarium
 import site.siredvin.testiarium.Testiarium
 import site.siredvin.testiarium.cct.CctComputers
@@ -15,6 +17,9 @@ object FabricPeripheralWorksTestMod : ModInitializer {
             CctFixtureCommands.importFiles(it)
         }
         Testiarium.register(PeripheralWorksGameTests::class.java)
+        if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
+            Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.NetworkManagerClientGameTests"))
+        }
         FabricTestiarium.registerTests()
     }
 }

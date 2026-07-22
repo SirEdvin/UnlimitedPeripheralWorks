@@ -53,6 +53,10 @@ val testiariumCctArtifacts = configurations.detachedConfiguration(
     project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1:cct-test-mod@jar"),
 ).apply { isTransitive = false }
 
+val testiariumTestModArtifacts = configurations.detachedConfiguration(
+    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1:test-mod@jar"),
+).apply { isTransitive = false }
+
 val testiariumMainArtifacts = configurations.detachedConfiguration(
     project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1"),
     project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1"),
@@ -72,13 +76,27 @@ loom {
             property("fabric-api.gametest", "true")
             property("fabric.debug.disableModIds", "create")
             property("fabric.debug.loadLate", "testiarium_cct_testmod")
-            property("testiarium.tags", "peripheralworks")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             vmArg("-ea")
             runDir("run/peripheralworks-gametest")
+        }
+        create("peripheralWorksClientGameTest") {
+            client()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("fabric.debug.disableModIds", "create,testiarium_testmod,testiarium_cct_testmod")
+            property("fabric.debug.loadLate", "testiarium_testmod")
+            property("testiarium.client", "true")
+            property("testiarium.tags", "network-manager-client")
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/network-manager-client-gametest")
         }
     }
 }
@@ -125,6 +143,7 @@ dependencies {
     add("modTestModImplementation", libs.bundles.fabric.core)
     add("modTestModImplementation", libs.bundles.ccfabric)
     add("modTestModImplementation", files(testiariumMainArtifacts))
+    add(testMod.implementationConfigurationName, files(testiariumTestModArtifacts))
     add("modTestModImplementation", files(testiariumCctArtifacts))
 }
 

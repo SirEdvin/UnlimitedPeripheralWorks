@@ -12,6 +12,12 @@ tasks.register("gameTest") {
     dependsOn(":forge:runGameTestServer", ":fabric:runPeripheralWorksGameTest")
 }
 
+tasks.register("clientGameTest") {
+    group = "verification"
+    description = "Runs network manager client GameTests on Forge and Fabric."
+    dependsOn(":forge:runClientGameTest", ":fabric:runPeripheralWorksClientGameTest")
+}
+
 subprojectShaking {
     withKotlin.set(true)
     kotlinVersion.set("2.0.0")

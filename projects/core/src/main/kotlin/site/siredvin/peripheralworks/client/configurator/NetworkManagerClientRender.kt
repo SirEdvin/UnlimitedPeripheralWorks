@@ -9,10 +9,8 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
-import net.minecraft.world.InteractionHand
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
-import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
 import kotlin.math.sqrt
 
 object NetworkManagerClientRender : ConfigurationModeRender {
@@ -58,7 +56,7 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         CommonRenderer.initRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? NetworkManagerBlockEntity ?: return
         val playerPos = minecraft.player!!.position()
-        val range = NetworkManagerMode.getRange(minecraft.player!!.getItemInHand(InteractionHand.MAIN_HAND))
+        val range = entity.range
         RenderSystem.disableDepthTest()
         RenderSystem.disableCull()
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
