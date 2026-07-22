@@ -56,11 +56,11 @@ class NetworkManagerGroupMessage(
         }
 
         if (operation == Operation.EXPANSION) {
-            UltimateConfigurator.setNetworkGroupExpanded(stack, value, present)
+            NetworkManagerMode.setGroupExpanded(stack, value, present)
             return
         }
 
-        val selected = UltimateConfigurator.getSelectedNetworkGroup(stack)
+        val selected = NetworkManagerMode.getSelectedGroup(stack)
         val result = when (operation) {
             Operation.SELECT -> if (manager.peripheralGroups.containsKey(group)) NetworkManagerBlockEntity.GroupOperationResult.SUCCESS else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.CREATE -> manager.createGroup(group)
@@ -73,9 +73,9 @@ class NetworkManagerGroupMessage(
         }
         if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) {
             when (operation) {
-                Operation.SELECT, Operation.CREATE -> UltimateConfigurator.setSelectedNetworkGroup(stack, group)
-                Operation.RENAME -> UltimateConfigurator.setSelectedNetworkGroup(stack, value)
-                Operation.DELETE -> UltimateConfigurator.clearSelectedNetworkGroup(stack)
+                Operation.SELECT, Operation.CREATE -> NetworkManagerMode.setSelectedGroup(stack, group)
+                Operation.RENAME -> NetworkManagerMode.setSelectedGroup(stack, value)
+                Operation.DELETE -> NetworkManagerMode.clearSelectedGroup(stack)
                 else -> Unit
             }
         }

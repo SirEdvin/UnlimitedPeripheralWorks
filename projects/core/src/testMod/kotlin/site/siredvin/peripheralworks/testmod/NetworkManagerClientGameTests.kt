@@ -86,7 +86,7 @@ class NetworkManagerClientGameTests {
                 click(screen, button(screen, "+ ore", trim = true))
             }
             .thenWaitUntil {
-                val paths = UltimateConfigurator.getExpandedNetworkGroupPaths(player(helper).mainHandItem)
+                val paths = NetworkManagerMode.getExpandedGroupPaths(player(helper).mainHandItem)
                 if (!paths.containsAll(setOf("factory", "factory/ore"))) retry("Expanded hierarchy paths have not synchronized to the configurator")
             }
             .thenOnClient { screenshot("network-manager-group-hierarchy.png") }
@@ -98,7 +98,7 @@ class NetworkManagerClientGameTests {
                 click(screen, button(screen, "factory/ore/iron", trim = true))
             }
             .thenWaitUntil {
-                if (UltimateConfigurator.getSelectedNetworkGroup(player(helper).mainHandItem) != "factory/ore/iron") retry("Selected group has not synchronized")
+                if (NetworkManagerMode.getSelectedGroup(player(helper).mainHandItem) != "factory/ore/iron") retry("Selected group has not synchronized")
             }
             .thenIdle(5)
             .thenOnClient {

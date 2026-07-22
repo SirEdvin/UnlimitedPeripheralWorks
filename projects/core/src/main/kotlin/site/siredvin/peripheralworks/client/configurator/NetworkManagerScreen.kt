@@ -10,10 +10,10 @@ import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.CommonComponents
 import org.lwjgl.glfw.GLFW
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
-import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.NetworkManagerGroupMessage
+import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
 
 class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_MANAGER_SCREEN_TITLE.text) {
     private enum class Tab { GROUPS, MEMBERSHIP, SETTINGS }
@@ -43,11 +43,11 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     override fun init() {
         val manager = manager ?: return unavailable()
-        val expandedPaths = minecraft?.player?.mainHandItem?.let(UltimateConfigurator::getExpandedNetworkGroupPaths).orEmpty()
+        val expandedPaths = minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getExpandedGroupPaths).orEmpty()
         delimiter = manager.delimiter
         range = manager.range.toString()
         selectedName = selectedName?.takeIf(manager.peripheralGroups::containsKey)
-            ?: minecraft?.player?.mainHandItem?.let(UltimateConfigurator::getSelectedNetworkGroup)?.takeIf(manager.peripheralGroups::containsKey)
+            ?: minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getSelectedGroup)?.takeIf(manager.peripheralGroups::containsKey)
 
         val panelWidth = (width - 24).coerceAtMost(420)
         val left = (width - panelWidth) / 2
@@ -241,8 +241,8 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     private fun toggleExpansion(path: String) {
         val stack = minecraft?.player?.mainHandItem ?: return
-        val expanded = path !in UltimateConfigurator.getExpandedNetworkGroupPaths(stack)
-        UltimateConfigurator.setNetworkGroupExpanded(stack, path, expanded)
+        val expanded = path !in NetworkManagerMode.getExpandedGroupPaths(stack)
+        NetworkManagerMode.setGroupExpanded(stack, path, expanded)
         send(NetworkManagerGroupMessage.Operation.EXPANSION, "", path, present = expanded)
         rebuild()
     }
@@ -286,7 +286,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         onClose()
     }
 
-    private fun stateSnapshot(manager: NetworkManagerBlockEntity): String = "${manager.delimiter}:${manager.range}:" + manager.peripheralGroups.toSortedMap().entries.joinToString("|") { (name, group) -> "$name:${group.color}:${group.peripherals.sorted()}" } + manager.displayPeripherals.keys.sorted() + minecraft?.player?.mainHandItem?.let(UltimateConfigurator::getSelectedNetworkGroup)
+    private fun stateSnapshot(manager: NetworkManagerBlockEntity): String = "${manager.delimiter}:${manager.range}:" + manager.peripheralGroups.toSortedMap().entries.joinToString("|") { (name, group) -> "$name:${group.color}:${group.peripherals.sorted()}" } + manager.displayPeripherals.keys.sorted() + minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getSelectedGroup)
 
     override fun tick() {
         val manager = manager ?: return unavailable()
