@@ -78,7 +78,7 @@ class ModUaLanguageProvider(
         add(ModText.NETWORK_MANAGER_REQUEST_REJECTED, "Запит до менеджера мережі відхилено")
         add(ModText.NETWORK_MANAGER_REQUEST_SUCCEEDED, "Групу менеджера мережі оновлено")
         add(ModText.NETWORK_MANAGER_REQUEST_FAILED, "Не вдалося оновити групу менеджера мережі: %s")
-        add(ModText.NETWORK_MANAGER_SCREEN_TITLE, "Групи менеджера мережі")
+        add(ModText.NETWORK_MANAGER_SCREEN_TITLE, "Менеджер мережі")
         add(ModText.NETWORK_MANAGER_TAB_GROUPS, "Групи")
         add(ModText.NETWORK_MANAGER_TAB_MEMBERSHIP, "Членство")
         add(ModText.NETWORK_MANAGER_TAB_SETTINGS, "Налаштування")

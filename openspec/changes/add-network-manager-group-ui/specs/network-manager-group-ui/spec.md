@@ -73,11 +73,11 @@ The group management screen SHALL allow the selected group to be renamed, assign
 - **THEN** the server removes the group and all memberships, emits membership removal events, and clears the current configurator selection
 
 ### Requirement: Manage membership from the UI
-The screen SHALL provide a searchable membership view for the selected group containing every peripheral currently attached to the bound network manager, categorized by peripheral type, and SHALL allow each membership to be toggled.
+The screen SHALL provide a searchable membership view for the selected group containing every peripheral currently attached to the bound network manager and SHALL allow each membership to be toggled. Peripheral types SHALL remain searchable without being displayed as an additional group or prefix.
 
 #### Scenario: Display network peripherals
 - **WHEN** the player opens the membership view for a selected group
-- **THEN** the screen lists every synchronized peripheral name with its derived type and indicates whether each belongs to that group
+- **THEN** the screen lists every synchronized peripheral name and indicates whether each belongs to that group
 
 #### Scenario: Search membership by type
 - **WHEN** the player enters a peripheral type or full peripheral name in the membership search field
@@ -96,7 +96,11 @@ The screen SHALL derive a client-side visual hierarchy by splitting full group n
 
 #### Scenario: Build nested paths
 - **WHEN** the delimiter is `/` and groups include `factory/ore/iron` and `factory/ore/gold`
-- **THEN** the screen displays both real groups beneath virtual `factory` and `ore` hierarchy nodes with labels left-aligned and indented by hierarchy depth
+- **THEN** the screen displays both real groups beneath virtual `factory` and `ore` hierarchy nodes with left-aligned labels, doubled indentation, and a `|-` branch marker visible only under expanded nodes
+
+#### Scenario: Collapse a real group with descendants
+- **WHEN** a real group is also a hierarchy parent and the player collapses it
+- **THEN** the screen hides its selectable group row and all descendant rows until the parent is expanded again
 
 #### Scenario: Disable hierarchy
 - **WHEN** the configured delimiter is empty

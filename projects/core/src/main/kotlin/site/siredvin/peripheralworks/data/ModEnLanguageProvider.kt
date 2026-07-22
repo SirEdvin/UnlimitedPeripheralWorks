@@ -78,7 +78,7 @@ class ModEnLanguageProvider(
         add(ModText.NETWORK_MANAGER_REQUEST_REJECTED, "Network manager request rejected")
         add(ModText.NETWORK_MANAGER_REQUEST_SUCCEEDED, "Network manager group updated")
         add(ModText.NETWORK_MANAGER_REQUEST_FAILED, "Network manager group update failed: %s")
-        add(ModText.NETWORK_MANAGER_SCREEN_TITLE, "Network manager groups")
+        add(ModText.NETWORK_MANAGER_SCREEN_TITLE, "Network Manager")
         add(ModText.NETWORK_MANAGER_TAB_GROUPS, "Groups")
         add(ModText.NETWORK_MANAGER_TAB_MEMBERSHIP, "Membership")
         add(ModText.NETWORK_MANAGER_TAB_SETTINGS, "Settings")

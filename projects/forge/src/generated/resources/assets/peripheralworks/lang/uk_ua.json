@@ -86,7 +86,7 @@
   "text.peripheralworks.network_manager_request_sent": "Зміну надіслано на сервер",
   "text.peripheralworks.network_manager_request_succeeded": "Групу менеджера мережі оновлено",
   "text.peripheralworks.network_manager_save_settings": "Зберегти налаштування",
-  "text.peripheralworks.network_manager_screen_title": "Групи менеджера мережі",
+  "text.peripheralworks.network_manager_screen_title": "Менеджер мережі",
   "text.peripheralworks.network_manager_search": "Пошук або повна назва нової групи",
   "text.peripheralworks.network_manager_select_group": "Виберіть групу на вкладці «Групи»",
   "text.peripheralworks.network_manager_selected": "Вибрано: %s",

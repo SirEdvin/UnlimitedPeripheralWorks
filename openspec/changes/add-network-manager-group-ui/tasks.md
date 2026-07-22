@@ -36,7 +36,7 @@
 
 - [x] 6.1 Left-align group labels and indent them by virtual hierarchy depth.
 - [x] 6.2 Add exact hexadecimal color entry plus an on-demand native RGB slider sub-screen with preview and cancel/apply behavior.
-- [x] 6.3 Add membership search by full peripheral name or derived peripheral type and display type categorization.
+- [x] 6.3 Add membership search by full peripheral name or derived peripheral type without displaying a separate type group.
 - [x] 6.4 Add four configurator-backed visualization modes and delimiter-aware selected-group filtering.
 - [x] 6.5 Persist and synchronize default, always-show, and always-hide visibility settings for each manager group.
 - [x] 6.6 Extend server and client GameTests for visibility persistence, visualization synchronization, type search, and RGB picker application.

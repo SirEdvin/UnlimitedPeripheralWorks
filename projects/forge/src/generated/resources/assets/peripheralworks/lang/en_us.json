@@ -86,7 +86,7 @@
   "text.peripheralworks.network_manager_request_sent": "Change sent to the server",
   "text.peripheralworks.network_manager_request_succeeded": "Network manager group updated",
   "text.peripheralworks.network_manager_save_settings": "Save settings",
-  "text.peripheralworks.network_manager_screen_title": "Network manager groups",
+  "text.peripheralworks.network_manager_screen_title": "Network Manager",
   "text.peripheralworks.network_manager_search": "Search or new full group name",
   "text.peripheralworks.network_manager_select_group": "Select a group on the Groups tab",
   "text.peripheralworks.network_manager_selected": "Selected: %s",

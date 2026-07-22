@@ -83,14 +83,22 @@ class NetworkManagerClientGameTests {
             .thenWaitUntil { requireScreenshot("network-manager-group-created-iron.png") }
             .thenOnClient { createGroup(minecraft.screen as NetworkManagerScreen, "factory/ore/gold") }
             .thenWaitUntil { manager(helper, managerPos).requireGroup("factory/ore/gold") }
+            .thenOnClient { createGroup(minecraft.screen as NetworkManagerScreen, "factory") }
+            .thenWaitUntil { manager(helper, managerPos).requireGroup("factory") }
             .thenIdle(5)
             .thenOnClient {
                 val screen = minecraft.screen as NetworkManagerScreen
                 editBoxes(screen).first().setValue("")
                 screen.tick()
+                check(screen.children().filterIsInstance<Button>().count { it.message.string.trim() == "+ factory" } == 1) { "Collapsed group exposed a child row" }
+                check(findButton(screen, "factory", trim = true) == null) { "Collapsed real group remained selectable" }
                 click(screen, button(screen, "+ factory", trim = true))
-                if (findButton(screen, "+ ore", trim = true) == null) click(screen, button(screen, ">"))
-                click(screen, button(screen, "+ ore", trim = true))
+                while (findButton(screen, "|- + ore", trim = true) == null) {
+                    val next = button(screen, ">")
+                    check(next.active) { "Expanded child group was not reachable through pagination" }
+                    click(screen, next)
+                }
+                click(screen, button(screen, "|- + ore", trim = true))
             }
             .thenWaitUntil {
                 val paths = NetworkManagerMode.getExpandedGroupPaths(player(helper).mainHandItem)
@@ -131,11 +139,11 @@ class NetworkManagerClientGameTests {
                 click(screen, button(screen, ModText.NETWORK_MANAGER_TAB_MEMBERSHIP.text.string))
                 editBoxes(screen).single().setValue("monitor")
                 screen.tick()
-                check(findButton(screen, "[printer] [ ] printer_0") == null) { "Membership search did not filter by peripheral type" }
+                check(findButton(screen, "[ ] printer_0") == null) { "Membership search did not filter by peripheral type" }
                 editBoxes(screen).single().setValue("")
                 screen.tick()
-                click(screen, button(screen, "[monitor] [ ] monitor_0"))
-                click(screen, button(screen, "[printer] [ ] printer_0"))
+                click(screen, button(screen, "[ ] monitor_0"))
+                click(screen, button(screen, "[ ] printer_0"))
             }
             .thenWaitUntil {
                 val members = manager(helper, managerPos).peripheralGroups.getValue("factory/ore/iron").peripherals

@@ -7,7 +7,7 @@ Network manager groups can currently be assigned in-world only by combining the 
 - Add a searchable network manager group UI opened by using an Ultimate Configurator in network manager mode on air.
 - Allow players to select or create groups and use the selected group when toggling peripheral membership in-world.
 - Add group management for rename, confirmed deletion including memberships, and color editing through exact RGB input or a native RGB picker sub-screen.
-- Add a searchable membership view that categorizes connected peripherals by peripheral type and allows membership changes.
+- Add a membership view that searches connected peripherals by full name or peripheral type and allows membership changes.
 - Display groups as a client-side hierarchy derived by splitting group names with a configurable delimiter; hierarchy nodes are visual only and do not create server groups.
 - Persist and synchronize delimiter, overlay range, and per-group overlay visibility on the network manager; store hierarchy expansion and visualization mode on the Ultimate Configurator.
 - Expose delimiter and range through the peripheral configuration API and make group queries include descendant groups.

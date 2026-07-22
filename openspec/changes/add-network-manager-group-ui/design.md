@@ -28,7 +28,7 @@ The change spans common item interaction, a client screen, local client preferen
 
 Open a native `Screen` when the player uses the configurator on air in network manager mode. The screen reads the already synchronized target `NetworkManagerBlockEntity`; if the target is unavailable client-side, opening fails with feedback instead of introducing a menu solely for data transport.
 
-The screen has group-management, membership, and settings tabs. Group management provides searchable selection/creation, rename, exact RGB editing, a native RGB slider sub-screen with preview, visibility override, and confirmed deletion. Membership categorizes synchronized names by the peripheral type encoded in ComputerCraft names and filters by either type or full name before toggling membership through serverbound messages.
+The screen has group-management, membership, and settings tabs. Group management provides searchable selection/creation, rename, exact RGB editing, a native RGB slider sub-screen with preview, visibility override, and confirmed deletion. Membership displays synchronized peripheral names and filters by either full name or the peripheral type encoded in ComputerCraft names before toggling membership through serverbound messages.
 
 Alternative: use a container menu. Rejected because there is no inventory or menu-specific state, and existing block entity synchronization plus explicit mutation messages cover the requirement with less machinery.
 

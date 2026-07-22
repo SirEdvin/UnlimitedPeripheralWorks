@@ -124,7 +124,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         val rows = manager.displayPeripherals.keys.map { peripheralType(it) to it }
             .filter { (type, name) -> membershipSearch.isBlank() || type.contains(membershipSearch, true) || name.contains(membershipSearch, true) }
             .sortedWith(compareBy({ it.first }, { it.second }))
-            .map { (type, name) -> "[$type] ${if (name in members) "[x]" else "[ ]"} $name" to name }
+            .map { (_, name) -> "${if (name in members) "[x]" else "[ ]"} $name" to name }
         addPagedRows(rows, left, 76, panelWidth, ((height - 106) / 22).coerceAtLeast(1)) { peripheral ->
             val expectedPresent = peripheral in members
             send(NetworkManagerGroupMessage.Operation.MEMBERSHIP, selected, peripheral, present = !expectedPresent, expectedPresent = expectedPresent)
@@ -184,9 +184,17 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             } else {
                 "+ "
             }
-            if (expandable) add("  ".repeat(depth) + marker + node.segment to NODE_PREFIX + path)
-            node.group?.let { add("  ".repeat(depth + if (expandable) 1 else 0) + "  " + node.segment to it.fullName) }
-            if (expandable && path in expanded) addAll(flatten(node.children, expanded, depth + 1))
+            val isExpanded = expandable && path in expanded
+            val prefix = "    ".repeat(depth) + if (depth > 0) "|- " else ""
+            if (expandable) add(prefix + marker + node.segment to NODE_PREFIX + path)
+            if (!expandable || isExpanded) {
+                node.group?.let {
+                    val groupDepth = depth + if (expandable) 1 else 0
+                    val label = "    ".repeat(groupDepth) + if (groupDepth > 0) "|- ${it.fullName}" else it.fullName
+                    add(label to it.fullName)
+                }
+            }
+            if (isExpanded) addAll(flatten(node.children, expanded, depth + 1))
         }
     }
 
