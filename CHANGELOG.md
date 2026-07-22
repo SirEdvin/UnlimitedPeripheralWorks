@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Basic tests
+
+### Changed
+
+- Network manager logic got reworked, now it has proper UI instead of name tag logic
+
 ## [1.7.17] - 2026-02-20
 
 ### Fixed
