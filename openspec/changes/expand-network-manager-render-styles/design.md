@@ -1,0 +1,57 @@
+## Context
+
+The Ultimate Configurator currently stores one four-way visualization mode, while each network manager group stores a visibility override. The overlay always renders text for visible peripherals. The requested styles are player presentation preferences, so they belong on the configurator rather than in shared manager state.
+
+## Goals / Non-Goals
+
+**Goals:**
+
+- Configure selected-hierarchy, other-group, and ungrouped rendering independently.
+- Render each peripheral once using none, text, bold text, outline box, filled box, or flare.
+- Reuse native Minecraft box rendering and the existing flare renderer.
+- Preserve existing configurator behavior when reading the old visualization-mode tag.
+
+**Non-Goals:**
+
+- Add new render libraries or custom models.
+- Add per-group render styles.
+- Change group membership, hierarchy identity, group colors, range, or delimiter persistence.
+- Remove legacy group visibility data from saved managers.
+
+## Decisions
+
+### Store three render styles on the configurator
+
+Define three targets, selected groups, other groups, and ungrouped peripherals, and one six-value render-style enum. Persist each target's style in configurator NBT and synchronize changes through the existing validated network-manager packet.
+
+Alternative: persist styles on the manager. Rejected because these settings control an individual player's current overlay and should not affect other viewers.
+
+### Resolve one target and color per peripheral
+
+A peripheral with any membership in the selected group or a descendant uses the selected style. Otherwise a grouped peripheral uses the other-groups style; a peripheral without memberships uses the ungrouped style. For colored styles, use the first matching group in sorted order and fall back to white when the group has no color; ungrouped peripherals use white. This deterministic precedence avoids drawing overlapping boxes or flares for multi-group peripherals.
+
+Alternative: render once per membership. Rejected because identical geometry overlaps, produces unstable blended colors, and adds no useful information beyond text labels.
+
+### Keep text neutral
+
+Text and bold text retain neutral label colors and do not inherit group colors. Outline boxes, filled boxes, and flares use the resolved group color. Text mode continues to show peripheral, extra-name, and applicable group labels.
+
+### Read old visualization settings as defaults
+
+When a new per-target style tag is absent, derive it from the old four-way visualization mode. Once edited, each new target tag overrides only that target. This preserves existing configurators without a data fixer or eager mutation.
+
+Alternative: reset every existing configurator to text for all categories. Rejected because persisted selected-only and ungrouped-only behavior would change unexpectedly.
+
+## Risks / Trade-offs
+
+- [A peripheral belongs to groups with different colors] -> Use the first matching sorted group for stable output; add explicit color priority only if users need it.
+- [Filled boxes obscure blocks] -> Render them translucent with depth disabled, matching the diagnostic-overlay behavior.
+- [Legacy group visibility overrides remain saved but unused] -> Leave the data intact for rollback compatibility instead of adding a migration solely to delete it.
+
+## Migration Plan
+
+Existing configurators derive missing styles from their old visualization mode. Existing manager group visibility fields remain readable and writable but no longer affect the overlay. Rolling back restores the old selector and ignores the new style tags.
+
+## Open Questions
+
+None.

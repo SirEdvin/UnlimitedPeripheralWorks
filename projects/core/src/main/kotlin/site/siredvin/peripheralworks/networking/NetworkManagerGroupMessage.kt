@@ -17,7 +17,7 @@ class NetworkManagerGroupMessage(
     private val present: Boolean = false,
     private val expectedPresent: Boolean = false,
 ) : NetworkMessage<ServerNetworkContext> {
-    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, VISIBILITY, MEMBERSHIP, SETTINGS, EXPANSION, VISUALIZATION }
+    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, VISIBILITY, MEMBERSHIP, SETTINGS, EXPANSION, RENDER_STYLE }
 
     constructor(buf: FriendlyByteBuf) : this(
         buf.readBlockPos(),
@@ -59,13 +59,14 @@ class NetworkManagerGroupMessage(
             NetworkManagerMode.setGroupExpanded(stack, value, present)
             return
         }
-        if (operation == Operation.VISUALIZATION) {
-            val mode = NetworkManagerMode.VisualizationMode.entries.getOrNull(color)
-            if (mode == null) {
+        if (operation == Operation.RENDER_STYLE) {
+            val target = NetworkManagerMode.RenderTarget.entries.firstOrNull { it.name == group }
+            val style = NetworkManagerMode.RenderStyle.entries.getOrNull(color)
+            if (target == null || style == null) {
                 player.displayClientMessage(ModText.NETWORK_MANAGER_REQUEST_REJECTED.text, true)
                 return
             }
-            NetworkManagerMode.setVisualizationMode(stack, mode)
+            NetworkManagerMode.setRenderStyle(stack, target, style)
             return
         }
 
@@ -85,7 +86,7 @@ class NetworkManagerGroupMessage(
             Operation.MEMBERSHIP -> if (selected == group) manager.setGroupMembership(group, value, present, expectedPresent) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.SETTINGS -> manager.setConfiguration(value, color)
             Operation.EXPANSION -> error("Handled above")
-            Operation.VISUALIZATION -> error("Handled above")
+            Operation.RENDER_STYLE -> error("Handled above")
         }
         if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) {
             when (operation) {

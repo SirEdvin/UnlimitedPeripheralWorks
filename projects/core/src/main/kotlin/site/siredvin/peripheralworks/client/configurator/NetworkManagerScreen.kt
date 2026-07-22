@@ -95,8 +95,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             tooltip = Tooltip.create(ModText.NETWORK_MANAGER_COLOR_PICKER.text)
         }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_APPLY.text) { colorSelected() }.bounds(left + panelWidth - 60, fieldsY + 24, 60, 20).build()).active = selectedName != null
-        addRenderableWidget(Button.builder(visibilityText(manager)) { cycleVisibility() }.bounds(left, fieldsY + 48, panelWidth - 64, 20).build()).active = selectedName != null
-        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_DELETE.text) { confirmDelete() }.bounds(left + panelWidth - 60, fieldsY + 48, 60, 20).build()).apply {
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_DELETE.text) { confirmDelete() }.bounds(left, fieldsY + 48, panelWidth, 20).build()).apply {
             active = selectedName != null
             tooltip = Tooltip.create(ModText.NETWORK_MANAGER_DELETE_TOOLTIP.text)
         }
@@ -136,8 +135,10 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         delimiterBox = editBox(left, 52, panelWidth, ModText.NETWORK_MANAGER_DELIMITER, delimiter) { delimiter = it }
         delimiterBox.setMaxLength(NetworkManagerBlockEntity.MAX_DELIMITER_LENGTH)
         rangeBox = editBox(left, 76, panelWidth, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
-        addRenderableWidget(Button.builder(visualizationText()) { cycleVisualization() }.bounds(left, 100, panelWidth, 20).build())
-        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 124, panelWidth, 20).build())
+        NetworkManagerMode.RenderTarget.entries.forEachIndexed { index, target ->
+            addRenderableWidget(Button.builder(renderStyleText(target)) { cycleRenderStyle(target) }.bounds(left, 100 + index * 24, panelWidth, 20).build())
+        }
+        addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 172, panelWidth, 20).build())
         setInitialFocus(if (focusedField == "range") rangeBox else delimiterBox)
     }
 
@@ -259,42 +260,31 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         )
     }
 
-    private fun cycleVisibility() {
-        val selected = selectedName ?: return
-        val group = manager?.peripheralGroups?.get(selected) ?: return unavailable()
-        val visibility = NetworkManagerBlockEntity.GroupVisibility.entries[(group.visibility.ordinal + 1) % NetworkManagerBlockEntity.GroupVisibility.entries.size]
-        send(NetworkManagerGroupMessage.Operation.VISIBILITY, selected, color = visibility.ordinal)
-        status = ModText.NETWORK_MANAGER_REQUEST_SENT.text
-    }
-
-    private fun visibilityText(manager: NetworkManagerBlockEntity): Component {
-        val visibility = selectedName?.let { manager.peripheralGroups[it]?.visibility } ?: NetworkManagerBlockEntity.GroupVisibility.DEFAULT
-        val value = when (visibility) {
-            NetworkManagerBlockEntity.GroupVisibility.DEFAULT -> ModText.NETWORK_MANAGER_VISIBILITY_DEFAULT.text
-            NetworkManagerBlockEntity.GroupVisibility.SHOW -> ModText.NETWORK_MANAGER_VISIBILITY_SHOW.text
-            NetworkManagerBlockEntity.GroupVisibility.HIDE -> ModText.NETWORK_MANAGER_VISIBILITY_HIDE.text
-        }
-        return ModText.NETWORK_MANAGER_VISIBILITY.format(value)
-    }
-
-    private fun cycleVisualization() {
+    private fun cycleRenderStyle(target: NetworkManagerMode.RenderTarget) {
         val stack = minecraft?.player?.mainHandItem ?: return
-        val modes = NetworkManagerMode.VisualizationMode.entries
-        val mode = modes[(NetworkManagerMode.getVisualizationMode(stack).ordinal + 1) % modes.size]
-        NetworkManagerMode.setVisualizationMode(stack, mode)
-        send(NetworkManagerGroupMessage.Operation.VISUALIZATION, "", color = mode.ordinal)
+        val styles = NetworkManagerMode.RenderStyle.entries
+        val style = styles[(NetworkManagerMode.getRenderStyle(stack, target).ordinal + 1) % styles.size]
+        NetworkManagerMode.setRenderStyle(stack, target, style)
+        send(NetworkManagerGroupMessage.Operation.RENDER_STYLE, target.name, color = style.ordinal)
         rebuild()
     }
 
-    private fun visualizationText(): Component {
-        val mode = minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getVisualizationMode) ?: NetworkManagerMode.VisualizationMode.ALL
-        val value = when (mode) {
-            NetworkManagerMode.VisualizationMode.ALL -> ModText.NETWORK_MANAGER_VISUALIZATION_ALL.text
-            NetworkManagerMode.VisualizationMode.SELECTED -> ModText.NETWORK_MANAGER_VISUALIZATION_SELECTED.text
-            NetworkManagerMode.VisualizationMode.SELECTED_AND_UNGROUPED -> ModText.NETWORK_MANAGER_VISUALIZATION_SELECTED_AND_UNGROUPED.text
-            NetworkManagerMode.VisualizationMode.UNGROUPED -> ModText.NETWORK_MANAGER_VISUALIZATION_UNGROUPED.text
+    private fun renderStyleText(target: NetworkManagerMode.RenderTarget): Component {
+        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getRenderStyle(it, target) } ?: NetworkManagerMode.RenderStyle.TEXT
+        val targetText = when (target) {
+            NetworkManagerMode.RenderTarget.SELECTED -> ModText.NETWORK_MANAGER_RENDER_SELECTED.text
+            NetworkManagerMode.RenderTarget.GROUPED -> ModText.NETWORK_MANAGER_RENDER_GROUPED.text
+            NetworkManagerMode.RenderTarget.UNGROUPED -> ModText.NETWORK_MANAGER_RENDER_UNGROUPED.text
         }
-        return ModText.NETWORK_MANAGER_VISUALIZATION.format(value)
+        val styleText = when (style) {
+            NetworkManagerMode.RenderStyle.NONE -> ModText.NETWORK_MANAGER_RENDER_STYLE_NONE.text
+            NetworkManagerMode.RenderStyle.TEXT -> ModText.NETWORK_MANAGER_RENDER_STYLE_TEXT.text
+            NetworkManagerMode.RenderStyle.BOLD_TEXT -> ModText.NETWORK_MANAGER_RENDER_STYLE_BOLD_TEXT.text
+            NetworkManagerMode.RenderStyle.OUTLINE_BOX -> ModText.NETWORK_MANAGER_RENDER_STYLE_OUTLINE_BOX.text
+            NetworkManagerMode.RenderStyle.FILLED_BOX -> ModText.NETWORK_MANAGER_RENDER_STYLE_FILLED_BOX.text
+            NetworkManagerMode.RenderStyle.FLARE -> ModText.NETWORK_MANAGER_RENDER_STYLE_FLARE.text
+        }
+        return ModText.NETWORK_MANAGER_RENDER_STYLE.format(targetText, styleText)
     }
 
     private fun confirmDelete() {

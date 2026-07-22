@@ -20,11 +20,15 @@ import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 object NetworkManagerMode : ConfigurationMode {
+    // ponytail: derive new defaults from this legacy tag instead of adding a data fixer.
     enum class VisualizationMode { ALL, SELECTED, SELECTED_AND_UNGROUPED, UNGROUPED }
+    enum class RenderTarget { SELECTED, GROUPED, UNGROUPED }
+    enum class RenderStyle { NONE, TEXT, BOLD_TEXT, OUTLINE_BOX, FILLED_BOX, FLARE }
 
     private const val SELECTED_GROUP = "selectedNetworkGroup"
     private const val EXPANDED_GROUP_PATHS = "expandedNetworkGroupPaths"
     private const val VISUALIZATION_MODE = "networkVisualizationMode"
+    private const val RENDER_STYLE_PREFIX = "networkRenderStyle"
     private const val MAX_EXPANDED_GROUP_PATHS = 256
 
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
@@ -77,6 +81,22 @@ object NetworkManagerMode : ConfigurationMode {
         stack.orCreateTag.putString(VISUALIZATION_MODE, mode.name)
     }
 
+    fun getRenderStyle(stack: ItemStack, target: RenderTarget): RenderStyle {
+        val stored = stack.tag?.getString(RENDER_STYLE_PREFIX + target.name)
+            ?.let { value -> RenderStyle.entries.firstOrNull { it.name == value } }
+        if (stored != null) return stored
+        return when (getVisualizationMode(stack)) {
+            VisualizationMode.ALL -> RenderStyle.TEXT
+            VisualizationMode.SELECTED -> if (target == RenderTarget.SELECTED) RenderStyle.TEXT else RenderStyle.NONE
+            VisualizationMode.SELECTED_AND_UNGROUPED -> if (target == RenderTarget.GROUPED) RenderStyle.NONE else RenderStyle.TEXT
+            VisualizationMode.UNGROUPED -> if (target == RenderTarget.UNGROUPED) RenderStyle.TEXT else RenderStyle.NONE
+        }
+    }
+
+    fun setRenderStyle(stack: ItemStack, target: RenderTarget, style: RenderStyle) {
+        stack.orCreateTag.putString(RENDER_STYLE_PREFIX + target.name, style.name)
+    }
+
     fun getExpandedGroupPaths(stack: ItemStack): Set<String> {
         val paths = stack.tag?.getList(EXPANDED_GROUP_PATHS, Tag.TAG_STRING.toInt()) ?: return emptySet()
         return paths.mapTo(mutableSetOf()) { it.asString }
@@ -108,5 +128,6 @@ object NetworkManagerMode : ConfigurationMode {
         itemStack.tag?.remove(SELECTED_GROUP)
         itemStack.tag?.remove(EXPANDED_GROUP_PATHS)
         itemStack.tag?.remove(VISUALIZATION_MODE)
+        RenderTarget.entries.forEach { itemStack.tag?.remove(RENDER_STYLE_PREFIX + it.name) }
     }
 }
