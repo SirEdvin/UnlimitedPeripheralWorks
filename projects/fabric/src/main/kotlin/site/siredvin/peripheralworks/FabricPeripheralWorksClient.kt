@@ -5,6 +5,7 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.upgrades.UpgradeType
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
@@ -17,8 +18,10 @@ import site.siredvin.peripheralworks.client.configurator.ConfigurationModeRender
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.block.FlexibleStatue
 import site.siredvin.peripheralworks.common.setup.Blocks
+import site.siredvin.peripheralworks.fabric.FabricModClientPlatform
 
 object FabricPeripheralWorksClient : ClientModInitializer {
+
     override fun onInitializeClient() {
         PeripheralWorksClientCore.onInit()
         ModelLoadingPlugin.register {
@@ -41,6 +44,7 @@ object FabricPeripheralWorksClient : ClientModInitializer {
 
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_REALITY_ANCHOR.get(), RenderType.translucent())
         BlockRenderLayerMap.INSTANCE.putBlock(Blocks.FLEXIBLE_STATUE.get(), RenderType.translucent())
+        BlockRenderLayerMap.INSTANCE.putBlock(Blocks.HOLOGRAM_PROJECTOR.get(), RenderType.translucent())
 
         PeripheralWorksClientCore.onModelRegister { upgrade, modeller ->
             @Suppress("UNCHECKED_CAST")
@@ -53,6 +57,10 @@ object FabricPeripheralWorksClient : ClientModInitializer {
             if (matrix != null && consumers != null) {
                 ConfigurationModeRenderRegistry.render(matrix, consumers, it.world(), it.camera())
             }
+        }
+
+        ClientLifecycleEvents.CLIENT_STARTED.register {
+            PeripheralWorksClientCore.configure(FabricModClientPlatform)
         }
     }
 }

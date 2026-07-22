@@ -54,11 +54,11 @@ object AE2Helper {
 
     fun buildKey(mode: String, id_key: String): AEKey = when (mode) {
         "fluid" -> {
-            val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation(id_key))
+            val fluid = PlatformRegistries.FLUIDS.get(ResourceLocation.parse(id_key))
             AEFluidKey.of(fluid)
         }
         "item" -> {
-            val item = PlatformRegistries.ITEMS.get(ResourceLocation(id_key))
+            val item = PlatformRegistries.ITEMS.get(ResourceLocation.parse(id_key))
             AEItemKey.of(item)
         }
         else -> {

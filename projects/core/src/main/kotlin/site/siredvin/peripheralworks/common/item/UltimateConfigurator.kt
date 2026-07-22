@@ -40,6 +40,7 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
             list.add(ModTooltip.ACTIVE_CONFIGURATION_MODE.text)
             list.add(activeMode.first.description)
             list.add(ModTooltip.CONFIGURATION_TARGET_BLOCK.format(activeMode.second.toString()))
+            activeMode.first.extraTooltips(itemStack, list)
         }
     }
 
@@ -79,9 +80,10 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
             val possibleMode = ConfiguratorModeRegistry.get(targetState)
             if (possibleMode != null) {
                 saveActiveMode(stack, possibleMode, hit.blockPos)
+                return InteractionResultHolder.consume(stack)
             }
         }
-        return InteractionResultHolder.consume(stack)
+        return InteractionResultHolder.pass(stack)
     }
 
     override fun use(
@@ -98,7 +100,8 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
             if (player.pose == Pose.CROUCHING) {
                 InteractionResultHolder.consume(clearActiveMode(itemStack))
             } else {
-                InteractionResultHolder.pass(itemStack)
+                val activeModePair = getActiveMode(itemStack) ?: return InteractionResultHolder.pass(itemStack)
+                return activeModePair.first.onBlockMiss(activeModePair.second, itemStack, player, level)
             }
         } else {
             val activeModePair = getActiveMode(itemStack) ?: return tryActivateMode(itemStack, player, blockHitResult, level)

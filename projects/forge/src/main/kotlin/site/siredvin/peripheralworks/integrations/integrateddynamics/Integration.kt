@@ -68,12 +68,12 @@ class Integration : Runnable {
 
     override fun run() {
         ComputerCraftProxy.addProvider(VariableStoreProvider)
-        val ccOutput = AspectBuilder.forReadType(ValueTypes.NBT).byMod(IntegratedDynamics._instance)
+        val ccOutput = AspectBuilder.forReadType(ValueTypes.NBT).byMod(IntegratedDynamics._instance.modId)
             .handle(AspectReadBuilders.Block.PROP_GET, "cc_output")
             .handle {
                 ValueTypeNbt.ValueNbt.of(collectValue(it))
             }.withUpdateType(AspectUpdateType.NETWORK_TICK).buildRead()
-        val ccInput = AspectBuilder.forWriteType(ValueTypes.NBT).byMod(IntegratedDynamics._instance)
+        val ccInput = AspectBuilder.forWriteType(ValueTypes.NBT).byMod(IntegratedDynamics._instance.modId)
             .handle({
                 if (it.right.value.rawValue.isPresent) {
                     setValue(it.left.target.pos, it.right.value.rawValue.get())

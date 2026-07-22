@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.xplat
 
-import site.siredvin.broccolium.modules.storage.energy.EnergyUnit
 import site.siredvin.tweakium.modules.platform.ComputerBasePlatform
 import site.siredvin.tweakium.modules.platform.ComputerModInformationTracker
 
@@ -23,6 +22,7 @@ object ModPlatform : ComputerBasePlatform() {
     override val modInformationTracker: ComputerModInformationTracker
         get() = innerModInformationTracker
 
-    val commonEnergy: EnergyUnit
-        get() = baseInnerPlatform.commonEnergy
+    val modList: List<String>
+        get() = baseInnerPlatform.modList
+    fun getModInformation(mod: String): Map<String, Any>? = baseInnerPlatform.getModInformation(mod)
 }

@@ -1,15 +1,15 @@
 package site.siredvin.peripheralworks.integrations.powah
 
-import net.minecraftforge.common.ForgeConfigSpec
+import net.neoforged.neoforge.common.ModConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object Configuration : IForgeConfigHandler {
 
-    private var enableEnergyConfig: ForgeConfigSpec.BooleanValue? = null
-    private var enableGeneraotrConfig: ForgeConfigSpec.BooleanValue? = null
-    private var enableEnergyCellConfig: ForgeConfigSpec.BooleanValue? = null
-    private var enableReactorConfig: ForgeConfigSpec.BooleanValue? = null
-    private var enableRedstoneControlConfig: ForgeConfigSpec.BooleanValue? = null
+    private var enableEnergyConfig: ModConfigSpec.BooleanValue? = null
+    private var enableGeneraotrConfig: ModConfigSpec.BooleanValue? = null
+    private var enableEnergyCellConfig: ModConfigSpec.BooleanValue? = null
+    private var enableReactorConfig: ModConfigSpec.BooleanValue? = null
+    private var enableRedstoneControlConfig: ModConfigSpec.BooleanValue? = null
 
     val enableEnergy: Boolean
         get() = enableEnergyConfig?.get() ?: true
@@ -29,7 +29,7 @@ object Configuration : IForgeConfigHandler {
     override val name: String
         get() = "powah"
 
-    override fun addToConfig(builder: ForgeConfigSpec.Builder) {
+    override fun addToConfig(builder: ModConfigSpec.Builder) {
         enableEnergyConfig = builder.comment("Enabled energy integration")
             .define("enableEnergy", true)
         enableGeneraotrConfig = builder.comment("Enables generators integration")

@@ -1,9 +1,13 @@
 package site.siredvin.peripheralworks
+import dan200.computercraft.api.network.wired.WiredElementLookup
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
 import net.minecraft.client.player.AbstractClientPlayer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
@@ -15,13 +19,22 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.phys.EntityHitResult
 import net.neoforged.fml.config.ModConfig
 import site.siredvin.broccolium.modules.base.FabricIntegrationLoader
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralium.FabricPeripheralium
+import site.siredvin.peripheralworks.api.IPlatformItemStorageHolder
+import site.siredvin.peripheralworks.common.block.PeripheralProxy
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
+import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
+import site.siredvin.peripheralworks.fabric.FabricCustomSlottedStorage
+import site.siredvin.peripheralworks.fabric.FabricMessageType
 import site.siredvin.peripheralworks.fabric.FabricModBlocksReference
 import site.siredvin.peripheralworks.fabric.FabricModPlatform
 import site.siredvin.peripheralworks.fabric.FabricModRecipeIngredients
+import site.siredvin.peripheralworks.networking.NetworkMessage
+import site.siredvin.peripheralworks.networking.NetworkMessages
+import site.siredvin.peripheralworks.networking.ServerNetworkContext
 import site.siredvin.peripheralworks.subsystem.recipe.FabricRecipeTransformers
 import site.siredvin.peripheralworks.xplat.PeripheralWorksCommonHooks
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralProvider
@@ -37,13 +50,23 @@ object FabricPeripheralWorks : ModInitializer {
     override fun onInitialize() {
         // Register configuration
         FabricPeripheralium.sayHi()
+
         PeripheralWorksCore.configure(FabricModPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
+        for (type in NetworkMessages.serverbound) {
+            val fabricType = FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type)
+            PayloadTypeRegistry.playC2S().register(fabricType.type, fabricType.codec)
+            ServerPlayNetworking.registerGlobalReceiver(
+                fabricType.type,
+                { packet, context ->
+                    packet.payload.handle(ServerNetworkContext { context.player() })
+                },
+            )
+        }
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         // Load all integrations
         loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("team_reborn_energy").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
@@ -54,6 +77,7 @@ object FabricPeripheralWorks : ModInitializer {
 //        loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         // Pretty important to setup configuration after integration loading!
         NeoForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
+        PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->
             if (blockEntity is IPeripheralProvider<*>) {
@@ -64,6 +88,17 @@ object FabricPeripheralWorks : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             DebugCommands.register(dispatcher)
+        }
+
+        ItemStorage.SIDED.registerFallback { level, pos, state, entity, direction ->
+            if (entity is IPlatformItemStorageHolder) {
+                val storage = entity.getPlatformItemStorage()
+                if (storage is FabricCustomSlottedStorage) {
+                    @Suppress("UNCHECKED_CAST")
+                    return@registerFallback storage
+                }
+            }
+            return@registerFallback null
         }
 
         UseEntityCallback.EVENT.register(
@@ -88,5 +123,20 @@ object FabricPeripheralWorks : ModInitializer {
         )
 
         FabricRecipeTransformers.init()
+
+        WiredElementLookup.get().registerForBlockEntity({ it1, it2 ->
+            if (it2 == it1.blockState.getValue(PeripheralProxy.ORIENTATION).opposite) {
+                return@registerForBlockEntity it1.element
+            }
+            return@registerForBlockEntity null
+        }, BlockEntityTypes.PERIPHERAL_PROXY.get())
+
+        WiredElementLookup.get().registerForBlockEntity({ it1, it2 ->
+            return@registerForBlockEntity if (it2 == it1.blockState.getValue(FacingBlockEntityBlock.FACING)) {
+                null
+            } else {
+                it1.element
+            }
+        }, BlockEntityTypes.NETWORK_MANAGER.get())
     }
 }

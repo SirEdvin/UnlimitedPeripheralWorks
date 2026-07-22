@@ -28,5 +28,6 @@ object ModItemModelProvider {
 
         turtleUpgrades(generators, Blocks.UNIVERSAL_SCANNER.get(), "_side")
         turtleUpgrades(generators, Blocks.ULTIMATE_SENSOR.get(), "_side")
+        turtleUpgrades(generators, Blocks.HOLOGRAM_PROJECTOR.get(), "_side")
     }
 }

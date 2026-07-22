@@ -20,6 +20,37 @@ class FluxControllerPlugin(private val blockEntity: TileFluxController) : IPerip
     fun getEnergyUnit(): String = Energies.FORGE.name
 
     @LuaFunction(mainThread = true)
+    fun getConnections(): List<Map<String, Any>> {
+        val connections = blockEntity.network.allConnections
+        val result = mutableListOf<Map<String, Any>>()
+        connections.forEach {
+            result.add(
+                mapOf(
+                    "customName" to it.customName,
+                    "maxTransferLimit" to it.maxTransferLimit,
+                    "transferBuffer" to it.transferBuffer,
+                    "transferChange" to it.transferChange,
+                    "surgeMode" to it.surgeMode,
+                    "deviceType" to it.deviceType.name,
+                    "isChunkLoaded" to it.isChunkLoaded,
+                ),
+            )
+        }
+        return result
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getNetwork(): Map<String, Any> {
+        val network = blockEntity.network
+        return mapOf(
+            "name" to network.networkName,
+            "id" to network.networkID,
+            "color" to network.networkColor,
+            "securityLevel" to network.securityLevel.name,
+        )
+    }
+
+    @LuaFunction(mainThread = true)
     fun getStatistic(): Map<String, Any> {
         val stat = blockEntity.network.statistics
         return mapOf(

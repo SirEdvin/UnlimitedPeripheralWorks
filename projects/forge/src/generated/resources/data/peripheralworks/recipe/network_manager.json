@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:cobweb"
+    },
+    "K": {
+      "item": "computercraft:cable"
+    },
+    "P": {
+      "item": "peripheralworks:peripheral_casing"
+    }
+  },
+  "pattern": [
+    "KCK",
+    "CPC",
+    "KCK"
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:network_manager"
+  },
+  "show_notification": false
+}

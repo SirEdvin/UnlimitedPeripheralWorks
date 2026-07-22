@@ -7,9 +7,9 @@ import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.world.item.ItemStack
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.peripheralworks.common.components.PeripheralUpgrades
 import site.siredvin.peripheralworks.common.setup.ModDataComponents
 import site.siredvin.peripheralworks.computercraft.modem.LocalTurtleWrapper
-import site.siredvin.peripheralworks.common.components.PeripheralUpgrades
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
 import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner

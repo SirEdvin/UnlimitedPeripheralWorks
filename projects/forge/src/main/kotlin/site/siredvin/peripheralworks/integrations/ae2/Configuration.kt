@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
-import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import net.neoforged.neoforge.common.ModConfigSpec as ForgeConfigSpec
 
 object Configuration : IForgeConfigHandler {
 
@@ -19,6 +19,6 @@ object Configuration : IForgeConfigHandler {
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
         enableMeInterfaceConfig = builder.comment("Enables me blocks integration").define("enableMEInterface", true)
-        enableMeInterfaceConfig = builder.comment("Enables me integration with storages").define("enableStorageIntegrations", true)
+        enableStorageIntegrationConfig = builder.comment("Enables me integration with storages").define("enableStorageIntegrations", true)
     }
 }

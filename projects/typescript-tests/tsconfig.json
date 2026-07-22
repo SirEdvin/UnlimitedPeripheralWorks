@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/TypeScriptToLua/TypeScriptToLua/master/tsconfig-schema.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@siredvin/soteria": ["build/soteria-source/index.ts"]
+    },
+    "strict": false,
+    "types": [
+      "@jackmacwindows/lua-types/cc",
+      "@siredvin/craftos-types",
+      "@siredvin/cc-types",
+      "@siredvin/api-types"
+    ]
+  },
+  "tstl": {
+    "luaTarget": "5.1",
+    "luaLibImport": "inline",
+    "sourceMapTraceback": false,
+    "noResolvePaths": ["cc.expect"]
+  },
+  "include": ["src/**/*.ts"]
+}

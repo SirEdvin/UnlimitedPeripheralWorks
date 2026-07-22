@@ -13,6 +13,7 @@ object ConfiguratorModeRegistry {
         register(RemoteObserverMode.modeID, RemoteObserverMode) { it.`is`(Blocks.REMOTE_OBSERVER.get()) }
         register(PeripheralProxyMode.modeID, PeripheralProxyMode) { it.`is`(Blocks.PERIPHERAL_PROXY.get()) }
         register(EntityLinkMode.modeID, EntityLinkMode) { it.`is`(Blocks.ENTITY_LINK.get()) }
+        register(NetworkManagerMode.modeID, NetworkManagerMode) { it.`is`(Blocks.NETWORK_MANAGER.get()) }
     }
 
     fun register(modeID: ResourceLocation, builder: ConfigurationMode, condition: Predicate<BlockState>) {

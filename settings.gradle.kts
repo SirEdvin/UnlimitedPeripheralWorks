@@ -1,21 +1,13 @@
 pluginManagement {
     repositories {
-        mavenCentral()
-        gradlePluginPortal()
         maven("https://mvn.siredvin.site/minecraft") {
-            name = "SirEdvin's Minecraft repository"
+            name = "SirEdvin's Maven proxy"
+        }
+        gradlePluginPortal {
             content {
-                includeGroup("net.minecraftforge")
-                includeGroup("net.minecraftforge.gradle")
-                includeGroup("org.parchmentmc")
-                includeGroup("org.parchmentmc.feather")
-                includeGroup("org.parchmentmc.data")
-                includeGroup("org.spongepowered")
-                includeGroup("org.spongepowered.gradle.vanilla")
-                includeGroup("net.fabricmc")
-                includeGroup("fabric-loom")
-                includeGroup("site.siredvin")
-                includeGroupByRegex("site.siredvin.*")
+                includeGroup("com.github.node-gradle.node")
+                includeGroup("net.neoforged")
+                includeGroup("net.neoforged.moddev")
             }
         }
     }
@@ -33,8 +25,9 @@ val minecraftVersion: String by settings
 rootProject.name = "UnlimitedPeripheralWorks $minecraftVersion"
 
 include(":core")
-//include(":forge")
+include(":forge")
 include(":fabric")
+include(":typescript-tests")
 
 
 for (project in rootProject.children) {

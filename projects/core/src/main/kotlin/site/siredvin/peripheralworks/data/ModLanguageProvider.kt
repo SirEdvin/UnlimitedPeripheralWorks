@@ -14,6 +14,7 @@ abstract class ModLanguageProvider(output: PackOutput, locale: String) :
         ModPlatform.holder,
         *ModText.entries.toTypedArray(),
         *ModTooltip.entries.toTypedArray(),
+        *ModEnergiesText.entries.toTypedArray(),
     ) {
 
     companion object {

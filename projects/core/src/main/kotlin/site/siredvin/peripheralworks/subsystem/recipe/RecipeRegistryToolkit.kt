@@ -29,7 +29,7 @@ import java.util.stream.Collectors
 import kotlin.collections.HashMap
 
 object RecipeRegistryToolkit {
-    private val GSON = Gson()
+    val GSON = Gson()
     val SERIALIZATION_SKIP = Any()
     val SERIALIZATION_EMPTY_SLOT = mapOf("type" to "empty")
 
@@ -172,6 +172,7 @@ object RecipeRegistryToolkit {
     }
 
     @Throws(LuaException::class)
+    @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     fun collectRecipeTypes(types: Any?): List<RecipeType<*>> {
         if (types == null || types.toString() == "*") return PlatformRegistries.RECIPE_TYPES.iterator().asSequence().toList()
         if (types is String) {

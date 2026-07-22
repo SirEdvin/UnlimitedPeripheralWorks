@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.subsystem.configurator.EntityLinkMode
+import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
 import site.siredvin.peripheralworks.subsystem.configurator.PeripheralProxyMode
 import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
 
@@ -18,6 +19,7 @@ object ConfigurationModeRenderRegistry {
         register(RemoteObserverMode.modeID, RemoteObserverClientRender)
         register(PeripheralProxyMode.modeID, PeripheralProxyClientRender)
         register(EntityLinkMode.modeID, EntityLinkClientRenderer)
+        register(NetworkManagerMode.modeID, NetworkManagerClientRender)
     }
 
     fun register(modeID: ResourceLocation, render: ConfigurationModeRender) {

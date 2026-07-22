@@ -1,14 +1,25 @@
 package site.siredvin.peripheralworks.utils
 
+import dan200.computercraft.api.lua.IArguments
+import dan200.computercraft.api.lua.LuaException
+import dan200.computercraft.api.peripheral.IPeripheral
+import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.core.Vec3i
 import net.minecraft.data.models.blockstates.VariantProperties.Rotation
 import net.minecraft.world.item.crafting.Recipe
 import net.minecraft.world.item.crafting.RecipeHolder
+import net.minecraft.world.level.block.entity.BlockEntity
+import net.minecraft.world.phys.Vec3
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 import site.siredvin.broccolium.modules.platform.SimpleRegistryEntry
 import site.siredvin.broccolium.modules.platform.api.RegistryEntry
+import site.siredvin.tweakium.modules.peripheral.representation.LuaInterpretation
 import java.lang.IllegalArgumentException
+import java.util.Arrays
+import java.util.stream.Collectors
+import kotlin.collections.get
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -57,3 +68,47 @@ fun VoxelShape.rotate(from: Direction, to: Direction): VoxelShape {
 }
 
 fun <T : Recipe<*>> RecipeHolder<T>.toEntry(): RegistryEntry<Recipe<*>> = SimpleRegistryEntry(this.id, this::value)
+fun IArguments.getBlockPos(index: Int): BlockPos = LuaInterpretation.asBlockPos(this.getTable(index))
+fun IArguments.getBlockPos(index: Int, center: BlockPos, facing: Direction): BlockPos = LuaInterpretation.asBlockPos(center, this.getTable(index), facing)
+fun IArguments.getVec(index: Int): Vec3 = LuaInterpretation.asVec3(this.getTable(index))
+fun IArguments.getVec(index: Int, center: BlockPos, facing: Direction): Vec3 = LuaInterpretation.asVec3(center, this.getTable(index), facing)
+fun IArguments.getVec(index: Int, center: Vec3, facing: Direction): Vec3 = LuaInterpretation.asVec3(center, this.getTable(index), facing)
+
+fun IArguments.getVec3i(index: Int): Vec3i {
+    val table = this.getTable(index)
+    if (!table.containsKey("x") || !table.containsKey("y") || !table.containsKey("z")) throw LuaException("Table should be block position table")
+    val x = table["x"]
+    val y = table["y"]
+    val z = table["z"]
+    if (x !is Number || y !is Number || z !is Number) throw LuaException("Table should be block position table")
+    return Vec3i(x.toInt(), y.toInt(), z.toInt())
+}
+
+fun IArguments.optDirection(index: Int): Direction? {
+    val directionArgument = this.optString(index)
+    return if (directionArgument.isEmpty) {
+        null
+    } else {
+        try {
+            Direction.valueOf(
+                directionArgument.get().uppercase(),
+            )
+        } catch (exc: IllegalArgumentException) {
+            val allValues = Arrays.stream(Direction.entries.toTypedArray()).map { mode -> mode.name.lowercase() }.collect(
+                Collectors.toList(),
+            ).joinToString(", ")
+            throw LuaException("Vertical direction should be one of: $allValues")
+        }
+    }
+}
+
+fun IPeripheral.extractPosition(): BlockPos? {
+    val target = this.target
+    if (target is BlockPos) {
+        return target
+    }
+    if (target is BlockEntity) {
+        return target.blockPos
+    }
+    return null
+}

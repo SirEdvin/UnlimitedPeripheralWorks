@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.api.IItemStackHolder
@@ -11,9 +12,9 @@ import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.DisplayPedestalPeripheral
 import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 
-class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState) :
+class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState, blockEntityType: BlockEntityType<*> = BlockEntityTypes.DISPLAY_PEDESTAL.get()) :
     MutablePeripheralBlockEntity<DisplayPedestalPeripheral>(
-        BlockEntityTypes.DISPLAY_PEDESTAL.get(),
+        blockEntityType,
         blockPos,
         blockState,
     ),

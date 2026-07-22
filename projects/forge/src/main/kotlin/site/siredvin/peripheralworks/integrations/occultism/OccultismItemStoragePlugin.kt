@@ -16,14 +16,14 @@ class OccultismItemStoragePlugin(private val storageController: IStorageControll
         get() = PeripheralWorksConfig.itemStorageTransferLimit
 
     @LuaFunction(mainThread = true)
-    fun getMaxSlots(): Int = storageController.maxSlots
+    fun getMaxSlots(): Int = storageController.maxItemTypes
 
     @LuaFunction(mainThread = true)
-    fun getUsedSlots(): Int = storageController.usedSlots
+    fun getUsedSlots(): Int = storageController.usedItemTypes
 
     @LuaFunction(mainThread = true)
     fun isBlacklisted(item: String): Boolean {
-        val itemInstance = PlatformRegistries.ITEMS.get(ResourceLocation(item))
+        val itemInstance = PlatformRegistries.ITEMS.get(ResourceLocation.parse(item))
         if (itemInstance == Items.AIR) {
             throw LuaException("Cannot find item with id $item")
         }

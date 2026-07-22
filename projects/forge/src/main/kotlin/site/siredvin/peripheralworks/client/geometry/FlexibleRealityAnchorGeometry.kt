@@ -6,9 +6,8 @@ import net.minecraft.client.resources.model.BakedModel
 import net.minecraft.client.resources.model.Material
 import net.minecraft.client.resources.model.ModelBaker
 import net.minecraft.client.resources.model.ModelState
-import net.minecraft.resources.ResourceLocation
-import net.minecraftforge.client.model.geometry.IGeometryBakingContext
-import net.minecraftforge.client.model.geometry.IUnbakedGeometry
+import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext
+import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry
 import site.siredvin.peripheralworks.client.model.FlexibleRealityAnchorModel
 import java.util.function.Function
 
@@ -19,6 +18,5 @@ object FlexibleRealityAnchorGeometry : IUnbakedGeometry<FlexibleRealityAnchorGeo
         spriteGetter: Function<Material, TextureAtlasSprite>,
         modelState: ModelState,
         overrides: ItemOverrides,
-        modelLocation: ResourceLocation,
     ): BakedModel = FlexibleRealityAnchorModel
 }

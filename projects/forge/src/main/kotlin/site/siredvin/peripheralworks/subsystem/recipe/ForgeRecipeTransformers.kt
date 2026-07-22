@@ -1,6 +1,6 @@
 package site.siredvin.peripheralworks.subsystem.recipe
 
-import net.minecraftforge.fluids.FluidStack
+import net.neoforged.neoforge.fluids.FluidStack
 import site.siredvin.broccolium.modules.storage.fluid.toVanilla
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 

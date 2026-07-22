@@ -5,7 +5,7 @@ import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
 import appeng.api.stacks.AEKey
-import appeng.blockentity.grid.AENetworkBlockEntity
+import appeng.me.helpers.IGridConnectedBlockEntity
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
@@ -22,7 +22,7 @@ import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentatio
 import java.util.*
 import kotlin.NoSuchElementException
 
-class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity) : IPeripheralPlugin {
+class MENetworkBlockPlugin(private val level: Level, private val entity: IGridConnectedBlockEntity) : IPeripheralPlugin {
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }
@@ -36,7 +36,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
                 return null
             }
             val entity = level.getBlockEntity(pos)
-            if (entity !is AENetworkBlockEntity) {
+            if (entity !is IGridConnectedBlockEntity) {
                 return null
             }
             return MENetworkBlockPlugin(level, entity)

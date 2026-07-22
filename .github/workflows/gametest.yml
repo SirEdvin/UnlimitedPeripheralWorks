@@ -1,0 +1,45 @@
+name: GameTests
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gametest:
+    name: Forge and Fabric GameTests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run GameTests
+        run: timeout --foreground 1200s xvfb-run -a ./gradlew gameTest --no-daemon -PminimalTestEnvironment
+
+      - name: Upload JUnit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gametest-junit-reports
+          path: |
+            projects/forge/build/test-results/peripheralworks-gametest.xml
+            projects/forge/build/test-results/peripheralworks-gametest.html
+            projects/fabric/build/test-results/peripheralworks-gametest.xml
+            projects/fabric/build/test-results/peripheralworks-gametest.html
+          if-no-files-found: warn
+          retention-days: 14

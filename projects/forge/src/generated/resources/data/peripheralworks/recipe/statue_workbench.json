@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:smooth_stone"
+    },
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "D": {
+      "item": "peripheralium:peripheralium_dust"
+    },
+    "S": {
+      "item": "peripheralworks:flexible_statue"
+    }
+  },
+  "pattern": [
+    "BSB",
+    "SCS",
+    "BDB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:statue_workbench"
+  },
+  "show_notification": false
+}
