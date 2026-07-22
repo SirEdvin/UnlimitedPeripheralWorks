@@ -11,6 +11,8 @@ import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity.GroupVisibility
+import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
 import kotlin.math.sqrt
 
 object NetworkManagerClientRender : ConfigurationModeRender {
@@ -57,13 +59,25 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val entity = minecraft.level?.getBlockEntity(source) as? NetworkManagerBlockEntity ?: return
         val playerPos = minecraft.player!!.position()
         val range = entity.range
+        val stack = minecraft.player!!.mainHandItem
+        val selected = NetworkManagerMode.getSelectedGroup(stack)
+        val mode = NetworkManagerMode.getVisualizationMode(stack)
         RenderSystem.disableDepthTest()
         RenderSystem.disableCull()
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
         RenderSystem.depthMask(false)
         entity.clientBlockCache.entries.forEach {
             val distance = sqrt(it.key.distToCenterSqr(playerPos.x(), playerPos.y(), playerPos.z()))
-            if (distance < range) {
+            val selectedGroups = it.value.groups.filter { group -> selected != null && (group == selected || entity.delimiter.isNotEmpty() && group.startsWith(selected + entity.delimiter)) }
+            val forcedGroups = it.value.groups.filter { group -> entity.peripheralGroups[group]?.visibility == GroupVisibility.SHOW }
+            val ungrouped = it.value.groups.isEmpty()
+            val visible = forcedGroups.isNotEmpty() || when (mode) {
+                NetworkManagerMode.VisualizationMode.ALL -> true
+                NetworkManagerMode.VisualizationMode.SELECTED -> selectedGroups.isNotEmpty()
+                NetworkManagerMode.VisualizationMode.SELECTED_AND_UNGROUPED -> selectedGroups.isNotEmpty() || ungrouped
+                NetworkManagerMode.VisualizationMode.UNGROUPED -> ungrouped
+            }
+            if (distance < range && visible) {
                 var baseHeight = 1.2
                 renderText(
                     poseStack,
@@ -85,7 +99,7 @@ object NetworkManagerClientRender : ConfigurationModeRender {
                         0xff0000,
                     )
                 }
-                for (group in it.value.groups) {
+                for (group in it.value.groups.filter { group -> entity.peripheralGroups[group]?.visibility != GroupVisibility.HIDE && (mode == NetworkManagerMode.VisualizationMode.ALL || group in selectedGroups || group in forcedGroups) }) {
                     baseHeight += 0.15
                     val color = entity.peripheralGroups[group]!!.color
                     renderText(

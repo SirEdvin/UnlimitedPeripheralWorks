@@ -9,7 +9,7 @@ The change spans common item interaction, a client screen, local client preferen
 **Goals:**
 
 - Make all routine group management and membership assignment available from the configurator.
-- Keep group names, colors, and memberships authoritative on the server and compatible with Lua access.
+- Keep group names, colors, visibility overrides, and memberships authoritative on the server and compatible with Lua access.
 - Keep delimiter and range authoritative on the network manager while hierarchy expansion follows the Ultimate Configurator.
 - Reuse the existing synchronized network manager state and loader-neutral networking abstractions.
 - Validate every UI mutation on the server against the held configurator and its bound network manager.
@@ -28,7 +28,7 @@ The change spans common item interaction, a client screen, local client preferen
 
 Open a native `Screen` when the player uses the configurator on air in network manager mode. The screen reads the already synchronized target `NetworkManagerBlockEntity`; if the target is unavailable client-side, opening fails with feedback instead of introducing a menu solely for data transport.
 
-The screen has a group-management tab and a membership tab. Group management provides searchable selection/creation, rename, color editing, confirmed deletion, and settings. Membership lists all synchronized peripheral names for the selected group and toggles membership through serverbound messages.
+The screen has group-management, membership, and settings tabs. Group management provides searchable selection/creation, rename, exact RGB editing, a native RGB slider sub-screen with preview, visibility override, and confirmed deletion. Membership displays synchronized peripheral names and filters by either full name or the peripheral type encoded in ComputerCraft names before toggling membership through serverbound messages.
 
 Alternative: use a container menu. Rejected because there is no inventory or menu-specific state, and existing block entity synchronization plus explicit mutation messages cover the requirement with less machinery.
 
@@ -42,12 +42,18 @@ Alternative: let the client edit synchronized NBT directly. Rejected because it 
 
 ### Split server data, item selection, and local presentation state
 
-- Server block entity: real group names, colors, memberships, delimiter, and overlay range.
-- Configurator NBT: selected full group name and expanded hierarchy paths.
+- Server block entity: real group names, colors, visibility overrides, memberships, delimiter, and overlay range.
+- Configurator NBT: selected full group name, expanded hierarchy paths, and visualization mode.
 
 When a selected group is renamed, a successful UI response updates the held configurator selection to the new name. When it is deleted, the selection is cleared. Other configurators with stale selections are handled safely by rejecting assignment until a valid group is selected.
 
 Alternative: store all settings on the item. Rejected because delimiter and range belong to each network manager. Expansion state remains on the configurator because it is transient UI state.
+
+### Compose overlay modes with persistent group visibility
+
+The configurator selects one of four overlay modes: everything, selected group, selected group plus ungrouped peripherals, or ungrouped peripherals. Selected-group matching includes descendant groups under the configured non-empty delimiter. Each real group stores a default, always-show, or always-hide visibility override on the manager. Always-show groups remain visible across configurator modes, while always-hide suppresses their group label.
+
+Alternative: store one global visualization mode on the manager. Rejected because mode is a player's current inspection preference, while group visibility is shared manager configuration.
 
 ### Derive a virtual hierarchy from full group names
 
@@ -74,7 +80,7 @@ The overlay continues to render authoritative group labels/colors and uses the s
 
 ## Migration Plan
 
-Existing block entity group NBT requires no migration. Existing managers use the default delimiter and range when those fields are absent. Existing configurators gain no selected group until the player chooses one in the UI.
+Existing block entity group NBT requires no migration. Existing groups default to mode-controlled visibility, and existing managers use the default delimiter and range when those fields are absent. Existing configurators default to showing everything and gain no selected group until the player chooses one in the UI.
 
 Rollback restores the old interactions without transforming server group data. New configurator selection and expansion tags are harmless if ignored by an older build.
 

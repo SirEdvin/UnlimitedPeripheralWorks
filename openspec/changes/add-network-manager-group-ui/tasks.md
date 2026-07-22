@@ -29,5 +29,14 @@
 
 - [x] 5.1 Run formatting and the full Gradle build for both loader targets.
 - [x] 5.2 Run the bounded GameTest suite and confirm group mutations pass on both loaders.
-- [ ] 5.3 Launch the client under `xvfb-run` with an explicit timeout and verify screen opening, group CRUD, hierarchy settings, membership changes, selected-group in-world assignment, and overlay range behavior.
+- [x] 5.3 Launch the client under `xvfb-run` with an explicit timeout and verify screen opening, group CRUD, hierarchy settings, membership changes, selected-group in-world assignment, and overlay range behavior.
 - [x] 5.4 Expose manager settings through the peripheral API and test delimiter-aware parent group queries.
+
+## 6. Visualization And Filtering Improvements
+
+- [x] 6.1 Left-align group labels and indent them by virtual hierarchy depth.
+- [x] 6.2 Add exact hexadecimal color entry plus an on-demand native RGB slider sub-screen with preview and cancel/apply behavior.
+- [x] 6.3 Add membership search by full peripheral name or derived peripheral type without displaying a separate type group.
+- [x] 6.4 Add four configurator-backed visualization modes and delimiter-aware selected-group filtering.
+- [x] 6.5 Persist and synchronize default, always-show, and always-hide visibility settings for each manager group.
+- [x] 6.6 Extend server and client GameTests for visibility persistence, visualization synchronization, type search, and RGB picker application.

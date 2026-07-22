@@ -17,7 +17,7 @@ class NetworkManagerGroupMessage(
     private val present: Boolean = false,
     private val expectedPresent: Boolean = false,
 ) : NetworkMessage<ServerNetworkContext> {
-    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, MEMBERSHIP, SETTINGS, EXPANSION }
+    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, VISIBILITY, MEMBERSHIP, SETTINGS, EXPANSION, VISUALIZATION }
 
     constructor(buf: FriendlyByteBuf) : this(
         buf.readBlockPos(),
@@ -59,6 +59,15 @@ class NetworkManagerGroupMessage(
             NetworkManagerMode.setGroupExpanded(stack, value, present)
             return
         }
+        if (operation == Operation.VISUALIZATION) {
+            val mode = NetworkManagerMode.VisualizationMode.entries.getOrNull(color)
+            if (mode == null) {
+                player.displayClientMessage(ModText.NETWORK_MANAGER_REQUEST_REJECTED.text, true)
+                return
+            }
+            NetworkManagerMode.setVisualizationMode(stack, mode)
+            return
+        }
 
         val selected = NetworkManagerMode.getSelectedGroup(stack)
         val result = when (operation) {
@@ -67,9 +76,16 @@ class NetworkManagerGroupMessage(
             Operation.RENAME -> if (selected == group) manager.renameGroup(group, value) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.DELETE -> if (selected == group) manager.deleteGroup(group) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.COLOR -> if (selected == group) manager.setGroupColor(group, color) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            Operation.VISIBILITY -> if (selected != group) {
+                NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            } else {
+                NetworkManagerBlockEntity.GroupVisibility.entries.getOrNull(color)?.let { manager.setGroupVisibility(group, it) }
+                    ?: NetworkManagerBlockEntity.GroupOperationResult.INVALID_VISIBILITY
+            }
             Operation.MEMBERSHIP -> if (selected == group) manager.setGroupMembership(group, value, present, expectedPresent) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.SETTINGS -> manager.setConfiguration(value, color)
             Operation.EXPANSION -> error("Handled above")
+            Operation.VISUALIZATION -> error("Handled above")
         }
         if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) {
             when (operation) {

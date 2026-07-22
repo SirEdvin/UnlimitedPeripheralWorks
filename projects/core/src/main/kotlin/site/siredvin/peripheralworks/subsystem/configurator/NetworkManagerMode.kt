@@ -20,8 +20,11 @@ import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 object NetworkManagerMode : ConfigurationMode {
+    enum class VisualizationMode { ALL, SELECTED, SELECTED_AND_UNGROUPED, UNGROUPED }
+
     private const val SELECTED_GROUP = "selectedNetworkGroup"
     private const val EXPANDED_GROUP_PATHS = "expandedNetworkGroupPaths"
+    private const val VISUALIZATION_MODE = "networkVisualizationMode"
     private const val MAX_EXPANDED_GROUP_PATHS = 256
 
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
@@ -66,6 +69,14 @@ object NetworkManagerMode : ConfigurationMode {
         stack.tag?.remove(SELECTED_GROUP)
     }
 
+    fun getVisualizationMode(stack: ItemStack): VisualizationMode = stack.tag?.getString(VISUALIZATION_MODE)
+        ?.let { value -> VisualizationMode.entries.firstOrNull { it.name == value } }
+        ?: VisualizationMode.ALL
+
+    fun setVisualizationMode(stack: ItemStack, mode: VisualizationMode) {
+        stack.orCreateTag.putString(VISUALIZATION_MODE, mode.name)
+    }
+
     fun getExpandedGroupPaths(stack: ItemStack): Set<String> {
         val paths = stack.tag?.getList(EXPANDED_GROUP_PATHS, Tag.TAG_STRING.toInt()) ?: return emptySet()
         return paths.mapTo(mutableSetOf()) { it.asString }
@@ -96,5 +107,6 @@ object NetworkManagerMode : ConfigurationMode {
     override fun clearData(itemStack: ItemStack) {
         itemStack.tag?.remove(SELECTED_GROUP)
         itemStack.tag?.remove(EXPANDED_GROUP_PATHS)
+        itemStack.tag?.remove(VISUALIZATION_MODE)
     }
 }

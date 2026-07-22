@@ -49,6 +49,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         SUCCESS,
         INVALID_NAME,
         INVALID_COLOR,
+        INVALID_VISIBILITY,
         INVALID_DELIMITER,
         INVALID_RANGE,
         GROUP_EXISTS,
@@ -58,13 +59,17 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         PERIPHERAL_NOT_PRESENT,
     }
 
+    enum class GroupVisibility { DEFAULT, SHOW, HIDE }
+
     class PeripheralGroup {
         val peripherals: MutableSet<String> = mutableSetOf()
         var color: Int = -1
+        var visibility = GroupVisibility.DEFAULT
 
         fun toNBT(): CompoundTag {
             val data = CompoundTag()
             data.putInt("color", color)
+            data.putString("visibility", visibility.name)
             val list = ListTag()
             peripherals.forEach {
                 list.add(StringTag.valueOf(it))
@@ -79,6 +84,8 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             fun fromNBT(tag: CompoundTag): PeripheralGroup {
                 val group = PeripheralGroup()
                 group.color = tag.getInt("color")
+                group.visibility = tag.getString("visibility").let { value -> GroupVisibility.entries.firstOrNull { it.name == value } }
+                    ?: GroupVisibility.DEFAULT
                 val list = tag.getList("peripherals", StringTag.TAG_STRING.toInt())
                 list.forEach {
                     group.peripherals.add(it.asString)
@@ -181,6 +188,13 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         if (color !in -1..0xffffff) return GroupOperationResult.INVALID_COLOR
         val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
         group.color = color
+        pushData()
+        return GroupOperationResult.SUCCESS
+    }
+
+    fun setGroupVisibility(name: String, visibility: GroupVisibility): GroupOperationResult {
+        val group = peripheralGroups[name] ?: return GroupOperationResult.GROUP_MISSING
+        group.visibility = visibility
         pushData()
         return GroupOperationResult.SUCCESS
     }
