@@ -21,8 +21,6 @@ object NetworkManagerMode : ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "network_manager")
     override val description: Component = ModTooltip.NETWORK_MANAGER_MODE.text
 
-    const val DEFAULT_RANGE = 32
-
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
         if (!UltimateConfigurator.isActiveModeDimension(stack, level)) return InteractionResultHolder.fail(stack)
         if (level.isClientSide || level !is ServerLevel) {

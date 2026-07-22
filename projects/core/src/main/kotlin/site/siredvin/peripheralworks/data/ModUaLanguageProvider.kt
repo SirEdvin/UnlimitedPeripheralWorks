@@ -70,7 +70,6 @@ class ModUaLanguageProvider(
         add(ModText.ENTITY_LINK_UPGRADES, "Список покращень:")
         add(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES, "Коннектор до сутності наразі немає покращень")
         add(ModText.ENTITY_LINK_UPGRADE_SCANNER, "Сканер")
-        add(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE, "Радіус оверлея менеджера мережі: %s")
         add(ModText.NETWORK_MANAGER_GROUP_SELECT_REQUIRED, "Спочатку виберіть групу менеджера мережі")
         add(ModText.NETWORK_MANAGER_GROUP_STALE, "Вибраної групи більше не існує; виберіть іншу групу")
         add(ModText.NETWORK_MANAGER_PERIPHERAL_MISSING, "Цей периферійний пристрій не підключено до менеджера мережі")
@@ -101,7 +100,6 @@ class ModUaLanguageProvider(
         add(ModText.NETWORK_MANAGER_DUPLICATE_NAME, "Група з такою повною назвою вже існує")
         add(ModText.NETWORK_MANAGER_INVALID_COLOR, "Використовуйте #RRGGBB або -1 для типового кольору")
         add(ModText.NETWORK_MANAGER_INVALID_RANGE, "Радіус має бути від %s до %s")
-        add(ModText.NETWORK_MANAGER_SETTINGS_SAVED, "Локальні налаштування відображення збережено")
         add(ModText.NETWORK_MANAGER_REQUEST_SENT, "Зміну надіслано на сервер")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
@@ -125,7 +123,6 @@ class ModUaLanguageProvider(
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Автор: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Налаштування коннектора до сутності")
         add(ModTooltip.NETWORK_MANAGER_MODE, "  Оверлей менеджера мережі")
-        add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE, "  Радіус оверлея: %s")
         add(ModTooltip.NETWORK_MANAGER_SELECTED_GROUP, "  Вибрана група: %s")
 
         add(ModEnergiesText.MERCURY_FLUX, "Ртутний флюс")

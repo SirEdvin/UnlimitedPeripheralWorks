@@ -17,7 +17,9 @@ class NetworkManagerGroupHierarchy private constructor(
 
     companion object {
         fun build(groups: Collection<String>, delimiter: String): NetworkManagerGroupHierarchy {
-            val leaves = groups.distinct().sorted().map { NetworkManagerGroupLeaf(it, split(it, delimiter)) }
+            val leaves = groups.distinct().sorted().map {
+                NetworkManagerGroupLeaf(it, if (delimiter.isEmpty()) listOf(it) else it.split(delimiter))
+            }
             val root = MutableNode("")
             leaves.forEach { leaf ->
                 var node = root
@@ -25,21 +27,6 @@ class NetworkManagerGroupHierarchy private constructor(
                 node.group = leaf
             }
             return NetworkManagerGroupHierarchy(root.freeze(emptyList()).children, leaves)
-        }
-
-        private fun split(name: String, delimiter: String): List<String> {
-            if (delimiter.isEmpty()) return listOf(name)
-            val result = mutableListOf<String>()
-            var start = 0
-            while (true) {
-                val end = name.indexOf(delimiter, start)
-                if (end < 0) {
-                    result.add(name.substring(start))
-                    return result
-                }
-                result.add(name.substring(start, end))
-                start = end + delimiter.length
-            }
         }
     }
 

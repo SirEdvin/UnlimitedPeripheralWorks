@@ -70,7 +70,6 @@ class ModEnLanguageProvider(
         add(ModText.ENTITY_LINK_UPGRADES, "List of entity link upgrades:")
         add(ModText.ENTITY_LINK_DOES_NOT_HAVE_UPGRADES, "Entity link doesn't have any upgrades")
         add(ModText.ENTITY_LINK_UPGRADE_SCANNER, "Scanner")
-        add(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE, "Network manager overlay radius: %s")
         add(ModText.NETWORK_MANAGER_GROUP_SELECT_REQUIRED, "Select a network manager group first")
         add(ModText.NETWORK_MANAGER_GROUP_STALE, "The selected group no longer exists; select another group")
         add(ModText.NETWORK_MANAGER_PERIPHERAL_MISSING, "This peripheral is not attached to the network manager")
@@ -101,7 +100,6 @@ class ModEnLanguageProvider(
         add(ModText.NETWORK_MANAGER_DUPLICATE_NAME, "That full group name already exists")
         add(ModText.NETWORK_MANAGER_INVALID_COLOR, "Use #RRGGBB or -1 for the default color")
         add(ModText.NETWORK_MANAGER_INVALID_RANGE, "Range must be from %s to %s")
-        add(ModText.NETWORK_MANAGER_SETTINGS_SAVED, "Local presentation settings saved")
         add(ModText.NETWORK_MANAGER_REQUEST_SENT, "Change sent to the server")
 
         add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
@@ -125,7 +123,6 @@ class ModEnLanguageProvider(
         add(ModTooltip.FLEXIBLE_STATUE_AUTHOR, "Author: %s")
         add(ModTooltip.ENTITY_LINK_MODE, "  Entity link configuration")
         add(ModTooltip.NETWORK_MANAGER_MODE, "  Network manager overlay")
-        add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE, "  Overlay radius: %s")
         add(ModTooltip.NETWORK_MANAGER_SELECTED_GROUP, "  Selected group: %s")
 
         add(ModEnergiesText.MERCURY_FLUX, "Mercury flux")
