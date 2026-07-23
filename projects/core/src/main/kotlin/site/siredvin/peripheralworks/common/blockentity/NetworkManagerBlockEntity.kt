@@ -352,6 +352,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                     }
                 }
             }
+            clientBlockCache.values.forEach { it.groups.sort() }
         }
         return state ?: blockState
     }
