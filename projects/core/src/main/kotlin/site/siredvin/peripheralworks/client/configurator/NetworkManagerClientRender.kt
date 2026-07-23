@@ -48,13 +48,6 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val font = Minecraft.getInstance().font
         val component = Component.literal(text).withStyle { it.withBold(bold) }
         val offset = (-font.width(component) / 2).toFloat()
-        for (xOffset in -1..1) {
-            for (yOffset in -1..1) {
-                if (xOffset != 0 || yOffset != 0) {
-                    font.drawInBatch(component, offset + xOffset, yOffset.toFloat(), 0x000000, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0, LightTexture.FULL_BRIGHT)
-                }
-            }
-        }
         font.drawInBatch(component, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0, LightTexture.FULL_BRIGHT)
 
         matrices.popPose()

@@ -34,12 +34,16 @@
 
 ## 7. Improve Combined Settings Readability
 
-- [x] 7.1 Render text with a contrasting glyph outline.
+- [x] 7.1 Keep text legible when combined with box effects.
 - [x] 7.2 Present each category as one label with separate text and box buttons.
 - [x] 7.3 Regenerate resources and run formatting, build, and GameTests.
 
 ## 8. Correct Text Compositing
 
-- [x] 8.1 Render outlined text through blocks using the see-through font path.
+- [x] 8.1 Render text through blocks using the see-through font path.
 - [x] 8.2 Render outline, filled, and flare effects before the text pass.
 - [x] 8.3 Run formatting, build, and GameTests.
+
+## 9. Simplify Text Rendering
+
+- [x] 9.1 Remove the unreadable glyph outline while retaining see-through, text-last rendering.
