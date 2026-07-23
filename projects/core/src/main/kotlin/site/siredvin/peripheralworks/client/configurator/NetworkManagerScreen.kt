@@ -85,7 +85,9 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             flatten(hierarchy.roots, expandedPaths)
         }
         val fieldsY = (height - 122).coerceAtLeast(120)
-        addPagedRows(rows, left, 76, panelWidth, (((fieldsY - 76) / 22) - 1).coerceAtLeast(1)) { value ->
+        addPagedRows(rows, left, 76, panelWidth, (((fieldsY - 76) / 22) - 1).coerceAtLeast(1), { value ->
+            manager.peripheralGroups[value.removePrefix(NODE_PREFIX)]?.color?.takeIf { it >= 0 } ?: 0xffffff
+        }) { value ->
             if (value.startsWith(NODE_PREFIX)) toggleExpansion(value.removePrefix(NODE_PREFIX)) else select(value)
         }
 
@@ -158,11 +160,11 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         },
     )
 
-    private fun addPagedRows(rows: List<Pair<String, String>>, left: Int, top: Int, panelWidth: Int, rowsPerPage: Int, action: (String) -> Unit) {
+    private fun addPagedRows(rows: List<Pair<String, String>>, left: Int, top: Int, panelWidth: Int, rowsPerPage: Int, color: (String) -> Int = { 0xffffff }, action: (String) -> Unit) {
         val pageCount = ((rows.size + rowsPerPage - 1) / rowsPerPage).coerceAtLeast(1)
         page = page.coerceIn(0, pageCount - 1)
         rows.drop(page * rowsPerPage).take(rowsPerPage).forEachIndexed { index, (label, value) ->
-            addRenderableWidget(LeftAlignedButton(left, top + index * 22, panelWidth, Component.literal(label)) { action(value) })
+            addRenderableWidget(LeftAlignedButton(left, top + index * 22, panelWidth, Component.literal(label), color(value)) { action(value) })
         }
         if (pageCount > 1) {
             addRenderableWidget(
@@ -429,10 +431,10 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         }
     }
 
-    private class LeftAlignedButton(x: Int, y: Int, width: Int, message: Component, onPress: () -> Unit) : Button(x, y, width, 20, message, { onPress() }, DEFAULT_NARRATION) {
+    private class LeftAlignedButton(x: Int, y: Int, width: Int, message: Component, private val textColor: Int, onPress: () -> Unit) : Button(x, y, width, 20, message, { onPress() }, DEFAULT_NARRATION) {
         override fun renderString(graphics: GuiGraphics, font: Font, color: Int) {
             graphics.enableScissor(x + 4, y, x + width - 4, y + height)
-            graphics.drawString(font, message, x + 4, y + (height - 8) / 2, color)
+            graphics.drawString(font, message, x + 4, y + (height - 8) / 2, textColor)
             graphics.disableScissor()
         }
     }

@@ -41,6 +41,10 @@ Each overlay category SHALL provide one text control supporting none, regular, a
 - **WHEN** a category uses regular or bold text
 - **THEN** the overlay renders its peripheral labels through intervening blocks in normal or bold text without applying group color to the text
 
+#### Scenario: Color group-name text
+- **WHEN** a group has a configured color
+- **THEN** its `group:<name>` overlay line and Groups-tab row use that color while groups without a color use white
+
 #### Scenario: Combine text and box styles
 - **WHEN** a category enables both a text style and a box style
 - **THEN** the overlay renders both for each peripheral in that category, with text composited after and above the box effect

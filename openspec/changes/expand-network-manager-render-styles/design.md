@@ -34,7 +34,7 @@ Alternative: render once per membership. Rejected because identical geometry ove
 
 ### Keep text neutral
 
-Regular and bold text retain neutral label colors and do not inherit group colors. Outline, filled, and flare box effects use the resolved group color. Text and box styles render independently so a category can show either or both.
+Peripheral and extra-name text retain neutral label colors. Each group-name line and Groups-tab row uses that group's configured color, defaulting to white. Outline, filled, and flare box effects use the resolved group color. Text and box styles render independently so a category can show either or both.
 
 Render text once through the `SEE_THROUGH` font path. Draw all box effects first and text last so labels remain visible through blocks and cannot be composited beneath boxes.
 

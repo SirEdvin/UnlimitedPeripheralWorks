@@ -52,3 +52,8 @@
 
 - [x] 10.1 Use triangle-strip topology for vanilla chained filled-box vertices.
 - [x] 10.2 Run formatting, build, and GameTests.
+
+## 11. Color Group Text
+
+- [x] 11.1 Apply each group's configured color to overlay group-name lines and Groups-tab rows.
+- [x] 11.2 Run formatting, build, and GameTests.

@@ -132,7 +132,8 @@ object NetworkManagerClientRender : ConfigurationModeRender {
             }
             for (group in it.groups) {
                 baseHeight += 0.15
-                renderText(poseStack, "group:$group", it.pos.x + 0.5, it.pos.y + baseHeight, it.pos.z + 0.5, buffer, bold = bold)
+                val groupColor = entity.peripheralGroups[group]?.color?.takeIf { color -> color >= 0 } ?: 0xffffff
+                renderText(poseStack, "group:$group", it.pos.x + 0.5, it.pos.y + baseHeight, it.pos.z + 0.5, buffer, groupColor, bold)
             }
         }
         buffer.endBatch()

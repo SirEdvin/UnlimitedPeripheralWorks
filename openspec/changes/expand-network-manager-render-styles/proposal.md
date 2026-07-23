@@ -10,7 +10,8 @@ The network manager overlay currently applies one visibility mode to every perip
 - Make box styles visually strong and visible through intervening blocks.
 - Present each category as one labeled row with separate text and box controls.
 - Apply the selected-group style to the selected group and all descendants.
-- Use each group's configured color for box styles, defaulting to white; keep text labels free of group-color styling.
+- Use each group's configured color for box styles, defaulting to white; keep peripheral-name text free of group-color styling.
+- Use configured group colors for group-name text in the world overlay and Groups tab, defaulting to white.
 - Remove the now-redundant per-group visibility override control and rendering behavior.
 
 ## Capabilities
