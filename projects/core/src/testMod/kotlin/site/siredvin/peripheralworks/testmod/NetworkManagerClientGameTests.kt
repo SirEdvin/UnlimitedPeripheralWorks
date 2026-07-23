@@ -64,12 +64,12 @@ class NetworkManagerClientGameTests {
                 check(editBoxes(screen).size == 2) { "Settings tab did not expose delimiter and range" }
                 editBoxes(screen)[1].setValue("64")
                 click(screen, button(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string))
-                click(screen, button(screen, textStyleLabel(NetworkManagerMode.RenderTarget.SELECTED, NetworkManagerMode.TextStyle.REGULAR)))
-                click(screen, button(screen, textStyleLabel(NetworkManagerMode.RenderTarget.GROUPED, NetworkManagerMode.TextStyle.NONE)), 1)
-                click(screen, button(screen, textStyleLabel(NetworkManagerMode.RenderTarget.UNGROUPED, NetworkManagerMode.TextStyle.REGULAR)), 1)
-                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.RenderTarget.SELECTED, NetworkManagerMode.BoxStyle.NONE)))
-                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.RenderTarget.GROUPED, NetworkManagerMode.BoxStyle.NONE)), 1)
-                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.RenderTarget.UNGROUPED, NetworkManagerMode.BoxStyle.NONE)))
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.REGULAR)))
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.NONE)), 1)
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.REGULAR)), 1)
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)), 1)
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
             }
             .thenWaitUntil {
                 val stack = player(helper).mainHandItem
@@ -168,29 +168,23 @@ class NetworkManagerClientGameTests {
         click(screen, button(screen, ModText.NETWORK_MANAGER_CREATE.text.string))
     }
 
-    private fun targetText(target: NetworkManagerMode.RenderTarget) = when (target) {
-        NetworkManagerMode.RenderTarget.SELECTED -> ModText.NETWORK_MANAGER_RENDER_SELECTED.text
-        NetworkManagerMode.RenderTarget.GROUPED -> ModText.NETWORK_MANAGER_RENDER_GROUPED.text
-        NetworkManagerMode.RenderTarget.UNGROUPED -> ModText.NETWORK_MANAGER_RENDER_UNGROUPED.text
-    }
-
-    private fun textStyleLabel(target: NetworkManagerMode.RenderTarget, style: NetworkManagerMode.TextStyle): String {
+    private fun textStyleLabel(style: NetworkManagerMode.TextStyle): String {
         val styleText = when (style) {
             NetworkManagerMode.TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
             NetworkManagerMode.TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
             NetworkManagerMode.TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
         }
-        return ModText.NETWORK_MANAGER_TEXT_STYLE.format(targetText(target), styleText).string
+        return ModText.NETWORK_MANAGER_TEXT_STYLE.format(styleText).string
     }
 
-    private fun boxStyleLabel(target: NetworkManagerMode.RenderTarget, style: NetworkManagerMode.BoxStyle): String {
+    private fun boxStyleLabel(style: NetworkManagerMode.BoxStyle): String {
         val styleText = when (style) {
             NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
             NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
             NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
             NetworkManagerMode.BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
         }
-        return ModText.NETWORK_MANAGER_BOX_STYLE.format(targetText(target), styleText).string
+        return ModText.NETWORK_MANAGER_BOX_STYLE.format(styleText).string
     }
 
     private fun screenshot(name: String) = ClientTestHelper().screenshot(name)
@@ -207,7 +201,7 @@ class NetworkManagerClientGameTests {
 
     private fun editBoxes(screen: Screen) = screen.children().filterIsInstance<EditBox>().sortedWith(compareBy({ it.y }, { it.x }))
 
-    private fun findButton(screen: Screen, label: String, trim: Boolean = false): Button? = screen.children().filterIsInstance<Button>().singleOrNull {
+    private fun findButton(screen: Screen, label: String, trim: Boolean = false): Button? = screen.children().filterIsInstance<Button>().firstOrNull {
         (if (trim) it.message.string.trim() else it.message.string) == label
     }
 

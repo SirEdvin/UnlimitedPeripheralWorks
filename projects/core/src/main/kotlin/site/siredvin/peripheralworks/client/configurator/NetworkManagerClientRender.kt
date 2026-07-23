@@ -9,7 +9,6 @@ import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.LightTexture
@@ -48,8 +47,14 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val font = Minecraft.getInstance().font
         val component = Component.literal(text).withStyle { it.withBold(bold) }
         val offset = (-font.width(component) / 2).toFloat()
-        font.drawInBatch(
-            component, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0,
+        font.drawInBatch8xOutline(
+            component.visualOrderText,
+            offset,
+            0f,
+            color,
+            0x000000,
+            matrix4f,
+            buffer,
             LightTexture.FULL_BRIGHT,
         )
 

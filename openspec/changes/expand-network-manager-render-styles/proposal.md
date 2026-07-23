@@ -8,6 +8,7 @@ The network manager overlay currently applies one visibility mode to every perip
 - Add independent text styles (none, regular, bold) and box styles (none, outline, filled, flare) for every overlay category.
 - Let render-style buttons cycle forward with left click and backward with right click.
 - Make box styles visually strong and visible through intervening blocks.
+- Give overlay text a contrasting outline and present each category as one labeled row with separate text and box controls.
 - Apply the selected-group style to the selected group and all descendants.
 - Use each group's configured color for box styles, defaulting to white; keep text labels free of group-color styling.
 - Remove the now-redundant per-group visibility override control and rendering behavior.

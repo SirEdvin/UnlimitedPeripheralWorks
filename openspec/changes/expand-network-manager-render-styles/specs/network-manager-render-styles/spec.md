@@ -33,9 +33,13 @@ The overlay SHALL classify a peripheral as selected when it belongs to the selec
 ### Requirement: Configure text and box styles independently
 Each overlay category SHALL provide one text control supporting none, regular, and bold, and one box control supporting none, outline, filled, and flare. Text and box choices SHALL render independently.
 
+#### Scenario: Display category settings
+- **WHEN** the settings tab is open
+- **THEN** each category appears once as a label followed by its text and box controls
+
 #### Scenario: Render text styles
 - **WHEN** a category uses regular or bold text
-- **THEN** the overlay renders its peripheral labels in normal or bold text without applying group color to the text
+- **THEN** the overlay renders its peripheral labels in normal or bold text with a contrasting glyph outline and without applying group color to the text
 
 #### Scenario: Combine text and box styles
 - **WHEN** a category enables both a text style and a box style

@@ -31,3 +31,9 @@
 
 - [x] 6.1 Add flare to the independent box options and rendering path.
 - [x] 6.2 Update localization, generated resources, OpenSpec, and GameTest coverage.
+
+## 7. Improve Combined Settings Readability
+
+- [x] 7.1 Render text with a contrasting glyph outline.
+- [x] 7.2 Present each category as one label with separate text and box buttons.
+- [x] 7.3 Regenerate resources and run formatting, build, and GameTests.

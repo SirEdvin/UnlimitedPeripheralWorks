@@ -34,6 +34,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     private var snapshot = ""
     private var rebuildRequested = false
     private var focusedField = "search"
+    private var settingsLabels = emptyList<Triple<Component, Int, Int>>()
     private lateinit var searchBox: EditBox
     private lateinit var membershipSearchBox: EditBox
     private lateinit var renameBox: EditBox
@@ -48,6 +49,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     override fun init() {
         val manager = manager ?: return unavailable()
+        settingsLabels = emptyList()
         val expandedPaths = minecraft?.player?.mainHandItem?.let(NetworkManagerMode::getExpandedGroupPaths).orEmpty()
         delimiter = manager.delimiter
         range = manager.range.toString()
@@ -136,10 +138,12 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         delimiterBox = editBox(left, 52, panelWidth, ModText.NETWORK_MANAGER_DELIMITER, delimiter) { delimiter = it }
         delimiterBox.setMaxLength(NetworkManagerBlockEntity.MAX_DELIMITER_LENGTH)
         rangeBox = editBox(left, 76, panelWidth, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
-        val styleWidth = (panelWidth - 4) / 2
+        val labelWidth = (panelWidth / 3).coerceAtMost(100)
+        val styleWidth = (panelWidth - labelWidth - 8) / 2
+        settingsLabels = NetworkManagerMode.RenderTarget.entries.mapIndexed { index, target -> Triple(targetText(target).copy().append(":"), left, 106 + index * 24) }
         NetworkManagerMode.RenderTarget.entries.forEachIndexed { index, target ->
-            addRenderableWidget(RenderStyleButton(left, 100 + index * 24, styleWidth, textStyleText(target)) { cycleTextStyle(target, it) })
-            addRenderableWidget(RenderStyleButton(left + styleWidth + 4, 100 + index * 24, styleWidth, boxStyleText(target)) { cycleBoxStyle(target, it) })
+            addRenderableWidget(RenderStyleButton(left + labelWidth, 100 + index * 24, styleWidth, textStyleText(target)) { cycleTextStyle(target, it) })
+            addRenderableWidget(RenderStyleButton(left + labelWidth + styleWidth + 4, 100 + index * 24, styleWidth, boxStyleText(target)) { cycleBoxStyle(target, it) })
         }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 172, panelWidth, 20).build())
         setInitialFocus(if (focusedField == "range") rangeBox else delimiterBox)
@@ -294,7 +298,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             NetworkManagerMode.TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
             NetworkManagerMode.TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
         }
-        return ModText.NETWORK_MANAGER_TEXT_STYLE.format(targetText(target), styleText)
+        return ModText.NETWORK_MANAGER_TEXT_STYLE.format(styleText)
     }
 
     private fun boxStyleText(target: NetworkManagerMode.RenderTarget): Component {
@@ -305,7 +309,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
             NetworkManagerMode.BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
         }
-        return ModText.NETWORK_MANAGER_BOX_STYLE.format(targetText(target), styleText)
+        return ModText.NETWORK_MANAGER_BOX_STYLE.format(styleText)
     }
 
     private fun confirmDelete() {
@@ -408,6 +412,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         renderBackground(graphics)
         super.render(graphics, mouseX, mouseY, partialTick)
+        settingsLabels.forEach { (label, x, y) -> graphics.drawString(font, label, x, y, 0xffffff) }
         graphics.drawCenteredString(font, title, width / 2, 8, 0xffffff)
         selectedName?.let { graphics.drawCenteredString(font, ModText.NETWORK_MANAGER_SELECTED.format(it), width / 2, height - 22, 0xa0ffa0) }
         if (status != CommonComponents.EMPTY) graphics.drawCenteredString(font, status, width / 2, height - 10, 0xffd060)

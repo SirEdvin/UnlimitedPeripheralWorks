@@ -36,6 +36,12 @@ Alternative: render once per membership. Rejected because identical geometry ove
 
 Regular and bold text retain neutral label colors and do not inherit group colors. Outline, filled, and flare box effects use the resolved group color. Text and box styles render independently so a category can show either or both.
 
+Render text with Minecraft's native eight-direction glyph outline so labels remain legible over colored boxes and world geometry.
+
+### Present one row per category
+
+Show the category once as a static row label followed by separate text and box buttons. Keep the existing three-row layout and use the same bidirectional cycling button for both controls.
+
 ### Draw diagnostic boxes immediately
 
 Draw box geometry with vanilla line and position-color shaders while depth testing is disabled instead of queuing depth-tested render types. Use a thicker line width for outlines and stronger translucent alpha for filled boxes so both remain legible through intervening blocks.
