@@ -55,6 +55,7 @@
   "text.peripheralworks.mercury_flux": "Ртутний флюс",
   "text.peripheralworks.network_manager_apply": "Застосувати",
   "text.peripheralworks.network_manager_box_filled": "заповнений",
+  "text.peripheralworks.network_manager_box_flare": "сяйво",
   "text.peripheralworks.network_manager_box_outline": "контур",
   "text.peripheralworks.network_manager_box_style": "%s блок: %s",
   "text.peripheralworks.network_manager_color": "Колір (#RRGGBB або -1)",

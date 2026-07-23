@@ -102,6 +102,7 @@ class ModUaLanguageProvider(
         add(ModText.NETWORK_MANAGER_TEXT_BOLD, "жирний")
         add(ModText.NETWORK_MANAGER_BOX_OUTLINE, "контур")
         add(ModText.NETWORK_MANAGER_BOX_FILLED, "заповнений")
+        add(ModText.NETWORK_MANAGER_BOX_FLARE, "сяйво")
         add(ModText.NETWORK_MANAGER_DELIMITER, "Роздільник ієрархії")
         add(ModText.NETWORK_MANAGER_RANGE, "Радіус оверлея")
         add(ModText.NETWORK_MANAGER_APPLY, "Застосувати")

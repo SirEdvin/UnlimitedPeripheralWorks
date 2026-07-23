@@ -7,7 +7,7 @@ The Ultimate Configurator currently stores one four-way visualization mode, whil
 **Goals:**
 
 - Configure selected-hierarchy, other-group, and ungrouped rendering independently.
-- Render independent none, regular, or bold text and none, outline, or filled boxes.
+- Render independent none, regular, or bold text and none, outline, filled, or flare box effects.
 - Reuse native Minecraft box rendering.
 - Preserve existing configurator behavior when reading the old visualization-mode tag.
 
@@ -34,7 +34,7 @@ Alternative: render once per membership. Rejected because identical geometry ove
 
 ### Keep text neutral
 
-Regular and bold text retain neutral label colors and do not inherit group colors. Outline and filled boxes use the resolved group color. Text and box styles render independently so a category can show either or both.
+Regular and bold text retain neutral label colors and do not inherit group colors. Outline, filled, and flare box effects use the resolved group color. Text and box styles render independently so a category can show either or both.
 
 ### Draw diagnostic boxes immediately
 

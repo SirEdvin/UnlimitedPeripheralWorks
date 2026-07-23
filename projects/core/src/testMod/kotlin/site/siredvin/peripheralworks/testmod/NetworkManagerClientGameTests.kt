@@ -79,7 +79,7 @@ class NetworkManagerClientGameTests {
                     NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.TextStyle.BOLD ||
                     NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.TextStyle.NONE ||
                     NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.BoxStyle.OUTLINE ||
-                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.BoxStyle.FILLED ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.BoxStyle.FLARE ||
                     NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.BoxStyle.OUTLINE
                 ) {
                     retry("Manager settings have not reached the server")
@@ -188,6 +188,7 @@ class NetworkManagerClientGameTests {
             NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
             NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
             NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+            NetworkManagerMode.BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
         }
         return ModText.NETWORK_MANAGER_BOX_STYLE.format(targetText(target), styleText).string
     }

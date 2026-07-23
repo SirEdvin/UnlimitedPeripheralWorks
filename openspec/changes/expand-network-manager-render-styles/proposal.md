@@ -5,7 +5,7 @@ The network manager overlay currently applies one visibility mode to every perip
 ## What Changes
 
 - Replace the single overlay visualization selector with independent selected-group, other-groups, and ungrouped render settings.
-- Add independent text styles (none, regular, bold) and box styles (none, outline, filled) for every overlay category.
+- Add independent text styles (none, regular, bold) and box styles (none, outline, filled, flare) for every overlay category.
 - Let render-style buttons cycle forward with left click and backward with right click.
 - Make box styles visually strong and visible through intervening blocks.
 - Apply the selected-group style to the selected group and all descendants.

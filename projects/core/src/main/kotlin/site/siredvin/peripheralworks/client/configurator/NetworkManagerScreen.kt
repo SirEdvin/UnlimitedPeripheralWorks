@@ -303,6 +303,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
             NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
             NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+            NetworkManagerMode.BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
         }
         return ModText.NETWORK_MANAGER_BOX_STYLE.format(targetText(target), styleText)
     }

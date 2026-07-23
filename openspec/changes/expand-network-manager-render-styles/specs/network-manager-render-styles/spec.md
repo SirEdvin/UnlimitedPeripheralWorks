@@ -31,7 +31,7 @@ The overlay SHALL classify a peripheral as selected when it belongs to the selec
 - **THEN** the overlay renders that peripheral using the ungrouped style
 
 ### Requirement: Configure text and box styles independently
-Each overlay category SHALL provide one text control supporting none, regular, and bold, and one box control supporting none, outline, and filled. Text and box choices SHALL render independently.
+Each overlay category SHALL provide one text control supporting none, regular, and bold, and one box control supporting none, outline, filled, and flare. Text and box choices SHALL render independently.
 
 #### Scenario: Render text styles
 - **WHEN** a category uses regular or bold text
@@ -48,6 +48,10 @@ Each overlay category SHALL provide one text control supporting none, regular, a
 #### Scenario: Render a filled box
 - **WHEN** a category uses filled box
 - **THEN** the overlay renders a strong translucent group-colored fill over the peripheral block that remains visible through intervening blocks
+
+#### Scenario: Render a flare
+- **WHEN** a category uses flare
+- **THEN** the overlay renders a group-colored flare inside the peripheral block
 
 ### Requirement: Resolve render colors
 Colored styles SHALL use a deterministic matching group color, treating an unset group color and every ungrouped peripheral as white.

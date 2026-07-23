@@ -102,6 +102,7 @@ class ModEnLanguageProvider(
         add(ModText.NETWORK_MANAGER_TEXT_BOLD, "bold")
         add(ModText.NETWORK_MANAGER_BOX_OUTLINE, "outline")
         add(ModText.NETWORK_MANAGER_BOX_FILLED, "filled")
+        add(ModText.NETWORK_MANAGER_BOX_FLARE, "flare")
         add(ModText.NETWORK_MANAGER_DELIMITER, "Hierarchy delimiter")
         add(ModText.NETWORK_MANAGER_RANGE, "Overlay range")
         add(ModText.NETWORK_MANAGER_APPLY, "Apply")

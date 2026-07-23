@@ -145,6 +145,25 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         RenderSystem.enableCull()
         RenderSystem.depthMask(true)
         CommonRenderer.uninitRenderer(poseStack)
+
+        val flares = peripherals.filter { it.boxStyle == NetworkManagerMode.BoxStyle.FLARE }
+        if (flares.isNotEmpty()) {
+            FlareRenderer.initRenderer(poseStack, camera)
+            flares.forEach {
+                val color = it.color
+                FlareRenderer.renderFlare(
+                    poseStack,
+                    camera,
+                    partialTick,
+                    it.pos.x + 0.5,
+                    it.pos.y + 0.5,
+                    it.pos.z + 0.5,
+                    FlareRenderer.FlareColor((color shr 16 and 0xff) / 255f, (color shr 8 and 0xff) / 255f, (color and 0xff) / 255f),
+                    1f,
+                )
+            }
+            FlareRenderer.uninitRenderer(poseStack)
+        }
     }
 
     private fun renderBox(poseStack: PoseStack, peripheral: RenderedPeripheral, filled: Boolean) {

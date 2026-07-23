@@ -23,6 +23,11 @@
 ## 5. Split Text And Box Settings
 
 - [x] 5.1 Replace unified render styles with independent text and box settings for each category.
-- [x] 5.2 Render enabled text and box styles together and remove the flare option.
+- [x] 5.2 Render enabled text and box styles together.
 - [x] 5.3 Update the settings screen, synchronization, localization, and client GameTest coverage.
 - [x] 5.4 Regenerate resources and run formatting, build, and GameTests.
+
+## 6. Restore Flare Box Effect
+
+- [x] 6.1 Add flare to the independent box options and rendering path.
+- [x] 6.2 Update localization, generated resources, OpenSpec, and GameTest coverage.
