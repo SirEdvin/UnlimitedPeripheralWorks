@@ -65,14 +65,16 @@ class NetworkManagerClientGameTests {
                 editBoxes(screen)[1].setValue("64")
                 click(screen, button(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string))
                 click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.SELECTED, NetworkManagerMode.RenderStyle.TEXT)))
-                click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.GROUPED, NetworkManagerMode.RenderStyle.NONE)))
-                click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.UNGROUPED, NetworkManagerMode.RenderStyle.TEXT)))
+                click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.GROUPED, NetworkManagerMode.RenderStyle.NONE)), 1)
+                click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.UNGROUPED, NetworkManagerMode.RenderStyle.TEXT)), 1)
             }
             .thenWaitUntil {
                 val stack = player(helper).mainHandItem
                 if (
                     manager(helper, managerPos).range != 64 ||
-                    NetworkManagerMode.RenderTarget.entries.any { NetworkManagerMode.getRenderStyle(stack, it) != NetworkManagerMode.RenderStyle.entries[if (it == NetworkManagerMode.RenderTarget.GROUPED) 1 else 2] }
+                    NetworkManagerMode.getRenderStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.RenderStyle.BOLD_TEXT ||
+                    NetworkManagerMode.getRenderStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.RenderStyle.FLARE ||
+                    NetworkManagerMode.getRenderStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.RenderStyle.NONE
                 ) {
                     retry("Manager settings have not reached the server")
                 }
@@ -198,8 +200,8 @@ class NetworkManagerClientGameTests {
     private fun button(screen: Screen, label: String, trim: Boolean = false): Button = findButton(screen, label, trim)
         ?: error("Button '$label' not found among ${screen.children().filterIsInstance<Button>().map { it.message.string }}")
 
-    private fun click(screen: Screen, widget: AbstractWidget) {
-        check(screen.mouseClicked(widget.x + widget.width / 2.0, widget.y + widget.height / 2.0, 0)) { "Widget click was not handled: ${widget.message.string}" }
+    private fun click(screen: Screen, widget: AbstractWidget, button: Int = 0) {
+        check(screen.mouseClicked(widget.x + widget.width / 2.0, widget.y + widget.height / 2.0, button)) { "Widget click was not handled: ${widget.message.string}" }
     }
 
     private fun NetworkManagerBlockEntity.requireGroup(name: String) {

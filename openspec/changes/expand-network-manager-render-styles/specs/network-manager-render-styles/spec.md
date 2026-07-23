@@ -11,6 +11,10 @@ The settings area SHALL let the player independently choose a render style for t
 - **WHEN** the player changes a category style in the network manager screen
 - **THEN** the server validates and stores that style on the held, correctly bound configurator
 
+#### Scenario: Cycle styles forward and backward
+- **WHEN** the player left-clicks or right-clicks a render-style button
+- **THEN** the setting advances to the next style or returns to the previous style respectively, wrapping at either end
+
 ### Requirement: Classify selected hierarchy
 The overlay SHALL classify a peripheral as selected when it belongs to the selected group or any descendant group separated by the manager's configured non-empty delimiter. A selected classification SHALL take precedence over other group memberships.
 
@@ -35,11 +39,11 @@ Each overlay category SHALL support none, text, bold text, outline box, filled b
 
 #### Scenario: Render an outline box
 - **WHEN** a category uses outline box
-- **THEN** the overlay renders a group-colored outline around the peripheral block
+- **THEN** the overlay renders a thick group-colored outline around the peripheral block that remains visible through intervening blocks
 
 #### Scenario: Render a filled box
 - **WHEN** a category uses filled box
-- **THEN** the overlay renders a translucent group-colored fill over the peripheral block
+- **THEN** the overlay renders a strong translucent group-colored fill over the peripheral block that remains visible through intervening blocks
 
 #### Scenario: Render a flare
 - **WHEN** a category uses flare

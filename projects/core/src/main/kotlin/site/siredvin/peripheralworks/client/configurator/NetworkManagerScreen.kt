@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.client.configurator
 
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.components.Button
@@ -136,7 +137,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         delimiterBox.setMaxLength(NetworkManagerBlockEntity.MAX_DELIMITER_LENGTH)
         rangeBox = editBox(left, 76, panelWidth, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
         NetworkManagerMode.RenderTarget.entries.forEachIndexed { index, target ->
-            addRenderableWidget(Button.builder(renderStyleText(target)) { cycleRenderStyle(target) }.bounds(left, 100 + index * 24, panelWidth, 20).build())
+            addRenderableWidget(RenderStyleButton(left, 100 + index * 24, panelWidth, renderStyleText(target)) { cycleRenderStyle(target, it) })
         }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 172, panelWidth, 20).build())
         setInitialFocus(if (focusedField == "range") rangeBox else delimiterBox)
@@ -260,10 +261,10 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         )
     }
 
-    private fun cycleRenderStyle(target: NetworkManagerMode.RenderTarget) {
+    private fun cycleRenderStyle(target: NetworkManagerMode.RenderTarget, direction: Int) {
         val stack = minecraft?.player?.mainHandItem ?: return
         val styles = NetworkManagerMode.RenderStyle.entries
-        val style = styles[(NetworkManagerMode.getRenderStyle(stack, target).ordinal + 1) % styles.size]
+        val style = styles[Math.floorMod(NetworkManagerMode.getRenderStyle(stack, target).ordinal + direction, styles.size)]
         NetworkManagerMode.setRenderStyle(stack, target, style)
         send(NetworkManagerGroupMessage.Operation.RENDER_STYLE, target.name, color = style.ordinal)
         rebuild()
@@ -347,7 +348,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         }
     }
 
-    override fun resize(minecraft: net.minecraft.client.Minecraft, width: Int, height: Int) {
+    override fun resize(minecraft: Minecraft, width: Int, height: Int) {
         rememberFocus()
         super.resize(minecraft, width, height)
     }
@@ -419,6 +420,17 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             graphics.fill(x + 8, y + 6, x + 11, y + 10, color)
             graphics.fill(x + 10, y + 9, x + 14, y + 12, color)
             graphics.fill(x + 12, y + 11, x + 15, y + 15, color)
+        }
+    }
+
+    private class RenderStyleButton(x: Int, y: Int, width: Int, message: Component, private val cycle: (Int) -> Unit) : Button(x, y, width, 20, message, { cycle(1) }, DEFAULT_NARRATION) {
+        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+            if (button == 1 && active && visible && isMouseOver(mouseX, mouseY)) {
+                playDownSound(Minecraft.getInstance().soundManager)
+                cycle(-1)
+                return true
+            }
+            return super.mouseClicked(mouseX, mouseY, button)
         }
     }
 }

@@ -36,6 +36,14 @@ Alternative: render once per membership. Rejected because identical geometry ove
 
 Text and bold text retain neutral label colors and do not inherit group colors. Outline boxes, filled boxes, and flares use the resolved group color. Text mode continues to show peripheral, extra-name, and applicable group labels.
 
+### Draw diagnostic boxes immediately
+
+Draw box geometry with vanilla line and position-color shaders while depth testing is disabled instead of queuing depth-tested render types. Use a thicker line width for outlines and stronger translucent alpha for filled boxes so both remain legible through intervening blocks.
+
+### Cycle style buttons in both directions
+
+Use one native button subclass that retains normal left-click behavior and handles right click as the previous enum value. Both directions wrap at the ends and use the same validated setting packet.
+
 ### Read old visualization settings as defaults
 
 When a new per-target style tag is absent, derive it from the old four-way visualization mode. Once edited, each new target tag overrides only that target. This preserves existing configurators without a data fixer or eager mutation.
@@ -45,7 +53,7 @@ Alternative: reset every existing configurator to text for all categories. Rejec
 ## Risks / Trade-offs
 
 - [A peripheral belongs to groups with different colors] -> Use the first matching sorted group for stable output; add explicit color priority only if users need it.
-- [Filled boxes obscure blocks] -> Render them translucent with depth disabled, matching the diagnostic-overlay behavior.
+- [Filled boxes obscure blocks] -> Keep them translucent but visually stronger, with depth disabled to match diagnostic-overlay behavior.
 - [Legacy group visibility overrides remain saved but unused] -> Leave the data intact for rollback compatibility instead of adding a migration solely to delete it.
 
 ## Migration Plan

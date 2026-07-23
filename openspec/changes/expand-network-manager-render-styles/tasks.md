@@ -13,3 +13,9 @@
 
 - [x] 3.1 Update client GameTests for independent settings and legacy defaults.
 - [x] 3.2 Regenerate localized resources and run the multi-loader build and GameTests.
+
+## 4. Interaction And Visibility Refinements
+
+- [x] 4.1 Render thicker outline and stronger filled boxes without depth testing.
+- [x] 4.2 Add right-click previous-style behavior with wraparound and client GameTest coverage.
+- [x] 4.3 Run formatting, the multi-loader build, and client GameTests.

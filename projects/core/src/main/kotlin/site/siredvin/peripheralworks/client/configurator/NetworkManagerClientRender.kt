@@ -1,15 +1,19 @@
 package site.siredvin.peripheralworks.client.configurator
 
 import com.mojang.blaze3d.systems.RenderSystem
+import com.mojang.blaze3d.vertex.BufferUploader
+import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
+import com.mojang.blaze3d.vertex.Tesselator
+import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.Font
+import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
@@ -125,8 +129,14 @@ object NetworkManagerClientRender : ConfigurationModeRender {
                         )
                     }
                 }
-                NetworkManagerMode.RenderStyle.OUTLINE_BOX -> renderBox(poseStack, buffer, it, false)
-                NetworkManagerMode.RenderStyle.FILLED_BOX -> renderBox(poseStack, buffer, it, true)
+                NetworkManagerMode.RenderStyle.OUTLINE_BOX -> {
+                    buffer.endBatch()
+                    renderBox(poseStack, it, false)
+                }
+                NetworkManagerMode.RenderStyle.FILLED_BOX -> {
+                    buffer.endBatch()
+                    renderBox(poseStack, it, true)
+                }
                 else -> Unit
             }
         }
@@ -156,15 +166,28 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         }
     }
 
-    private fun renderBox(poseStack: PoseStack, buffer: MultiBufferSource.BufferSource, peripheral: RenderedPeripheral, filled: Boolean) {
+    private fun renderBox(poseStack: PoseStack, peripheral: RenderedPeripheral, filled: Boolean) {
         val red = (peripheral.color shr 16 and 0xff) / 255f
         val green = (peripheral.color shr 8 and 0xff) / 255f
         val blue = (peripheral.color and 0xff) / 255f
-        val box = AABB(peripheral.pos).inflate(0.002)
+        val box = AABB(peripheral.pos).inflate(0.01)
+        val buffer = Tesselator.getInstance().builder
+        RenderSystem.disableDepthTest()
         if (filled) {
-            LevelRenderer.addChainedFilledBoxVertices(poseStack, buffer.getBuffer(RenderType.debugFilledBox()), box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, red, green, blue, 0.25f)
+            RenderSystem.enableBlend()
+            RenderSystem.defaultBlendFunc()
+            RenderSystem.setShader(GameRenderer::getPositionColorShader)
+            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
+            LevelRenderer.addChainedFilledBoxVertices(poseStack, buffer, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, red, green, blue, 0.45f)
+            BufferUploader.drawWithShader(buffer.end())
+            RenderSystem.disableBlend()
         } else {
-            LevelRenderer.renderLineBox(poseStack, buffer.getBuffer(RenderType.lines()), box, red, green, blue, 1f)
+            RenderSystem.setShader(GameRenderer::getRendertypeLinesShader)
+            RenderSystem.lineWidth(4f)
+            buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL)
+            LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, 1f)
+            BufferUploader.drawWithShader(buffer.end())
+            RenderSystem.lineWidth(1f)
         }
     }
 
