@@ -49,6 +49,7 @@ class NetworkManagerClientGameTests {
                 stack.orCreateTag.putString(UltimateConfigurator.ACTIVE_MOD_NAME, NetworkManagerMode.modeID.toString())
                 stack.orCreateTag.put(UltimateConfigurator.ACTIVE_MOD_POS, NbtUtils.writeBlockPos(helper.absolutePos(managerPos)))
                 stack.orCreateTag.putString(UltimateConfigurator.ACTIVE_MOD_DIMENSION, helper.level.dimension().location().toString())
+                NetworkManagerMode.setVisualizationMode(stack, NetworkManagerMode.VisualizationMode.SELECTED_AND_UNGROUPED)
                 player(helper).setItemInHand(InteractionHand.MAIN_HAND, stack)
             }
             .thenIdle(5)
@@ -63,10 +64,25 @@ class NetworkManagerClientGameTests {
                 check(editBoxes(screen).size == 2) { "Settings tab did not expose delimiter and range" }
                 editBoxes(screen)[1].setValue("64")
                 click(screen, button(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string))
-                click(screen, button(screen, ModText.NETWORK_MANAGER_VISUALIZATION.format(ModText.NETWORK_MANAGER_VISUALIZATION_ALL.text).string))
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.REGULAR)))
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.NONE)), 1)
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.REGULAR)), 1)
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)), 1)
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.OUTLINE)))
             }
             .thenWaitUntil {
-                if (manager(helper, managerPos).range != 64 || NetworkManagerMode.getVisualizationMode(player(helper).mainHandItem) != NetworkManagerMode.VisualizationMode.SELECTED) {
+                val stack = player(helper).mainHandItem
+                if (
+                    manager(helper, managerPos).range != 64 ||
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.TextStyle.BOLD ||
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.TextStyle.BOLD ||
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.TextStyle.NONE ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.BoxStyle.FILLED ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.BoxStyle.FLARE ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.BoxStyle.OUTLINE
+                ) {
                     retry("Manager settings have not reached the server")
                 }
             }
@@ -127,12 +143,6 @@ class NetworkManagerClientGameTests {
             .thenWaitUntil {
                 if (manager(helper, managerPos).peripheralGroups.getValue("factory/ore/iron").color != 0x123456) retry("Picked group color has not synchronized")
             }
-            .thenOnClient {
-                click(minecraft.screen as NetworkManagerScreen, button(minecraft.screen as NetworkManagerScreen, ModText.NETWORK_MANAGER_VISIBILITY.format(ModText.NETWORK_MANAGER_VISIBILITY_DEFAULT.text).string))
-            }
-            .thenWaitUntil {
-                if (manager(helper, managerPos).peripheralGroups.getValue("factory/ore/iron").visibility != NetworkManagerBlockEntity.GroupVisibility.SHOW) retry("Group visibility has not synchronized")
-            }
             .thenIdle(5)
             .thenOnClient {
                 val screen = minecraft.screen as NetworkManagerScreen
@@ -159,6 +169,25 @@ class NetworkManagerClientGameTests {
         click(screen, button(screen, ModText.NETWORK_MANAGER_CREATE.text.string))
     }
 
+    private fun textStyleLabel(style: NetworkManagerMode.TextStyle): String {
+        val styleText = when (style) {
+            NetworkManagerMode.TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            NetworkManagerMode.TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
+            NetworkManagerMode.TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
+        }
+        return ModText.NETWORK_MANAGER_TEXT_STYLE.format(styleText).string
+    }
+
+    private fun boxStyleLabel(style: NetworkManagerMode.BoxStyle): String {
+        val styleText = when (style) {
+            NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
+            NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+            NetworkManagerMode.BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
+        }
+        return ModText.NETWORK_MANAGER_BOX_STYLE.format(styleText).string
+    }
+
     private fun screenshot(name: String) = ClientTestHelper().screenshot(name)
 
     private fun requireScreenshot(name: String) {
@@ -173,15 +202,15 @@ class NetworkManagerClientGameTests {
 
     private fun editBoxes(screen: Screen) = screen.children().filterIsInstance<EditBox>().sortedWith(compareBy({ it.y }, { it.x }))
 
-    private fun findButton(screen: Screen, label: String, trim: Boolean = false): Button? = screen.children().filterIsInstance<Button>().singleOrNull {
+    private fun findButton(screen: Screen, label: String, trim: Boolean = false): Button? = screen.children().filterIsInstance<Button>().firstOrNull {
         (if (trim) it.message.string.trim() else it.message.string) == label
     }
 
     private fun button(screen: Screen, label: String, trim: Boolean = false): Button = findButton(screen, label, trim)
         ?: error("Button '$label' not found among ${screen.children().filterIsInstance<Button>().map { it.message.string }}")
 
-    private fun click(screen: Screen, widget: AbstractWidget) {
-        check(screen.mouseClicked(widget.x + widget.width / 2.0, widget.y + widget.height / 2.0, 0)) { "Widget click was not handled: ${widget.message.string}" }
+    private fun click(screen: Screen, widget: AbstractWidget, button: Int = 0) {
+        check(screen.mouseClicked(widget.x + widget.width / 2.0, widget.y + widget.height / 2.0, button)) { "Widget click was not handled: ${widget.message.string}" }
     }
 
     private fun NetworkManagerBlockEntity.requireGroup(name: String) {
