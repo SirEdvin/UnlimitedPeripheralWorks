@@ -47,3 +47,8 @@
 ## 9. Simplify Text Rendering
 
 - [x] 9.1 Remove the unreadable glyph outline while retaining see-through, text-last rendering.
+
+## 10. Correct Filled Box Mesh
+
+- [x] 10.1 Use triangle-strip topology for vanilla chained filled-box vertices.
+- [x] 10.2 Run formatting, build, and GameTests.

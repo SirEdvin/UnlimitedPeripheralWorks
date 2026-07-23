@@ -46,6 +46,8 @@ Show the category once as a static row label followed by separate text and box b
 
 Draw box geometry with vanilla line and position-color shaders while depth testing is disabled instead of queuing depth-tested render types. Use a thicker line width for outlines and stronger translucent alpha for filled boxes so both remain legible through intervening blocks.
 
+Submit `addChainedFilledBoxVertices` as a triangle strip, matching the topology emitted by the vanilla helper.
+
 ### Cycle style buttons in both directions
 
 Use one native button subclass for all six controls that retains normal left-click behavior and handles right click as the previous enum value. Both directions wrap at the ends and use the same validated setting packet.

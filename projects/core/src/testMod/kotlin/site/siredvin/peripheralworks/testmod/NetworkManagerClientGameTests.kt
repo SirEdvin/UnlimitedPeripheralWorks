@@ -70,6 +70,7 @@ class NetworkManagerClientGameTests {
                 click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
                 click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)), 1)
                 click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.OUTLINE)))
             }
             .thenWaitUntil {
                 val stack = player(helper).mainHandItem
@@ -78,7 +79,7 @@ class NetworkManagerClientGameTests {
                     NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.TextStyle.BOLD ||
                     NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.TextStyle.BOLD ||
                     NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.TextStyle.NONE ||
-                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.BoxStyle.OUTLINE ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.BoxStyle.FILLED ||
                     NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.BoxStyle.FLARE ||
                     NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.BoxStyle.OUTLINE
                 ) {
