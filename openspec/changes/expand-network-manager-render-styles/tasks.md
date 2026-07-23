@@ -7,7 +7,7 @@
 ## 2. Overlay Rendering
 
 - [x] 2.1 Classify peripherals into selected hierarchy, other groups, or ungrouped with deterministic color resolution.
-- [x] 2.2 Render none, neutral text, neutral bold text, colored outline box, colored filled box, and colored flare styles.
+- [x] 2.2 Render neutral regular or bold text and colored outline or filled box styles.
 
 ## 3. Verification
 
@@ -19,3 +19,10 @@
 - [x] 4.1 Render thicker outline and stronger filled boxes without depth testing.
 - [x] 4.2 Add right-click previous-style behavior with wraparound and client GameTest coverage.
 - [x] 4.3 Run formatting, the multi-loader build, and client GameTests.
+
+## 5. Split Text And Box Settings
+
+- [x] 5.1 Replace unified render styles with independent text and box settings for each category.
+- [x] 5.2 Render enabled text and box styles together and remove the flare option.
+- [x] 5.3 Update the settings screen, synchronization, localization, and client GameTest coverage.
+- [x] 5.4 Regenerate resources and run formatting, build, and GameTests.

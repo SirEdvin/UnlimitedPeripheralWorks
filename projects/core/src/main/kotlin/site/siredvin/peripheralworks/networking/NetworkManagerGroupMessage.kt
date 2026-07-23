@@ -17,7 +17,7 @@ class NetworkManagerGroupMessage(
     private val present: Boolean = false,
     private val expectedPresent: Boolean = false,
 ) : NetworkMessage<ServerNetworkContext> {
-    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, VISIBILITY, MEMBERSHIP, SETTINGS, EXPANSION, RENDER_STYLE }
+    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, VISIBILITY, MEMBERSHIP, SETTINGS, EXPANSION, TEXT_STYLE, BOX_STYLE }
 
     constructor(buf: FriendlyByteBuf) : this(
         buf.readBlockPos(),
@@ -59,14 +59,17 @@ class NetworkManagerGroupMessage(
             NetworkManagerMode.setGroupExpanded(stack, value, present)
             return
         }
-        if (operation == Operation.RENDER_STYLE) {
+        if (operation == Operation.TEXT_STYLE || operation == Operation.BOX_STYLE) {
             val target = NetworkManagerMode.RenderTarget.entries.firstOrNull { it.name == group }
-            val style = NetworkManagerMode.RenderStyle.entries.getOrNull(color)
-            if (target == null || style == null) {
+            val valid = target != null &&
+                when (operation) {
+                    Operation.TEXT_STYLE -> NetworkManagerMode.TextStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setTextStyle(stack, target, it) } != null
+                    Operation.BOX_STYLE -> NetworkManagerMode.BoxStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setBoxStyle(stack, target, it) } != null
+                    else -> false
+                }
+            if (!valid) {
                 player.displayClientMessage(ModText.NETWORK_MANAGER_REQUEST_REJECTED.text, true)
-                return
             }
-            NetworkManagerMode.setRenderStyle(stack, target, style)
             return
         }
 
@@ -86,7 +89,7 @@ class NetworkManagerGroupMessage(
             Operation.MEMBERSHIP -> if (selected == group) manager.setGroupMembership(group, value, present, expectedPresent) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
             Operation.SETTINGS -> manager.setConfiguration(value, color)
             Operation.EXPANSION -> error("Handled above")
-            Operation.RENDER_STYLE -> error("Handled above")
+            Operation.TEXT_STYLE, Operation.BOX_STYLE -> error("Handled above")
         }
         if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) {
             when (operation) {

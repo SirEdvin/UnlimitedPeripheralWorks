@@ -136,8 +136,10 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         delimiterBox = editBox(left, 52, panelWidth, ModText.NETWORK_MANAGER_DELIMITER, delimiter) { delimiter = it }
         delimiterBox.setMaxLength(NetworkManagerBlockEntity.MAX_DELIMITER_LENGTH)
         rangeBox = editBox(left, 76, panelWidth, ModText.NETWORK_MANAGER_RANGE, range) { range = it }
+        val styleWidth = (panelWidth - 4) / 2
         NetworkManagerMode.RenderTarget.entries.forEachIndexed { index, target ->
-            addRenderableWidget(RenderStyleButton(left, 100 + index * 24, panelWidth, renderStyleText(target)) { cycleRenderStyle(target, it) })
+            addRenderableWidget(RenderStyleButton(left, 100 + index * 24, styleWidth, textStyleText(target)) { cycleTextStyle(target, it) })
+            addRenderableWidget(RenderStyleButton(left + styleWidth + 4, 100 + index * 24, styleWidth, boxStyleText(target)) { cycleBoxStyle(target, it) })
         }
         addRenderableWidget(Button.builder(ModText.NETWORK_MANAGER_SAVE_SETTINGS.text) { saveSettings() }.bounds(left, 172, panelWidth, 20).build())
         setInitialFocus(if (focusedField == "range") rangeBox else delimiterBox)
@@ -261,31 +263,48 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
         )
     }
 
-    private fun cycleRenderStyle(target: NetworkManagerMode.RenderTarget, direction: Int) {
+    private fun cycleTextStyle(target: NetworkManagerMode.RenderTarget, direction: Int) {
         val stack = minecraft?.player?.mainHandItem ?: return
-        val styles = NetworkManagerMode.RenderStyle.entries
-        val style = styles[Math.floorMod(NetworkManagerMode.getRenderStyle(stack, target).ordinal + direction, styles.size)]
-        NetworkManagerMode.setRenderStyle(stack, target, style)
-        send(NetworkManagerGroupMessage.Operation.RENDER_STYLE, target.name, color = style.ordinal)
+        val styles = NetworkManagerMode.TextStyle.entries
+        val style = styles[Math.floorMod(NetworkManagerMode.getTextStyle(stack, target).ordinal + direction, styles.size)]
+        NetworkManagerMode.setTextStyle(stack, target, style)
+        send(NetworkManagerGroupMessage.Operation.TEXT_STYLE, target.name, color = style.ordinal)
         rebuild()
     }
 
-    private fun renderStyleText(target: NetworkManagerMode.RenderTarget): Component {
-        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getRenderStyle(it, target) } ?: NetworkManagerMode.RenderStyle.TEXT
-        val targetText = when (target) {
-            NetworkManagerMode.RenderTarget.SELECTED -> ModText.NETWORK_MANAGER_RENDER_SELECTED.text
-            NetworkManagerMode.RenderTarget.GROUPED -> ModText.NETWORK_MANAGER_RENDER_GROUPED.text
-            NetworkManagerMode.RenderTarget.UNGROUPED -> ModText.NETWORK_MANAGER_RENDER_UNGROUPED.text
-        }
+    private fun cycleBoxStyle(target: NetworkManagerMode.RenderTarget, direction: Int) {
+        val stack = minecraft?.player?.mainHandItem ?: return
+        val styles = NetworkManagerMode.BoxStyle.entries
+        val style = styles[Math.floorMod(NetworkManagerMode.getBoxStyle(stack, target).ordinal + direction, styles.size)]
+        NetworkManagerMode.setBoxStyle(stack, target, style)
+        send(NetworkManagerGroupMessage.Operation.BOX_STYLE, target.name, color = style.ordinal)
+        rebuild()
+    }
+
+    private fun targetText(target: NetworkManagerMode.RenderTarget): Component = when (target) {
+        NetworkManagerMode.RenderTarget.SELECTED -> ModText.NETWORK_MANAGER_RENDER_SELECTED.text
+        NetworkManagerMode.RenderTarget.GROUPED -> ModText.NETWORK_MANAGER_RENDER_GROUPED.text
+        NetworkManagerMode.RenderTarget.UNGROUPED -> ModText.NETWORK_MANAGER_RENDER_UNGROUPED.text
+    }
+
+    private fun textStyleText(target: NetworkManagerMode.RenderTarget): Component {
+        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getTextStyle(it, target) } ?: NetworkManagerMode.TextStyle.REGULAR
         val styleText = when (style) {
-            NetworkManagerMode.RenderStyle.NONE -> ModText.NETWORK_MANAGER_RENDER_STYLE_NONE.text
-            NetworkManagerMode.RenderStyle.TEXT -> ModText.NETWORK_MANAGER_RENDER_STYLE_TEXT.text
-            NetworkManagerMode.RenderStyle.BOLD_TEXT -> ModText.NETWORK_MANAGER_RENDER_STYLE_BOLD_TEXT.text
-            NetworkManagerMode.RenderStyle.OUTLINE_BOX -> ModText.NETWORK_MANAGER_RENDER_STYLE_OUTLINE_BOX.text
-            NetworkManagerMode.RenderStyle.FILLED_BOX -> ModText.NETWORK_MANAGER_RENDER_STYLE_FILLED_BOX.text
-            NetworkManagerMode.RenderStyle.FLARE -> ModText.NETWORK_MANAGER_RENDER_STYLE_FLARE.text
+            NetworkManagerMode.TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            NetworkManagerMode.TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
+            NetworkManagerMode.TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
         }
-        return ModText.NETWORK_MANAGER_RENDER_STYLE.format(targetText, styleText)
+        return ModText.NETWORK_MANAGER_TEXT_STYLE.format(targetText(target), styleText)
+    }
+
+    private fun boxStyleText(target: NetworkManagerMode.RenderTarget): Component {
+        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getBoxStyle(it, target) } ?: NetworkManagerMode.BoxStyle.NONE
+        val styleText = when (style) {
+            NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
+            NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+        }
+        return ModText.NETWORK_MANAGER_BOX_STYLE.format(targetText(target), styleText)
     }
 
     private fun confirmDelete() {

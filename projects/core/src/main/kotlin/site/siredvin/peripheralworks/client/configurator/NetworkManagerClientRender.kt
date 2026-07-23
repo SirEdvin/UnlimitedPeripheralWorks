@@ -80,7 +80,7 @@ object NetworkManagerClientRender : ConfigurationModeRender {
             val groups = if (target == NetworkManagerMode.RenderTarget.SELECTED) selectedGroups else instructions.groups.sorted()
             // ponytail: one stable color avoids overlapping effects for multi-group peripherals.
             val color = groups.firstOrNull()?.let { entity.peripheralGroups[it]?.color }?.takeIf { it >= 0 } ?: 0xffffff
-            RenderedPeripheral(pos, instructions, groups, NetworkManagerMode.getRenderStyle(stack, target), color)
+            RenderedPeripheral(pos, instructions, groups, NetworkManagerMode.getTextStyle(stack, target), NetworkManagerMode.getBoxStyle(stack, target), color)
         }
 
         CommonRenderer.initRenderer(poseStack, camera)
@@ -90,50 +90,50 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         RenderSystem.depthMask(false)
         val buffer = minecraft.renderBuffers().bufferSource()
         peripherals.forEach {
-            when (it.style) {
-                NetworkManagerMode.RenderStyle.TEXT, NetworkManagerMode.RenderStyle.BOLD_TEXT -> {
-                    val bold = it.style == NetworkManagerMode.RenderStyle.BOLD_TEXT
-                    var baseHeight = 1.2
+            if (it.textStyle != NetworkManagerMode.TextStyle.NONE) {
+                val bold = it.textStyle == NetworkManagerMode.TextStyle.BOLD
+                var baseHeight = 1.2
+                renderText(
+                    poseStack,
+                    it.instructions.peripheralName,
+                    it.pos.x + 0.5,
+                    it.pos.y + baseHeight,
+                    it.pos.z + 0.5,
+                    buffer,
+                    bold = bold,
+                )
+                for (extraName in it.instructions.extraNames) {
+                    baseHeight += 0.15
                     renderText(
                         poseStack,
-                        it.instructions.peripheralName,
+                        extraName,
+                        it.pos.x + 0.5,
+                        it.pos.y + baseHeight,
+                        it.pos.z + 0.5,
+                        buffer,
+                        0xff0000,
+                        bold,
+                    )
+                }
+                for (group in it.groups) {
+                    baseHeight += 0.15
+                    renderText(
+                        poseStack,
+                        "group:$group",
                         it.pos.x + 0.5,
                         it.pos.y + baseHeight,
                         it.pos.z + 0.5,
                         buffer,
                         bold = bold,
                     )
-                    for (extraName in it.instructions.extraNames) {
-                        baseHeight += 0.15
-                        renderText(
-                            poseStack,
-                            extraName,
-                            it.pos.x + 0.5,
-                            it.pos.y + baseHeight,
-                            it.pos.z + 0.5,
-                            buffer,
-                            0xff0000,
-                            bold,
-                        )
-                    }
-                    for (group in it.groups) {
-                        baseHeight += 0.15
-                        renderText(
-                            poseStack,
-                            "group:$group",
-                            it.pos.x + 0.5,
-                            it.pos.y + baseHeight,
-                            it.pos.z + 0.5,
-                            buffer,
-                            bold = bold,
-                        )
-                    }
                 }
-                NetworkManagerMode.RenderStyle.OUTLINE_BOX -> {
+            }
+            when (it.boxStyle) {
+                NetworkManagerMode.BoxStyle.OUTLINE -> {
                     buffer.endBatch()
                     renderBox(poseStack, it, false)
                 }
-                NetworkManagerMode.RenderStyle.FILLED_BOX -> {
+                NetworkManagerMode.BoxStyle.FILLED -> {
                     buffer.endBatch()
                     renderBox(poseStack, it, true)
                 }
@@ -145,25 +145,6 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         RenderSystem.enableCull()
         RenderSystem.depthMask(true)
         CommonRenderer.uninitRenderer(poseStack)
-
-        val flares = peripherals.filter { it.style == NetworkManagerMode.RenderStyle.FLARE }
-        if (flares.isNotEmpty()) {
-            FlareRenderer.initRenderer(poseStack, camera)
-            flares.forEach {
-                val color = it.color
-                FlareRenderer.renderFlare(
-                    poseStack,
-                    camera,
-                    partialTick,
-                    it.pos.x + 0.5,
-                    it.pos.y + 0.5,
-                    it.pos.z + 0.5,
-                    FlareRenderer.FlareColor((color shr 16 and 0xff) / 255f, (color shr 8 and 0xff) / 255f, (color and 0xff) / 255f),
-                    1f,
-                )
-            }
-            FlareRenderer.uninitRenderer(poseStack)
-        }
     }
 
     private fun renderBox(poseStack: PoseStack, peripheral: RenderedPeripheral, filled: Boolean) {
@@ -195,7 +176,8 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val pos: BlockPos,
         val instructions: NetworkManagerBlockEntity.DrawingInstructions,
         val groups: List<String>,
-        val style: NetworkManagerMode.RenderStyle,
+        val textStyle: NetworkManagerMode.TextStyle,
+        val boxStyle: NetworkManagerMode.BoxStyle,
         val color: Int,
     )
 }

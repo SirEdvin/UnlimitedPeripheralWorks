@@ -64,17 +64,23 @@ class NetworkManagerClientGameTests {
                 check(editBoxes(screen).size == 2) { "Settings tab did not expose delimiter and range" }
                 editBoxes(screen)[1].setValue("64")
                 click(screen, button(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string))
-                click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.SELECTED, NetworkManagerMode.RenderStyle.TEXT)))
-                click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.GROUPED, NetworkManagerMode.RenderStyle.NONE)), 1)
-                click(screen, button(screen, renderStyleLabel(NetworkManagerMode.RenderTarget.UNGROUPED, NetworkManagerMode.RenderStyle.TEXT)), 1)
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.RenderTarget.SELECTED, NetworkManagerMode.TextStyle.REGULAR)))
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.RenderTarget.GROUPED, NetworkManagerMode.TextStyle.NONE)), 1)
+                click(screen, button(screen, textStyleLabel(NetworkManagerMode.RenderTarget.UNGROUPED, NetworkManagerMode.TextStyle.REGULAR)), 1)
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.RenderTarget.SELECTED, NetworkManagerMode.BoxStyle.NONE)))
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.RenderTarget.GROUPED, NetworkManagerMode.BoxStyle.NONE)), 1)
+                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.RenderTarget.UNGROUPED, NetworkManagerMode.BoxStyle.NONE)))
             }
             .thenWaitUntil {
                 val stack = player(helper).mainHandItem
                 if (
                     manager(helper, managerPos).range != 64 ||
-                    NetworkManagerMode.getRenderStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.RenderStyle.BOLD_TEXT ||
-                    NetworkManagerMode.getRenderStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.RenderStyle.FLARE ||
-                    NetworkManagerMode.getRenderStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.RenderStyle.NONE
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.TextStyle.BOLD ||
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.TextStyle.BOLD ||
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.TextStyle.NONE ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.BoxStyle.OUTLINE ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.BoxStyle.FILLED ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.BoxStyle.OUTLINE
                 ) {
                     retry("Manager settings have not reached the server")
                 }
@@ -162,21 +168,28 @@ class NetworkManagerClientGameTests {
         click(screen, button(screen, ModText.NETWORK_MANAGER_CREATE.text.string))
     }
 
-    private fun renderStyleLabel(target: NetworkManagerMode.RenderTarget, style: NetworkManagerMode.RenderStyle): String {
-        val targetText = when (target) {
-            NetworkManagerMode.RenderTarget.SELECTED -> ModText.NETWORK_MANAGER_RENDER_SELECTED.text
-            NetworkManagerMode.RenderTarget.GROUPED -> ModText.NETWORK_MANAGER_RENDER_GROUPED.text
-            NetworkManagerMode.RenderTarget.UNGROUPED -> ModText.NETWORK_MANAGER_RENDER_UNGROUPED.text
-        }
+    private fun targetText(target: NetworkManagerMode.RenderTarget) = when (target) {
+        NetworkManagerMode.RenderTarget.SELECTED -> ModText.NETWORK_MANAGER_RENDER_SELECTED.text
+        NetworkManagerMode.RenderTarget.GROUPED -> ModText.NETWORK_MANAGER_RENDER_GROUPED.text
+        NetworkManagerMode.RenderTarget.UNGROUPED -> ModText.NETWORK_MANAGER_RENDER_UNGROUPED.text
+    }
+
+    private fun textStyleLabel(target: NetworkManagerMode.RenderTarget, style: NetworkManagerMode.TextStyle): String {
         val styleText = when (style) {
-            NetworkManagerMode.RenderStyle.NONE -> ModText.NETWORK_MANAGER_RENDER_STYLE_NONE.text
-            NetworkManagerMode.RenderStyle.TEXT -> ModText.NETWORK_MANAGER_RENDER_STYLE_TEXT.text
-            NetworkManagerMode.RenderStyle.BOLD_TEXT -> ModText.NETWORK_MANAGER_RENDER_STYLE_BOLD_TEXT.text
-            NetworkManagerMode.RenderStyle.OUTLINE_BOX -> ModText.NETWORK_MANAGER_RENDER_STYLE_OUTLINE_BOX.text
-            NetworkManagerMode.RenderStyle.FILLED_BOX -> ModText.NETWORK_MANAGER_RENDER_STYLE_FILLED_BOX.text
-            NetworkManagerMode.RenderStyle.FLARE -> ModText.NETWORK_MANAGER_RENDER_STYLE_FLARE.text
+            NetworkManagerMode.TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            NetworkManagerMode.TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
+            NetworkManagerMode.TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
         }
-        return ModText.NETWORK_MANAGER_RENDER_STYLE.format(targetText, styleText).string
+        return ModText.NETWORK_MANAGER_TEXT_STYLE.format(targetText(target), styleText).string
+    }
+
+    private fun boxStyleLabel(target: NetworkManagerMode.RenderTarget, style: NetworkManagerMode.BoxStyle): String {
+        val styleText = when (style) {
+            NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
+            NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+        }
+        return ModText.NETWORK_MANAGER_BOX_STYLE.format(targetText(target), styleText).string
     }
 
     private fun screenshot(name: String) = ClientTestHelper().screenshot(name)

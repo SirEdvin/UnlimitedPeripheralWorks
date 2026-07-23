@@ -7,8 +7,8 @@ The Ultimate Configurator currently stores one four-way visualization mode, whil
 **Goals:**
 
 - Configure selected-hierarchy, other-group, and ungrouped rendering independently.
-- Render each peripheral once using none, text, bold text, outline box, filled box, or flare.
-- Reuse native Minecraft box rendering and the existing flare renderer.
+- Render independent none, regular, or bold text and none, outline, or filled boxes.
+- Reuse native Minecraft box rendering.
 - Preserve existing configurator behavior when reading the old visualization-mode tag.
 
 **Non-Goals:**
@@ -22,19 +22,19 @@ The Ultimate Configurator currently stores one four-way visualization mode, whil
 
 ### Store three render styles on the configurator
 
-Define three targets, selected groups, other groups, and ungrouped peripherals, and one six-value render-style enum. Persist each target's style in configurator NBT and synchronize changes through the existing validated network-manager packet.
+Define three targets, selected groups, other groups, and ungrouped peripherals, with independent three-value text and box style enums. Persist both styles for every target in configurator NBT and synchronize changes through the existing validated network-manager packet.
 
 Alternative: persist styles on the manager. Rejected because these settings control an individual player's current overlay and should not affect other viewers.
 
 ### Resolve one target and color per peripheral
 
-A peripheral with any membership in the selected group or a descendant uses the selected style. Otherwise a grouped peripheral uses the other-groups style; a peripheral without memberships uses the ungrouped style. For colored styles, use the first matching group in sorted order and fall back to white when the group has no color; ungrouped peripherals use white. This deterministic precedence avoids drawing overlapping boxes or flares for multi-group peripherals.
+A peripheral with any membership in the selected group or a descendant uses the selected styles. Otherwise a grouped peripheral uses the other-groups styles; a peripheral without memberships uses the ungrouped styles. For colored boxes, use the first matching group in sorted order and fall back to white when the group has no color; ungrouped peripherals use white. This deterministic precedence avoids drawing overlapping boxes for multi-group peripherals.
 
 Alternative: render once per membership. Rejected because identical geometry overlaps, produces unstable blended colors, and adds no useful information beyond text labels.
 
 ### Keep text neutral
 
-Text and bold text retain neutral label colors and do not inherit group colors. Outline boxes, filled boxes, and flares use the resolved group color. Text mode continues to show peripheral, extra-name, and applicable group labels.
+Regular and bold text retain neutral label colors and do not inherit group colors. Outline and filled boxes use the resolved group color. Text and box styles render independently so a category can show either or both.
 
 ### Draw diagnostic boxes immediately
 
@@ -42,7 +42,7 @@ Draw box geometry with vanilla line and position-color shaders while depth testi
 
 ### Cycle style buttons in both directions
 
-Use one native button subclass that retains normal left-click behavior and handles right click as the previous enum value. Both directions wrap at the ends and use the same validated setting packet.
+Use one native button subclass for all six controls that retains normal left-click behavior and handles right click as the previous enum value. Both directions wrap at the ends and use the same validated setting packet.
 
 ### Read old visualization settings as defaults
 

@@ -30,12 +30,16 @@ The overlay SHALL classify a peripheral as selected when it belongs to the selec
 - **WHEN** a peripheral has no group memberships
 - **THEN** the overlay renders that peripheral using the ungrouped style
 
-### Requirement: Provide six render styles
-Each overlay category SHALL support none, text, bold text, outline box, filled box, and flare styles. None SHALL omit the peripheral from the overlay.
+### Requirement: Configure text and box styles independently
+Each overlay category SHALL provide one text control supporting none, regular, and bold, and one box control supporting none, outline, and filled. Text and box choices SHALL render independently.
 
 #### Scenario: Render text styles
-- **WHEN** a category uses text or bold text
+- **WHEN** a category uses regular or bold text
 - **THEN** the overlay renders its peripheral labels in normal or bold text without applying group color to the text
+
+#### Scenario: Combine text and box styles
+- **WHEN** a category enables both a text style and a box style
+- **THEN** the overlay renders both the labels and box for each peripheral in that category
 
 #### Scenario: Render an outline box
 - **WHEN** a category uses outline box
@@ -45,24 +49,20 @@ Each overlay category SHALL support none, text, bold text, outline box, filled b
 - **WHEN** a category uses filled box
 - **THEN** the overlay renders a strong translucent group-colored fill over the peripheral block that remains visible through intervening blocks
 
-#### Scenario: Render a flare
-- **WHEN** a category uses flare
-- **THEN** the overlay renders a group-colored flare inside the peripheral block
-
 ### Requirement: Resolve render colors
 Colored styles SHALL use a deterministic matching group color, treating an unset group color and every ungrouped peripheral as white.
 
 #### Scenario: Use configured group color
 - **WHEN** a grouped peripheral uses a colored style and its resolved group has an explicit color
-- **THEN** the box or flare uses that color
+- **THEN** the box uses that color
 
 #### Scenario: Use default white
 - **WHEN** a colored style applies to an ungrouped peripheral or a group whose color is unset
-- **THEN** the box or flare uses white
+- **THEN** the box uses white
 
 ### Requirement: Preserve legacy configurator behavior
-The system SHALL derive missing per-category styles from the legacy visualization mode stored on an existing configurator.
+The system SHALL derive missing per-category text styles from the legacy visualization mode stored on an existing configurator and default missing box styles to none.
 
 #### Scenario: Read legacy selected and ungrouped mode
 - **WHEN** a configurator has the legacy selected-plus-ungrouped mode and no new category style tags
-- **THEN** selected and ungrouped default to text while other groups default to none
+- **THEN** selected and ungrouped text defaults to regular while other-group text defaults to none and every box defaults to none

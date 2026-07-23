@@ -23,12 +23,14 @@ object NetworkManagerMode : ConfigurationMode {
     // ponytail: derive new defaults from this legacy tag instead of adding a data fixer.
     enum class VisualizationMode { ALL, SELECTED, SELECTED_AND_UNGROUPED, UNGROUPED }
     enum class RenderTarget { SELECTED, GROUPED, UNGROUPED }
-    enum class RenderStyle { NONE, TEXT, BOLD_TEXT, OUTLINE_BOX, FILLED_BOX, FLARE }
+    enum class TextStyle { NONE, REGULAR, BOLD }
+    enum class BoxStyle { NONE, OUTLINE, FILLED }
 
     private const val SELECTED_GROUP = "selectedNetworkGroup"
     private const val EXPANDED_GROUP_PATHS = "expandedNetworkGroupPaths"
     private const val VISUALIZATION_MODE = "networkVisualizationMode"
-    private const val RENDER_STYLE_PREFIX = "networkRenderStyle"
+    private const val TEXT_STYLE_PREFIX = "networkTextStyle"
+    private const val BOX_STYLE_PREFIX = "networkBoxStyle"
     private const val MAX_EXPANDED_GROUP_PATHS = 256
 
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
@@ -81,20 +83,28 @@ object NetworkManagerMode : ConfigurationMode {
         stack.orCreateTag.putString(VISUALIZATION_MODE, mode.name)
     }
 
-    fun getRenderStyle(stack: ItemStack, target: RenderTarget): RenderStyle {
-        val stored = stack.tag?.getString(RENDER_STYLE_PREFIX + target.name)
-            ?.let { value -> RenderStyle.entries.firstOrNull { it.name == value } }
+    fun getTextStyle(stack: ItemStack, target: RenderTarget): TextStyle {
+        val stored = stack.tag?.getString(TEXT_STYLE_PREFIX + target.name)
+            ?.let { value -> TextStyle.entries.firstOrNull { it.name == value } }
         if (stored != null) return stored
         return when (getVisualizationMode(stack)) {
-            VisualizationMode.ALL -> RenderStyle.TEXT
-            VisualizationMode.SELECTED -> if (target == RenderTarget.SELECTED) RenderStyle.TEXT else RenderStyle.NONE
-            VisualizationMode.SELECTED_AND_UNGROUPED -> if (target == RenderTarget.GROUPED) RenderStyle.NONE else RenderStyle.TEXT
-            VisualizationMode.UNGROUPED -> if (target == RenderTarget.UNGROUPED) RenderStyle.TEXT else RenderStyle.NONE
+            VisualizationMode.ALL -> TextStyle.REGULAR
+            VisualizationMode.SELECTED -> if (target == RenderTarget.SELECTED) TextStyle.REGULAR else TextStyle.NONE
+            VisualizationMode.SELECTED_AND_UNGROUPED -> if (target == RenderTarget.GROUPED) TextStyle.NONE else TextStyle.REGULAR
+            VisualizationMode.UNGROUPED -> if (target == RenderTarget.UNGROUPED) TextStyle.REGULAR else TextStyle.NONE
         }
     }
 
-    fun setRenderStyle(stack: ItemStack, target: RenderTarget, style: RenderStyle) {
-        stack.orCreateTag.putString(RENDER_STYLE_PREFIX + target.name, style.name)
+    fun setTextStyle(stack: ItemStack, target: RenderTarget, style: TextStyle) {
+        stack.orCreateTag.putString(TEXT_STYLE_PREFIX + target.name, style.name)
+    }
+
+    fun getBoxStyle(stack: ItemStack, target: RenderTarget): BoxStyle = stack.tag?.getString(BOX_STYLE_PREFIX + target.name)
+        ?.let { value -> BoxStyle.entries.firstOrNull { it.name == value } }
+        ?: BoxStyle.NONE
+
+    fun setBoxStyle(stack: ItemStack, target: RenderTarget, style: BoxStyle) {
+        stack.orCreateTag.putString(BOX_STYLE_PREFIX + target.name, style.name)
     }
 
     fun getExpandedGroupPaths(stack: ItemStack): Set<String> {
@@ -128,6 +138,9 @@ object NetworkManagerMode : ConfigurationMode {
         itemStack.tag?.remove(SELECTED_GROUP)
         itemStack.tag?.remove(EXPANDED_GROUP_PATHS)
         itemStack.tag?.remove(VISUALIZATION_MODE)
-        RenderTarget.entries.forEach { itemStack.tag?.remove(RENDER_STYLE_PREFIX + it.name) }
+        RenderTarget.entries.forEach {
+            itemStack.tag?.remove(TEXT_STYLE_PREFIX + it.name)
+            itemStack.tag?.remove(BOX_STYLE_PREFIX + it.name)
+        }
     }
 }
