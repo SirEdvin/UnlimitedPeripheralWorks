@@ -36,7 +36,7 @@ Alternative: render once per membership. Rejected because identical geometry ove
 
 Regular and bold text retain neutral label colors and do not inherit group colors. Outline, filled, and flare box effects use the resolved group color. Text and box styles render independently so a category can show either or both.
 
-Render text with Minecraft's native eight-direction glyph outline so labels remain legible over colored boxes and world geometry.
+Render text with eight offset `SEE_THROUGH` glyph draws followed by the foreground glyph. Draw all box effects first and text last so labels remain visible through blocks and cannot be composited beneath boxes.
 
 ### Present one row per category
 

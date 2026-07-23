@@ -9,6 +9,7 @@ import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.LightTexture
@@ -47,16 +48,14 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val font = Minecraft.getInstance().font
         val component = Component.literal(text).withStyle { it.withBold(bold) }
         val offset = (-font.width(component) / 2).toFloat()
-        font.drawInBatch8xOutline(
-            component.visualOrderText,
-            offset,
-            0f,
-            color,
-            0x000000,
-            matrix4f,
-            buffer,
-            LightTexture.FULL_BRIGHT,
-        )
+        for (xOffset in -1..1) {
+            for (yOffset in -1..1) {
+                if (xOffset != 0 || yOffset != 0) {
+                    font.drawInBatch(component, offset + xOffset, yOffset.toFloat(), 0x000000, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0, LightTexture.FULL_BRIGHT)
+                }
+            }
+        }
+        font.drawInBatch(component, offset, 0f, color, false, matrix4f, buffer, Font.DisplayMode.SEE_THROUGH, 0, LightTexture.FULL_BRIGHT)
 
         matrices.popPose()
     }
@@ -93,59 +92,13 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         RenderSystem.disableCull()
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F)
         RenderSystem.depthMask(false)
-        val buffer = minecraft.renderBuffers().bufferSource()
         peripherals.forEach {
-            if (it.textStyle != NetworkManagerMode.TextStyle.NONE) {
-                val bold = it.textStyle == NetworkManagerMode.TextStyle.BOLD
-                var baseHeight = 1.2
-                renderText(
-                    poseStack,
-                    it.instructions.peripheralName,
-                    it.pos.x + 0.5,
-                    it.pos.y + baseHeight,
-                    it.pos.z + 0.5,
-                    buffer,
-                    bold = bold,
-                )
-                for (extraName in it.instructions.extraNames) {
-                    baseHeight += 0.15
-                    renderText(
-                        poseStack,
-                        extraName,
-                        it.pos.x + 0.5,
-                        it.pos.y + baseHeight,
-                        it.pos.z + 0.5,
-                        buffer,
-                        0xff0000,
-                        bold,
-                    )
-                }
-                for (group in it.groups) {
-                    baseHeight += 0.15
-                    renderText(
-                        poseStack,
-                        "group:$group",
-                        it.pos.x + 0.5,
-                        it.pos.y + baseHeight,
-                        it.pos.z + 0.5,
-                        buffer,
-                        bold = bold,
-                    )
-                }
-            }
             when (it.boxStyle) {
-                NetworkManagerMode.BoxStyle.OUTLINE -> {
-                    buffer.endBatch()
-                    renderBox(poseStack, it, false)
-                }
-                NetworkManagerMode.BoxStyle.FILLED -> {
-                    buffer.endBatch()
-                    renderBox(poseStack, it, true)
-                }
+                NetworkManagerMode.BoxStyle.OUTLINE -> renderBox(poseStack, it, false)
+                NetworkManagerMode.BoxStyle.FILLED -> renderBox(poseStack, it, true)
                 else -> Unit
             }
         }
-        buffer.endBatch()
         RenderSystem.enableDepthTest()
         RenderSystem.enableCull()
         RenderSystem.depthMask(true)
@@ -169,6 +122,31 @@ object NetworkManagerClientRender : ConfigurationModeRender {
             }
             FlareRenderer.uninitRenderer(poseStack)
         }
+
+        CommonRenderer.initRenderer(poseStack, camera)
+        RenderSystem.disableDepthTest()
+        RenderSystem.disableCull()
+        RenderSystem.depthMask(false)
+        val buffer = minecraft.renderBuffers().bufferSource()
+        peripherals.forEach {
+            if (it.textStyle == NetworkManagerMode.TextStyle.NONE) return@forEach
+            val bold = it.textStyle == NetworkManagerMode.TextStyle.BOLD
+            var baseHeight = 1.2
+            renderText(poseStack, it.instructions.peripheralName, it.pos.x + 0.5, it.pos.y + baseHeight, it.pos.z + 0.5, buffer, bold = bold)
+            for (extraName in it.instructions.extraNames) {
+                baseHeight += 0.15
+                renderText(poseStack, extraName, it.pos.x + 0.5, it.pos.y + baseHeight, it.pos.z + 0.5, buffer, 0xff0000, bold)
+            }
+            for (group in it.groups) {
+                baseHeight += 0.15
+                renderText(poseStack, "group:$group", it.pos.x + 0.5, it.pos.y + baseHeight, it.pos.z + 0.5, buffer, bold = bold)
+            }
+        }
+        buffer.endBatch()
+        RenderSystem.enableDepthTest()
+        RenderSystem.enableCull()
+        RenderSystem.depthMask(true)
+        CommonRenderer.uninitRenderer(poseStack)
     }
 
     private fun renderBox(poseStack: PoseStack, peripheral: RenderedPeripheral, filled: Boolean) {

@@ -39,11 +39,11 @@ Each overlay category SHALL provide one text control supporting none, regular, a
 
 #### Scenario: Render text styles
 - **WHEN** a category uses regular or bold text
-- **THEN** the overlay renders its peripheral labels in normal or bold text with a contrasting glyph outline and without applying group color to the text
+- **THEN** the overlay renders its peripheral labels through intervening blocks in normal or bold text with a contrasting glyph outline and without applying group color to the text
 
 #### Scenario: Combine text and box styles
 - **WHEN** a category enables both a text style and a box style
-- **THEN** the overlay renders both the labels and box for each peripheral in that category
+- **THEN** the overlay renders both for each peripheral in that category, with text composited after and above the box effect
 
 #### Scenario: Render an outline box
 - **WHEN** a category uses outline box
