@@ -20,8 +20,8 @@ object RemoteObserverClientRender : ConfigurationModeRender {
         camera: Camera,
         projectionMatrix: Matrix4f,
     ) {
-        FlareRenderer.initRenderer(poseStack, camera)
         val entity = minecraft.level?.getBlockEntity(source) as? RemoteObserverBlockEntity ?: return
+        FlareRenderer.initRenderer(poseStack, camera)
         FlareRenderer.renderFlare(
             poseStack,
             camera,
