@@ -23,8 +23,6 @@ object NetworkManagerMode : ConfigurationMode {
     // ponytail: derive new defaults from this legacy tag instead of adding a data fixer.
     enum class VisualizationMode { ALL, SELECTED, SELECTED_AND_UNGROUPED, UNGROUPED }
     enum class RenderTarget { SELECTED, GROUPED, UNGROUPED }
-    enum class TextStyle { NONE, REGULAR, BOLD }
-    enum class BoxStyle { NONE, OUTLINE, FILLED, FLARE }
 
     private const val SELECTED_GROUP = "selectedNetworkGroup"
     private const val EXPANDED_GROUP_PATHS = "expandedNetworkGroupPaths"

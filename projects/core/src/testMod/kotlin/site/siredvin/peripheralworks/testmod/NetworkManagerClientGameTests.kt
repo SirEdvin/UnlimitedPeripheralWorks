@@ -11,15 +11,23 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.entity.Pose
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerColorPickerScreen
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerScreen
+import site.siredvin.peripheralworks.client.configurator.TargetRenderSettingsScreen
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.data.ModText
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
+import site.siredvin.peripheralworks.subsystem.configurator.PeripheralProxyMode
+import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.testiarium.api.ClientGameTest
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.fixture.client.ClientTestHelper
@@ -28,6 +36,62 @@ import java.io.File
 
 @TestGroup("network-manager-client")
 class NetworkManagerClientGameTests {
+    @ClientGameTest(template = "empty", timeoutTicks = 400)
+    fun configuresProxyAndObserverTargetRendering(helper: GameTestHelper) {
+        val proxyPos = BlockPos(1, 1, 1)
+        val observerPos = BlockPos(3, 1, 1)
+        helper.startSequence()
+            .thenExecute {
+                helper.setBlock(proxyPos, Blocks.PERIPHERAL_PROXY.get())
+                helper.setBlock(observerPos, Blocks.REMOTE_OBSERVER.get())
+                bind(helper, PeripheralProxyMode.modeID, proxyPos)
+            }
+            .thenIdle(5)
+            .thenOnClient {
+                val player = minecraft.player ?: error("Client player is missing")
+                player.xRot = -90f
+                minecraft.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
+                val screen = minecraft.screen as? TargetRenderSettingsScreen ?: error("Proxy settings screen did not open")
+                click(screen, button(screen, textStyleLabel(TextStyle.REGULAR)))
+                click(screen, button(screen, boxStyleLabel(BoxStyle.FLARE)), 1)
+            }
+            .thenWaitUntil {
+                val proxy = helper.getBlockEntity(proxyPos) as PeripheralProxyBlockEntity
+                if (proxy.textStyle != TextStyle.BOLD || proxy.boxStyle != BoxStyle.FILLED) retry("Proxy styles have not synchronized")
+            }
+            .thenOnClient { minecraft.setScreen(null) }
+            .thenExecute { bind(helper, RemoteObserverMode.modeID, observerPos) }
+            .thenIdle(5)
+            .thenOnClient {
+                val player = minecraft.player ?: error("Client player is missing")
+                player.xRot = -90f
+                minecraft.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
+                val screen = minecraft.screen as? TargetRenderSettingsScreen ?: error("Observer settings screen did not open")
+                click(screen, button(screen, textStyleLabel(TextStyle.NONE)), 1)
+                click(screen, button(screen, boxStyleLabel(BoxStyle.FLARE)))
+            }
+            .thenWaitUntil {
+                val observer = helper.getBlockEntity(observerPos) as RemoteObserverBlockEntity
+                if (observer.textStyle != TextStyle.BOLD || observer.boxStyle != BoxStyle.NONE) retry("Observer styles have not synchronized")
+            }
+            .thenExecute { helper.setBlock(observerPos, net.minecraft.world.level.block.Blocks.AIR) }
+            .thenIdle(5)
+            .thenOnClient { check(minecraft.screen !is TargetRenderSettingsScreen) { "Unavailable observer screen remained open" } }
+            .thenExecute {
+                bind(helper, PeripheralProxyMode.modeID, proxyPos)
+                val player = player(helper)
+                player.pose = Pose.CROUCHING
+                player.xRot = -90f
+                (player.mainHandItem.item as UltimateConfigurator).use(helper.level, player, InteractionHand.MAIN_HAND)
+            }
+            .thenWaitUntil {
+                if ((player(helper).mainHandItem.item as UltimateConfigurator).getActiveMode(player(helper).mainHandItem) != null) retry("Crouching air use did not detach the configurator")
+            }
+            .thenIdle(3)
+            .thenOnClient { check(minecraft.screen !is TargetRenderSettingsScreen) { "Crouching air use opened settings" } }
+            .thenSucceed()
+    }
+
     @ClientGameTest(template = "empty", timeoutTicks = 800)
     fun createsHierarchyAndAddsPeripherals(helper: GameTestHelper) {
         val managerPos = BlockPos(1, 1, 1)
@@ -64,24 +128,24 @@ class NetworkManagerClientGameTests {
                 check(editBoxes(screen).size == 2) { "Settings tab did not expose delimiter and range" }
                 editBoxes(screen)[1].setValue("64")
                 click(screen, button(screen, ModText.NETWORK_MANAGER_SAVE_SETTINGS.text.string))
-                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.REGULAR)))
-                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.NONE)), 1)
-                click(screen, button(screen, textStyleLabel(NetworkManagerMode.TextStyle.REGULAR)), 1)
-                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
-                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)), 1)
-                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.NONE)))
-                click(screen, button(screen, boxStyleLabel(NetworkManagerMode.BoxStyle.OUTLINE)))
+                click(screen, button(screen, textStyleLabel(TextStyle.REGULAR)))
+                click(screen, button(screen, textStyleLabel(TextStyle.NONE)), 1)
+                click(screen, button(screen, textStyleLabel(TextStyle.REGULAR)), 1)
+                click(screen, button(screen, boxStyleLabel(BoxStyle.NONE)))
+                click(screen, button(screen, boxStyleLabel(BoxStyle.NONE)), 1)
+                click(screen, button(screen, boxStyleLabel(BoxStyle.NONE)))
+                click(screen, button(screen, boxStyleLabel(BoxStyle.OUTLINE)))
             }
             .thenWaitUntil {
                 val stack = player(helper).mainHandItem
                 if (
                     manager(helper, managerPos).range != 64 ||
-                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.TextStyle.BOLD ||
-                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.TextStyle.BOLD ||
-                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.TextStyle.NONE ||
-                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != NetworkManagerMode.BoxStyle.FILLED ||
-                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != NetworkManagerMode.BoxStyle.FLARE ||
-                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != NetworkManagerMode.BoxStyle.OUTLINE
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != TextStyle.BOLD ||
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != TextStyle.BOLD ||
+                    NetworkManagerMode.getTextStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != TextStyle.NONE ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.SELECTED) != BoxStyle.FILLED ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.GROUPED) != BoxStyle.FLARE ||
+                    NetworkManagerMode.getBoxStyle(stack, NetworkManagerMode.RenderTarget.UNGROUPED) != BoxStyle.OUTLINE
                 ) {
                     retry("Manager settings have not reached the server")
                 }
@@ -169,21 +233,21 @@ class NetworkManagerClientGameTests {
         click(screen, button(screen, ModText.NETWORK_MANAGER_CREATE.text.string))
     }
 
-    private fun textStyleLabel(style: NetworkManagerMode.TextStyle): String {
+    private fun textStyleLabel(style: TextStyle): String {
         val styleText = when (style) {
-            NetworkManagerMode.TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
-            NetworkManagerMode.TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
-            NetworkManagerMode.TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
+            TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
+            TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
         }
         return ModText.NETWORK_MANAGER_TEXT_STYLE.format(styleText).string
     }
 
-    private fun boxStyleLabel(style: NetworkManagerMode.BoxStyle): String {
+    private fun boxStyleLabel(style: BoxStyle): String {
         val styleText = when (style) {
-            NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
-            NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
-            NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
-            NetworkManagerMode.BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
+            BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
+            BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+            BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
         }
         return ModText.NETWORK_MANAGER_BOX_STYLE.format(styleText).string
     }
@@ -199,6 +263,14 @@ class NetworkManagerClientGameTests {
     private fun manager(helper: GameTestHelper, pos: BlockPos) = helper.getBlockEntity(pos) as NetworkManagerBlockEntity
 
     private fun player(helper: GameTestHelper) = helper.level.randomPlayer ?: error("Client GameTest player is missing")
+
+    private fun bind(helper: GameTestHelper, mode: net.minecraft.resources.ResourceLocation, pos: BlockPos) {
+        val stack = ItemStack(Items.ULTIMATE_CONFIGURATOR.get())
+        stack.orCreateTag.putString(UltimateConfigurator.ACTIVE_MOD_NAME, mode.toString())
+        stack.orCreateTag.put(UltimateConfigurator.ACTIVE_MOD_POS, NbtUtils.writeBlockPos(helper.absolutePos(pos)))
+        stack.orCreateTag.putString(UltimateConfigurator.ACTIVE_MOD_DIMENSION, helper.level.dimension().location().toString())
+        player(helper).setItemInHand(InteractionHand.MAIN_HAND, stack)
+    }
 
     private fun editBoxes(screen: Screen) = screen.children().filterIsInstance<EditBox>().sortedWith(compareBy({ it.y }, { it.x }))
 

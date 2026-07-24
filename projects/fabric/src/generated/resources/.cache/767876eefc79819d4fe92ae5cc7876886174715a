@@ -1,4 +1,4 @@
-// 1.20.1	2026-07-23T15:14:05.8335417	Unlimited Peripheral Works/Block State Definitions
+// 1.20.1	2026-07-24T21:29:14.604112224	Unlimited Peripheral Works/Block State Definitions
 36c244142cb28bcce875cbcb68f6102141bf78d5 assets/peripheralworks/blockstates/peripheral_casing.json
 efd5ba47bc8f73def3c977d8887af54ef4ad1370 assets/peripheralworks/models/block/map_pedestal.json
 c8fb84d1128c18b2958d371b6b86c1b3ce6ef08e assets/peripheralworks/blockstates/ultimate_sensor.json
@@ -10,8 +10,8 @@ fa09940646b26b32e317d46436ba6e5708942a3d assets/peripheralworks/models/block/sta
 767287600ba5632ed8a38b3d2675cc8ff924a609 assets/peripheralworks/models/item/flexible_reality_anchor.json
 c23515b1dd22a9ab692eb1d023862f1e952c93ff assets/peripheralworks/blockstates/map_pedestal.json
 778759f975277f38234eec1b10e5b25082f838e1 assets/peripheralworks/models/item/peripheralium_hub.json
-d51f30f284b2cf682dcc04372764ce53718de77c assets/peripheralworks/blockstates/informative_registry.json
 3f9d98dbf30a19bef2f380a22aa02a21e5c2a49d assets/peripheralworks/blockstates/universal_scanner.json
+d51f30f284b2cf682dcc04372764ce53718de77c assets/peripheralworks/blockstates/informative_registry.json
 c584ae8cb969815c79c844b4063142c7b18acc5a assets/peripheralworks/models/turtle/hologram_projector_left.json
 8d77c1f92bd14f27cd16d72a9ea98032581def5c assets/peripheralworks/models/item/netherite_peripheralium_hub.json
 a83df0770a4d517d4f4d3bb447d0eda00bcfc4a1 assets/peripheralworks/blockstates/statue_workbench.json

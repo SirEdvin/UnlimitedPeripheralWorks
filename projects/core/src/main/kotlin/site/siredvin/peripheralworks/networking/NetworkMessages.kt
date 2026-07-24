@@ -29,6 +29,13 @@ object NetworkMessages {
         ::NetworkManagerGroupMessage,
     )
 
+    val TARGET_RENDER_STYLE = registerServerbound(
+        603,
+        "target_render_style",
+        TargetRenderStyleMessage::class.java,
+        ::TargetRenderStyleMessage,
+    )
+
     private fun <C, T : NetworkMessage<C>> register(
         messages: MutableList<MessageType<out NetworkMessage<C>>>,
         id: Int,

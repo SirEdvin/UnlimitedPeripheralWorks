@@ -26,6 +26,8 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.PeripheralProxyPeripheral
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 import java.util.function.Consumer
@@ -40,6 +42,8 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         const val DIRECTION_TAG = "direction"
         const val PERIPHERAL_NAME_TAG = "peripheralName"
         const val RESERVED_IDS_TAG = "reservedIds"
+        const val TEXT_STYLE_TAG = "textStyle"
+        const val BOX_STYLE_TAG = "boxStyle"
 
         fun fromTag(tag: CompoundTag): RemotePeripheralRecord {
             val targetBlock = NbtUtils.readBlockPos(tag.getCompound(TARGET_BLOCK_TAG))
@@ -88,6 +92,10 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     val remotePeripherals: MutableMap<BlockPos, RemotePeripheralRecord> = mutableMapOf()
+    var textStyle: TextStyle = TextStyle.REGULAR
+        private set
+    var boxStyle: BoxStyle = BoxStyle.FLARE
+        private set
     val element = PeripheralProxyWiredElement(this)
     private val connectedElements: ComponentAccess<WiredElement?> =
         PlatformHelper.get().createWiredElementAccess(
@@ -108,6 +116,18 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     var itemStackCacheBuilt: Boolean = false
 
     override fun createPeripheral(side: Direction): PeripheralProxyPeripheral = PeripheralProxyPeripheral(this)
+
+    fun setTextStyle(style: TextStyle) {
+        if (textStyle == style) return
+        textStyle = style
+        pushInternalDataChangeToClient()
+    }
+
+    fun setBoxStyle(style: BoxStyle) {
+        if (boxStyle == style) return
+        boxStyle = style
+        pushInternalDataChangeToClient()
+    }
 
     fun isPosApplicable(pos: BlockPos): Boolean {
         if (pos == this.blockPos) {
@@ -243,6 +263,8 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             trackedBlockTag.add(it.value.toTag())
         }
         data.put(REMOTE_PERIPHERALS_TAG, trackedBlockTag)
+        data.putString(TEXT_STYLE_TAG, textStyle.name)
+        data.putString(BOX_STYLE_TAG, boxStyle.name)
         return data
     }
 
@@ -262,6 +284,8 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
+        textStyle = TextStyle.entries.firstOrNull { it.name == data.getString(TEXT_STYLE_TAG) } ?: TextStyle.REGULAR
+        boxStyle = BoxStyle.entries.firstOrNull { it.name == data.getString(BOX_STYLE_TAG) } ?: BoxStyle.FLARE
         if (data.contains(REMOTE_PERIPHERALS_TAG)) {
             remotePeripherals.clear()
             val internalList = data.getList(REMOTE_PERIPHERALS_TAG, Tag.TAG_COMPOUND.toInt())

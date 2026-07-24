@@ -6,7 +6,9 @@ import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntit
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.data.ModText
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 
 class NetworkManagerGroupMessage(
     private val pos: BlockPos,
@@ -63,8 +65,8 @@ class NetworkManagerGroupMessage(
             val target = NetworkManagerMode.RenderTarget.entries.firstOrNull { it.name == group }
             val valid = target != null &&
                 when (operation) {
-                    Operation.TEXT_STYLE -> NetworkManagerMode.TextStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setTextStyle(stack, target, it) } != null
-                    Operation.BOX_STYLE -> NetworkManagerMode.BoxStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setBoxStyle(stack, target, it) } != null
+                    Operation.TEXT_STYLE -> TextStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setTextStyle(stack, target, it) } != null
+                    Operation.BOX_STYLE -> BoxStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setBoxStyle(stack, target, it) } != null
                     else -> false
                 }
             if (!valid) {
