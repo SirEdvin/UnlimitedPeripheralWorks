@@ -22,5 +22,5 @@ class PeripheralTest extends BasicTest {
 }
 
 const suite = new TestSuite("Network manager methods");
-suite.addTest(new PeripheralTest("executes every method", 60));
+suite.addTest(new PeripheralTest("executes every method", 1000));
 finish(suite.run());

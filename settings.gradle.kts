@@ -2,6 +2,7 @@ pluginManagement {
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        maven("https://maven.fabricmc.net/")
         maven("https://mvn.siredvin.site/minecraft") {
             name = "SirEdvin's Minecraft repository"
             content {
