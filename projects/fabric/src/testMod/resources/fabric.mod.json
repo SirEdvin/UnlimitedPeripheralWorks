@@ -2,16 +2,20 @@
   "schemaVersion": 1,
   "id": "peripheralworks_testmod",
   "version": "1.0",
-  "name": "Unlimited Peripheral Works Testmod",
+  "name": "UnlimitedPeripheralWorks Testmod",
   "environment": "*",
   "entrypoints": {
-    "fabric-gametest": [
-      "site.siredvin.peripheralworks.testmod.PeripheralWorksGameTests"
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.testmod.FabricPeripheralWorksTestMod"
+      }
     ]
   },
   "depends": {
     "fabricloader": "*",
     "peripheralworks": "*",
-    "testiarium": "*"
+    "testiarium": "*",
+    "computercraft": "*"
   }
 }

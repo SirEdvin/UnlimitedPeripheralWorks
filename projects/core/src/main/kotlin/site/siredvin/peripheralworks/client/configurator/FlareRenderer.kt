@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager.DestFactor.ZERO
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor.ONE
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor.SRC_ALPHA
 import com.mojang.blaze3d.systems.RenderSystem
+import com.mojang.blaze3d.vertex.BufferBuilder
 import com.mojang.blaze3d.vertex.BufferUploader
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
@@ -21,6 +22,7 @@ import site.siredvin.peripheralworks.PeripheralWorksCore
 // Copy of https://github.com/SwitchCraftCC/Plethora-Fabric/blob/91a64b3cf9f428227425e06bbbc8aa6e9a416bee/src/main/java/io/sc3/plethora/gameplay/overlay/FlareOverlayRenderer.kt#L4
 object FlareRenderer : AbstractRenderer() {
     private val flareTexture = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "textures/misc/flare.png")
+    private lateinit var buffer: BufferBuilder
 
     override fun initRenderer(matrices: PoseStack, camera: Camera) {
         RenderSystem.disableDepthTest()
@@ -30,11 +32,13 @@ object FlareRenderer : AbstractRenderer() {
 
         super.initRenderer(matrices, camera)
 
-        RenderSystem.setShader(GameRenderer::getPositionTexShader)
+        RenderSystem.setShader(GameRenderer::getPositionTexColorShader)
         RenderSystem.setShaderTexture(0, flareTexture)
+        buffer = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR)
     }
 
     override fun uninitRenderer(matrices: PoseStack) {
+        BufferUploader.drawWithShader(buffer.buildOrThrow())
         super.uninitRenderer(matrices)
 
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
@@ -68,27 +72,22 @@ object FlareRenderer : AbstractRenderer() {
         val renderSize = size * 0.2f + Mth.sin(ticks / 100.0f + color.offset) / 16.0f
 
         // Prepare to render
-        val tessellator = Tesselator.getInstance()
         val matrix4f = matrices.last().pose()
 
         // Inner highlight
-        RenderSystem.setShaderColor(color.r, color.g, color.b, 0.5f)
-        renderQuad(tessellator, matrix4f, renderSize)
+        renderQuad(matrix4f, renderSize, color, 0.5f)
 
         // Outer aura
-        RenderSystem.setShaderColor(color.r, color.g, color.b, 0.2f)
-        renderQuad(tessellator, matrix4f, renderSize * 2)
+        renderQuad(matrix4f, renderSize * 2, color, 0.2f)
 
         matrices.popPose()
     }
 
-    private fun renderQuad(tessellator: Tesselator, matrix4f: Matrix4f, size: Float) {
-        val buffer = tessellator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX)
-        buffer.addVertex(matrix4f, -size, -size, 0f).setUv(0f, 1f)
-        buffer.addVertex(matrix4f, -size, +size, 0f).setUv(1f, 1f)
-        buffer.addVertex(matrix4f, +size, +size, 0f).setUv(1f, 0f)
-        buffer.addVertex(matrix4f, +size, -size, 0f).setUv(0f, 0f)
-        BufferUploader.drawWithShader(buffer.buildOrThrow())
+    private fun renderQuad(matrix4f: Matrix4f, size: Float, color: FlareColor, alpha: Float) {
+        buffer.addVertex(matrix4f, -size, -size, 0f).setColor(color.r, color.g, color.b, alpha).setUv(0f, 1f)
+        buffer.addVertex(matrix4f, -size, +size, 0f).setColor(color.r, color.g, color.b, alpha).setUv(1f, 1f)
+        buffer.addVertex(matrix4f, +size, +size, 0f).setColor(color.r, color.g, color.b, alpha).setUv(1f, 0f)
+        buffer.addVertex(matrix4f, +size, -size, 0f).setColor(color.r, color.g, color.b, alpha).setUv(0f, 0f)
     }
     data class FlareColor(val r: Float, val g: Float, val b: Float, val offset: Float = 0.1f)
 }

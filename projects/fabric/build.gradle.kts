@@ -10,12 +10,13 @@ plugins {
 val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
+val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
 evaluationDependsOn(":core")
 
 baseShaking {
     projectPart.set("fabric")
-    integrationRepositories.set(true)
+    integrationRepositories.set(false)
     shake()
 }
 
@@ -45,6 +46,11 @@ sourceSets.main {
     }
 }
 
+if (minimalTestEnvironment) {
+    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude("**/integrations/**") }
+}
+
 val testMod = sourceSets.create("testMod") {
     compileClasspath += sourceSets.main.get().compileClasspath
     compileClasspath += sourceSets.main.get().output
@@ -65,6 +71,7 @@ val testiariumMainArtifacts = configurations.detachedConfiguration(
 
 val testiariumTestArtifacts = configurations.detachedConfiguration(
     project.dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar"),
+    project.dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1:cct-test-mod@jar"),
     project.dependencies.create("site.siredvin:testiarium-fabric-1.21.1:0.1.1:test-mod@jar"),
 ).apply {
     isTransitive = false
@@ -82,12 +89,26 @@ loom {
             server()
             source(testMod)
             property("fabric-api.gametest", "true")
-            property("testiarium.tags", "peripheralworks")
+            property("fabric.debug.loadLate", "testiarium_testmod")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             vmArg("-ea")
             runDir("run/peripheralworks-gametest")
+        }
+        create("peripheralWorksClientGameTest") {
+            client()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("testiarium.client", "true")
+            property("testiarium.tags", "network-manager-client")
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/network-manager-client-gametest")
         }
     }
 }
@@ -98,6 +119,10 @@ tasks.named<JavaExec>("runPeripheralWorksGameTest") {
 
 repositories {
     mavenLocal()
+    maven {
+        name = "SirEdvin's Maven proxy"
+        url = uri("https://mvn.siredvin.site/minecraft")
+    }
     // location of the maven that hosts JEI files since January 2023
     maven {
         name = "Jared's maven"
@@ -207,21 +232,15 @@ repositories {
             includeGroup("dev.latvian.apps")
         }
     }
-
-    maven {
-        name = "Jitpack for kubejs deps"
-        url = uri("https://jitpack.io")
-        content {
-            includeGroup("com.github.rtyley")
-        }
-    }
 }
 
 dependencies {
     compileOnly(libs.endec)
 
-    modApi(libs.bundles.externalMods.fabric.integrations.api) {
-        exclude("net.fabricmc.fabric-api")
+    if (!minimalTestEnvironment) {
+        modApi(libs.bundles.externalMods.fabric.integrations.api) {
+            exclude("net.fabricmc.fabric-api")
+        }
     }
 
     modImplementation(libs.bundles.fabric.core)
@@ -241,16 +260,17 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
-    libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
-    libs.bundles.externalMods.fabric.integrations.raw.full.get().map { compileOnly(it) }
+    if (!minimalTestEnvironment) {
+        libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
+        libs.bundles.externalMods.fabric.integrations.raw.full.get().map { compileOnly(it) }
+        libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
+        libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+        libs.bundles.externalMods.fabric.integrations.raw.active.get().map { runtimeOnly(it) }
+    }
     runtimeOnly(libs.endec)
     runtimeOnly(libs.endec.gson)
     runtimeOnly(libs.endec.jankson)
     runtimeOnly(libs.endec.netty)
-    libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
-    libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
-    libs.bundles.externalMods.fabric.integrations.raw.active.get().map { runtimeOnly(it) }
-
     add("modTestModImplementation", files(testiariumMainArtifacts))
     add("modTestModImplementation", files(testiariumTestArtifacts))
 }

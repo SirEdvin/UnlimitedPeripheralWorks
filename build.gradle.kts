@@ -6,6 +6,18 @@ plugins {
     id("com.github.ben-manes.versions") version "0.51.0"
 }
 
+tasks.register("gameTest") {
+    group = "verification"
+    description = "Runs UnlimitedPeripheralWorks GameTests on NeoForge and Fabric."
+    dependsOn(":forge:runGameTestServer", ":fabric:runPeripheralWorksGameTest")
+}
+
+tasks.register("clientGameTest") {
+    group = "verification"
+    description = "Runs network manager client GameTests on NeoForge and Fabric."
+    dependsOn(":forge:runClientGameTest", ":fabric:runPeripheralWorksClientGameTest")
+}
+
 subprojectShaking {
     withKotlin.set(true)
     javaVersion.set(JavaVersion.VERSION_21)
@@ -16,7 +28,9 @@ val setupSubproject = subprojectShaking::setupSubproject
 
 
 subprojects {
-    setupSubproject(this)
+    if (name != "typescript-tests") {
+        setupSubproject(this)
+    }
 }
 
 githubShaking {
@@ -28,11 +42,7 @@ githubShaking {
 }
 
 repositories {
-    mavenCentral()
-}
-
-tasks.register("gameTest") {
-    group = "verification"
-    description = "Runs UnlimitedPeripheralWorks GameTests on NeoForge and Fabric."
-    dependsOn(":forge:runGameTestServer", ":fabric:runPeripheralWorksGameTest")
+    maven("https://mvn.siredvin.site/minecraft") {
+        name = "SirEdvin's Maven proxy"
+    }
 }

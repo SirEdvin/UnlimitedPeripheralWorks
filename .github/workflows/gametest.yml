@@ -15,7 +15,6 @@ jobs:
     name: NeoForge and Fabric GameTests
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,13 +29,13 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run GameTests
-        run: timeout --foreground 1200s ./gradlew gameTest --no-daemon
+        run: timeout --foreground 1200s xvfb-run -a ./gradlew gameTest --no-daemon -PminimalTestEnvironment
 
-      - name: Upload GameTest reports
+      - name: Upload JUnit reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gametest-reports
+          name: gametest-junit-reports
           path: |
             projects/forge/build/test-results/peripheralworks-gametest.xml
             projects/forge/build/test-results/peripheralworks-gametest.html

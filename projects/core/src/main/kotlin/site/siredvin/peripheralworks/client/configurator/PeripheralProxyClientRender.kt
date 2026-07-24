@@ -8,6 +8,7 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
+import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 
 object PeripheralProxyClientRender : ConfigurationModeRender {
@@ -42,13 +43,20 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         matrices.popPose()
     }
 
-    override fun render(minecraft: Minecraft, source: BlockPos, poseStack: PoseStack, camera: Camera) {
+    override fun render(
+        minecraft: Minecraft,
+        source: BlockPos,
+        poseStack: PoseStack,
+        partialTick: Float,
+        camera: Camera,
+        projectionMatrix: Matrix4f,
+    ) {
         val entity = minecraft.level?.getBlockEntity(source) as? PeripheralProxyBlockEntity ?: return
         FlareRenderer.initRenderer(poseStack, camera)
         FlareRenderer.renderFlare(
             poseStack,
             camera,
-            minecraft.timer.getGameTimeDeltaPartialTick(true),
+            partialTick,
             entity.blockPos.x + 0.5,
             entity.blockPos.y + 0.5,
             entity.blockPos.z + 0.5,
@@ -60,7 +68,7 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
             FlareRenderer.renderFlare(
                 poseStack,
                 camera,
-                minecraft.timer.getGameTimeDeltaPartialTick(true),
+                partialTick,
                 it.targetBlock.x + 0.5 + 0.45 * normal.x,
                 it.targetBlock.y + 0.5 + 0.45 * normal.y,
                 it.targetBlock.z + 0.5 + 0.45 * normal.z,

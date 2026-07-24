@@ -5,7 +5,6 @@ import net.neoforged.neoforge.common.ModConfigSpec
 object ConfigHolder {
     var commonSpec: ModConfigSpec
     var commonConfig: PeripheralWorksConfig.CommonConfig
-
     init {
         val (key, value) = ModConfigSpec.Builder()
             .configure { builder: ModConfigSpec.Builder -> PeripheralWorksConfig.CommonConfig(builder) }
