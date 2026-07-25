@@ -18,9 +18,11 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import site.siredvin.broccolium.modules.base.item.DescriptiveItem
 import site.siredvin.peripheralworks.data.ModTooltip
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.ConfigurationMode
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorModeRegistry
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorTarget
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
@@ -34,8 +36,8 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         const val MAX_RECENT_TARGETS = 3
         const val MAX_FAVORITE_TARGETS = 16
         const val MAX_TARGET_HISTORY = MAX_RECENT_TARGETS + MAX_FAVORITE_TARGETS
-        const val FAVORITE_TEXT_COLOR = "favoriteTextColor"
-        const val FAVORITE_BOX_COLOR = "favoriteBoxColor"
+        const val FAVORITE_TEXT_STYLE = "favoriteTextStyle"
+        const val FAVORITE_BOX_STYLE = "favoriteBoxStyle"
         const val DEFAULT_FAVORITE_TEXT_COLOR = 0xffffff
         const val DEFAULT_FAVORITE_BOX_COLOR = 0xffaa00
         fun isActiveModeDimension(stack: ItemStack, level: Level): Boolean = stack.tag?.getString(ACTIVE_MOD_DIMENSION) == level.dimension().location().toString()
@@ -172,23 +174,17 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         return true
     }
 
-    fun getFavoriteTextColor(stack: ItemStack): Int = stack.tag?.takeIf { it.contains(FAVORITE_TEXT_COLOR, Tag.TAG_INT.toInt()) }?.getInt(FAVORITE_TEXT_COLOR)?.takeIf { it in 0..0xffffff } ?: DEFAULT_FAVORITE_TEXT_COLOR
+    fun getFavoriteTextStyle(stack: ItemStack): TextStyle = stack.tag?.getString(FAVORITE_TEXT_STYLE)?.let { runCatching { TextStyle.valueOf(it) }.getOrNull() } ?: TextStyle.REGULAR
 
-    fun getFavoriteBoxColor(stack: ItemStack): Int = stack.tag?.takeIf { it.contains(FAVORITE_BOX_COLOR, Tag.TAG_INT.toInt()) }?.getInt(FAVORITE_BOX_COLOR)?.takeIf { it in 0..0xffffff } ?: DEFAULT_FAVORITE_BOX_COLOR
+    fun getFavoriteBoxStyle(stack: ItemStack): BoxStyle = stack.tag?.getString(FAVORITE_BOX_STYLE)?.let { runCatching { BoxStyle.valueOf(it) }.getOrNull() } ?: BoxStyle.OUTLINE
 
-    fun setSettings(stack: ItemStack, name: String?, textColor: Int? = null, boxColor: Int? = null): Boolean {
+    fun setSettings(stack: ItemStack, name: String?, textStyle: TextStyle? = null, boxStyle: BoxStyle? = null): Boolean {
         if (name != null) {
             if (name.length > ConfiguratorTarget.MAX_NAME_LENGTH) return false
             if (name.isEmpty()) stack.resetHoverName() else stack.hoverName = Component.literal(name)
         }
-        if (textColor != null) {
-            if (textColor !in 0..0xffffff) return false
-            stack.orCreateTag.putInt(FAVORITE_TEXT_COLOR, textColor)
-        }
-        if (boxColor != null) {
-            if (boxColor !in 0..0xffffff) return false
-            stack.orCreateTag.putInt(FAVORITE_BOX_COLOR, boxColor)
-        }
+        textStyle?.let { stack.orCreateTag.putString(FAVORITE_TEXT_STYLE, it.name) }
+        boxStyle?.let { stack.orCreateTag.putString(FAVORITE_BOX_STYLE, it.name) }
         return true
     }
 

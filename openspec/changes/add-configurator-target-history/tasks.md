@@ -16,7 +16,8 @@
 - [x] 3.2 Implement one last-used target list with multi-row pagination, default block/dimension/coordinate labels, and golden-outlined custom-name-only favorite labels.
 - [x] 3.3 Implement immediate row selection, non-favorite Favorite actions, favorite Edit actions, and a favorite edit screen with rename/reset/removal controls, a 64-character client limit, and server-authoritative refresh/close behavior.
 - [x] 3.4 Add English and Ukrainian localization source entries for the screen, controls, empty states, and mutation feedback, then regenerate loader resources.
-- [x] 3.5 Add a Settings tab for configurator naming and default favorite colors, plus per-favorite text and outline color pickers.
+- [x] 3.5 Add a Settings tab for configurator naming and favorite text/box styles, plus per-favorite text and box color pickers.
+- [x] 3.6 Render current-dimension favorites in the world while a detached configurator is held.
 
 ## 4. Verification
 

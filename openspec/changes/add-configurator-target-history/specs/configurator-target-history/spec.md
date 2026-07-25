@@ -75,15 +75,26 @@ The target menu SHALL allow a player to open a favorite editor and assign a cust
 - **THEN** the server rejects the mutation
 
 ### Requirement: Configurator appearance settings
-The detached menu SHALL provide a Settings tab for assigning a custom Ultimate Configurator name and default favorite text and outline colors. A favorite editor SHALL allow each favorite to override both colors using the existing color picker.
+The detached menu SHALL provide a Settings tab for assigning a custom Ultimate Configurator name and favorite text and box render styles. A favorite editor SHALL allow each favorite to override text and box colors using the existing color picker.
 
 #### Scenario: Change configurator settings
-- **WHEN** a player submits a valid name or default favorite color from the Settings tab
+- **WHEN** a player submits a valid name or favorite render style from the Settings tab
 - **THEN** the server persists it on that Ultimate Configurator and synchronizes the item
 
 #### Scenario: Override favorite colors
 - **WHEN** a player selects a valid text or outline color in a favorite editor
 - **THEN** the server persists that color on the favorite and the target list uses it instead of the configurator default
+
+### Requirement: Detached favorite rendering
+While a detached Ultimate Configurator is held in the main hand, the client SHALL render all favorites in the current dimension using the configured text and box styles and each favorite's colors.
+
+#### Scenario: Render detached favorites
+- **WHEN** a player holds a detached Ultimate Configurator with current-dimension favorites
+- **THEN** the client renders their configured labels and box effects in the world
+
+#### Scenario: Hide cross-dimension favorites
+- **WHEN** a favorite belongs to another dimension
+- **THEN** the client does not render it in the current world
 
 ### Requirement: Validated target selection
 Selecting a stored target row SHALL immediately reattach the configurator and close the menu only when the target is in the player's current dimension, its position is loaded, and its current block state supports the stored configuration type.

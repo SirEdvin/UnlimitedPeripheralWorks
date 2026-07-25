@@ -12,7 +12,9 @@ import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.ConfiguratorTargetActionMessage
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorTarget
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 
 class ConfiguratorTargetHistoryScreen : Screen(ModText.CONFIGURATOR_HISTORY_TITLE.text) {
     private var tab = Tab.TARGETS
@@ -83,14 +85,16 @@ class ConfiguratorTargetHistoryScreen : Screen(ModText.CONFIGURATOR_HISTORY_TITL
         )
         addRenderableWidget(Button.builder(ModText.CONFIGURATOR_HISTORY_APPLY.text) { sendSetting(ConfiguratorTargetActionMessage.Action.CONFIGURATOR_NAME, name.value) }.bounds(left, 88, panelWidth, 20).build())
         addRenderableWidget(
-            Button.builder(ModText.CONFIGURATOR_SETTINGS_TEXT_COLOR.format("#%06X".format(configurator.getFavoriteTextColor(stack)))) {
-                minecraft?.setScreen(NetworkManagerColorPickerScreen(this, configurator.getFavoriteTextColor(stack)) { sendSetting(ConfiguratorTargetActionMessage.Action.DEFAULT_TEXT_COLOR, color = it) })
-            }.bounds(left, 116, panelWidth, 20).build(),
+            RenderStyleButton(left, 116, panelWidth, textStyleText(configurator.getFavoriteTextStyle(stack))) { direction ->
+                val styles = TextStyle.entries
+                sendSetting(ConfiguratorTargetActionMessage.Action.DEFAULT_TEXT_STYLE, styles[Math.floorMod(configurator.getFavoriteTextStyle(stack).ordinal + direction, styles.size)].name)
+            },
         )
         addRenderableWidget(
-            Button.builder(ModText.CONFIGURATOR_SETTINGS_BOX_COLOR.format("#%06X".format(configurator.getFavoriteBoxColor(stack)))) {
-                minecraft?.setScreen(NetworkManagerColorPickerScreen(this, configurator.getFavoriteBoxColor(stack)) { sendSetting(ConfiguratorTargetActionMessage.Action.DEFAULT_BOX_COLOR, color = it) })
-            }.bounds(left, 142, panelWidth, 20).build(),
+            RenderStyleButton(left, 142, panelWidth, boxStyleText(configurator.getFavoriteBoxStyle(stack))) { direction ->
+                val styles = BoxStyle.entries
+                sendSetting(ConfiguratorTargetActionMessage.Action.DEFAULT_BOX_STYLE, styles[Math.floorMod(configurator.getFavoriteBoxStyle(stack).ordinal + direction, styles.size)].name)
+            },
         )
     }
 
@@ -98,7 +102,7 @@ class ConfiguratorTargetHistoryScreen : Screen(ModText.CONFIGURATOR_HISTORY_TITL
         if (favorite) {
             val stack = minecraft?.player?.mainHandItem ?: return
             val configurator = stack.item as UltimateConfigurator
-            addTargetButton(target, left, top, panelWidth - 64, target.textColor ?: configurator.getFavoriteTextColor(stack), target.boxColor ?: configurator.getFavoriteBoxColor(stack))
+            addTargetButton(target, left, top, panelWidth - 64, target.textColor ?: UltimateConfigurator.DEFAULT_FAVORITE_TEXT_COLOR, target.boxColor ?: UltimateConfigurator.DEFAULT_FAVORITE_BOX_COLOR)
             addRenderableWidget(Button.builder(ModText.CONFIGURATOR_HISTORY_EDIT.text) { minecraft?.setScreen(ConfiguratorFavoriteEditScreen(this, target)) }.bounds(left + panelWidth - 60, top, 60, 20).build())
         } else {
             addTargetButton(target, left, top, panelWidth - 92, 0xffffff, null)
@@ -125,6 +129,23 @@ class ConfiguratorTargetHistoryScreen : Screen(ModText.CONFIGURATOR_HISTORY_TITL
     private fun sendSetting(action: ConfiguratorTargetActionMessage.Action, name: String = "", color: Int = -1) {
         ClientNetworking.sendToServer(ConfiguratorTargetActionMessage(action, net.minecraft.resources.ResourceLocation.tryParse("minecraft:overworld")!!, net.minecraft.core.BlockPos.ZERO, name, color))
     }
+
+    private fun textStyleText(style: TextStyle): Component = ModText.NETWORK_MANAGER_TEXT_STYLE.format(
+        when (style) {
+            TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
+            TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
+        },
+    )
+
+    private fun boxStyleText(style: BoxStyle): Component = ModText.NETWORK_MANAGER_BOX_STYLE.format(
+        when (style) {
+            BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
+            BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+            BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
+        },
+    )
 
     private fun configurator(): UltimateConfigurator? {
         val stack = minecraft?.player?.mainHandItem ?: return null

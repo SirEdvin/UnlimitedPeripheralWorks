@@ -6,7 +6,9 @@ import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.data.ModText
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorTarget
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 
 class ConfiguratorTargetActionMessage(
     private val action: Action,
@@ -15,7 +17,7 @@ class ConfiguratorTargetActionMessage(
     private val name: String = "",
     private val color: Int = -1,
 ) : NetworkMessage<ServerNetworkContext> {
-    enum class Action { SELECT, TOGGLE_FAVORITE, RENAME, FAVORITE_TEXT_COLOR, FAVORITE_BOX_COLOR, CONFIGURATOR_NAME, DEFAULT_TEXT_COLOR, DEFAULT_BOX_COLOR }
+    enum class Action { SELECT, TOGGLE_FAVORITE, RENAME, FAVORITE_TEXT_COLOR, FAVORITE_BOX_COLOR, CONFIGURATOR_NAME, DEFAULT_TEXT_STYLE, DEFAULT_BOX_STYLE }
 
     constructor(buf: FriendlyByteBuf) : this(
         buf.readEnum(Action::class.java),
@@ -59,8 +61,8 @@ class ConfiguratorTargetActionMessage(
             Action.FAVORITE_TEXT_COLOR -> if (configurator.setFavoriteColor(stack, target, color, true)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
             Action.FAVORITE_BOX_COLOR -> if (configurator.setFavoriteColor(stack, target, color, false)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
             Action.CONFIGURATOR_NAME -> if (configurator.setSettings(stack, name)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
-            Action.DEFAULT_TEXT_COLOR -> if (configurator.setSettings(stack, null, textColor = color)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
-            Action.DEFAULT_BOX_COLOR -> if (configurator.setSettings(stack, null, boxColor = color)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
+            Action.DEFAULT_TEXT_STYLE -> if (runCatching { TextStyle.valueOf(name) }.getOrNull()?.let { configurator.setSettings(stack, null, textStyle = it) } == true) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
+            Action.DEFAULT_BOX_STYLE -> if (runCatching { BoxStyle.valueOf(name) }.getOrNull()?.let { configurator.setSettings(stack, null, boxStyle = it) } == true) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
         }
         if (result == null) player.inventoryMenu.broadcastChanges() else player.displayClientMessage(result.text, true)
     }
