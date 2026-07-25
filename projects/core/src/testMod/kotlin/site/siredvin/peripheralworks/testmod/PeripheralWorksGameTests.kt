@@ -3,14 +3,67 @@ package site.siredvin.peripheralworks.testmod
 import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.nbt.CompoundTag
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 import site.siredvin.peripheralworks.common.setup.Blocks
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
+    @GameTest(template = "empty")
+    fun peripheralProxyRenderSettingsPersistAndFallback(helper: GameTestHelper) {
+        val firstPos = BlockPos(1, 1, 1)
+        val secondPos = BlockPos(2, 1, 1)
+        helper.setBlock(firstPos, Blocks.PERIPHERAL_PROXY.get())
+        helper.setBlock(secondPos, Blocks.PERIPHERAL_PROXY.get())
+        val proxy = helper.getBlockEntity(firstPos) as PeripheralProxyBlockEntity
+        val loaded = helper.getBlockEntity(secondPos) as PeripheralProxyBlockEntity
+        check(proxy.textStyle == TextStyle.REGULAR && proxy.boxStyle == BoxStyle.FLARE)
+        proxy.setTextStyle(TextStyle.BOLD)
+        proxy.setBoxStyle(BoxStyle.OUTLINE)
+        loaded.loadInternalData(proxy.saveInternalData(CompoundTag()), null)
+        check(loaded.textStyle == TextStyle.BOLD && loaded.boxStyle == BoxStyle.OUTLINE)
+        loaded.loadInternalData(
+            CompoundTag().apply {
+                putString(PeripheralProxyBlockEntity.TEXT_STYLE_TAG, "INVALID")
+                putString(PeripheralProxyBlockEntity.BOX_STYLE_TAG, BoxStyle.FILLED.name)
+            },
+            null,
+        )
+        check(loaded.textStyle == TextStyle.REGULAR && loaded.boxStyle == BoxStyle.FILLED)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun remoteObserverRenderSettingsPersistAndFallback(helper: GameTestHelper) {
+        val firstPos = BlockPos(1, 1, 1)
+        val secondPos = BlockPos(2, 1, 1)
+        helper.setBlock(firstPos, Blocks.REMOTE_OBSERVER.get())
+        helper.setBlock(secondPos, Blocks.REMOTE_OBSERVER.get())
+        val observer = helper.getBlockEntity(firstPos) as RemoteObserverBlockEntity
+        val loaded = helper.getBlockEntity(secondPos) as RemoteObserverBlockEntity
+        check(observer.textStyle == TextStyle.NONE && observer.boxStyle == BoxStyle.FLARE)
+        observer.setTextStyle(TextStyle.BOLD)
+        observer.setBoxStyle(BoxStyle.OUTLINE)
+        loaded.loadInternalData(observer.saveInternalData(CompoundTag()), null)
+        check(loaded.textStyle == TextStyle.BOLD && loaded.boxStyle == BoxStyle.OUTLINE)
+        loaded.loadInternalData(
+            CompoundTag().apply {
+                putString(RemoteObserverBlockEntity.TEXT_STYLE_TAG, TextStyle.REGULAR.name)
+                putString(RemoteObserverBlockEntity.BOX_STYLE_TAG, "INVALID")
+            },
+            null,
+        )
+        check(loaded.textStyle == TextStyle.REGULAR && loaded.boxStyle == BoxStyle.FLARE)
+        helper.succeed()
+    }
+
     private fun getNetworkManager(helper: GameTestHelper): NetworkManagerBlockEntity {
         val pos = BlockPos(1, 1, 1)
         helper.setBlock(pos, Blocks.NETWORK_MANAGER.get())

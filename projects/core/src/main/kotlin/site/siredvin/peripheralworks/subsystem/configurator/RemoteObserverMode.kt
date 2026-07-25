@@ -11,13 +11,21 @@ import net.minecraft.world.phys.BlockHitResult
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 object RemoteObserverMode : ConfigurationMode {
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     override val modeID: ResourceLocation = ResourceLocation(PeripheralWorksCore.MOD_ID, "remote_observer")
     override val description: Component = ModTooltip.REMOTE_OBSERVER_MODE.text
+
+    override fun onBlockMiss(configurationTarget: BlockPos, stack: ItemStack, player: Player, level: Level): InteractionResultHolder<ItemStack> {
+        if (!UltimateConfigurator.isActiveModeDimension(stack, level)) return InteractionResultHolder.fail(stack)
+        if (level.isClientSide) ModClientPlatform.openTargetRenderSettingsScreen(configurationTarget)
+        return InteractionResultHolder.consume(stack)
+    }
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
         if (level.isClientSide) {

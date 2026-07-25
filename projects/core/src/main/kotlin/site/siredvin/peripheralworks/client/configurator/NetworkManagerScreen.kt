@@ -16,7 +16,9 @@ import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntit
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.networking.ClientNetworking
 import site.siredvin.peripheralworks.networking.NetworkManagerGroupMessage
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 
 class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_MANAGER_SCREEN_TITLE.text) {
     private enum class Tab { GROUPS, MEMBERSHIP, SETTINGS }
@@ -271,7 +273,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     private fun cycleTextStyle(target: NetworkManagerMode.RenderTarget, direction: Int) {
         val stack = minecraft?.player?.mainHandItem ?: return
-        val styles = NetworkManagerMode.TextStyle.entries
+        val styles = TextStyle.entries
         val style = styles[Math.floorMod(NetworkManagerMode.getTextStyle(stack, target).ordinal + direction, styles.size)]
         NetworkManagerMode.setTextStyle(stack, target, style)
         send(NetworkManagerGroupMessage.Operation.TEXT_STYLE, target.name, color = style.ordinal)
@@ -280,7 +282,7 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
 
     private fun cycleBoxStyle(target: NetworkManagerMode.RenderTarget, direction: Int) {
         val stack = minecraft?.player?.mainHandItem ?: return
-        val styles = NetworkManagerMode.BoxStyle.entries
+        val styles = BoxStyle.entries
         val style = styles[Math.floorMod(NetworkManagerMode.getBoxStyle(stack, target).ordinal + direction, styles.size)]
         NetworkManagerMode.setBoxStyle(stack, target, style)
         send(NetworkManagerGroupMessage.Operation.BOX_STYLE, target.name, color = style.ordinal)
@@ -294,22 +296,22 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
     }
 
     private fun textStyleText(target: NetworkManagerMode.RenderTarget): Component {
-        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getTextStyle(it, target) } ?: NetworkManagerMode.TextStyle.REGULAR
+        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getTextStyle(it, target) } ?: TextStyle.REGULAR
         val styleText = when (style) {
-            NetworkManagerMode.TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
-            NetworkManagerMode.TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
-            NetworkManagerMode.TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
+            TextStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            TextStyle.REGULAR -> ModText.NETWORK_MANAGER_TEXT_REGULAR.text
+            TextStyle.BOLD -> ModText.NETWORK_MANAGER_TEXT_BOLD.text
         }
         return ModText.NETWORK_MANAGER_TEXT_STYLE.format(styleText)
     }
 
     private fun boxStyleText(target: NetworkManagerMode.RenderTarget): Component {
-        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getBoxStyle(it, target) } ?: NetworkManagerMode.BoxStyle.NONE
+        val style = minecraft?.player?.mainHandItem?.let { NetworkManagerMode.getBoxStyle(it, target) } ?: BoxStyle.NONE
         val styleText = when (style) {
-            NetworkManagerMode.BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
-            NetworkManagerMode.BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
-            NetworkManagerMode.BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
-            NetworkManagerMode.BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
+            BoxStyle.NONE -> ModText.NETWORK_MANAGER_STYLE_NONE.text
+            BoxStyle.OUTLINE -> ModText.NETWORK_MANAGER_BOX_OUTLINE.text
+            BoxStyle.FILLED -> ModText.NETWORK_MANAGER_BOX_FILLED.text
+            BoxStyle.FLARE -> ModText.NETWORK_MANAGER_BOX_FLARE.text
         }
         return ModText.NETWORK_MANAGER_BOX_STYLE.format(styleText)
     }
@@ -447,17 +449,6 @@ class NetworkManagerScreen(private val pos: BlockPos) : Screen(ModText.NETWORK_M
             graphics.fill(x + 8, y + 6, x + 11, y + 10, color)
             graphics.fill(x + 10, y + 9, x + 14, y + 12, color)
             graphics.fill(x + 12, y + 11, x + 15, y + 15, color)
-        }
-    }
-
-    private class RenderStyleButton(x: Int, y: Int, width: Int, message: Component, private val cycle: (Int) -> Unit) : Button(x, y, width, 20, message, { cycle(1) }, DEFAULT_NARRATION) {
-        override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
-            if (button == 1 && active && visible && isMouseOver(mouseX, mouseY)) {
-                playDownSound(Minecraft.getInstance().soundManager)
-                cycle(-1)
-                return true
-            }
-            return super.mouseClicked(mouseX, mouseY, button)
         }
     }
 }

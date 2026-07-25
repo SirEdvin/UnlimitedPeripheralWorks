@@ -1,48 +1,16 @@
 package site.siredvin.peripheralworks.client.configurator
 
 import com.mojang.blaze3d.vertex.PoseStack
-import com.mojang.math.Axis
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
-import net.minecraft.client.gui.Font
-import net.minecraft.client.renderer.LightTexture
-import net.minecraft.client.renderer.MultiBufferSource
 import net.minecraft.core.BlockPos
+import net.minecraft.network.chat.Component
+import net.minecraft.world.phys.AABB
+import net.minecraft.world.phys.Vec3
 import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 
 object PeripheralProxyClientRender : ConfigurationModeRender {
-
-    private val targetFlareColor = FlareRenderer.FlareColor(0.957f, 0.635f, 0.38f)
-    private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
-
-    fun renderText(
-        matrices: PoseStack,
-        camera: Camera,
-        text: String,
-        x: Double,
-        y: Double,
-        z: Double,
-        lightLevel: Int,
-        buffer: MultiBufferSource,
-    ) {
-        matrices.pushPose()
-
-        // Set up the view
-        matrices.translate(x, y, z)
-        matrices.mulPose(Minecraft.getInstance().entityRenderDispatcher.cameraOrientation())
-        matrices.mulPose(Axis.ZP.rotationDegrees(180f))
-        matrices.scale(0.025f, 0.025f, 0.025f)
-
-        val matrix4f = matrices.last().pose()
-
-        val font = Minecraft.getInstance().font
-        val offset = (-font.width(text) / 2).toFloat()
-        font.drawInBatch(text, offset, 0f, 0xffffff, false, matrix4f, buffer, Font.DisplayMode.NORMAL, 0, lightLevel)
-
-        matrices.popPose()
-    }
-
     override fun render(
         minecraft: Minecraft,
         source: BlockPos,
@@ -52,41 +20,32 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         projectionMatrix: Matrix4f,
     ) {
         val entity = minecraft.level?.getBlockEntity(source) as? PeripheralProxyBlockEntity ?: return
-        FlareRenderer.initRenderer(poseStack, camera)
-        FlareRenderer.renderFlare(
+        val effects = buildList {
+            add(TargetRenderHelper.Effect(AABB(entity.blockPos), Vec3.atCenterOf(entity.blockPos), entity.boxStyle, GREEN))
+            entity.remotePeripherals.values.forEach {
+                val normal = it.direction.normal
+                add(
+                    TargetRenderHelper.Effect(
+                        AABB(it.targetBlock),
+                        Vec3(it.targetBlock.x + 0.5 + 0.45 * normal.x, it.targetBlock.y + 0.5 + 0.45 * normal.y, it.targetBlock.z + 0.5 + 0.45 * normal.z),
+                        entity.boxStyle,
+                        ORANGE,
+                        it.direction,
+                        GREEN,
+                    ),
+                )
+            }
+        }
+        TargetRenderHelper.renderEffects(poseStack, camera, partialTick, effects)
+        TargetRenderHelper.renderLabels(
             poseStack,
             camera,
-            partialTick,
-            entity.blockPos.x + 0.5,
-            entity.blockPos.y + 0.5,
-            entity.blockPos.z + 0.5,
-            sourceFlareColor,
-            1f,
+            entity.remotePeripherals.values.mapNotNull {
+                it.peripheralName?.let { name -> TargetRenderHelper.Label(Component.literal(name), Vec3(it.targetBlock.x + 0.5, it.targetBlock.y + 1.2, it.targetBlock.z + 0.5), entity.textStyle) }
+            },
         )
-        entity.remotePeripherals.values.forEach {
-            val normal = it.direction.normal
-            FlareRenderer.renderFlare(
-                poseStack,
-                camera,
-                partialTick,
-                it.targetBlock.x + 0.5 + 0.45 * normal.x,
-                it.targetBlock.y + 0.5 + 0.45 * normal.y,
-                it.targetBlock.z + 0.5 + 0.45 * normal.z,
-                targetFlareColor,
-                1f,
-            )
-            renderText(
-                poseStack,
-                camera,
-                it.peripheralName ?: "",
-                it.targetBlock.x + 0.5,
-                it.targetBlock.y + 1.5,
-                it.targetBlock.z + 0.5,
-                LightTexture.FULL_BRIGHT,
-                minecraft.renderBuffers().bufferSource(),
-            )
-        }
-        minecraft.renderBuffers().bufferSource().endBatch()
-        FlareRenderer.uninitRenderer(poseStack)
     }
+
+    private const val GREEN = 0x2a9d8f
+    private const val ORANGE = 0xf4a261
 }

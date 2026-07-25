@@ -118,6 +118,9 @@ class ModUaLanguageProvider(
         add(ModText.NETWORK_MANAGER_INVALID_COLOR, "Використовуйте #RRGGBB або -1 для типового кольору")
         add(ModText.NETWORK_MANAGER_INVALID_RANGE, "Радіус має бути від %s до %s")
         add(ModText.NETWORK_MANAGER_REQUEST_SENT, "Зміну надіслано на сервер")
+        add(ModText.TARGET_RENDER_SETTINGS_TITLE, "Налаштування відображення цілей")
+        add(ModText.TARGET_RENDER_SETTINGS_UNAVAILABLE, "Прив'язана ціль недоступна")
+        add(ModText.TARGET_RENDER_SETTINGS_REQUEST_REJECTED, "Запит налаштувань відображення цілей відхилено")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
 

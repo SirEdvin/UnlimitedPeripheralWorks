@@ -118,6 +118,9 @@ class ModEnLanguageProvider(
         add(ModText.NETWORK_MANAGER_INVALID_COLOR, "Use #RRGGBB or -1 for the default color")
         add(ModText.NETWORK_MANAGER_INVALID_RANGE, "Range must be from %s to %s")
         add(ModText.NETWORK_MANAGER_REQUEST_SENT, "Change sent to the server")
+        add(ModText.TARGET_RENDER_SETTINGS_TITLE, "Target Render Settings")
+        add(ModText.TARGET_RENDER_SETTINGS_UNAVAILABLE, "The bound target is unavailable")
+        add(ModText.TARGET_RENDER_SETTINGS_REQUEST_REJECTED, "Target render settings request rejected")
 
         add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
 
