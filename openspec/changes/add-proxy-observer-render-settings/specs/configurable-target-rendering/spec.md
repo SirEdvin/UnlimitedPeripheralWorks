@@ -58,7 +58,7 @@ While Peripheral Proxy configurator rendering is active, the system SHALL render
 
 #### Scenario: Proxy box style
 - **WHEN** the Proxy box style is `outline`, `filled`, or `flare`
-- **THEN** each target displays the selected orange box effect and does not also display the former fixed target flare
+- **THEN** the Proxy and each target display the selected green box effect and do not also display a fixed flare
 
 #### Scenario: Proxy boxes disabled
 - **WHEN** the Proxy box style is `none`
@@ -77,18 +77,25 @@ While Remote Observer configurator rendering is active, the system SHALL render 
 
 #### Scenario: Observer box style
 - **WHEN** the Observer box style is `outline`, `filled`, or `flare`
-- **THEN** each target displays the selected orange box effect and does not also display the former fixed target flare
+- **THEN** the Observer and each target display the selected green box effect and do not also display a fixed flare
 
 #### Scenario: Observer boxes disabled
 - **WHEN** the Observer box style is `none`
 - **THEN** no target box or target flare is rendered
 
-### Requirement: Source markers remain unchanged
-The system SHALL continue rendering the existing fixed teal source flare for a bound Peripheral Proxy or Remote Observer independently of target text and box settings.
+### Requirement: Remote Observer tracking changes synchronize
+The system SHALL synchronize direct Remote Observer tracking additions and removals and SHALL replace stale client tracking state when updates arrive.
 
-#### Scenario: All target effects disabled
-- **WHEN** both target styles are `none`
-- **THEN** the source flare remains visible while target text and box effects are absent
+#### Scenario: Remove a tracked position through Lua
+- **WHEN** a computer removes a tracked position from a Remote Observer
+- **THEN** observing clients remove that position from the Observer overlay
+
+### Requirement: Box style includes the source block
+The system SHALL render the bound Peripheral Proxy or Remote Observer using the same green box style selected for its targets.
+
+#### Scenario: All box effects disabled
+- **WHEN** box style is `none`
+- **THEN** source and target box effects are absent
 
 ### Requirement: Render settings persist with compatibility defaults
 The system SHALL persist text and box styles in each Peripheral Proxy and Remote Observer block entity and SHALL safely fall back to the block type's compatibility defaults when either value is absent or invalid.

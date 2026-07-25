@@ -35,6 +35,8 @@ Peripheral Proxy and Remote Observer block entities each hold `textStyle` and `b
 
 Alternative considered: store preferences on the Ultimate Configurator like Network Manager. Rejected because the requested setting is peripheral configuration, must be available to Lua, and applies to all players rather than one held item.
 
+Remote Observer direct tracking mutations also use the existing block-entity synchronization path, and incoming NBT replaces rather than appends tracked positions so removed targets do not remain in client overlays.
+
 ### Use one lightweight screen and packet path
 
 Both configurator modes implement `onBlockMiss`, retain the existing dimension guard, and request a shared target-render settings screen through `ModClientPlatform`. The screen entry resolves the bound client block entity and opens only for a Proxy or Observer. The screen presents one text-style control and one box-style control with the same forward/ reverse cycling behavior as Network Manager.
@@ -43,9 +45,9 @@ Style changes update the synchronized client value immediately for responsive co
 
 Alternative considered: separate screens and packets per block type. Rejected because the fields, controls, validation flow, and interaction are identical.
 
-### Keep target-specific labels and existing colors
+### Keep target-specific labels and use one effect color
 
-Proxy text remains the assigned remote peripheral name. Observer text is the target block's translated display name. Text remains white; target outline, fill, and flare remain orange. The fixed teal source flare remains unchanged and independent of the target box style. Selecting `none` suppresses only the corresponding target text or box effect.
+Proxy text remains the assigned remote peripheral name. Observer text is the target block's translated display name. Text remains white; source and target outline, fill, and flare effects use the existing green source-marker color. The selected box style applies uniformly to the bound block and every target, so selecting `none` suppresses all box effects.
 
 Alternative considered: coordinates for Observer labels or configurable colors. Rejected because block names were selected and color configuration is outside the requested scope.
 

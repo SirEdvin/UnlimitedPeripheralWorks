@@ -74,6 +74,18 @@ class NetworkManagerClientGameTests {
                 val observer = helper.getBlockEntity(observerPos) as RemoteObserverBlockEntity
                 if (observer.textStyle != TextStyle.BOLD || observer.boxStyle != BoxStyle.NONE) retry("Observer styles have not synchronized")
             }
+            .thenExecute { (helper.getBlockEntity(observerPos) as RemoteObserverBlockEntity).addPosToTrack(helper.absolutePos(BlockPos(4, 1, 1))) }
+            .thenIdle(3)
+            .thenOnClient {
+                val observer = minecraft.level!!.getBlockEntity(helper.absolutePos(observerPos)) as RemoteObserverBlockEntity
+                check(observer.trackedBlocksView.size == 1) { "Observer addition did not synchronize" }
+            }
+            .thenExecute { (helper.getBlockEntity(observerPos) as RemoteObserverBlockEntity).removePosToTrack(helper.absolutePos(BlockPos(4, 1, 1))) }
+            .thenIdle(3)
+            .thenOnClient {
+                val observer = minecraft.level!!.getBlockEntity(helper.absolutePos(observerPos)) as RemoteObserverBlockEntity
+                check(observer.trackedBlocksView.isEmpty()) { "Observer removal did not synchronize" }
+            }
             .thenExecute { helper.setBlock(observerPos, net.minecraft.world.level.block.Blocks.AIR) }
             .thenIdle(5)
             .thenOnClient { check(minecraft.screen !is TargetRenderSettingsScreen) { "Unavailable observer screen remained open" } }

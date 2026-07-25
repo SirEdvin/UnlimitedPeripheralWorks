@@ -75,18 +75,19 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             addPosToTrack(pos)
             true
         }
-        pushInternalDataChangeToClient()
         return blockAdded
     }
 
     fun addPosToTrack(pos: BlockPos) {
         trackedBlocks.add(pos)
         BlockStateUpdateEventBus.addBlockPos(pos)
+        pushInternalDataChangeToClient()
     }
 
     fun removePosToTrack(pos: BlockPos) {
         if (trackedBlocks.remove(pos)) {
             BlockStateUpdateEventBus.removeBlockPos(pos)
+            pushInternalDataChangeToClient()
         }
     }
 
@@ -107,8 +108,14 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         textStyle = TextStyle.entries.firstOrNull { it.name == data.getString(TEXT_STYLE_TAG) } ?: TextStyle.NONE
         boxStyle = BoxStyle.entries.firstOrNull { it.name == data.getString(BOX_STYLE_TAG) } ?: BoxStyle.FLARE
         if (data.contains(TRACKED_BLOCKS_TAG)) {
+            BlockStateUpdateEventBus.removeBlockPos(trackedBlocks)
+            trackedBlocks.clear()
             val internalList = data.getList(TRACKED_BLOCKS_TAG, Tag.TAG_COMPOUND.toInt())
-            internalList.forEach { addPosToTrack(NbtUtils.readBlockPos(it as CompoundTag)) }
+            internalList.forEach {
+                val pos = NbtUtils.readBlockPos(it as CompoundTag)
+                trackedBlocks.add(pos)
+                BlockStateUpdateEventBus.addBlockPos(pos)
+            }
         }
         return state ?: blockState
     }

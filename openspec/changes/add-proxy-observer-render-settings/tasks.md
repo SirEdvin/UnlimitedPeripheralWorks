@@ -8,6 +8,7 @@
 - [x] 2.1 Add persisted and synchronized text/box styles to Peripheral Proxy with `regular` and `flare` compatibility defaults and safe invalid-NBT fallback.
 - [x] 2.2 Add persisted and synchronized text/box styles to Remote Observer with `none` and `flare` compatibility defaults and safe invalid-NBT fallback.
 - [x] 2.3 Centralize each block entity's style mutation so UI and Lua changes share validation, dirty marking, and client synchronization.
+- [x] 2.4 Synchronize direct Remote Observer tracking changes and replace stale tracked positions on client reload.
 
 ## 3. Lua Configuration API
 
@@ -24,8 +25,8 @@
 
 ## 5. Target Rendering
 
-- [x] 5.1 Update Peripheral Proxy rendering to use persisted styles for white peripheral-name text and orange target boxes while retaining its fixed teal source flare.
-- [x] 5.2 Update Remote Observer rendering to use persisted styles for translated white block-name text and orange target boxes while retaining its fixed teal source flare.
+- [x] 5.1 Update Peripheral Proxy rendering to use persisted styles for white peripheral-name text and green source/target boxes.
+- [x] 5.2 Update Remote Observer rendering to use persisted styles for translated white block-name text and green source/target boxes.
 - [x] 5.3 Verify `none`, `regular`, `bold`, `outline`, `filled`, and `flare` produce the specified effects without duplicate target flares.
 
 ## 6. Verification

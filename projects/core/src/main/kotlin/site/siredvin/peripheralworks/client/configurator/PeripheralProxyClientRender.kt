@@ -11,9 +11,6 @@ import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 
 object PeripheralProxyClientRender : ConfigurationModeRender {
-
-    private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
-
     override fun render(
         minecraft: Minecraft,
         source: BlockPos,
@@ -23,28 +20,21 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         projectionMatrix: Matrix4f,
     ) {
         val entity = minecraft.level?.getBlockEntity(source) as? PeripheralProxyBlockEntity ?: return
-        val effects = entity.remotePeripherals.values.map {
-            val normal = it.direction.normal
-            TargetRenderHelper.Effect(
-                AABB(it.targetBlock),
-                Vec3(it.targetBlock.x + 0.5 + 0.45 * normal.x, it.targetBlock.y + 0.5 + 0.45 * normal.y, it.targetBlock.z + 0.5 + 0.45 * normal.z),
-                entity.boxStyle,
-                TARGET_COLOR,
-            )
+        val effects = buildList {
+            add(TargetRenderHelper.Effect(AABB(entity.blockPos), Vec3.atCenterOf(entity.blockPos), entity.boxStyle, COLOR))
+            entity.remotePeripherals.values.forEach {
+                val normal = it.direction.normal
+                add(
+                    TargetRenderHelper.Effect(
+                        AABB(it.targetBlock),
+                        Vec3(it.targetBlock.x + 0.5 + 0.45 * normal.x, it.targetBlock.y + 0.5 + 0.45 * normal.y, it.targetBlock.z + 0.5 + 0.45 * normal.z),
+                        entity.boxStyle,
+                        COLOR,
+                    ),
+                )
+            }
         }
         TargetRenderHelper.renderEffects(poseStack, camera, partialTick, effects)
-        FlareRenderer.initRenderer(poseStack, camera)
-        FlareRenderer.renderFlare(
-            poseStack,
-            camera,
-            partialTick,
-            entity.blockPos.x + 0.5,
-            entity.blockPos.y + 0.5,
-            entity.blockPos.z + 0.5,
-            sourceFlareColor,
-            1f,
-        )
-        FlareRenderer.uninitRenderer(poseStack)
         TargetRenderHelper.renderLabels(
             poseStack,
             camera,
@@ -54,5 +44,5 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         )
     }
 
-    private const val TARGET_COLOR = 0xf4a261
+    private const val COLOR = 0x2a9d8f
 }

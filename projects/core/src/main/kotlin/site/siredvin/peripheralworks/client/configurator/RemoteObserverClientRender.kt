@@ -10,9 +10,6 @@ import org.joml.Matrix4f
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 
 object RemoteObserverClientRender : ConfigurationModeRender {
-
-    private val sourceFlareColor = FlareRenderer.FlareColor(0.165f, 0.616f, 0.561f)
-
     override fun render(
         minecraft: Minecraft,
         source: BlockPos,
@@ -26,20 +23,11 @@ object RemoteObserverClientRender : ConfigurationModeRender {
             poseStack,
             camera,
             partialTick,
-            entity.trackedBlocksView.map { TargetRenderHelper.Effect(AABB(it), Vec3.atCenterOf(it), entity.boxStyle, TARGET_COLOR) },
+            buildList {
+                add(TargetRenderHelper.Effect(AABB(entity.blockPos), Vec3.atCenterOf(entity.blockPos), entity.boxStyle, COLOR))
+                entity.trackedBlocksView.forEach { add(TargetRenderHelper.Effect(AABB(it), Vec3.atCenterOf(it), entity.boxStyle, COLOR)) }
+            },
         )
-        FlareRenderer.initRenderer(poseStack, camera)
-        FlareRenderer.renderFlare(
-            poseStack,
-            camera,
-            partialTick,
-            entity.blockPos.x + 0.5,
-            entity.blockPos.y + 0.5,
-            entity.blockPos.z + 0.5,
-            sourceFlareColor,
-            1f,
-        )
-        FlareRenderer.uninitRenderer(poseStack)
         TargetRenderHelper.renderLabels(
             poseStack,
             camera,
@@ -49,5 +37,5 @@ object RemoteObserverClientRender : ConfigurationModeRender {
         )
     }
 
-    private const val TARGET_COLOR = 0xf4a261
+    private const val COLOR = 0x2a9d8f
 }
