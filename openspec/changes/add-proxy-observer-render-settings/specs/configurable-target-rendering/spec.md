@@ -59,7 +59,8 @@ While Peripheral Proxy configurator rendering is active, the system SHALL render
 #### Scenario: Proxy box style
 - **WHEN** the Proxy box style is `outline`, `filled`, or `flare`
 - **THEN** the Proxy displays the selected green box effect
-- **AND** each target displays the selected orange box effect with its attached face green
+- **AND** each target displays the selected orange box effect, with its attached face green for outline and filled styles
+- **AND** target flares are orange
 - **AND** no fixed flare is also displayed
 
 #### Scenario: Proxy boxes disabled

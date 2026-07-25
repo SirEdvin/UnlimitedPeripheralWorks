@@ -49,7 +49,7 @@ object TargetRenderHelper {
         if (effects.any { it.style == BoxStyle.FLARE }) {
             FlareRenderer.initRenderer(poseStack, camera)
             effects.filter { it.style == BoxStyle.FLARE }.forEach {
-                FlareRenderer.renderFlare(poseStack, camera, partialTick, it.flare.x, it.flare.y, it.flare.z, flareColor(if (it.face == null) it.color else it.faceColor), 1f)
+                FlareRenderer.renderFlare(poseStack, camera, partialTick, it.flare.x, it.flare.y, it.flare.z, flareColor(it.color), 1f)
             }
             FlareRenderer.uninitRenderer(poseStack)
         }
