@@ -74,6 +74,17 @@ The target menu SHALL allow a player to open a favorite editor and assign a cust
 - **WHEN** a client requests a rename for a target that is not currently a favorite
 - **THEN** the server rejects the mutation
 
+### Requirement: Configurator appearance settings
+The detached menu SHALL provide a Settings tab for assigning a custom Ultimate Configurator name and default favorite text and outline colors. A favorite editor SHALL allow each favorite to override both colors using the existing color picker.
+
+#### Scenario: Change configurator settings
+- **WHEN** a player submits a valid name or default favorite color from the Settings tab
+- **THEN** the server persists it on that Ultimate Configurator and synchronizes the item
+
+#### Scenario: Override favorite colors
+- **WHEN** a player selects a valid text or outline color in a favorite editor
+- **THEN** the server persists that color on the favorite and the target list uses it instead of the configurator default
+
 ### Requirement: Validated target selection
 Selecting a stored target row SHALL immediately reattach the configurator and close the menu only when the target is in the player's current dimension, its position is loaded, and its current block state supports the stored configuration type.
 

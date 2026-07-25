@@ -36,6 +36,8 @@ A normal right-click on air with no active mode opens a client `Screen` through 
 
 Each row provides immediate selection. Non-favorite recent rows provide a favorite action, while favorite rows provide an edit action that opens a focused child screen for renaming or removing the favorite. Submitting an empty name removes the custom name and restores the default label; non-empty names are limited to 64 characters. The screen remains non-pausing and closes after a successful selection.
 
+The detached screen also has a Settings tab. It uses vanilla item hover-name storage for the configurator name and compact RGB integer tags for default favorite text and outline colors. Favorite records may override either color, and both settings surfaces reuse the existing network-manager color picker.
+
 Alternative considered: add a `Menu` and synchronized container. Rejected because no inventory slots or continuously authoritative world data are involved; normal item synchronization and explicit mutations are smaller.
 
 ### Route all changes through validated serverbound actions

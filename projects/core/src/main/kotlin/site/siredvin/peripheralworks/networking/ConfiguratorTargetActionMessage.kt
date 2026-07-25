@@ -13,14 +13,16 @@ class ConfiguratorTargetActionMessage(
     private val dimension: ResourceLocation,
     private val pos: BlockPos,
     private val name: String = "",
+    private val color: Int = -1,
 ) : NetworkMessage<ServerNetworkContext> {
-    enum class Action { SELECT, TOGGLE_FAVORITE, RENAME }
+    enum class Action { SELECT, TOGGLE_FAVORITE, RENAME, FAVORITE_TEXT_COLOR, FAVORITE_BOX_COLOR, CONFIGURATOR_NAME, DEFAULT_TEXT_COLOR, DEFAULT_BOX_COLOR }
 
     constructor(buf: FriendlyByteBuf) : this(
         buf.readEnum(Action::class.java),
         buf.readResourceLocation(),
         buf.readBlockPos(),
         buf.readUtf(MAX_WIRE_NAME_LENGTH),
+        buf.readInt(),
     )
 
     override fun type(): MessageType<*> = NetworkMessages.CONFIGURATOR_TARGET_ACTION
@@ -30,6 +32,7 @@ class ConfiguratorTargetActionMessage(
         buf.writeResourceLocation(dimension)
         buf.writeBlockPos(pos)
         buf.writeUtf(name, MAX_WIRE_NAME_LENGTH)
+        buf.writeInt(color)
     }
 
     override fun handle(context: ServerNetworkContext) {
@@ -53,6 +56,11 @@ class ConfiguratorTargetActionMessage(
                 UltimateConfigurator.FavoriteResult.REJECTED -> ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
             }
             Action.RENAME -> if (configurator.renameFavorite(stack, target, name)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
+            Action.FAVORITE_TEXT_COLOR -> if (configurator.setFavoriteColor(stack, target, color, true)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
+            Action.FAVORITE_BOX_COLOR -> if (configurator.setFavoriteColor(stack, target, color, false)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
+            Action.CONFIGURATOR_NAME -> if (configurator.setSettings(stack, name)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
+            Action.DEFAULT_TEXT_COLOR -> if (configurator.setSettings(stack, null, textColor = color)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
+            Action.DEFAULT_BOX_COLOR -> if (configurator.setSettings(stack, null, boxColor = color)) null else ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED
         }
         if (result == null) player.inventoryMenu.broadcastChanges() else player.displayClientMessage(result.text, true)
     }

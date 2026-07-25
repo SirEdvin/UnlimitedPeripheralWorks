@@ -23,7 +23,7 @@ class ConfiguratorFavoriteEditScreen(
 
     override fun init() {
         val left = width / 2 - 120
-        val top = height / 2 - 44
+        val top = height / 2 - 72
         name = addRenderableWidget(
             EditBox(font, left, top, 240, 20, ModText.CONFIGURATOR_HISTORY_RENAME.text).apply {
                 setHint(ModText.CONFIGURATOR_HISTORY_RENAME.text)
@@ -34,6 +34,16 @@ class ConfiguratorFavoriteEditScreen(
         addRenderableWidget(Button.builder(ModText.CONFIGURATOR_HISTORY_APPLY.text) { rename() }.bounds(left, top + 28, 116, 20).build())
         addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL) { onClose() }.bounds(left + 124, top + 28, 116, 20).build())
         addRenderableWidget(Button.builder(ModText.CONFIGURATOR_HISTORY_UNFAVORITE.text) { removeFavorite() }.bounds(left, top + 56, 240, 20).build())
+        addRenderableWidget(
+            Button.builder(ModText.CONFIGURATOR_SETTINGS_TEXT_COLOR.format("#%06X".format(target.textColor ?: UltimateConfigurator.DEFAULT_FAVORITE_TEXT_COLOR))) {
+                minecraft?.setScreen(NetworkManagerColorPickerScreen(this, target.textColor ?: UltimateConfigurator.DEFAULT_FAVORITE_TEXT_COLOR) { send(ConfiguratorTargetActionMessage.Action.FAVORITE_TEXT_COLOR, color = it) })
+            }.bounds(left, top + 84, 240, 20).build(),
+        )
+        addRenderableWidget(
+            Button.builder(ModText.CONFIGURATOR_SETTINGS_BOX_COLOR.format("#%06X".format(target.boxColor ?: UltimateConfigurator.DEFAULT_FAVORITE_BOX_COLOR))) {
+                minecraft?.setScreen(NetworkManagerColorPickerScreen(this, target.boxColor ?: UltimateConfigurator.DEFAULT_FAVORITE_BOX_COLOR) { send(ConfiguratorTargetActionMessage.Action.FAVORITE_BOX_COLOR, color = it) })
+            }.bounds(left, top + 108, 240, 20).build(),
+        )
         setInitialFocus(name)
     }
 
@@ -47,8 +57,8 @@ class ConfiguratorFavoriteEditScreen(
         onClose()
     }
 
-    private fun send(action: ConfiguratorTargetActionMessage.Action, name: String = "") {
-        ClientNetworking.sendToServer(ConfiguratorTargetActionMessage(action, target.dimensionID, target.pos, name))
+    private fun send(action: ConfiguratorTargetActionMessage.Action, name: String = "", color: Int = -1) {
+        ClientNetworking.sendToServer(ConfiguratorTargetActionMessage(action, target.dimensionID, target.pos, name, color))
     }
 
     override fun tick() {
@@ -72,6 +82,6 @@ class ConfiguratorFavoriteEditScreen(
     override fun render(graphics: GuiGraphics, mouseX: Int, mouseY: Int, partialTick: Float) {
         renderBackground(graphics)
         super.render(graphics, mouseX, mouseY, partialTick)
-        graphics.drawCenteredString(font, title, width / 2, height / 2 - 68, 0xffffff)
+        graphics.drawCenteredString(font, title, width / 2, height / 2 - 96, 0xffffff)
     }
 }

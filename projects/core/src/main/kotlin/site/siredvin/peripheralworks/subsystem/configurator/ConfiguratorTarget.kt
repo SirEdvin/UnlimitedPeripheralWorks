@@ -11,6 +11,8 @@ data class ConfiguratorTarget(
     val dimensionID: ResourceLocation,
     val pos: BlockPos,
     val name: String? = null,
+    val textColor: Int? = null,
+    val boxColor: Int? = null,
 ) {
     fun matches(other: ConfiguratorTarget): Boolean = dimensionID == other.dimensionID && pos == other.pos
 
@@ -19,6 +21,8 @@ data class ConfiguratorTarget(
         putString(DIMENSION, dimensionID.toString())
         put(POS, NbtUtils.writeBlockPos(pos))
         name?.takeIf { it.isNotEmpty() && it.length <= MAX_NAME_LENGTH }?.let { putString(NAME, it) }
+        textColor?.let { putInt(TEXT_COLOR, it) }
+        boxColor?.let { putInt(BOX_COLOR, it) }
     }
 
     companion object {
@@ -27,6 +31,8 @@ data class ConfiguratorTarget(
         private const val DIMENSION = "dimension"
         private const val POS = "pos"
         private const val NAME = "name"
+        private const val TEXT_COLOR = "textColor"
+        private const val BOX_COLOR = "boxColor"
 
         fun fromNBT(tag: CompoundTag): ConfiguratorTarget? {
             if (!tag.contains(MODE, Tag.TAG_STRING.toInt()) || !tag.contains(DIMENSION, Tag.TAG_STRING.toInt()) || !tag.contains(POS, Tag.TAG_COMPOUND.toInt())) return null
@@ -35,7 +41,9 @@ data class ConfiguratorTarget(
             val posTag = tag.getCompound(POS)
             if (!posTag.contains("X", Tag.TAG_ANY_NUMERIC.toInt()) || !posTag.contains("Y", Tag.TAG_ANY_NUMERIC.toInt()) || !posTag.contains("Z", Tag.TAG_ANY_NUMERIC.toInt())) return null
             val name = tag.getString(NAME).takeIf { tag.contains(NAME, Tag.TAG_STRING.toInt()) && it.isNotEmpty() && it.length <= MAX_NAME_LENGTH }
-            return ConfiguratorTarget(mode, dimension, NbtUtils.readBlockPos(posTag), name)
+            val textColor = tag.getInt(TEXT_COLOR).takeIf { tag.contains(TEXT_COLOR, Tag.TAG_INT.toInt()) && it in 0..0xffffff }
+            val boxColor = tag.getInt(BOX_COLOR).takeIf { tag.contains(BOX_COLOR, Tag.TAG_INT.toInt()) && it in 0..0xffffff }
+            return ConfiguratorTarget(mode, dimension, NbtUtils.readBlockPos(posTag), name, textColor, boxColor)
         }
     }
 }

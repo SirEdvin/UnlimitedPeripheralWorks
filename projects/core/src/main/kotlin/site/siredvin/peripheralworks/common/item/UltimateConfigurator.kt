@@ -34,6 +34,10 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         const val MAX_RECENT_TARGETS = 3
         const val MAX_FAVORITE_TARGETS = 16
         const val MAX_TARGET_HISTORY = MAX_RECENT_TARGETS + MAX_FAVORITE_TARGETS
+        const val FAVORITE_TEXT_COLOR = "favoriteTextColor"
+        const val FAVORITE_BOX_COLOR = "favoriteBoxColor"
+        const val DEFAULT_FAVORITE_TEXT_COLOR = 0xffffff
+        const val DEFAULT_FAVORITE_BOX_COLOR = 0xffaa00
         fun isActiveModeDimension(stack: ItemStack, level: Level): Boolean = stack.tag?.getString(ACTIVE_MOD_DIMENSION) == level.dimension().location().toString()
     }
 
@@ -157,6 +161,34 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         val favorites = getFavoriteTargets(stack)
         if (favorites.none(target::matches)) return false
         writeTargets(stack, FAVORITE_TARGETS, favorites.map { if (it.matches(target)) it.copy(name = name.ifEmpty { null }) else it }, MAX_FAVORITE_TARGETS)
+        return true
+    }
+
+    fun setFavoriteColor(stack: ItemStack, target: ConfiguratorTarget, color: Int, text: Boolean): Boolean {
+        if (color !in 0..0xffffff) return false
+        val favorites = getFavoriteTargets(stack)
+        if (favorites.none(target::matches)) return false
+        writeTargets(stack, FAVORITE_TARGETS, favorites.map { if (it.matches(target)) if (text) it.copy(textColor = color) else it.copy(boxColor = color) else it }, MAX_FAVORITE_TARGETS)
+        return true
+    }
+
+    fun getFavoriteTextColor(stack: ItemStack): Int = stack.tag?.takeIf { it.contains(FAVORITE_TEXT_COLOR, Tag.TAG_INT.toInt()) }?.getInt(FAVORITE_TEXT_COLOR)?.takeIf { it in 0..0xffffff } ?: DEFAULT_FAVORITE_TEXT_COLOR
+
+    fun getFavoriteBoxColor(stack: ItemStack): Int = stack.tag?.takeIf { it.contains(FAVORITE_BOX_COLOR, Tag.TAG_INT.toInt()) }?.getInt(FAVORITE_BOX_COLOR)?.takeIf { it in 0..0xffffff } ?: DEFAULT_FAVORITE_BOX_COLOR
+
+    fun setSettings(stack: ItemStack, name: String?, textColor: Int? = null, boxColor: Int? = null): Boolean {
+        if (name != null) {
+            if (name.length > ConfiguratorTarget.MAX_NAME_LENGTH) return false
+            if (name.isEmpty()) stack.resetHoverName() else stack.hoverName = Component.literal(name)
+        }
+        if (textColor != null) {
+            if (textColor !in 0..0xffffff) return false
+            stack.orCreateTag.putInt(FAVORITE_TEXT_COLOR, textColor)
+        }
+        if (boxColor != null) {
+            if (boxColor !in 0..0xffffff) return false
+            stack.orCreateTag.putInt(FAVORITE_BOX_COLOR, boxColor)
+        }
         return true
     }
 

@@ -133,6 +133,10 @@ class ModEnLanguageProvider(
         add(ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED, "Configurator target request rejected")
         add(ModText.CONFIGURATOR_HISTORY_TARGET_UNAVAILABLE, "That configurator target is unavailable")
         add(ModText.CONFIGURATOR_HISTORY_FAVORITE_LIMIT, "A configurator can have at most 16 favorites")
+        add(ModText.CONFIGURATOR_SETTINGS_TITLE, "Settings")
+        add(ModText.CONFIGURATOR_SETTINGS_NAME, "Configurator name")
+        add(ModText.CONFIGURATOR_SETTINGS_TEXT_COLOR, "Favorite text color: %s")
+        add(ModText.CONFIGURATOR_SETTINGS_BOX_COLOR, "Favorite outline color: %s")
 
         add(ModText.TECH_REBORN_ENERGY, "Tech reborn energy")
 

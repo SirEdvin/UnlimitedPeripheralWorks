@@ -10,6 +10,7 @@ Detaching an Ultimate Configurator currently discards convenient access to its p
 - Reattach immediately when the player selects a valid stored target.
 - Display each stored target's configurator type and coordinates, including its dimension, and allow favorites to be renamed.
 - Hide a renamed favorite's coordinates behind its custom name and mark it with a golden outline; clearing the name restores the type-and-coordinate label.
+- Provide a Settings tab for naming the configurator and choosing default favorite text and outline colors, with per-favorite color overrides.
 - Persist recent targets, favorites, and favorite names in the Ultimate Configurator's NBT.
 
 ## Capabilities

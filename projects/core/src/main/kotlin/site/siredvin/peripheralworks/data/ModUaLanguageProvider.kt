@@ -133,6 +133,10 @@ class ModUaLanguageProvider(
         add(ModText.CONFIGURATOR_HISTORY_REQUEST_REJECTED, "Запит цілі конфігуратора відхилено")
         add(ModText.CONFIGURATOR_HISTORY_TARGET_UNAVAILABLE, "Ця ціль конфігуратора недоступна")
         add(ModText.CONFIGURATOR_HISTORY_FAVORITE_LIMIT, "Конфігуратор може мати щонайбільше 16 обраних цілей")
+        add(ModText.CONFIGURATOR_SETTINGS_TITLE, "Налаштування")
+        add(ModText.CONFIGURATOR_SETTINGS_NAME, "Назва конфігуратора")
+        add(ModText.CONFIGURATOR_SETTINGS_TEXT_COLOR, "Колір тексту обраних цілей: %s")
+        add(ModText.CONFIGURATOR_SETTINGS_BOX_COLOR, "Колір контуру обраних цілей: %s")
 
         add(ModText.TECH_REBORN_ENERGY, "Енергія з Tech reborn")
 
