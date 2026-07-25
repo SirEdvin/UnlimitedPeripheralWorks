@@ -24,15 +24,15 @@ This change adds item-local target history and favorites. Records can outlive lo
 
 ### Store compact target records on the item
 
-Store recent and favorite lists as separate NBT lists. Each target record contains the configurator mode ID, dimension ID, and block position; favorite records may additionally contain a custom name. A target's identity is its dimension and position. Attaching at an existing identity replaces its stored mode and moves it to the front of the recent list, then trims the list to three entries.
+Store history order and favorite metadata as separate NBT lists. Each target record contains the configurator mode ID, dimension ID, and block position; favorite records may additionally contain a custom name. A target's identity is its dimension and position. Attaching at an existing identity replaces its stored mode and moves it to the front of history, which retains every favorite and the three latest non-favorites.
 
-Favorites are independent of recent-list eviction and are ordered by most recent favorite action. Favoriting inserts a target at the front, duplicate favorite requests do not create another record, and the server rejects additions after 16 entries. Selecting or renaming a favorite does not reorder it.
+Favoriting changes metadata without changing last-use order, duplicate favorite requests do not create another record, and the server rejects additions after 16 entries. Selecting any target promotes it through the shared attachment path; renaming does not reorder it. Existing stacks whose three-entry history omits older favorites append those favorites after known last-used entries.
 
-Alternative considered: keep one list with recent/favorite flags. Rejected because trimming recent history would either delete favorites or require extra retention rules, while two small lists directly match the UI sections.
+Alternative considered: store timestamps on each target. Rejected because one bounded order list plus favorite metadata directly represents the required ordering without clock data or migration.
 
 ### Open a non-container screen only while detached
 
-A normal right-click on air with no active mode opens a client `Screen` through the existing loader-neutral client platform. The screen reads the held stack's recent and favorite NBT and displays two sections. Default rows show the translated target block name, dimension, and coordinates. A named favorite displays only its custom name, as requested.
+A normal right-click on air with no active mode opens a client `Screen` through the existing loader-neutral client platform. The screen reads the held stack's history and favorite NBT and displays one last-used list. Default rows show the translated target block name, dimension, and coordinates. A named favorite displays only its custom name with a golden outline.
 
 Each row provides immediate selection. Non-favorite recent rows provide a favorite action, while favorite rows provide an edit action that opens a focused child screen for renaming or removing the favorite. Submitting an empty name removes the custom name and restores the default label; non-empty names are limited to 64 characters. The screen remains non-pausing and closes after a successful selection.
 

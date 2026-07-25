@@ -1,6 +1,6 @@
 ## 1. Target Data And Attachment
 
-- [x] 1.1 Add bounded NBT serialization and parsing for target records, three-entry unique MRU history, 16-entry newest-first favorites, and optional 64-character favorite names.
+- [x] 1.1 Add bounded NBT serialization and parsing for target records, a last-used history containing all favorites plus three non-favorites, a 16-favorite limit, and optional 64-character favorite names.
 - [x] 1.2 Record recent targets in the shared active-mode save path while preserving history and favorites during detach.
 - [x] 1.3 Add item mutation helpers for favorite toggle, rename/reset, and validated reattachment using current dimension, loaded position, and registered block mode.
 
@@ -13,8 +13,8 @@
 ## 3. Target Menu
 
 - [x] 3.1 Add the loader-neutral client platform hook and non-pausing screen entry for the held detached configurator.
-- [x] 3.2 Implement separate recent and newest-first favorite sections with multi-row pagination or clipping, default block/dimension/coordinate labels, and custom-name-only favorite labels.
-- [x] 3.3 Implement immediate row selection, recent-row favorite actions, and a favorite edit screen with rename/reset/removal controls, a 64-character client limit, and server-authoritative refresh/close behavior.
+- [x] 3.2 Implement one last-used target list with multi-row pagination, default block/dimension/coordinate labels, and golden-outlined custom-name-only favorite labels.
+- [x] 3.3 Implement immediate row selection, non-favorite Favorite actions, favorite Edit actions, and a favorite edit screen with rename/reset/removal controls, a 64-character client limit, and server-authoritative refresh/close behavior.
 - [x] 3.4 Add English and Ukrainian localization source entries for the screen, controls, empty states, and mutation feedback, then regenerate loader resources.
 
 ## 4. Verification

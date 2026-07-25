@@ -33,6 +33,7 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         const val FAVORITE_TARGETS = "favoriteTargets"
         const val MAX_RECENT_TARGETS = 3
         const val MAX_FAVORITE_TARGETS = 16
+        const val MAX_TARGET_HISTORY = MAX_RECENT_TARGETS + MAX_FAVORITE_TARGETS
         fun isActiveModeDimension(stack: ItemStack, level: Level): Boolean = stack.tag?.getString(ACTIVE_MOD_DIMENSION) == level.dimension().location().toString()
     }
 
@@ -68,9 +69,23 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         )
     }
 
-    fun getRecentTargets(stack: ItemStack): List<ConfiguratorTarget> = readTargets(stack, RECENT_TARGETS, MAX_RECENT_TARGETS)
-
     fun getFavoriteTargets(stack: ItemStack): List<ConfiguratorTarget> = readTargets(stack, FAVORITE_TARGETS, MAX_FAVORITE_TARGETS)
+
+    private fun getStoredHistory(stack: ItemStack): List<ConfiguratorTarget> = readTargets(stack, RECENT_TARGETS, MAX_TARGET_HISTORY)
+
+    fun getTargetHistory(stack: ItemStack): List<ConfiguratorTarget> {
+        val favorites = getFavoriteTargets(stack)
+        val history = getStoredHistory(stack)
+        var nonFavorites = 0
+        return (history + favorites.filter { favorite -> history.none(favorite::matches) }).mapNotNull { target ->
+            favorites.firstOrNull(target::matches) ?: target.takeIf { nonFavorites++ < MAX_RECENT_TARGETS }
+        }
+    }
+
+    fun getRecentTargets(stack: ItemStack): List<ConfiguratorTarget> {
+        val favorites = getFavoriteTargets(stack)
+        return getStoredHistory(stack).filter { target -> favorites.none(target::matches) }.take(MAX_RECENT_TARGETS)
+    }
 
     private fun readTargets(stack: ItemStack, key: String, limit: Int): List<ConfiguratorTarget> {
         val list = stack.tag?.getList(key, Tag.TAG_COMPOUND.toInt()) ?: return emptyList()
@@ -89,6 +104,17 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         stack.orCreateTag.put(key, list)
     }
 
+    private fun writeHistory(stack: ItemStack, targets: List<ConfiguratorTarget>, favorites: List<ConfiguratorTarget>) {
+        var nonFavorites = 0
+        val complete = targets + favorites.filter { favorite -> targets.none(favorite::matches) }
+        writeTargets(
+            stack,
+            RECENT_TARGETS,
+            complete.filter { target -> favorites.any(target::matches) || nonFavorites++ < MAX_RECENT_TARGETS },
+            MAX_TARGET_HISTORY,
+        )
+    }
+
     fun saveActiveMode(stack: ItemStack, mode: ConfigurationMode, targetBlock: BlockPos, level: Level) {
         getActiveMode(stack)?.first?.clearData(stack)
         val data = stack.orCreateTag
@@ -96,7 +122,9 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         data.put(ACTIVE_MOD_POS, NbtUtils.writeBlockPos(targetBlock))
         data.putString(ACTIVE_MOD_DIMENSION, level.dimension().location().toString())
         val target = ConfiguratorTarget(mode.modeID, level.dimension().location(), targetBlock)
-        writeTargets(stack, RECENT_TARGETS, listOf(target) + getRecentTargets(stack).filterNot(target::matches), MAX_RECENT_TARGETS)
+        val favorites = getFavoriteTargets(stack).map { if (it.matches(target)) it.copy(modeID = target.modeID) else it }
+        writeTargets(stack, FAVORITE_TARGETS, favorites, MAX_FAVORITE_TARGETS)
+        writeHistory(stack, listOf(target) + getStoredHistory(stack).filterNot(target::matches), favorites)
     }
 
     fun clearActiveMode(stack: ItemStack): ItemStack {
@@ -109,14 +137,18 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
     }
 
     fun toggleFavorite(stack: ItemStack, target: ConfiguratorTarget): FavoriteResult {
-        val stored = (getRecentTargets(stack) + getFavoriteTargets(stack)).firstOrNull(target::matches) ?: return FavoriteResult.REJECTED
+        val stored = getTargetHistory(stack).firstOrNull(target::matches) ?: return FavoriteResult.REJECTED
         val favorites = getFavoriteTargets(stack)
         if (favorites.any(target::matches)) {
-            writeTargets(stack, FAVORITE_TARGETS, favorites.filterNot(target::matches), MAX_FAVORITE_TARGETS)
+            val updated = favorites.filterNot(target::matches)
+            writeTargets(stack, FAVORITE_TARGETS, updated, MAX_FAVORITE_TARGETS)
+            writeHistory(stack, getStoredHistory(stack), updated)
             return FavoriteResult.REMOVED
         }
         if (favorites.size >= MAX_FAVORITE_TARGETS) return FavoriteResult.LIMIT
-        writeTargets(stack, FAVORITE_TARGETS, listOf(stored.copy(name = null)) + favorites, MAX_FAVORITE_TARGETS)
+        val updated = listOf(stored.copy(name = null)) + favorites
+        writeTargets(stack, FAVORITE_TARGETS, updated, MAX_FAVORITE_TARGETS)
+        writeHistory(stack, getStoredHistory(stack), updated)
         return FavoriteResult.ADDED
     }
 
@@ -129,7 +161,7 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
     }
 
     fun selectTarget(stack: ItemStack, level: Level, target: ConfiguratorTarget): SelectionResult {
-        val stored = (getRecentTargets(stack) + getFavoriteTargets(stack)).firstOrNull(target::matches) ?: return SelectionResult.REJECTED
+        val stored = getTargetHistory(stack).firstOrNull(target::matches) ?: return SelectionResult.REJECTED
         if (stored.dimensionID != level.dimension().location() || !level.isLoaded(stored.pos)) return SelectionResult.UNAVAILABLE
         val mode = ConfiguratorModeRegistry.get(level.getBlockState(stored.pos))
         if (mode?.modeID != stored.modeID) return SelectionResult.UNAVAILABLE

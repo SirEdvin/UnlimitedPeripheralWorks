@@ -206,7 +206,8 @@ class PeripheralWorksGameTests {
         check(configurator.toggleFavorite(stack, recent.first()) == UltimateConfigurator.FavoriteResult.ADDED)
         configurator.clearActiveMode(stack)
         check(configurator.getActiveMode(stack) == null)
-        check(configurator.getRecentTargets(stack) == recent)
+        check(configurator.getTargetHistory(stack) == recent)
+        check(configurator.getRecentTargets(stack) == recent.drop(1))
         check(configurator.getFavoriteTargets(stack).single().matches(recent.first()))
         helper.succeed()
     }
@@ -222,9 +223,14 @@ class PeripheralWorksGameTests {
         val favorites = configurator.getFavoriteTargets(stack)
         check(favorites.size == UltimateConfigurator.MAX_FAVORITE_TARGETS)
         check(favorites.first().pos == helper.absolutePos(BlockPos(16, 1, 1)))
+        check(configurator.getTargetHistory(stack).map { it.pos } == (16 downTo 1).map { helper.absolutePos(BlockPos(it, 1, 1)) })
+
+        configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(BlockPos(1, 1, 1)), helper.level)
+        check(configurator.getTargetHistory(stack).first().pos == helper.absolutePos(BlockPos(1, 1, 1)))
 
         configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(BlockPos(17, 1, 1)), helper.level)
         check(configurator.toggleFavorite(stack, configurator.getRecentTargets(stack).first()) == UltimateConfigurator.FavoriteResult.LIMIT)
+        check(configurator.getTargetHistory(stack).size == UltimateConfigurator.MAX_FAVORITE_TARGETS + 1)
         val target = favorites.first()
         val validName = "n".repeat(ConfiguratorTarget.MAX_NAME_LENGTH)
         check(configurator.renameFavorite(stack, target, validName))

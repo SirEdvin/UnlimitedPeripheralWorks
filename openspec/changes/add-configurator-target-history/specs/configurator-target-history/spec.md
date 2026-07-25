@@ -1,14 +1,14 @@
 ## ADDED Requirements
 
-### Requirement: Recent target history
-The Ultimate Configurator SHALL persist the three most recently attached distinct targets in its own NBT. Each target SHALL include its configuration type, dimension, and block coordinates, and target identity SHALL be determined by dimension and coordinates.
+### Requirement: Target history
+The Ultimate Configurator SHALL persist one last-used target order containing every favorite and the three most recently attached distinct non-favorites. Each target SHALL include its configuration type, dimension, and block coordinates, and target identity SHALL be determined by dimension and coordinates.
 
 #### Scenario: Attach a new target
-- **WHEN** a player attaches the configurator to a configurable block not already in its recent history
-- **THEN** the system stores that target first and retains at most the three newest distinct targets
+- **WHEN** a player attaches the configurator to a configurable block not already in its history
+- **THEN** the system stores that target first and retains every favorite plus at most the three newest distinct non-favorites
 
-#### Scenario: Reattach a recent target
-- **WHEN** a player attaches the configurator to a dimension and coordinates already in its recent history
+#### Scenario: Reattach a stored target
+- **WHEN** a player attaches the configurator to a dimension and coordinates already in its history
 - **THEN** the system updates the stored configuration type, moves that target to the first position, and does not create a duplicate
 
 #### Scenario: Detach the configurator
@@ -16,26 +16,26 @@ The Ultimate Configurator SHALL persist the three most recently attached distinc
 - **THEN** the system clears its active binding without clearing recent targets or favorites
 
 ### Requirement: Detached target menu
-The system SHALL open a non-pausing native target menu when a player right-clicks air with a detached main-hand Ultimate Configurator. The menu SHALL display separate recent and favorite sections from that configurator's NBT.
+The system SHALL open a non-pausing native target menu when a player right-clicks air with a detached main-hand Ultimate Configurator. The menu SHALL display one list containing all favorites and the three latest non-favorites, ordered by last use.
 
 #### Scenario: Open detached configurator menu
 - **WHEN** a player normally right-clicks air with a detached Ultimate Configurator in the main hand
-- **THEN** the system opens the target menu and displays the configurator's stored recent targets and favorites
+- **THEN** the system opens the target menu and displays the configurator's stored targets in last-used order
 
 #### Scenario: Use an attached configurator on air
 - **WHEN** a player normally right-clicks air with an attached Ultimate Configurator
 - **THEN** the system preserves the active configuration mode's existing air-use behavior instead of opening the target menu
 
 #### Scenario: Empty history
-- **WHEN** the target menu opens for a configurator with no recent targets or favorites
-- **THEN** the system displays both sections as empty without creating records
+- **WHEN** the target menu opens for a configurator with no stored targets
+- **THEN** the system displays the list as empty without creating records
 
 ### Requirement: Favorite target management
-The target menu SHALL allow non-favorite recent targets to be favorited and favorite targets to be edited or removed from the favorite section. Each Ultimate Configurator SHALL persist no more than 16 distinct favorites, ordered by most recent favorite action.
+The target menu SHALL show a favorite action for non-favorites and an edit action for favorites. Each Ultimate Configurator SHALL persist no more than 16 distinct favorites while preserving last-use ordering in the combined target list.
 
 #### Scenario: Favorite a recent target
 - **WHEN** a player favorites a recent target and fewer than 16 favorites exist
-- **THEN** the system stores it first in the favorite list without removing it from recent history
+- **THEN** the system marks it as a favorite without changing its last-used position
 
 #### Scenario: Favorite an existing favorite
 - **WHEN** a duplicate favorite action references a target already in the favorite list
@@ -47,14 +47,16 @@ The target menu SHALL allow non-favorite recent targets to be favorited and favo
 
 #### Scenario: Unfavorite a target
 - **WHEN** a player removes a target from favorites
-- **THEN** the system removes only its favorite record and leaves any recent-history record intact
+- **THEN** the system removes its favorite record and retains it only if it remains among the three latest non-favorites
 
 #### Scenario: Select or rename a favorite
-- **WHEN** a player selects or renames an existing favorite
-- **THEN** the system preserves its position in the favorite list
+- **WHEN** a player selects an existing favorite
+- **THEN** the system promotes it to the first last-used position
+- **WHEN** a player only renames an existing favorite
+- **THEN** the system preserves its last-used position
 
 ### Requirement: Favorite target names
-The target menu SHALL allow a player to open a favorite editor and assign a custom name of at most 64 characters. A named favorite SHALL display only its custom name; an unnamed target SHALL display its translated block name, dimension, and coordinates.
+The target menu SHALL allow a player to open a favorite editor and assign a custom name of at most 64 characters. A named favorite SHALL display only its custom name with a golden outline; an unnamed target SHALL display its translated block name, dimension, and coordinates.
 
 #### Scenario: Rename a favorite
 - **WHEN** a player submits a non-empty valid custom name for a favorite
@@ -73,7 +75,7 @@ The target menu SHALL allow a player to open a favorite editor and assign a cust
 - **THEN** the server rejects the mutation
 
 ### Requirement: Validated target selection
-Selecting a recent or favorite row SHALL immediately reattach the configurator and close the menu only when the target is in the player's current dimension, its position is loaded, and its current block state supports the stored configuration type.
+Selecting a stored target row SHALL immediately reattach the configurator and close the menu only when the target is in the player's current dimension, its position is loaded, and its current block state supports the stored configuration type.
 
 #### Scenario: Select a valid target
 - **WHEN** a player selects a stored target in the current dimension whose loaded block still supports its stored configuration type
