@@ -14,6 +14,7 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Pose
 import net.minecraft.world.item.ItemStack
+import site.siredvin.peripheralworks.client.configurator.ConfiguratorFavoriteEditScreen
 import site.siredvin.peripheralworks.client.configurator.ConfiguratorTargetHistoryScreen
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerColorPickerScreen
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerScreen
@@ -52,6 +53,10 @@ class NetworkManagerClientGameTests {
                 val proxyTarget = configurator.getRecentTargets(stack).first()
                 check(configurator.toggleFavorite(stack, proxyTarget) == UltimateConfigurator.FavoriteResult.ADDED)
                 check(configurator.renameFavorite(stack, proxyTarget, "Workshop Proxy"))
+                repeat(3) { index ->
+                    configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(BlockPos(5 + index, 1, 1)), helper.level)
+                    check(configurator.toggleFavorite(stack, configurator.getRecentTargets(stack).first()) == UltimateConfigurator.FavoriteResult.ADDED)
+                }
                 configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(observerPos), helper.level)
                 configurator.clearActiveMode(stack)
                 player(helper).setItemInHand(InteractionHand.MAIN_HAND, stack)
@@ -63,25 +68,28 @@ class NetworkManagerClientGameTests {
                 minecraft.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
                 val screen = minecraft.screen as? ConfiguratorTargetHistoryScreen ?: error("Detached configurator target screen did not open")
                 val labels = screen.children().filterIsInstance<Button>().map { it.message.string }
-                val observerLabel = targetLabel(RemoteObserverMode.description.string, helper.absolutePos(observerPos))
-                val proxyLabel = targetLabel(PeripheralProxyMode.description.string, helper.absolutePos(proxyPos))
-                check(observerLabel in labels && proxyLabel in labels) { "Recent targets did not render their type, dimension, and coordinates: $labels" }
+                val observerLabel = targetLabel(Blocks.REMOTE_OBSERVER.get().name.string, helper.absolutePos(observerPos))
+                check(observerLabel in labels) { "Recent target did not render its block name, dimension, and coordinates: $labels" }
                 check("Workshop Proxy" in labels && labels.none { it.startsWith("Workshop Proxy |") }) { "Custom favorite name did not hide its default label" }
-                check(ModText.CONFIGURATOR_HISTORY_UNFAVORITE.text.string in labels) { "Named favorite was not recognized by target identity" }
+                check(screen.children().filterIsInstance<Button>().count { it.message == ModText.CONFIGURATOR_HISTORY_EDIT.text } == 4) { "Favorite page did not display four rows" }
+                check(editBoxes(screen).isEmpty()) { "Favorite rows still contain inline name fields" }
+                check(ModText.CONFIGURATOR_HISTORY_UNFAVORITE.text.string !in labels) { "Recent rows still allow removing favorites" }
                 click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_FAVORITE.text.string))
             }
             .thenWaitUntil {
                 val configurator = player(helper).mainHandItem.item as UltimateConfigurator
-                if (configurator.getFavoriteTargets(player(helper).mainHandItem).size != 2) retry("Favorite toggle has not synchronized")
+                if (configurator.getFavoriteTargets(player(helper).mainHandItem).size != 5) retry("Favorite toggle has not synchronized")
             }
             .thenIdle(3)
             .thenOnClient {
                 val screen = minecraft.screen as? ConfiguratorTargetHistoryScreen ?: error("Target screen closed after favorite toggle")
-                val name = editBoxes(screen).first()
+                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_EDIT.text.string))
+                val editor = minecraft.screen as? ConfiguratorFavoriteEditScreen ?: error("Favorite editor did not open")
+                val name = editBoxes(editor).single()
                 name.setValue("n".repeat(65))
                 check(name.value.length == 64) { "Favorite name field did not enforce the 64-character limit" }
                 name.setValue("Roof Observer")
-                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_APPLY.text.string))
+                click(editor, button(editor, ModText.CONFIGURATOR_HISTORY_APPLY.text.string))
             }
             .thenWaitUntil {
                 val configurator = player(helper).mainHandItem.item as UltimateConfigurator
@@ -90,7 +98,10 @@ class NetworkManagerClientGameTests {
             .thenIdle(3)
             .thenOnClient {
                 val screen = minecraft.screen as ConfiguratorTargetHistoryScreen
-                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_RESET.text.string))
+                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_EDIT.text.string))
+                val editor = minecraft.screen as ConfiguratorFavoriteEditScreen
+                editBoxes(editor).single().setValue("")
+                click(editor, button(editor, ModText.CONFIGURATOR_HISTORY_APPLY.text.string))
             }
             .thenWaitUntil {
                 val configurator = player(helper).mainHandItem.item as UltimateConfigurator
@@ -99,7 +110,18 @@ class NetworkManagerClientGameTests {
             .thenIdle(3)
             .thenOnClient {
                 val screen = minecraft.screen as ConfiguratorTargetHistoryScreen
-                click(screen, button(screen, targetLabel(RemoteObserverMode.description.string, helper.absolutePos(observerPos))))
+                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_EDIT.text.string))
+                val editor = minecraft.screen as ConfiguratorFavoriteEditScreen
+                click(editor, button(editor, ModText.CONFIGURATOR_HISTORY_UNFAVORITE.text.string))
+            }
+            .thenWaitUntil {
+                val configurator = player(helper).mainHandItem.item as UltimateConfigurator
+                if (configurator.getFavoriteTargets(player(helper).mainHandItem).size != 4) retry("Removing the favorite has not synchronized")
+            }
+            .thenIdle(3)
+            .thenOnClient {
+                val screen = minecraft.screen as ConfiguratorTargetHistoryScreen
+                click(screen, button(screen, targetLabel(Blocks.REMOTE_OBSERVER.get().name.string, helper.absolutePos(observerPos))))
             }
             .thenWaitUntil {
                 val configurator = player(helper).mainHandItem.item as UltimateConfigurator

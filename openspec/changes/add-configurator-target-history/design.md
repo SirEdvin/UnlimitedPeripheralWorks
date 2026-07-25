@@ -32,9 +32,9 @@ Alternative considered: keep one list with recent/favorite flags. Rejected becau
 
 ### Open a non-container screen only while detached
 
-A normal right-click on air with no active mode opens a client `Screen` through the existing loader-neutral client platform. The screen reads the held stack's recent and favorite NBT and displays two sections. Default rows show the translated configuration type, dimension, and coordinates. A named favorite displays only its custom name, as requested.
+A normal right-click on air with no active mode opens a client `Screen` through the existing loader-neutral client platform. The screen reads the held stack's recent and favorite NBT and displays two sections. Default rows show the translated target block name, dimension, and coordinates. A named favorite displays only its custom name, as requested.
 
-Each row provides immediate selection and a favorite toggle. Favorite rows additionally provide inline rename editing. Submitting an empty name removes the custom name and restores the default label; non-empty names are limited to 64 characters. The screen remains non-pausing and closes after a successful selection.
+Each row provides immediate selection. Non-favorite recent rows provide a favorite action, while favorite rows provide an edit action that opens a focused child screen for renaming or removing the favorite. Submitting an empty name removes the custom name and restores the default label; non-empty names are limited to 64 characters. The screen remains non-pausing and closes after a successful selection.
 
 Alternative considered: add a `Menu` and synchronized container. Rejected because no inventory slots or continuously authoritative world data are involved; normal item synchronization and explicit mutations are smaller.
 

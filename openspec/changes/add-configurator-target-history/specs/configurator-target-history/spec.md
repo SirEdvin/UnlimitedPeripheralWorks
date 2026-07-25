@@ -31,7 +31,7 @@ The system SHALL open a non-pausing native target menu when a player right-click
 - **THEN** the system displays both sections as empty without creating records
 
 ### Requirement: Favorite target management
-The target menu SHALL allow targets shown in either section to be favorited or unfavorited. Each Ultimate Configurator SHALL persist no more than 16 distinct favorites, ordered by most recent favorite action.
+The target menu SHALL allow non-favorite recent targets to be favorited and favorite targets to be edited or removed from the favorite section. Each Ultimate Configurator SHALL persist no more than 16 distinct favorites, ordered by most recent favorite action.
 
 #### Scenario: Favorite a recent target
 - **WHEN** a player favorites a recent target and fewer than 16 favorites exist
@@ -54,7 +54,7 @@ The target menu SHALL allow targets shown in either section to be favorited or u
 - **THEN** the system preserves its position in the favorite list
 
 ### Requirement: Favorite target names
-The target menu SHALL allow a player to assign a custom name of at most 64 characters to a favorite. A named favorite SHALL display only its custom name; an unnamed target SHALL display its translated configuration type, dimension, and coordinates.
+The target menu SHALL allow a player to open a favorite editor and assign a custom name of at most 64 characters. A named favorite SHALL display only its custom name; an unnamed target SHALL display its translated block name, dimension, and coordinates.
 
 #### Scenario: Rename a favorite
 - **WHEN** a player submits a non-empty valid custom name for a favorite

@@ -13,8 +13,8 @@
 ## 3. Target Menu
 
 - [x] 3.1 Add the loader-neutral client platform hook and non-pausing screen entry for the held detached configurator.
-- [x] 3.2 Implement separate recent and newest-first favorite sections with scrolling or clipping, default type/dimension/coordinate labels, and custom-name-only favorite labels.
-- [x] 3.3 Implement immediate row selection, favorite toggles, and inline favorite rename/reset controls with a 64-character client limit and server-authoritative refresh/close behavior.
+- [x] 3.2 Implement separate recent and newest-first favorite sections with multi-row pagination or clipping, default block/dimension/coordinate labels, and custom-name-only favorite labels.
+- [x] 3.3 Implement immediate row selection, recent-row favorite actions, and a favorite edit screen with rename/reset/removal controls, a 64-character client limit, and server-authoritative refresh/close behavior.
 - [x] 3.4 Add English and Ukrainian localization source entries for the screen, controls, empty states, and mutation feedback, then regenerate loader resources.
 
 ## 4. Verification
