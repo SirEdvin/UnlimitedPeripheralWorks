@@ -36,6 +36,13 @@ object NetworkMessages {
         ::TargetRenderStyleMessage,
     )
 
+    val CONFIGURATOR_TARGET_ACTION = registerServerbound(
+        604,
+        "configurator_target_action",
+        ConfiguratorTargetActionMessage::class.java,
+        ::ConfiguratorTargetActionMessage,
+    )
+
     private fun <C, T : NetworkMessage<C>> register(
         messages: MutableList<MessageType<out NetworkMessage<C>>>,
         id: Int,

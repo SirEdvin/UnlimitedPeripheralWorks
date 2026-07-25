@@ -4,12 +4,21 @@ import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
+import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
+import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
+import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorTarget
+import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
+import site.siredvin.peripheralworks.subsystem.configurator.PeripheralProxyMode
+import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
 import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
@@ -176,6 +185,132 @@ class PeripheralWorksGameTests {
             ),
         )
         check(hierarchy.roots.single { it.segment == "a" }.group?.fullName == "a")
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun configuratorRecentTargetsAreUniqueBoundedAndRetained(helper: GameTestHelper) {
+        val configurator = Items.ULTIMATE_CONFIGURATOR.get() as UltimateConfigurator
+        val stack = ItemStack(configurator)
+        val positions = (1..4).map { helper.absolutePos(BlockPos(it, 1, 1)) }
+        configurator.saveActiveMode(stack, RemoteObserverMode, positions[0], helper.level)
+        configurator.saveActiveMode(stack, PeripheralProxyMode, positions[1], helper.level)
+        configurator.saveActiveMode(stack, NetworkManagerMode, positions[2], helper.level)
+        configurator.saveActiveMode(stack, RemoteObserverMode, positions[3], helper.level)
+        check(configurator.getRecentTargets(stack).map { it.pos } == listOf(positions[3], positions[2], positions[1]))
+
+        configurator.saveActiveMode(stack, PeripheralProxyMode, positions[2], helper.level)
+        val recent = configurator.getRecentTargets(stack)
+        check(recent.map { it.pos } == listOf(positions[2], positions[3], positions[1]))
+        check(recent.first().modeID == PeripheralProxyMode.modeID)
+        check(configurator.toggleFavorite(stack, recent.first()) == UltimateConfigurator.FavoriteResult.ADDED)
+        configurator.clearActiveMode(stack)
+        check(configurator.getActiveMode(stack) == null)
+        check(configurator.getTargetHistory(stack) == recent)
+        check(configurator.getRecentTargets(stack) == recent.drop(1))
+        check(configurator.getFavoriteTargets(stack).single().matches(recent.first()))
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun configuratorFavoritesAreOrderedBoundedAndNamed(helper: GameTestHelper) {
+        val configurator = Items.ULTIMATE_CONFIGURATOR.get() as UltimateConfigurator
+        val stack = ItemStack(configurator)
+        repeat(UltimateConfigurator.MAX_FAVORITE_TARGETS) { index ->
+            configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(BlockPos(index + 1, 1, 1)), helper.level)
+            check(configurator.toggleFavorite(stack, configurator.getRecentTargets(stack).first()) == UltimateConfigurator.FavoriteResult.ADDED)
+        }
+        val favorites = configurator.getFavoriteTargets(stack)
+        check(favorites.size == UltimateConfigurator.MAX_FAVORITE_TARGETS)
+        check(favorites.first().pos == helper.absolutePos(BlockPos(16, 1, 1)))
+        check(configurator.getTargetHistory(stack).map { it.pos } == (16 downTo 1).map { helper.absolutePos(BlockPos(it, 1, 1)) })
+
+        configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(BlockPos(1, 1, 1)), helper.level)
+        check(configurator.getTargetHistory(stack).first().pos == helper.absolutePos(BlockPos(1, 1, 1)))
+
+        configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(BlockPos(17, 1, 1)), helper.level)
+        check(configurator.toggleFavorite(stack, configurator.getRecentTargets(stack).first()) == UltimateConfigurator.FavoriteResult.LIMIT)
+        check(configurator.getTargetHistory(stack).size == UltimateConfigurator.MAX_FAVORITE_TARGETS + 1)
+        val target = favorites.first()
+        val validName = "n".repeat(ConfiguratorTarget.MAX_NAME_LENGTH)
+        check(configurator.renameFavorite(stack, target, validName))
+        check(!configurator.renameFavorite(stack, target, validName + "n"))
+        check(configurator.getFavoriteTargets(stack).first().name == validName)
+        check(configurator.renameFavorite(stack, target, ""))
+        check(configurator.getFavoriteTargets(stack).first().name == null)
+        check(configurator.setFavoriteColor(stack, target, 0x123456, true))
+        check(configurator.setFavoriteColor(stack, target, 0x654321, false))
+        check(configurator.getFavoriteTargets(stack).first().textColor == 0x123456)
+        check(configurator.getFavoriteTargets(stack).first().boxColor == 0x654321)
+        check(configurator.getFavoriteTextStyle(stack) == TextStyle.REGULAR)
+        check(configurator.getFavoriteBoxStyle(stack) == BoxStyle.OUTLINE)
+        check(configurator.setSettings(stack, "Field Kit", TextStyle.BOLD, BoxStyle.FLARE))
+        check(stack.hoverName.string == "Field Kit")
+        check(configurator.getFavoriteTextStyle(stack) == TextStyle.BOLD)
+        check(configurator.getFavoriteBoxStyle(stack) == BoxStyle.FLARE)
+        check(configurator.toggleFavorite(stack, target) == UltimateConfigurator.FavoriteResult.REMOVED)
+        check(configurator.getFavoriteTargets(stack).size == UltimateConfigurator.MAX_FAVORITE_TARGETS - 1)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun configuratorIgnoresMalformedAndExcessTargets(helper: GameTestHelper) {
+        val configurator = Items.ULTIMATE_CONFIGURATOR.get() as UltimateConfigurator
+        val stack = ItemStack(configurator)
+        val dimension = helper.level.dimension().location()
+        val valid = ConfiguratorTarget(RemoteObserverMode.modeID, dimension, BlockPos(1, 2, 3))
+        stack.orCreateTag.put(
+            UltimateConfigurator.RECENT_TARGETS,
+            ListTag().apply {
+                add(CompoundTag())
+                add(valid.toNBT())
+                add(valid.toNBT())
+                add(ConfiguratorTarget(RemoteObserverMode.modeID, dimension, BlockPos(2, 2, 3)).toNBT().apply { putString("name", "x".repeat(65)) })
+                add(ConfiguratorTarget(RemoteObserverMode.modeID, dimension, BlockPos(3, 2, 3)).toNBT())
+                add(ConfiguratorTarget(RemoteObserverMode.modeID, dimension, BlockPos(4, 2, 3)).toNBT())
+            },
+        )
+        val recent = configurator.getRecentTargets(stack)
+        check(recent.map { it.pos } == listOf(BlockPos(1, 2, 3), BlockPos(2, 2, 3), BlockPos(3, 2, 3)))
+        check(recent[1].name == null)
+
+        stack.orCreateTag.put(
+            UltimateConfigurator.FAVORITE_TARGETS,
+            ListTag().apply {
+                repeat(20) { add(ConfiguratorTarget(RemoteObserverMode.modeID, dimension, BlockPos(it, 1, 1)).toNBT()) }
+            },
+        )
+        check(configurator.getFavoriteTargets(stack).size == UltimateConfigurator.MAX_FAVORITE_TARGETS)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun configuratorSelectionValidatesStoredAndWorldTargets(helper: GameTestHelper) {
+        val configurator = Items.ULTIMATE_CONFIGURATOR.get() as UltimateConfigurator
+        val stack = ItemStack(configurator)
+        val relativePos = BlockPos(1, 1, 1)
+        val pos = helper.absolutePos(relativePos)
+        helper.setBlock(relativePos, Blocks.PERIPHERAL_PROXY.get())
+        configurator.saveActiveMode(stack, PeripheralProxyMode, pos, helper.level)
+        configurator.clearActiveMode(stack)
+        val target = configurator.getRecentTargets(stack).single()
+        check(configurator.selectTarget(stack, helper.level, target) == UltimateConfigurator.SelectionResult.SUCCESS)
+        check(configurator.getActiveMode(stack)?.second == pos)
+
+        configurator.clearActiveMode(stack)
+        helper.setBlock(relativePos, Blocks.REMOTE_OBSERVER.get())
+        check(configurator.selectTarget(stack, helper.level, target) == UltimateConfigurator.SelectionResult.UNAVAILABLE)
+        check(configurator.getActiveMode(stack) == null)
+        check(configurator.selectTarget(stack, helper.level, target.copy(pos = pos.offset(1, 0, 0))) == UltimateConfigurator.SelectionResult.REJECTED)
+
+        val otherDimension = target.copy(dimensionID = ResourceLocation("minecraft", "the_nether"))
+        stack.orCreateTag.put(UltimateConfigurator.RECENT_TARGETS, ListTag().apply { add(otherDimension.toNBT()) })
+        check(configurator.selectTarget(stack, helper.level, otherDimension) == UltimateConfigurator.SelectionResult.UNAVAILABLE)
+
+        val unloaded = target.copy(pos = BlockPos(30_000_000, 1, 30_000_000))
+        stack.orCreateTag.put(UltimateConfigurator.RECENT_TARGETS, ListTag().apply { add(unloaded.toNBT()) })
+        check(!helper.level.isLoaded(unloaded.pos))
+        check(configurator.selectTarget(stack, helper.level, unloaded) == UltimateConfigurator.SelectionResult.UNAVAILABLE)
         helper.succeed()
     }
 

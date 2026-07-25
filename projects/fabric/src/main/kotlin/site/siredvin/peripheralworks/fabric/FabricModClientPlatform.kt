@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.entity.BlockEntityType
+import site.siredvin.peripheralworks.client.configurator.ConfiguratorTargetHistoryScreenEntry
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerScreenEntry
 import site.siredvin.peripheralworks.client.configurator.TargetRenderSettingsScreenEntry
 import site.siredvin.peripheralworks.xplat.ModClientInternalPlatform
@@ -13,6 +14,7 @@ import java.util.function.Supplier
 object FabricModClientPlatform : ModClientInternalPlatform {
     override fun openNetworkManagerScreen(pos: BlockPos) = NetworkManagerScreenEntry.open(pos)
     override fun openTargetRenderSettingsScreen(pos: BlockPos) = TargetRenderSettingsScreenEntry.open(pos)
+    override fun openConfiguratorTargetHistoryScreen() = ConfiguratorTargetHistoryScreenEntry.open()
 
     override fun registerBlockEntityRendererCallback(sup: Supplier<List<Pair<BlockEntityType<BlockEntity>, BlockEntityRendererProvider<BlockEntity>>>>) {
         sup.get().forEach {

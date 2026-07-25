@@ -37,4 +37,6 @@ object ModClientPlatform {
     fun openNetworkManagerScreen(pos: BlockPos) = baseInnerPlatform.openNetworkManagerScreen(pos)
 
     fun openTargetRenderSettingsScreen(pos: BlockPos) = baseInnerPlatform.openTargetRenderSettingsScreen(pos)
+
+    fun openConfiguratorTargetHistoryScreen() = baseInnerPlatform.openConfiguratorTargetHistoryScreen()
 }
