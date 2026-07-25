@@ -10,4 +10,5 @@ interface ModClientInternalPlatform {
     fun registerBlockEntityRendererCallback(sup: Supplier<List<Pair<BlockEntityType<BlockEntity>, BlockEntityRendererProvider<BlockEntity>>>>)
     fun openNetworkManagerScreen(pos: BlockPos)
     fun openTargetRenderSettingsScreen(pos: BlockPos)
+    fun openConfiguratorTargetHistoryScreen()
 }

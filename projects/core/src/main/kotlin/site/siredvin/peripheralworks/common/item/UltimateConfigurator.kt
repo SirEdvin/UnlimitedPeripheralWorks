@@ -1,7 +1,9 @@
 package site.siredvin.peripheralworks.common.item
 
 import net.minecraft.core.BlockPos
+import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtUtils
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionHand
@@ -18,6 +20,8 @@ import site.siredvin.broccolium.modules.base.item.DescriptiveItem
 import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.subsystem.configurator.ConfigurationMode
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorModeRegistry
+import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorTarget
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
 
@@ -25,6 +29,10 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         const val ACTIVE_MOD_NAME = "activeMod"
         const val ACTIVE_MOD_POS = "activeModPos"
         const val ACTIVE_MOD_DIMENSION = "activeModDimension"
+        const val RECENT_TARGETS = "recentTargets"
+        const val FAVORITE_TARGETS = "favoriteTargets"
+        const val MAX_RECENT_TARGETS = 3
+        const val MAX_FAVORITE_TARGETS = 16
         fun isActiveModeDimension(stack: ItemStack, level: Level): Boolean = stack.tag?.getString(ACTIVE_MOD_DIMENSION) == level.dimension().location().toString()
     }
 
@@ -52,23 +60,46 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         if (!data.contains(ACTIVE_MOD_POS)) {
             return null
         }
-        @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
-        val configurationMode = ConfiguratorModeRegistry.get(ResourceLocation(data.getString(ACTIVE_MOD_NAME))) ?: return null
+        val modeID = ResourceLocation.tryParse(data.getString(ACTIVE_MOD_NAME)) ?: return null
+        val configurationMode = ConfiguratorModeRegistry.get(modeID) ?: return null
         return Pair(
             configurationMode,
             NbtUtils.readBlockPos(data.getCompound(ACTIVE_MOD_POS)),
         )
     }
 
-    private fun saveActiveMode(stack: ItemStack, mode: ConfigurationMode, targetBlock: BlockPos, level: Level) {
+    fun getRecentTargets(stack: ItemStack): List<ConfiguratorTarget> = readTargets(stack, RECENT_TARGETS, MAX_RECENT_TARGETS)
+
+    fun getFavoriteTargets(stack: ItemStack): List<ConfiguratorTarget> = readTargets(stack, FAVORITE_TARGETS, MAX_FAVORITE_TARGETS)
+
+    private fun readTargets(stack: ItemStack, key: String, limit: Int): List<ConfiguratorTarget> {
+        val list = stack.tag?.getList(key, Tag.TAG_COMPOUND.toInt()) ?: return emptyList()
+        return buildList {
+            for (index in 0 until list.size) {
+                val target = ConfiguratorTarget.fromNBT(list.getCompound(index)) ?: continue
+                if (none(target::matches)) add(target)
+                if (size == limit) break
+            }
+        }
+    }
+
+    private fun writeTargets(stack: ItemStack, key: String, targets: List<ConfiguratorTarget>, limit: Int) {
+        val list = ListTag()
+        targets.distinctBy { it.dimensionID to it.pos }.take(limit).forEach { list.add(it.toNBT()) }
+        stack.orCreateTag.put(key, list)
+    }
+
+    fun saveActiveMode(stack: ItemStack, mode: ConfigurationMode, targetBlock: BlockPos, level: Level) {
         getActiveMode(stack)?.first?.clearData(stack)
         val data = stack.orCreateTag
         data.putString(ACTIVE_MOD_NAME, mode.modeID.toString())
         data.put(ACTIVE_MOD_POS, NbtUtils.writeBlockPos(targetBlock))
         data.putString(ACTIVE_MOD_DIMENSION, level.dimension().location().toString())
+        val target = ConfiguratorTarget(mode.modeID, level.dimension().location(), targetBlock)
+        writeTargets(stack, RECENT_TARGETS, listOf(target) + getRecentTargets(stack).filterNot(target::matches), MAX_RECENT_TARGETS)
     }
 
-    private fun clearActiveMode(stack: ItemStack): ItemStack {
+    fun clearActiveMode(stack: ItemStack): ItemStack {
         val data = stack.tag ?: return stack
         getActiveMode(stack)?.first?.clearData(stack)
         data.remove(ACTIVE_MOD_NAME)
@@ -76,6 +107,38 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
         data.remove(ACTIVE_MOD_DIMENSION)
         return stack
     }
+
+    fun toggleFavorite(stack: ItemStack, target: ConfiguratorTarget): FavoriteResult {
+        val stored = (getRecentTargets(stack) + getFavoriteTargets(stack)).firstOrNull(target::matches) ?: return FavoriteResult.REJECTED
+        val favorites = getFavoriteTargets(stack)
+        if (favorites.any(target::matches)) {
+            writeTargets(stack, FAVORITE_TARGETS, favorites.filterNot(target::matches), MAX_FAVORITE_TARGETS)
+            return FavoriteResult.REMOVED
+        }
+        if (favorites.size >= MAX_FAVORITE_TARGETS) return FavoriteResult.LIMIT
+        writeTargets(stack, FAVORITE_TARGETS, listOf(stored.copy(name = null)) + favorites, MAX_FAVORITE_TARGETS)
+        return FavoriteResult.ADDED
+    }
+
+    fun renameFavorite(stack: ItemStack, target: ConfiguratorTarget, name: String): Boolean {
+        if (name.length > ConfiguratorTarget.MAX_NAME_LENGTH) return false
+        val favorites = getFavoriteTargets(stack)
+        if (favorites.none(target::matches)) return false
+        writeTargets(stack, FAVORITE_TARGETS, favorites.map { if (it.matches(target)) it.copy(name = name.ifEmpty { null }) else it }, MAX_FAVORITE_TARGETS)
+        return true
+    }
+
+    fun selectTarget(stack: ItemStack, level: Level, target: ConfiguratorTarget): SelectionResult {
+        val stored = (getRecentTargets(stack) + getFavoriteTargets(stack)).firstOrNull(target::matches) ?: return SelectionResult.REJECTED
+        if (stored.dimensionID != level.dimension().location() || !level.isLoaded(stored.pos)) return SelectionResult.UNAVAILABLE
+        val mode = ConfiguratorModeRegistry.get(level.getBlockState(stored.pos))
+        if (mode?.modeID != stored.modeID) return SelectionResult.UNAVAILABLE
+        saveActiveMode(stack, mode, stored.pos, level)
+        return SelectionResult.SUCCESS
+    }
+
+    enum class FavoriteResult { ADDED, REMOVED, LIMIT, REJECTED }
+    enum class SelectionResult { SUCCESS, UNAVAILABLE, REJECTED }
 
     private fun tryActivateMode(stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
         if (player.pose == Pose.CROUCHING) {
@@ -103,7 +166,11 @@ class UltimateConfigurator : DescriptiveItem(Properties().stacksTo(1)) {
             if (player.pose == Pose.CROUCHING) {
                 InteractionResultHolder.consume(clearActiveMode(itemStack))
             } else {
-                val activeModePair = getActiveMode(itemStack) ?: return InteractionResultHolder.pass(itemStack)
+                val activeModePair = getActiveMode(itemStack)
+                if (activeModePair == null) {
+                    if (level.isClientSide) ModClientPlatform.openConfiguratorTargetHistoryScreen()
+                    return InteractionResultHolder.consume(itemStack)
+                }
                 return activeModePair.first.onBlockMiss(activeModePair.second, itemStack, player, level)
             }
         } else {

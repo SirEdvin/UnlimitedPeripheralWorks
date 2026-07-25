@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.testmod
 
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.components.AbstractSliderButton
 import net.minecraft.client.gui.components.AbstractWidget
 import net.minecraft.client.gui.components.Button
@@ -13,6 +14,7 @@ import net.minecraft.network.chat.CommonComponents
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Pose
 import net.minecraft.world.item.ItemStack
+import site.siredvin.peripheralworks.client.configurator.ConfiguratorTargetHistoryScreen
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerColorPickerScreen
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerScreen
 import site.siredvin.peripheralworks.client.configurator.TargetRenderSettingsScreen
@@ -36,6 +38,85 @@ import java.io.File
 
 @TestGroup("network-manager-client")
 class NetworkManagerClientGameTests {
+    @ClientGameTest(template = "empty", timeoutTicks = 600)
+    fun managesDetachedConfiguratorTargetsAndPreservesAttachedUse(helper: GameTestHelper) {
+        val proxyPos = BlockPos(1, 1, 1)
+        val observerPos = BlockPos(3, 1, 1)
+        helper.startSequence()
+            .thenExecute {
+                helper.setBlock(proxyPos, Blocks.PERIPHERAL_PROXY.get())
+                helper.setBlock(observerPos, Blocks.REMOTE_OBSERVER.get())
+                val configurator = Items.ULTIMATE_CONFIGURATOR.get() as UltimateConfigurator
+                val stack = ItemStack(configurator)
+                configurator.saveActiveMode(stack, PeripheralProxyMode, helper.absolutePos(proxyPos), helper.level)
+                val proxyTarget = configurator.getRecentTargets(stack).first()
+                check(configurator.toggleFavorite(stack, proxyTarget) == UltimateConfigurator.FavoriteResult.ADDED)
+                check(configurator.renameFavorite(stack, proxyTarget, "Workshop Proxy"))
+                configurator.saveActiveMode(stack, RemoteObserverMode, helper.absolutePos(observerPos), helper.level)
+                configurator.clearActiveMode(stack)
+                player(helper).setItemInHand(InteractionHand.MAIN_HAND, stack)
+            }
+            .thenIdle(5)
+            .thenOnClient {
+                val player = minecraft.player ?: error("Client player is missing")
+                player.xRot = -90f
+                minecraft.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
+                val screen = minecraft.screen as? ConfiguratorTargetHistoryScreen ?: error("Detached configurator target screen did not open")
+                val labels = screen.children().filterIsInstance<Button>().map { it.message.string }
+                val observerLabel = targetLabel(RemoteObserverMode.description.string, helper.absolutePos(observerPos))
+                val proxyLabel = targetLabel(PeripheralProxyMode.description.string, helper.absolutePos(proxyPos))
+                check(observerLabel in labels && proxyLabel in labels) { "Recent targets did not render their type, dimension, and coordinates: $labels" }
+                check("Workshop Proxy" in labels && labels.none { it.startsWith("Workshop Proxy |") }) { "Custom favorite name did not hide its default label" }
+                check(ModText.CONFIGURATOR_HISTORY_UNFAVORITE.text.string in labels) { "Named favorite was not recognized by target identity" }
+                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_FAVORITE.text.string))
+            }
+            .thenWaitUntil {
+                val configurator = player(helper).mainHandItem.item as UltimateConfigurator
+                if (configurator.getFavoriteTargets(player(helper).mainHandItem).size != 2) retry("Favorite toggle has not synchronized")
+            }
+            .thenIdle(3)
+            .thenOnClient {
+                val screen = minecraft.screen as? ConfiguratorTargetHistoryScreen ?: error("Target screen closed after favorite toggle")
+                val name = editBoxes(screen).first()
+                name.setValue("n".repeat(65))
+                check(name.value.length == 64) { "Favorite name field did not enforce the 64-character limit" }
+                name.setValue("Roof Observer")
+                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_APPLY.text.string))
+            }
+            .thenWaitUntil {
+                val configurator = player(helper).mainHandItem.item as UltimateConfigurator
+                if (configurator.getFavoriteTargets(player(helper).mainHandItem).first().name != "Roof Observer") retry("Favorite rename has not synchronized")
+            }
+            .thenIdle(3)
+            .thenOnClient {
+                val screen = minecraft.screen as ConfiguratorTargetHistoryScreen
+                click(screen, button(screen, ModText.CONFIGURATOR_HISTORY_RESET.text.string))
+            }
+            .thenWaitUntil {
+                val configurator = player(helper).mainHandItem.item as UltimateConfigurator
+                if (configurator.getFavoriteTargets(player(helper).mainHandItem).first().name != null) retry("Favorite name reset has not synchronized")
+            }
+            .thenIdle(3)
+            .thenOnClient {
+                val screen = minecraft.screen as ConfiguratorTargetHistoryScreen
+                click(screen, button(screen, targetLabel(RemoteObserverMode.description.string, helper.absolutePos(observerPos))))
+            }
+            .thenWaitUntil {
+                val configurator = player(helper).mainHandItem.item as UltimateConfigurator
+                if (configurator.getActiveMode(player(helper).mainHandItem)?.second != helper.absolutePos(observerPos)) retry("Target selection has not attached the configurator")
+            }
+            .thenIdle(5)
+            .thenOnClient {
+                check(minecraft.screen !is ConfiguratorTargetHistoryScreen) { "Target screen did not close after successful selection" }
+                val player = minecraft.player ?: error("Client player is missing")
+                player.xRot = -90f
+                minecraft.gameMode!!.useItem(player, InteractionHand.MAIN_HAND)
+                check(minecraft.screen is TargetRenderSettingsScreen) { "Attached mode air use did not retain precedence" }
+                minecraft.setScreen(null)
+            }
+            .thenSucceed()
+    }
+
     @ClientGameTest(template = "empty", timeoutTicks = 400)
     fun configuresProxyAndObserverTargetRendering(helper: GameTestHelper) {
         val proxyPos = BlockPos(1, 1, 1)
@@ -263,6 +344,10 @@ class NetworkManagerClientGameTests {
         }
         return ModText.NETWORK_MANAGER_BOX_STYLE.format(styleText).string
     }
+
+    private fun targetLabel(mode: String, pos: BlockPos): String = "$mode | ${playerDimension()} | ${pos.x}, ${pos.y}, ${pos.z}"
+
+    private fun playerDimension() = Minecraft.getInstance().level?.dimension()?.location() ?: error("Client level is missing")
 
     private fun screenshot(name: String) = ClientTestHelper().screenshot(name)
 
