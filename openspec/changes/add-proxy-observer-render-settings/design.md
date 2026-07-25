@@ -45,9 +45,9 @@ Style changes update the synchronized client value immediately for responsive co
 
 Alternative considered: separate screens and packets per block type. Rejected because the fields, controls, validation flow, and interaction are identical.
 
-### Keep target-specific labels and use one effect color
+### Keep target-specific labels and distinguish source connections
 
-Proxy text remains the assigned remote peripheral name. Observer text is the target block's translated display name. Text remains white; source and target outline, fill, and flare effects use the existing green source-marker color. The selected box style applies uniformly to the bound block and every target, so selecting `none` suppresses all box effects.
+Proxy text remains the assigned remote peripheral name. Observer text is the target block's translated display name. Text remains white. Proxy and Observer source effects are green, Observer targets are orange, and Proxy targets are orange except for the green face to which the Proxy connects. In flare mode, the Proxy target flare uses that green connection face. The selected box style applies to the bound block and every target, so selecting `none` suppresses all box effects.
 
 Alternative considered: coordinates for Observer labels or configurable colors. Rejected because block names were selected and color configuration is outside the requested scope.
 

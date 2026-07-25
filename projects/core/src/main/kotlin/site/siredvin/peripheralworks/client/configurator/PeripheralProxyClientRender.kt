@@ -21,7 +21,7 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
     ) {
         val entity = minecraft.level?.getBlockEntity(source) as? PeripheralProxyBlockEntity ?: return
         val effects = buildList {
-            add(TargetRenderHelper.Effect(AABB(entity.blockPos), Vec3.atCenterOf(entity.blockPos), entity.boxStyle, COLOR))
+            add(TargetRenderHelper.Effect(AABB(entity.blockPos), Vec3.atCenterOf(entity.blockPos), entity.boxStyle, GREEN))
             entity.remotePeripherals.values.forEach {
                 val normal = it.direction.normal
                 add(
@@ -29,7 +29,9 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
                         AABB(it.targetBlock),
                         Vec3(it.targetBlock.x + 0.5 + 0.45 * normal.x, it.targetBlock.y + 0.5 + 0.45 * normal.y, it.targetBlock.z + 0.5 + 0.45 * normal.z),
                         entity.boxStyle,
-                        COLOR,
+                        ORANGE,
+                        it.direction,
+                        GREEN,
                     ),
                 )
             }
@@ -44,5 +46,6 @@ object PeripheralProxyClientRender : ConfigurationModeRender {
         )
     }
 
-    private const val COLOR = 0x2a9d8f
+    private const val GREEN = 0x2a9d8f
+    private const val ORANGE = 0xf4a261
 }

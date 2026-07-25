@@ -58,7 +58,9 @@ While Peripheral Proxy configurator rendering is active, the system SHALL render
 
 #### Scenario: Proxy box style
 - **WHEN** the Proxy box style is `outline`, `filled`, or `flare`
-- **THEN** the Proxy and each target display the selected green box effect and do not also display a fixed flare
+- **THEN** the Proxy displays the selected green box effect
+- **AND** each target displays the selected orange box effect with its attached face green
+- **AND** no fixed flare is also displayed
 
 #### Scenario: Proxy boxes disabled
 - **WHEN** the Proxy box style is `none`
@@ -77,7 +79,9 @@ While Remote Observer configurator rendering is active, the system SHALL render 
 
 #### Scenario: Observer box style
 - **WHEN** the Observer box style is `outline`, `filled`, or `flare`
-- **THEN** the Observer and each target display the selected green box effect and do not also display a fixed flare
+- **THEN** the Observer displays the selected green box effect
+- **AND** each target displays the selected orange box effect
+- **AND** no fixed flare is also displayed
 
 #### Scenario: Observer boxes disabled
 - **WHEN** the Observer box style is `none`
@@ -91,7 +95,7 @@ The system SHALL synchronize direct Remote Observer tracking additions and remov
 - **THEN** observing clients remove that position from the Observer overlay
 
 ### Requirement: Box style includes the source block
-The system SHALL render the bound Peripheral Proxy or Remote Observer using the same green box style selected for its targets.
+The system SHALL render the bound Peripheral Proxy or Remote Observer in green using the same box style selected for its targets.
 
 #### Scenario: All box effects disabled
 - **WHEN** box style is `none`

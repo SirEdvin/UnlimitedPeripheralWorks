@@ -24,8 +24,8 @@ object RemoteObserverClientRender : ConfigurationModeRender {
             camera,
             partialTick,
             buildList {
-                add(TargetRenderHelper.Effect(AABB(entity.blockPos), Vec3.atCenterOf(entity.blockPos), entity.boxStyle, COLOR))
-                entity.trackedBlocksView.forEach { add(TargetRenderHelper.Effect(AABB(it), Vec3.atCenterOf(it), entity.boxStyle, COLOR)) }
+                add(TargetRenderHelper.Effect(AABB(entity.blockPos), Vec3.atCenterOf(entity.blockPos), entity.boxStyle, GREEN))
+                entity.trackedBlocksView.forEach { add(TargetRenderHelper.Effect(AABB(it), Vec3.atCenterOf(it), entity.boxStyle, ORANGE)) }
             },
         )
         TargetRenderHelper.renderLabels(
@@ -37,5 +37,6 @@ object RemoteObserverClientRender : ConfigurationModeRender {
         )
     }
 
-    private const val COLOR = 0x2a9d8f
+    private const val GREEN = 0x2a9d8f
+    private const val ORANGE = 0xf4a261
 }

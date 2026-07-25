@@ -25,8 +25,8 @@
 
 ## 5. Target Rendering
 
-- [x] 5.1 Update Peripheral Proxy rendering to use persisted styles for white peripheral-name text and green source/target boxes.
-- [x] 5.2 Update Remote Observer rendering to use persisted styles for translated white block-name text and green source/target boxes.
+- [x] 5.1 Update Peripheral Proxy rendering to use persisted styles for white peripheral-name text, a green source, and orange targets with green attached faces.
+- [x] 5.2 Update Remote Observer rendering to use persisted styles for translated white block-name text, a green source, and orange targets.
 - [x] 5.3 Verify `none`, `regular`, `bold`, `outline`, `filled`, and `flare` produce the specified effects without duplicate target flares.
 
 ## 6. Verification

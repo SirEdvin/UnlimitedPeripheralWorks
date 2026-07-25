@@ -7,7 +7,7 @@ Peripheral Proxy and Remote Observer overlays are currently fixed, while Network
 - Open a dedicated render-settings screen when a bound Ultimate Configurator is right-clicked in the air for a Peripheral Proxy or Remote Observer.
 - Configure one text style and one box style for all targets of the bound block, using the Network Manager style choices.
 - Render Peripheral Proxy target peripheral names and Remote Observer target block names according to the selected text style.
-- Apply the selected green box style to the bound block and all of its targets.
+- Apply the selected box style with green bound blocks, orange Observer targets, and orange Proxy targets with a green attached face.
 - Persist and synchronize render settings on each Peripheral Proxy and Remote Observer block entity.
 - Synchronize direct Remote Observer tracking additions and removals so clients discard stale targets.
 - Include `textStyle` and `boxStyle` in each peripheral's `getConfiguration` result and expose `setTextStyle` and `setBoxStyle` Lua methods.

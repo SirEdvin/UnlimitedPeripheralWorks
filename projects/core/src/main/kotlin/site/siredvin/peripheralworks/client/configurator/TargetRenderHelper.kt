@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.BufferUploader
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
+import com.mojang.blaze3d.vertex.VertexConsumer
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
 import net.minecraft.client.Camera
@@ -13,6 +14,7 @@ import net.minecraft.client.gui.Font
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LevelRenderer
 import net.minecraft.client.renderer.LightTexture
+import net.minecraft.core.Direction
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -20,7 +22,14 @@ import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 
 object TargetRenderHelper {
-    data class Effect(val box: AABB, val flare: Vec3, val style: BoxStyle, val color: Int)
+    data class Effect(
+        val box: AABB,
+        val flare: Vec3,
+        val style: BoxStyle,
+        val color: Int,
+        val face: Direction? = null,
+        val faceColor: Int = color,
+    )
     data class Label(val text: Component, val pos: Vec3, val style: TextStyle, val color: Int = 0xffffff)
 
     fun renderEffects(poseStack: PoseStack, camera: Camera, partialTick: Float, effects: List<Effect>) {
@@ -40,7 +49,7 @@ object TargetRenderHelper {
         if (effects.any { it.style == BoxStyle.FLARE }) {
             FlareRenderer.initRenderer(poseStack, camera)
             effects.filter { it.style == BoxStyle.FLARE }.forEach {
-                FlareRenderer.renderFlare(poseStack, camera, partialTick, it.flare.x, it.flare.y, it.flare.z, flareColor(it.color), 1f)
+                FlareRenderer.renderFlare(poseStack, camera, partialTick, it.flare.x, it.flare.y, it.flare.z, flareColor(if (it.face == null) it.color else it.faceColor), 1f)
             }
             FlareRenderer.uninitRenderer(poseStack)
         }
@@ -86,18 +95,32 @@ object TargetRenderHelper {
             buffer.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL)
         }
         effects.filter { it.style == style }.forEach {
-            val red = (it.color shr 16 and 0xff) / 255f
-            val green = (it.color shr 8 and 0xff) / 255f
-            val blue = (it.color and 0xff) / 255f
             val box = it.box.inflate(0.01)
-            if (filled) {
-                LevelRenderer.addChainedFilledBoxVertices(poseStack, buffer, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, red, green, blue, 0.45f)
-            } else {
-                LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, 1f)
-            }
+            renderBox(poseStack, buffer, box, it.color, filled)
+            it.face?.let { face -> renderBox(poseStack, buffer, faceBox(box, face), it.faceColor, filled) }
         }
         BufferUploader.drawWithShader(buffer.end())
         if (filled) RenderSystem.disableBlend() else RenderSystem.lineWidth(1f)
+    }
+
+    private fun renderBox(poseStack: PoseStack, buffer: VertexConsumer, box: AABB, color: Int, filled: Boolean) {
+        val red = (color shr 16 and 0xff) / 255f
+        val green = (color shr 8 and 0xff) / 255f
+        val blue = (color and 0xff) / 255f
+        if (filled) {
+            LevelRenderer.addChainedFilledBoxVertices(poseStack, buffer, box.minX, box.minY, box.minZ, box.maxX, box.maxY, box.maxZ, red, green, blue, 0.45f)
+        } else {
+            LevelRenderer.renderLineBox(poseStack, buffer, box, red, green, blue, 1f)
+        }
+    }
+
+    private fun faceBox(box: AABB, face: Direction): AABB = when (face) {
+        Direction.DOWN -> AABB(box.minX, box.minY - FACE_DEPTH, box.minZ, box.maxX, box.minY, box.maxZ)
+        Direction.UP -> AABB(box.minX, box.maxY, box.minZ, box.maxX, box.maxY + FACE_DEPTH, box.maxZ)
+        Direction.NORTH -> AABB(box.minX, box.minY, box.minZ - FACE_DEPTH, box.maxX, box.maxY, box.minZ)
+        Direction.SOUTH -> AABB(box.minX, box.minY, box.maxZ, box.maxX, box.maxY, box.maxZ + FACE_DEPTH)
+        Direction.WEST -> AABB(box.minX - FACE_DEPTH, box.minY, box.minZ, box.minX, box.maxY, box.maxZ)
+        Direction.EAST -> AABB(box.maxX, box.minY, box.minZ, box.maxX + FACE_DEPTH, box.maxY, box.maxZ)
     }
 
     private fun flareColor(color: Int) = FlareRenderer.FlareColor(
@@ -105,4 +128,6 @@ object TargetRenderHelper {
         (color shr 8 and 0xff) / 255f,
         (color and 0xff) / 255f,
     )
+
+    private const val FACE_DEPTH = 0.002
 }
