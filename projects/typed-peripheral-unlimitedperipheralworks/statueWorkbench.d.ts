@@ -1,7 +1,7 @@
 import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 /** @noSelf **/
 export interface StatueWorkbench extends IPeripheral {
-    isPresent(): Boolean;
+    isPresent(): boolean;
     setStatueName(name: string): any;
     getStatueName(): string;
     setAuthor(author: string): any;
@@ -14,7 +14,7 @@ export interface StatueWorkbench extends IPeripheral {
 }
 /** @noSelf **/
 export declare class DummyStatueWorkbench implements StatueWorkbench {
-    isPresent(): Boolean;
+    isPresent(): boolean;
     setStatueName(name: string): void;
     getStatueName(): string;
     setAuthor(author: string): void;

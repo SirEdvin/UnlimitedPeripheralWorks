@@ -12,14 +12,17 @@ export interface InformativeRegistry extends ConfigurationAPI<object> {
             | "itemTags"
             | "fluidTags"
             | "blockTags"
+            | "entityTypeTags"
+            | "mods"
+            | "entity"
     ): string[];
     describe(
-        listName: "itemTags" | "blockTags" | "fluidTags",
+        listName: "itemTags" | "blockTags" | "fluidTags" | "entityTypeTags",
         tag: string
     ): string[];
     describe(listName: "item", id: string): ItemDetail;
     describe(listName: "fluid", id: string): FluidDetail;
-    describe(listName: "list" | "block", id: string): LuaTable;
+    describe(listName: "list" | "block" | "mods" | "entity", id: string): LuaTable;
 }
 
 export const informativeRegistryProvider =

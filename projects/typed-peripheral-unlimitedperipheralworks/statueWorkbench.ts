@@ -7,7 +7,7 @@ let DUMMY_CUBES = [];
 
 /** @noSelf **/
 export interface StatueWorkbench extends IPeripheral {
-    isPresent(): Boolean;
+    isPresent(): boolean;
     setStatueName(name: string);
     getStatueName(): string;
     setAuthor(author: string);
@@ -21,7 +21,7 @@ export interface StatueWorkbench extends IPeripheral {
 
 /** @noSelf **/
 export class DummyStatueWorkbench implements StatueWorkbench {
-    isPresent(): Boolean {
+    isPresent(): boolean {
         return true;
     }
     setStatueName(name: string) {

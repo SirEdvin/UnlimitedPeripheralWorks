@@ -9,11 +9,14 @@ export interface NetworkManager extends ConfigurationAPI<object> {
     add(group: string, peripheral: string): Result;
     remove(group: string, peripheral: string): Result;
     setGroupColor(group: string, color: number): Result;
+    getGroupColor(group: string): number;
+    setDelimiter(delimiter: string): Result;
+    setRange(range: number): Result;
     get(group: string): LuaMultiReturn<string[]>;
     getDistanceBetween(
         first: string,
         second: string
-    ): { x: number; y: number; z: number };
+    ): { x: number; y: number; z: number } | null;
 }
 
 export const networkManagerProvider = new IPeripheralProvider<NetworkManager>(
