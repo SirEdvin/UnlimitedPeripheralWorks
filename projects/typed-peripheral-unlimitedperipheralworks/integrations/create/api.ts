@@ -1,6 +1,3 @@
-import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
-import { CreateFilterableAPI } from "./filterable_api";
-
 /** @noSelf **/
 export interface CreateScrollOptionAPI extends IPeripheral {
     getScrollValue(): number;
@@ -14,13 +11,5 @@ export interface CreateLinearActuatorAPI extends IPeripheral {
 
 /** @noSelf **/
 export interface CreateBlazeBurnerAPI extends IPeripheral {
-    inspect(): { fuelType: string; remainingBurnTime: number };
+    inspect(): { fuelType: string | null; remainingBurnTime: number };
 }
-
-export const createFilterProvider =
-    new IPeripheralProvider<CreateFilterableAPI>("create_filter");
-export const createScrollProvider =
-    new IPeripheralProvider<CreateScrollOptionAPI>("create_scroll");
-export const createProvider = new IPeripheralProvider<
-    CreateLinearActuatorAPI | CreateBlazeBurnerAPI
->("create");

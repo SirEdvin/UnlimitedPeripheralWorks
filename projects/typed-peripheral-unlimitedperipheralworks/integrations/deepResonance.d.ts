@@ -1,4 +1,3 @@
-import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 /** @noSelf **/
 export interface DeepResonanceCrystal extends IPeripheral {
     inspect(): {
@@ -17,5 +16,3 @@ export interface DeepResonanceGenerator extends IPeripheral {
         isActive: boolean;
     };
 }
-export declare const resonatingCrystalProvider: IPeripheralProvider<DeepResonanceCrystal>;
-export declare const deepResonanceGeneratorProvider: IPeripheralProvider<DeepResonanceGenerator>;

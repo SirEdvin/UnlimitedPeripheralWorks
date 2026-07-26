@@ -1,19 +1,24 @@
 import { Position } from "../types";
-import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 
 /** @noSelf **/
 export interface ManaAndArtificeConstructAPI extends IPeripheral {
-    move(position: Position): Result;
-    store(position: Position, direction?: string): Result;
+    move(ignored: any, position: Position): void;
+    store(ignored: any, position: Position, direction?: string): void;
     take(
+        ignored: any,
         position: Position,
         direction: string | undefined,
         item: string,
         amount?: number
-    ): Result;
-    listCommands(): string[];
-    diagnose(): LuaTable<string, any>;
-    getCommand(): string;
+    ): void;
+    listCommands(): LuaTable<string, string>;
+    diagnose(): string[];
+    getCommand(): {
+        name: string;
+        isFinished: boolean;
+        isSuccess: boolean;
+        isStart: boolean;
+    };
 }
 
 /** @noSelf **/
@@ -21,8 +26,3 @@ export interface AutomobilityAutomobileAPI extends IPeripheral {
     rotate(delta: number): void;
     boost(power: number, time: number): void;
 }
-
-export const constructProvider =
-    new IPeripheralProvider<ManaAndArtificeConstructAPI>("construct");
-export const automobileProvider =
-    new IPeripheralProvider<AutomobilityAutomobileAPI>("automobile");

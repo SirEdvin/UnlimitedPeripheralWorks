@@ -2,15 +2,15 @@ import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 /** @noSelf **/
 export interface StatueWorkbench extends IPeripheral {
     isPresent(): boolean;
-    setStatueName(name: string): any;
+    setStatueName(name: string): void;
     getStatueName(): string;
-    setAuthor(author: string): any;
+    setAuthor(author: string): void;
     getAuthor(): string;
-    setLightLevel(level: number): any;
+    setLightLevel(level: number): void;
     getLightLevel(): number;
-    setCubes(cubes: Array<Cube>): any;
+    setCubes(cubes: Array<Cube>): void;
     getCubes(): Array<Cube>;
-    reset(): any;
+    reset(): void;
 }
 /** @noSelf **/
 export declare class DummyStatueWorkbench implements StatueWorkbench {

@@ -1,6 +1,6 @@
 import { ConfigurationAPI } from "@siredvin/typed-peripheral-api/configuration";
 import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
-import { BlockState, Position } from "./types";
+import { BlockState, Fallible, Position } from "./types";
 export type Vector3 = [number, number, number];
 export type Quaternion = [number, number, number, number];
 export type DisplayOptions = {
@@ -38,13 +38,13 @@ export interface HologramProjector extends ConfigurationAPI<{
     entityLimit: number;
     distanceLimit: number;
 }> {
-    item(item: object, options?: ItemDisplayOptions): string;
-    block(blockState: BlockState, options?: DisplayOptions): string;
-    text(text: object, options?: TextDisplayOptions): string;
+    item(item: object, options?: ItemDisplayOptions): Fallible<string>;
+    block(blockState: BlockState, options?: DisplayOptions): Fallible<string>;
+    text(text: object, options?: TextDisplayOptions): Fallible<string>;
     destroy(uuid: string): Result;
     move(uuid: string, position: Position): Result;
     rotate(uuid: string, xRot?: number, yRot?: number): Result;
-    list(mode: "owned" | "around"): LuaTable<string, object>;
+    list(mode: "owned" | "around"): Fallible<LuaTable<string, object>>;
     update(uuid: string, content?: object, options?: DisplayOptions): Result;
     ride(riderUUID: string, mountUUID: string): Result;
     unmount(riderUUID: string): Result;

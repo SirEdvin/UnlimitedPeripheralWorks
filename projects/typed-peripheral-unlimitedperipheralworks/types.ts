@@ -6,3 +6,5 @@ export type BlockState = {
 };
 
 export type EntityDetail = LuaTable<string, any> & Position;
+
+export type Fallible<T, F = null> = LuaMultiReturn<[T] | [F, string]>;

@@ -1,5 +1,4 @@
 import { ItemStorageAPI } from "@siredvin/typed-peripheral-api/item_storage";
-import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 
 /** @noSelf **/
 export interface OccultismStorage extends ItemStorageAPI {
@@ -11,8 +10,11 @@ export interface OccultismStorage extends ItemStorageAPI {
 /** @noSelf **/
 export interface OccultismGoldenBowl extends IPeripheral {
     isBusy(): boolean;
-    getCraftingInformation(): LuaTable<string, any> | null;
+    getCraftingInformation(): {
+        pentacle: string;
+        ritual: string;
+        itemUseFulfilled: boolean;
+        sacrificeFulfilled: boolean;
+        leftTime: number;
+    } | null;
 }
-
-export const occultismProvider =
-    new IPeripheralProvider<OccultismGoldenBowl>("occultism");

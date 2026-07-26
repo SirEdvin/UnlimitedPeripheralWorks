@@ -1,6 +1,6 @@
 /** @noSelf **/
 export declare interface CreateFilterableAPI extends IPeripheral {
-    getFilterName(): string;
-    setFilterItem(id: string): any;
-    clearFilterItem(): any;
+    getFilterName(): string | null;
+    setFilterItem(id: string): Result;
+    clearFilterItem(): Result;
 }

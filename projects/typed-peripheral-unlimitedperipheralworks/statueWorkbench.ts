@@ -8,15 +8,15 @@ let DUMMY_CUBES = [];
 /** @noSelf **/
 export interface StatueWorkbench extends IPeripheral {
     isPresent(): boolean;
-    setStatueName(name: string);
+    setStatueName(name: string): void;
     getStatueName(): string;
-    setAuthor(author: string);
+    setAuthor(author: string): void;
     getAuthor(): string;
-    setLightLevel(level: number);
+    setLightLevel(level: number): void;
     getLightLevel(): number;
-    setCubes(cubes: Array<Cube>);
+    setCubes(cubes: Array<Cube>): void;
     getCubes(): Array<Cube>;
-    reset();
+    reset(): void;
 }
 
 /** @noSelf **/

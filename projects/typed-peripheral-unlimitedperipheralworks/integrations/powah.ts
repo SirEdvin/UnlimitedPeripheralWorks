@@ -1,5 +1,3 @@
-import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
-
 /** @noSelf **/
 export interface PowahEnergyStorageAPI extends IPeripheral {
     getEnergyTransfer(): number;
@@ -12,7 +10,23 @@ export interface PowahGeneratorAPI extends PowahEnergyStorageAPI {
 
 /** @noSelf **/
 export interface PowahReactorAPI extends PowahGeneratorAPI {
-    inspect(): LuaTable<string, any>;
+    inspect(): {
+        autoMode: boolean;
+        currentCarbon: number;
+        maxCarbon: number;
+        currentRedstone: number;
+        maxRedstone: number;
+        currentUranium: number;
+        maxUranium: number;
+        uraniumConsumption: number;
+        energyProduction: number;
+        currentSolidCoolant: number;
+        maxSolidCoolant: number;
+        coolantTemp: number;
+        solidCoolantTemp: number;
+        currentTemp: number;
+        maxTemp: number;
+    };
     toggleAutoMode(): void;
 }
 
@@ -28,9 +42,3 @@ export interface PowahRedstoneControlAPI extends IPeripheral {
     getRedstoneMode(): string;
     setRedstoneMode(mode: string): void;
 }
-
-export const powahExtraProvider = new IPeripheralProvider<
-    PowahEnergyStorageAPI | PowahGeneratorAPI | PowahReactorAPI | PowahEnderCellAPI
->("powah_extra");
-export const powahRedstoneProvider =
-    new IPeripheralProvider<PowahRedstoneControlAPI>("powah_redstone");

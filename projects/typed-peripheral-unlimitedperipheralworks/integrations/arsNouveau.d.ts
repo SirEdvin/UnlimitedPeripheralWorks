@@ -1,4 +1,3 @@
-import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 import { EntityDetail } from "../types";
 /** @noSelf **/
 export interface ArsNouveauMobJar extends IPeripheral {
@@ -6,4 +5,3 @@ export interface ArsNouveauMobJar extends IPeripheral {
         entity: EntityDetail;
     } | object;
 }
-export declare const mobJarProvider: IPeripheralProvider<ArsNouveauMobJar>;

@@ -7,14 +7,14 @@ export interface Lectern extends IPeripheral {
     hasBook(): boolean;
     getPageCount(): number;
     getActivePage(): number;
-    setActivePage(page: number): Result;
+    setActivePage(page: number): void;
     getText(): string[];
     isBookEditable(): boolean;
     addPage(text?: string): Result;
     removePage(page: number): Result;
     editPage(page: number, text: string): Result;
     ejectBook(toName: string): Result;
-    injectBook(fromName: string, query?: object): Result;
+    injectBook(fromName: string, query?: string | object): Result;
 }
 
 /** @noSelf **/
@@ -25,7 +25,7 @@ export interface Beacon extends IPeripheral {
     configure(
         primaryPower: string,
         fromInventory: string,
-        paymentQuery: object,
+        paymentQuery: string | object,
         regenerationSecondary?: boolean
     ): Result;
 }
@@ -52,7 +52,7 @@ export interface Jukebox extends IPeripheral {
     replay(): void;
     stop(): void;
     ejectDisc(toName: string): Result;
-    injectDisc(fromName: string, query?: object): Result;
+    injectDisc(fromName: string, query?: string | object): Result;
 }
 
 export const lecternProvider = new IPeripheralProvider<Lectern>(

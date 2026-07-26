@@ -1,4 +1,4 @@
-import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
+import { Fallible } from "../types";
 
 export type AE2CraftingCPU = {
     name?: string;
@@ -19,18 +19,20 @@ export interface AE2NetworkAPI extends IPeripheral {
     getAverageEnergyDemand(): number;
     getAverageEnergyIncome(): number;
     getChannelEnergyDemand(): number;
-    getChannelInformation(): { maxChannels: number; usedChannels: number };
+    getChannelInformation(): { maxChannels?: number; usedChannels?: number };
     getCraftingCPUs(): AE2CraftingCPU[];
-    getCraftableItems(): ItemDetail[];
+    getCraftableItems(): (Omit<ItemDetail, "count"> & { registryID: string })[];
     getCraftableFluids(): { name: string }[];
     getPatternsFor(mode: "item" | "fluid", id: string): AE2Pattern[];
-    getActiveCraftings(): AE2Crafting[];
+    getActiveCraftings(): Fallible<AE2Crafting[]>;
     scheduleCrafting(
         mode: "item" | "fluid",
         id: string,
         amount?: number,
         targetCPU?: string
-    ): Result;
+    ): LuaMultiReturn<
+        | [true]
+        | [null, string]
+        | [false, string, LuaTable<string, number>]
+    >;
 }
-
-export const ae2Provider = new IPeripheralProvider<AE2NetworkAPI>("ae2");
