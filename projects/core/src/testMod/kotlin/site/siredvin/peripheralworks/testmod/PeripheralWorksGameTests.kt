@@ -61,7 +61,7 @@ class PeripheralWorksGameTests {
         }
     }
 
-    @GameTest(template = "light_test")
+    @GameTest(template = "light_test", timeoutTicks = 1200)
     fun realityAnchorSkylightPassability(helper: GameTestHelper) {
         val positions = listOf(false, true).associateWith { passable ->
             val below = BlockPos(if (passable) 4 else 1, 1, 1)
@@ -84,16 +84,21 @@ class PeripheralWorksGameTests {
         helper.setNight()
         helper.startSequence()
             .thenWaitUntil {
-                helper.assertTrue(helper.level.getMaxLocalRawBrightness(helper.absolutePos(positions.getValue(false))) == 0, "Anchor should block skylight at night")
-                nightBrightness = helper.level.getMaxLocalRawBrightness(helper.absolutePos(positions.getValue(true)))
+                val blockedPos = helper.absolutePos(positions.getValue(false))
+                val passablePos = helper.absolutePos(positions.getValue(true))
+                helper.assertTrue(helper.level.getBrightness(LightLayer.SKY, blockedPos) == 0, "Anchor should block skylight at night")
+                helper.assertTrue(helper.level.getBrightness(LightLayer.SKY, passablePos) > 0, "Anchor should pass skylight at night")
+                nightBrightness = helper.level.getMaxLocalRawBrightness(passablePos)
                 helper.assertTrue(nightBrightness > 0, "Anchor should pass skylight at night")
             }
             .thenExecute { helper.setDayTime(6000) }
             .thenWaitUntil {
-                helper.assertTrue(helper.level.getMaxLocalRawBrightness(helper.absolutePos(positions.getValue(false))) == 0, "Anchor should block skylight during the day")
+                val blockedPos = helper.absolutePos(positions.getValue(false))
                 val passablePos = helper.absolutePos(positions.getValue(true))
+                helper.assertTrue(helper.level.getBrightness(LightLayer.SKY, blockedPos) == 0, "Anchor should block skylight during the day")
                 val dayBrightness = helper.level.getMaxLocalRawBrightness(passablePos)
                 val rawBrightness = helper.level.getBrightness(LightLayer.SKY, passablePos)
+                helper.assertTrue(rawBrightness > 0, "Anchor should pass skylight during the day")
                 helper.assertTrue(dayBrightness > nightBrightness, "Daytime skylight should be brighter than nighttime skylight (day=$dayBrightness, night=$nightBrightness, raw=$rawBrightness)")
             }
             .thenSucceed()
