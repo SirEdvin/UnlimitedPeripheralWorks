@@ -7,7 +7,9 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.lighting.LightEngine
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
+import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
@@ -25,6 +27,29 @@ import site.siredvin.testiarium.cct.thenLua
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
+    @GameTest(template = "empty")
+    fun realityAnchorLightPassability(helper: GameTestHelper) {
+        val pos = BlockPos(1, 1, 1)
+        val absolutePos = helper.absolutePos(pos)
+        val configured = Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState()
+            .setValue(FlexibleRealityAnchor.CONFIGURED, true)
+
+        helper.setBlock(pos, configured)
+        check(configured.getLightBlock(helper.level, absolutePos) == LightEngine.MAX_LEVEL)
+        check(!configured.propagatesSkylightDown(helper.level, absolutePos))
+
+        val lightPassable = configured.setValue(FlexibleRealityAnchor.LIGHT_PASSABLE, true)
+        helper.setBlock(pos, lightPassable)
+        check(lightPassable.getLightBlock(helper.level, absolutePos) == 0)
+        check(!lightPassable.propagatesSkylightDown(helper.level, absolutePos))
+
+        val skylightPassable = configured.setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, true)
+        helper.setBlock(pos, skylightPassable)
+        check(skylightPassable.getLightBlock(helper.level, absolutePos) == LightEngine.MAX_LEVEL)
+        check(skylightPassable.propagatesSkylightDown(helper.level, absolutePos))
+        helper.succeed()
+    }
+
     @GameTest(template = "empty")
     fun peripheralProxyRenderSettingsPersistAndFallback(helper: GameTestHelper) {
         val firstPos = BlockPos(1, 1, 1)
