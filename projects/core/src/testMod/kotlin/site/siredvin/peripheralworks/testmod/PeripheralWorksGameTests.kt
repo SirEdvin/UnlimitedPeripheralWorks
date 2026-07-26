@@ -29,47 +29,74 @@ import net.minecraft.world.level.block.Blocks as MinecraftBlocks
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
-    @GameTest(template = "empty")
-    fun realityAnchorLightPassability(helper: GameTestHelper) {
-        val below = BlockPos(2, 1, 2)
-        val anchor = below.above()
-        val source = anchor.above()
-        helper.setBlock(below.below(), MinecraftBlocks.STONE)
-        Direction.Plane.HORIZONTAL.forEach {
-            helper.setBlock(below.relative(it), MinecraftBlocks.STONE)
-            helper.setBlock(anchor.relative(it), MinecraftBlocks.STONE)
+    @GameTest(template = "light_test")
+    fun realityAnchorBlockLightPassability(helper: GameTestHelper) {
+        val cases = listOf(false to false, true to false, false to true, true to true)
+        val positions = cases.mapIndexed { index, (passable, sourcePresent) ->
+            val below = BlockPos(1 + index * 3, 1, 1)
+            val anchor = below.above()
+            helper.setBlock(below.below(), MinecraftBlocks.STONE)
+            Direction.Plane.HORIZONTAL.forEach {
+                helper.setBlock(below.relative(it), MinecraftBlocks.STONE)
+                helper.setBlock(anchor.relative(it), MinecraftBlocks.STONE)
+            }
+            helper.setBlock(anchor.above(), if (sourcePresent) MinecraftBlocks.GLOWSTONE else MinecraftBlocks.STONE)
+            helper.setBlock(
+                anchor,
+                Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState()
+                    .setValue(FlexibleRealityAnchor.CONFIGURED, true)
+                    .setValue(FlexibleRealityAnchor.LIGHT_PASSABLE, passable)
+                    .setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, true),
+            )
+            Triple(below, passable && sourcePresent, "passable=$passable, source=$sourcePresent")
         }
-        val configured = Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState()
-            .setValue(FlexibleRealityAnchor.CONFIGURED, true)
-        helper.setBlock(anchor, configured)
 
-        helper.runAtTickTime(10) {
-            helper.assertTrue(helper.level.getBrightness(LightLayer.SKY, helper.absolutePos(below)) == 0, "Anchor should block skylight")
+        helper.succeedWhen {
+            positions.forEach { (below, shouldBeLit, description) ->
+                val brightness = helper.level.getBrightness(LightLayer.BLOCK, helper.absolutePos(below))
+                val anchorBrightness = helper.level.getBrightness(LightLayer.BLOCK, helper.absolutePos(below.above()))
+                val sourceBrightness = helper.level.getBrightness(LightLayer.BLOCK, helper.absolutePos(below.above(2)))
+                helper.assertTrue(if (shouldBeLit) brightness > 0 else brightness == 0, "Unexpected block light levels below=$brightness, anchor=$anchorBrightness, source=$sourceBrightness ($description)")
+            }
+        }
+    }
+
+    @GameTest(template = "light_test")
+    fun realityAnchorSkylightPassability(helper: GameTestHelper) {
+        val positions = listOf(false, true).associateWith { passable ->
+            val below = BlockPos(if (passable) 4 else 1, 1, 1)
+            val anchor = below.above()
+            helper.setBlock(below.below(), MinecraftBlocks.STONE)
+            Direction.Plane.HORIZONTAL.forEach {
+                helper.setBlock(below.relative(it), MinecraftBlocks.STONE)
+                helper.setBlock(anchor.relative(it), MinecraftBlocks.STONE)
+            }
             helper.setBlock(
                 anchor,
-                configured
+                Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState()
+                    .setValue(FlexibleRealityAnchor.CONFIGURED, true)
                     .setValue(FlexibleRealityAnchor.LIGHT_PASSABLE, true)
-                    .setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, true),
+                    .setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, passable),
             )
+            below
         }
-        helper.runAtTickTime(20) {
-            helper.assertTrue(helper.level.getBrightness(LightLayer.SKY, helper.absolutePos(below)) > 0, "Anchor should pass skylight")
-            helper.setBlock(source, MinecraftBlocks.GLOWSTONE)
-            helper.setBlock(anchor, configured)
-        }
-        helper.runAtTickTime(30) {
-            helper.assertTrue(helper.level.getBrightness(LightLayer.BLOCK, helper.absolutePos(below)) == 0, "Anchor should block light")
-            helper.setBlock(
-                anchor,
-                configured
-                    .setValue(FlexibleRealityAnchor.LIGHT_PASSABLE, true)
-                    .setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, true),
-            )
-        }
-        helper.runAtTickTime(40) {
-            helper.assertTrue(helper.level.getBrightness(LightLayer.BLOCK, helper.absolutePos(below)) > 0, "Anchor should pass light")
-            helper.succeed()
-        }
+        var nightBrightness = 0
+        helper.setNight()
+        helper.startSequence()
+            .thenWaitUntil {
+                helper.assertTrue(helper.level.getMaxLocalRawBrightness(helper.absolutePos(positions.getValue(false))) == 0, "Anchor should block skylight at night")
+                nightBrightness = helper.level.getMaxLocalRawBrightness(helper.absolutePos(positions.getValue(true)))
+                helper.assertTrue(nightBrightness > 0, "Anchor should pass skylight at night")
+            }
+            .thenExecute { helper.setDayTime(6000) }
+            .thenWaitUntil {
+                helper.assertTrue(helper.level.getMaxLocalRawBrightness(helper.absolutePos(positions.getValue(false))) == 0, "Anchor should block skylight during the day")
+                val passablePos = helper.absolutePos(positions.getValue(true))
+                val dayBrightness = helper.level.getMaxLocalRawBrightness(passablePos)
+                val rawBrightness = helper.level.getBrightness(LightLayer.SKY, passablePos)
+                helper.assertTrue(dayBrightness > nightBrightness, "Daytime skylight should be brighter than nighttime skylight (day=$dayBrightness, night=$nightBrightness, raw=$rawBrightness)")
+            }
+            .thenSucceed()
     }
 
     @GameTest(template = "empty")
