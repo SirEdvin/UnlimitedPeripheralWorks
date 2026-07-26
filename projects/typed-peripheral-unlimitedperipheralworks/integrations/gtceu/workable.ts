@@ -3,6 +3,8 @@ import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 
 /** @noSelf **/
 export interface WorkableMachine extends ConfigurationAPI<object> {
+    getProgress(): number;
+    getMaxProgress(): number;
     isActive(): boolean;
 }
 
