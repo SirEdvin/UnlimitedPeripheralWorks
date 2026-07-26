@@ -1,13 +1,14 @@
 package site.siredvin.peripheralworks.testmod
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.level.lighting.LightEngine
+import net.minecraft.world.level.LightLayer
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
 import site.siredvin.peripheralworks.common.block.FlexibleRealityAnchor
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
@@ -24,30 +25,51 @@ import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
 import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
+import net.minecraft.world.level.block.Blocks as MinecraftBlocks
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
     @GameTest(template = "empty")
     fun realityAnchorLightPassability(helper: GameTestHelper) {
-        val pos = BlockPos(1, 1, 1)
-        val absolutePos = helper.absolutePos(pos)
+        val below = BlockPos(2, 1, 2)
+        val anchor = below.above()
+        val source = anchor.above()
+        helper.setBlock(below.below(), MinecraftBlocks.STONE)
+        Direction.Plane.HORIZONTAL.forEach {
+            helper.setBlock(below.relative(it), MinecraftBlocks.STONE)
+            helper.setBlock(anchor.relative(it), MinecraftBlocks.STONE)
+        }
         val configured = Blocks.FLEXIBLE_REALITY_ANCHOR.get().defaultBlockState()
             .setValue(FlexibleRealityAnchor.CONFIGURED, true)
+        helper.setBlock(anchor, configured)
 
-        helper.setBlock(pos, configured)
-        check(configured.getLightBlock(helper.level, absolutePos) == LightEngine.MAX_LEVEL)
-        check(!configured.propagatesSkylightDown(helper.level, absolutePos))
-
-        val lightPassable = configured.setValue(FlexibleRealityAnchor.LIGHT_PASSABLE, true)
-        helper.setBlock(pos, lightPassable)
-        check(lightPassable.getLightBlock(helper.level, absolutePos) == 0)
-        check(!lightPassable.propagatesSkylightDown(helper.level, absolutePos))
-
-        val skylightPassable = configured.setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, true)
-        helper.setBlock(pos, skylightPassable)
-        check(skylightPassable.getLightBlock(helper.level, absolutePos) == LightEngine.MAX_LEVEL)
-        check(skylightPassable.propagatesSkylightDown(helper.level, absolutePos))
-        helper.succeed()
+        helper.runAtTickTime(10) {
+            helper.assertTrue(helper.level.getBrightness(LightLayer.SKY, helper.absolutePos(below)) == 0, "Anchor should block skylight")
+            helper.setBlock(
+                anchor,
+                configured
+                    .setValue(FlexibleRealityAnchor.LIGHT_PASSABLE, true)
+                    .setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, true),
+            )
+        }
+        helper.runAtTickTime(20) {
+            helper.assertTrue(helper.level.getBrightness(LightLayer.SKY, helper.absolutePos(below)) > 0, "Anchor should pass skylight")
+            helper.setBlock(source, MinecraftBlocks.GLOWSTONE)
+            helper.setBlock(anchor, configured)
+        }
+        helper.runAtTickTime(30) {
+            helper.assertTrue(helper.level.getBrightness(LightLayer.BLOCK, helper.absolutePos(below)) == 0, "Anchor should block light")
+            helper.setBlock(
+                anchor,
+                configured
+                    .setValue(FlexibleRealityAnchor.LIGHT_PASSABLE, true)
+                    .setValue(FlexibleRealityAnchor.SKY_LIGHT_PASSABLE, true),
+            )
+        }
+        helper.runAtTickTime(40) {
+            helper.assertTrue(helper.level.getBrightness(LightLayer.BLOCK, helper.absolutePos(below)) > 0, "Anchor should pass light")
+            helper.succeed()
+        }
     }
 
     @GameTest(template = "empty")
