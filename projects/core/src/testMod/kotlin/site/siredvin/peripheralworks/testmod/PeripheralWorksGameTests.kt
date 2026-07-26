@@ -81,9 +81,14 @@ class PeripheralWorksGameTests {
             below
         }
         positions.values.forEach { below ->
+            val source = helper.absolutePos(below.above(2))
+            val surface = helper.level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, source.x, source.z)
+            for (y in source.y..surface) {
+                helper.level.setBlock(BlockPos(source.x, y, source.z), MinecraftBlocks.AIR.defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL)
+            }
             helper.level.chunkSource.lightEngine.checkBlock(helper.absolutePos(below))
             helper.level.chunkSource.lightEngine.checkBlock(helper.absolutePos(below.above()))
-            helper.level.chunkSource.lightEngine.checkBlock(helper.absolutePos(below.above(2)))
+            helper.level.chunkSource.lightEngine.checkBlock(source)
         }
         var nightBrightness = 0
         helper.setNight()
