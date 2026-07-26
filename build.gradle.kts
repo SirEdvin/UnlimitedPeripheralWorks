@@ -27,7 +27,7 @@ val setupSubproject = subprojectShaking::setupSubproject
 
 
 subprojects {
-    if (name != "typescript-tests") {
+    if (name !in setOf("typed-peripheral-unlimitedperipheralworks", "typescript-tests")) {
         setupSubproject(this)
     }
 }

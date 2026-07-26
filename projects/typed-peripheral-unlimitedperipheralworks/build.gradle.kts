@@ -1,6 +1,7 @@
 import com.github.gradle.node.npm.task.NpmTask
 
 plugins {
+    base
     id("com.github.node-gradle.node") version "7.1.0"
 }
 
@@ -13,16 +14,26 @@ node {
     npmInstallCommand.set("ci")
 }
 
-tasks.npmInstall {
-    dependsOn(":typed-peripheral-unlimitedperipheralworks:compileTypeScript")
-}
-
-val compileTestLua by tasks.registering(NpmTask::class) {
+val compileTypeScript by tasks.registering(NpmTask::class) {
     dependsOn(tasks.npmInstall)
     npmCommand.set(listOf("run", "build"))
     inputs.files(fileTree(projectDir) {
-        include("package.json", "package-lock.json", "tsconfig.json", "build.mjs", "src/**/*.ts")
+        include("package.json", "package-lock.json", "tsconfig.json", "**/*.ts")
         exclude("node_modules/**")
     })
-    outputs.dir(layout.buildDirectory.dir("generated/test-lua"))
+    outputs.files(fileTree(projectDir) {
+        include("**/*.lua")
+        exclude("node_modules/**")
+    })
+}
+
+tasks.assemble {
+    dependsOn(compileTypeScript)
+}
+
+tasks.clean {
+    delete(fileTree(projectDir) {
+        include("**/*.lua")
+        exclude("node_modules/**")
+    })
 }
