@@ -80,6 +80,11 @@ class PeripheralWorksGameTests {
             )
             below
         }
+        positions.values.forEach { below ->
+            helper.level.chunkSource.lightEngine.checkBlock(helper.absolutePos(below))
+            helper.level.chunkSource.lightEngine.checkBlock(helper.absolutePos(below.above()))
+            helper.level.chunkSource.lightEngine.checkBlock(helper.absolutePos(below.above(2)))
+        }
         var nightBrightness = 0
         helper.setNight()
         helper.startSequence()
