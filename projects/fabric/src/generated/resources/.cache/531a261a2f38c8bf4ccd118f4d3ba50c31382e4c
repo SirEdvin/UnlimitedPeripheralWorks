@@ -1,6 +1,6 @@
-// 1.20.1	2026-07-24T21:29:14.611993114	Unlimited Peripheral Works/Recipes
-a2696e406e9032af7d01eb6c0b534b706f6d9f5f data/minecraft/recipes/card_clean.json
+// 1.20.1	2026-07-26T10:53:36.338088049	Unlimited Peripheral Works/Recipes
 379f6f63779c41d1be5a1de6c1315cdc0e712956 data/peripheralworks/recipes/display_pedestal.json
+a2696e406e9032af7d01eb6c0b534b706f6d9f5f data/minecraft/recipes/card_clean.json
 09177d9534a5723cf4e8af294cb05de7b5b398e2 data/minecraft/recipes/statue_cloning.json
 6055ea560499bc9f789c3363cbab2c35be03c5b3 data/peripheralworks/recipes/hologram_projector.json
 e20244a6a3e2ee660321fe0e935132060759e281 data/peripheralworks/recipes/peripheral_proxy.json
@@ -11,7 +11,7 @@ fbc2f184b7c636a9ae3711d412b4a4c242dfab89 data/peripheralworks/recipes/entity_lin
 adf5bf621f241034fc11c5239ed396ca04e35041 data/peripheralworks/recipes/ultimate_sensor.json
 555bce600855adba123d7ce53aba512c936ec217 data/peripheralworks/recipes/universal_scanner.json
 336b8711ee86aaec282dcf8982135d795126e030 data/peripheralworks/recipes/reality_forger.json
-a2a265ea418ff34b94f24eee78d5ce76b302d05e data/peripheralworks/recipes/network_manager.json
+00f0831a58f24c4caad800741aaf511fb973fca1 data/peripheralworks/recipes/network_manager.json
 9f3ccb014e913ed7d65b9561935a26e97885f13e data/peripheralworks/recipes/recipe_registry.json
 b4e4c663207dbc5fdd92be5957a0dc7ba675e330 data/peripheralworks/recipes/flexible_statue.json
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data/minecraft/recipes/anchor_clean.json

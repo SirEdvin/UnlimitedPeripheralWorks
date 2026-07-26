@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remote observer and peripheral proxy also have settings UI for ultimate configurator
 - Ultimate configurator itself now has UI on right click, when not attached to anything, with memory of previous attached blocks
 
+### Changed
+
+- Simplify network manager recipe
+
 ## [1.7.17] - 2026-02-20
 
 ### Fixed

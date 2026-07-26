@@ -195,7 +195,7 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
 
         TweakedShapedRecipeBuilder.shaped(Blocks.NETWORK_MANAGER.get())
             .define('P', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
-            .define('C', net.minecraft.world.item.Items.COBWEB)
+            .define('C', net.minecraft.world.item.Items.STRING)
             .define('K', ModRegistry.Items.CABLE.get())
             .pattern("KCK")
             .pattern("CPC")
