@@ -2,72 +2,145 @@ package site.siredvin.peripheralworks.subsystem.configurator
 
 import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponents
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.StringTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResultHolder
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.BlockHitResult
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 
 object NetworkManagerMode : ConfigurationMode {
+    // ponytail: derive new defaults from this legacy tag instead of adding a data fixer.
+    enum class VisualizationMode { ALL, SELECTED, SELECTED_AND_UNGROUPED, UNGROUPED }
+    enum class RenderTarget { SELECTED, GROUPED, UNGROUPED }
+
+    private const val SELECTED_GROUP = "selectedNetworkGroup"
+    private const val EXPANDED_GROUP_PATHS = "expandedNetworkGroupPaths"
+    private const val VISUALIZATION_MODE = "networkVisualizationMode"
+    private const val TEXT_STYLE_PREFIX = "networkTextStyle"
+    private const val BOX_STYLE_PREFIX = "networkBoxStyle"
+    private const val MAX_EXPANDED_GROUP_PATHS = 256
+
     override val modeID: ResourceLocation = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "network_manager")
     override val description: Component = ModTooltip.NETWORK_MANAGER_MODE.text
-
-    const val RANGE_TAG = "networkManagerRange"
-    private const val DEFAULT_RANGE = 32
-    private val appropriateRanges = listOf(64, 32, 16, 8, 4)
-
-    fun getRange(stack: ItemStack): Int {
-        val data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
-        if (!data.contains(RANGE_TAG)) {
-            data.putInt(RANGE_TAG, DEFAULT_RANGE)
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data))
-        }
-        return data.getInt(RANGE_TAG)
-    }
-
-    override fun extraTooltips(itemStack: ItemStack, tooltip: MutableList<Component>) {
-        tooltip.add(ModTooltip.NETWORK_MANAGER_CURRENT_RANGE.format(getRange(itemStack)))
-    }
-
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
+        if (!UltimateConfigurator.isActiveModeDimension(stack, level)) return InteractionResultHolder.fail(stack)
         if (level.isClientSide || level !is ServerLevel) {
             return InteractionResultHolder.consume(stack)
         }
-        val offhandItem = player.getItemInHand(InteractionHand.OFF_HAND)
-        if (offhandItem.`is`(Items.NAME_TAG) && offhandItem.hoverName != offhandItem.item.getName(offhandItem)) {
-            val name = offhandItem.hoverName.string
-            val be = level.getBlockEntity(configurationTarget) as? NetworkManagerBlockEntity ?: return InteractionResultHolder.fail(stack)
-            val peripheralRecord = be.peripherals.entries.firstOrNull { it.value == hit.blockPos } ?: return InteractionResultHolder.fail(stack)
-            be.toggleGroup(name, peripheralRecord.key)
-            return InteractionResultHolder.success(stack)
+        val name = getSelectedGroup(stack)
+        if (name == null) {
+            player.displayClientMessage(ModText.NETWORK_MANAGER_GROUP_SELECT_REQUIRED.text, true)
+            return InteractionResultHolder.fail(stack)
         }
+        val be = level.getBlockEntity(configurationTarget) as? NetworkManagerBlockEntity
+        val peripheralRecord = be?.peripherals?.entries?.firstOrNull { it.value == hit.blockPos }
+        val result = if (peripheralRecord == null) null else be.toggleGroup(name, peripheralRecord.key)
+        val message = when (result) {
+            NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> ModText.NETWORK_MANAGER_GROUP_MEMBERSHIP_TOGGLED
+            NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> ModText.NETWORK_MANAGER_GROUP_STALE
+            else -> ModText.NETWORK_MANAGER_PERIPHERAL_MISSING
+        }
+        player.displayClientMessage(message.text, true)
+        return if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) InteractionResultHolder.success(stack) else InteractionResultHolder.fail(stack)
+    }
+
+    override fun onBlockMiss(configurationTarget: BlockPos, stack: ItemStack, player: Player, level: Level): InteractionResultHolder<ItemStack> {
+        if (!UltimateConfigurator.isActiveModeDimension(stack, level)) return InteractionResultHolder.fail(stack)
+        if (level.isClientSide) ModClientPlatform.openNetworkManagerScreen(configurationTarget)
         return InteractionResultHolder.consume(stack)
     }
 
-    override fun onSwing(
-        configurationTarget: BlockPos,
-        stack: ItemStack,
-        owner: Player,
-    ): Boolean {
-        val currentRange = getRange(stack)
-        val index = (appropriateRanges.indexOf(currentRange) + 1) % appropriateRanges.size
-        val data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag()
-        data.putInt(RANGE_TAG, appropriateRanges[index])
-        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data))
-        if (owner is ServerPlayer) {
-            owner.displayClientMessage(ModText.NETWORK_MANAGER_MOD_RADIUS_CHANGE.format(appropriateRanges[index]), true)
+    fun getSelectedGroup(stack: ItemStack): String? = stack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getString(SELECTED_GROUP)?.takeIf(String::isNotEmpty)
+
+    fun setSelectedGroup(stack: ItemStack, group: String) {
+        CustomData.update(DataComponents.CUSTOM_DATA, stack) { it.putString(SELECTED_GROUP, group) }
+    }
+
+    fun clearSelectedGroup(stack: ItemStack) {
+        CustomData.update(DataComponents.CUSTOM_DATA, stack) { it.remove(SELECTED_GROUP) }
+    }
+
+    fun getVisualizationMode(stack: ItemStack): VisualizationMode = stack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getString(VISUALIZATION_MODE)
+        ?.let { value -> VisualizationMode.entries.firstOrNull { it.name == value } }
+        ?: VisualizationMode.ALL
+
+    fun setVisualizationMode(stack: ItemStack, mode: VisualizationMode) {
+        CustomData.update(DataComponents.CUSTOM_DATA, stack) { it.putString(VISUALIZATION_MODE, mode.name) }
+    }
+
+    fun getTextStyle(stack: ItemStack, target: RenderTarget): TextStyle {
+        val stored = stack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getString(TEXT_STYLE_PREFIX + target.name)
+            ?.let { value -> TextStyle.entries.firstOrNull { it.name == value } }
+        if (stored != null) return stored
+        return when (getVisualizationMode(stack)) {
+            VisualizationMode.ALL -> TextStyle.REGULAR
+            VisualizationMode.SELECTED -> if (target == RenderTarget.SELECTED) TextStyle.REGULAR else TextStyle.NONE
+            VisualizationMode.SELECTED_AND_UNGROUPED -> if (target == RenderTarget.GROUPED) TextStyle.NONE else TextStyle.REGULAR
+            VisualizationMode.UNGROUPED -> if (target == RenderTarget.UNGROUPED) TextStyle.REGULAR else TextStyle.NONE
         }
-        return false
+    }
+
+    fun setTextStyle(stack: ItemStack, target: RenderTarget, style: TextStyle) {
+        CustomData.update(DataComponents.CUSTOM_DATA, stack) { it.putString(TEXT_STYLE_PREFIX + target.name, style.name) }
+    }
+
+    fun getBoxStyle(stack: ItemStack, target: RenderTarget): BoxStyle = stack.get(DataComponents.CUSTOM_DATA)?.copyTag()?.getString(BOX_STYLE_PREFIX + target.name)
+        ?.let { value -> BoxStyle.entries.firstOrNull { it.name == value } }
+        ?: BoxStyle.NONE
+
+    fun setBoxStyle(stack: ItemStack, target: RenderTarget, style: BoxStyle) {
+        CustomData.update(DataComponents.CUSTOM_DATA, stack) { it.putString(BOX_STYLE_PREFIX + target.name, style.name) }
+    }
+
+    fun getExpandedGroupPaths(stack: ItemStack): Set<String> {
+        val data = stack.get(DataComponents.CUSTOM_DATA)?.copyTag() ?: return emptySet()
+        val paths = data.getList(EXPANDED_GROUP_PATHS, Tag.TAG_STRING.toInt())
+        return paths.mapTo(mutableSetOf()) { it.asString }
+    }
+
+    fun setGroupExpanded(stack: ItemStack, path: String, expanded: Boolean) {
+        val paths = getExpandedGroupPaths(stack).toMutableSet()
+        if (expanded) {
+            if (paths.size >= MAX_EXPANDED_GROUP_PATHS) return
+            paths.add(path)
+        } else {
+            paths.remove(path)
+        }
+        CustomData.update(DataComponents.CUSTOM_DATA, stack) { data ->
+            if (paths.isEmpty()) {
+                data.remove(EXPANDED_GROUP_PATHS)
+            } else {
+                data.put(EXPANDED_GROUP_PATHS, ListTag().apply { paths.sorted().forEach { add(StringTag.valueOf(it)) } })
+            }
+        }
+    }
+
+    override fun extraTooltips(itemStack: ItemStack, tooltip: MutableList<Component>) {
+        tooltip.add(ModTooltip.NETWORK_MANAGER_SELECTED_GROUP.format(getSelectedGroup(itemStack) ?: "-"))
+    }
+
+    override fun clearData(itemStack: ItemStack) {
+        CustomData.update(DataComponents.CUSTOM_DATA, itemStack) { data ->
+            data.remove(SELECTED_GROUP)
+            data.remove(EXPANDED_GROUP_PATHS)
+            data.remove(VISUALIZATION_MODE)
+            RenderTarget.entries.forEach {
+                data.remove(TEXT_STYLE_PREFIX + it.name)
+                data.remove(BOX_STYLE_PREFIX + it.name)
+            }
+        }
     }
 }

@@ -6,7 +6,8 @@
   },
   "dependencies": {
     "@siredvin/cc-utils": "0.1.0",
-    "@siredvin/soteria": "0.1.0"
+    "@siredvin/soteria": "0.1.0",
+    "@siredvin/typed-peripheral-unlimitedperipheralworks": "file:../typed-peripheral-unlimitedperipheralworks"
   },
   "devDependencies": {
     "@jackmacwindows/lua-types": "2.13.1",

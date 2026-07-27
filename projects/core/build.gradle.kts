@@ -45,8 +45,8 @@ dependencies {
     api(libs.bundles.apicommon)
     compileOnly(libs.mixin)
     add(testMod.implementationConfigurationName, libs.testiarium.core)
-    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:0.1.1:test-mod@jar")
-    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:0.1.1:cct-test-mod@jar")
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar")
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.21.1:0.1.1:cct-test-mod@jar")
     add(testMod.compileOnlyConfigurationName, libs.bundles.cccommon)
 }
 

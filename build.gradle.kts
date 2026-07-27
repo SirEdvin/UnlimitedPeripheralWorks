@@ -12,6 +12,12 @@ tasks.register("gameTest") {
     dependsOn(":forge:runGameTestServer", ":fabric:runPeripheralWorksGameTest")
 }
 
+tasks.register("clientGameTest") {
+    group = "verification"
+    description = "Runs network manager client GameTests on Forge and Fabric."
+    dependsOn(":forge:runClientGameTest", ":fabric:runPeripheralWorksClientGameTest")
+}
+
 subprojectShaking {
     withKotlin.set(true)
     javaVersion.set(JavaVersion.VERSION_21)
@@ -22,7 +28,7 @@ val setupSubproject = subprojectShaking::setupSubproject
 
 
 subprojects {
-    if (name != "typescript-tests") {
+    if (name !in setOf("typed-peripheral-unlimitedperipheralworks", "typescript-tests")) {
         setupSubproject(this)
     }
 }

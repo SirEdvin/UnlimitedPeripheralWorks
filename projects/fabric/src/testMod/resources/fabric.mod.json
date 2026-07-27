@@ -10,6 +10,12 @@
         "adapter": "kotlin",
         "value": "site.siredvin.peripheralworks.testmod.FabricPeripheralWorksTestMod"
       }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "site.siredvin.peripheralworks.testmod.FabricPeripheralWorksClientTestMod"
+      }
     ]
   },
   "mixins": [
