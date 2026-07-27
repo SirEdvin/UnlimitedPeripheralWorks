@@ -18,4 +18,5 @@ interface ConfigurationMode {
     fun onSwing(configurationTarget: BlockPos, stack: ItemStack, owner: Player): Boolean = false
     fun onHurtEntity(configurationTarget: BlockPos, stack: ItemStack, target: LivingEntity, attacker: LivingEntity): Boolean = false
     fun extraTooltips(itemStack: ItemStack, tooltip: MutableList<Component>) {}
+    fun clearData(itemStack: ItemStack) {}
 }

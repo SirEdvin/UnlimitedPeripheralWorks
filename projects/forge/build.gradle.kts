@@ -176,10 +176,16 @@ dependencies {
     add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar") {
         isTransitive = false
     }
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-forge-1.21.1:0.1.1:test-mod@jar") {
+        isTransitive = false
+    }
     add(cctTestMod.name, "site.siredvin:testiarium-core-1.21.1:0.1.1:cct-test-mod@jar") {
         isTransitive = false
     }
     add(developmentRuntime.name, libs.testiarium.forge)
+    add(developmentRuntime.name, "site.siredvin:testiarium-forge-1.21.1:0.1.1:test-mod@jar") {
+        isTransitive = false
+    }
     add(developmentRuntime.name, "maven.modrinth:refined-storage:lHHiI26k")
 }
 
@@ -200,13 +206,26 @@ neoForge {
             type = "gameTestServer"
             gameDirectory = file("run/peripheralworks-gametest")
             systemProperty("neoforge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            systemProperty("testiarium.tags", "peripheralworks")
+            systemProperty("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
             systemProperty("testiarium.structures", project.project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             systemProperty("testiarium.fixture-source", project.project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             systemProperty("testiarium.cct-fixtures", project.project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
             systemProperty("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             jvmArgument("-ea")
             programArgument("--nogui")
+            loadedMods.add(peripheralworks.get())
+            loadedMods.add(peripheralworksTestMod.get())
+        }
+        register("clientGameTest") {
+            type = "client"
+            gameDirectory = file("run/network-manager-client-gametest")
+            systemProperty("neoforge.enabledGameTestNamespaces", "peripheralworks_testmod")
+            systemProperty("testiarium.client", "true")
+            systemProperty("testiarium.tags", "network-manager-client")
+            systemProperty("testiarium.structures", project.project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            systemProperty("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            systemProperty("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
+            jvmArgument("-ea")
             loadedMods.add(peripheralworks.get())
             loadedMods.add(peripheralworksTestMod.get())
         }

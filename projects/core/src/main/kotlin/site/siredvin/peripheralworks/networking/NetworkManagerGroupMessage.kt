@@ -1,0 +1,110 @@
+package site.siredvin.peripheralworks.networking
+
+import net.minecraft.core.BlockPos
+import net.minecraft.network.FriendlyByteBuf
+import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
+import site.siredvin.peripheralworks.common.item.UltimateConfigurator
+import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.data.ModText
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
+import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
+
+class NetworkManagerGroupMessage(
+    private val pos: BlockPos,
+    private val operation: Operation,
+    private val group: String,
+    private val value: String = "",
+    private val color: Int = -1,
+    private val present: Boolean = false,
+    private val expectedPresent: Boolean = false,
+) : NetworkMessage<ServerNetworkContext> {
+    enum class Operation { SELECT, CREATE, RENAME, DELETE, COLOR, VISIBILITY, MEMBERSHIP, SETTINGS, EXPANSION, TEXT_STYLE, BOX_STYLE }
+
+    constructor(buf: FriendlyByteBuf) : this(
+        buf.readBlockPos(),
+        buf.readEnum(Operation::class.java),
+        buf.readUtf(NetworkManagerBlockEntity.MAX_GROUP_NAME_LENGTH),
+        buf.readUtf(MAX_VALUE_LENGTH),
+        buf.readInt(),
+        buf.readBoolean(),
+        buf.readBoolean(),
+    )
+
+    override fun type(): MessageType<*> = NetworkMessages.NETWORK_MANAGER_GROUP
+
+    override fun write(buf: FriendlyByteBuf) {
+        buf.writeBlockPos(pos)
+        buf.writeEnum(operation)
+        buf.writeUtf(group, NetworkManagerBlockEntity.MAX_GROUP_NAME_LENGTH)
+        buf.writeUtf(value, MAX_VALUE_LENGTH)
+        buf.writeInt(color)
+        buf.writeBoolean(present)
+        buf.writeBoolean(expectedPresent)
+    }
+
+    override fun handle(context: ServerNetworkContext) {
+        val player = context.getSender()
+        val stack = player.mainHandItem
+        val activeMode = (stack.item as? UltimateConfigurator)?.getActiveMode(stack)
+        if (!stack.`is`(Items.ULTIMATE_CONFIGURATOR.get()) || activeMode?.first?.modeID != NetworkManagerMode.modeID || activeMode.second != pos || !UltimateConfigurator.isActiveModeDimension(stack, player.level()) || !player.level().isLoaded(pos)) {
+            player.displayClientMessage(ModText.NETWORK_MANAGER_REQUEST_REJECTED.text, true)
+            return
+        }
+        val manager = player.level().getBlockEntity(pos) as? NetworkManagerBlockEntity
+        if (manager == null) {
+            player.displayClientMessage(ModText.NETWORK_MANAGER_UNAVAILABLE.text, true)
+            return
+        }
+
+        if (operation == Operation.EXPANSION) {
+            NetworkManagerMode.setGroupExpanded(stack, value, present)
+            return
+        }
+        if (operation == Operation.TEXT_STYLE || operation == Operation.BOX_STYLE) {
+            val target = NetworkManagerMode.RenderTarget.entries.firstOrNull { it.name == group }
+            val valid = target != null &&
+                when (operation) {
+                    Operation.TEXT_STYLE -> TextStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setTextStyle(stack, target, it) } != null
+                    Operation.BOX_STYLE -> BoxStyle.entries.getOrNull(color)?.also { NetworkManagerMode.setBoxStyle(stack, target, it) } != null
+                    else -> false
+                }
+            if (!valid) {
+                player.displayClientMessage(ModText.NETWORK_MANAGER_REQUEST_REJECTED.text, true)
+            }
+            return
+        }
+
+        val selected = NetworkManagerMode.getSelectedGroup(stack)
+        val result = when (operation) {
+            Operation.SELECT -> if (manager.peripheralGroups.containsKey(group)) NetworkManagerBlockEntity.GroupOperationResult.SUCCESS else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            Operation.CREATE -> manager.createGroup(group)
+            Operation.RENAME -> if (selected == group) manager.renameGroup(group, value) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            Operation.DELETE -> if (selected == group) manager.deleteGroup(group) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            Operation.COLOR -> if (selected == group) manager.setGroupColor(group, color) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            Operation.VISIBILITY -> if (selected != group) {
+                NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            } else {
+                NetworkManagerBlockEntity.GroupVisibility.entries.getOrNull(color)?.let { manager.setGroupVisibility(group, it) }
+                    ?: NetworkManagerBlockEntity.GroupOperationResult.INVALID_VISIBILITY
+            }
+            Operation.MEMBERSHIP -> if (selected == group) manager.setGroupMembership(group, value, present, expectedPresent) else NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING
+            Operation.SETTINGS -> manager.setConfiguration(value, color)
+            Operation.EXPANSION -> error("Handled above")
+            Operation.TEXT_STYLE, Operation.BOX_STYLE -> error("Handled above")
+        }
+        if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) {
+            when (operation) {
+                Operation.SELECT, Operation.CREATE -> NetworkManagerMode.setSelectedGroup(stack, group)
+                Operation.RENAME -> NetworkManagerMode.setSelectedGroup(stack, value)
+                Operation.DELETE -> NetworkManagerMode.clearSelectedGroup(stack)
+                else -> Unit
+            }
+        }
+        player.displayClientMessage(if (result == NetworkManagerBlockEntity.GroupOperationResult.SUCCESS) ModText.NETWORK_MANAGER_REQUEST_SUCCEEDED.text else ModText.NETWORK_MANAGER_REQUEST_FAILED.format(result.name.lowercase()), true)
+    }
+
+    companion object {
+        private const val MAX_VALUE_LENGTH = 128
+    }
+}

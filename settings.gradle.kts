@@ -27,6 +27,7 @@ rootProject.name = "UnlimitedPeripheralWorks $minecraftVersion"
 include(":core")
 include(":forge")
 include(":fabric")
+include(":typed-peripheral-unlimitedperipheralworks")
 include(":typescript-tests")
 
 

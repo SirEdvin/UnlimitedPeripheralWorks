@@ -6,9 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Basic tests
+- Network manager logic got reworked, now it has proper UI instead of name tag logic
+- Remote observer and peripheral proxy also have settings UI for ultimate configurator
+- Ultimate configurator itself now has UI on right click, when not attached to anything, with memory of previous attached blocks
+
+### Changed
+
+- Simplify network manager recipe
+
 ## [2.0.0-rc.1] - 2025-03-12
 
-### Added 
+### Added
 - Large migration to new framework and update to 1.21
 
 ## [1.7.17] - 2026-02-20

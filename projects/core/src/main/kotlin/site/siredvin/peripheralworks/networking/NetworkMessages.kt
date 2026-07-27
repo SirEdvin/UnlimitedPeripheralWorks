@@ -23,6 +23,27 @@ object NetworkMessages {
         MapBasedEventMessage.STREAM_CODEC,
     )
 
+    val NETWORK_MANAGER_GROUP = registerServerbound(
+        602,
+        "network_manager_group",
+        NetworkManagerGroupMessage::class.java,
+        StreamCodec.ofMember(NetworkManagerGroupMessage::write, ::NetworkManagerGroupMessage),
+    )
+
+    val TARGET_RENDER_STYLE = registerServerbound(
+        603,
+        "target_render_style",
+        TargetRenderStyleMessage::class.java,
+        StreamCodec.ofMember(TargetRenderStyleMessage::write, ::TargetRenderStyleMessage),
+    )
+
+    val CONFIGURATOR_TARGET_ACTION = registerServerbound(
+        604,
+        "configurator_target_action",
+        ConfiguratorTargetActionMessage::class.java,
+        StreamCodec.ofMember(ConfiguratorTargetActionMessage::write, ::ConfiguratorTargetActionMessage),
+    )
+
     private fun <C, T : NetworkMessage<C>> register(
         messages: MutableList<MessageType<out NetworkMessage<C>>>,
         id: Int,

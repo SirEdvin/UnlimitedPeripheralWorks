@@ -5,6 +5,8 @@ import dan200.computercraft.api.lua.MethodResult
 import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
 import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.representation.LuaInterpretation
@@ -23,8 +25,26 @@ class RemoteObserverPeripheral(
         get() {
             val base = super.peripheralConfiguration
             base["maxRange"] = PeripheralWorksConfig.remoteObserverMaxRange
+            base["textStyle"] = blockEntity.textStyle.name.lowercase()
+            base["boxStyle"] = blockEntity.boxStyle.name.lowercase()
             return base
         }
+
+    @LuaFunction(mainThread = true)
+    fun setTextStyle(value: String): MethodResult = TextStyle.entries.firstOrNull { it.name.lowercase() == value }
+        ?.let {
+            blockEntity.setTextStyle(it)
+            MethodResult.of(true)
+        }
+        ?: MethodResult.of(false, "Invalid text style: $value")
+
+    @LuaFunction(mainThread = true)
+    fun setBoxStyle(value: String): MethodResult = BoxStyle.entries.firstOrNull { it.name.lowercase() == value }
+        ?.let {
+            blockEntity.setBoxStyle(it)
+            MethodResult.of(true)
+        }
+        ?: MethodResult.of(false, "Invalid box style: $value")
 
     @LuaFunction(mainThread = true)
     fun addPosition(pos: Map<*, *>): MethodResult {

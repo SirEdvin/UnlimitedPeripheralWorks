@@ -11,6 +11,8 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.RemoteObserverPeripheral
+import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
+import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.peripheral.representation.stateProperties
@@ -22,10 +24,16 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
     companion object {
         const val TRACKED_BLOCKS_TAG = "trackedBlocks"
+        const val TEXT_STYLE_TAG = "textStyle"
+        const val BOX_STYLE_TAG = "boxStyle"
     }
 
     private var lastConsumedEventID: Long = BlockStateUpdateEventBus.lastEventID - 1
     private val trackedBlocks: MutableList<BlockPos> = mutableListOf()
+    var textStyle: TextStyle = TextStyle.NONE
+        private set
+    var boxStyle: BoxStyle = BoxStyle.FLARE
+        private set
 
     private val facing: Direction
         get() = blockState.getValue(FacingBlockEntityBlock.FACING)
@@ -34,6 +42,18 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         get() = trackedBlocks
 
     override fun createPeripheral(side: Direction): RemoteObserverPeripheral = RemoteObserverPeripheral(this)
+
+    fun setTextStyle(style: TextStyle) {
+        if (textStyle == style) return
+        textStyle = style
+        pushInternalDataChangeToClient()
+    }
+
+    fun setBoxStyle(style: BoxStyle) {
+        if (boxStyle == style) return
+        boxStyle = style
+        pushInternalDataChangeToClient()
+    }
 
     fun isPosApplicable(pos: BlockPos): Boolean {
         if (pos == this.blockPos) {
@@ -53,18 +73,19 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             addPosToTrack(pos)
             true
         }
-        pushInternalDataChangeToClient()
         return blockAdded
     }
 
     fun addPosToTrack(pos: BlockPos) {
         trackedBlocks.add(pos)
         BlockStateUpdateEventBus.addBlockPos(pos)
+        pushInternalDataChangeToClient()
     }
 
     fun removePosToTrack(pos: BlockPos) {
         if (trackedBlocks.remove(pos)) {
             BlockStateUpdateEventBus.removeBlockPos(pos)
+            pushInternalDataChangeToClient()
         }
     }
 
@@ -76,15 +97,23 @@ class RemoteObserverBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         val trackedBlockTag = ListTag()
         trackedBlocks.forEach { trackedBlockTag.add(NbtUtils.writeBlockPos(it)) }
         data.put(TRACKED_BLOCKS_TAG, trackedBlockTag)
+        data.putString(TEXT_STYLE_TAG, textStyle.name)
+        data.putString(BOX_STYLE_TAG, boxStyle.name)
         return data
     }
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
+        textStyle = TextStyle.entries.firstOrNull { it.name == data.getString(TEXT_STYLE_TAG) } ?: TextStyle.NONE
+        boxStyle = BoxStyle.entries.firstOrNull { it.name == data.getString(BOX_STYLE_TAG) } ?: BoxStyle.FLARE
         if (data.contains(TRACKED_BLOCKS_TAG)) {
+            BlockStateUpdateEventBus.removeBlockPos(trackedBlocks)
+            trackedBlocks.clear()
             val internalList = data.getList(TRACKED_BLOCKS_TAG, Tag.TAG_INT_ARRAY.toInt())
             internalList.forEach {
                 val list = (it as IntArrayTag).asIntArray
-                addPosToTrack(BlockPos(list[0], list[1], list[2]))
+                val pos = BlockPos(list[0], list[1], list[2])
+                trackedBlocks.add(pos)
+                BlockStateUpdateEventBus.addBlockPos(pos)
             }
         }
         return state ?: blockState

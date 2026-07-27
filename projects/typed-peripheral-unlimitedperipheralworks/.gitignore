@@ -1,0 +1,3 @@
+*.lua
+*.d.ts
+node_modules

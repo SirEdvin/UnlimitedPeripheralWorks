@@ -13,6 +13,10 @@ node {
     npmInstallCommand.set("ci")
 }
 
+tasks.npmInstall {
+    dependsOn(":typed-peripheral-unlimitedperipheralworks:compileTypeScript")
+}
+
 val compileTestLua by tasks.registering(NpmTask::class) {
     dependsOn(tasks.npmInstall)
     npmCommand.set(listOf("run", "build"))

@@ -26,58 +26,51 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     override val isEnabled: Boolean
         get() = PeripheralWorksConfig.enableNetworkManager
 
+    override val peripheralConfiguration: MutableMap<String, Any>
+        get() = super.peripheralConfiguration.apply {
+            put("delimiter", be.delimiter)
+            put("range", be.range)
+        }
+
     @LuaFunction(mainThread = true)
     fun getGroups(): List<String> = be.peripheralGroups.keys.toList()
 
     @LuaFunction(mainThread = true)
-    fun addGroup(group: String): MethodResult {
-        if (be.peripheralGroups.contains(group)) return MethodResult.of(false, "Such group already exists")
-        be.peripheralGroups[group] = NetworkManagerBlockEntity.PeripheralGroup()
-        be.setChanged()
-        return MethodResult.of(true)
+    fun addGroup(group: String): MethodResult = when (be.createGroup(group)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_EXISTS -> MethodResult.of(false, "Such group already exists")
+        else -> MethodResult.of(false, "Invalid group name")
     }
 
     @LuaFunction(mainThread = true)
     fun removeGroup(group: String): MethodResult {
         if (!be.peripheralGroups.contains(group)) return MethodResult.of(false, "Group does not exists")
         if (be.peripheralGroups[group]!!.peripherals.any { be.peripherals.contains(it) }) return MethodResult.of(false, "Group is not empty")
-        be.peripheralGroups.remove(group)
-        be.setChanged()
+        be.deleteGroup(group)
         return MethodResult.of(true)
     }
 
     @LuaFunction(mainThread = true)
-    fun add(group: String, peripheral: String): MethodResult {
-        if (!be.peripherals.contains(peripheral)) return MethodResult.of(false, "There is no such peripheral")
-        val groupInstance = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
-        if (groupInstance.peripherals.contains(peripheral)) {
-            return MethodResult.of(false, "Peripheral already in the group")
-        }
-        groupInstance.peripherals.add(peripheral)
-        queueEvent("network_manager_group_change", group, "added", peripheral)
-        be.pushData()
-        return MethodResult.of(true)
+    fun add(group: String, peripheral: String): MethodResult = when (be.setGroupMembership(group, peripheral, true)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.PERIPHERAL_MISSING -> MethodResult.of(false, "There is no such peripheral")
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> MethodResult.of(false, "There is no such group")
+        else -> MethodResult.of(false, "Peripheral already in the group")
     }
 
     @LuaFunction(mainThread = true)
-    fun remove(group: String, peripheral: String): MethodResult {
-        if (!be.peripherals.contains(peripheral)) return MethodResult.of(false, "There is no such peripheral")
-        val groupInstance = be.peripheralGroups[group] ?: return MethodResult.of(false, "There is no such group")
-        if (!groupInstance.peripherals.contains(peripheral)) {
-            return MethodResult.of(false, "Peripheral not in the group")
-        }
-        groupInstance.peripherals.remove(peripheral)
-        queueEvent("network_manager_group_change", group, "removed", peripheral)
-        be.pushData()
-        return MethodResult.of(true)
+    fun remove(group: String, peripheral: String): MethodResult = when (be.setGroupMembership(group, peripheral, false)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.PERIPHERAL_MISSING -> MethodResult.of(false, "There is no such peripheral")
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> MethodResult.of(false, "There is no such group")
+        else -> MethodResult.of(false, "Peripheral not in the group")
     }
 
     @LuaFunction(mainThread = true)
-    fun setGroupColor(group: String, color: Int): MethodResult {
-        if (!be.peripheralGroups.contains(group)) return MethodResult.of(false, "There is no such group")
-        be.peripheralGroups[group]!!.color = color
-        be.pushData()
-        return MethodResult.of(true)
+    fun setGroupColor(group: String, color: Int): MethodResult = when (be.setGroupColor(group, color)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        NetworkManagerBlockEntity.GroupOperationResult.GROUP_MISSING -> MethodResult.of(false, "There is no such group")
+        else -> MethodResult.of(false, "Invalid color")
     }
 
     @LuaFunction(mainThread = true)
@@ -87,12 +80,21 @@ class NetworkManagerPeripheral(private val be: NetworkManagerBlockEntity) :
     }
 
     @LuaFunction(mainThread = true)
-    fun get(group: String): MethodResult {
-        val group = be.peripheralGroups[group] ?: return MethodResult.of()
-        return MethodResult.of(
-            *group.peripherals.filter { be.peripherals.contains(it) }.toTypedArray(),
-        )
+    fun setDelimiter(delimiter: String): MethodResult = when (be.setDelimiter(delimiter)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        else -> MethodResult.of(false, "Delimiter is too long")
     }
+
+    @LuaFunction(mainThread = true)
+    fun setRange(range: Int): MethodResult = when (be.setRange(range)) {
+        NetworkManagerBlockEntity.GroupOperationResult.SUCCESS -> MethodResult.of(true)
+        else -> MethodResult.of(false, "Range should be between ${NetworkManagerBlockEntity.MIN_RANGE} and ${NetworkManagerBlockEntity.MAX_RANGE}")
+    }
+
+    @LuaFunction(mainThread = true)
+    fun get(group: String): MethodResult = MethodResult.of(
+        *be.groupPeripherals(group).filter { be.peripherals.contains(it) }.toTypedArray(),
+    )
 
     @LuaFunction(mainThread = true)
     fun getDistanceBetween(computer: IComputerAccess, firstName: String, secondName: String): MethodResult {

@@ -195,7 +195,7 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
 
         TweakedShapedRecipeBuilder(Blocks.NETWORK_MANAGER.get().asItem().defaultInstance)
             .define('P', Ingredient.of(Blocks.PERIPHERAL_CASING.get().asItem()))
-            .define('C', net.minecraft.world.item.Items.COBWEB)
+            .define('C', net.minecraft.world.item.Items.STRING)
             .define('K', ModBlocksReference.get().cable)
             .pattern("KCK")
             .pattern("CPC")

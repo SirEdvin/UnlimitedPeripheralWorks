@@ -12,14 +12,22 @@ import net.minecraft.world.phys.BlockHitResult
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.data.ModText
 import site.siredvin.peripheralworks.data.ModTooltip
 import site.siredvin.peripheralworks.tags.BlockTags
+import site.siredvin.peripheralworks.xplat.ModClientPlatform
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 object PeripheralProxyMode : ConfigurationMode {
     override val modeID: ResourceLocation = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "peripheral_proxy")
     override val description: Component = ModTooltip.PERIPHERAL_PROXY_MODE.text
+
+    override fun onBlockMiss(configurationTarget: BlockPos, stack: ItemStack, player: Player, level: Level): InteractionResultHolder<ItemStack> {
+        if (!UltimateConfigurator.isActiveModeDimension(stack, level)) return InteractionResultHolder.fail(stack)
+        if (level.isClientSide) ModClientPlatform.openTargetRenderSettingsScreen(configurationTarget)
+        return InteractionResultHolder.consume(stack)
+    }
 
     override fun onBlockClick(configurationTarget: BlockPos, stack: ItemStack, player: Player, hit: BlockHitResult, level: Level): InteractionResultHolder<ItemStack> {
         if (level.isClientSide || level !is ServerLevel) {
