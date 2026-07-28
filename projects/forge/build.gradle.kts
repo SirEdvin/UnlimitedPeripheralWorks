@@ -1,3 +1,4 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.gradle.api.artifacts.ExternalModuleDependency
 
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -147,6 +148,10 @@ modPublishing {
         ),
     )
     shake()
+}
+
+tasks.named<TaskPublishCurseForge>("publishCurseForge") {
+    uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }
 
 val copyPowah by tasks.register<Copy>("copyPowah") {

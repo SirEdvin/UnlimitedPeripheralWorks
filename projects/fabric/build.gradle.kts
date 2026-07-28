@@ -1,3 +1,5 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("site.siredvin.fabric")
@@ -162,4 +164,8 @@ modPublishing {
     requiredDependenciesCurseforge.add("forge-config-api-port")
     requiredDependenciesModrinth.add("forge-config-api-port")
     shake()
+}
+
+tasks.named<TaskPublishCurseForge>("publishCurseForge") {
+    uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }
