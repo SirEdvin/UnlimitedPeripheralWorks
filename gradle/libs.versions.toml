@@ -9,7 +9,7 @@ loom = "1.17.11"
 mixinGradle = "0.7.+"
 forgegradle = "6.+"
 # Core mod dependencies
-cc-tweaked = "1.113.0"
+cc-tweaked = "1.113.1"
 broccolium = "1.4.6"
 tweakium = "1.4.9"
 peripheralium = "1.4.6"
