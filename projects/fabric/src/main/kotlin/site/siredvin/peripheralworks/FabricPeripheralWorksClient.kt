@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelResolver
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents
+import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers
 import net.minecraft.resources.ResourceLocation
@@ -51,11 +52,10 @@ object FabricPeripheralWorksClient : ClientModInitializer {
             FabricComputerCraftAPIClient.registerTurtleUpgradeModeller(upgrade as UpgradeType<ITurtleUpgrade>, modeller)
         }
 
-        WorldRenderEvents.AFTER_ENTITIES.register {
+        WorldRenderEvents.LAST.register {
             val matrix = it.matrixStack()
-            val consumers = it.consumers()
-            if (matrix != null && consumers != null) {
-                ConfigurationModeRenderRegistry.render(matrix, consumers, it.world(), it.camera())
+            if (matrix != null) {
+                ConfigurationModeRenderRegistry.render(matrix, Minecraft.getInstance().renderBuffers().bufferSource(), it.world(), it.camera())
             }
         }
 
