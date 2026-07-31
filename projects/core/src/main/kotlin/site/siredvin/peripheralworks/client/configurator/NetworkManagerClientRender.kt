@@ -3,7 +3,6 @@ package site.siredvin.peripheralworks.client.configurator
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Camera
 import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.culling.Frustum
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.phys.AABB
@@ -32,10 +31,10 @@ object NetworkManagerClientRender : ConfigurationModeRender {
         val selectedPrefix = selected?.takeIf { entity.delimiter.isNotEmpty() }?.plus(entity.delimiter)
         val textStyles = NetworkManagerMode.RenderTarget.entries.map { NetworkManagerMode.getTextStyle(stack, it) }
         val boxStyles = NetworkManagerMode.RenderTarget.entries.map { NetworkManagerMode.getBoxStyle(stack, it) }
-        val frustum = Frustum(poseStack.last().pose(), projectionMatrix).apply { prepare(camera.position.x, camera.position.y, camera.position.z) }
         val peripherals = buildList {
             entity.clientBlockCache.forEach { (pos, instructions) ->
-                if (pos.distToCenterSqr(playerPos.x, playerPos.y, playerPos.z) >= rangeSquared || !frustum.isVisible(AABB(pos).inflate(1.0))) return@forEach
+                // ponytail: the radius bounds the work without loader-specific render-stage frustum matrices.
+                if (pos.distToCenterSqr(playerPos.x, playerPos.y, playerPos.z) >= rangeSquared) return@forEach
                 val selectedGroups = if (selected == null) emptyList() else instructions.groups.filter { group -> group == selected || selectedPrefix != null && group.startsWith(selectedPrefix) }
                 val target = when {
                     selectedGroups.isNotEmpty() -> NetworkManagerMode.RenderTarget.SELECTED
