@@ -227,20 +227,22 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         }
     }
 
-    fun connectBlockPos(level: Level, record: RemotePeripheralRecord) {
+    fun connectBlockPos(level: Level, record: RemotePeripheralRecord): Boolean {
         if (level is ServerLevel) {
-            val targetPeripheral = ComputerPlatformToolkit.get().getPeripheral(level, record.targetBlock, Direction.NORTH)
+            if (!level.isLoaded(record.targetBlock)) return true
+            val targetPeripheral = ComputerPlatformToolkit.get().getPeripheral(level, record.targetBlock, record.direction)
             if (targetPeripheral == null) {
                 PeripheralWorksCore.logger.debug(
-                    "Postpone {} for peripheral proxing, it doesn't contains any peripheral for now",
+                    "Remove {} from peripheral proxy because it doesn't contain a peripheral",
                     record.targetBlock,
                 )
-                peripheralConnectionIncomplete = true
+                return false
             } else {
                 trackRecord(record, targetPeripheral)
                 pushInternalDataChangeToClient()
             }
         }
+        return true
     }
 
     fun updateCachedStacks(level: Level) {
@@ -297,7 +299,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                     listenerConnectionIncomplete = true
                     PeripheralWorksCore.logger.debug("Postpone of loading blockPos {}", blockPos)
                 } else {
-                    connectBlockPos(level!!, record)
+                    if (!connectBlockPos(level!!, record)) remotePeripherals.remove(record.targetBlock)
                 }
             }
             if (level?.isClientSide == true) {
@@ -312,11 +314,10 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             ensurePeripheralCreated(Direction.UP)
         }
         if (listenerConnectionIncomplete || peripheralConnectionIncomplete) {
-            remotePeripherals.values.forEach {
-                if (!it.connectedToListener || !it.connectedToPeripheral) {
-                    connectBlockPos(level, it)
-                }
+            val removed = remotePeripherals.values.removeIf {
+                (!it.connectedToListener || !it.connectedToPeripheral) && !connectBlockPos(level, it)
             }
+            if (removed) pushInternalDataChangeToClient()
             listenerConnectionIncomplete = remotePeripherals.values.any { !it.connectedToListener }
             peripheralConnectionIncomplete = remotePeripherals.values.any { !it.connectedToPeripheral }
         }

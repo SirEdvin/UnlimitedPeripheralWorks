@@ -84,6 +84,31 @@ class PeripheralWorksGameTests {
     }
 
     @GameTest(template = "empty")
+    fun peripheralProxyRemovesMissingPeripheralOnLoad(helper: GameTestHelper) {
+        val proxyPos = BlockPos(1, 1, 1)
+        helper.setBlock(proxyPos, Blocks.PERIPHERAL_PROXY.get())
+        val proxy = helper.getBlockEntity(proxyPos) as PeripheralProxyBlockEntity
+        val missingPos = helper.absolutePos(BlockPos(2, 1, 1))
+        proxy.loadInternalData(
+            CompoundTag().apply {
+                put(
+                    PeripheralProxyBlockEntity.REMOTE_PERIPHERALS_TAG,
+                    ListTag().apply {
+                        add(PeripheralProxyBlockEntity.RemotePeripheralRecord(missingPos, "minecraft:chest", Direction.UP).toTag())
+                    },
+                )
+            },
+            null,
+        )
+
+        check(proxy.remotePeripherals.isEmpty()) { "Missing peripheral remained attached after proxy load" }
+        check(proxy.saveInternalData(CompoundTag()).getList(PeripheralProxyBlockEntity.REMOTE_PERIPHERALS_TAG, Tag.TAG_COMPOUND.toInt()).isEmpty()) {
+            "Missing peripheral remained in proxy NBT after load"
+        }
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
     fun remoteObserverRenderSettingsPersistAndFallback(helper: GameTestHelper) {
         val firstPos = BlockPos(1, 1, 1)
         val secondPos = BlockPos(2, 1, 1)
