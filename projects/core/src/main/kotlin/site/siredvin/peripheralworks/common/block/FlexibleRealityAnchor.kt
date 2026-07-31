@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.level.block.state.properties.Property
+import net.minecraft.world.level.lighting.LightEngine
 import net.minecraft.world.level.material.MapColor
 import net.minecraft.world.phys.shapes.CollisionContext
 import net.minecraft.world.phys.shapes.EntityCollisionContext
@@ -67,10 +68,7 @@ class FlexibleRealityAnchor :
         builder.add(INVISIBLE)
     }
 
-    override fun getLightBlock(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos): Int {
-        val blockEntity = blockGetter.getBlockEntity(blockPos)
-        return if (blockEntity is FlexibleRealityAnchorBlockEntity) blockEntity.lightLevel else 0
-    }
+    override fun getLightBlock(blockState: BlockState, blockGetter: BlockGetter, blockPos: BlockPos): Int = if (!blockState.getValue(CONFIGURED) || blockState.getValue(LIGHT_PASSABLE) && blockState.getValue(SKY_LIGHT_PASSABLE)) 0 else LightEngine.MAX_LEVEL
 
     override fun createItemStack(): ItemStack = ItemStack(Blocks.FLEXIBLE_REALITY_ANCHOR.get().asItem())
 
@@ -93,7 +91,7 @@ class FlexibleRealityAnchor :
         return if (blockState.getValue(INVISIBLE)) RenderShape.INVISIBLE else super.getRenderShape(blockState)
     }
 
-    override fun useShapeForLightOcclusion(state: BlockState): Boolean = true
+    override fun useShapeForLightOcclusion(state: BlockState): Boolean = !state.getValue(LIGHT_PASSABLE) && state.getValue(CONFIGURED)
 
     override fun getVisualShape(
         state: BlockState,
