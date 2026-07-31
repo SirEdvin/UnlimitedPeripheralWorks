@@ -109,6 +109,32 @@ class PeripheralWorksGameTests {
     }
 
     @GameTest(template = "empty")
+    fun networkManagerDisplaysPeripheralProxyTargets(helper: GameTestHelper) {
+        val managerPos = BlockPos(1, 1, 1)
+        val proxyPos = BlockPos(1, 2, 1)
+        val chestPos = BlockPos(2, 1, 1)
+        helper.setBlock(managerPos, Blocks.NETWORK_MANAGER.get())
+        helper.setBlock(proxyPos, Blocks.PERIPHERAL_PROXY.get())
+        helper.setBlock(chestPos, net.minecraft.world.level.block.Blocks.CHEST)
+        val manager = helper.getBlockEntity(managerPos) as NetworkManagerBlockEntity
+        val proxy = helper.getBlockEntity(proxyPos) as PeripheralProxyBlockEntity
+        val absoluteChestPos = helper.absolutePos(chestPos)
+        val chest = ComputerPlatformToolkit.get().getPeripheral(helper.level, absoluteChestPos, Direction.UP)
+            ?: error("Chest peripheral was not available")
+        proxy.addPosToTrack(absoluteChestPos, Direction.UP, chest)
+        val peripheralName = proxy.remotePeripherals.getValue(absoluteChestPos).peripheralName!!
+
+        helper.startSequence()
+            .thenIdle(5)
+            .thenExecute {
+                check(manager.peripherals[peripheralName] == absoluteChestPos) {
+                    "Network manager did not display peripheral proxy target $peripheralName"
+                }
+            }
+            .thenSucceed()
+    }
+
+    @GameTest(template = "empty")
     fun remoteObserverRenderSettingsPersistAndFallback(helper: GameTestHelper) {
         val firstPos = BlockPos(1, 1, 1)
         val secondPos = BlockPos(2, 1, 1)
