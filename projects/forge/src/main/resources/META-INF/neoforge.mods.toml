@@ -6,6 +6,9 @@ logoFile="pack.png"
 
 license="MIT"
 
+[[mixins]]
+config="peripheralworks.mixins.json"
+
 [[mods]]
 modId="peripheralworks"
 version="${file.jarVersion}"

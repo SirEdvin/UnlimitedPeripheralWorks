@@ -1,11 +1,13 @@
 package site.siredvin.peripheralworks.testmod
 
 import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
@@ -13,6 +15,7 @@ import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHier
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
+import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
@@ -24,6 +27,7 @@ import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
 import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
@@ -49,6 +53,34 @@ class PeripheralWorksGameTests {
         )
         check(loaded.textStyle == TextStyle.REGULAR && loaded.boxStyle == BoxStyle.FILLED)
         helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun peripheralProxyRemovesBrokenPeripheral(helper: GameTestHelper) {
+        val proxyPos = BlockPos(1, 1, 1)
+        val chestPos = BlockPos(2, 1, 1)
+        helper.setBlock(proxyPos, Blocks.PERIPHERAL_PROXY.get())
+        helper.setBlock(chestPos, net.minecraft.world.level.block.Blocks.CHEST)
+        val proxy = helper.getBlockEntity(proxyPos) as PeripheralProxyBlockEntity
+        val absoluteChestPos = helper.absolutePos(chestPos)
+        val chest = ComputerPlatformToolkit.get().getPeripheral(helper.level, absoluteChestPos, Direction.UP)
+            ?: error("Chest peripheral was not available")
+        proxy.addPosToTrack(absoluteChestPos, Direction.UP, chest)
+        val eventId = BlockStateUpdateEventBus.lastEventID
+
+        helper.startSequence()
+            .thenExecute {
+                helper.setBlock(chestPos, net.minecraft.world.level.block.Blocks.AIR)
+                check(BlockStateUpdateEventBus.lastEventID > eventId) { "Chest removal did not publish a block-state event" }
+            }
+            .thenIdle(2)
+            .thenExecute {
+                check(proxy.remotePeripherals.isEmpty()) { "Broken chest remained attached to peripheral proxy" }
+                check(proxy.saveInternalData(CompoundTag()).getList(PeripheralProxyBlockEntity.REMOTE_PERIPHERALS_TAG, Tag.TAG_COMPOUND.toInt()).isEmpty()) {
+                    "Broken chest remained in peripheral proxy NBT"
+                }
+            }
+            .thenSucceed()
     }
 
     @GameTest(template = "empty")
