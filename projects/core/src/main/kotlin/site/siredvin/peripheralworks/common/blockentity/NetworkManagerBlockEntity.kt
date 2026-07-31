@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.common.blockentity
 
 import dan200.computercraft.api.network.wired.WiredElement
+import dan200.computercraft.api.network.wired.WiredNetworkChange
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.shared.computer.core.ServerContext
 import dan200.computercraft.shared.peripheral.modem.wired.WiredModemElement
@@ -96,6 +97,26 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     class NetworkManagerWiredElement(private val be: NetworkManagerBlockEntity) : WiredModemElement() {
+        override fun networkChanged(change: WiredNetworkChange) {
+            // ponytail: Log batch boundaries, not every peripheral, so diagnostics do not amplify shutdown work.
+            val started = System.nanoTime()
+            PeripheralWorksCore.logger.info(
+                "Network manager wired change started at {} (thread={}, added={}, removed={}, tracked={})",
+                be.blockPos,
+                Thread.currentThread().name,
+                change.peripheralsAdded().size,
+                change.peripheralsRemoved().size,
+                be.peripherals.size,
+            )
+            super.networkChanged(change)
+            PeripheralWorksCore.logger.info(
+                "Network manager wired change completed at {} in {} ms (tracked={})",
+                be.blockPos,
+                (System.nanoTime() - started) / 1_000_000,
+                be.peripherals.size,
+            )
+        }
+
         override fun attachPeripheral(
             name: String,
             peripheral: IPeripheral,
@@ -390,7 +411,19 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     override fun setRemoved() {
         super.setRemoved()
         if (level == null || !level!!.isClientSide) {
+            val started = System.nanoTime()
+            PeripheralWorksCore.logger.info(
+                "Network manager node removal started at {} (thread={}, tracked={})",
+                blockPos,
+                Thread.currentThread().name,
+                peripherals.size,
+            )
             this.element.node.remove()
+            PeripheralWorksCore.logger.info(
+                "Network manager node removal completed at {} in {} ms",
+                blockPos,
+                (System.nanoTime() - started) / 1_000_000,
+            )
         }
     }
 
