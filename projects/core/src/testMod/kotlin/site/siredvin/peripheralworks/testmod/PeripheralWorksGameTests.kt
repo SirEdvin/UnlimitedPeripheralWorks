@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
+import site.siredvin.peripheralworks.common.block.NetworkManager
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
@@ -129,6 +130,49 @@ class PeripheralWorksGameTests {
             .thenExecute {
                 check(manager.peripherals[peripheralName] == absoluteChestPos) {
                     "Network manager did not display peripheral proxy target $peripheralName"
+                }
+            }
+            .thenSucceed()
+    }
+
+    @GameTest(template = "empty")
+    fun networkManagerDefersPeripheralSync(helper: GameTestHelper) {
+        val manager = getNetworkManager(helper)
+        var toggling = false
+
+        helper.startSequence()
+            .thenIdle(2)
+            .thenExecute {
+                manager.peripherals["monitor_0"] = BlockPos.ZERO
+                toggling = manager.blockState.getValue(NetworkManager.TOGGLING)
+                manager.detachPeripheral("monitor_0")
+                check(manager.blockState.getValue(NetworkManager.TOGGLING) == toggling) { "Peripheral sync was not deferred" }
+            }
+            .thenIdle(1)
+            .thenExecute {
+                check(manager.blockState.getValue(NetworkManager.TOGGLING) != toggling) { "Deferred peripheral sync did not run" }
+            }
+            .thenSucceed()
+    }
+
+    @GameTest(template = "empty")
+    fun networkManagerNodeRemovalDoesNotMutateSurvivorSynchronously(helper: GameTestHelper) {
+        val survivorPos = BlockPos(1, 1, 1)
+        val removedPos = BlockPos(1, 2, 1)
+        helper.setBlock(survivorPos, Blocks.NETWORK_MANAGER.get())
+        helper.setBlock(removedPos, Blocks.NETWORK_MANAGER.get())
+        val survivor = helper.getBlockEntity(survivorPos) as NetworkManagerBlockEntity
+        val absoluteRemovedPos = helper.absolutePos(removedPos)
+
+        helper.startSequence()
+            .thenIdle(5)
+            .thenExecute {
+                check(absoluteRemovedPos in survivor.peripherals.values) { "Network managers did not connect" }
+                val toggling = survivor.blockState.getValue(NetworkManager.TOGGLING)
+                helper.setBlock(removedPos, net.minecraft.world.level.block.Blocks.AIR)
+                check(absoluteRemovedPos !in survivor.peripherals.values) { "Removed network manager remained attached" }
+                check(survivor.blockState.getValue(NetworkManager.TOGGLING) == toggling) {
+                    "Node removal synchronously mutated the surviving network manager"
                 }
             }
             .thenSucceed()

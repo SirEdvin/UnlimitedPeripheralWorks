@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.common.blockentity
 
 import dan200.computercraft.api.network.wired.WiredElement
-import dan200.computercraft.api.network.wired.WiredNetworkChange
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.shared.computer.core.ServerContext
 import dan200.computercraft.shared.peripheral.modem.wired.WiredModemElement
@@ -13,6 +12,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.StringTag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -97,26 +97,6 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     class NetworkManagerWiredElement(private val be: NetworkManagerBlockEntity) : WiredModemElement() {
-        override fun networkChanged(change: WiredNetworkChange) {
-            // ponytail: Log batch boundaries, not every peripheral, so diagnostics do not amplify shutdown work.
-            val started = System.nanoTime()
-            PeripheralWorksCore.logger.info(
-                "Network manager wired change started at {} (thread={}, added={}, removed={}, tracked={})",
-                be.blockPos,
-                Thread.currentThread().name,
-                change.peripheralsAdded().size,
-                change.peripheralsRemoved().size,
-                be.peripherals.size,
-            )
-            super.networkChanged(change)
-            PeripheralWorksCore.logger.info(
-                "Network manager wired change completed at {} in {} ms (tracked={})",
-                be.blockPos,
-                (System.nanoTime() - started) / 1_000_000,
-                be.peripherals.size,
-            )
-        }
-
         override fun attachPeripheral(
             name: String,
             peripheral: IPeripheral,
@@ -151,6 +131,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     val element = NetworkManagerWiredElement(this)
     private var peripheralName: String? = null
     private var refreshConnectionsRequired: Boolean = true
+    private var peripheralSyncRequired: Boolean = false
     private var begsForTick: Boolean = true
     private var peripheralRegistered: Boolean = false
     private val connectedElements: ComponentAccess<WiredElement> =
@@ -167,7 +148,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         val pos = extractPeripheralPos(peripheral.target)
         if (pos != null) {
             peripherals[name] = pos
-            pushData()
+            schedulePeripheralSync()
         } else {
             PeripheralWorksCore.logger.warn("Cannot locate anything about {} skipping it", name)
         }
@@ -175,9 +156,17 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     fun detachPeripheral(name: String) {
-        peripherals.remove(name)
-        pushData()
+        if (peripherals.remove(name) != null) schedulePeripheralSync()
         satisfyBegForTicks()
+    }
+
+    private fun schedulePeripheralSync() {
+        peripheralSyncRequired = true
+        val level = level
+        // ponytail: Do not mutate or dirty chunks after server shutdown has started.
+        if (level is ServerLevel && level.server?.isRunning == true && !isRemoved) {
+            level.scheduleTick(blockPos, blockState.block, 0)
+        }
     }
 
     fun createGroup(name: String): GroupOperationResult {
@@ -401,6 +390,10 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                 )
                 peripheralRegistered = true
             }
+            if (peripheralSyncRequired) {
+                peripheralSyncRequired = false
+                pushData()
+            }
         }
     }
 
@@ -411,19 +404,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     override fun setRemoved() {
         super.setRemoved()
         if (level == null || !level!!.isClientSide) {
-            val started = System.nanoTime()
-            PeripheralWorksCore.logger.info(
-                "Network manager node removal started at {} (thread={}, tracked={})",
-                blockPos,
-                Thread.currentThread().name,
-                peripherals.size,
-            )
             this.element.node.remove()
-            PeripheralWorksCore.logger.info(
-                "Network manager node removal completed at {} in {} ms",
-                blockPos,
-                (System.nanoTime() - started) / 1_000_000,
-            )
         }
     }
 
