@@ -11,7 +11,7 @@ import site.siredvin.peripheralworks.client.configurator.ConfigurationModeRender
 object ForgePeripheralWorksMainClient {
     @SubscribeEvent
     fun onRender(ev: RenderLevelStageEvent) {
-        if (ev.stage == RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
+        if (ev.stage == RenderLevelStageEvent.Stage.AFTER_LEVEL) {
             ConfigurationModeRenderRegistry.render(
                 ev.poseStack,
                 Minecraft.getInstance().renderBuffers().bufferSource(),
