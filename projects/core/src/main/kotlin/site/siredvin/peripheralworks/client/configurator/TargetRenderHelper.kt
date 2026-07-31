@@ -65,9 +65,9 @@ object TargetRenderHelper {
         labels.filter { it.style != TextStyle.NONE }.forEach {
             poseStack.pushPose()
             poseStack.translate(it.pos.x, it.pos.y, it.pos.z)
-            poseStack.mulPose(Minecraft.getInstance().entityRenderDispatcher.cameraOrientation())
-            poseStack.mulPose(Axis.ZP.rotationDegrees(180f))
-            poseStack.scale(0.015f, 0.015f, 0.015f)
+            poseStack.mulPose(camera.rotation())
+            poseStack.mulPose(Axis.YP.rotationDegrees(180f))
+            poseStack.scale(-0.015f, -0.015f, 0.015f)
             val text = if (it.style == TextStyle.BOLD) it.text.copy().withStyle { style -> style.withBold(true) } else it.text
             val font = Minecraft.getInstance().font
             font.drawInBatch(text, -font.width(text) / 2f, 0f, it.color, false, poseStack.last().pose(), buffer, Font.DisplayMode.SEE_THROUGH, 0, LightTexture.FULL_BRIGHT)

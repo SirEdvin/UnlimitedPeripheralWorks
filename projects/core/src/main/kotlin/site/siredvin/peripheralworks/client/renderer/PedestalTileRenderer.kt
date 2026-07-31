@@ -130,12 +130,11 @@ class PedestalTileRenderer<T> : BlockEntityRenderer<T> where T : BlockEntity, T 
         val scale = 0.01f
         val opacity = (.4f * 255.0f).toInt() shl 24
         val offset = (-font.width(text) / 2).toFloat()
-        val matrix = stack.last().pose()
         stack.translate(translation.x, translation.y, translation.z)
-        stack.scale(scale, scale, scale)
-        stack.mulPose(Minecraft.getInstance().entityRenderDispatcher.cameraOrientation())
-        stack.mulPose(Axis.ZP.rotationDegrees(180f))
-        font.drawInBatch(text, offset, 0f, color, false, matrix, buffer, Font.DisplayMode.NORMAL, opacity, lightLevel)
+        stack.mulPose(Minecraft.getInstance().gameRenderer.mainCamera.rotation())
+        stack.mulPose(Axis.YP.rotationDegrees(180f))
+        stack.scale(-scale, -scale, scale)
+        font.drawInBatch(text, offset, 0f, color, false, stack.last().pose(), buffer, Font.DisplayMode.NORMAL, opacity, lightLevel)
         stack.popPose()
     }
 
