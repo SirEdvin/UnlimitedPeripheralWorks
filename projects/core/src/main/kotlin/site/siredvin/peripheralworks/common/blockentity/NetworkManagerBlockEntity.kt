@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtUtils
 import net.minecraft.nbt.StringTag
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
@@ -130,6 +131,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     val element = NetworkManagerWiredElement(this)
     private var peripheralName: String? = null
     private var refreshConnectionsRequired: Boolean = true
+    private var peripheralSyncRequired: Boolean = false
     private var begsForTick: Boolean = true
     private var peripheralRegistered: Boolean = false
     private val connectedElements: ComponentAccess<WiredElement> =
@@ -146,7 +148,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
         val pos = extractPeripheralPos(peripheral.target)
         if (pos != null) {
             peripherals[name] = pos
-            pushData()
+            schedulePeripheralSync()
         } else {
             PeripheralWorksCore.logger.warn("Cannot locate anything about {} skipping it", name)
         }
@@ -154,9 +156,17 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
     }
 
     fun detachPeripheral(name: String) {
-        peripherals.remove(name)
-        pushData()
+        if (peripherals.remove(name) != null) schedulePeripheralSync()
         satisfyBegForTicks()
+    }
+
+    private fun schedulePeripheralSync() {
+        peripheralSyncRequired = true
+        val level = level
+        // ponytail: Do not mutate or dirty chunks after server shutdown has started.
+        if (level is ServerLevel && level.server?.isRunning == true && !isRemoved) {
+            level.scheduleTick(blockPos, blockState.block, 0)
+        }
     }
 
     fun createGroup(name: String): GroupOperationResult {
@@ -379,6 +389,10 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
                     ),
                 )
                 peripheralRegistered = true
+            }
+            if (peripheralSyncRequired) {
+                peripheralSyncRequired = false
+                pushData()
             }
         }
     }
