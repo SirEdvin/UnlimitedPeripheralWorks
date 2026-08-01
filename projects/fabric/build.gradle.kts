@@ -1,3 +1,4 @@
+import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import java.io.ByteArrayInputStream
 
 @Suppress("DSL_SCOPE_VIOLATION")
@@ -241,4 +242,8 @@ modPublishing {
     requiredDependenciesCurseforge.add("forge-config-api-port-fabric")
     requiredDependenciesModrinth.add("forge-config-api-port")
     shake()
+}
+
+tasks.named<TaskPublishCurseForge>("publishCurseForge") {
+    uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }
