@@ -36,8 +36,10 @@ class TargetRenderStyleMessage(
             return
         }
         val target = player.level().getBlockEntity(pos)
-        val validTarget = activeMode.first.modeID == PeripheralProxyMode.modeID && target is PeripheralProxyBlockEntity ||
-            activeMode.first.modeID == RemoteObserverMode.modeID && target is RemoteObserverBlockEntity
+        val validTarget = activeMode.first.modeID == PeripheralProxyMode.modeID &&
+            target is PeripheralProxyBlockEntity ||
+            activeMode.first.modeID == RemoteObserverMode.modeID &&
+            target is RemoteObserverBlockEntity
         if (!validTarget) {
             reject(player)
             return
