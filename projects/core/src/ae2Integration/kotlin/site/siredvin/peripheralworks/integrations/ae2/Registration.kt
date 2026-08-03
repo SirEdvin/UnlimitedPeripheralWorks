@@ -7,7 +7,7 @@ package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.features.P2PTunnelAttunement
 import appeng.api.parts.PartModels
-import appeng.core.definitions.AEItems
+import appeng.core.definitions.AEBlocks
 import appeng.core.definitions.AEParts
 import appeng.items.parts.PartItem
 import appeng.items.parts.PartModelsHelper
@@ -21,10 +21,9 @@ import net.minecraft.data.models.model.ModelTemplates
 import net.minecraft.data.models.model.TextureMapping
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
-import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.block.entity.BlockEntityType
 import site.siredvin.broccolium.modules.base.block.GenericBlockEntityBlock
-import site.siredvin.broccolium.modules.base.item.HiddenDescriptiveBlockItem
+import site.siredvin.broccolium.modules.base.item.DescriptiveBlockItem
 import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.broccolium.modules.data.recipe.TweakedShapedRecipeBuilder
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
@@ -38,24 +37,16 @@ import site.siredvin.peripheralworks.data.ModLootTableProvider
 import site.siredvin.peripheralworks.data.ModRecipeProvider
 import site.siredvin.peripheralworks.data.ModTagsProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
-import site.siredvin.peripheralworks.utils.TooltipCollection
 import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.Supplier
+import site.siredvin.peripheralworks.common.setup.Items as ModItems
 
 class Registration : Runnable {
     companion object {
         val ME_NETWORK_PERIPHERAL = ModPlatform.registerBlock(
             "me_network_peripheral",
             { GenericBlockEntityBlock({ ME_NETWORK_PERIPHERAL_BLOCK_ENTITY.get() }, false, false, BlockUtil.defaultProperties()) },
-            {
-                HiddenDescriptiveBlockItem(
-                    it,
-                    Item.Properties(),
-                    Configuration::enableMEInterface,
-                    false,
-                    TooltipCollection::isDisabled,
-                )
-            },
+            { DescriptiveBlockItem(it, Item.Properties()) },
         )
 
         val ME_NETWORK_PERIPHERAL_BLOCK_ENTITY: Supplier<BlockEntityType<MENetworkPeripheralBlockEntity>> = ModPlatform.registerBlockEntity(
@@ -79,18 +70,12 @@ class Registration : Runnable {
             val conditionalOutput = AE2RecipeConditions.wrap(output)
             TweakedShapedRecipeBuilder.shaped(ME_NETWORK_PERIPHERAL.get())
                 .define('C', Blocks.PERIPHERAL_CASING.get())
-                .define('F', AEItems.FLUIX_CRYSTAL)
-                .define('P', AEItems.ENGINEERING_PROCESSOR)
-                .pattern("FPF")
-                .pattern("PCP")
-                .pattern("FPF")
-                .save(conditionalOutput)
-            TweakedShapedRecipeBuilder.shaped(WIRED_NETWORK_P2P_TUNNEL.get())
-                .define('T', AEParts.ME_P2P_TUNNEL)
-                .define('C', Ingredient.of(ModRegistry.Items.CABLE.get()))
-                .pattern(" C ")
-                .pattern("CTC")
-                .pattern(" C ")
+                .define('E', AEParts.EXPORT_BUS)
+                .define('I', AEBlocks.INTERFACE)
+                .define('M', AEParts.IMPORT_BUS)
+                .pattern(" E ")
+                .pattern("ICI")
+                .pattern(" M ")
                 .save(conditionalOutput)
         }
         ModLootTableProvider.addBlockHook { loot, output -> loot.dropSelf(output, ME_NETWORK_PERIPHERAL) }
@@ -112,22 +97,27 @@ class Registration : Runnable {
             ) {
                 JsonObject().apply {
                     addProperty("parent", "ae2:part/p2p/p2p_tunnel_base")
-                    add("textures", JsonObject().apply { addProperty("type", "computercraft:block/cable_side") })
+                    add("textures", JsonObject().apply { addProperty("type", "computercraft:block/wired_modem_face") })
                 }
             }
         }
         ModItemModelProvider.addHook { generators ->
-            ModelTemplates.FLAT_ITEM.create(
+            generators.output.accept(
                 ModelLocationUtils.getModelLocation(WIRED_NETWORK_P2P_TUNNEL.get()),
-                TextureMapping.layer0(ResourceLocation("computercraft", "block/cable_side")),
-                generators.output,
-            )
+            ) {
+                JsonObject().apply {
+                    addProperty("parent", "ae2:item/p2p_tunnel_base")
+                    add("textures", JsonObject().apply { addProperty("type", "computercraft:block/wired_modem_face") })
+                }
+            }
         }
         ModTagsProvider.addItemHook { tags ->
             tags.tag(P2PTunnelAttunement.getAttunementTag(WIRED_NETWORK_P2P_TUNNEL.get())).add(
                 ModRegistry.Items.CABLE.get(),
                 ModRegistry.Items.WIRED_MODEM.get(),
                 ModRegistry.Items.WIRED_MODEM_FULL.get(),
+                Blocks.NETWORK_MANAGER.get().asItem(),
+                ModItems.ULTIMATE_CONFIGURATOR.get(),
             )
         }
         ModEnLanguageProvider.addHook {

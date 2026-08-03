@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "ae2:item/p2p_tunnel_base",
   "textures": {
-    "layer0": "computercraft:block/cable_side"
+    "type": "computercraft:block/wired_modem_face"
   }
 }

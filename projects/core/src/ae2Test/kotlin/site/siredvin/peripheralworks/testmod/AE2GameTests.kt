@@ -36,6 +36,8 @@ import site.siredvin.peripheralworks.integrations.ae2.MENetworkPeripheralBlockEn
 import site.siredvin.peripheralworks.integrations.ae2.Registration
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
+import site.siredvin.peripheralworks.common.setup.Blocks as ModBlocks
+import site.siredvin.peripheralworks.common.setup.Items as ModItems
 
 @TestGroup("ae2")
 class AE2GameTests {
@@ -79,6 +81,8 @@ class AE2GameTests {
         check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.CABLE.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
         check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
         check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM_FULL.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
+        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModBlocks.NETWORK_MANAGER.get().asItem().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
+        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModItems.ULTIMATE_CONFIGURATOR.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
         helper.succeed()
     }
 

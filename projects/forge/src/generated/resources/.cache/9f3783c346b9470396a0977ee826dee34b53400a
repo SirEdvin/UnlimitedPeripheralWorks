@@ -1,4 +1,4 @@
-// 1.20.1	2026-08-03T13:56:40.933980628	vanilla/Block State Definitions
+// 1.20.1	2026-08-03T17:08:32.641963184	vanilla/Block State Definitions
 2c78de2bc1bf6e2f3467ace2f3d867c2a405bd09 assets/peripheralworks/blockstates/display_pedestal.json
 8933da812303de26cbf34418c010500f4a177d6e assets/peripheralworks/blockstates/entity_link.json
 2bba1d9924c2ab8e763485fb8bf6b73af4c4ebf5 assets/peripheralworks/blockstates/flexible_reality_anchor.json
@@ -56,8 +56,8 @@ b073cd6e922c5c57e55d9666f94e510846d07c2d assets/peripheralworks/models/item/peri
 0b77336b9f17020698a6c5745a1eabc47f3da3a0 assets/peripheralworks/models/item/ultimate_configurator.json
 76a0a59364ad940309fdabf54073f692b9924ea1 assets/peripheralworks/models/item/ultimate_sensor.json
 03f8d8391900ef012d7d1ba99077571d0647381f assets/peripheralworks/models/item/universal_scanner.json
-fa595a2fef87effdb90e9f1ad8f79c89680ff8f9 assets/peripheralworks/models/item/wired_network_p2p_tunnel.json
-6153bac77d68d82b7a8436fd077038e7ecedcbb7 assets/peripheralworks/models/part/p2p/wired_network_p2p_tunnel.json
+8e7831ef1f648f528f38391cc853fd2ee76e04df assets/peripheralworks/models/item/wired_network_p2p_tunnel.json
+454d81f4baf1e8e9fadbd63756418661fbc60e3d assets/peripheralworks/models/part/p2p/wired_network_p2p_tunnel.json
 c584ae8cb969815c79c844b4063142c7b18acc5a assets/peripheralworks/models/turtle/hologram_projector_left.json
 b8b108197aa41be2f6e35fa478f13aded5b3a752 assets/peripheralworks/models/turtle/hologram_projector_right.json
 044f49f87553cb08286e37c95ab22f119a750679 assets/peripheralworks/models/turtle/ultimate_sensor_left.json
