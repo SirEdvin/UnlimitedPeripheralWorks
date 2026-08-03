@@ -15,7 +15,7 @@ Reference material:
 
 **Goals:**
 
-- Make the `ae2` Lua interface available from one explicit block rather than arbitrary AE2 machines.
+- Add an explicit channel-owning block for the `ae2` Lua interface while preserving existing arbitrary AE2 block wrappers.
 - Preserve the current Lua method names, arguments, and results.
 - Carry complete CC:Tweaked wired-network behavior through AE2's linked P2P topology, bidirectionally and across dimensions.
 - Use AE2's native node, part, model, and attunement APIs and CC:Tweaked's native wired-node API.
@@ -27,7 +27,7 @@ Reference material:
 - Changing the existing generic AE2 item, fluid, or energy storage adapters.
 - Making the P2P tunnel carry wireless modem traffic or creating a second networking protocol.
 - Supporting inactive or unloaded tunnel endpoints as chunk loaders.
-- Retaining arbitrary AE2 blocks as `ae2` peripherals for compatibility.
+- Removing arbitrary AE2 blocks as `ae2` peripherals.
 
 ## Decisions
 
@@ -35,15 +35,15 @@ Reference material:
 
 Register `me_network_peripheral` and its block entity as optional AE2 integration content. The block entity owns one AE2 managed in-world node, marks it as requiring a channel, supplies the block item as its visual representation, exposes smart cable connections on every face, and creates/destroys the node through load, unload, and removal lifecycle hooks.
 
-Keep `MENetworkBlockPlugin` as the Lua implementation, but provide it only for the dedicated block entity and use that entity's node as the grid and `IActionSource`. This preserves one implementation of the existing methods and prevents behavior drift.
+Keep `MENetworkBlockPlugin` as the Lua implementation and use each accepted block entity's node as the grid and `IActionSource`. The provider accepts the dedicated block and other `AENetworkBlockEntity` instances so existing worlds remain compatible, while the dedicated block provides an explicit channel-owning network participant.
 
-Alternative: continue wrapping arbitrary `AENetworkBlockEntity` instances and add a cosmetic bridge block. Rejected because it leaves the accidental behavior in place and does not give actions a dedicated network participant.
+Alternative: restrict the plugin to the dedicated block. Rejected because existing worlds and automation already depend on wrapping arbitrary `AENetworkBlockEntity` instances.
 
 Alternative: port Advanced Peripherals' ME Bridge peripheral. Rejected because the requested block replaces the current UPW integration; adding a second, larger API would be unrelated compatibility work.
 
 ### Keep storage adapters separate from peripheral selection
 
-Do not narrow `extractItemStorage`, `extractFluidStorage`, or `extractEnergyStorage`. Only `MENetworkBlockPlugin.Provider` changes its accepted block entity type. The existing `enableStorageIntegrations` setting remains independent; the existing ME-interface setting controls the dedicated block/peripheral behavior and can be renamed only if configuration migration is explicitly handled.
+Do not narrow `MENetworkBlockPlugin.Provider`, `extractItemStorage`, `extractFluidStorage`, or `extractEnergyStorage`. The existing `enableStorageIntegrations` setting remains independent; the existing ME-interface setting controls both the legacy provider and dedicated block/peripheral behavior and can be renamed only if configuration migration is explicitly handled.
 
 Alternative: restrict all AE2 integration to the new block. Rejected because that would silently remove unrelated storage interoperability and expand the breaking change.
 
@@ -81,14 +81,14 @@ Alternative: register integration content from the current late `Integration.run
 - [A CC node survives after a part or remote endpoint unloads] -> Make cleanup explicit in every AE2 part lifecycle/deactivation callback and assert separation in GameTests.
 - [Cross-dimensional peer callbacks occur while one level is unloading] -> Recompute only on the server thread, tolerate missing peers, and disconnect tracked edges before removing owned nodes.
 - [Optional classes are resolved when AE2 is absent] -> Keep AE2-typed classes behind loader mod-presence checks and verify a minimal no-AE2 build/GameTest startup.
-- [Existing automation wraps arbitrary AE2 blocks] -> Document the breaking migration and preserve the Lua surface so scripts only need to move their modem/computer attachment.
+- [Existing automation wraps arbitrary AE2 blocks] -> Preserve the broad provider predicate and existing Lua surface as an explicit backward-compatibility exception.
 - [The current Forge AE2 source-copy task is not a reliable compilation dependency] -> Either make the shared source set explicit or wire the copy task into Kotlin compilation as part of implementation, without duplicating divergent logic.
 
 ## Migration Plan
 
-Add the optional registrations and resources, then change the plugin provider predicate to the dedicated block entity. Existing worlds require players to craft and attach the new ME network peripheral to their AE2 cable; Lua programs retain the same `ae2` methods. Existing generic storage integration configuration and behavior remain unchanged.
+Add the optional registrations and resources while retaining the broad plugin provider predicate. Existing worlds continue working unchanged; players can use the new ME network peripheral when they want an explicit channel-owning block. Existing generic storage integration configuration and behavior remain unchanged.
 
-Rollback removes the new block and part and restores the broad provider predicate. Worlds rolled back after placing the new content will report missing blocks/items, so rollback should be performed only with a backup or after removing the devices.
+Rollback removes the new block and part. Worlds rolled back after placing the new content will report missing blocks/items, so rollback should be performed only with a backup or after removing the devices.
 
 ## Open Questions
 

@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- AE2's `ae2` peripheral is now exposed only by the ME network peripheral. Existing computers wrapping arbitrary AE2 blocks must attach to the new block; Lua method signatures are unchanged.
+- Existing computers wrapping AE2 network blocks retain the `ae2` peripheral API; the dedicated ME network peripheral adds an explicit channel-owning option.
 
 ## [1.8.0] - 2026-07-27
 

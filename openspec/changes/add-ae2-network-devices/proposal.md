@@ -5,12 +5,12 @@ The AE2 integration currently turns any adjacent AE2 network block into a Comput
 ## What Changes
 
 - Add a dedicated AE2 network peripheral block that joins an AE2 network, requires a channel, and exposes the existing `ae2` Lua methods.
-- Restrict the `ae2` peripheral plugin to the dedicated block instead of attaching it to arbitrary AE2 network block entities.
+- Keep the existing `ae2` peripheral plugin on arbitrary AE2 network block entities for backward compatibility while adding the dedicated block as the explicit channel-owning option.
 - Add a CC:Tweaked cable P2P tunnel part that is attuned from an AE2 P2P tunnel with a CC cable or wired modem.
 - Make linked cable P2P tunnel endpoints bridge their attached CC:Tweaked wired networks bidirectionally while their AE2 tunnel nodes are active.
 - Add recipes, models, localization, optional-AE2 registration, and multi-loader GameTests for both devices.
 - Keep the existing generic AE2 item, fluid, and energy storage integrations unchanged.
-- **BREAKING**: Existing computers that wrap arbitrary AE2 blocks to obtain the `ae2` peripheral must replace that attachment with the dedicated AE2 network peripheral block.
+- Existing computers that wrap arbitrary AE2 blocks continue to expose the same `ae2` Lua API.
 
 ## Capabilities
 

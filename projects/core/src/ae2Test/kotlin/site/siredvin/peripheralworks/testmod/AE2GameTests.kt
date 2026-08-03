@@ -55,7 +55,7 @@ class AE2GameTests {
                 check(peripheral.mainNode.node!!.hasFlag(GridFlags.REQUIRE_CHANNEL))
                 Direction.entries.forEach { check(peripheral.getCableConnectionType(it) == AECableType.SMART) }
                 check(MENetworkBlockPlugin.Provider.provide(helper.level, helper.absolutePos(peripheralPos), Direction.UP) != null)
-                check(MENetworkBlockPlugin.Provider.provide(helper.level, helper.absolutePos(interfacePos), Direction.UP) == null)
+                check(MENetworkBlockPlugin.Provider.provide(helper.level, helper.absolutePos(interfacePos), Direction.UP) != null)
                 check(Integration.extractItemStorage(helper.level, helper.absolutePos(interfacePos), helper.getBlockEntity(interfacePos), Direction.UP) != null)
                 check(peripheral.mainNode.isActive)
                 check(MENetworkBlockPlugin(helper.level, peripheral).getChannelInformation().isNotEmpty())

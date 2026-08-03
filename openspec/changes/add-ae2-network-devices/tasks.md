@@ -7,8 +7,8 @@
 ## 2. ME Network Peripheral
 
 - [x] 2.1 Implement the `me_network_peripheral` block entity with a channel-requiring managed AE2 node, smart cable connections on every face, visual representation, and complete load/unload/removal cleanup.
-- [x] 2.2 Restrict `MENetworkBlockPlugin.Provider` to the new block entity and route grid access and crafting action sources through its managed node while preserving all existing Lua signatures and results.
-- [x] 2.3 Add AE2 integration GameTests proving only the dedicated block exposes the `ae2` plugin, active/disconnected behavior is safe, the node consumes and releases a channel, and generic AE2 storage adapters still work on eligible AE2 blocks.
+- [x] 2.2 Route the dedicated peripheral's grid access and crafting action sources through its managed node while preserving the legacy provider fallback and all existing Lua signatures and results.
+- [x] 2.3 Add AE2 integration GameTests proving the dedicated block and legacy AE2 network blocks expose the `ae2` plugin, active/disconnected behavior is safe, the node consumes and releases a channel, and generic AE2 storage adapters still work on eligible AE2 blocks.
 
 ## 3. Wired Network P2P Tunnel
 
@@ -21,7 +21,7 @@
 ## 4. Content And Migration
 
 - [x] 4.1 Add datagenerated recipes, loot, block/item models, AE2 part models, attunement tags, and creative-tab entries with appropriate AE2 load conditions.
-- [x] 4.2 Add English and Ukrainian names/tooltips for both devices and document the migration from wrapping arbitrary AE2 blocks to placing the ME network peripheral.
+- [x] 4.2 Add English and Ukrainian names/tooltips for both devices and document compatibility for computers wrapping existing AE2 blocks.
 
 ## 5. Verification
 

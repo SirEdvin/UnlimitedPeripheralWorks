@@ -9,7 +9,7 @@ The system SHALL provide a dedicated `me_network_peripheral` block whose CC:Twea
 
 #### Scenario: Computer wraps another AE2 block
 - **WHEN** a computer or wired modem accesses an AE2 network block other than the dedicated ME network peripheral
-- **THEN** the system does not add the `ae2` peripheral plugin to that block
+- **THEN** the system continues to add the `ae2` peripheral plugin for backward compatibility
 
 ### Requirement: AE2 network participation
 The ME network peripheral SHALL own an AE2 in-world grid node, require one AE2 channel, expose a smart-cable connection on every face, and cleanly create and destroy its node with the block entity lifecycle.
