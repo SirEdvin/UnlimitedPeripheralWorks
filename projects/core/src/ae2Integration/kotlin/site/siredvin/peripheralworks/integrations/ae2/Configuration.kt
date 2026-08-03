@@ -18,7 +18,7 @@ object Configuration : IForgeConfigHandler {
         get() = "ae2"
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
-        enableMeInterfaceConfig = builder.comment("Enables me blocks integration").define("enableMEInterface", true)
+        enableMeInterfaceConfig = builder.comment("Enables the ME network peripheral").define("enableMEInterface", true)
         enableStorageIntegrationConfig = builder.comment("Enables me integration with storages").define("enableStorageIntegrations", true)
     }
 }

@@ -12,6 +12,12 @@ val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
+if (!minimalTestEnvironment) {
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+        source(project(":core").fileTree("src/ae2Integration/kotlin"))
+    }
+}
+
 baseShaking {
     projectPart.set("forge")
     integrationRepositories.set(false)
@@ -46,6 +52,11 @@ val testMod = sourceSets.create("testMod") {
     runtimeClasspath += sourceSets.main.get().runtimeClasspath
     runtimeClasspath += sourceSets.main.get().output
     runtimeClasspath += project(":core").sourceSets["testMod"].output
+}
+if (!minimalTestEnvironment) {
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
+        source(project(":core").fileTree("src/ae2Test/kotlin"))
+    }
 }
 
 repositories {
@@ -179,14 +190,8 @@ val copyKubeJS by tasks.register<Copy>("copyKubeJS") {
     into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/kubejs"))
 }
 
-// TODO: make this possible, probably (?) This would be really nice
-val copyAE2 by tasks.register<Copy>("copyAE2") {
-    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
-    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
-}
-
 val fullCopy by tasks.register("fullCopy") {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS, copyAE2)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }
 
 tasks.compileKotlin {

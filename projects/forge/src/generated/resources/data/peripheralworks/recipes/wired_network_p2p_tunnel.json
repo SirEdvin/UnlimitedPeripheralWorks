@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "key": {
+    "C": {
+      "item": "computercraft:cable"
+    },
+    "T": {
+      "item": "ae2:me_p2p_tunnel"
+    }
+  },
+  "pattern": [
+    " C ",
+    "CTC",
+    " C "
+  ],
+  "result": {
+    "item": "peripheralworks:wired_network_p2p_tunnel"
+  }
+}

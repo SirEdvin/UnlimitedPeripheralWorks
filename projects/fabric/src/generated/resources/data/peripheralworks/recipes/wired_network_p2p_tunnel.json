@@ -1,0 +1,27 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ae2"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "computercraft:cable"
+    },
+    "T": {
+      "item": "ae2:me_p2p_tunnel"
+    }
+  },
+  "pattern": [
+    " C ",
+    "CTC",
+    " C "
+  ],
+  "result": {
+    "item": "peripheralworks:wired_network_p2p_tunnel"
+  }
+}

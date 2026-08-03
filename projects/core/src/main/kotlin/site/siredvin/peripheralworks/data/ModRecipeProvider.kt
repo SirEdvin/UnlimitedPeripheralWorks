@@ -16,6 +16,14 @@ import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 import java.util.function.Consumer
 
 class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
+    companion object {
+        private val hooks = mutableListOf<Consumer<Consumer<FinishedRecipe>>>()
+
+        fun addHook(hook: Consumer<Consumer<FinishedRecipe>>) {
+            hooks.add(hook)
+        }
+    }
+
     override fun buildRecipes(consumer: Consumer<FinishedRecipe>) {
         val ingredients = ModRecipeIngredients.get()
 
@@ -222,5 +230,6 @@ class ModRecipeProvider(output: PackOutput) : RecipeProvider(output) {
             .save(consumer, "anchor_clean")
         SpecialRecipeBuilder.special(RecipeSerializers.CARD_CLEAN.get())
             .save(consumer, "card_clean")
+        hooks.forEach { it.accept(consumer) }
     }
 }

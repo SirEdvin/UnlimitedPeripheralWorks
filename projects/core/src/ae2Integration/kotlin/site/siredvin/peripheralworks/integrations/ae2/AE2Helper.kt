@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.stacks.*

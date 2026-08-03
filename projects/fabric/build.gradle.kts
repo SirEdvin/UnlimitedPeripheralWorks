@@ -12,6 +12,12 @@ val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
+if (!minimalTestEnvironment) {
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+        source(project(":core").fileTree("src/ae2Integration/kotlin"))
+    }
+}
+
 baseShaking {
     projectPart.set("fabric")
     integrationRepositories.set(false)
@@ -46,6 +52,11 @@ val testMod = sourceSets.create("testMod") {
     runtimeClasspath += sourceSets.main.get().runtimeClasspath
     runtimeClasspath += sourceSets.main.get().output
     runtimeClasspath += project(":core").sourceSets["testMod"].output
+}
+if (!minimalTestEnvironment) {
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
+        source(project(":core").fileTree("src/ae2Test/kotlin"))
+    }
 }
 
 net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)

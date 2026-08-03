@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "key": {
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "F": {
+      "item": "ae2:fluix_crystal"
+    },
+    "P": {
+      "item": "ae2:engineering_processor"
+    }
+  },
+  "pattern": [
+    "FPF",
+    "PCP",
+    "FPF"
+  ],
+  "result": {
+    "item": "peripheralworks:me_network_peripheral"
+  }
+}

@@ -63,11 +63,12 @@ object ForgePeripheralWorks {
 
     init {
         ForgePeripheralium.sayHi()
+        PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
+        loader.maybeLoadIntegration("ae2", "Registration").ifPresent { (it as Runnable).run() }
         // Configure configuration
         @Suppress("DEPRECATION", "removal")
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
-        PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
         ForgeNetworkHandler.setup()
         val eventBus = MOD_CONTEXT.getKEventBus()
         eventBus.addListener(this::commonSetup)

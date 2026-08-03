@@ -11,7 +11,6 @@ import site.siredvin.broccolium.modules.storage.base.api.SomethingOperator
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
 import site.siredvin.broccolium.modules.storage.fluid.FluidStorageUtils
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
-import site.siredvin.broccolium.modules.storage.fluid.toForge
 import java.util.function.Predicate
 
 class AEFluidStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : AgnosticFluidStorage {
@@ -38,7 +37,7 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
         get() = FluidStorageUtils
 
     override fun store(stack: AgnosticFluidStack, simulate: Boolean): AgnosticFluidStack {
-        val insertedAmount = storage.insert(AEFluidKey.of(stack.toForge()), stack.platformAmount.toLong(), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, IActionSource.ofMachine(entity))
+        val insertedAmount = storage.insert(AEFluidKeyFactory.of(stack), stack.platformAmount.toLong(), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (insertedAmount == 0L) return stack
         stack.shrink(insertedAmount.toDouble() / PlatformToolkit.get().fluidCompactDivider)
         return stack

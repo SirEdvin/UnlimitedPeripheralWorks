@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Dedicated AE2 ME network peripheral and CC:Tweaked wired-network P2P tunnel.
+
+### Changed
+
+- AE2's `ae2` peripheral is now exposed only by the ME network peripheral. Existing computers wrapping arbitrary AE2 blocks must attach to the new block; Lua method signatures are unchanged.
+
 ## [1.8.0] - 2026-07-27
 
 ### Added

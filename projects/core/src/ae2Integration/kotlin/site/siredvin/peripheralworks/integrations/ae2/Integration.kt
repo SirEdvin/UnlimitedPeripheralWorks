@@ -48,5 +48,6 @@ class Integration : Runnable {
         if (Configuration.enableMEInterface) {
             ComputerCraftProxy.addProvider(MENetworkBlockPlugin.Provider)
         }
+        AE2Setup.registerAttunement()
     }
 }
