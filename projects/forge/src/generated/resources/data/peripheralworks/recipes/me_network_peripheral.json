@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "key": {
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "E": {
+      "item": "ae2:export_bus"
+    },
+    "I": {
+      "item": "ae2:interface"
+    },
+    "M": {
+      "item": "ae2:import_bus"
+    }
+  },
+  "pattern": [
+    " E ",
+    "ICI",
+    " M "
+  ],
+  "result": {
+    "item": "peripheralworks:me_network_peripheral"
+  }
+}

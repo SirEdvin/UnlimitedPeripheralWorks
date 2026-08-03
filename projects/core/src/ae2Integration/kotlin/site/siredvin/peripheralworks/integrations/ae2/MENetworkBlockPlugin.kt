@@ -36,6 +36,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
                 return null
             }
             val entity = level.getBlockEntity(pos)
+            // Preserve existing worlds that wrap arbitrary AE2 network blocks.
             if (entity !is AENetworkBlockEntity) {
                 return null
             }
@@ -43,27 +44,30 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         }
     }
 
+    private val grid
+        get() = entity.mainNode.takeIf { it.isActive }?.grid
+
     @LuaFunction(mainThread = true)
     fun getAverageEnergyDemand(): Double {
-        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        val energyService = grid?.energyService ?: return 0.0
         return energyService.avgPowerUsage
     }
 
     @LuaFunction(mainThread = true)
     fun getAverageEnergyIncome(): Double {
-        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        val energyService = grid?.energyService ?: return 0.0
         return energyService.avgPowerInjection
     }
 
     @LuaFunction(mainThread = true)
     fun getChannelEnergyDemand(): Double {
-        val energyService = entity.mainNode.grid?.energyService ?: return 0.0
+        val energyService = grid?.energyService ?: return 0.0
         return energyService.channelPowerUsage
     }
 
     @LuaFunction(mainThread = true)
     fun getChannelInformation(): Map<String, Any> {
-        val pathingService = entity.mainNode.grid?.pathingService ?: return emptyMap()
+        val pathingService = grid?.pathingService ?: return emptyMap()
         return mapOf(
             "maxChannels" to pathingService.channelMode.adHocNetworkChannels,
             "usedChannels" to pathingService.usedChannels,
@@ -72,7 +76,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun getCraftingCPUs(): List<Map<String, *>> {
-        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val craftingService = grid?.craftingService ?: return emptyList()
         val data: MutableList<Map<String, *>> = mutableListOf()
         craftingService.cpus.forEach {
             val cpuInformation = mutableMapOf<String, Any>()
@@ -89,7 +93,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun getCraftableItems(): List<Map<String, *>> {
-        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val craftingService = grid?.craftingService ?: return emptyList()
         val data: MutableList<Map<String, *>> = mutableListOf()
         craftingService.getCraftables { it is AEItemKey }.forEach {
             data.add(LuaRepresentation.forItem((it as AEItemKey).item))
@@ -99,7 +103,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun getCraftableFluids(): List<Map<String, *>> {
-        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val craftingService = grid?.craftingService ?: return emptyList()
         val data: MutableList<Map<String, *>> = mutableListOf()
         craftingService.getCraftables { it is AEFluidKey }.forEach {
             data.add(
@@ -113,7 +117,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun getPatternsFor(mode: String, id_key: String): List<Map<String, *>> {
-        val craftingService = entity.mainNode.grid?.craftingService ?: return emptyList()
+        val craftingService = grid?.craftingService ?: return emptyList()
         val key: AEKey = buildKey(mode, id_key)
         val patterns = craftingService.getCraftingFor(key)
         val data = mutableListOf<Map<String, *>>()
@@ -149,7 +153,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = true)
     fun getActiveCraftings(): MethodResult {
-        val craftingService = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
+        val craftingService = grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
         val craftingList: MutableList<Map<String, Any>> = mutableListOf()
         craftingService.cpus.forEach {
             if (it.isBusy && it.jobStatus != null) {
@@ -170,7 +174,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
 
     @LuaFunction(mainThread = false)
     fun scheduleCrafting(mode: String, id_key: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
-        val craftingService = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
+        val craftingService = grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
 
         val key = buildKey(mode, id_key)
         val source = IActionSource.ofMachine(entity)

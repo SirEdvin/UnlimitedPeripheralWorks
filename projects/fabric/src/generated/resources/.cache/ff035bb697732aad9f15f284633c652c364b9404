@@ -1,3 +1,4 @@
-// 1.20.1	2026-07-26T10:53:36.338807729	Unlimited Peripheral Works/Tags for minecraft:item
+// 1.20.1	2026-08-03T17:01:25.534572709	Unlimited Peripheral Works/Tags for minecraft:item
 31939d3b804f748a932a97bb3d1ca071c930070b data/peripheralworks/tags/items/peripheral_proxy_forbidden.json
+7864ad38079bdb3aa5d4903a7fedf893aa63612b data/peripheralworks/tags/items/p2p_attunements/wired_network_p2p_tunnel.json
 d419b420963d6122db39dd885d326a0aa4bfc8eb data/peripheralworks/tags/items/reality_forger_forbidden.json

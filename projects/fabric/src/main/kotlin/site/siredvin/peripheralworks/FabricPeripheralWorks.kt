@@ -51,6 +51,7 @@ object FabricPeripheralWorks : ModInitializer {
         FabricPeripheralium.sayHi()
 
         PeripheralWorksCore.configure(FabricModPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
+        loader.maybeLoadIntegration("ae2", "Registration").ifPresent { (it as Runnable).run() }
         for (type in NetworkMessages.serverbound) {
             ServerPlayNetworking.registerGlobalReceiver(
                 FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type),

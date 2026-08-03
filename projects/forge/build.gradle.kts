@@ -12,6 +12,10 @@ val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+    source(project(":core").fileTree("src/ae2Integration/kotlin"))
+}
+
 baseShaking {
     projectPart.set("forge")
     integrationRepositories.set(false)
@@ -35,8 +39,11 @@ forgeShaking {
 }
 
 if (minimalTestEnvironment) {
-    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude("**/integrations/**") }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+        file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles()
+            ?.filter { it.name != "ae2" }
+            ?.forEach { exclude("**/integrations/${it.name}/**") }
+    }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -46,6 +53,9 @@ val testMod = sourceSets.create("testMod") {
     runtimeClasspath += sourceSets.main.get().runtimeClasspath
     runtimeClasspath += sourceSets.main.get().output
     runtimeClasspath += project(":core").sourceSets["testMod"].output
+}
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
+    source(project(":core").fileTree("src/ae2Test/kotlin"))
 }
 
 repositories {
@@ -80,6 +90,9 @@ dependencies {
         libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }
         libs.bundles.externalMods.forge.integrations.raw.active.get().map { runtimeOnly(it) }
         libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(fg.deobf(it)) }
+    } else {
+        compileOnly(fg.deobf(libs.ae2.forge))
+        runtimeOnly(fg.deobf(libs.ae2.forge))
     }
 
     listOf(
@@ -99,7 +112,7 @@ minecraft {
         create("gameTestServer") {
             workingDirectory(file("run/peripheralworks-gametest"))
             property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2" else "peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
@@ -179,14 +192,8 @@ val copyKubeJS by tasks.register<Copy>("copyKubeJS") {
     into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/kubejs"))
 }
 
-// TODO: make this possible, probably (?) This would be really nice
-val copyAE2 by tasks.register<Copy>("copyAE2") {
-    from(project(":fabric").file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
-    into(project.file("src/main/kotlin/site/siredvin/peripheralworks/integrations/ae2"))
-}
-
 val fullCopy by tasks.register("fullCopy") {
-    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS, copyAE2)
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }
 
 tasks.compileKotlin {

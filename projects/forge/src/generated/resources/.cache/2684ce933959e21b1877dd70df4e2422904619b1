@@ -1,4 +1,4 @@
-// 1.20.1	2026-07-26T10:54:00.864183354	vanilla/Recipes
+// 1.20.1	2026-08-03T17:08:32.644790735	vanilla/Recipes
 09593a44d8ebe98926763ef8dfc34cb75f8dc4a2 data/minecraft/recipes/anchor_clean.json
 06bd5042d86f18b9ed542713e4705dc45f330edb data/minecraft/recipes/anchor_cloning.json
 a2696e406e9032af7d01eb6c0b534b706f6d9f5f data/minecraft/recipes/card_clean.json
@@ -13,6 +13,7 @@ b4e4c663207dbc5fdd92be5957a0dc7ba675e330 data/peripheralworks/recipes/flexible_s
 95d93da7ee211551dae0624f6c4f473136ec8685 data/peripheralworks/recipes/informative_registry.json
 169c5991b28b93c851e46abeaefd752048626eab data/peripheralworks/recipes/item_pedestal.json
 b929cb33a2a61b583a688d95bf8534260eb9ff09 data/peripheralworks/recipes/map_pedestal.json
+fa71166c4155e80741be4947f6b01bf2831ec4bd data/peripheralworks/recipes/me_network_peripheral.json
 2e8895a33da8f4660886663ac5fdc7242b0b2cd6 data/peripheralworks/recipes/netherite_peripheralium_hub.json
 00f0831a58f24c4caad800741aaf511fb973fca1 data/peripheralworks/recipes/network_manager.json
 ffec3efd8adf8ae72892d33215f1748e2c358104 data/peripheralworks/recipes/peripheral_casing.json
