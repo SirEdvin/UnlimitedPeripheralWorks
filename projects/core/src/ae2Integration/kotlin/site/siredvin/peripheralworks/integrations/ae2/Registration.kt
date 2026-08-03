@@ -2,6 +2,9 @@
 
 package site.siredvin.peripheralworks.integrations.ae2
 
+// P2P registration and attunement are inspired by Advanced Peripherals' AE2Registries by zyxkad:
+// https://github.com/IntelligenceModding/AdvancedPeripherals/blob/fafb3877eed9c40b5a5d56b20421b8625b2d8cce/src/main/java/de/srendi/advancedperipherals/common/addons/ae2/AE2Registries.java
+
 import appeng.api.features.P2PTunnelAttunement
 import appeng.api.parts.PartModels
 import appeng.core.definitions.AEItems
