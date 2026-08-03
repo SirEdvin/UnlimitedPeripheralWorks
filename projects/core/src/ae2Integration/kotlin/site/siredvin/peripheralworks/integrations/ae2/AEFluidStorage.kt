@@ -14,13 +14,16 @@ import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
 import java.util.function.Predicate
 
 class AEFluidStorage(private val storage: MEStorage, private val entity: AENetworkBlockEntity) : AgnosticFluidStorage {
+    private val fluidCompactDivider
+        get() = PlatformToolkit.get().fluidCompactDivider
+
     override fun getContent(): Iterator<AgnosticFluidStack> {
         return storage.availableStacks.mapNotNull {
             if (it.key !is AEFluidKey) return@mapNotNull null
             val fluidKey = it.key as AEFluidKey
             return@mapNotNull AgnosticFluidStack(
                 fluidKey.fluid,
-                it.longValue.toDouble(),
+                it.longValue.toDouble() / fluidCompactDivider,
                 fluidKey.tag,
             )
         }.iterator()
@@ -39,12 +42,12 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
     override fun store(stack: AgnosticFluidStack, simulate: Boolean): AgnosticFluidStack {
         val insertedAmount = storage.insert(AEFluidKeyFactory.of(stack), stack.platformAmount.toLong(), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (insertedAmount == 0L) return stack
-        stack.shrink(insertedAmount.toDouble() / PlatformToolkit.get().fluidCompactDivider)
+        stack.shrink(insertedAmount.toDouble() / fluidCompactDivider)
         return stack
     }
 
     override fun take(predicate: Predicate<AgnosticFluidStack>, limit: Double, simulate: Boolean): AgnosticFluidStack {
-        val platformLimit = limit * PlatformToolkit.get().fluidCompactDivider
+        val platformLimit = limit * fluidCompactDivider
 
         @Suppress("UNCHECKED_CAST")
         val fluidToTransfer = storage.availableStacks.find {
@@ -52,10 +55,10 @@ class AEFluidStorage(private val storage: MEStorage, private val entity: AENetwo
             if (aeKey !is AEFluidKey) {
                 return@find false
             }
-            return@find predicate.test(AgnosticFluidStack(aeKey.fluid, it.longValue.toDouble(), aeKey.tag))
+            return@find predicate.test(AgnosticFluidStack(aeKey.fluid, it.longValue.toDouble() / fluidCompactDivider, aeKey.tag))
         } as? Object2LongMap.Entry<AEFluidKey> ?: return AgnosticFluidStack.EMPTY
         val extractedAmount = storage.extract(fluidToTransfer.key, minOf(platformLimit.toLong(), fluidToTransfer.longValue), if (simulate) Actionable.SIMULATE else Actionable.MODULATE, IActionSource.ofMachine(entity))
         if (extractedAmount == 0L) return AgnosticFluidStack.EMPTY
-        return AgnosticFluidStack(fluidToTransfer.key.fluid, extractedAmount.toDouble(), fluidToTransfer.key.tag)
+        return AgnosticFluidStack(fluidToTransfer.key.fluid, extractedAmount.toDouble() / fluidCompactDivider, fluidToTransfer.key.tag)
     }
 }

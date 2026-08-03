@@ -97,7 +97,7 @@ class Registration : Runnable {
         ModBlockModelProvider.addHook { generators ->
             val model = ModelTemplates.CUBE_ALL.create(
                 ME_NETWORK_PERIPHERAL.get(),
-                TextureMapping.cube(ResourceLocation("ae2", "block/fluix_block")),
+                TextureMapping.cube(ResourceLocation(PeripheralWorksCore.MOD_ID, "block/me_network_peripheral")),
                 generators.modelOutput,
             )
             generators.blockStateOutput.accept(

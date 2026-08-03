@@ -12,10 +12,8 @@ val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
-if (!minimalTestEnvironment) {
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
-        source(project(":core").fileTree("src/ae2Integration/kotlin"))
-    }
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+    source(project(":core").fileTree("src/ae2Integration/kotlin"))
 }
 
 baseShaking {
@@ -41,8 +39,11 @@ fabricShaking {
 }
 
 if (minimalTestEnvironment) {
-    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude("**/integrations/**") }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+        file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles()
+            ?.filter { it.name != "ae2" }
+            ?.forEach { exclude("**/integrations/${it.name}/**") }
+    }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -53,10 +54,8 @@ val testMod = sourceSets.create("testMod") {
     runtimeClasspath += sourceSets.main.get().output
     runtimeClasspath += project(":core").sourceSets["testMod"].output
 }
-if (!minimalTestEnvironment) {
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
-        source(project(":core").fileTree("src/ae2Test/kotlin"))
-    }
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
+    source(project(":core").fileTree("src/ae2Test/kotlin"))
 }
 
 net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)
@@ -89,7 +88,7 @@ loom {
             property("fabric-api.gametest", "true")
             property("fabric.debug.disableModIds", "create")
             property("fabric.debug.loadLate", "testiarium_cct_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2" else "peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
@@ -150,6 +149,10 @@ dependencies {
         libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
         libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
         libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+    } else {
+        modApi(libs.teamreborn.energy)
+        modCompileOnly(libs.ae2.fabric)
+        modRuntimeOnly(libs.ae2.fabric)
     }
 
     add("modTestModImplementation", libs.bundles.kotlin)

@@ -2,12 +2,19 @@
 
 package site.siredvin.peripheralworks.testmod
 
+import appeng.api.config.Actionable
 import appeng.api.features.P2PTunnelAttunement
 import appeng.api.networking.GridFlags
+import appeng.api.networking.security.IActionSource
+import appeng.api.orientation.BlockOrientation
 import appeng.api.parts.PartHelper
+import appeng.api.stacks.AEItemKey
+import appeng.api.storage.StorageCells
 import appeng.api.util.AECableType
 import appeng.api.util.AEColor
+import appeng.blockentity.storage.DriveBlockEntity
 import appeng.core.definitions.AEBlocks
+import appeng.core.definitions.AEItems
 import appeng.core.definitions.AEParts
 import appeng.parts.p2p.P2PTunnelPart
 import dan200.computercraft.api.network.Packet
@@ -17,12 +24,18 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Items
+import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec3
+import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
+import site.siredvin.peripheralworks.integrations.ae2.AEFluidKeyFactory
 import site.siredvin.peripheralworks.integrations.ae2.Integration
 import site.siredvin.peripheralworks.integrations.ae2.MENetworkBlockPlugin
 import site.siredvin.peripheralworks.integrations.ae2.MENetworkPeripheralBlockEntity
 import site.siredvin.peripheralworks.integrations.ae2.Registration
 import site.siredvin.testiarium.api.TestGroup
+import site.siredvin.testiarium.cct.thenLua
 
 @TestGroup("ae2")
 class AE2GameTests {
@@ -67,6 +80,31 @@ class AE2GameTests {
         check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
         check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM_FULL.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
         helper.succeed()
+    }
+
+    @GameTest(template = "ae2gametests.item_and_fluid_storage_transfers", timeoutTicks = 2400)
+    fun itemAndFluidStorageTransfers(helper: GameTestHelper) {
+        helper.setBlock(BlockPos(3, 2, 4), Registration.ME_NETWORK_PERIPHERAL.get())
+        helper.setBlock(BlockPos(3, 2, 5), AEBlocks.DRIVE.block())
+        helper.setBlock(BlockPos(2, 2, 4), AEBlocks.CREATIVE_ENERGY_CELL.block())
+        helper.setBlock(BlockPos(3, 2, 2), Registration.ME_NETWORK_PERIPHERAL.get())
+        helper.setBlock(BlockPos(3, 2, 1), AEBlocks.DRIVE.block())
+        helper.setBlock(BlockPos(2, 2, 2), AEBlocks.CREATIVE_ENERGY_CELL.block())
+        val drive = helper.getBlockEntity(BlockPos(3, 2, 5)) as DriveBlockEntity
+        val secondaryDrive = helper.getBlockEntity(BlockPos(3, 2, 1)) as DriveBlockEntity
+        BlockOrientation.EAST_UP.setOn(drive)
+        BlockOrientation.EAST_UP.setOn(secondaryDrive)
+        val itemCell = AEItems.ITEM_CELL_1K.stack()
+        val fluidCell = AEItems.FLUID_CELL_1K.stack()
+        val source = IActionSource.ofMachine(drive)
+        check(StorageCells.getCellInventory(itemCell, null)!!.insert(AEItemKey.of(ItemStack(Items.DIAMOND)), 8, Actionable.MODULATE, source) == 8L)
+        val water = AgnosticFluidStack(Fluids.WATER, 1_000.0)
+        check(StorageCells.getCellInventory(fluidCell, null)!!.insert(AEFluidKeyFactory.of(water), water.platformAmount.toLong(), Actionable.MODULATE, source) > 0)
+        check(drive.internalInventory.insertItem(0, itemCell, false).isEmpty)
+        check(drive.internalInventory.insertItem(1, fluidCell, false).isEmpty)
+        check(secondaryDrive.internalInventory.insertItem(0, AEItems.ITEM_CELL_1K.stack(), false).isEmpty)
+        check(secondaryDrive.internalInventory.insertItem(1, AEItems.FLUID_CELL_1K.stack(), false).isEmpty)
+        helper.thenLua().thenSucceed()
     }
 
     @GameTest(template = "empty", timeoutTicks = 200)
