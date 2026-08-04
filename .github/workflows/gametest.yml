@@ -28,6 +28,12 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Accept Minecraft EULA
+        run: |
+          mkdir -p projects/fabric/run/peripheralworks-gametest projects/forge/run/peripheralworks-gametest
+          printf 'eula=true\n' > projects/fabric/run/peripheralworks-gametest/eula.txt
+          printf 'eula=true\n' > projects/forge/run/peripheralworks-gametest/eula.txt
+
       - name: Run GameTests
         run: timeout --foreground 1200s xvfb-run -a ./gradlew gameTest --no-daemon
 
