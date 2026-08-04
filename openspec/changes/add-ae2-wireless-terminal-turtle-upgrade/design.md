@@ -58,11 +58,11 @@ Expose peripheral type `ae2_wireless_terminal` with:
 
 ```text
 items(detailed?, filter?)
-pushItem(itemQuery?, limit?, toSlot?)
-pullItem(itemQuery?, limit?, fromSlot?)
+pullItem(itemQuery?, limit?, toSlot?)
+pushItem(fromSlotOrItemQuery?, limit?)
 ```
 
-The method names and item-query representations match `item_storage`, but the peripheral name argument is removed because the turtle inventory is implicit. `pushItem` follows the storage peripheral's perspective and moves AE2 to turtle; `pullItem` moves turtle to AE2. Optional slots are one-based and refer only to the turtle inventory.
+The method names use the turtle caller's perspective: `pullItem` moves AE2 to turtle and `pushItem` moves turtle to AE2. `pullItem` accepts an optional one-based destination slot. `pushItem` accepts either a one-based source slot or an item query as its first argument.
 
 Use Tweakium's existing item representation and item-query conversion. Reuse `PeripheralWorksConfig.itemStorageTransferLimit`. Implement transfer methods directly or through a narrowly scoped shared transfer primitive; do not add a generalized plugin abstraction solely for this peripheral.
 
@@ -86,7 +86,7 @@ Define listing overloads equivalent to `ItemStorageAPI`, redefine `pushItem` and
 
 ### Registration remains inside the optional AE2 integration
 
-Register the serializer, generated turtle upgrade data, client model, language entry, and peripheral only when AE2 integration loading runs. Use the existing integration hooks demonstrated by Nature's Compass and ProjectE. Render the terminal item as the turtle upgrade model rather than adding a custom model asset.
+Register the serializer, generated turtle upgrade data, client model, language entry, and peripheral only when AE2 integration loading runs. Use the existing integration hooks demonstrated by Nature's Compass and ProjectE. Render the terminal item slightly scaled down and facing upward as the turtle upgrade model rather than adding a custom model asset.
 
 Keep implementation and GameTests in the Fabric and Forge AE2 integration source sets because core must remain free of hard AE2 references. Preserve equivalent behavior despite the project's supported AE2 version difference.
 

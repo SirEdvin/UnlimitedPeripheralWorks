@@ -98,6 +98,13 @@ private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner
         return predicate to (transferLimit to storageSlot)
     }
 
+    private fun validatePush(fromSlotOrItemQuery: Any?, limit: Optional<Int>): Pair<Predicate<ItemStack>, Pair<Int, Int>> {
+        if (fromSlotOrItemQuery !is Number) return validateTransfer(fromSlotOrItemQuery, limit, Optional.empty())
+        val fromSlot = fromSlotOrItemQuery.toInt()
+        if (fromSlotOrItemQuery.toDouble() != fromSlot.toDouble()) throw LuaException("Slot must be an integer")
+        return validateTransfer(null, limit, Optional.of(fromSlot))
+    }
+
     private fun consumeFuel() {
         val fuel = owner.getBoon(PeripheralOwnerBoonKey.FUEL)!!
         if (!fuel.consumeFuel(1, false)) throw LuaException("Not enough fuel")
@@ -115,7 +122,7 @@ private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner
     }
 
     @LuaFunction(mainThread = true)
-    fun pushItem(itemQuery: Any?, limit: Optional<Int>, toSlot: Optional<Int>): Int {
+    fun pullItem(itemQuery: Any?, limit: Optional<Int>, toSlot: Optional<Int>): Int {
         val session = resolve()
         val (predicate, transfer) = validateTransfer(itemQuery, limit, toSlot)
         consumeFuel()
@@ -126,9 +133,9 @@ private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner
     }
 
     @LuaFunction(mainThread = true)
-    fun pullItem(itemQuery: Any?, limit: Optional<Int>, fromSlot: Optional<Int>): Int {
+    fun pushItem(fromSlotOrItemQuery: Any?, limit: Optional<Int>): Int {
         val session = resolve()
-        val (predicate, transfer) = validateTransfer(itemQuery, limit, fromSlot)
+        val (predicate, transfer) = validatePush(fromSlotOrItemQuery, limit)
         consumeFuel()
         return owner.withPlayer({ player ->
             owner.storage!!.moveTo(

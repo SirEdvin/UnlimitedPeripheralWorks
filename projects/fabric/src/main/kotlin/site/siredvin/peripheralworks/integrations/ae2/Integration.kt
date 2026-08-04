@@ -3,7 +3,6 @@ package site.siredvin.peripheralworks.integrations.ae2
 import appeng.blockentity.grid.AENetworkBlockEntity
 import appeng.core.definitions.AEBlockEntities
 import appeng.core.definitions.AEItems
-import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
@@ -19,6 +18,7 @@ import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
+import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
@@ -60,7 +60,7 @@ class Integration : Runnable {
         }
         PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
             @Suppress("UNCHECKED_CAST")
-            Pair(wirelessTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, TurtleUpgradeModeller.flatItem())
+            Pair(wirelessTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, xRotationDegrees = -90f))
         }
         ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "Wireless") }
         ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "Бездротова") }

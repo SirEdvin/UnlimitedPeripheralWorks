@@ -9,14 +9,15 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import org.joml.Quaternionf
 
-class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: Int = 16) : TurtleUpgradeModeller<T> {
+class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize: Int = 16, xRotationDegrees: Float = 0f) : TurtleUpgradeModeller<T> {
 
     companion object {
-        fun buildMatrix(side: TurtleSide, scaleFactor: Float, modelPixelSize: Int): Transformation {
+        fun buildMatrix(side: TurtleSide, scaleFactor: Float, modelPixelSize: Int, xRotationDegrees: Float = 0f): Transformation {
             val shiftFactor = (1 - scaleFactor) / (2 * scaleFactor)
             val stack = PoseStack()
             stack.translate(0.5f, 0.5f, 0.5f)
             stack.mulPose(Quaternionf().rotateLocalY(90f * 0.017453292f))
+            stack.mulPose(Quaternionf().rotateLocalX(xRotationDegrees * 0.017453292f))
             stack.translate(-0.5f, -0.5f, -0.5f)
             stack.pushPose()
 
@@ -37,8 +38,8 @@ class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize:
         }
     }
 
-    private val leftTransformation = buildMatrix(TurtleSide.LEFT, scaleFactor, modelPixelSize)
-    private val rightTransformation = buildMatrix(TurtleSide.RIGHT, scaleFactor, modelPixelSize)
+    private val leftTransformation = buildMatrix(TurtleSide.LEFT, scaleFactor, modelPixelSize, xRotationDegrees)
+    private val rightTransformation = buildMatrix(TurtleSide.RIGHT, scaleFactor, modelPixelSize, xRotationDegrees)
 
     override fun getModel(
         upgrade: T,

@@ -8,13 +8,13 @@
 
 - [x] 2.1 Implement the AE2 wireless terminal turtle upgrade and peripheral in both loader integration source sets using a `TurtlePeripheralOwner` with an attached `FuelBoon`.
 - [x] 2.2 Persist the complete equipped Wireless Terminal stack in authoritative side upgrade data and reconstruct it unchanged on unequip, while rejecting unlinked terminals and non-standard terminal variants.
-- [x] 2.3 Register the optional `ae2_wireless_terminal` serializer, generated turtle upgrade data, flat terminal model, and English and Ukrainian language entries through the existing AE2 integration hooks.
+- [x] 2.3 Register the optional `ae2_wireless_terminal` serializer, generated turtle upgrade data, scaled upward-facing terminal model, and English and Ukrainian language entries through the existing AE2 integration hooks.
 
 ## 3. Lua Item API
 
 - [x] 3.1 Implement `items(detailed?, filter?)` with the regular item-storage representations and query semantics while excluding fluids and addon keys.
-- [x] 3.2 Implement `pushItem(itemQuery?, limit?, toSlot?)` from AE2 into the turtle inventory with one-based slot validation and the configured item-storage transfer limit.
-- [x] 3.3 Implement `pullItem(itemQuery?, limit?, fromSlot?)` from the turtle inventory into AE2 with one-based slot validation and the configured item-storage transfer limit.
+- [x] 3.2 Implement `pullItem(itemQuery?, limit?, toSlot?)` from AE2 into the turtle inventory with one-based slot validation and the configured item-storage transfer limit.
+- [x] 3.3 Implement `pushItem(fromSlotOrItemQuery?, limit?)` from the turtle inventory into AE2 with one-based slot validation and the configured item-storage transfer limit.
 - [x] 3.4 Use one owner-derived player `IActionSource` for transfer simulation and mutation, consume one base fuel after connection and argument validation for every transfer call including valid zero-move calls, and leave terminal AE charge unchanged.
 
 ## 4. Typed Peripheral Contract

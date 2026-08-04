@@ -57,14 +57,14 @@ The peripheral SHALL expose `items(detailed?, filter?)` with the same detailed/b
 - **THEN** the peripheral returns only matching network items using base item representations
 
 ### Requirement: Push network items into the turtle inventory
-The peripheral SHALL expose `pushItem(itemQuery?, limit?, toSlot?)`, which moves matching items from the connected AE2 network into the owning turtle's 16-slot inventory. `toSlot`, when present, SHALL use one-based turtle slot numbering. The operation SHALL respect the configured item-storage transfer limit.
+The peripheral SHALL expose `pullItem(itemQuery?, limit?, toSlot?)`, which moves matching items from the connected AE2 network into the owning turtle's 16-slot inventory. `toSlot`, when present, SHALL use one-based turtle slot numbering. The operation SHALL respect the configured item-storage transfer limit.
 
-#### Scenario: Push into any turtle slot
-- **WHEN** Lua calls `pushItem(query, limit)` with matching network items and available turtle capacity
+#### Scenario: Pull into any turtle slot
+- **WHEN** Lua calls `pullItem(query, limit)` with matching network items and available turtle capacity
 - **THEN** up to the effective limit is extracted from AE2 and inserted into the turtle inventory and the moved count is returned
 
-#### Scenario: Push into a selected turtle slot
-- **WHEN** Lua calls `pushItem(query, limit, toSlot)` with a valid compatible destination slot
+#### Scenario: Pull into a selected turtle slot
+- **WHEN** Lua calls `pullItem(query, limit, toSlot)` with a valid compatible destination slot
 - **THEN** items are inserted only into that turtle slot and the moved count is returned
 
 #### Scenario: Reject an invalid destination slot
@@ -72,14 +72,14 @@ The peripheral SHALL expose `pushItem(itemQuery?, limit?, toSlot?)`, which moves
 - **THEN** the call fails without moving items or consuming fuel
 
 ### Requirement: Pull turtle items into the network
-The peripheral SHALL expose `pullItem(itemQuery?, limit?, fromSlot?)`, which moves matching items from the owning turtle's inventory into the connected AE2 network. `fromSlot`, when present, SHALL use one-based turtle slot numbering. The operation SHALL respect the configured item-storage transfer limit.
+The peripheral SHALL expose `pushItem(fromSlotOrItemQuery?, limit?)`, which moves items from the owning turtle's inventory into the connected AE2 network. A numeric first argument SHALL select a one-based turtle source slot; a string or table SHALL use the regular item-query semantics across the turtle inventory. The operation SHALL respect the configured item-storage transfer limit.
 
-#### Scenario: Pull from any turtle slot
-- **WHEN** Lua calls `pullItem(query, limit)` with matching turtle items and available AE2 capacity
+#### Scenario: Push from any turtle slot
+- **WHEN** Lua calls `pushItem(query, limit)` with matching turtle items and available AE2 capacity
 - **THEN** up to the effective limit is removed from the turtle inventory, inserted into AE2, and the moved count is returned
 
-#### Scenario: Pull from a selected turtle slot
-- **WHEN** Lua calls `pullItem(query, limit, fromSlot)` with a valid matching source slot
+#### Scenario: Push from a selected turtle slot
+- **WHEN** Lua calls `pushItem(fromSlot, limit)` with a valid source slot
 - **THEN** only items from that turtle slot are offered to AE2 and the moved count is returned
 
 #### Scenario: Reject an invalid source slot

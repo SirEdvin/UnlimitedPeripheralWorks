@@ -17,8 +17,8 @@ export interface AE2WirelessTerminalAPI extends FuelApi {
         detailed: false,
         filter?: ItemQuery
     ): LuaTable<number, ShortItemDetail>;
-    pushItem(itemQuery?: ItemQuery, limit?: number, toSlot?: number): number;
-    pullItem(itemQuery?: ItemQuery, limit?: number, fromSlot?: number): number;
+    pullItem(itemQuery?: ItemQuery, limit?: number, toSlot?: number): number;
+    pushItem(fromSlotOrItemQuery?: number | ItemQuery, limit?: number): number;
 }
 
 export const ae2WirelessTerminalProvider =
