@@ -17,6 +17,7 @@ object FabricPeripheralWorksTestMod : ModInitializer {
             CctFixtureCommands.importFiles(it)
         }
         Testiarium.register(PeripheralWorksGameTests::class.java)
+        Testiarium.register(AE2ConfigurableObjectsGameTests::class.java)
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.NetworkManagerClientGameTests"))
         }

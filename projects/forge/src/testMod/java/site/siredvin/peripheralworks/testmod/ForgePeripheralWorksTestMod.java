@@ -24,6 +24,7 @@ public final class ForgePeripheralWorksTestMod {
             CctFixtureCommands.INSTANCE.importFiles(event.getServer());
         });
         Testiarium.register(PeripheralWorksGameTests.class);
+        Testiarium.register(AE2ConfigurableObjectsGameTests.class);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientTests::register);
         ForgeTestiarium.registerTests();
     }

@@ -1,6 +1,8 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.blockentity.grid.AENetworkBlockEntity
+import appeng.core.definitions.AEBlockEntities
+import dan200.computercraft.api.peripheral.PeripheralLookup
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
@@ -47,6 +49,13 @@ class Integration : Runnable {
         }
         if (Configuration.enableMEInterface) {
             ComputerCraftProxy.addProvider(MENetworkBlockPlugin.Provider)
+            ComputerCraftProxy.addProvider(AE2CableObjectProvider)
+            ComputerCraftProxy.addProvider(AE2InterfaceObjectProvider)
+            ComputerCraftProxy.addProvider(AE2PatternProviderObjectProvider)
+            PeripheralLookup.get().registerForBlockEntity(
+                { entity, side -> ComputerCraftProxy.peripheralProvider(entity.level!!, entity.blockPos, entity.blockState, entity, side) },
+                AEBlockEntities.CABLE_BUS,
+            )
         }
     }
 }
