@@ -35,8 +35,11 @@ fabricShaking {
 }
 
 if (minimalTestEnvironment) {
-    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude("**/integrations/**") }
+    val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles()!!
+        .filter { it.isDirectory && it.name != "ae2" }
+        .map { "**/integrations/${it.name}/**" }
+    sourceSets.main { kotlin.exclude(excludedIntegrations) }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -112,10 +115,8 @@ repositories {
 }
 
 dependencies {
-    if (!minimalTestEnvironment) {
-        modApi(libs.bundles.externalMods.fabric.integrations.api) {
-            exclude("net.fabricmc.fabric-api")
-        }
+    modApi(libs.bundles.externalMods.fabric.integrations.api) {
+        exclude("net.fabricmc.fabric-api")
     }
 
     modImplementation(libs.bundles.fabric.core)
@@ -135,7 +136,9 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
-    if (!minimalTestEnvironment) {
+    if (minimalTestEnvironment) {
+        modImplementation(libs.ae2.fabric)
+    } else {
         libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
         libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
         libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }

@@ -35,8 +35,11 @@ forgeShaking {
 }
 
 if (minimalTestEnvironment) {
-    sourceSets.main { kotlin.exclude("site/siredvin/peripheralworks/integrations/**") }
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude("**/integrations/**") }
+    val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles()!!
+        .filter { it.isDirectory && it.name != "ae2" }
+        .map { "**/integrations/${it.name}/**" }
+    sourceSets.main { kotlin.exclude(excludedIntegrations) }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -74,7 +77,9 @@ dependencies {
 //    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
     compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 
-    if (!minimalTestEnvironment) {
+    if (minimalTestEnvironment) {
+        implementation(fg.deobf(libs.ae2.forge.get()))
+    } else {
         libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
         libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
         libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }
