@@ -58,7 +58,7 @@ class Integration : Runnable {
         }
         PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
             @Suppress("UNCHECKED_CAST")
-            Pair(wirelessTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, xRotationDegrees = -90f))
+            Pair(wirelessTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, xRotationDegrees = -45f))
         }
         ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "Wireless") }
         ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "Бездротова") }

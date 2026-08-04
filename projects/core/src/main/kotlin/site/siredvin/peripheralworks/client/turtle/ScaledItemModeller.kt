@@ -16,8 +16,8 @@ class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize:
             val shiftFactor = (1 - scaleFactor) / (2 * scaleFactor)
             val stack = PoseStack()
             stack.translate(0.5f, 0.5f, 0.5f)
-            stack.mulPose(Quaternionf().rotateLocalY(90f * 0.017453292f))
             stack.mulPose(Quaternionf().rotateLocalX(xRotationDegrees * 0.017453292f))
+            stack.mulPose(Quaternionf().rotateLocalY(90f * 0.017453292f))
             stack.translate(-0.5f, -0.5f, -0.5f)
             stack.pushPose()
 
