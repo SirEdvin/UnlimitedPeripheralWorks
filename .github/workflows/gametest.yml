@@ -29,7 +29,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Run GameTests
-        run: timeout --foreground 1200s xvfb-run -a ./gradlew gameTest --no-daemon -PminimalTestEnvironment
+        run: timeout --foreground 1200s xvfb-run -a ./gradlew gameTest --no-daemon
 
       - name: Upload JUnit reports
         if: always()
