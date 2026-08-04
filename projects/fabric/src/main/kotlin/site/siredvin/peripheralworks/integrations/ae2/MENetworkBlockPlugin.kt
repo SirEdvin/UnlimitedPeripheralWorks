@@ -1,6 +1,5 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
-import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
 import appeng.api.stacks.AEKey
@@ -16,9 +15,8 @@ import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMap
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
-import java.util.*
 
-class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity) : IPeripheralPlugin {
+class MENetworkBlockPlugin(private val entity: AENetworkBlockEntity) : IPeripheralPlugin {
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }
@@ -35,7 +33,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             if (entity !is AENetworkBlockEntity) {
                 return null
             }
-            return MENetworkBlockPlugin(level, entity)
+            return MENetworkBlockPlugin(entity)
         }
     }
 
@@ -162,26 +160,5 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             }
         }
         return MethodResult.of(craftingList)
-    }
-
-    @LuaFunction(mainThread = false)
-    fun scheduleCrafting(mode: String, id_key: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
-        val craftingService = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
-        return AE2CraftingJobs.schedule(level, craftingService, IActionSource.ofMachine(entity), mode, id_key, amount, targetCPU)
-    }
-
-    @LuaFunction(mainThread = true)
-    fun getCraftingJob(jobID: String): MethodResult {
-        val service = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
-        return AE2CraftingJobs.get(service, jobID)
-    }
-
-    @LuaFunction(mainThread = true)
-    fun getCraftingJobs(): List<Map<String, Any>> = entity.mainNode.grid?.craftingService?.let(AE2CraftingJobs::getAll) ?: emptyList()
-
-    @LuaFunction(mainThread = true)
-    fun cancelCrafting(jobID: String): MethodResult {
-        val service = entity.mainNode.grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
-        return AE2CraftingJobs.cancel(service, jobID)
     }
 }

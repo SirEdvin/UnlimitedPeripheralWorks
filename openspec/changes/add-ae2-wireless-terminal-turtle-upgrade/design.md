@@ -70,7 +70,7 @@ Use Tweakium's existing item representation and item-query conversion. Reuse `Pe
 
 Register a second turtle upgrade using AE2's linked Wireless Crafting Terminal and peripheral type `ae2_crafting_monitor`. It exposes `scheduleCrafting`, `getCraftingJob`, `getCraftingJobs`, and `cancelCrafting`; the regular Wireless Terminal remains storage-only. Both upgrades preserve their complete equipped terminal stack and use the same fresh link/range resolver.
 
-Reuse the stationary AE2 peripheral's crafting request semantics and return the submitted `ICraftingLink` UUID after the existing leading success value. Track links in a process-wide weak-key map scoped by weak crafting-service identity, so the cache does not keep completed jobs or grids alive. Expose lookup, listing, and cancellation on stationary AE2 peripherals and crafting monitor turtle upgrades.
+Use one shared crafting-job peripheral plugin for stationary AE2 blocks and crafting monitor turtles, injecting only connection resolution and action-source handling. Return the submitted `ICraftingLink` UUID after the existing leading success value. Track links in a process-wide weak-key map scoped by weak crafting-service identity, so the cache does not keep completed jobs or grids alive.
 
 An unknown ID, an ID from another network, or a link already reclaimed by garbage collection is reported uniformly as a missing job. Job tracking intentionally does not survive server restart because AE2 has no public lookup-by-UUID API; using AE2 implementation internals to reconstruct links was rejected.
 

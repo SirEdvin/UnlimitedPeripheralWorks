@@ -124,7 +124,7 @@ The typed project SHALL define the storage contract in `integrations/ae2Wireless
 - **THEN** it resolves peripherals whose runtime type is `ae2_wireless_terminal`
 
 ### Requirement: Request and weakly track AE2 crafting jobs
-The system SHALL register an `ae2_crafting_monitor` turtle upgrade using an exact linked AE2 Wireless Crafting Terminal and preserve that stack unchanged. Successful `scheduleCrafting` calls SHALL retain the existing leading `true` result and additionally return the submitted AE2 crafting-link UUID. The server process SHALL weakly track submitted links per AE2 crafting service and expose `getCraftingJob`, `getCraftingJobs`, and `cancelCrafting` on stationary AE2 peripherals and crafting monitor upgrades without retaining links or grids solely for tracking. The regular `ae2_wireless_terminal` peripheral SHALL remain storage-only.
+The system SHALL register an `ae2_crafting_monitor` turtle upgrade using an exact linked AE2 Wireless Crafting Terminal and preserve that stack unchanged. A shared crafting-job peripheral plugin SHALL serve stationary AE2 peripherals and crafting monitor upgrades with injected connection and action-source behavior. Successful `scheduleCrafting` calls SHALL retain the existing leading `true` result and additionally return the submitted AE2 crafting-link UUID. The server process SHALL weakly track submitted links per AE2 crafting service without retaining links or grids solely for tracking. The regular `ae2_wireless_terminal` peripheral SHALL remain storage-only.
 
 #### Scenario: Request a tracked crafting job
 - **WHEN** AE2 accepts a crafting request

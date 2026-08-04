@@ -4,12 +4,20 @@ import appeng.api.networking.crafting.CalculationStrategy
 import appeng.api.networking.crafting.ICraftingLink
 import appeng.api.networking.crafting.ICraftingService
 import appeng.api.networking.security.IActionSource
+import appeng.blockentity.grid.AENetworkBlockEntity
+import appeng.core.definitions.AEItems
+import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
+import net.minecraft.core.BlockPos
+import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.stackToMap
+import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
+import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
 import java.lang.ref.WeakReference
 import java.util.Collections
 import java.util.Locale
@@ -91,4 +99,61 @@ object AE2CraftingJobs {
     )
 
     private fun missing(jobID: String): MethodResult = MethodResult.of(null, "Crafting job '$jobID' was not found")
+}
+
+class AE2CraftingJobsPlugin private constructor(
+    private val resolve: () -> Context?,
+    private val withActionSource: (((IActionSource) -> MethodResult) -> MethodResult),
+    private val unavailableMessage: String,
+) : IPeripheralPlugin {
+    private data class Context(val level: Level, val service: ICraftingService)
+
+    @LuaFunction(mainThread = false)
+    fun scheduleCrafting(mode: String, id: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
+        val context = resolve() ?: return unavailable()
+        return withActionSource { source -> AE2CraftingJobs.schedule(context.level, context.service, source, mode, id, amount, targetCPU) }
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getCraftingJob(jobID: String): MethodResult {
+        val context = resolve() ?: return unavailable()
+        return AE2CraftingJobs.get(context.service, jobID)
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getCraftingJobs(): List<Map<String, Any>> = resolve()?.let { AE2CraftingJobs.getAll(it.service) } ?: emptyList()
+
+    @LuaFunction(mainThread = true)
+    fun cancelCrafting(jobID: String): MethodResult {
+        val context = resolve() ?: return unavailable()
+        return AE2CraftingJobs.cancel(context.service, jobID)
+    }
+
+    private fun unavailable(): MethodResult = MethodResult.of(null, unavailableMessage)
+
+    companion object {
+        fun forMachine(level: Level, entity: AENetworkBlockEntity) = AE2CraftingJobsPlugin(
+            resolve = { entity.mainNode.grid?.craftingService?.let { Context(level, it) } },
+            withActionSource = { callback -> callback(IActionSource.ofMachine(entity)) },
+            unavailableMessage = "AE2 network is not connected",
+        )
+
+        fun forTurtle(owner: TurtlePeripheralOwner) = AE2CraftingJobsPlugin(
+            resolve = {
+                owner.level?.let { level -> Context(level, resolveWirelessSession(owner, AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).craftingService) }
+            },
+            withActionSource = { callback -> owner.withPlayer({ callback(IActionSource.ofPlayer(it.fakePlayer)) }, skipInventory = true) },
+            unavailableMessage = "Linked AE2 network is unavailable",
+        )
+    }
+}
+
+object AE2CraftingJobsPluginProvider : PeripheralPluginProvider {
+    override val pluginType = "ae2_crafting_jobs"
+
+    override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+        if (!Configuration.enableMEInterface) return null
+        val entity = level.getBlockEntity(pos) as? AENetworkBlockEntity ?: return null
+        return AE2CraftingJobsPlugin.forMachine(level, entity)
+    }
 }
