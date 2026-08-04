@@ -1,6 +1,7 @@
-// 1.20.1	2026-07-26T10:53:36.337809388	Unlimited Peripheral Works/Turtle Upgrades
+// 1.20.1	2026-08-04T08:36:50.658698627	Unlimited Peripheral Works/Turtle Upgrades
 c6585d2541a807aca0f82eb85fd2e9aa81dd677c data/peripheralworks/computercraft/turtle_upgrades/universal_scanner.json
 2246ea1d5805e9afda36c4f1265f520598315dc9 data/peripheralworks/computercraft/turtle_upgrades/netherite_peripheralium_hub.json
+25be7c06a318cf62fa70a4f814e8e0370076cd20 data/peripheralworks/computercraft/turtle_upgrades/ae2_wireless_terminal.json
 2d73257c0a967655f5a7acfa66bf9c39308db3f1 data/peripheralworks/computercraft/turtle_upgrades/ultimate_sensor.json
 911a593d4aafc165c692b127978a82c7f08b960e data/peripheralworks/computercraft/turtle_upgrades/hologram_projector.json
 d718e1fc9579bfe9b1ed23e3c237508eaab815a9 data/peripheralworks/computercraft/turtle_upgrades/natures_compass.json
