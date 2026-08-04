@@ -113,7 +113,7 @@ The system SHALL perform AE2 insertion and extraction with a player action sourc
 - **THEN** both simulated and committed AE2 storage operations use the turtle owner's action source
 
 ### Requirement: Publish a typed peripheral contract
-The typed project SHALL define the source contract in `projects/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal.ts`. The contract SHALL declare the `ae2_wireless_terminal` provider, item listing overloads, implicit-turtle `pushItem` and `pullItem` signatures, one-based optional slot parameters, numeric moved counts, and inherited fuel methods. Generated `.d.ts` and `.lua` files SHALL remain build output.
+The typed project SHALL define the source contract in `projects/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal.ts`. The contract SHALL declare the `ae2_wireless_terminal` provider, item listing overloads, implicit-turtle `pushItem` and `pullItem` signatures, one-based optional slot parameters, numeric moved counts, crafting-job methods, and inherited fuel methods. The stationary AE2 contract SHALL expose the same job type, IDs, lookup, listing, and cancellation methods. Generated `.d.ts` and `.lua` files SHALL remain build output.
 
 #### Scenario: Compile the typed contract
 - **WHEN** the typed-peripheral project is built
@@ -123,8 +123,27 @@ The typed project SHALL define the source contract in `projects/typed-peripheral
 - **WHEN** a TypeScript consumer uses the exported wireless terminal provider
 - **THEN** it resolves peripherals whose runtime type is `ae2_wireless_terminal`
 
-### Requirement: Keep the initial feature item-only and local-dimensional
-The first version SHALL NOT expose fluids, AE2 crafting requests, terminal user-interface settings, cross-dimensional access, or Wireless Crafting Terminal support.
+### Requirement: Request and weakly track AE2 crafting jobs
+Successful `scheduleCrafting` calls SHALL retain the existing leading `true` result and additionally return the submitted AE2 crafting-link UUID. The server process SHALL weakly track submitted links per AE2 crafting service and expose `getCraftingJob`, `getCraftingJobs`, and `cancelCrafting` on stationary and wireless AE2 peripherals without retaining links or grids solely for tracking.
+
+#### Scenario: Request a tracked crafting job
+- **WHEN** AE2 accepts a crafting request
+- **THEN** the call returns `true` and a job ID that can be queried or canceled while the weak link remains available
+
+#### Scenario: Query a tracked crafting job
+- **WHEN** Lua queries a known job ID on the same AE2 network
+- **THEN** it receives the ID, target, requested amount, and `running`, `done`, or `canceled` state
+
+#### Scenario: Cancel a running job
+- **WHEN** Lua cancels a known running job
+- **THEN** the AE2 crafting link is canceled and the call returns true
+
+#### Scenario: Handle a missing job
+- **WHEN** an ID is unknown, belongs to another network, or its weakly cached link has been reclaimed
+- **THEN** lookup and cancellation return `nil` and a not-found error without throwing
+
+### Requirement: Keep item storage local-dimensional
+The first version's storage API SHALL NOT expose fluids, terminal user-interface settings, cross-dimensional access, or Wireless Crafting Terminal support. Crafting requests MAY target AE2 item or fluid patterns through the existing mode parameter.
 
 #### Scenario: Network contains non-item keys
 - **WHEN** the connected AE2 network contains fluids or addon-defined keys

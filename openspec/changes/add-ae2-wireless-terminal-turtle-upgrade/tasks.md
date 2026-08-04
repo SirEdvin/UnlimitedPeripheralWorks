@@ -35,3 +35,10 @@
 - [x] 6.1 Run formatting and targeted compile checks for both loaders and fix all failures.
 - [x] 6.2 Run the root `gameTest` task for Fabric and Forge under `xvfb-run` with the required timeout and log capture, and verify all existing and new GameTests pass.
 - [x] 6.3 Run the timed root `build --no-daemon` with complete log capture and verify the multi-loader build and typed-peripheral outputs pass.
+
+## 7. Crafting Job Tracking
+
+- [x] 7.1 Return AE2 crafting-link UUIDs from successful stationary and wireless `scheduleCrafting` calls while preserving existing response ordering and errors.
+- [x] 7.2 Weakly cache links per crafting service and add lookup, listing, cancellation, terminal-state, and explicit missing-job responses.
+- [x] 7.3 Publish shared job typings and exercise wireless missing-job responses plus request typings in the TypeScript/GameTest fixture.
+- [x] 7.4 Run strict OpenSpec validation, the minimal multi-loader GameTests, and the timed root build.

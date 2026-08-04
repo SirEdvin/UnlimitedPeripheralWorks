@@ -11,6 +11,15 @@ const check = (value: unknown, message: string): void => {
 };
 
 const terminal = ae2WirelessTerminalProvider.findOrThrow();
+const [missingJob, missingJobError] = terminal.getCraftingJob("missing");
+check(missingJob === null && typeof missingJobError === "string" && missingJobError.includes("not found"), "Missing crafting job was not reported");
+const [missingCancel, missingCancelError] = terminal.cancelCrafting("missing");
+check(missingCancel === null && typeof missingCancelError === "string" && missingCancelError.includes("not found"), "Missing crafting job cancellation was not reported");
+terminal.getCraftingJobs();
+const typecheckCraftingRequest = (): void => {
+    const [scheduled, jobId] = terminal.scheduleCrafting("item", "minecraft:stone", 1);
+    if (scheduled) terminal.getCraftingJob(jobId);
+};
 const detailed = terminal.items();
 terminal.items(true);
 const filtered = terminal.items(false, { name: "minecraft:stone" });

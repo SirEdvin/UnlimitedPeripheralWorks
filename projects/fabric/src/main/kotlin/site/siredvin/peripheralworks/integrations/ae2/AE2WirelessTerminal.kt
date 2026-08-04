@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.implementations.blockentities.IWirelessAccessPoint
+import appeng.api.networking.crafting.ICraftingService
 import appeng.api.networking.security.IActionSource
 import appeng.api.storage.MEStorage
 import appeng.blockentity.networking.WirelessAccessPointBlockEntity
@@ -8,6 +9,7 @@ import appeng.core.definitions.AEItems
 import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
+import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.TurtleSide
 import net.minecraft.nbt.CompoundTag
@@ -69,7 +71,7 @@ class AE2WirelessTerminalPeripheral private constructor(owner: TurtlePeripheralO
 }
 
 private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner) : IPeripheralPlugin {
-    private data class Session(val storage: MEStorage)
+    private data class Session(val storage: MEStorage, val craftingService: ICraftingService)
 
     private fun resolve(): Session {
         val data = owner.turtle.getUpgradeNBTData(owner.side)
@@ -85,7 +87,7 @@ private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner
             isInRange(accessPoint, level, owner.pos)
         }
         if (!inRange) throw LuaException("Turtle is outside wireless range")
-        return Session(grid.storageService.inventory)
+        return Session(grid.storageService.inventory, grid.craftingService)
     }
 
     private fun validateTransfer(itemQuery: Any?, limit: Optional<Int>, slot: Optional<Int>): Pair<Predicate<ItemStack>, Pair<Int, Int>> {
@@ -146,6 +148,30 @@ private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner
                 predicate,
             )
         }, skipInventory = true)
+    }
+
+    @LuaFunction(mainThread = false)
+    fun scheduleCrafting(mode: String, id: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
+        val session = resolve()
+        val level = owner.level ?: return MethodResult.of(null, "Linked AE2 network is unavailable")
+        return owner.withPlayer({ player ->
+            AE2CraftingJobs.schedule(level, session.craftingService, IActionSource.ofPlayer(player.fakePlayer), mode, id, amount, targetCPU)
+        }, skipInventory = true)
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getCraftingJob(jobID: String): MethodResult {
+        val service = resolve().craftingService
+        return AE2CraftingJobs.get(service, jobID)
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getCraftingJobs(): List<Map<String, Any>> = AE2CraftingJobs.getAll(resolve().craftingService)
+
+    @LuaFunction(mainThread = true)
+    fun cancelCrafting(jobID: String): MethodResult {
+        val service = resolve().craftingService
+        return AE2CraftingJobs.cancel(service, jobID)
     }
 
     private fun isInRange(accessPoint: IWirelessAccessPoint, level: net.minecraft.world.level.Level, pos: net.minecraft.core.BlockPos): Boolean = accessPoint.isActive && accessPoint.location.level === level && accessPoint.location.pos.distSqr(pos) < accessPoint.range * accessPoint.range
