@@ -38,7 +38,8 @@
 
 ## 7. Crafting Job Tracking
 
-- [x] 7.1 Return AE2 crafting-link UUIDs from successful stationary and wireless `scheduleCrafting` calls while preserving existing response ordering and errors.
+- [x] 7.1 Return AE2 crafting-link UUIDs from successful stationary and crafting-monitor `scheduleCrafting` calls while preserving existing response ordering and errors.
 - [x] 7.2 Weakly cache links per crafting service and add lookup, listing, cancellation, terminal-state, and explicit missing-job responses.
-- [x] 7.3 Publish shared job typings and exercise wireless missing-job responses plus request typings in the TypeScript/GameTest fixture.
-- [x] 7.4 Run strict OpenSpec validation, the minimal multi-loader GameTests, and the timed root build.
+- [x] 7.3 Register a separate `ae2_crafting_monitor` upgrade using a linked Wireless Crafting Terminal and remove crafting methods from the regular wireless terminal.
+- [x] 7.4 Publish separate crafting-monitor typings and exercise runtime missing-job responses through the crafting monitor.
+- [x] 7.5 Run datagen, strict OpenSpec validation, the minimal multi-loader GameTests, and the timed root build.

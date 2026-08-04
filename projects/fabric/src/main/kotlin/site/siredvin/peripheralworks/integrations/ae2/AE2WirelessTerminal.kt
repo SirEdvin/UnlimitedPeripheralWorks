@@ -6,10 +6,10 @@ import appeng.api.networking.security.IActionSource
 import appeng.api.storage.MEStorage
 import appeng.blockentity.networking.WirelessAccessPointBlockEntity
 import appeng.core.definitions.AEItems
+import appeng.items.tools.powered.WirelessTerminalItem
 import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
-import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.TurtleSide
 import net.minecraft.nbt.CompoundTag
@@ -30,17 +30,35 @@ import java.util.Optional
 import java.util.function.Predicate
 import kotlin.math.min
 
-private const val TERMINAL_TAG = "terminal"
+internal const val AE2_TERMINAL_TAG = "terminal"
+
+internal data class AE2WirelessSession(val storage: MEStorage, val craftingService: ICraftingService)
+
+internal fun resolveWirelessSession(owner: TurtlePeripheralOwner, terminal: WirelessTerminalItem): AE2WirelessSession {
+    val data = owner.turtle.getUpgradeNBTData(owner.side)
+    if (!data.contains(AE2_TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) throw LuaException("Invalid stored wireless terminal")
+    val stack = ItemStack.of(data.getCompound(AE2_TERMINAL_TAG))
+    if (stack.item !== terminal || terminal.getLinkedPosition(stack) == null) throw LuaException("Invalid stored wireless terminal")
+    val level = owner.level ?: throw LuaException("Linked AE2 network is unavailable")
+    val grid = terminal.getLinkedGrid(stack, level, null) ?: throw LuaException("Linked AE2 network is unavailable")
+    val inRange = grid.getMachines(WirelessAccessPointBlockEntity::class.java).any { accessPoint ->
+        isInWirelessRange(accessPoint, level, owner.pos)
+    }
+    if (!inRange) throw LuaException("Turtle is outside wireless range")
+    return AE2WirelessSession(grid.storageService.inventory, grid.craftingService)
+}
+
+private fun isInWirelessRange(accessPoint: IWirelessAccessPoint, level: net.minecraft.world.level.Level, pos: net.minecraft.core.BlockPos): Boolean = accessPoint.isActive && accessPoint.location.level === level && accessPoint.location.pos.distSqr(pos) < accessPoint.range * accessPoint.range
 
 class AE2WirelessTerminalUpgrade(stack: ItemStack) : PeripheralTurtleUpgrade<AE2WirelessTerminalPeripheral>(UPGRADE_ID, stack) {
     override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(turtle, side)
 
     override fun getUpgradeData(stack: ItemStack): CompoundTag = CompoundTag().apply {
-        put(TERMINAL_TAG, stack.save(CompoundTag()))
+        put(AE2_TERMINAL_TAG, stack.save(CompoundTag()))
     }
 
-    override fun getUpgradeItem(upgradeData: CompoundTag): ItemStack = if (upgradeData.contains(TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) {
-        ItemStack.of(upgradeData.getCompound(TERMINAL_TAG))
+    override fun getUpgradeItem(upgradeData: CompoundTag): ItemStack = if (upgradeData.contains(AE2_TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) {
+        ItemStack.of(upgradeData.getCompound(AE2_TERMINAL_TAG))
     } else {
         craftingItem
     }
@@ -71,24 +89,7 @@ class AE2WirelessTerminalPeripheral private constructor(owner: TurtlePeripheralO
 }
 
 private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner) : IPeripheralPlugin {
-    private data class Session(val storage: MEStorage, val craftingService: ICraftingService)
-
-    private fun resolve(): Session {
-        val data = owner.turtle.getUpgradeNBTData(owner.side)
-        if (!data.contains(TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) throw LuaException("Invalid stored wireless terminal")
-        val stack = ItemStack.of(data.getCompound(TERMINAL_TAG))
-        val terminal = AEItems.WIRELESS_TERMINAL.asItem()
-        if (!AEItems.WIRELESS_TERMINAL.isSameAs(stack) || terminal.getLinkedPosition(stack) == null) {
-            throw LuaException("Invalid stored wireless terminal")
-        }
-        val level = owner.level ?: throw LuaException("Linked AE2 network is unavailable")
-        val grid = terminal.getLinkedGrid(stack, level, null) ?: throw LuaException("Linked AE2 network is unavailable")
-        val inRange = grid.getMachines(WirelessAccessPointBlockEntity::class.java).any { accessPoint ->
-            isInRange(accessPoint, level, owner.pos)
-        }
-        if (!inRange) throw LuaException("Turtle is outside wireless range")
-        return Session(grid.storageService.inventory, grid.craftingService)
-    }
+    private fun resolve(): AE2WirelessSession = resolveWirelessSession(owner, AEItems.WIRELESS_TERMINAL.asItem())
 
     private fun validateTransfer(itemQuery: Any?, limit: Optional<Int>, slot: Optional<Int>): Pair<Predicate<ItemStack>, Pair<Int, Int>> {
         val predicate = PeripheralPluginUtils.itemQueryToPredicate(itemQuery)
@@ -149,30 +150,4 @@ private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner
             )
         }, skipInventory = true)
     }
-
-    @LuaFunction(mainThread = false)
-    fun scheduleCrafting(mode: String, id: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
-        val session = resolve()
-        val level = owner.level ?: return MethodResult.of(null, "Linked AE2 network is unavailable")
-        return owner.withPlayer({ player ->
-            AE2CraftingJobs.schedule(level, session.craftingService, IActionSource.ofPlayer(player.fakePlayer), mode, id, amount, targetCPU)
-        }, skipInventory = true)
-    }
-
-    @LuaFunction(mainThread = true)
-    fun getCraftingJob(jobID: String): MethodResult {
-        val service = resolve().craftingService
-        return AE2CraftingJobs.get(service, jobID)
-    }
-
-    @LuaFunction(mainThread = true)
-    fun getCraftingJobs(): List<Map<String, Any>> = AE2CraftingJobs.getAll(resolve().craftingService)
-
-    @LuaFunction(mainThread = true)
-    fun cancelCrafting(jobID: String): MethodResult {
-        val service = resolve().craftingService
-        return AE2CraftingJobs.cancel(service, jobID)
-    }
-
-    private fun isInRange(accessPoint: IWirelessAccessPoint, level: net.minecraft.world.level.Level, pos: net.minecraft.core.BlockPos): Boolean = accessPoint.isActive && accessPoint.location.level === level && accessPoint.location.pos.distSqr(pos) < accessPoint.range * accessPoint.range
 }

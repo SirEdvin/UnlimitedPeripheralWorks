@@ -20,6 +20,7 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import site.siredvin.peripheralworks.integrations.ae2.AE2CraftingMonitorUpgrade
 import site.siredvin.peripheralworks.integrations.ae2.AE2WirelessTerminalUpgrade
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.api.thenExecuteFailFast
@@ -50,6 +51,11 @@ class AE2WirelessTerminalGameTests {
         val upgrade = AE2WirelessTerminalUpgrade(AEItems.WIRELESS_TERMINAL.stack())
         check(ItemStack.matches(terminal, upgrade.getUpgradeItem(upgrade.getUpgradeData(terminal))))
         turtle.access.setUpgradeWithData(TurtleSide.LEFT, UpgradeData.of(upgrade, upgrade.getUpgradeData(terminal)))
+        val craftingTerminal = AEItems.WIRELESS_CRAFTING_TERMINAL.stack()
+        WirelessTerminalItem.LINKABLE_HANDLER.link(craftingTerminal, GlobalPos.of(helper.level.dimension(), accessPointPos))
+        val craftingMonitor = AE2CraftingMonitorUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack())
+        check(ItemStack.matches(craftingTerminal, craftingMonitor.getUpgradeItem(craftingMonitor.getUpgradeData(craftingTerminal))))
+        turtle.access.setUpgradeWithData(TurtleSide.RIGHT, UpgradeData.of(craftingMonitor, craftingMonitor.getUpgradeData(craftingTerminal)))
 
         helper.startSequence()
             .thenIdle(10)

@@ -60,19 +60,17 @@ Expose peripheral type `ae2_wireless_terminal` with:
 items(detailed?, filter?)
 pullItem(itemQuery?, limit?, toSlot?)
 pushItem(fromSlotOrItemQuery?, limit?)
-scheduleCrafting(mode, id, amount?, targetCPU?)
-getCraftingJob(jobID)
-getCraftingJobs()
-cancelCrafting(jobID)
 ```
 
 The method names use the turtle caller's perspective: `pullItem` moves AE2 to turtle and `pushItem` moves turtle to AE2. `pullItem` accepts an optional one-based destination slot. `pushItem` accepts either a one-based source slot or an item query as its first argument.
 
 Use Tweakium's existing item representation and item-query conversion. Reuse `PeripheralWorksConfig.itemStorageTransferLimit`. Implement transfer methods directly or through a narrowly scoped shared transfer primitive; do not add a generalized plugin abstraction solely for this peripheral.
 
-### Crafting jobs use weak server-session tracking
+### A separate crafting monitor owns crafting jobs
 
-Reuse the stationary AE2 peripheral's crafting request semantics and return the submitted `ICraftingLink` UUID after the existing leading success value. Track links in a process-wide weak-key map scoped by weak crafting-service identity, so the cache does not keep completed jobs or grids alive. Expose lookup, listing, and cancellation on both stationary and wireless AE2 peripherals.
+Register a second turtle upgrade using AE2's linked Wireless Crafting Terminal and peripheral type `ae2_crafting_monitor`. It exposes `scheduleCrafting`, `getCraftingJob`, `getCraftingJobs`, and `cancelCrafting`; the regular Wireless Terminal remains storage-only. Both upgrades preserve their complete equipped terminal stack and use the same fresh link/range resolver.
+
+Reuse the stationary AE2 peripheral's crafting request semantics and return the submitted `ICraftingLink` UUID after the existing leading success value. Track links in a process-wide weak-key map scoped by weak crafting-service identity, so the cache does not keep completed jobs or grids alive. Expose lookup, listing, and cancellation on stationary AE2 peripherals and crafting monitor turtle upgrades.
 
 An unknown ID, an ID from another network, or a link already reclaimed by garbage collection is reported uniformly as a missing job. Job tracking intentionally does not survive server restart because AE2 has no public lookup-by-UUID API; using AE2 implementation internals to reconstruct links was rejected.
 
@@ -92,7 +90,7 @@ Per-item and distance-based charging were rejected by product decision. Terminal
 
 Create `projects/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal.ts`. It should import `ItemQuery` from `@siredvin/typed-peripheral-api/item_storage`, item detail types and `IPeripheralProvider` from `@siredvin/typed-peripheral-base`, and `FuelApi` from `@siredvin/typed-peripheral-api/fuel`.
 
-Define listing overloads equivalent to `ItemStorageAPI`, redefine `pushItem` and `pullItem` with implicit turtle endpoints and optional slots, extend `FuelApi`, add the shared crafting-job types and methods, and export an `IPeripheralProvider` for `ae2_wireless_terminal`. Update `integrations/ae2.ts` with the same job tracking surface for stationary AE blocks. Generated `.d.ts` and `.lua` files remain untracked build output.
+Define listing overloads equivalent to `ItemStorageAPI`, redefine `pushItem` and `pullItem` with implicit turtle endpoints and optional slots, extend `FuelApi`, and export an `IPeripheralProvider` for `ae2_wireless_terminal`. Add `ae2CraftingMonitor.ts` for the separate crafting peripheral and update `integrations/ae2.ts` with the same job tracking surface for stationary AE blocks. Generated `.d.ts` and `.lua` files remain untracked build output.
 
 ### Registration remains inside the optional AE2 integration
 

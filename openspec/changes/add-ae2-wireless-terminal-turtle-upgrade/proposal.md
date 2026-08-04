@@ -9,13 +9,14 @@ Turtles cannot directly use a linked AE2 wireless terminal to inspect network it
 - Apply vanilla AE2 link, loaded-network, active-access-point, dimension, and wireless-range constraints on every peripheral call without loading chunks.
 - Charge one turtle fuel for each valid item-transfer operation through Tweakium's fuel boon while leaving the terminal's AE charge unchanged.
 - Add the proposed typed contract at `projects/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal.ts` and keep generated declarations as build output.
-- Limit the first version to the standard AE2 Wireless Terminal and item storage; defer the Wireless Crafting Terminal, fluids, crafting requests, and cross-dimensional access.
+- Add a separate Crafting Monitor turtle upgrade backed by AE2's linked Wireless Crafting Terminal for crafting requests, weak job tracking, and cancellation.
+- Keep item storage on the standard Wireless Terminal and crafting control on the Wireless Crafting Terminal; defer fluid storage and cross-dimensional access.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `ae2-wireless-terminal-turtle-upgrade`: Direct terminal equipping, state preservation, wireless connection validation, network item inspection, turtle-local transfers, fuel charging, and the typed Lua contract.
+- `ae2-wireless-terminal-turtle-upgrade`: Direct terminal equipping, state preservation, wireless connection validation, network item inspection, turtle-local transfers, fuel charging, a separate Wireless Crafting Terminal monitor upgrade, weak crafting-job tracking, and typed Lua contracts.
 
 ### Modified Capabilities
 
@@ -27,5 +28,5 @@ None.
 - Turtle upgrade registration, model registration, language data, and generated upgrade data.
 - Persistent CC:Tweaked turtle upgrade NBT containing the equipped terminal state.
 - Tweakium turtle ownership, inventory storage, item-query, and fuel-boon integration.
-- Typed peripheral source at `projects/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal.ts`.
+- Typed peripheral sources for the wireless terminal and crafting monitor.
 - Fabric and Forge GameTests covering connection constraints, transfers, fuel, and item-state round trips.
