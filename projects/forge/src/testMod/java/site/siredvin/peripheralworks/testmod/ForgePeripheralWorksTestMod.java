@@ -25,6 +25,7 @@ public final class ForgePeripheralWorksTestMod {
         });
         Testiarium.register(PeripheralWorksGameTests.class);
         Testiarium.register(AE2ConfigurableObjectsGameTests.class);
+        Testiarium.register(AE2WirelessTerminalGameTests.class);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientTests::register);
         ForgeTestiarium.registerTests();
     }

@@ -93,7 +93,6 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
-        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("mna").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("deepresonance").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
@@ -126,6 +125,7 @@ object ForgePeripheralWorks {
         loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("ars_nouveau").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("projecte").ifPresent { (it as Runnable).run() }
+        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
     }
 
     @Suppress("MemberVisibilityCanBePrivate")

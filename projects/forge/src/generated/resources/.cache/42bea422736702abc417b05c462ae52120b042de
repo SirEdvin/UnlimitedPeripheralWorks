@@ -1,4 +1,6 @@
-// 1.20.1	2025-11-08T18:25:34.6607103	vanilla/Turtle Upgrades
+// 1.20.1	2026-08-04T16:34:49.329673094	vanilla/Turtle Upgrades
+d240fa0f18606d9d4e6781d8797dd80ffc38e237 data/peripheralworks/computercraft/turtle_upgrades/ae2_crafting_monitor.json
+3853625a634297d38a4ed83cc9b58f38bce9211c data/peripheralworks/computercraft/turtle_upgrades/ae2_wireless_terminal.json
 911a593d4aafc165c692b127978a82c7f08b960e data/peripheralworks/computercraft/turtle_upgrades/hologram_projector.json
 d205e7849ba7d32f6e008c44a81fb296064072dd data/peripheralworks/computercraft/turtle_upgrades/natures_compass.json
 2246ea1d5805e9afda36c4f1265f520598315dc9 data/peripheralworks/computercraft/turtle_upgrades/netherite_peripheralium_hub.json

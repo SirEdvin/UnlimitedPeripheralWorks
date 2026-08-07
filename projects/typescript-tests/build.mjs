@@ -16,7 +16,7 @@ for (const peripheral of [
   "universal_scanner", "ultimate_sensor", "item_pedestal", "map_pedestal", "display_pedestal",
   "remote_observer", "peripheral_proxy", "reality_forger", "recipe_registry",
   "informative_registry", "statue_workbench", "entity_link", "network_manager",
-  "hologram_projector", "ae2_configurable_objects",
+  "hologram_projector", "ae2_configurable_objects", "ae2_wireless_terminal",
 ]) {
   const result = spawnSync(
     resolve("node_modules/.bin/tstl"),

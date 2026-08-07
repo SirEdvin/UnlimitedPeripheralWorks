@@ -157,6 +157,8 @@
   "tooltip.peripheralworks.remote_observer_range": "  §6Max range of observed block: %s",
   "tooltip.peripheralworks.universal_scanner_free_range": "  §6Cost-free scan range: %s",
   "tooltip.peripheralworks.universal_scanner_max_range": "  §6Max scan range: %s",
+  "turtle.peripheralworks.ae2_crafting_monitor": "AE crafting monitor",
+  "turtle.peripheralworks.ae2_wireless_terminal": "AE terminal",
   "turtle.peripheralworks.hologram_projector": "Projecting",
   "turtle.peripheralworks.natures_compass": "Nature Compassing",
   "turtle.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",
