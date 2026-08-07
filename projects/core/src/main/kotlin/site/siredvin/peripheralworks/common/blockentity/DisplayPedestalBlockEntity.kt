@@ -66,7 +66,7 @@ class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState, blo
     }
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {
-        data.put(STORED_ITEM_STACK_TAG, _storedStack.save(PlatformToolkit.get().registries!!))
+        data.put(STORED_ITEM_STACK_TAG, _storedStack.saveOptional(PlatformToolkit.get().registries!!))
         data.putBoolean(RENDER_ITEM_TAG, _renderItem)
         data.putBoolean(RENDER_LABEL_TAG, _renderLabel)
         return data

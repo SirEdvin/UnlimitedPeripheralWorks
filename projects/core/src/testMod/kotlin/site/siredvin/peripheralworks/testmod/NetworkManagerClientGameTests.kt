@@ -21,6 +21,7 @@ import site.siredvin.peripheralworks.client.configurator.ConfiguratorTargetHisto
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerColorPickerScreen
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerScreen
 import site.siredvin.peripheralworks.client.configurator.TargetRenderSettingsScreen
+import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
@@ -36,11 +37,37 @@ import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.testiarium.api.ClientGameTest
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.fixture.client.ClientTestHelper
+import site.siredvin.testiarium.fixture.client.positionAt
 import site.siredvin.testiarium.fixture.client.thenOnClient
+import site.siredvin.testiarium.fixture.client.thenScreenshot
 import java.io.File
+import net.minecraft.world.item.Items as MinecraftItems
 
 @TestGroup("network-manager-client")
 class NetworkManagerClientGameTests {
+    @ClientGameTest(template = "empty", timeoutTicks = 200)
+    @TestGroup("display-pedestal-client")
+    fun rendersEmptyAndConfiguredDisplayPedestal(helper: GameTestHelper) {
+        val pedestalPos = BlockPos(1, 1, 1)
+        helper.startSequence()
+            .thenExecute {
+                listOf("display-pedestal-empty.png", "display-pedestal-configured.png").forEach {
+                    screenshotFile(it).apply {
+                        parentFile.mkdirs()
+                        delete()
+                    }
+                }
+                helper.setBlock(pedestalPos, Blocks.DISPLAY_PEDESTAL.get())
+                helper.positionAt(BlockPos(1, 2, 4), 180f, 15f)
+            }
+            .thenScreenshot("display-pedestal-empty")
+            .thenExecute {
+                (helper.getBlockEntity(pedestalPos) as DisplayPedestalBlockEntity).storedStack = ItemStack(MinecraftItems.DIAMOND, 16)
+            }
+            .thenScreenshot("display-pedestal-configured")
+            .thenSucceed()
+    }
+
     @ClientGameTest(template = "empty", timeoutTicks = 600)
     fun managesDetachedConfiguratorTargetsAndPreservesAttachedUse(helper: GameTestHelper) {
         val proxyPos = BlockPos(1, 1, 1)
