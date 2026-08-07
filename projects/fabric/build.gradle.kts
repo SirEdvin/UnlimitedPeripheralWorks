@@ -98,7 +98,7 @@ loom {
             source(testMod)
             property("fabric-api.gametest", "true")
             property("testiarium.client", "true")
-            property("testiarium.tags", "network-manager-client")
+            property("testiarium.tags", providers.gradleProperty("testiariumClientTags").orElse("network-manager-client,display-pedestal-client").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
             property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)

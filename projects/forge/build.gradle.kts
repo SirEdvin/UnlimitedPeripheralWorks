@@ -222,7 +222,7 @@ neoForge {
             gameDirectory = file("run/network-manager-client-gametest")
             systemProperty("neoforge.enabledGameTestNamespaces", "peripheralworks_testmod")
             systemProperty("testiarium.client", "true")
-            systemProperty("testiarium.tags", "network-manager-client")
+            systemProperty("testiarium.tags", providers.gradleProperty("testiariumClientTags").orElse("network-manager-client,display-pedestal-client").get())
             systemProperty("testiarium.structures", project.project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             systemProperty("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
             systemProperty("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
