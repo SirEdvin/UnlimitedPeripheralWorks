@@ -11,6 +11,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.RecipeSerializer
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
+import net.neoforged.bus.api.EventPriority
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
@@ -66,7 +67,8 @@ class ForgePeripheralWorks(modEventBus: IEventBus, modContainer: ModContainer) {
         modEventBus.addListener(this::commonSetup)
         modEventBus.addListener(this::registrySetup)
         modEventBus.addListener(ForgeNetworkHandler::setup)
-        modEventBus.addListener(ForgeCommonHooks::registerCapabilities)
+        // ponytail: NeoForge provider ordering gives this catch-all registration fallback semantics.
+        modEventBus.addListener(EventPriority.LOWEST, ForgeCommonHooks::registerCapabilities)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         blocksRegistry.register(modEventBus)
