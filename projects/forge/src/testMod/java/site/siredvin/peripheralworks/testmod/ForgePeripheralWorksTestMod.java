@@ -33,6 +33,9 @@ public final class ForgePeripheralWorksTestMod {
     private static final class ClientTests {
         private static void register() {
             Testiarium.register(NetworkManagerClientGameTests.class);
+            if (System.getProperty("testiarium.client") == null) {
+                return;
+            }
             ForgeClientTestHooks.register();
             // ponytail: Forge's headless loading overlay never opens a title screen, so trigger Testiarium after resources settle.
             CompletableFuture.delayedExecutor(20, TimeUnit.SECONDS).execute(() -> Minecraft.getInstance().execute(() -> {

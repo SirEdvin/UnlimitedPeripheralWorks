@@ -103,6 +103,19 @@ loom {
             vmArg("-ea")
             runDir("run/network-manager-client-gametest")
         }
+        create("peripheralWorksTestClient") {
+            client()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("fabric.debug.disableModIds", "create,testiarium_testmod,testiarium_cct_testmod")
+            property("fabric.debug.loadLate", "testiarium_testmod")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/test-client")
+        }
     }
 }
 

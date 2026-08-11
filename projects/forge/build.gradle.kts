@@ -137,6 +137,24 @@ minecraft {
                 }
             }
         }
+        create("testClient") {
+            parent(runs.getByName("client"))
+            workingDirectory(file("run/test-client"))
+            property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
+            jvmArgs("-ea")
+            args("--mixin.config", "testiarium-testmod.mixins.json")
+            mods {
+                create("peripheralworks") { source(sourceSets.main.get()) }
+                create("peripheralworks_testmod") {
+                    source(testMod)
+                    source(project(":core").sourceSets["testMod"])
+                }
+            }
+        }
     }
 }
 
