@@ -19,8 +19,8 @@ for (const peripheral of [
   "hologram_projector", "ae2_configurable_objects", "ae2_wireless_terminal",
 ]) {
   const result = spawnSync(
-    resolve("node_modules/.bin/tstl"),
-    ["-p", "tsconfig.json", "--luaBundle", resolve(output, `peripheralworksgametests.${peripheral}.lua`), "--luaBundleEntry", `src/${peripheral}.ts`],
+    process.execPath,
+    [resolve("node_modules/typescript-to-lua/dist/tstl.js"), "-p", "tsconfig.json", "--luaBundle", resolve(output, `peripheralworksgametests.${peripheral}.lua`), "--luaBundleEntry", `src/${peripheral}.ts`],
     { stdio: "inherit" }
   );
   if (result.status !== 0) process.exit(result.status ?? 1);
