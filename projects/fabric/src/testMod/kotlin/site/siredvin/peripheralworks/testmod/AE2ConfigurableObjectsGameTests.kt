@@ -27,7 +27,7 @@ import site.siredvin.testiarium.cct.CctComputerState
 import java.lang.reflect.Proxy
 import java.util.concurrent.CompletableFuture
 
-@TestGroup("peripheralworks")
+@TestGroup("ae2-configurable-peripherals")
 class AE2ConfigurableObjectsGameTests {
     @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
     fun configurableObjects(helper: GameTestHelper) {

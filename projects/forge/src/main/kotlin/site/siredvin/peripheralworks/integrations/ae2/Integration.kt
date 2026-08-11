@@ -54,28 +54,14 @@ class Integration : Runnable {
             TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack -> AE2WirelessTerminalUpgrade(stack) },
         )
         ModTurtleUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.UPGRADE_ID, wirelessTerminalUpgrade.get(), AEItems.WIRELESS_TERMINAL.asItem()).requireMod("ae2")
+            it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.UPGRADE_ID, wirelessTerminalUpgrade.get(), AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).requireMod("ae2")
         }
         PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
             @Suppress("UNCHECKED_CAST")
             Pair(wirelessTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, heightShift = 0.15f))
         }
-        ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE terminal") }
-        ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE термінальна") }
-
-        val craftingMonitorUpgrade = ModPlatform.registerTurtleUpgrade(
-            AE2CraftingMonitorUpgrade.UPGRADE_ID,
-            TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack -> AE2CraftingMonitorUpgrade(stack) },
-        )
-        ModTurtleUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(AE2CraftingMonitorUpgrade.UPGRADE_ID, craftingMonitorUpgrade.get(), AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).requireMod("ae2")
-        }
-        PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
-            @Suppress("UNCHECKED_CAST")
-            Pair(craftingMonitorUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, heightShift = 0.15f))
-        }
-        ModEnLanguageProvider.addHook { it.addTurtle(AE2CraftingMonitorUpgrade.UPGRADE_ID, "AE crafting monitor") }
-        ModUaLanguageProvider.addHook { it.addTurtle(AE2CraftingMonitorUpgrade.UPGRADE_ID, "AE монітор крафтингу") }
+        ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE wireless terminal") }
+        ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE бездротова термінальна") }
 
         if (Configuration.enableStorageIntegrations) {
             AgnosticItemStorageLookup.addBlockLookup(::extractItemStorage)

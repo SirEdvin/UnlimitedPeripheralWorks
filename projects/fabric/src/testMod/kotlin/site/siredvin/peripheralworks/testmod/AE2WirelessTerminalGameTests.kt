@@ -20,13 +20,12 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
-import site.siredvin.peripheralworks.integrations.ae2.AE2CraftingMonitorUpgrade
 import site.siredvin.peripheralworks.integrations.ae2.AE2WirelessTerminalUpgrade
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.api.thenExecuteFailFast
 import site.siredvin.testiarium.cct.CctComputerState
 
-@TestGroup("peripheralworks")
+@TestGroup("ae2-configurable-peripherals")
 class AE2WirelessTerminalGameTests {
     @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 12000)
     fun wirelessTerminal(helper: GameTestHelper) {
@@ -39,8 +38,8 @@ class AE2WirelessTerminalGameTests {
         helper.level.setBlockAndUpdate(chestPos, AEBlocks.CHEST.block().defaultBlockState())
         (helper.level.getBlockEntity(chestPos) as ChestBlockEntity).setCell(AEItems.ITEM_CELL_1K.stack())
 
-        val terminalItem = AEItems.WIRELESS_TERMINAL.asItem()
-        val terminal = AEItems.WIRELESS_TERMINAL.stack().apply {
+        val terminalItem = AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()
+        val terminal = AEItems.WIRELESS_CRAFTING_TERMINAL.stack().apply {
             hoverName = Component.literal("Test terminal")
             orCreateTag.putString("upw_test", "preserved")
         }
@@ -48,14 +47,9 @@ class AE2WirelessTerminalGameTests {
         terminalItem.injectAEPower(terminal, 400.0, Actionable.MODULATE)
         terminalItem.getUpgrades(terminal).setItemDirect(0, AEItems.ENERGY_CARD.stack())
         val initialCharge = terminalItem.getAECurrentPower(terminal)
-        val upgrade = AE2WirelessTerminalUpgrade(AEItems.WIRELESS_TERMINAL.stack())
+        val upgrade = AE2WirelessTerminalUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack())
         check(ItemStack.matches(terminal, upgrade.getUpgradeItem(upgrade.getUpgradeData(terminal))))
         turtle.access.setUpgradeWithData(TurtleSide.LEFT, UpgradeData.of(upgrade, upgrade.getUpgradeData(terminal)))
-        val craftingTerminal = AEItems.WIRELESS_CRAFTING_TERMINAL.stack()
-        WirelessTerminalItem.LINKABLE_HANDLER.link(craftingTerminal, GlobalPos.of(helper.level.dimension(), accessPointPos))
-        val craftingMonitor = AE2CraftingMonitorUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack())
-        check(ItemStack.matches(craftingTerminal, craftingMonitor.getUpgradeItem(craftingMonitor.getUpgradeData(craftingTerminal))))
-        turtle.access.setUpgradeWithData(TurtleSide.RIGHT, UpgradeData.of(craftingMonitor, craftingMonitor.getUpgradeData(craftingTerminal)))
 
         helper.startSequence()
             .thenIdle(10)

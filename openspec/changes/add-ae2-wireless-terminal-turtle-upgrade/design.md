@@ -4,13 +4,13 @@ UPW already adapts storage from an `AENetworkBlockEntity` into an `AEItemStorage
 
 The wireless terminal use case differs in two ways. Its AE2 storage is discovered from item NBT and the turtle's current position rather than a stationary block entity, and its transfer endpoint is always the same turtle rather than a peripheral name. A normal `ItemStoragePlugin` therefore cannot be reused unchanged because it retains one storage object and requires named peripherals.
 
-AE2 15's standard Wireless Terminal stores its linked access-point position in item NBT. Vanilla resolves that block entity to discover the grid, scans the grid's access points for an active in-range access point, and normally drains terminal charge while a menu remains open. CC:Tweaked stores configurable turtle upgrade state separately from the upgrade's constant crafting item, so default upgrade behavior would discard the terminal's link, charge, cards, and other NBT when unequipped.
+AE2 15's Wireless Crafting Terminal stores its linked access-point position in item NBT. Vanilla resolves that block entity to discover the grid, scans the grid's access points for an active in-range access point, and normally drains terminal charge while a menu remains open. CC:Tweaked stores configurable turtle upgrade state separately from the upgrade's constant crafting item, so default upgrade behavior would discard the terminal's link, charge, cards, and other NBT when unequipped.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Equip a linked standard AE2 Wireless Terminal directly, without introducing another item or recipe.
+- Equip a linked AE2 Wireless Crafting Terminal directly, without introducing another item or recipe.
 - Preserve the exact terminal item across equip, turtle persistence, and unequip.
 - Expose network item listing and implicit transfers to and from the turtle inventory.
 - Revalidate the linked grid and wireless range on every call without chunk loading.
@@ -32,7 +32,7 @@ AE2 15's standard Wireless Terminal stores its linked access-point position in i
 
 ### The linked Wireless Terminal is the upgrade item
 
-Register an AE2-specific turtle upgrade whose custom crafting item is the standard Wireless Terminal. Require link NBT during suitability checks. Do not add a UPW bridge item or recipe.
+Register an AE2-specific turtle upgrade whose custom crafting item is the Wireless Crafting Terminal. Require link NBT during suitability checks. Do not add a UPW bridge item or recipe.
 
 The upgrade must override the CC:Tweaked item/data round trip: copy the equipped stack into upgrade data and reconstruct it from that data in `getUpgradeItem`. The runtime peripheral must read and update the terminal state through the turtle side's authoritative upgrade data rather than retaining the serializer's default crafting stack.
 
@@ -66,11 +66,11 @@ The method names use the turtle caller's perspective: `pullItem` moves AE2 to tu
 
 Use Tweakium's existing item representation and item-query conversion. Reuse `PeripheralWorksConfig.itemStorageTransferLimit`. Implement transfer methods directly or through a narrowly scoped shared transfer primitive; do not add a generalized plugin abstraction solely for this peripheral.
 
-### A separate crafting monitor owns crafting jobs
+### The wireless terminal also owns crafting jobs
 
-Register a second turtle upgrade using AE2's linked Wireless Crafting Terminal and peripheral type `ae2_crafting_monitor`. It exposes `scheduleCrafting`, `getCraftingJob`, `getCraftingJobs`, and `cancelCrafting`; the regular Wireless Terminal remains storage-only. Both upgrades preserve their complete equipped terminal stack and use the same fresh link/range resolver.
+Register one turtle upgrade using AE2's linked Wireless Crafting Terminal and peripheral type `ae2_wireless_terminal`. It exposes both item-storage methods and `scheduleCrafting`, `getCraftingJob`, `getCraftingJobs`, and `cancelCrafting`. The upgrade preserves the complete equipped terminal stack and uses the same fresh link/range resolver for both APIs.
 
-Use one shared crafting-job peripheral plugin for stationary AE2 blocks and crafting monitor turtles, injecting only connection resolution and action-source handling. Return the submitted `ICraftingLink` UUID after the existing leading success value. Track links in a process-wide weak-key map scoped by weak crafting-service identity, so the cache does not keep completed jobs or grids alive.
+Use one shared crafting-job peripheral plugin for stationary AE2 blocks and wireless-terminal turtles, injecting only connection resolution and action-source handling. Return the submitted `ICraftingLink` UUID after the existing leading success value. Track links in a process-wide weak-key map scoped by weak crafting-service identity, so the cache does not keep completed jobs or grids alive.
 
 An unknown ID, an ID from another network, or a link already reclaimed by garbage collection is reported uniformly as a missing job. Job tracking intentionally does not survive server restart because AE2 has no public lookup-by-UUID API; using AE2 implementation internals to reconstruct links was rejected.
 
@@ -90,7 +90,7 @@ Per-item and distance-based charging were rejected by product decision. Terminal
 
 Create `projects/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal.ts`. It should import `ItemQuery` from `@siredvin/typed-peripheral-api/item_storage`, item detail types and `IPeripheralProvider` from `@siredvin/typed-peripheral-base`, and `FuelApi` from `@siredvin/typed-peripheral-api/fuel`.
 
-Define listing overloads equivalent to `ItemStorageAPI`, redefine `pushItem` and `pullItem` with implicit turtle endpoints and optional slots, extend `FuelApi`, and export an `IPeripheralProvider` for `ae2_wireless_terminal`. Add `ae2CraftingMonitor.ts` for the separate crafting peripheral and update `integrations/ae2.ts` with the same job tracking surface for stationary AE blocks. Generated `.d.ts` and `.lua` files remain untracked build output.
+Define listing overloads equivalent to `ItemStorageAPI`, redefine `pushItem` and `pullItem` with implicit turtle endpoints and optional slots, extend `FuelApi`, include the crafting-job methods, and export an `IPeripheralProvider` for `ae2_wireless_terminal`. Update `integrations/ae2.ts` with the same job tracking surface for stationary AE blocks. Generated `.d.ts` and `.lua` files remain build output.
 
 ### Registration remains inside the optional AE2 integration
 

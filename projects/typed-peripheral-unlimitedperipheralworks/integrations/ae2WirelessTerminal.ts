@@ -5,6 +5,8 @@ import {
     IPeripheralProvider,
     ShortItemDetail,
 } from "@siredvin/typed-peripheral-base";
+import { AE2CraftingJob } from "./ae2";
+import { Fallible } from "../types";
 
 /** @noSelf **/
 export interface AE2WirelessTerminalAPI extends FuelApi {
@@ -19,6 +21,19 @@ export interface AE2WirelessTerminalAPI extends FuelApi {
     ): LuaTable<number, ShortItemDetail>;
     pullItem(itemQuery?: ItemQuery, limit?: number, toSlot?: number): number;
     pushItem(fromSlotOrItemQuery?: number | ItemQuery, limit?: number): number;
+    scheduleCrafting(
+        mode: "item" | "fluid",
+        id: string,
+        amount?: number,
+        targetCPU?: string
+    ): LuaMultiReturn<
+        | [true, string]
+        | [null, string]
+        | [false, string, LuaTable<string, number>]
+    >;
+    getCraftingJob(jobId: string): Fallible<AE2CraftingJob>;
+    getCraftingJobs(): AE2CraftingJob[];
+    cancelCrafting(jobId: string): Fallible<boolean>;
 }
 
 export const ae2WirelessTerminalProvider =

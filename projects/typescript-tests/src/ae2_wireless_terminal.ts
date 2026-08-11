@@ -1,4 +1,3 @@
-import { ae2CraftingMonitorProvider } from "@siredvin/typed-peripheral-unlimitedperipheralworks/integrations/ae2CraftingMonitor";
 import { ae2WirelessTerminalProvider } from "@siredvin/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal";
 
 /** @noSelf **/
@@ -12,15 +11,14 @@ const check = (value: unknown, message: string): void => {
 };
 
 const terminal = ae2WirelessTerminalProvider.findOrThrow();
-const craftingMonitor = ae2CraftingMonitorProvider.findOrThrow();
-const [missingJob, missingJobError] = craftingMonitor.getCraftingJob("missing");
+const [missingJob, missingJobError] = terminal.getCraftingJob("missing");
 check(missingJob === null && typeof missingJobError === "string" && missingJobError.includes("not found"), "Missing crafting job was not reported");
-const [missingCancel, missingCancelError] = craftingMonitor.cancelCrafting("missing");
+const [missingCancel, missingCancelError] = terminal.cancelCrafting("missing");
 check(missingCancel === null && typeof missingCancelError === "string" && missingCancelError.includes("not found"), "Missing crafting job cancellation was not reported");
-craftingMonitor.getCraftingJobs();
+terminal.getCraftingJobs();
 const typecheckCraftingRequest = (): void => {
-    const [scheduled, jobId] = craftingMonitor.scheduleCrafting("item", "minecraft:stone", 1);
-    if (scheduled) craftingMonitor.getCraftingJob(jobId);
+    const [scheduled, jobId] = terminal.scheduleCrafting("item", "minecraft:stone", 1);
+    if (scheduled) terminal.getCraftingJob(jobId);
 };
 const detailed = terminal.items();
 terminal.items(true);

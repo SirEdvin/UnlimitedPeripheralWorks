@@ -1,18 +1,18 @@
 ## ADDED Requirements
 
-### Requirement: Equip a linked AE2 Wireless Terminal directly
-The system SHALL register the standard AE2 Wireless Terminal as the crafting item for a turtle peripheral upgrade with peripheral type `ae2_wireless_terminal`. The system SHALL accept only a terminal containing a valid AE2 access-point link and SHALL NOT require a separate UPW item or crafting recipe.
+### Requirement: Equip a linked AE2 Wireless Crafting Terminal directly
+The system SHALL register the AE2 Wireless Crafting Terminal as the crafting item for a turtle peripheral upgrade with peripheral type `ae2_wireless_terminal`. The system SHALL accept only a terminal containing a valid AE2 access-point link and SHALL NOT require a separate UPW item or crafting recipe.
 
 #### Scenario: Equip a linked terminal
-- **WHEN** a turtle equips a standard AE2 Wireless Terminal containing an access-point link
+- **WHEN** a turtle equips an AE2 Wireless Crafting Terminal containing an access-point link
 - **THEN** the turtle gains an `ae2_wireless_terminal` peripheral on that side
 
 #### Scenario: Reject an unlinked terminal
-- **WHEN** a turtle attempts to equip a standard AE2 Wireless Terminal without an access-point link
+- **WHEN** a turtle attempts to equip an AE2 Wireless Crafting Terminal without an access-point link
 - **THEN** the item is not accepted as the wireless terminal upgrade
 
 #### Scenario: Do not accept other terminal variants
-- **WHEN** a turtle attempts to equip an AE2 Wireless Crafting Terminal or another terminal variant
+- **WHEN** a turtle attempts to equip a standard AE2 Wireless Terminal or another terminal variant
 - **THEN** the item is not accepted as this upgrade
 
 ### Requirement: Preserve the complete terminal item state
@@ -113,7 +113,7 @@ The system SHALL perform AE2 insertion and extraction with a player action sourc
 - **THEN** both simulated and committed AE2 storage operations use the turtle owner's action source
 
 ### Requirement: Publish a typed peripheral contract
-The typed project SHALL define the storage contract in `integrations/ae2WirelessTerminal.ts` and the crafting contract in `integrations/ae2CraftingMonitor.ts`. The storage contract SHALL declare the `ae2_wireless_terminal` provider, item listing overloads, implicit-turtle transfer signatures, and inherited fuel methods. The crafting contract SHALL declare the `ae2_crafting_monitor` provider and job methods. The stationary AE2 contract SHALL expose the same job type, IDs, lookup, listing, and cancellation methods. Generated `.d.ts` and `.lua` files SHALL remain build output.
+The typed project SHALL define the combined storage and crafting contract in `integrations/ae2WirelessTerminal.ts`. The contract SHALL declare the `ae2_wireless_terminal` provider, item listing overloads, implicit-turtle transfer signatures, inherited fuel methods, and crafting-job methods. The stationary AE2 contract SHALL expose the same job type, IDs, lookup, listing, and cancellation methods. Generated `.d.ts` and `.lua` files SHALL remain build output.
 
 #### Scenario: Compile the typed contract
 - **WHEN** the typed-peripheral project is built
@@ -124,14 +124,14 @@ The typed project SHALL define the storage contract in `integrations/ae2Wireless
 - **THEN** it resolves peripherals whose runtime type is `ae2_wireless_terminal`
 
 ### Requirement: Request and weakly track AE2 crafting jobs
-The system SHALL register an `ae2_crafting_monitor` turtle upgrade using an exact linked AE2 Wireless Crafting Terminal and preserve that stack unchanged. A shared crafting-job peripheral plugin SHALL serve stationary AE2 peripherals and crafting monitor upgrades with injected connection and action-source behavior. Successful `scheduleCrafting` calls SHALL retain the existing leading `true` result and additionally return the submitted AE2 crafting-link UUID. The server process SHALL weakly track submitted links per AE2 crafting service without retaining links or grids solely for tracking. The regular `ae2_wireless_terminal` peripheral SHALL remain storage-only.
+The `ae2_wireless_terminal` turtle upgrade SHALL use an exact linked AE2 Wireless Crafting Terminal, preserve that stack unchanged, and expose both item-storage and crafting-job methods. A shared crafting-job peripheral plugin SHALL serve stationary AE2 peripherals and wireless-terminal upgrades with injected connection and action-source behavior. Successful `scheduleCrafting` calls SHALL retain the existing leading `true` result and additionally return the submitted AE2 crafting-link UUID. The server process SHALL weakly track submitted links per AE2 crafting service without retaining links or grids solely for tracking.
 
 #### Scenario: Request a tracked crafting job
 - **WHEN** AE2 accepts a crafting request
 - **THEN** the call returns `true` and a job ID that can be queried or canceled while the weak link remains available
 
 #### Scenario: Query a tracked crafting job
-- **WHEN** Lua queries a known job ID through a stationary AE2 peripheral or in-range crafting monitor on the same network
+- **WHEN** Lua queries a known job ID through a stationary AE2 peripheral or in-range wireless terminal on the same network
 - **THEN** it receives the ID, target, requested amount, and `running`, `done`, or `canceled` state
 
 #### Scenario: Cancel a running job

@@ -63,8 +63,8 @@ class AE2WirelessTerminalUpgrade(stack: ItemStack) : PeripheralTurtleUpgrade<AE2
         craftingItem
     }
 
-    override fun isItemSuitable(stack: ItemStack): Boolean = AEItems.WIRELESS_TERMINAL.isSameAs(stack) &&
-        AEItems.WIRELESS_TERMINAL.asItem().getLinkedPosition(stack) != null
+    override fun isItemSuitable(stack: ItemStack): Boolean = AEItems.WIRELESS_CRAFTING_TERMINAL.isSameAs(stack) &&
+        AEItems.WIRELESS_CRAFTING_TERMINAL.asItem().getLinkedPosition(stack) != null
 
     companion object {
         val UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, AE2WirelessTerminalPeripheral.TYPE)
@@ -76,6 +76,7 @@ class AE2WirelessTerminalPeripheral private constructor(owner: TurtlePeripheralO
 
     init {
         addPlugin(AE2WirelessTerminalPlugin(owner))
+        addPlugin(AE2CraftingJobsPlugin.forTurtle(owner))
     }
 
     companion object {
@@ -89,7 +90,7 @@ class AE2WirelessTerminalPeripheral private constructor(owner: TurtlePeripheralO
 }
 
 private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner) : IPeripheralPlugin {
-    private fun resolve(): AE2WirelessSession = resolveWirelessSession(owner, AEItems.WIRELESS_TERMINAL.asItem())
+    private fun resolve(): AE2WirelessSession = resolveWirelessSession(owner, AEItems.WIRELESS_CRAFTING_TERMINAL.asItem())
 
     private fun validateTransfer(itemQuery: Any?, limit: Optional<Int>, slot: Optional<Int>): Pair<Predicate<ItemStack>, Pair<Int, Int>> {
         val predicate = PeripheralPluginUtils.itemQueryToPredicate(itemQuery)

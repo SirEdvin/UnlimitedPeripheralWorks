@@ -40,6 +40,6 @@
 
 - [x] 7.1 Return AE2 crafting-link UUIDs from successful stationary and crafting-monitor `scheduleCrafting` calls while preserving existing response ordering and errors.
 - [x] 7.2 Extract one shared stationary/turtle crafting-job peripheral plugin with injected context, weakly cached links, lookup, listing, cancellation, terminal-state, and explicit missing-job responses.
-- [x] 7.3 Register a separate `ae2_crafting_monitor` upgrade using a linked Wireless Crafting Terminal and remove crafting methods from the regular wireless terminal.
-- [x] 7.4 Publish separate crafting-monitor typings and exercise runtime missing-job responses through the crafting monitor.
+- [x] 7.3 Use one `ae2_wireless_terminal` upgrade backed by a linked Wireless Crafting Terminal for both item storage and crafting-job methods.
+- [x] 7.4 Publish the combined wireless-terminal typings and exercise runtime missing-job responses through that peripheral.
 - [x] 7.5 Run datagen, strict OpenSpec validation, the minimal multi-loader GameTests, and the timed root build.
