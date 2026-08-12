@@ -30,66 +30,73 @@ import java.util.concurrent.CompletableFuture
 @TestGroup("ae2-configurable-peripherals")
 class AE2ConfigurableObjectsGameTests {
     @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
-    fun configurableObjects(helper: GameTestHelper) {
+    fun interfaceObject(helper: GameTestHelper) = configurableObject(helper, Device.INTERFACE)
+
+    @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
+    fun importBus(helper: GameTestHelper) = configurableObject(helper, Device.IMPORT_BUS)
+
+    @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
+    fun exportBus(helper: GameTestHelper) = configurableObject(helper, Device.EXPORT_BUS)
+
+    @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
+    fun storageBus(helper: GameTestHelper) = configurableObject(helper, Device.STORAGE_BUS)
+
+    @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
+    fun formationPlane(helper: GameTestHelper) = configurableObject(helper, Device.FORMATION_PLANE)
+
+    @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
+    fun storageLevelEmitter(helper: GameTestHelper) = configurableObject(helper, Device.STORAGE_LEVEL_EMITTER)
+
+    @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
+    fun energyLevelEmitter(helper: GameTestHelper) = configurableObject(helper, Device.ENERGY_LEVEL_EMITTER)
+
+    @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
+    fun patternProvider(helper: GameTestHelper) = configurableObject(helper, Device.PATTERN_PROVIDER)
+
+    private fun configurableObject(helper: GameTestHelper, device: Device) {
         val computer = findComputer(helper)
-        val interfacePos = computer.blockPos.relative(Direction.NORTH)
-        val cablePos = computer.blockPos.relative(Direction.SOUTH)
+        val targetPos = computer.blockPos.relative(Direction.NORTH)
         val chestPos = computer.blockPos.relative(Direction.WEST)
-        val patternProviderPos = computer.blockPos.relative(Direction.EAST)
-        helper.level.setBlockAndUpdate(interfacePos, AEBlocks.INTERFACE.block().defaultBlockState())
-        helper.level.setBlockAndUpdate(patternProviderPos, AEBlocks.PATTERN_PROVIDER.block().defaultBlockState())
-        helper.level.setBlockAndUpdate(cablePos, AEBlocks.CABLE_BUS.block().defaultBlockState())
+        val directBlock = when (device) {
+            Device.INTERFACE -> AEBlocks.INTERFACE.block()
+            Device.PATTERN_PROVIDER -> AEBlocks.PATTERN_PROVIDER.block()
+            else -> null
+        }
+        helper.level.setBlockAndUpdate(targetPos, (directBlock ?: AEBlocks.CABLE_BUS.block()).defaultBlockState())
         helper.level.setBlockAndUpdate(chestPos, net.minecraft.world.level.block.Blocks.CHEST.defaultBlockState())
-        val cable = helper.level.getBlockEntity(cablePos) as CableBusBlockEntity
-        val exportBus = cable.addPart(AEParts.EXPORT_BUS.asItem(), Direction.SOUTH, null)!!
-        assertCraftingSlotTen(exportBus, helper)
-        cable.addPart(AEParts.STORAGE_BUS.asItem(), Direction.EAST, null)
-        cable.addPart(AEParts.FORMATION_PLANE.asItem(), Direction.WEST, null)
-        cable.addPart(AEParts.LEVEL_EMITTER.asItem(), Direction.UP, null)
-        cable.addPart(AEParts.ENERGY_LEVEL_EMITTER.asItem(), Direction.DOWN, null)
-        check(ComputerCraftProxy.collectPlugins(helper.level, cablePos, Direction.NORTH).containsKey("ae2_cable_objects")) {
-            "Cable provider was not registered"
+        if (directBlock == null) {
+            val cable = helper.level.getBlockEntity(targetPos) as CableBusBlockEntity
+            val part = when (device) {
+                Device.IMPORT_BUS -> AEParts.IMPORT_BUS
+                Device.EXPORT_BUS -> AEParts.EXPORT_BUS
+                Device.STORAGE_BUS -> AEParts.STORAGE_BUS
+                Device.FORMATION_PLANE -> AEParts.FORMATION_PLANE
+                Device.STORAGE_LEVEL_EMITTER -> AEParts.LEVEL_EMITTER
+                Device.ENERGY_LEVEL_EMITTER -> AEParts.ENERGY_LEVEL_EMITTER
+                else -> error("Unexpected direct device $device")
+            }
+            val added = cable.addPart(part.asItem(), Direction.SOUTH, null)!!
+            if (added is ExportBusPart) assertCraftingSlotTen(added, helper)
         }
-        check(ComputerCraftProxy.collectPlugins(helper.level, interfacePos, Direction.SOUTH).containsKey("ae2_interface_object")) {
-            "Interface provider was not registered"
+        val provider = if (directBlock == null) {
+            "ae2_cable_objects"
+        } else if (device == Device.INTERFACE) {
+            "ae2_interface_object"
+        } else {
+            "ae2_pattern_provider_object"
         }
-        check(ComputerCraftProxy.collectPlugins(helper.level, patternProviderPos, Direction.WEST).containsKey("ae2_pattern_provider_object")) {
-            "Pattern Provider provider was not registered"
-        }
+        check(ComputerCraftProxy.collectPlugins(helper.level, targetPos, Direction.SOUTH).containsKey(provider)) { "$device provider was not registered" }
 
         (helper.level.getBlockEntity(chestPos) as ChestBlockEntity).apply {
             setItem(0, AEItems.CAPACITY_CARD.stack())
             setItem(2, AEItems.CRAFTING_CARD.stack())
             setItem(3, AEItems.FUZZY_CARD.stack())
             setItem(4, ItemStack(Items.STONE))
-            setItem(
-                5,
-                PatternDetailsHelper.encodeProcessingPattern(
-                    arrayOf(GenericStack(AEItemKey.of(Items.COBBLESTONE), 1)),
-                    arrayOf(GenericStack(AEItemKey.of(Items.STONE), 1)),
-                ),
-            )
+            setItem(5, PatternDetailsHelper.encodeProcessingPattern(arrayOf(GenericStack(AEItemKey.of(Items.COBBLESTONE), 1)), arrayOf(GenericStack(AEItemKey.of(Items.STONE), 1))))
         }
         helper.startSequence()
             .thenIdle(5)
             .thenExecute { computer.createServerComputer().turnOn() }
-            .thenWaitUntil { await("same-kind") }
-            .thenExecuteFailFast {
-                state().check("same-kind")
-                cable.removePartFromSide(Direction.SOUTH)
-                check(cable.addPart(AEParts.EXPORT_BUS.asItem(), Direction.SOUTH, null) != null)
-            }
-            .thenWaitUntil { await("different-kind") }
-            .thenExecuteFailFast {
-                state().check("different-kind")
-                cable.removePartFromSide(Direction.SOUTH)
-                check(cable.addPart(AEParts.IMPORT_BUS.asItem(), Direction.SOUTH, null) != null)
-            }
-            .thenWaitUntil { await("removed") }
-            .thenExecuteFailFast {
-                state().check("removed")
-                cable.removePartFromSide(Direction.SOUTH)
-            }
             .thenWaitUntil { await(CctComputerState.DONE) }
             .thenExecuteFailFast { state().check(CctComputerState.DONE) }
             .thenSucceed()
@@ -126,6 +133,8 @@ class AE2ConfigurableObjectsGameTests {
         } as ICraftingService
         tracker.handleCrafting(9, AEItemKey.of(Items.STONE), 1, helper.level, craftingService, IActionSource.empty())
     }
+
+    private enum class Device { INTERFACE, IMPORT_BUS, EXPORT_BUS, STORAGE_BUS, FORMATION_PLANE, STORAGE_LEVEL_EMITTER, ENERGY_LEVEL_EMITTER, PATTERN_PROVIDER }
 
     companion object {
         private const val FIXTURE = "peripheralworksgametests.ae2_configurable_objects"

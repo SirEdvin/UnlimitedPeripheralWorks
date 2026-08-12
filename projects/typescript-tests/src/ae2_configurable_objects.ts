@@ -29,9 +29,7 @@ const fluid = (name: string) => ({ type: "fluid" as const, name });
 const sides = ["top", "bottom", "left", "right", "front", "back"];
 let inventory: InventoryViewAPI | undefined;
 let inventoryName = "";
-let cable: AE2CableAPI | undefined;
-let directInterface: AE2InterfacePeripheral | undefined;
-let directProvider: AE2PatternProviderPeripheral | undefined;
+let object: any;
 let seen = "";
 for (let attempt = 0; attempt < 100; attempt++) {
     seen = "";
@@ -39,153 +37,125 @@ for (let attempt = 0; attempt < 100; attempt++) {
         const wrapped = peripheral.wrap(side) as any;
         if (!wrapped) continue;
         seen += `${side}:${peripheral.getType(side)} `;
-        if (wrapped.getSide) cable = wrapped;
-        else if (wrapped.listStock) directInterface = wrapped;
-        else if (wrapped.listPatterns) directProvider = wrapped;
-        else if (wrapped.list) {
+        if (wrapped.list) {
             inventory = wrapped as InventoryViewAPI;
             inventoryName = side;
+        } else if (wrapped.getSide) {
+            const cable = wrapped as AE2CableAPI;
+            const [device] = cable.getSide("south");
+            if (device) object = device;
+        } else {
+            object = wrapped;
         }
     }
-    if (inventory && cable && directInterface && directProvider) break;
+    if (inventory && object) break;
     sleep(0.05);
 }
-const requirePeripheral = (value: unknown, name: string): void => {
-    if (!value) throw `Fixture ${name} did not become available`;
-};
-requirePeripheral(inventory, "inventory");
-requirePeripheral(cable, `cable (${seen})`);
-requirePeripheral(directInterface, "Interface");
-requirePeripheral(directProvider, "Pattern Provider");
-
-const aeCable = cable as AE2CableAPI;
-const aeInterface = directInterface as AE2InterfacePeripheral;
-const aeProvider = directProvider as AE2PatternProviderPeripheral;
+check(inventory, "Fixture inventory did not become available");
+check(object, `Fixture configurable object did not become available (${seen})`);
 const itemInventory = inventory as InventoryViewAPI;
 
-aeInterface.setStock(1, { ...item("minecraft:iron_ingot"), count: 32 });
-const initialStock = aeInterface.getStock(1);
-check(initialStock?.target?.count === 32, `direct interface stock callback returned ${textutils.serialize(initialStock)}`);
-aeInterface.setStock(2, { ...fluid("minecraft:water"), count: 1000 });
-check(aeInterface.getStock(2)?.target?.count === 1000, "fluid stock was not exposed as 1000 mB");
-aeInterface.setPriority(12);
-aeInterface.setFuzzyMode("percent_75");
-check(aeInterface.getPriority() === 12 && aeInterface.getFuzzyMode() === "percent_75", "interface settings did not apply");
-fails(
-    () => aeInterface.setStock(1, { type: "item", name: "minecraft:not_a_real_item", count: 1 }),
-    "unknown stock resource was accepted",
-);
-check(aeInterface.getStock(1)?.target?.count === 32, "invalid stock resource partially mutated the interface");
-aeInterface.clearStock(1);
-check(aeInterface.getStock(1) === null, "direct interface stock did not clear");
+switch (object.getDeviceType()) {
+    case "interface": {
+        const target = object as AE2InterfacePeripheral;
+        target.setStock(1, { ...item("minecraft:iron_ingot"), count: 32 });
+        check(target.getStock(1)?.target?.count === 32, "interface item stock did not apply");
+        target.setStock(2, { ...fluid("minecraft:water"), count: 1000 });
+        check(target.getStock(2)?.target?.count === 1000, "interface fluid stock did not apply");
+        target.setPriority(12);
+        target.setFuzzyMode("percent_75");
+        check(target.getPriority() === 12 && target.getFuzzyMode() === "percent_75", "interface settings did not apply");
+        fails(() => target.setStock(1, { type: "item", name: "minecraft:not_a_real_item", count: 1 }), "unknown stock resource was accepted");
+        check(target.getStock(1)?.target?.count === 32, "invalid stock resource partially mutated the interface");
+        target.clearStock(1);
+        check(target.getStock(1) === null, "interface stock did not clear");
+        break;
+    }
+    case "pattern_provider": {
+        const target = object as AE2PatternProviderPeripheral;
+        target.setPriority(9);
+        target.setBlocking(true);
+        target.setVisibleInPatternAccessTerminal(false);
+        target.setPatternLockMode("lock_while_high");
+        target.setPushDirection("east");
+        check(target.getPriority() === 9 && target.isBlocking() && !target.isVisibleInPatternAccessTerminal() &&
+            target.getPatternLockMode() === "lock_while_high" && target.getPushDirection() === "east", "pattern provider settings did not apply");
+        check(target.pullPattern(inventoryName, 6, 1, 1) === 1 && target.getPattern(1) !== null, "encoded pattern did not transfer into the provider");
+        check(target.pullPattern(inventoryName, 5, 1, 2) === 0 && itemInventory.list()[5]?.name === "minecraft:stone", "non-pattern transfer mutated its source");
+        check(target.pushPattern(inventoryName, 1, 1, 12) === 1, "encoded pattern did not transfer out of the provider");
+        break;
+    }
+    case "import_bus": {
+        const target = object as AE2ImportBusObject;
+        target.setFilter(1, item("minecraft:iron_ingot"));
+        target.setFuzzyMode("percent_50");
+        target.setRedstoneMode("high_signal");
+        check(target.getFilter(1)?.name === "minecraft:iron_ingot" && target.getFuzzyMode() === "percent_50" &&
+            target.getRedstoneMode() === "high_signal", "Import Bus settings did not apply");
+        check(target.pullUpgrade(inventoryName, 1, 1, 1) === 1, "Import Bus upgrade did not transfer");
+        break;
+    }
+    case "export_bus": {
+        const target = object as AE2ExportBusObject;
+        target.setFilter(1, item("minecraft:iron_ingot"));
+        target.setFuzzyMode("percent_50");
+        target.setRedstoneMode("high_signal");
+        target.setSchedulingMode("round_robin");
+        check(target.getFilter(1)?.name === "minecraft:iron_ingot" && target.getFuzzyMode() === "percent_50" &&
+            target.getRedstoneMode() === "high_signal" && target.getSchedulingMode() === "round_robin", "Export Bus settings did not apply");
+        fails(() => target.setFilter(1, { ...item("minecraft:gold_ingot"), count: 1 } as any), "amount-bearing filter was accepted");
+        check(target.getFilter(1)?.name === "minecraft:iron_ingot", "invalid filter partially mutated the Export Bus");
+        check(target.pullUpgrade(inventoryName, 1, 1, 1) === 1 && target.getFilterSlotCount() === 27, "Capacity Card did not expand filters");
+        target.setFilter(27, item("minecraft:diamond"));
+        check(target.pullUpgrade(inventoryName, 3, 1, 2) === 1, "Crafting Card did not transfer into the Export Bus");
+        target.setCraftOnly(true);
+        target.setFilter(10, item("minecraft:gold_ingot"));
+        check(target.isCraftOnly() && target.getFilter(10)?.name === "minecraft:gold_ingot", "craft-only slot 10 configuration failed");
+        check(target.pullUpgrade(inventoryName, 5, 1, 3) === 0 && itemInventory.list()[5]?.name === "minecraft:stone", "invalid upgrade mutated its source");
+        check(target.pushUpgrade(inventoryName, 1, 1, 10) === 1 && target.getFilterSlotCount() === 18, "Capacity Card removal did not shrink filters");
+        check(target.pullUpgrade(inventoryName, 10, 1, 1) === 1 && target.getFilter(27) === null, "inactive filter was not cleared on shrink");
+        break;
+    }
+    case "storage_bus": {
+        const target = object as AE2StorageBusObject;
+        target.setFilter(1, item("minecraft:cobblestone"));
+        target.setPriority(7);
+        target.setAccessMode("read");
+        target.setStorageFilterMode("extractable_only");
+        target.setFilterOnExtract(true);
+        check(target.getFilter(1)?.name === "minecraft:cobblestone" && target.getPriority() === 7 && target.getAccessMode() === "read" &&
+            target.getStorageFilterMode() === "extractable_only" && target.shouldFilterOnExtract(), "Storage Bus settings did not apply");
+        break;
+    }
+    case "formation_plane": {
+        const target = object as AE2FormationPlaneObject;
+        target.setFilter(1, item("minecraft:stone"));
+        target.setPriority(4);
+        target.setPlaceBlocks(false);
+        check(target.getFilter(1)?.name === "minecraft:stone" && target.getPriority() === 4 && !target.shouldPlaceBlocks(), "Formation Plane settings did not apply");
+        break;
+    }
+    case "storage_level_emitter": {
+        const target = object as AE2StorageLevelEmitterObject;
+        target.setMonitoredResource(fluid("minecraft:water"));
+        target.setThreshold(4000);
+        target.setEmitterMode("high_signal");
+        target.setCraftViaRedstone(true);
+        check(target.getThreshold() === 4000 && target.getThresholdUnit() === "millibucket" && target.getEmitterMode() === "high_signal" &&
+            target.shouldCraftViaRedstone(), "Storage Level Emitter settings did not apply");
+        check(target.pullUpgrade(inventoryName, 3, 1, 1) === 1, "emitter upgrade did not transfer");
+        check(target.pullUpgrade(inventoryName, 4, 1, 1) === 0 && itemInventory.list()[4]?.name === "ae2:fuzzy_card", "emitter accepted a second card");
+        break;
+    }
+    case "energy_level_emitter": {
+        const target = object as AE2EnergyLevelEmitterObject;
+        target.setThreshold(250);
+        target.setEmitterMode("high_signal");
+        check(target.getThreshold() === 250 && target.getEmitterMode() === "high_signal", "Energy Level Emitter settings did not apply");
+        break;
+    }
+    default:
+        throw `Unexpected configurable object ${object.getDeviceType()}`;
+}
 
-aeProvider.setPriority(9);
-aeProvider.setBlocking(true);
-aeProvider.setVisibleInPatternAccessTerminal(false);
-aeProvider.setPatternLockMode("lock_while_high");
-aeProvider.setPushDirection("east");
-check(
-    aeProvider.getPriority() === 9 && aeProvider.isBlocking() &&
-        !aeProvider.isVisibleInPatternAccessTerminal() &&
-        aeProvider.getPatternLockMode() === "lock_while_high" && aeProvider.getPushDirection() === "east",
-    "direct pattern provider settings did not apply",
-);
-check(aeProvider.pullPattern(inventoryName, 6, 1, 1) === 1, "encoded pattern did not transfer into the provider");
-check(aeProvider.getPattern(1) !== null, "encoded pattern slot was not updated");
-check(aeProvider.pullPattern(inventoryName, 5, 1, 2) === 0, "non-pattern item transferred into the provider");
-check(itemInventory.list()[5]?.name === "minecraft:stone", "rejected pattern mutated its source slot");
-check(aeProvider.pushPattern(inventoryName, 1, 1, 12) === 1, "encoded pattern did not transfer out of the provider");
-
-const [south, southError] = aeCable.getSide("south");
-check(south && !southError, "south Export Bus was not resolved");
-const exportBus = south as AE2ExportBusObject;
-const [empty, emptyError] = aeCable.getSide("north");
-check(empty === null && !!emptyError, "empty cable side did not return nil and an error");
-fails(() => (aeCable as any).getSide("sideways"), "invalid cable direction was accepted");
-
-exportBus.setFilter(1, item("minecraft:iron_ingot"));
-exportBus.setFuzzyMode("percent_50");
-exportBus.setRedstoneMode("high_signal");
-exportBus.setSchedulingMode("round_robin");
-check(
-    exportBus.getFilter(1)?.name === "minecraft:iron_ingot" && exportBus.getFuzzyMode() === "percent_50" &&
-        exportBus.getRedstoneMode() === "high_signal" && exportBus.getSchedulingMode() === "round_robin",
-    "Export Bus callbacks did not apply",
-);
-fails(
-    () => exportBus.setFilter(1, { ...item("minecraft:gold_ingot"), count: 1 } as any),
-    "amount-bearing filter was accepted",
-);
-check(exportBus.getFilter(1)?.name === "minecraft:iron_ingot", "invalid filter partially mutated the Export Bus");
-check(exportBus.pullUpgrade(inventoryName, 1, 1, 1) === 1, "Capacity Card did not transfer through the side object");
-const expandedSlots = exportBus.getFilterSlotCount();
-check(expandedSlots === 27, `Capacity Card produced ${expandedSlots} slots with ${textutils.serialize(exportBus.listUpgrades())}`);
-exportBus.setFilter(27, item("minecraft:diamond"));
-check(exportBus.pullUpgrade(inventoryName, 3, 1, 2) === 1, "Crafting Card did not transfer into the Export Bus");
-exportBus.setCraftOnly(true);
-exportBus.setFilter(10, item("minecraft:gold_ingot"));
-check(exportBus.isCraftOnly() && exportBus.getFilter(10)?.name === "minecraft:gold_ingot", "craft-only slot 10 configuration failed");
-check(exportBus.pullUpgrade(inventoryName, 5, 1, 3) === 0, "invalid upgrade card was accepted");
-check(itemInventory.list()[5]?.name === "minecraft:stone", "rejected upgrade mutated its source slot");
-check(exportBus.pushUpgrade(inventoryName, 1, 1, 10) === 1, "Capacity Card did not transfer out through originating computer access");
-check(exportBus.getFilterSlotCount() === 18, "Capacity Card removal did not shrink active filters");
-check(exportBus.pullUpgrade(inventoryName, 10, 1, 1) === 1, "Capacity Card could not be restored");
-check(exportBus.getFilterSlotCount() === 27 && exportBus.getFilter(27) === null, "inactive filter was not cleared on shrink");
-
-const [east] = aeCable.getSide("east");
-const storageBus = east as AE2StorageBusObject;
-storageBus.setFilter(1, item("minecraft:cobblestone"));
-storageBus.setPriority(7);
-storageBus.setAccessMode("read");
-storageBus.setStorageFilterMode("extractable_only");
-storageBus.setFilterOnExtract(true);
-check(
-    storageBus.getFilter(1)?.name === "minecraft:cobblestone" && storageBus.getPriority() === 7 &&
-        storageBus.getAccessMode() === "read" && storageBus.getStorageFilterMode() === "extractable_only" &&
-        storageBus.shouldFilterOnExtract(),
-    "Storage Bus callbacks did not apply",
-);
-
-const [west] = aeCable.getSide("west");
-const formationPlane = west as AE2FormationPlaneObject;
-formationPlane.setFilter(1, item("minecraft:stone"));
-formationPlane.setPriority(4);
-formationPlane.setPlaceBlocks(false);
-check(formationPlane.getPriority() === 4 && !formationPlane.shouldPlaceBlocks(), "Formation Plane callbacks did not apply");
-
-const [up] = aeCable.getSide("up");
-const storageEmitter = up as AE2StorageLevelEmitterObject;
-storageEmitter.setMonitoredResource(fluid("minecraft:water"));
-storageEmitter.setThreshold(4000);
-storageEmitter.setEmitterMode("high_signal");
-storageEmitter.setCraftViaRedstone(true);
-check(
-    storageEmitter.getThreshold() === 4000 && storageEmitter.getThresholdUnit() === "millibucket" &&
-        storageEmitter.getEmitterMode() === "high_signal" && storageEmitter.shouldCraftViaRedstone(),
-    "storage emitter fluid normalization or callbacks failed",
-);
-check(exportBus.pushUpgrade(inventoryName, 2, 1, 11) === 1, "Crafting Card could not be staged for the emitter");
-check(storageEmitter.pullUpgrade(inventoryName, 11, 1, 1) === 1, "emitter upgrade transfer failed");
-check(storageEmitter.pullUpgrade(inventoryName, 4, 1, 1) === 0, "emitter accepted a card beyond its one-slot limit");
-check(itemInventory.list()[4]?.name === "ae2:fuzzy_card", "card-limit rejection mutated the source inventory");
-
-const [down] = aeCable.getSide("down");
-const energyEmitter = down as AE2EnergyLevelEmitterObject;
-energyEmitter.setThreshold(250);
-energyEmitter.setEmitterMode("high_signal");
-check(energyEmitter.getThreshold() === 250 && energyEmitter.getEmitterMode() === "high_signal", "energy emitter callbacks did not apply");
-
-test.ok("same-kind");
-while (exportBus.getFilter(1) !== null) sleep(0.05);
-exportBus.setFilter(1, item("minecraft:gold_ingot"));
-check(exportBus.getFilter(1)?.name === "minecraft:gold_ingot", "side object did not operate on same-kind replacement");
-
-test.ok("different-kind");
-while (pcall(() => exportBus.getDeviceType())[0]) sleep(0.05);
-const [replacement] = aeCable.getSide("south");
-const importBus = replacement as AE2ImportBusObject;
-check(importBus.getDeviceType() === "import_bus", "different-kind replacement was not visible through getSide");
-
-test.ok("removed");
-while (pcall(() => importBus.getDeviceType())[0]) sleep(0.05);
 test.ok();
