@@ -37,13 +37,15 @@ for (let attempt = 0; attempt < 100; attempt++) {
         const wrapped = peripheral.wrap(side) as any;
         if (!wrapped) continue;
         seen += `${side}:${peripheral.getType(side)} `;
-        if (wrapped.list) {
-            inventory = wrapped as InventoryViewAPI;
-            inventoryName = side;
-        } else if (wrapped.getSide) {
+        if (wrapped.getSide) {
             const cable = wrapped as AE2CableAPI;
             const [device] = cable.getSide("south");
             if (device) object = device;
+        } else if (wrapped.listStock || wrapped.listPatterns) {
+            object = wrapped;
+        } else if (wrapped.list) {
+            inventory = wrapped as InventoryViewAPI;
+            inventoryName = side;
         } else {
             object = wrapped;
         }
@@ -55,7 +57,9 @@ check(inventory, "Fixture inventory did not become available");
 check(object, `Fixture configurable object did not become available (${seen})`);
 const itemInventory = inventory as InventoryViewAPI;
 
-switch (object.getDeviceType()) {
+export const testConfigurableObject = (expected: string): void => {
+check(object.getDeviceType() === expected, `Expected ${expected}, got ${object.getDeviceType()}`);
+switch (expected) {
     case "interface": {
         const target = object as AE2InterfacePeripheral;
         target.setStock(1, { ...item("minecraft:iron_ingot"), count: 32 });
@@ -157,5 +161,5 @@ switch (object.getDeviceType()) {
     default:
         throw `Unexpected configurable object ${object.getDeviceType()}`;
 }
-
 test.ok();
+};

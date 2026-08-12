@@ -55,6 +55,8 @@ class AE2ConfigurableObjectsGameTests {
 
     private fun configurableObject(helper: GameTestHelper, device: Device) {
         val computer = findComputer(helper)
+        val label = "peripheralworksgametests.ae2_${device.name.lowercase()}"
+        computer.setLabel(label)
         val targetPos = computer.blockPos.relative(Direction.NORTH)
         val chestPos = computer.blockPos.relative(Direction.WEST)
         val directBlock = when (device) {
@@ -97,17 +99,17 @@ class AE2ConfigurableObjectsGameTests {
         helper.startSequence()
             .thenIdle(5)
             .thenExecute { computer.createServerComputer().turnOn() }
-            .thenWaitUntil { await(CctComputerState.DONE) }
-            .thenExecuteFailFast { state().check(CctComputerState.DONE) }
+            .thenWaitUntil { await(label, CctComputerState.DONE) }
+            .thenExecuteFailFast { state(label).check(CctComputerState.DONE) }
             .thenSucceed()
     }
 
-    private fun state() = CctComputerState.get(FIXTURE) ?: throw GameTestAssertException("Computer '$FIXTURE' has not started")
+    private fun state(label: String) = CctComputerState.get(label) ?: throw GameTestAssertException("Computer '$label' has not started")
 
-    private fun await(marker: String) {
-        val state = CctComputerState.get(FIXTURE) ?: throw GameTestAssertException("Computer '$FIXTURE' has not started")
+    private fun await(label: String, marker: String) {
+        val state = state(label)
         if (state.isDone(CctComputerState.DONE)) state.check(CctComputerState.DONE)
-        if (!state.isDone(marker)) throw GameTestAssertException("Computer '$FIXTURE' has not reached $marker")
+        if (!state.isDone(marker)) throw GameTestAssertException("Computer '$label' has not reached $marker")
     }
 
     private fun findComputer(helper: GameTestHelper): ComputerBlockEntity {
