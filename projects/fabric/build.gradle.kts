@@ -12,6 +12,10 @@ val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+    source(project(":core").fileTree("src/ae2Integration/kotlin"))
+}
+
 baseShaking {
     projectPart.set("fabric")
     integrationRepositories.set(false)
@@ -35,7 +39,7 @@ fabricShaking {
 }
 
 if (minimalTestEnvironment) {
-    val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles()!!
+    val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
         .filter { it.isDirectory && it.name != "ae2" }
         .map { "**/integrations/${it.name}/**" }
     sourceSets.main { kotlin.exclude(excludedIntegrations) }
@@ -49,6 +53,9 @@ val testMod = sourceSets.create("testMod") {
     runtimeClasspath += sourceSets.main.get().runtimeClasspath
     runtimeClasspath += sourceSets.main.get().output
     runtimeClasspath += project(":core").sourceSets["testMod"].output
+}
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
+    source(project(":core").fileTree("src/ae2Test/kotlin"))
 }
 
 net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)
@@ -81,7 +88,7 @@ loom {
             property("fabric-api.gametest", "true")
             property("fabric.debug.disableModIds", "create")
             property("fabric.debug.loadLate", "testiarium_cct_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)

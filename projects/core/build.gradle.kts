@@ -8,6 +8,8 @@ val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
 
+spotless { kotlin { target("src/**/*.kt") } }
+
 baseShaking {
     projectPart.set("common")
     shake()

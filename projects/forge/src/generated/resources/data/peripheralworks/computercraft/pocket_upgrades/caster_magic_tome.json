@@ -1,5 +1,5 @@
 {
-  "type": "peripheralworks:caster_magic_tome",
+  "type": "peripheralworks:magic_tome",
   "forge:conditions": [
     {
       "type": "forge:mod_loaded",

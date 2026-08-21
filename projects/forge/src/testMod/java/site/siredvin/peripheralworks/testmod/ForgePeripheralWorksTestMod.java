@@ -8,6 +8,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import site.siredvin.testiarium.ForgeTestiarium;
 import site.siredvin.testiarium.Testiarium;
@@ -24,8 +25,15 @@ public final class ForgePeripheralWorksTestMod {
             CctFixtureCommands.INSTANCE.importFiles(event.getServer());
         });
         Testiarium.register(PeripheralWorksGameTests.class);
-        Testiarium.register(AE2ConfigurableObjectsGameTests.class);
-        Testiarium.register(AE2WirelessTerminalGameTests.class);
+        if (ModList.get().isLoaded("ae2")) {
+            try {
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2GameTests"));
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2ConfigurableObjectsGameTests"));
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2WirelessTerminalGameTests"));
+            } catch (ClassNotFoundException exception) {
+                throw new IllegalStateException(exception);
+            }
+        }
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> ClientTests::register);
         ForgeTestiarium.registerTests();
     }

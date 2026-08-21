@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Dedicated AE2 ME network peripheral and CC:Tweaked wired-network P2P tunnel.
+
+### Changed
+
+- Existing computers wrapping AE2 network blocks retain the `ae2` peripheral API; the dedicated ME network peripheral adds an explicit channel-owning option.
+
 ## [1.8.0] - 2026-07-27
 
 ### Added
