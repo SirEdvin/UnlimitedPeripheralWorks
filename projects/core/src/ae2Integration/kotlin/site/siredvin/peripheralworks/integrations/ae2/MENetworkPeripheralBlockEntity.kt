@@ -8,7 +8,16 @@ import appeng.api.networking.IManagedGridNode
 import appeng.blockentity.grid.AENetworkBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.world.item.Item
+import net.minecraft.world.level.block.entity.BlockEntityType
+import net.minecraft.world.level.block.state.BlockBehaviour
 import net.minecraft.world.level.block.state.BlockState
+import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
+import java.util.function.Supplier
+
+class MENetworkPeripheralBlock(
+    blockEntityType: Supplier<BlockEntityType<MENetworkPeripheralBlockEntity>>,
+    properties: BlockBehaviour.Properties,
+) : FacingBlockEntityBlock<MENetworkPeripheralBlockEntity>(blockEntityType, false, false, properties)
 
 class MENetworkPeripheralBlockEntity(pos: BlockPos, state: BlockState) : AENetworkBlockEntity(Registration.ME_NETWORK_PERIPHERAL_BLOCK_ENTITY.get(), pos, state) {
 

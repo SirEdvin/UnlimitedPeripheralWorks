@@ -24,7 +24,6 @@ import net.minecraft.data.models.model.TextureMapping
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.Item
 import net.minecraft.world.level.block.entity.BlockEntityType
-import site.siredvin.broccolium.modules.base.block.GenericBlockEntityBlock
 import site.siredvin.broccolium.modules.base.item.DescriptiveBlockItem
 import site.siredvin.broccolium.modules.base.util.BlockUtil
 import site.siredvin.broccolium.modules.data.recipe.TweakedShapedRecipeBuilder
@@ -50,7 +49,7 @@ class Registration : Runnable {
     companion object {
         val ME_NETWORK_PERIPHERAL = ModPlatform.registerBlock(
             "me_network_peripheral",
-            { GenericBlockEntityBlock({ ME_NETWORK_PERIPHERAL_BLOCK_ENTITY.get() }, false, false, BlockUtil.defaultProperties()) },
+            { MENetworkPeripheralBlock(ME_NETWORK_PERIPHERAL_BLOCK_ENTITY, BlockUtil.defaultProperties()) },
             { DescriptiveBlockItem(it, Item.Properties()) },
         )
 
