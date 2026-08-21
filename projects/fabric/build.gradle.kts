@@ -159,6 +159,7 @@ dependencies {
     if (minimalTestEnvironment) {
         modImplementation(libs.ae2.fabric)
     } else {
+        modRuntimeOnly(libs.jade.fabric)
         libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
         libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
         libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }

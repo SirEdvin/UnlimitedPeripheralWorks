@@ -87,6 +87,7 @@ dependencies {
     if (minimalTestEnvironment) {
         implementation(fg.deobf(libs.ae2.forge.get()))
     } else {
+        runtimeOnly(fg.deobf(libs.jade.forge.get()))
         libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
         libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
         libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }

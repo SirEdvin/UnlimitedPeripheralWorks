@@ -34,6 +34,8 @@ architectury = "9.0.8"
 emi = "1.1.22+1.20.1"
 emi-fabric = "1.1.22+1.20.1+fabric"
 emi-forge = "1.1.22+1.20.1+forge"
+jade-fabric = "11.13.3+fabric"
+jade-forge = "11.13.3+forge"
 testiarium = "0.1.1"
 
 # Shared integration mod dependency
@@ -136,6 +138,7 @@ tweakium-fabric = {module = "site.siredvin:tweakium-fabric-1.20.1", version.ref 
 peripheralium-fabric = {module = "site.siredvin:peripheralium-fabric-1.20.1", version.ref = "peripheralium"}
 modmenu = {module = "maven.modrinth:modmenu", version.ref="modmenu"}
 emi-fabric = {module="maven.modrinth:emi", version.ref="emi-fabric"}
+jade-fabric = {module="maven.modrinth:jade", version.ref="jade-fabric"}
 kubejs-fabric = {module="dev.latvian.mods:kubejs-fabric", version.ref="kubejs-fabric"}
 rhino-fabric = {module="dev.latvian.mods:rhino-fabric", version.ref="rhino-fabric"}
 
@@ -149,6 +152,7 @@ broccolium-jjar-forge = {module = "site.siredvin:broccolium-forge-1.20.1", versi
 tweakium-jjar-forge = {module = "site.siredvin:tweakium-forge-1.20.1", version.ref = "tweakium-jjar"}
 peripheralium-jjar-forge = {module = "site.siredvin:peripheralium-forge-1.20.1", version.ref = "peripheralium-jjar"}
 emi-forge = {module="maven.modrinth:emi", version.ref="emi-forge"}
+jade-forge = {module="maven.modrinth:jade", version.ref="jade-forge"}
 kubejs-forge = {module="dev.latvian.mods:kubejs-forge", version.ref="kubejs-forge"}
 rhino-forge = {module="dev.latvian.mods:rhino-forge", version.ref="rhino-forge"}
 
