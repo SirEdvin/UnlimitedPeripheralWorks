@@ -29,6 +29,19 @@ import java.util.concurrent.CompletableFuture
 
 @TestGroup("ae2-configurable-peripherals")
 class AE2ConfigurableObjectsGameTests {
+    @GameTest(template = FIXTURE, batch = FIXTURE)
+    fun cableWithoutSupportedParts(helper: GameTestHelper) {
+        val targetPos = findComputer(helper).blockPos.relative(Direction.NORTH)
+        helper.level.setBlockAndUpdate(targetPos, AEBlocks.CABLE_BUS.block().defaultBlockState())
+        helper.startSequence()
+            .thenExecuteFailFast {
+                check(!ComputerCraftProxy.collectPlugins(helper.level, targetPos, Direction.SOUTH).containsKey("ae2_cable_objects")) {
+                    "Cable without supported parts exposed a peripheral"
+                }
+            }
+            .thenSucceed()
+    }
+
     @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 2400)
     fun interfaceObject(helper: GameTestHelper) = configurableObject(helper, Device.INTERFACE)
 

@@ -20,6 +20,7 @@ check(target.getStock(1)?.target?.count === 32, "interface item stock did not ap
 target.setStock(2, { ...fluid("minecraft:water"), count: 1000 });
 check(target.getStock(2)?.target?.count === 1000, "interface fluid stock did not apply");
 target.setPriority(12);
+check(target.pullUpgrade("right", 4, 1, 1) === 1, "Fuzzy Card did not transfer into the interface");
 target.setFuzzyMode("percent_75");
 check(target.getPriority() === 12 && target.getFuzzyMode() === "percent_75", "interface settings did not apply");
 fails(() => target.setStock(1, { type: "item", name: "minecraft:not_a_real_item", count: 1 }), "unknown stock resource was accepted");

@@ -55,7 +55,6 @@ export interface AE2DeviceObject {
 
 /** @noSelf **/
 export interface AE2UpgradeableObject {
-    getUpgradeSlotCount(): number;
     listUpgrades(): LuaTable<number, ItemDetail>;
     getUpgrade(slot: number): ItemDetail | null;
     pullUpgrade(fromName: string, fromSlot: number, limit?: number, toSlot?: number): number;
@@ -70,7 +69,9 @@ export interface AE2PriorityObject {
 
 /** @noSelf **/
 export interface AE2FuzzyObject {
+    /** Requires a Fuzzy Card installed in the device. */
     getFuzzyMode(): AE2FuzzyMode;
+    /** Requires a Fuzzy Card installed in the device. */
     setFuzzyMode(mode: AE2FuzzyMode): void;
 }
 
@@ -82,7 +83,6 @@ export interface AE2RedstoneControlledObject {
 
 /** @noSelf **/
 export interface AE2FilterObject {
-    getFilterSlotCount(): number;
     listFilters(): LuaTable<number, AE2Resource>;
     getFilter(slot: number): AE2Resource | null;
     setFilter(slot: number, resource: AE2Resource): void;
@@ -202,6 +202,7 @@ export type AE2CableDevice =
 
 /** @noSelf **/
 export interface AE2CableAPI extends IPeripheral {
+    getSides(): AE2Direction[];
     getSide(side: AE2Direction): Fallible<AE2CableDevice>;
 }
 

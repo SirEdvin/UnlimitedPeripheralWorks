@@ -49,7 +49,7 @@ class Registration : Runnable {
     companion object {
         val ME_NETWORK_PERIPHERAL = ModPlatform.registerBlock(
             "me_network_peripheral",
-            { MENetworkPeripheralBlock(ME_NETWORK_PERIPHERAL_BLOCK_ENTITY, BlockUtil.defaultProperties()) },
+            { MENetworkPeripheralBlock({ ME_NETWORK_PERIPHERAL_BLOCK_ENTITY.get() }, BlockUtil.defaultProperties()) },
             { DescriptiveBlockItem(it, Item.Properties()) },
         )
 

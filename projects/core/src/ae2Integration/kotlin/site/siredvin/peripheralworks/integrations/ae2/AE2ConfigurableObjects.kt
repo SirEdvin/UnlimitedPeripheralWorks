@@ -54,6 +54,12 @@ private fun parseLimit(limit: Optional<Int>): Int = limit.orElse(Int.MAX_VALUE).
     if (it < 0) throw LuaException("Limit must be non-negative")
 }
 
+private fun invalidEnum(label: String, value: String, values: Iterable<String>): LuaException = LuaException("Invalid $label '$value'; expected one of: ${values.joinToString(", ")}")
+
+private fun requireFuzzyCard(upgrades: IUpgradeInventory) {
+    if (upgrades.getInstalledUpgrades(AEItems.FUZZY_CARD) == 0) throw LuaException("A Fuzzy Card is required")
+}
+
 private fun requireAttached(access: IComputerAccess, attached: (() -> Boolean)?) {
     if (attached != null && !attached()) throw LuaException("The originating computer is no longer attached")
 }
@@ -184,9 +190,6 @@ internal abstract class UpgradeableDeviceObject<T : Any>(
     }
 
     @LuaFunction(mainThread = true)
-    fun getUpgradeSlotCount(): Int = upgradeInventory().size()
-
-    @LuaFunction(mainThread = true)
     fun listUpgrades(): Map<Int, Map<String, Any>> = buildMap {
         val inventory = upgradeInventory()
         for (slot in 0 until inventory.size()) {
@@ -220,12 +223,6 @@ internal abstract class FilterDeviceObject<T : Any>(
         val size = activeSlots(target)
         assertBetween(slot, 1, size, "slot")
         return filter(target) to size
-    }
-
-    @LuaFunction(mainThread = true)
-    fun getFilterSlotCount(): Int {
-        val target = device()
-        return activeSlots(target)
     }
 
     @LuaFunction(mainThread = true)
@@ -272,14 +269,18 @@ internal open class InterfaceObject(level: Level, resolve: () -> InterfaceLogicH
     }
 
     @LuaFunction(mainThread = true)
-    fun getFuzzyMode(): String = host.configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    fun getFuzzyMode(): String {
+        requireFuzzyCard(host.upgrades)
+        return host.configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    }
 
     @LuaFunction(mainThread = true)
     fun setFuzzyMode(mode: String) {
+        requireFuzzyCard(host.upgrades)
         host.configManager.putSetting(
             Settings.FUZZY_MODE,
             FuzzyMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-                ?: throw LuaException("Invalid fuzzy mode '$mode'"),
+                ?: throw invalidEnum("fuzzy mode", mode, FuzzyMode.entries.map { it.name.lowercase(Locale.ROOT) }),
         )
     }
 
@@ -349,14 +350,22 @@ internal abstract class BusObject<T : IOBusPart>(
     resolve: () -> T,
 ) : FilterDeviceObject<T>(deviceType, level, resolve, IOBusPart::getUpgrades, IOBusPart::getConfig) {
     @LuaFunction(mainThread = true)
-    fun getFuzzyMode(): String = device().configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    fun getFuzzyMode(): String {
+        val target = device()
+        requireFuzzyCard(target.upgrades)
+        return target.configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    }
 
     @LuaFunction(mainThread = true)
-    fun setFuzzyMode(mode: String) = device().configManager.putSetting(
-        Settings.FUZZY_MODE,
-        FuzzyMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-            ?: throw LuaException("Invalid fuzzy mode '$mode'"),
-    )
+    fun setFuzzyMode(mode: String) {
+        val target = device()
+        requireFuzzyCard(target.upgrades)
+        target.configManager.putSetting(
+            Settings.FUZZY_MODE,
+            FuzzyMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
+                ?: throw invalidEnum("fuzzy mode", mode, FuzzyMode.entries.map { it.name.lowercase(Locale.ROOT) }),
+        )
+    }
 
     @LuaFunction(mainThread = true)
     fun getRedstoneMode(): String = device().configManager.getSetting(Settings.REDSTONE_CONTROLLED).name.lowercase(Locale.ROOT)
@@ -365,7 +374,7 @@ internal abstract class BusObject<T : IOBusPart>(
     fun setRedstoneMode(mode: String) = device().configManager.putSetting(
         Settings.REDSTONE_CONTROLLED,
         RedstoneMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-            ?: throw LuaException("Invalid redstone mode '$mode'"),
+            ?: throw invalidEnum("redstone mode", mode, RedstoneMode.entries.map { it.name.lowercase(Locale.ROOT) }),
     )
 }
 
@@ -414,7 +423,7 @@ internal class ExportBusObject(
             "default" -> SchedulingMode.DEFAULT
             "round_robin" -> SchedulingMode.ROUNDROBIN
             "random" -> SchedulingMode.RANDOM
-            else -> throw LuaException("Invalid scheduling mode '$mode'")
+            else -> throw invalidEnum("scheduling mode", mode, listOf("default", "round_robin", "random"))
         },
     )
 }
@@ -434,14 +443,22 @@ internal abstract class PriorityFilterObject<T : UpgradeablePart>(
     }
 
     @LuaFunction(mainThread = true)
-    fun getFuzzyMode(): String = device().configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    fun getFuzzyMode(): String {
+        val target = device()
+        requireFuzzyCard(target.upgrades)
+        return target.configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    }
 
     @LuaFunction(mainThread = true)
-    fun setFuzzyMode(mode: String) = device().configManager.putSetting(
-        Settings.FUZZY_MODE,
-        FuzzyMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-            ?: throw LuaException("Invalid fuzzy mode '$mode'"),
-    )
+    fun setFuzzyMode(mode: String) {
+        val target = device()
+        requireFuzzyCard(target.upgrades)
+        target.configManager.putSetting(
+            Settings.FUZZY_MODE,
+            FuzzyMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
+                ?: throw invalidEnum("fuzzy mode", mode, FuzzyMode.entries.map { it.name.lowercase(Locale.ROOT) }),
+        )
+    }
 }
 
 internal class StorageBusObject(
@@ -463,7 +480,7 @@ internal class StorageBusObject(
     fun setAccessMode(mode: String) = device().configManager.putSetting(
         Settings.ACCESS,
         AccessRestriction.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-            ?: throw LuaException("Invalid access mode '$mode'"),
+            ?: throw invalidEnum("access mode", mode, AccessRestriction.entries.map { it.name.lowercase(Locale.ROOT) }),
     )
 
     @LuaFunction(mainThread = true)
@@ -473,7 +490,7 @@ internal class StorageBusObject(
     fun setStorageFilterMode(mode: String) = device().configManager.putSetting(
         Settings.STORAGE_FILTER,
         StorageFilter.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-            ?: throw LuaException("Invalid storage filter mode '$mode'"),
+            ?: throw invalidEnum("storage filter mode", mode, StorageFilter.entries.map { it.name.lowercase(Locale.ROOT) }),
     )
 
     @LuaFunction(mainThread = true)
@@ -516,7 +533,7 @@ internal abstract class LevelEmitterObject<T : AbstractLevelEmitterPart>(
         when (mode) {
             "low_signal" -> RedstoneMode.LOW_SIGNAL
             "high_signal" -> RedstoneMode.HIGH_SIGNAL
-            else -> throw LuaException("Invalid emitter mode '$mode'")
+            else -> throw invalidEnum("emitter mode", mode, listOf("low_signal", "high_signal"))
         },
     )
 
@@ -538,9 +555,6 @@ internal class StorageLevelEmitterObject(
         if (threshold > Long.MAX_VALUE / divider) throw LuaException("Threshold is too large")
         return threshold * divider
     }
-
-    @LuaFunction(mainThread = true)
-    fun getUpgradeSlotCount(): Int = device().upgrades.size()
 
     @LuaFunction(mainThread = true)
     fun listUpgrades(): Map<Int, Map<String, Any>> = buildMap {
@@ -572,14 +586,22 @@ internal class StorageLevelEmitterObject(
     }
 
     @LuaFunction(mainThread = true)
-    fun getFuzzyMode(): String = device().configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    fun getFuzzyMode(): String {
+        val target = device()
+        requireFuzzyCard(target.upgrades)
+        return target.configManager.getSetting(Settings.FUZZY_MODE).name.lowercase(Locale.ROOT)
+    }
 
     @LuaFunction(mainThread = true)
-    fun setFuzzyMode(mode: String) = device().configManager.putSetting(
-        Settings.FUZZY_MODE,
-        FuzzyMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-            ?: throw LuaException("Invalid fuzzy mode '$mode'"),
-    )
+    fun setFuzzyMode(mode: String) {
+        val target = device()
+        requireFuzzyCard(target.upgrades)
+        target.configManager.putSetting(
+            Settings.FUZZY_MODE,
+            FuzzyMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
+                ?: throw invalidEnum("fuzzy mode", mode, FuzzyMode.entries.map { it.name.lowercase(Locale.ROOT) }),
+        )
+    }
 
     @LuaFunction(mainThread = true)
     fun getMonitoredResource(): Map<String, String>? = device().config.getKey(0)?.let(AE2Helper::keyToMap)
@@ -690,7 +712,7 @@ internal open class PatternProviderObject(level: Level, resolve: () -> PatternPr
     fun setPatternLockMode(mode: String) = device().configManager.putSetting(
         Settings.LOCK_CRAFTING_MODE,
         LockCraftingMode.entries.firstOrNull { it.name.lowercase(Locale.ROOT) == mode }
-            ?: throw LuaException("Invalid pattern lock mode '$mode'"),
+            ?: throw invalidEnum("pattern lock mode", mode, LockCraftingMode.entries.map { it.name.lowercase(Locale.ROOT) }),
     )
 }
 
@@ -710,7 +732,7 @@ internal class DirectPatternProviderObject(
     @LuaFunction(mainThread = true)
     fun setPushDirection(direction: String) {
         val value = PushDirection.entries.firstOrNull { it.serializedName == direction }
-            ?: throw LuaException("Invalid push direction '$direction'")
+            ?: throw invalidEnum("push direction", direction, PushDirection.entries.map(PushDirection::getSerializedName))
         level.setBlockAndUpdate(entity.blockPos, entity.blockState.setValue(PatternProviderBlock.PUSH_DIRECTION, value))
     }
 }
@@ -728,6 +750,15 @@ internal class SidePatternProviderObject(
     fun pushPattern(toName: String, fromSlot: Int, limit: Optional<Int>, toSlot: Optional<Int>): Int = pushPattern(access, attached, toName, fromSlot, limit, toSlot)
 }
 
+private fun isSupportedCablePart(part: Any?): Boolean = part is InterfacePart ||
+    part is ImportBusPart ||
+    part is ExportBusPart ||
+    part is StorageBusPart ||
+    part is FormationPlanePart ||
+    part is StorageLevelEmitterPart ||
+    part is EnergyLevelEmitterPart ||
+    part is PatternProviderPart
+
 internal class CableConfigurableObject(private val level: Level, private val pos: BlockPos) : IPeripheralPlugin {
     override var connectedPeripheral: IExpandedPeripheral? = null
 
@@ -737,6 +768,13 @@ internal class CableConfigurableObject(private val level: Level, private val pos
         val part = cable.getPart(side)
         if (part == null || part.javaClass != expected) throw LuaException("AE2 ${side.serializedName} part is no longer the expected device")
         return expected.cast(part)
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getSides(): List<String> {
+        val cable = level.getBlockEntity(pos) as? CableBusBlockEntity
+            ?: throw LuaException("AE2 cable is no longer present")
+        return Direction.entries.filter { isSupportedCablePart(cable.getPart(it)) }.map(Direction::getSerializedName)
     }
 
     @LuaFunction(mainThread = true)
@@ -763,7 +801,10 @@ internal class CableConfigurableObject(private val level: Level, private val pos
 
 object AE2CableObjectProvider : PeripheralPluginProvider {
     override val pluginType = "ae2_cable_objects"
-    override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? = if (level.getBlockEntity(pos) is CableBusBlockEntity) CableConfigurableObject(level, pos) else null
+    override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+        val cable = level.getBlockEntity(pos) as? CableBusBlockEntity ?: return null
+        return CableConfigurableObject(level, pos).takeIf { Direction.entries.any { direction -> isSupportedCablePart(cable.getPart(direction)) } }
+    }
 }
 
 object AE2InterfaceObjectProvider : PeripheralPluginProvider {
