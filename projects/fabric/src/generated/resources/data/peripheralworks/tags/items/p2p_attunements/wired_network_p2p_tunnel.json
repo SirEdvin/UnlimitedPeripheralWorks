@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    "computercraft:cable",
-    "computercraft:wired_modem",
-    "computercraft:wired_modem_full",
-    "peripheralworks:network_manager",
     "peripheralworks:ultimate_configurator"
   ]
 }

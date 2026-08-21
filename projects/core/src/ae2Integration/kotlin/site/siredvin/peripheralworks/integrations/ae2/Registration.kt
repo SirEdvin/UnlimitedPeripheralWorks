@@ -15,7 +15,6 @@ import appeng.items.parts.PartModelsHelper
 import com.google.gson.JsonObject
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
-import dan200.computercraft.shared.ModRegistry
 import net.minecraft.data.models.blockstates.MultiVariantGenerator
 import net.minecraft.data.models.blockstates.Variant
 import net.minecraft.data.models.blockstates.VariantProperties
@@ -132,10 +131,6 @@ class Registration : Runnable {
         }
         ModTagsProvider.addItemHook { tags ->
             tags.tag(P2PTunnelAttunement.getAttunementTag(WIRED_NETWORK_P2P_TUNNEL.get())).add(
-                ModRegistry.Items.CABLE.get(),
-                ModRegistry.Items.WIRED_MODEM.get(),
-                ModRegistry.Items.WIRED_MODEM_FULL.get(),
-                Blocks.NETWORK_MANAGER.get().asItem(),
                 ModItems.ULTIMATE_CONFIGURATOR.get(),
             )
         }
