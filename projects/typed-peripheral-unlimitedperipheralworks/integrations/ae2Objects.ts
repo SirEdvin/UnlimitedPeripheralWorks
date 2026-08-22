@@ -29,6 +29,10 @@ export type AE2StockRow = {
     stored?: AE2Stack;
 };
 
+export type AE2DeviceConfiguration = object;
+export type AE2UpgradeableConfiguration = { upgradeSlotCount: number };
+export type AE2FilterConfiguration = AE2UpgradeableConfiguration & { filterSlotCount: number };
+
 export type AE2FuzzyMode =
     | "ignore_all"
     | "percent_99"
@@ -49,8 +53,9 @@ export type AE2PatternLockMode =
     | "lock_until_result";
 
 /** @noSelf **/
-export interface AE2DeviceObject {
+export interface AE2DeviceObject<C extends AE2DeviceConfiguration = AE2DeviceConfiguration> {
     getDeviceType(): AE2DeviceType;
+    getConfiguration(): C;
 }
 
 /** @noSelf **/
@@ -91,7 +96,7 @@ export interface AE2FilterObject {
 
 /** @noSelf **/
 export interface AE2InterfaceObject
-    extends AE2DeviceObject,
+    extends AE2DeviceObject<AE2UpgradeableConfiguration>,
         AE2UpgradeableObject,
         AE2PriorityObject,
         AE2FuzzyObject {
@@ -103,7 +108,7 @@ export interface AE2InterfaceObject
 
 /** @noSelf **/
 export interface AE2ImportBusObject
-    extends AE2DeviceObject,
+    extends AE2DeviceObject<AE2FilterConfiguration>,
         AE2UpgradeableObject,
         AE2FilterObject,
         AE2FuzzyObject,
@@ -111,7 +116,7 @@ export interface AE2ImportBusObject
 
 /** @noSelf **/
 export interface AE2ExportBusObject
-    extends AE2DeviceObject,
+    extends AE2DeviceObject<AE2FilterConfiguration>,
         AE2UpgradeableObject,
         AE2FilterObject,
         AE2FuzzyObject,
@@ -124,7 +129,7 @@ export interface AE2ExportBusObject
 
 /** @noSelf **/
 export interface AE2StorageBusObject
-    extends AE2DeviceObject,
+    extends AE2DeviceObject<AE2FilterConfiguration>,
         AE2UpgradeableObject,
         AE2FilterObject,
         AE2PriorityObject,
@@ -139,7 +144,7 @@ export interface AE2StorageBusObject
 
 /** @noSelf **/
 export interface AE2FormationPlaneObject
-    extends AE2DeviceObject,
+    extends AE2DeviceObject<AE2FilterConfiguration>,
         AE2UpgradeableObject,
         AE2FilterObject,
         AE2PriorityObject,
@@ -149,7 +154,8 @@ export interface AE2FormationPlaneObject
 }
 
 /** @noSelf **/
-export interface AE2LevelEmitterObject extends AE2DeviceObject {
+export interface AE2LevelEmitterObject<C extends AE2DeviceConfiguration = AE2DeviceConfiguration>
+    extends AE2DeviceObject<C> {
     getEmitterMode(): AE2EmitterMode;
     setEmitterMode(mode: AE2EmitterMode): void;
     isEmitting(): boolean;
@@ -157,7 +163,7 @@ export interface AE2LevelEmitterObject extends AE2DeviceObject {
 
 /** @noSelf **/
 export interface AE2StorageLevelEmitterObject
-    extends AE2LevelEmitterObject,
+    extends AE2LevelEmitterObject<AE2UpgradeableConfiguration>,
         AE2UpgradeableObject,
         AE2FuzzyObject {
     getMonitoredResource(): AE2Resource | null;

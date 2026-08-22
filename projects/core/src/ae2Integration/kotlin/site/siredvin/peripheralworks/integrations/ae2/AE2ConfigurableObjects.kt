@@ -141,10 +141,18 @@ internal abstract class DeviceObject<T : Any>(
 ) {
     protected fun device(): T = resolveDevice()
 
+    protected open fun configuration(): Map<String, Any> = emptyMap()
+
     @LuaFunction(mainThread = true)
     fun getDeviceType(): String {
         device()
         return deviceType
+    }
+
+    @LuaFunction(mainThread = true)
+    fun getConfiguration(): Map<String, Any> {
+        device()
+        return configuration()
     }
 }
 
@@ -156,6 +164,8 @@ internal abstract class UpgradeableDeviceObject<T : Any>(
     private val config: ((T) -> ConfigInventory)? = null,
 ) : DeviceObject<T>(deviceType, level, resolveDevice) {
     protected fun upgradeInventory(): IUpgradeInventory = upgrades(device())
+
+    override fun configuration(): Map<String, Any> = mapOf("upgradeSlotCount" to upgradeInventory().size())
 
     protected fun pullUpgrade(
         access: IComputerAccess,
@@ -223,6 +233,11 @@ internal abstract class FilterDeviceObject<T : Any>(
         val size = activeSlots(target)
         assertBetween(slot, 1, size, "slot")
         return filter(target) to size
+    }
+
+    override fun configuration(): Map<String, Any> {
+        val target = device()
+        return super.configuration() + ("filterSlotCount" to activeSlots(target))
     }
 
     @LuaFunction(mainThread = true)
@@ -547,6 +562,8 @@ internal class StorageLevelEmitterObject(
     private val access: IComputerAccess,
     private val attached: () -> Boolean,
 ) : LevelEmitterObject<StorageLevelEmitterPart>("storage_level_emitter", level, resolve) {
+    override fun configuration(): Map<String, Any> = mapOf("upgradeSlotCount" to device().upgrades.size())
+
     private fun internalThreshold(threshold: Long): Long {
         if (threshold < 0) throw LuaException("Threshold must be a non-negative integer")
         val key = device().config.getKey(0)

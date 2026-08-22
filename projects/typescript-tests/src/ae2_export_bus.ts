@@ -22,6 +22,8 @@ const [device, error] = cable.getSide("south");
 check(device && !error, "Fixture export bus did not become available");
 const target = device as AE2ExportBusObject;
 check(target.getDeviceType() === "export_bus", `Expected export_bus, got ${target.getDeviceType()}`);
+check(target.getConfiguration().upgradeSlotCount >= 3 && target.getConfiguration().filterSlotCount === 18,
+    "Export Bus side configuration is wrong");
 target.setFilter(1, item("minecraft:iron_ingot"));
 check(target.pullUpgrade(inventoryName, 4, 1, 3) === 1, "Fuzzy Card did not transfer into the Export Bus");
 target.setFuzzyMode("percent_50");
@@ -32,6 +34,7 @@ check(target.getFilter(1)?.name === "minecraft:iron_ingot" && target.getFuzzyMod
 fails(() => target.setFilter(1, { ...item("minecraft:gold_ingot"), count: 1 } as any), "amount-bearing filter was accepted");
 check(target.getFilter(1)?.name === "minecraft:iron_ingot", "invalid filter partially mutated the Export Bus");
 check(target.pullUpgrade(inventoryName, 1, 1, 1) === 1, "Capacity Card did not transfer into the Export Bus");
+check(target.getConfiguration().filterSlotCount === 27, "Capacity Card did not update side configuration");
 target.setFilter(27, item("minecraft:diamond"));
 check(target.pullUpgrade(inventoryName, 3, 1, 2) === 1, "Crafting Card did not transfer into the Export Bus");
 target.setCraftOnly(true);
