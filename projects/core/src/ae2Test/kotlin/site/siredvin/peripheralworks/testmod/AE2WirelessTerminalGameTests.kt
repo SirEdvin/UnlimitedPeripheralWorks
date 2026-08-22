@@ -9,7 +9,6 @@ import appeng.core.definitions.AEBlocks
 import appeng.core.definitions.AEItems
 import appeng.items.tools.powered.WirelessTerminalItem
 import dan200.computercraft.api.turtle.TurtleSide
-import dan200.computercraft.api.upgrades.UpgradeData
 import dan200.computercraft.shared.config.Config
 import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity
 import net.minecraft.core.BlockPos
@@ -24,6 +23,7 @@ import site.siredvin.peripheralworks.integrations.ae2.AE2WirelessTerminalUpgrade
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.api.thenExecuteFailFast
 import site.siredvin.testiarium.cct.CctComputerState
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 @TestGroup("ae2-configurable-peripherals")
 class AE2WirelessTerminalGameTests {
@@ -47,9 +47,28 @@ class AE2WirelessTerminalGameTests {
         terminalItem.injectAEPower(terminal, 400.0, Actionable.MODULATE)
         terminalItem.getUpgrades(terminal).setItemDirect(0, AEItems.ENERGY_CARD.stack())
         val initialCharge = terminalItem.getAECurrentPower(terminal)
-        val upgrade = AE2WirelessTerminalUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack())
+        val standardTerminal = AEItems.WIRELESS_TERMINAL.stack()
+        check(
+            ComputerPlatformToolkit.get().getTurtleUpgrade(standardTerminal) == null &&
+                ComputerPlatformToolkit.get().getTurtleUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack()) == null,
+        ) {
+            "Unlinked wireless terminal was accepted as a turtle upgrade"
+        }
+        (standardTerminal.item as WirelessTerminalItem).let {
+            WirelessTerminalItem.LINKABLE_HANDLER.link(standardTerminal, GlobalPos.of(helper.level.dimension(), accessPointPos))
+            it.injectAEPower(standardTerminal, 100.0, Actionable.MODULATE)
+        }
+        check(ComputerPlatformToolkit.get().getTurtleUpgrade(standardTerminal)?.upgrade?.upgradeID == AE2WirelessTerminalUpgrade.UPGRADE_ID) {
+            "Linked standard wireless terminal was not accepted as a turtle upgrade"
+        }
+        val upgradeData = ComputerPlatformToolkit.get().getTurtleUpgrade(terminal)
+            ?: error("Linked wireless terminal was not accepted as a turtle upgrade")
+        check(upgradeData.upgrade.upgradeID == AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID) {
+            "Linked wireless crafting terminal resolved to the wrong turtle upgrade"
+        }
+        val upgrade = upgradeData.upgrade as AE2WirelessTerminalUpgrade
         check(ItemStack.matches(terminal, upgrade.getUpgradeItem(upgrade.getUpgradeData(terminal))))
-        turtle.access.setUpgradeWithData(TurtleSide.LEFT, UpgradeData.of(upgrade, upgrade.getUpgradeData(terminal)))
+        turtle.access.setUpgradeWithData(TurtleSide.LEFT, upgradeData)
 
         helper.startSequence()
             .thenIdle(10)

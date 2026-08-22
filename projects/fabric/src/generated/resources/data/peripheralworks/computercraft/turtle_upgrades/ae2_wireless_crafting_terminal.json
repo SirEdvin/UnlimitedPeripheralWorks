@@ -7,6 +7,6 @@
       ]
     }
   ],
-  "type": "peripheralworks:ae2_wireless_terminal",
-  "item": "ae2:wireless_terminal"
+  "type": "peripheralworks:ae2_wireless_crafting_terminal",
+  "item": "ae2:wireless_crafting_terminal"
 }

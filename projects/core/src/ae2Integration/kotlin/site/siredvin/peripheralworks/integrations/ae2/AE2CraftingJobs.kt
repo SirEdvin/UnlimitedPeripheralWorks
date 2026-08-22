@@ -5,7 +5,6 @@ import appeng.api.networking.crafting.ICraftingLink
 import appeng.api.networking.crafting.ICraftingService
 import appeng.api.networking.security.IActionSource
 import appeng.blockentity.grid.AENetworkBlockEntity
-import appeng.core.definitions.AEItems
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import net.minecraft.core.BlockPos
@@ -140,7 +139,7 @@ class AE2CraftingJobsPlugin private constructor(
 
         fun forTurtle(owner: TurtlePeripheralOwner) = AE2CraftingJobsPlugin(
             resolve = {
-                owner.level?.let { level -> Context(level, resolveWirelessSession(owner, AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).craftingService) }
+                owner.level?.let { level -> Context(level, resolveWirelessSession(owner).craftingService) }
             },
             withActionSource = { callback -> owner.withPlayer({ callback(IActionSource.ofPlayer(it.fakePlayer)) }, skipInventory = true) },
             unavailableMessage = "Linked AE2 network is unavailable",

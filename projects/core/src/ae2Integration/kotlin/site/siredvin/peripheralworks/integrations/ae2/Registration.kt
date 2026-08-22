@@ -72,17 +72,30 @@ class Registration : Runnable {
         PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         val wirelessTerminalUpgrade = ModPlatform.registerTurtleUpgrade(
             AE2WirelessTerminalUpgrade.UPGRADE_ID,
-            TurtleUpgradeSerialiser.simpleWithCustomItem { _, stack -> AE2WirelessTerminalUpgrade(stack) },
+            TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack -> AE2WirelessTerminalUpgrade(id, stack) },
+        )
+        val wirelessCraftingTerminalUpgrade = ModPlatform.registerTurtleUpgrade(
+            AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID,
+            TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack -> AE2WirelessTerminalUpgrade(id, stack) },
         )
         ModTurtleUpgradeDataProvider.hookUpgrade {
-            it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.UPGRADE_ID, wirelessTerminalUpgrade.get(), AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).requireMod("ae2")
+            it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.UPGRADE_ID, wirelessTerminalUpgrade.get(), AEItems.WIRELESS_TERMINAL.asItem()).requireMod("ae2")
+        }
+        ModTurtleUpgradeDataProvider.hookUpgrade {
+            it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, wirelessCraftingTerminalUpgrade.get(), AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).requireMod("ae2")
         }
         PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
             @Suppress("UNCHECKED_CAST")
             Pair(wirelessTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, heightShift = 0.15f))
         }
+        PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
+            @Suppress("UNCHECKED_CAST")
+            Pair(wirelessCraftingTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, heightShift = 0.15f))
+        }
         ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE wireless terminal") }
+        ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, "AE wireless crafting terminal") }
         ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE бездротова термінальна") }
+        ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, "AE бездротова термінальна крафтингу") }
         ModRecipeProvider.addHook { output ->
             val conditionalOutput = AE2RecipeConditions.wrap(output)
             TweakedShapedRecipeBuilder.shaped(ME_NETWORK_PERIPHERAL.get())

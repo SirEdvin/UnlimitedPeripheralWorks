@@ -169,6 +169,7 @@
   "tooltip.peripheralworks.remote_observer_range": "  §6Максимальна дальність стостерігання: %s",
   "tooltip.peripheralworks.universal_scanner_free_range": "  §6Бескоштовний радіус сканування: %s",
   "tooltip.peripheralworks.universal_scanner_max_range": "  §6Максимальний радіус сканування: %s",
+  "turtle.peripheralworks.ae2_wireless_crafting_terminal": "AE бездротова термінальна крафтингу",
   "turtle.peripheralworks.ae2_wireless_terminal": "AE бездротова термінальна",
   "turtle.peripheralworks.hologram_projector": "Проекуюча",
   "turtle.peripheralworks.natures_compass": "Природновідчуваюча",

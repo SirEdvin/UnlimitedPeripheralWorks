@@ -5,7 +5,6 @@ import appeng.api.networking.crafting.ICraftingService
 import appeng.api.networking.security.IActionSource
 import appeng.api.storage.MEStorage
 import appeng.blockentity.networking.WirelessAccessPointBlockEntity
-import appeng.core.definitions.AEItems
 import appeng.items.tools.powered.WirelessTerminalItem
 import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.api.lua.LuaException
@@ -34,11 +33,12 @@ internal const val AE2_TERMINAL_TAG = "terminal"
 
 internal data class AE2WirelessSession(val storage: MEStorage, val craftingService: ICraftingService)
 
-internal fun resolveWirelessSession(owner: TurtlePeripheralOwner, terminal: WirelessTerminalItem): AE2WirelessSession {
+internal fun resolveWirelessSession(owner: TurtlePeripheralOwner): AE2WirelessSession {
     val data = owner.turtle.getUpgradeNBTData(owner.side)
     if (!data.contains(AE2_TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) throw LuaException("Invalid stored wireless terminal")
     val stack = ItemStack.of(data.getCompound(AE2_TERMINAL_TAG))
-    if (stack.item !== terminal || terminal.getLinkedPosition(stack) == null) throw LuaException("Invalid stored wireless terminal")
+    val terminal = stack.item as? WirelessTerminalItem ?: throw LuaException("Invalid stored wireless terminal")
+    if (terminal.getLinkedPosition(stack) == null) throw LuaException("Invalid stored wireless terminal")
     val level = owner.level ?: throw LuaException("Linked AE2 network is unavailable")
     val grid = terminal.getLinkedGrid(stack, level, null) ?: throw LuaException("Linked AE2 network is unavailable")
     val inRange = grid.getMachines(WirelessAccessPointBlockEntity::class.java).any { accessPoint ->
@@ -50,7 +50,7 @@ internal fun resolveWirelessSession(owner: TurtlePeripheralOwner, terminal: Wire
 
 private fun isInWirelessRange(accessPoint: IWirelessAccessPoint, level: net.minecraft.world.level.Level, pos: net.minecraft.core.BlockPos): Boolean = accessPoint.isActive && accessPoint.location.level === level && accessPoint.location.pos.distSqr(pos) < accessPoint.range * accessPoint.range
 
-class AE2WirelessTerminalUpgrade(stack: ItemStack) : PeripheralTurtleUpgrade<AE2WirelessTerminalPeripheral>(UPGRADE_ID, stack) {
+class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack) : PeripheralTurtleUpgrade<AE2WirelessTerminalPeripheral>(id, stack) {
     override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(turtle, side)
 
     override fun getUpgradeData(stack: ItemStack): CompoundTag = CompoundTag().apply {
@@ -63,12 +63,15 @@ class AE2WirelessTerminalUpgrade(stack: ItemStack) : PeripheralTurtleUpgrade<AE2
         craftingItem
     }
 
-    override fun isItemSuitable(stack: ItemStack): Boolean = AEItems.WIRELESS_CRAFTING_TERMINAL.isSameAs(stack) &&
-        AEItems.WIRELESS_CRAFTING_TERMINAL.asItem().getLinkedPosition(stack) != null
+    override fun isItemSuitable(stack: ItemStack): Boolean = stack.item is WirelessTerminalItem &&
+        (stack.item as WirelessTerminalItem).getLinkedPosition(stack) != null
 
     companion object {
         @Suppress("DEPRECATION")
         val UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, AE2WirelessTerminalPeripheral.TYPE)
+
+        @Suppress("DEPRECATION")
+        val CRAFTING_UPGRADE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, "ae2_wireless_crafting_terminal")
     }
 }
 
@@ -91,7 +94,7 @@ class AE2WirelessTerminalPeripheral private constructor(owner: TurtlePeripheralO
 }
 
 private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner) : IPeripheralPlugin {
-    private fun resolve(): AE2WirelessSession = resolveWirelessSession(owner, AEItems.WIRELESS_CRAFTING_TERMINAL.asItem())
+    private fun resolve(): AE2WirelessSession = resolveWirelessSession(owner)
 
     private fun validateTransfer(itemQuery: Any?, limit: Optional<Int>, slot: Optional<Int>): Pair<Predicate<ItemStack>, Pair<Int, Int>> {
         val predicate = PeripheralPluginUtils.itemQueryToPredicate(itemQuery)
