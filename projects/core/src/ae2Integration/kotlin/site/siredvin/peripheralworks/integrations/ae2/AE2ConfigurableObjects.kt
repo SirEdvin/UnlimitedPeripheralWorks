@@ -45,7 +45,7 @@ import site.siredvin.tweakium.modules.peripheral.util.assertBetween
 import java.util.*
 import kotlin.math.min
 
-private fun itemDetails(stack: ItemStack): Map<String, Any> = LuaRepresentation.forItemStack(stack)
+private fun itemDetails(stack: ItemStack): MutableMap<String, Any> = LuaRepresentation.forItemStack(stack)
 
 private fun parseDirection(value: String): Direction = Direction.byName(value)
     ?: throw LuaException("Direction must be north, south, east, west, up, or down")
@@ -699,7 +699,10 @@ internal open class PatternProviderObject(level: Level, resolve: () -> PatternPr
     fun getPattern(slot: Int): Map<String, Any>? {
         val inventory = patternInventory()
         assertBetween(slot, 1, inventory.size(), "slot")
-        return inventory.getStackInSlot(slot - 1).takeUnless(ItemStack::isEmpty)?.let(::itemDetails)
+        val stack = inventory.getStackInSlot(slot - 1).takeUnless(ItemStack::isEmpty) ?: return null
+        return itemDetails(stack).apply {
+            PatternDetailsHelper.decodePattern(stack, level)?.let { put("pattern", AE2Helper.patternToMap(it)) }
+        }
     }
 
     @LuaFunction(mainThread = true)

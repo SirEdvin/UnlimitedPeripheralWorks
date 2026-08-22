@@ -6,7 +6,17 @@ export type AE2CraftingCPU = {
     storage: number;
     isBusy: boolean;
 };
-export type AE2Pattern = { inputs: object[]; outputs: object[] };
+export type AE2PatternItem = ItemDetail & { type: "item" };
+export type AE2PatternFluid = {
+    type: "fluid";
+    name: string;
+    amount: number;
+    precise_amount: number;
+    nbt?: string;
+};
+export type AE2PatternStack = AE2PatternItem | AE2PatternFluid;
+export type AE2PatternInput = AE2PatternStack | { variants: AE2PatternStack[] };
+export type AE2Pattern = { inputs: AE2PatternInput[]; outputs: AE2PatternStack[] };
 export type AE2Crafting = {
     target: object;
     amount: number;

@@ -116,31 +116,7 @@ class MENetworkBlockPlugin(private val entity: AENetworkBlockEntity) : IPeripher
         val patterns = craftingService.getCraftingFor(key)
         val data = mutableListOf<Map<String, *>>()
         patterns.forEach { pattern ->
-            val patternRepresentation = mutableMapOf<String, Any>()
-            val outputs = mutableListOf<Map<String, Any>>()
-            val inputs = mutableListOf<Map<String, Any>>()
-            pattern.outputs.forEach { outputs.add(genericStackToMap(it)) }
-            pattern.inputs.forEach {
-                val inputData: MutableMap<String, Any>
-                if (it.possibleInputs.size == 1) {
-                    inputData = genericStackToMap(it.possibleInputs[0])
-                    inputData["count"] = (inputData["count"] as Number).toDouble() * it.multiplier
-                } else {
-                    val inputVariants = mutableListOf<Map<String, Any>>()
-                    it.possibleInputs.forEach { pInput ->
-                        val pInputResult = genericStackToMap(pInput)
-                        pInputResult["count"] = (pInputResult["count"] as Number).toDouble() * it.multiplier
-                        inputVariants.add(pInputResult)
-                    }
-                    inputData = mutableMapOf(
-                        "variants" to inputVariants,
-                    )
-                }
-                inputs.add(inputData)
-            }
-            patternRepresentation["inputs"] = inputs
-            patternRepresentation["outputs"] = outputs
-            data.add(patternRepresentation)
+            data.add(AE2Helper.patternToMap(pattern))
         }
         return data
     }

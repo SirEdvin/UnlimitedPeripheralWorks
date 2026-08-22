@@ -3,6 +3,7 @@ package site.siredvin.peripheralworks.testmod
 import appeng.api.crafting.PatternDetailsHelper
 import appeng.api.networking.crafting.ICraftingService
 import appeng.api.networking.security.IActionSource
+import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
 import appeng.api.stacks.GenericStack
 import appeng.blockentity.networking.CableBusBlockEntity
@@ -20,6 +21,8 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.entity.ChestBlockEntity
+import net.minecraft.world.level.material.Fluids
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.api.thenExecuteFailFast
@@ -107,7 +110,14 @@ class AE2ConfigurableObjectsGameTests {
             setItem(2, AEItems.CRAFTING_CARD.stack())
             setItem(3, AEItems.FUZZY_CARD.stack())
             setItem(4, ItemStack(Items.STONE))
-            setItem(5, PatternDetailsHelper.encodeProcessingPattern(arrayOf(GenericStack(AEItemKey.of(Items.COBBLESTONE), 1)), arrayOf(GenericStack(AEItemKey.of(Items.STONE), 1))))
+            val fluidUnit = PlatformToolkit.get().fluidCompactDivider.toLong()
+            setItem(
+                5,
+                PatternDetailsHelper.encodeProcessingPattern(
+                    arrayOf(GenericStack(AEItemKey.of(Items.COBBLESTONE), 2), GenericStack(AEFluidKey.of(Fluids.WATER), fluidUnit * 1_000)),
+                    arrayOf(GenericStack(AEItemKey.of(Items.STONE), 1), GenericStack(AEFluidKey.of(Fluids.LAVA), fluidUnit * 250)),
+                ),
+            )
         }
         helper.startSequence()
             .thenIdle(5)

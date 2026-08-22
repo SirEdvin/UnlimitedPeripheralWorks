@@ -1,4 +1,4 @@
-import { AE2NetworkAPI } from "./ae2";
+import { AE2NetworkAPI, AE2Pattern } from "./ae2";
 import { Fallible } from "../types";
 
 export type AE2Direction = "north" | "south" | "east" | "west" | "up" | "down";
@@ -28,6 +28,8 @@ export type AE2StockRow = {
     target?: AE2Stack;
     stored?: AE2Stack;
 };
+
+export type AE2EncodedPattern = ItemDetail & { pattern: AE2Pattern };
 
 export type AE2DeviceConfiguration = object;
 export type AE2UpgradeableConfiguration = { upgradeSlotCount: number };
@@ -185,7 +187,7 @@ export interface AE2EnergyLevelEmitterObject extends AE2LevelEmitterObject {
 /** @noSelf **/
 export interface AE2PatternProviderObject extends AE2DeviceObject, AE2PriorityObject {
     listPatterns(): LuaTable<number, ItemDetail>;
-    getPattern(slot: number): ItemDetail | null;
+    getPattern(slot: number): AE2EncodedPattern | null;
     pullPattern(fromName: string, fromSlot: number, limit?: number, toSlot?: number): number;
     pushPattern(toName: string, fromSlot: number, limit?: number, toSlot?: number): number;
     isBlocking(): boolean;

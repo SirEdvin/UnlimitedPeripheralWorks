@@ -2,11 +2,13 @@
 
 package site.siredvin.peripheralworks.integrations.ae2
 
+import appeng.api.crafting.IPatternDetails
 import appeng.api.stacks.*
 import dan200.computercraft.api.lua.LuaException
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import java.util.function.Predicate
 
@@ -20,12 +22,29 @@ object AE2Helper {
             base["type"] = "item"
             return base
         }
-        val base = mutableMapOf<String, Any>()
+        val key = stack.what as AEFluidKey
+
+        @Suppress("UNCHECKED_CAST")
+        val base = LuaRepresentation.forFluidStack(
+            AgnosticFluidStack(
+                key.fluid,
+                stack.amount.toDouble() / PlatformToolkit.get().fluidCompactDivider,
+                key.tag,
+            ),
+        ) as MutableMap<String, Any>
         base["type"] = "fluid"
-        base["name"] = PlatformRegistries.FLUIDS.getKey((stack.what as AEFluidKey).fluid).toString()
-        base["count"] = stack.amount.toDouble() / PlatformToolkit.get().fluidCompactDivider
         return base
     }
+
+    fun patternToMap(pattern: IPatternDetails): Map<String, List<Map<String, Any>>> = mapOf(
+        "inputs" to pattern.inputs.map { input ->
+            val possibilities = input.possibleInputs.map {
+                genericStackToMap(GenericStack(it.what, Math.multiplyExact(it.amount, input.multiplier)))
+            }
+            if (possibilities.size == 1) possibilities.first() else mapOf("variants" to possibilities)
+        },
+        "outputs" to pattern.outputs.map(::genericStackToMap),
+    )
 
     fun keyToMap(key: AEKey): Map<String, String> = when (key) {
         is AEItemKey -> mapOf("type" to "item", "name" to PlatformRegistries.ITEMS.getKey(key.item).toString())
