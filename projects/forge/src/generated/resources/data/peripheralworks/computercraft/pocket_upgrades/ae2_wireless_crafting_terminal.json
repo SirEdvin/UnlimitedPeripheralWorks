@@ -1,0 +1,10 @@
+{
+  "type": "peripheralworks:ae2_wireless_crafting_terminal",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "item": "ae2:wireless_crafting_terminal"
+}

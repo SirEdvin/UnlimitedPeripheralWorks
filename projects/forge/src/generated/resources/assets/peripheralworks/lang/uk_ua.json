@@ -44,6 +44,8 @@
   "item.peripheralworks.ultimate_configurator.tooltip": "§3§oУніверсальний інструмент для налаштування всього. Використайте (присівши) його на будь-якому блоку, щоб перевірити, чи можна його налаштувати",
   "item.peripheralworks.wired_network_p2p_tunnel": "P2P-тунель провідної мережі",
   "item.peripheralworks.wired_network_p2p_tunnel.tooltip": "§3§oПередає провідну мережу CC:Tweaked через P2P-з'єднання AE2",
+  "pocket.peripheralworks.ae2_wireless_crafting_terminal": "AE бездротовий термінал крафтингу",
+  "pocket.peripheralworks.ae2_wireless_terminal": "AE бездротовий термінал",
   "pocket.peripheralworks.apprentice_magic_tome": "Чаклуючий",
   "pocket.peripheralworks.archmage_magic_tome": "Чаклуючий",
   "pocket.peripheralworks.caster_magic_tome": "Чаклуючий",

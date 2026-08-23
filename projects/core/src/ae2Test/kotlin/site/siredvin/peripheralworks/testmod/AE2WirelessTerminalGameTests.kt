@@ -50,9 +50,11 @@ class AE2WirelessTerminalGameTests {
         val standardTerminal = AEItems.WIRELESS_TERMINAL.stack()
         check(
             ComputerPlatformToolkit.get().getTurtleUpgrade(standardTerminal) == null &&
-                ComputerPlatformToolkit.get().getTurtleUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack()) == null,
+                ComputerPlatformToolkit.get().getTurtleUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack()) == null &&
+                ComputerPlatformToolkit.get().getPocketUpgrade(standardTerminal) == null &&
+                ComputerPlatformToolkit.get().getPocketUpgrade(AEItems.WIRELESS_CRAFTING_TERMINAL.stack()) == null,
         ) {
-            "Unlinked wireless terminal was accepted as a turtle upgrade"
+            "Unlinked wireless terminal was accepted as a computer upgrade"
         }
         (standardTerminal.item as WirelessTerminalItem).let {
             WirelessTerminalItem.LINKABLE_HANDLER.link(standardTerminal, GlobalPos.of(helper.level.dimension(), accessPointPos))
@@ -61,10 +63,18 @@ class AE2WirelessTerminalGameTests {
         check(ComputerPlatformToolkit.get().getTurtleUpgrade(standardTerminal)?.upgrade?.upgradeID == AE2WirelessTerminalUpgrade.UPGRADE_ID) {
             "Linked standard wireless terminal was not accepted as a turtle upgrade"
         }
+        val standardPocketUpgrade = ComputerPlatformToolkit.get().getPocketUpgrade(standardTerminal)
+        check(standardPocketUpgrade?.upgrade?.upgradeID == AE2WirelessTerminalUpgrade.UPGRADE_ID && ItemStack.matches(standardTerminal, standardPocketUpgrade.getUpgradeItem())) {
+            "Linked standard wireless terminal was not accepted as a pocket upgrade"
+        }
         val upgradeData = ComputerPlatformToolkit.get().getTurtleUpgrade(terminal)
             ?: error("Linked wireless terminal was not accepted as a turtle upgrade")
         check(upgradeData.upgrade.upgradeID == AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID) {
             "Linked wireless crafting terminal resolved to the wrong turtle upgrade"
+        }
+        val craftingPocketUpgrade = ComputerPlatformToolkit.get().getPocketUpgrade(terminal)
+        check(craftingPocketUpgrade?.upgrade?.upgradeID == AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID && ItemStack.matches(terminal, craftingPocketUpgrade.getUpgradeItem())) {
+            "Linked wireless crafting terminal resolved to the wrong pocket upgrade"
         }
         val upgrade = upgradeData.upgrade as AE2WirelessTerminalUpgrade
         check(ItemStack.matches(terminal, upgrade.getUpgradeItem(upgrade.getUpgradeData(terminal))))

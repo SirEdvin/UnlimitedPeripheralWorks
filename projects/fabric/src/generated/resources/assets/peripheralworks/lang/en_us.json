@@ -42,6 +42,8 @@
   "item.peripheralworks.ultimate_configurator.tooltip": "§3§oOne tool to configure them all. Crouch click on any block to check if it configurable",
   "item.peripheralworks.wired_network_p2p_tunnel": "Wired network P2P tunnel",
   "item.peripheralworks.wired_network_p2p_tunnel.tooltip": "§3§oCarries a CC:Tweaked wired network through an AE2 P2P link",
+  "pocket.peripheralworks.ae2_wireless_crafting_terminal": "AE wireless crafting terminal",
+  "pocket.peripheralworks.ae2_wireless_terminal": "AE wireless terminal",
   "pocket.peripheralworks.hologram_projector": "Projecting",
   "pocket.peripheralworks.natures_compass": "Nature Compassing",
   "pocket.peripheralworks.netherite_peripheralium_hub": "Netherite Hub",

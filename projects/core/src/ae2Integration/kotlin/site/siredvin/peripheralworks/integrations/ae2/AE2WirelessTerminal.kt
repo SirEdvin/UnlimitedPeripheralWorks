@@ -9,6 +9,7 @@ import appeng.items.tools.powered.WirelessTerminalItem
 import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
+import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.TurtleSide
 import net.minecraft.nbt.CompoundTag
@@ -20,10 +21,13 @@ import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.peripheral.boon.PeripheralOwnerBoonKey
+import site.siredvin.tweakium.modules.peripheral.owner.BasePeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
+import site.siredvin.tweakium.modules.pocket.BasePocketUpgrade
 import site.siredvin.tweakium.modules.turtle.PeripheralTurtleUpgrade
 import java.util.Optional
 import java.util.function.Predicate
@@ -33,10 +37,18 @@ internal const val AE2_TERMINAL_TAG = "terminal"
 
 internal data class AE2WirelessSession(val storage: MEStorage, val craftingService: ICraftingService)
 
-internal fun resolveWirelessSession(owner: TurtlePeripheralOwner): AE2WirelessSession {
-    val data = owner.turtle.getUpgradeNBTData(owner.side)
+private fun wirelessTerminalStack(owner: BasePeripheralOwner): ItemStack {
+    val data = when (owner) {
+        is TurtlePeripheralOwner -> owner.turtle.getUpgradeNBTData(owner.side)
+        is PocketPeripheralOwner -> owner.pocket.upgradeNBTData
+        else -> throw LuaException("Invalid wireless terminal owner")
+    }
     if (!data.contains(AE2_TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) throw LuaException("Invalid stored wireless terminal")
-    val stack = ItemStack.of(data.getCompound(AE2_TERMINAL_TAG))
+    return ItemStack.of(data.getCompound(AE2_TERMINAL_TAG))
+}
+
+internal fun resolveWirelessSession(owner: BasePeripheralOwner): AE2WirelessSession {
+    val stack = wirelessTerminalStack(owner)
     val terminal = stack.item as? WirelessTerminalItem ?: throw LuaException("Invalid stored wireless terminal")
     if (terminal.getLinkedPosition(stack) == null) throw LuaException("Invalid stored wireless terminal")
     val level = owner.level ?: throw LuaException("Linked AE2 network is unavailable")
@@ -44,27 +56,28 @@ internal fun resolveWirelessSession(owner: TurtlePeripheralOwner): AE2WirelessSe
     val inRange = grid.getMachines(WirelessAccessPointBlockEntity::class.java).any { accessPoint ->
         isInWirelessRange(accessPoint, level, owner.pos)
     }
-    if (!inRange) throw LuaException("Turtle is outside wireless range")
+    if (!inRange) throw LuaException("Computer is outside wireless range")
     return AE2WirelessSession(grid.storageService.inventory, grid.craftingService)
 }
 
 private fun isInWirelessRange(accessPoint: IWirelessAccessPoint, level: net.minecraft.world.level.Level, pos: net.minecraft.core.BlockPos): Boolean = accessPoint.isActive && accessPoint.location.level === level && accessPoint.location.pos.distSqr(pos) < accessPoint.range * accessPoint.range
 
+private fun wirelessTerminalData(stack: ItemStack): CompoundTag = CompoundTag().apply {
+    put(AE2_TERMINAL_TAG, stack.save(CompoundTag()))
+}
+
+private fun wirelessTerminalItem(data: CompoundTag, fallback: ItemStack): ItemStack = if (data.contains(AE2_TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) ItemStack.of(data.getCompound(AE2_TERMINAL_TAG)) else fallback
+
+private fun isLinkedWirelessTerminal(stack: ItemStack): Boolean = (stack.item as? WirelessTerminalItem)?.getLinkedPosition(stack) != null
+
 class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack) : PeripheralTurtleUpgrade<AE2WirelessTerminalPeripheral>(id, stack) {
     override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(turtle, side)
 
-    override fun getUpgradeData(stack: ItemStack): CompoundTag = CompoundTag().apply {
-        put(AE2_TERMINAL_TAG, stack.save(CompoundTag()))
-    }
+    override fun getUpgradeData(stack: ItemStack): CompoundTag = wirelessTerminalData(stack)
 
-    override fun getUpgradeItem(upgradeData: CompoundTag): ItemStack = if (upgradeData.contains(AE2_TERMINAL_TAG, Tag.TAG_COMPOUND.toInt())) {
-        ItemStack.of(upgradeData.getCompound(AE2_TERMINAL_TAG))
-    } else {
-        craftingItem
-    }
+    override fun getUpgradeItem(upgradeData: CompoundTag): ItemStack = wirelessTerminalItem(upgradeData, craftingItem)
 
-    override fun isItemSuitable(stack: ItemStack): Boolean = stack.item is WirelessTerminalItem &&
-        (stack.item as WirelessTerminalItem).getLinkedPosition(stack) != null
+    override fun isItemSuitable(stack: ItemStack): Boolean = isLinkedWirelessTerminal(stack)
 
     companion object {
         @Suppress("DEPRECATION")
@@ -75,12 +88,22 @@ class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack) : Perip
     }
 }
 
-class AE2WirelessTerminalPeripheral private constructor(owner: TurtlePeripheralOwner) : OwnedPeripheral<TurtlePeripheralOwner>(TYPE, owner) {
+class AE2WirelessTerminalPocketUpgrade(id: ResourceLocation, stack: ItemStack) : BasePocketUpgrade<AE2WirelessTerminalPeripheral>(id, stack) {
+    override fun getPeripheral(access: IPocketAccess): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(access)
+
+    override fun getUpgradeData(stack: ItemStack): CompoundTag = wirelessTerminalData(stack)
+
+    override fun getUpgradeItem(upgradeData: CompoundTag): ItemStack = wirelessTerminalItem(upgradeData, craftingItem)
+
+    override fun isItemSuitable(stack: ItemStack): Boolean = isLinkedWirelessTerminal(stack)
+}
+
+class AE2WirelessTerminalPeripheral private constructor(owner: BasePeripheralOwner) : OwnedPeripheral<BasePeripheralOwner>(TYPE, owner) {
     override val isEnabled = true
 
     init {
         addPlugin(AE2WirelessTerminalPlugin(owner))
-        addPlugin(AE2CraftingJobsPlugin.forTurtle(owner))
+        addPlugin(AE2CraftingJobsPlugin.forWirelessComputer(owner))
     }
 
     companion object {
@@ -90,10 +113,15 @@ class AE2WirelessTerminalPeripheral private constructor(owner: TurtlePeripheralO
             val owner = TurtlePeripheralOwner(turtle, side).attachFuel()
             return AE2WirelessTerminalPeripheral(owner)
         }
+
+        fun create(access: IPocketAccess): AE2WirelessTerminalPeripheral {
+            val owner = PocketPeripheralOwner(access).attachFuel()
+            return AE2WirelessTerminalPeripheral(owner)
+        }
     }
 }
 
-private class AE2WirelessTerminalPlugin(private val owner: TurtlePeripheralOwner) : IPeripheralPlugin {
+private class AE2WirelessTerminalPlugin(private val owner: BasePeripheralOwner) : IPeripheralPlugin {
     private fun resolve(): AE2WirelessSession = resolveWirelessSession(owner)
 
     private fun validateTransfer(itemQuery: Any?, limit: Optional<Int>, slot: Optional<Int>): Pair<Predicate<ItemStack>, Pair<Int, Int>> {

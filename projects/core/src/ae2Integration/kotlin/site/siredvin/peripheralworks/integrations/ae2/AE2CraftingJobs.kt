@@ -16,7 +16,7 @@ import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.stackToMap
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
-import site.siredvin.tweakium.modules.peripheral.owner.TurtlePeripheralOwner
+import site.siredvin.tweakium.modules.peripheral.owner.BasePeripheralOwner
 import java.lang.ref.WeakReference
 import java.util.Collections
 import java.util.Locale
@@ -137,7 +137,7 @@ class AE2CraftingJobsPlugin private constructor(
             unavailableMessage = "AE2 network is not connected",
         )
 
-        fun forTurtle(owner: TurtlePeripheralOwner) = AE2CraftingJobsPlugin(
+        fun forWirelessComputer(owner: BasePeripheralOwner) = AE2CraftingJobsPlugin(
             resolve = {
                 owner.level?.let { level -> Context(level, resolveWirelessSession(owner).craftingService) }
             },

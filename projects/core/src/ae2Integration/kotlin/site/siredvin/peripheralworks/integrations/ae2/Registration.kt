@@ -13,6 +13,7 @@ import appeng.core.definitions.AEParts
 import appeng.items.parts.PartItem
 import appeng.items.parts.PartModelsHelper
 import com.google.gson.JsonObject
+import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.data.models.blockstates.MultiVariantGenerator
@@ -37,6 +38,7 @@ import site.siredvin.peripheralworks.data.ModBlockModelProvider
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModItemModelProvider
 import site.siredvin.peripheralworks.data.ModLootTableProvider
+import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModRecipeProvider
 import site.siredvin.peripheralworks.data.ModTagsProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
@@ -84,6 +86,20 @@ class Registration : Runnable {
         ModTurtleUpgradeDataProvider.hookUpgrade {
             it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, wirelessCraftingTerminalUpgrade.get(), AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).requireMod("ae2")
         }
+        val wirelessTerminalPocketUpgrade = ModPlatform.registerPocketUpgrade(
+            AE2WirelessTerminalUpgrade.UPGRADE_ID,
+            PocketUpgradeSerialiser.simpleWithCustomItem { id, stack -> AE2WirelessTerminalPocketUpgrade(id, stack) },
+        )
+        val wirelessCraftingTerminalPocketUpgrade = ModPlatform.registerPocketUpgrade(
+            AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID,
+            PocketUpgradeSerialiser.simpleWithCustomItem { id, stack -> AE2WirelessTerminalPocketUpgrade(id, stack) },
+        )
+        ModPocketUpgradeDataProvider.hookUpgrade {
+            it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.UPGRADE_ID, wirelessTerminalPocketUpgrade.get(), AEItems.WIRELESS_TERMINAL.asItem()).requireMod("ae2")
+        }
+        ModPocketUpgradeDataProvider.hookUpgrade {
+            it.simpleWithCustomItem(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, wirelessCraftingTerminalPocketUpgrade.get(), AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()).requireMod("ae2")
+        }
         PeripheralWorksClientCore.EXTRA_TURTLE_MODEL_PROVIDERS.add {
             @Suppress("UNCHECKED_CAST")
             Pair(wirelessTerminalUpgrade.get() as TurtleUpgradeSerialiser<ITurtleUpgrade>, ScaledItemModeller(0.75f, heightShift = 0.15f))
@@ -94,8 +110,12 @@ class Registration : Runnable {
         }
         ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE wireless terminal") }
         ModEnLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, "AE wireless crafting terminal") }
+        ModEnLanguageProvider.addHook { it.addPocket(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE wireless terminal") }
+        ModEnLanguageProvider.addHook { it.addPocket(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, "AE wireless crafting terminal") }
         ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE бездротова термінальна") }
         ModUaLanguageProvider.addHook { it.addTurtle(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, "AE бездротова термінальна крафтингу") }
+        ModUaLanguageProvider.addHook { it.addPocket(AE2WirelessTerminalUpgrade.UPGRADE_ID, "AE бездротовий термінал") }
+        ModUaLanguageProvider.addHook { it.addPocket(AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID, "AE бездротовий термінал крафтингу") }
         ModRecipeProvider.addHook { output ->
             val conditionalOutput = AE2RecipeConditions.wrap(output)
             TweakedShapedRecipeBuilder.shaped(ME_NETWORK_PERIPHERAL.get())
