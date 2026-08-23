@@ -47,6 +47,11 @@ class Integration : Runnable {
         }
         if (Configuration.enableMEInterface) {
             ComputerCraftProxy.addProvider(MENetworkBlockPlugin.Provider)
+            ComputerCraftProxy.addProvider(AE2CraftingJobsPluginProvider)
+            ComputerCraftProxy.addProvider(AE2CableObjectProvider)
+            ComputerCraftProxy.addProvider(AE2InterfaceObjectProvider)
+            ComputerCraftProxy.addProvider(AE2PatternProviderObjectProvider)
+            AE2Setup.registerPeripherals()
         }
         AE2Setup.registerAttunement()
     }

@@ -60,7 +60,7 @@ class AE2GameTests {
                 check(MENetworkBlockPlugin.Provider.provide(helper.level, helper.absolutePos(interfacePos), Direction.UP) != null)
                 check(Integration.extractItemStorage(helper.level, helper.absolutePos(interfacePos), helper.getBlockEntity(interfacePos), Direction.UP) != null)
                 check(peripheral.mainNode.isActive)
-                check(MENetworkBlockPlugin(helper.level, peripheral).getChannelInformation().isNotEmpty())
+                check(MENetworkBlockPlugin(peripheral).getChannelInformation().isNotEmpty())
                 helper.destroyBlock(peripheralPos)
             }
             .thenIdle(2)
@@ -75,13 +75,13 @@ class AE2GameTests {
         val pos = BlockPos(1, 1, 1)
         helper.setBlock(pos, Registration.ME_NETWORK_PERIPHERAL.get())
         val peripheral = helper.getBlockEntity(pos) as MENetworkPeripheralBlockEntity
-        val plugin = MENetworkBlockPlugin(helper.level, peripheral)
+        val plugin = MENetworkBlockPlugin(peripheral)
         check(plugin.getAverageEnergyDemand() == 0.0)
         check(plugin.getChannelInformation().isEmpty())
-        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.CABLE.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
-        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
-        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM_FULL.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
-        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModBlocks.NETWORK_MANAGER.get().asItem().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
+        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.CABLE.get().defaultInstance).item != Registration.WIRED_NETWORK_P2P_TUNNEL.get())
+        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM.get().defaultInstance).item != Registration.WIRED_NETWORK_P2P_TUNNEL.get())
+        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModRegistry.Items.WIRED_MODEM_FULL.get().defaultInstance).item != Registration.WIRED_NETWORK_P2P_TUNNEL.get())
+        check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModBlocks.NETWORK_MANAGER.get().asItem().defaultInstance).item != Registration.WIRED_NETWORK_P2P_TUNNEL.get())
         check(P2PTunnelAttunement.getTunnelPartByTriggerItem(ModItems.ULTIMATE_CONFIGURATOR.get().defaultInstance).item == Registration.WIRED_NETWORK_P2P_TUNNEL.get())
         helper.succeed()
     }

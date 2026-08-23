@@ -1,7 +1,5 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
-import appeng.api.networking.crafting.CalculationStrategy
-import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEFluidKey
 import appeng.api.stacks.AEItemKey
 import appeng.api.stacks.AEKey
@@ -12,17 +10,13 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
-import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMap
-import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
-import java.util.*
-import kotlin.NoSuchElementException
 
-class MENetworkBlockPlugin(private val level: Level, private val entity: AENetworkBlockEntity) : IPeripheralPlugin {
+class MENetworkBlockPlugin(private val entity: AENetworkBlockEntity) : IPeripheralPlugin {
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }
@@ -40,7 +34,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             if (entity !is AENetworkBlockEntity) {
                 return null
             }
-            return MENetworkBlockPlugin(level, entity)
+            return MENetworkBlockPlugin(entity)
         }
     }
 
@@ -122,31 +116,7 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
         val patterns = craftingService.getCraftingFor(key)
         val data = mutableListOf<Map<String, *>>()
         patterns.forEach { pattern ->
-            val patternRepresentation = mutableMapOf<String, Any>()
-            val outputs = mutableListOf<Map<String, Any>>()
-            val inputs = mutableListOf<Map<String, Any>>()
-            pattern.outputs.forEach { outputs.add(genericStackToMap(it)) }
-            pattern.inputs.forEach {
-                val inputData: MutableMap<String, Any>
-                if (it.possibleInputs.size == 1) {
-                    inputData = genericStackToMap(it.possibleInputs[0])
-                    inputData["count"] = (inputData["count"] as Number).toDouble() * it.multiplier
-                } else {
-                    val inputVariants = mutableListOf<Map<String, Any>>()
-                    it.possibleInputs.forEach { pInput ->
-                        val pInputResult = genericStackToMap(pInput)
-                        pInputResult["count"] = (pInputResult["count"] as Number).toDouble() * it.multiplier
-                        inputVariants.add(pInputResult)
-                    }
-                    inputData = mutableMapOf(
-                        "variants" to inputVariants,
-                    )
-                }
-                inputs.add(inputData)
-            }
-            patternRepresentation["inputs"] = inputs
-            patternRepresentation["outputs"] = outputs
-            data.add(patternRepresentation)
+            data.add(AE2Helper.patternToMap(pattern))
         }
         return data
     }
@@ -170,43 +140,5 @@ class MENetworkBlockPlugin(private val level: Level, private val entity: AENetwo
             }
         }
         return MethodResult.of(craftingList)
-    }
-
-    @LuaFunction(mainThread = false)
-    fun scheduleCrafting(mode: String, id_key: String, amount: Optional<Long>, targetCPU: Optional<String>): MethodResult {
-        val craftingService = grid?.craftingService ?: return MethodResult.of(null, "AE2 network is not connected")
-
-        val key = buildKey(mode, id_key)
-        val source = IActionSource.ofMachine(entity)
-        val realAmount = if (mode == "item") {
-            amount.orElse(1)
-        } else {
-            amount.orElse(1000) * PlatformToolkit.get().fluidCompactDivider
-        }.toLong()
-        val future = craftingService.beginCraftingCalculation(
-            level,
-            { source },
-            key,
-            realAmount,
-            CalculationStrategy.REPORT_MISSING_ITEMS,
-        )
-        val plan = future.get()
-
-        if (!plan.missingItems().isEmpty) {
-            return MethodResult.of(false, "Missing items", keyCounterToLua(plan.missingItems()))
-        }
-        val realTargetCPU = if (targetCPU.isPresent) {
-            try {
-                craftingService.cpus.first {
-                    it.name != null && it.name!!.string.equals(targetCPU.get())
-                }
-            } catch (e: NoSuchElementException) {
-                return MethodResult.of(null, "Cannot find target CPU")
-            }
-        } else {
-            null
-        }
-        craftingService.submitJob(plan, null, realTargetCPU, false, source)
-        return MethodResult.of(true)
     }
 }

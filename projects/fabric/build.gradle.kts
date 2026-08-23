@@ -39,11 +39,11 @@ fabricShaking {
 }
 
 if (minimalTestEnvironment) {
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
-        file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles()
-            ?.filter { it.name != "ae2" }
-            ?.forEach { exclude("**/integrations/${it.name}/**") }
-    }
+    val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
+        .filter { it.isDirectory && it.name != "ae2" }
+        .map { "**/integrations/${it.name}/**" }
+    sourceSets.main { kotlin.exclude(excludedIntegrations) }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -88,7 +88,7 @@ loom {
             property("fabric-api.gametest", "true")
             property("fabric.debug.disableModIds", "create")
             property("fabric.debug.loadLate", "testiarium_cct_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2" else "peripheralworks").get())
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
@@ -110,6 +110,19 @@ loom {
             vmArg("-ea")
             runDir("run/network-manager-client-gametest")
         }
+        create("peripheralWorksTestClient") {
+            client()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("fabric.debug.disableModIds", "create,testiarium_testmod,testiarium_cct_testmod")
+            property("fabric.debug.loadLate", "testiarium_testmod")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/test-client")
+        }
     }
 }
 
@@ -122,10 +135,8 @@ repositories {
 }
 
 dependencies {
-    if (!minimalTestEnvironment) {
-        modApi(libs.bundles.externalMods.fabric.integrations.api) {
-            exclude("net.fabricmc.fabric-api")
-        }
+    modApi(libs.bundles.externalMods.fabric.integrations.api) {
+        exclude("net.fabricmc.fabric-api")
     }
 
     modImplementation(libs.bundles.fabric.core)
@@ -145,14 +156,13 @@ dependencies {
         exclude("net.fabricmc", "fabric-loader")
     }
 
-    if (!minimalTestEnvironment) {
+    if (minimalTestEnvironment) {
+        modImplementation(libs.ae2.fabric)
+    } else {
+        modRuntimeOnly(libs.jade.fabric)
         libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
         libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
         libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
-    } else {
-        modApi(libs.teamreborn.energy)
-        modCompileOnly(libs.ae2.fabric)
-        modRuntimeOnly(libs.ae2.fabric)
     }
 
     add("modTestModImplementation", libs.bundles.kotlin)

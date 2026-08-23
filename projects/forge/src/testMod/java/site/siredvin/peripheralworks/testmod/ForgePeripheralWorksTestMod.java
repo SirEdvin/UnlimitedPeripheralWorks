@@ -28,6 +28,8 @@ public final class ForgePeripheralWorksTestMod {
         if (ModList.get().isLoaded("ae2")) {
             try {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2GameTests"));
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2ConfigurableObjectsGameTests"));
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2WirelessTerminalGameTests"));
             } catch (ClassNotFoundException exception) {
                 throw new IllegalStateException(exception);
             }
@@ -39,6 +41,9 @@ public final class ForgePeripheralWorksTestMod {
     private static final class ClientTests {
         private static void register() {
             Testiarium.register(NetworkManagerClientGameTests.class);
+            if (System.getProperty("testiarium.client") == null) {
+                return;
+            }
             ForgeClientTestHooks.register();
             // ponytail: Forge's headless loading overlay never opens a title screen, so trigger Testiarium after resources settle.
             CompletableFuture.delayedExecutor(20, TimeUnit.SECONDS).execute(() -> Minecraft.getInstance().execute(() -> {

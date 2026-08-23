@@ -1,4 +1,6 @@
-// 1.20.1	2025-11-08T18:25:34.6637101	vanilla/Pocket Computer Upgrades
+// 1.20.1	2026-08-23T11:25:07.356449721	vanilla/Pocket Computer Upgrades
+5e4ec851b14dca8cd36f4b79fe3113b547b4bdb2 data/peripheralworks/computercraft/pocket_upgrades/ae2_wireless_crafting_terminal.json
+3853625a634297d38a4ed83cc9b58f38bce9211c data/peripheralworks/computercraft/pocket_upgrades/ae2_wireless_terminal.json
 5becfa84dad17bbb91b0127a4aa03a0f8cf51076 data/peripheralworks/computercraft/pocket_upgrades/apprentice_magic_tome.json
 be17206c34de7e493c4f63734c12e14bcec326b3 data/peripheralworks/computercraft/pocket_upgrades/archmage_magic_tome.json
 1612d35ffc7de0bbde3f20e90c0b1f1658334faa data/peripheralworks/computercraft/pocket_upgrades/caster_magic_tome.json

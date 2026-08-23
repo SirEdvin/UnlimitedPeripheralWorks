@@ -39,11 +39,11 @@ forgeShaking {
 }
 
 if (minimalTestEnvironment) {
-    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
-        file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles()
-            ?.filter { it.name != "ae2" }
-            ?.forEach { exclude("**/integrations/${it.name}/**") }
-    }
+    val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
+        .filter { it.isDirectory && it.name != "ae2" }
+        .map { "**/integrations/${it.name}/**" }
+    sourceSets.main { kotlin.exclude(excludedIntegrations) }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
 }
 
 val testMod = sourceSets.create("testMod") {
@@ -84,15 +84,15 @@ dependencies {
 //    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
     compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 
-    if (!minimalTestEnvironment) {
+    if (minimalTestEnvironment) {
+        implementation(fg.deobf(libs.ae2.forge.get()))
+    } else {
+        runtimeOnly(fg.deobf(libs.jade.forge.get()))
         libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
         libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
         libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }
         libs.bundles.externalMods.forge.integrations.raw.active.get().map { runtimeOnly(it) }
         libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(fg.deobf(it)) }
-    } else {
-        compileOnly(fg.deobf(libs.ae2.forge))
-        runtimeOnly(fg.deobf(libs.ae2.forge))
     }
 
     listOf(
@@ -112,7 +112,7 @@ minecraft {
         create("gameTestServer") {
             workingDirectory(file("run/peripheralworks-gametest"))
             property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2" else "peripheralworks").get())
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
@@ -136,6 +136,24 @@ minecraft {
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
             property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
             jvmArgs("-ea", "-Dtestiarium.client=true", "-Dforge.disableEarlyProgressWindow=true")
+            args("--mixin.config", "testiarium-testmod.mixins.json")
+            mods {
+                create("peripheralworks") { source(sourceSets.main.get()) }
+                create("peripheralworks_testmod") {
+                    source(testMod)
+                    source(project(":core").sourceSets["testMod"])
+                }
+            }
+        }
+        create("testClient") {
+            parent(runs.getByName("client"))
+            workingDirectory(file("run/test-client"))
+            property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
+            jvmArgs("-ea")
             args("--mixin.config", "testiarium-testmod.mixins.json")
             mods {
                 create("peripheralworks") { source(sourceSets.main.get()) }
