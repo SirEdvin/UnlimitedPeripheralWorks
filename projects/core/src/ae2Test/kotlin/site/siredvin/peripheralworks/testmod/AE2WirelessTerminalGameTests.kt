@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.testmod
 
 import appeng.api.config.Actionable
+import appeng.api.networking.IGrid
 import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEItemKey
 import appeng.blockentity.networking.WirelessAccessPointBlockEntity
@@ -8,7 +9,11 @@ import appeng.blockentity.storage.ChestBlockEntity
 import appeng.core.definitions.AEBlocks
 import appeng.core.definitions.AEItems
 import appeng.items.tools.powered.WirelessTerminalItem
+import dan200.computercraft.api.peripheral.IPeripheral
+import dan200.computercraft.api.pocket.IPocketAccess
+import dan200.computercraft.api.pocket.IPocketUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
+import dan200.computercraft.api.upgrades.UpgradeData
 import dan200.computercraft.shared.config.Config
 import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity
 import net.minecraft.core.BlockPos
@@ -16,9 +21,16 @@ import net.minecraft.core.GlobalPos
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestAssertException
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
+import net.minecraft.world.phys.Vec3
+import site.siredvin.peripheralworks.integrations.ae2.AE2WirelessTerminalPocketUpgrade
 import site.siredvin.peripheralworks.integrations.ae2.AE2WirelessTerminalUpgrade
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.api.thenExecuteFailFast
@@ -27,6 +39,47 @@ import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 @TestGroup("ae2-configurable-peripherals")
 class AE2WirelessTerminalGameTests {
+    @Suppress("DEPRECATION")
+    @GameTest(template = "empty")
+    fun corruptPocketSubscriptionsAreDiscarded(helper: GameTestHelper) {
+        val terminal = AEItems.WIRELESS_TERMINAL.stack()
+        WirelessTerminalItem.LINKABLE_HANDLER.link(terminal, GlobalPos.of(helper.level.dimension(), helper.absolutePos(BlockPos(1, 1, 1))))
+        val pocketData = ComputerPlatformToolkit.get().getPocketUpgrade(terminal)
+            ?: error("Linked wireless terminal was not accepted as a pocket upgrade")
+        pocketData.data.put("ae2StorageSubscriptions", malformedSubscriptions())
+        var currentUpgrade: UpgradeData<IPocketUpgrade>? = pocketData
+        var colour = -1
+        var light = -1
+        val access = object : IPocketAccess {
+            override fun getLevel(): ServerLevel = helper.level
+            override fun getPosition(): Vec3 = Vec3.atCenterOf(helper.absolutePos(BlockPos(1, 1, 1)))
+            override fun getEntity(): Entity = helper.makeMockPlayer()
+            override fun getColour(): Int = colour
+            override fun setColour(value: Int) {
+                colour = value
+            }
+            override fun getLight(): Int = light
+            override fun setLight(value: Int) {
+                light = value
+            }
+            override fun getUpgrade(): UpgradeData<IPocketUpgrade>? = currentUpgrade
+            override fun setUpgrade(upgrade: UpgradeData<IPocketUpgrade>?) {
+                currentUpgrade = upgrade
+            }
+            override fun getUpgradeNBTData(): CompoundTag = currentUpgrade!!.data
+            override fun updateUpgradeNBTData() = Unit
+            override fun invalidatePeripheral() = Unit
+
+            @Suppress("OVERRIDE_DEPRECATION")
+            override fun getUpgrades(): Map<ResourceLocation, IPeripheral> = emptyMap()
+        }
+
+        (pocketData.upgrade as AE2WirelessTerminalPocketUpgrade).createPeripheral(access)
+        val definitions = pocketData.data.getCompound("ae2StorageSubscriptions").getList("subscriptions", net.minecraft.nbt.Tag.TAG_COMPOUND.toInt())
+        check(definitions.isEmpty()) { "Corrupt pocket subscriptions were not discarded" }
+        helper.succeed()
+    }
+
     @GameTest(template = FIXTURE, batch = FIXTURE, timeoutTicks = 12000)
     fun wirelessTerminal(helper: GameTestHelper) {
         val turtle = findTurtle(helper)
@@ -78,15 +131,22 @@ class AE2WirelessTerminalGameTests {
         }
         val upgrade = upgradeData.upgrade as AE2WirelessTerminalUpgrade
         check(ItemStack.matches(terminal, upgrade.getUpgradeItem(upgrade.getUpgradeData(terminal))))
+        upgradeData.data.put("ae2StorageSubscriptions", malformedSubscriptions())
         turtle.access.setUpgradeWithData(TurtleSide.LEFT, upgradeData)
+        lateinit var grid: IGrid
+        var gridSizeWithoutObserver = 0
+        var usedChannelsWithoutObserver = 0
 
         helper.startSequence()
             .thenIdle(10)
             .thenExecuteFailFast {
                 val accessPoint = helper.level.getBlockEntity(accessPointPos) as WirelessAccessPointBlockEntity
                 check(accessPoint.isActive) { "Wireless access point did not become active" }
-                val inserted = accessPoint.grid!!.storageService.inventory.insert(AEItemKey.of(Items.STONE), 64, Actionable.MODULATE, IActionSource.empty())
+                grid = accessPoint.grid!!
+                val inserted = grid.storageService.inventory.insert(AEItemKey.of(Items.STONE), 64, Actionable.MODULATE, IActionSource.empty())
                 check(inserted == 64L) { "Failed to seed AE2 item storage" }
+                gridSizeWithoutObserver = grid.size()
+                usedChannelsWithoutObserver = grid.pathingService.usedChannels
                 turtle.createServerComputer().turnOn()
             }
             .thenWaitUntil { await("initial") }
@@ -95,6 +155,8 @@ class AE2WirelessTerminalGameTests {
                 check(turtle.access.fuelLevel == 7) { "Expected three fuel-consuming calls, got ${turtle.access.fuelLevel}" }
                 check(turtle.contents[0].count == 5 && turtle.contents[0].`is`(Items.STONE))
                 check(turtle.contents[15].count == 5 && turtle.contents[15].`is`(Items.GOLD_INGOT))
+                check(grid.size() == gridSizeWithoutObserver + 1) { "Wireless storage observer was not attached" }
+                check(grid.pathingService.usedChannels == usedChannelsWithoutObserver) { "Wireless storage observer consumed an AE2 channel" }
                 turtle.access.fuelLevel = 0
             }
             .thenWaitUntil { await("empty-fuel") }
@@ -117,11 +179,20 @@ class AE2WirelessTerminalGameTests {
             .thenWaitUntil { await("out-of-range") }
             .thenExecuteFailFast {
                 state().check("out-of-range")
+                check(grid.size() == gridSizeWithoutObserver) { "Wireless storage observer was not removed outside range" }
+                check(grid.storageService.inventory.insert(AEItemKey.of(Items.STONE), 1, Actionable.MODULATE, IActionSource.empty()) == 1L)
                 check(turtle.access.teleportTo(helper.level, accessPointPos.offset(0, 0, -1)))
             }
             .thenWaitUntil { await("returned") }
             .thenExecuteFailFast {
                 state().check("returned")
+                check(grid.size() == gridSizeWithoutObserver + 1) { "Wireless storage observer was not restored" }
+                check(grid.pathingService.usedChannels == usedChannelsWithoutObserver) { "Restored observer consumed an AE2 channel" }
+                check(grid.storageService.inventory.insert(AEItemKey.of(Items.STONE), 1, Actionable.MODULATE, IActionSource.empty()) == 1L)
+            }
+            .thenWaitUntil { await("post-return-change") }
+            .thenExecuteFailFast {
+                state().check("post-return-change")
                 helper.level.removeBlock(energyPos, false)
             }
             .thenWaitUntil { await("inactive") }
@@ -140,6 +211,7 @@ class AE2WirelessTerminalGameTests {
                 check(helper.level.chunkSource.getChunkNow(UNLOADED_POS.x shr 4, UNLOADED_POS.z shr 4) == null)
             }
             .thenWaitUntil { await(CctComputerState.DONE) }
+            .thenIdle(2)
             .thenExecuteFailFast {
                 state().check(CctComputerState.DONE)
                 check(helper.level.chunkSource.getChunkNow(UNLOADED_POS.x shr 4, UNLOADED_POS.z shr 4) == null) { "Wireless resolution loaded the linked chunk" }
@@ -148,6 +220,10 @@ class AE2WirelessTerminalGameTests {
                 check(stored.tag?.getString("upw_test") == "preserved")
                 check(terminalItem.getUpgrades(stored).getInstalledUpgrades(AEItems.ENERGY_CARD) == 1)
                 check(terminalItem.getAECurrentPower(stored) == initialCharge) { "Peripheral use changed terminal charge" }
+                val currentGrid = (helper.level.getBlockEntity(accessPointPos) as WirelessAccessPointBlockEntity).grid!!
+                check(currentGrid.size() == gridSizeWithoutObserver) { "Wireless storage observer was not cleaned up" }
+                val definitions = turtle.access.getUpgradeNBTData(TurtleSide.LEFT).getCompound("ae2StorageSubscriptions").getList("subscriptions", net.minecraft.nbt.Tag.TAG_COMPOUND.toInt())
+                check(definitions.size == 1 && definitions.getCompound(0).getString("name") == "stone") { "Corrupt turtle subscriptions were not replaced with valid persisted data" }
             }
             .thenSucceed()
     }
@@ -170,6 +246,21 @@ class AE2WirelessTerminalGameTests {
         val state = state()
         if (state.isDone(CctComputerState.DONE)) state.check(CctComputerState.DONE)
         if (!state.isDone(marker)) throw GameTestAssertException("Computer '$FIXTURE' has not reached $marker")
+    }
+
+    private fun malformedSubscriptions(): CompoundTag = CompoundTag().apply {
+        put(
+            "subscriptions",
+            ListTag().apply {
+                add(
+                    CompoundTag().apply {
+                        putString("name", "broken")
+                        putString("subscriptionType", "item")
+                        put("filter", CompoundTag().apply { putByte("type", 99) })
+                    },
+                )
+            },
+        )
     }
 
     companion object {

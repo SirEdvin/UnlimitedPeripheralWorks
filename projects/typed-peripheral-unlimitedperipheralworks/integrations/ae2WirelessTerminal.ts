@@ -5,11 +5,11 @@ import {
     IPeripheralProvider,
     ShortItemDetail,
 } from "@siredvin/typed-peripheral-base";
-import { AE2CraftingJob } from "./ae2";
+import { AE2CraftingJob, AE2StorageSubscriptionAPI } from "./ae2";
 import { Fallible } from "../types";
 
 /** @noSelf **/
-export interface AE2WirelessTerminalAPI extends FuelApi {
+export interface AE2WirelessTerminalAPI extends FuelApi, AE2StorageSubscriptionAPI {
     items(): LuaTable<number, ExtendedItemDetail>;
     items(
         detailed: true,

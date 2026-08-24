@@ -1,6 +1,7 @@
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.implementations.blockentities.IWirelessAccessPoint
+import appeng.api.networking.IGridNode
 import appeng.api.networking.crafting.ICraftingService
 import appeng.api.networking.security.IActionSource
 import appeng.api.storage.MEStorage
@@ -9,6 +10,7 @@ import appeng.items.tools.powered.WirelessTerminalItem
 import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
+import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.api.turtle.TurtleSide
@@ -35,7 +37,11 @@ import kotlin.math.min
 
 internal const val AE2_TERMINAL_TAG = "terminal"
 
-internal data class AE2WirelessSession(val storage: MEStorage, val craftingService: ICraftingService)
+internal data class AE2WirelessSession(
+    val storage: MEStorage,
+    val craftingService: ICraftingService,
+    val accessPointNode: IGridNode,
+)
 
 private fun wirelessTerminalStack(owner: BasePeripheralOwner): ItemStack {
     val data = when (owner) {
@@ -53,11 +59,14 @@ internal fun resolveWirelessSession(owner: BasePeripheralOwner): AE2WirelessSess
     if (terminal.getLinkedPosition(stack) == null) throw LuaException("Invalid stored wireless terminal")
     val level = owner.level ?: throw LuaException("Linked AE2 network is unavailable")
     val grid = terminal.getLinkedGrid(stack, level, null) ?: throw LuaException("Linked AE2 network is unavailable")
-    val inRange = grid.getMachines(WirelessAccessPointBlockEntity::class.java).any { accessPoint ->
+    val accessPoint = grid.getMachines(WirelessAccessPointBlockEntity::class.java).firstOrNull { accessPoint ->
         isInWirelessRange(accessPoint, level, owner.pos)
-    }
-    if (!inRange) throw LuaException("Computer is outside wireless range")
-    return AE2WirelessSession(grid.storageService.inventory, grid.craftingService)
+    } ?: throw LuaException("Computer is outside wireless range")
+    return AE2WirelessSession(
+        grid.storageService.inventory,
+        grid.craftingService,
+        accessPoint.mainNode.node ?: throw LuaException("Linked AE2 network is unavailable"),
+    )
 }
 
 private fun isInWirelessRange(accessPoint: IWirelessAccessPoint, level: net.minecraft.world.level.Level, pos: net.minecraft.core.BlockPos): Boolean = accessPoint.isActive && accessPoint.location.level === level && accessPoint.location.pos.distSqr(pos) < accessPoint.range * accessPoint.range
@@ -72,6 +81,10 @@ private fun isLinkedWirelessTerminal(stack: ItemStack): Boolean = (stack.item as
 
 class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack) : PeripheralTurtleUpgrade<AE2WirelessTerminalPeripheral>(id, stack) {
     override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(turtle, side)
+
+    override fun update(turtle: ITurtleAccess, side: TurtleSide) {
+        (turtle.getPeripheral(side) as? AE2WirelessTerminalPeripheral)?.updateSubscriptions()
+    }
 
     override fun getUpgradeData(stack: ItemStack): CompoundTag = wirelessTerminalData(stack)
 
@@ -91,6 +104,10 @@ class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack) : Perip
 class AE2WirelessTerminalPocketUpgrade(id: ResourceLocation, stack: ItemStack) : BasePocketUpgrade<AE2WirelessTerminalPeripheral>(id, stack) {
     override fun getPeripheral(access: IPocketAccess): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(access)
 
+    override fun update(access: IPocketAccess, peripheral: IPeripheral?) {
+        (peripheral as? AE2WirelessTerminalPeripheral)?.updateSubscriptions()
+    }
+
     override fun getUpgradeData(stack: ItemStack): CompoundTag = wirelessTerminalData(stack)
 
     override fun getUpgradeItem(upgradeData: CompoundTag): ItemStack = wirelessTerminalItem(upgradeData, craftingItem)
@@ -101,9 +118,32 @@ class AE2WirelessTerminalPocketUpgrade(id: ResourceLocation, stack: ItemStack) :
 class AE2WirelessTerminalPeripheral private constructor(owner: BasePeripheralOwner) : OwnedPeripheral<BasePeripheralOwner>(TYPE, owner) {
     override val isEnabled = true
 
+    private val subscriptionTracker = AE2StorageSubscriptionTracker()
+    private val subscriptionObserver = AE2WirelessStorageObserver(subscriptionTracker)
+
     init {
-        addPlugin(AE2WirelessTerminalPlugin(owner))
+        val storage = owner.dataStorage
+        val malformed = storage.loadAE2StorageSubscriptions(subscriptionTracker)
+        subscriptionTracker.onDefinitionsChanged = { storage.putAE2StorageSubscriptions(subscriptionTracker) }
+        subscriptionTracker.onActivityChanged = { owner.level?.server?.execute(::updateSubscriptions) }
+        if (malformed) storage.putAE2StorageSubscriptions(subscriptionTracker)
+        addPlugin(AE2StorageSubscriptionPlugin(subscriptionTracker))
+        addPlugin(AE2WirelessTerminalPlugin(owner, subscriptionObserver::destroy))
         addPlugin(AE2CraftingJobsPlugin.forWirelessComputer(owner))
+    }
+
+    internal fun updateSubscriptions() {
+        if (!subscriptionTracker.shouldObserve) {
+            subscriptionObserver.destroy()
+            return
+        }
+        try {
+            val session = resolveWirelessSession(peripheralOwner)
+            val level = peripheralOwner.level ?: throw LuaException("Linked AE2 network is unavailable")
+            subscriptionObserver.update(level, peripheralOwner.pos, session.accessPointNode)
+        } catch (_: LuaException) {
+            subscriptionObserver.destroy()
+        }
     }
 
     companion object {
@@ -121,8 +161,16 @@ class AE2WirelessTerminalPeripheral private constructor(owner: BasePeripheralOwn
     }
 }
 
-private class AE2WirelessTerminalPlugin(private val owner: BasePeripheralOwner) : IPeripheralPlugin {
-    private fun resolve(): AE2WirelessSession = resolveWirelessSession(owner)
+private class AE2WirelessTerminalPlugin(
+    private val owner: BasePeripheralOwner,
+    private val onUnavailable: () -> Unit,
+) : IPeripheralPlugin {
+    private fun resolve(): AE2WirelessSession = try {
+        resolveWirelessSession(owner)
+    } catch (error: LuaException) {
+        onUnavailable()
+        throw error
+    }
 
     private fun validateTransfer(itemQuery: Any?, limit: Optional<Int>, slot: Optional<Int>): Pair<Predicate<ItemStack>, Pair<Int, Int>> {
         val predicate = PeripheralPluginUtils.itemQueryToPredicate(itemQuery)

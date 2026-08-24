@@ -24,11 +24,15 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec3
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
+import site.siredvin.peripheralworks.integrations.ae2.AE2StorageSubscriptionPlugin
+import site.siredvin.peripheralworks.integrations.ae2.AE2StorageSubscriptionPluginProvider
 import site.siredvin.peripheralworks.integrations.ae2.AEFluidKeyFactory
 import site.siredvin.peripheralworks.integrations.ae2.Integration
 import site.siredvin.peripheralworks.integrations.ae2.MENetworkBlockPlugin
@@ -58,6 +62,8 @@ class AE2GameTests {
                 Direction.entries.forEach { check(peripheral.getCableConnectionType(it) == AECableType.SMART) }
                 check(MENetworkBlockPlugin.Provider.provide(helper.level, helper.absolutePos(peripheralPos), Direction.UP) != null)
                 check(MENetworkBlockPlugin.Provider.provide(helper.level, helper.absolutePos(interfacePos), Direction.UP) != null)
+                check(AE2StorageSubscriptionPluginProvider.provide(helper.level, helper.absolutePos(peripheralPos), Direction.UP) != null)
+                check(AE2StorageSubscriptionPluginProvider.provide(helper.level, helper.absolutePos(interfacePos), Direction.UP) == null)
                 check(Integration.extractItemStorage(helper.level, helper.absolutePos(interfacePos), helper.getBlockEntity(interfacePos), Direction.UP) != null)
                 check(peripheral.mainNode.isActive)
                 check(MENetworkBlockPlugin(peripheral).getChannelInformation().isNotEmpty())
@@ -68,6 +74,47 @@ class AE2GameTests {
                 check(helper.getBlockEntity(peripheralPos) == null)
             }
             .thenSucceed()
+    }
+
+    @GameTest(template = "empty")
+    fun storageSubscriptionPersistenceAndCorruption(helper: GameTestHelper) {
+        val pos = BlockPos(1, 1, 1)
+        helper.setBlock(pos, Registration.ME_NETWORK_PERIPHERAL.get())
+        val entity = helper.getBlockEntity(pos) as MENetworkPeripheralBlockEntity
+        val plugin = AE2StorageSubscriptionPlugin(entity.subscriptionTracker)
+        plugin.subscribe("items", "item", mapOf("all" to mapOf(1 to mapOf("name" to "minecraft:diamond"))))
+        plugin.subscribe("water", "fluid", "minecraft:water")
+
+        val saved = CompoundTag()
+        entity.saveAdditional(saved)
+        val restored = MENetworkPeripheralBlockEntity(helper.absolutePos(pos), entity.blockState)
+        restored.loadTag(saved)
+        val restoredSubscriptions = AE2StorageSubscriptionPlugin(restored.subscriptionTracker).getSubscriptions()
+        check(restoredSubscriptions.map { it["name"] } == listOf("items", "water"))
+        check(restoredSubscriptions.first()["filter"] is Map<*, *>)
+
+        val corrupt = CompoundTag().apply {
+            put(
+                "ae2StorageSubscriptions",
+                CompoundTag().apply {
+                    put(
+                        "subscriptions",
+                        ListTag().apply {
+                            add(
+                                CompoundTag().apply {
+                                    putString("name", "broken")
+                                    putString("subscriptionType", "item")
+                                    put("filter", CompoundTag().apply { putByte("type", 99) })
+                                },
+                            )
+                        },
+                    )
+                },
+            )
+        }
+        restored.loadTag(corrupt)
+        check(AE2StorageSubscriptionPlugin(restored.subscriptionTracker).getSubscriptions().isEmpty())
+        helper.succeed()
     }
 
     @GameTest(template = "empty")
