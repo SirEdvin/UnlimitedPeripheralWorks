@@ -1,4 +1,5 @@
 import { ae2WirelessTerminalProvider } from "@siredvin/typed-peripheral-unlimitedperipheralworks/integrations/ae2WirelessTerminal";
+import { ae2NetworkAccessProvider } from "@siredvin/typed-peripheral-unlimitedperipheralworks/integrations/ae2";
 
 /** @noSelf **/
 interface TestApi {
@@ -11,22 +12,23 @@ const check = (value: unknown, message: string): void => {
 };
 
 const terminal = ae2WirelessTerminalProvider.findOrThrow();
-terminal.subscribe("stone", "item", { name: "minecraft:stone" });
-terminal.subscribe("water", "fluid", "minecraft:water");
-const subscriptions = terminal.getSubscriptions();
+const networkAccess = ae2NetworkAccessProvider.findOrThrow();
+networkAccess.subscribe("stone", "item", { name: "minecraft:stone" });
+networkAccess.subscribe("water", "fluid", "minecraft:water");
+const subscriptions = networkAccess.getSubscriptions();
 check(subscriptions[0]?.name === "stone" && subscriptions[1]?.name === "water", "Subscriptions were not listed by name");
-terminal.subscribe("water", "fluid");
-check(terminal.unsubscribe("missing") === false, "Unknown subscription was removed");
-check(terminal.unsubscribe("water") === true, "Fluid subscription was not removed");
+networkAccess.subscribe("water", "fluid");
+check(networkAccess.unsubscribe("missing") === false, "Unknown subscription was removed");
+check(networkAccess.unsubscribe("water") === true, "Fluid subscription was not removed");
 sleep(0.1);
-const [missingJob, missingJobError] = terminal.getCraftingJob("missing");
+const [missingJob, missingJobError] = networkAccess.getCraftingJob("missing");
 check(missingJob === null && typeof missingJobError === "string" && missingJobError.includes("not found"), "Missing crafting job was not reported");
-const [missingCancel, missingCancelError] = terminal.cancelCrafting("missing");
+const [missingCancel, missingCancelError] = networkAccess.cancelCrafting("missing");
 check(missingCancel === null && typeof missingCancelError === "string" && missingCancelError.includes("not found"), "Missing crafting job cancellation was not reported");
-terminal.getCraftingJobs();
+networkAccess.getCraftingJobs();
 const typecheckCraftingRequest = (): void => {
-    const [scheduled, jobId] = terminal.scheduleCrafting("item", "minecraft:stone", 1);
-    if (scheduled) terminal.getCraftingJob(jobId);
+    const [scheduled, jobId] = networkAccess.scheduleCrafting("item", "minecraft:stone", 1);
+    if (scheduled) networkAccess.getCraftingJob(jobId);
 };
 const detailed = terminal.items();
 terminal.items(true);

@@ -1,6 +1,9 @@
 import { Fallible } from "../types";
 import { ItemQuery } from "@siredvin/typed-peripheral-api/item_storage";
-import { ExtendedItemDetail } from "@siredvin/typed-peripheral-base";
+import {
+    ExtendedItemDetail,
+    IPeripheralProvider,
+} from "@siredvin/typed-peripheral-base";
 
 export type AE2CraftingCPU = {
     name?: string;
@@ -47,16 +50,9 @@ export interface AE2StorageSubscriptionAPI {
 }
 
 /** @noSelf **/
-export interface AE2NetworkAPI extends IPeripheral, AE2StorageSubscriptionAPI {
-    getAverageEnergyDemand(): number;
-    getAverageEnergyIncome(): number;
-    getChannelEnergyDemand(): number;
-    getChannelInformation(): { maxChannels?: number; usedChannels?: number };
-    getCraftingCPUs(): AE2CraftingCPU[];
-    getCraftableItems(): (Omit<ItemDetail, "count"> & { registryID: string })[];
-    getCraftableFluids(): { name: string }[];
-    getPatternsFor(mode: "item" | "fluid", id: string): AE2Pattern[];
-    getActiveCraftings(): Fallible<AE2Crafting[]>;
+export interface AE2NetworkAccessAPI
+    extends IPeripheral,
+        AE2StorageSubscriptionAPI {
     getCraftingJob(jobId: string): Fallible<AE2CraftingJob>;
     getCraftingJobs(): AE2CraftingJob[];
     cancelCrafting(jobId: string): Fallible<boolean>;
@@ -70,4 +66,20 @@ export interface AE2NetworkAPI extends IPeripheral, AE2StorageSubscriptionAPI {
         | [null, string]
         | [false, string, LuaTable<string, number>]
     >;
+}
+
+export const ae2NetworkAccessProvider =
+    new IPeripheralProvider<AE2NetworkAccessAPI>("ae2_network_access");
+
+/** @noSelf **/
+export interface AE2NetworkAPI extends AE2NetworkAccessAPI {
+    getAverageEnergyDemand(): number;
+    getAverageEnergyIncome(): number;
+    getChannelEnergyDemand(): number;
+    getChannelInformation(): { maxChannels?: number; usedChannels?: number };
+    getCraftingCPUs(): AE2CraftingCPU[];
+    getCraftableItems(): (Omit<ItemDetail, "count"> & { registryID: string })[];
+    getCraftableFluids(): { name: string }[];
+    getPatternsFor(mode: "item" | "fluid", id: string): AE2Pattern[];
+    getActiveCraftings(): Fallible<AE2Crafting[]>;
 }
