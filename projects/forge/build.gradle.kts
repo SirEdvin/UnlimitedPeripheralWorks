@@ -181,7 +181,7 @@ modPublishing {
     shake()
 }
 
-tasks.named<TaskPublishCurseForge>("publishCurseForge") {
+tasks.withType<TaskPublishCurseForge>().configureEach {
     uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }
 
