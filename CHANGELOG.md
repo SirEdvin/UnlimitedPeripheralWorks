@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Pattern provider exposed as peripheral
 - Wireless terminal now can used as upgrade for turtles and pocket computers
 - Network peripheral can be used to subscribe to changes in AE2 storage
+- Dedicated and wireless AE2 network peripherals share the `ae2_network_access` type and TypeScript provider
 
 ### Changed
 
