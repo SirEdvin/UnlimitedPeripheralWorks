@@ -17,6 +17,9 @@ import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 
 class MENetworkBlockPlugin(private val entity: AENetworkBlockEntity) : IPeripheralPlugin {
+    override val additionalType
+        get() = if (entity is MENetworkPeripheralBlockEntity) "ae2_network_access" else null
+
     companion object {
         const val PLUGIN_TYPE = "ae2"
     }

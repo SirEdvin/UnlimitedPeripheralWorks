@@ -165,6 +165,8 @@ private class AE2WirelessTerminalPlugin(
     private val owner: BasePeripheralOwner,
     private val onUnavailable: () -> Unit,
 ) : IPeripheralPlugin {
+    override val additionalType = "ae2_network_access"
+
     private fun resolve(): AE2WirelessSession = try {
         resolveWirelessSession(owner)
     } catch (error: LuaException) {

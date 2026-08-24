@@ -31,6 +31,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec3
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
+import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.integrations.ae2.AE2StorageSubscriptionPlugin
 import site.siredvin.peripheralworks.integrations.ae2.AE2StorageSubscriptionPluginProvider
 import site.siredvin.peripheralworks.integrations.ae2.AEFluidKeyFactory
@@ -64,6 +65,8 @@ class AE2GameTests {
                 check(MENetworkBlockPlugin.Provider.provide(helper.level, helper.absolutePos(interfacePos), Direction.UP) != null)
                 check(AE2StorageSubscriptionPluginProvider.provide(helper.level, helper.absolutePos(peripheralPos), Direction.UP) != null)
                 check(AE2StorageSubscriptionPluginProvider.provide(helper.level, helper.absolutePos(interfacePos), Direction.UP) == null)
+                check(ComputerCraftProxy.peripheralProvider(helper.level, helper.absolutePos(peripheralPos), peripheral.blockState, peripheral, Direction.UP)!!.additionalTypes.contains("ae2_network_access"))
+                check(!ComputerCraftProxy.peripheralProvider(helper.level, helper.absolutePos(interfacePos), helper.getBlockState(interfacePos), helper.getBlockEntity(interfacePos), Direction.UP)!!.additionalTypes.contains("ae2_network_access"))
                 check(Integration.extractItemStorage(helper.level, helper.absolutePos(interfacePos), helper.getBlockEntity(interfacePos), Direction.UP) != null)
                 check(peripheral.mainNode.isActive)
                 check(MENetworkBlockPlugin(peripheral).getChannelInformation().isNotEmpty())

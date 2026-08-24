@@ -140,6 +140,7 @@ class AE2WirelessTerminalGameTests {
         helper.startSequence()
             .thenIdle(10)
             .thenExecuteFailFast {
+                check(turtle.access.getPeripheral(TurtleSide.LEFT)!!.additionalTypes.contains("ae2_network_access"))
                 val accessPoint = helper.level.getBlockEntity(accessPointPos) as WirelessAccessPointBlockEntity
                 check(accessPoint.isActive) { "Wireless access point did not become active" }
                 grid = accessPoint.grid!!
