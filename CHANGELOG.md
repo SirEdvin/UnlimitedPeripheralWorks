@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Dedicated AE2 ME network peripheral and CC:Tweaked wired-network P2P tunnel.
+- Any cable part from AE2 now can be a peripheral!
+- Pattern provider exposed as peripheral
+- Wireless terminal now can used as upgrade for turtles and pocket computers
+- Network peripheral can be used to subscribe to changes in AE2 storage
 
 ### Changed
 
