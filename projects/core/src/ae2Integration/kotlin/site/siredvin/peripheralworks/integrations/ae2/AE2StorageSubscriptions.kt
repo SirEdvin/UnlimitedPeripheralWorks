@@ -40,7 +40,6 @@ private const val VALUE_TAG = "value"
 private const val ENTRIES_TAG = "entries"
 private const val KEY_TAG = "key"
 private const val MAX_FILTER_DEPTH = 16
-private const val MAX_FILTER_VALUES = 1024
 
 private const val STRING_VALUE: Byte = 1
 private const val NUMBER_VALUE: Byte = 2
@@ -83,7 +82,10 @@ private data class RuntimeSubscription(
     }
 }
 
-class AE2StorageSubscriptionTracker {
+class AE2StorageSubscriptionTracker(
+    private val maxSubscriptions: Int = Configuration.maxSubscriptions,
+    private val maxItemFilterSize: Int = Configuration.maxItemFilterSize,
+) {
     private val subscriptions = TreeMap<String, RuntimeSubscription>()
     private val amounts = mutableMapOf<AEKey, Long>()
     private val eventSinks = mutableSetOf<(String, Map<String, Any>, Long, Long) -> Unit>()
@@ -97,6 +99,9 @@ class AE2StorageSubscriptionTracker {
 
     fun subscribe(name: String, typeName: String, filter: Any?) {
         if (name.isBlank()) throw LuaException("Subscription name must not be empty")
+        if (name !in subscriptions && subscriptions.size >= maxSubscriptions) {
+            throw LuaException("Peripheral cannot have more than $maxSubscriptions AE2 storage subscriptions")
+        }
         val type = AE2StorageSubscriptionType.parse(typeName)
         val normalizedFilter = normalizeFilter(type, filter)
         val definition = AE2StorageSubscriptionDefinition(name, type, normalizedFilter)
@@ -168,7 +173,7 @@ class AE2StorageSubscriptionTracker {
                 CompoundTag().apply {
                     putString("name", runtime.definition.name)
                     putString("subscriptionType", runtime.definition.type.serializedName)
-                    runtime.definition.filter?.let { put(FILTER_TAG, encodeValue(it, 0, intArrayOf(0))) }
+                    runtime.definition.filter?.let { put(FILTER_TAG, encodeValue(it, 0, intArrayOf(0), maxItemFilterSize)) }
                 },
             )
         }
@@ -179,14 +184,15 @@ class AE2StorageSubscriptionTracker {
         subscriptions.clear()
         var malformed = false
         val definitions = tag.getList(DEFINITIONS_TAG, Tag.TAG_COMPOUND.toInt())
-        definitions.forEach { raw ->
+        if (definitions.size > maxSubscriptions) malformed = true
+        definitions.take(maxSubscriptions).forEach { raw ->
             try {
                 val entry = raw as CompoundTag
                 val name = entry.getString("name")
                 if (name.isBlank()) throw IllegalArgumentException("Empty subscription name")
                 val type = AE2StorageSubscriptionType.parse(entry.getString("subscriptionType"))
                 val filter = if (entry.contains(FILTER_TAG, Tag.TAG_COMPOUND.toInt())) {
-                    decodeValue(entry.getCompound(FILTER_TAG), 0, intArrayOf(0))
+                    decodeValue(entry.getCompound(FILTER_TAG), 0, intArrayOf(0), maxItemFilterSize)
                 } else {
                     null
                 }
@@ -204,7 +210,7 @@ class AE2StorageSubscriptionTracker {
     private fun normalizeFilter(type: AE2StorageSubscriptionType, filter: Any?): Any? = when (type) {
         AE2StorageSubscriptionType.ITEM -> {
             if (filter != null && filter !is String && filter !is Map<*, *>) throw LuaException("Item query should be string or table")
-            normalizeValue(filter, 0, intArrayOf(0)).also { PeripheralPluginUtils.itemQueryToPredicate(it) }
+            normalizeValue(filter, 0, intArrayOf(0), maxItemFilterSize).also { PeripheralPluginUtils.itemQueryToPredicate(it) }
         }
         AE2StorageSubscriptionType.FLUID -> {
             if (filter == null) {
@@ -398,9 +404,9 @@ internal class AE2WirelessStorageObserver(private val tracker: AE2StorageSubscri
     }
 }
 
-private fun normalizeValue(value: Any?, depth: Int, count: IntArray): Any? {
+private fun normalizeValue(value: Any?, depth: Int, count: IntArray, maxValues: Int): Any? {
     if (value == null) return null
-    if (depth > MAX_FILTER_DEPTH || ++count[0] > MAX_FILTER_VALUES) throw LuaException("Subscription filter is too complex")
+    if (depth > MAX_FILTER_DEPTH || ++count[0] > maxValues) throw LuaException("Subscription item filter exceeds the configured size limit of $maxValues values")
     return when (value) {
         is String, is Boolean -> value
         is Number -> value.toDouble().also {
@@ -415,15 +421,15 @@ private fun normalizeValue(value: Any?, depth: Int, count: IntArray): Any? {
                     }
                     else -> throw LuaException("Subscription filter table keys must be strings or numbers")
                 }
-                put(normalizedKey, normalizeValue(nested, depth + 1, count) ?: throw LuaException("Subscription filter table values must not be nil"))
+                put(normalizedKey, normalizeValue(nested, depth + 1, count, maxValues) ?: throw LuaException("Subscription filter table values must not be nil"))
             }
         }
         else -> throw LuaException("Subscription filter contains an unsupported value")
     }
 }
 
-private fun encodeValue(value: Any, depth: Int, count: IntArray): CompoundTag {
-    if (depth > MAX_FILTER_DEPTH || ++count[0] > MAX_FILTER_VALUES) throw IllegalArgumentException("Subscription filter is too complex")
+private fun encodeValue(value: Any, depth: Int, count: IntArray, maxValues: Int): CompoundTag {
+    if (depth > MAX_FILTER_DEPTH || ++count[0] > maxValues) throw IllegalArgumentException("Subscription filter is too complex")
     return CompoundTag().apply {
         when (value) {
             is String -> {
@@ -446,8 +452,8 @@ private fun encodeValue(value: Any, depth: Int, count: IntArray): CompoundTag {
                         value.forEach { (key, nested) ->
                             add(
                                 CompoundTag().apply {
-                                    put(KEY_TAG, encodeValue(key ?: throw IllegalArgumentException("Missing filter key"), depth + 1, count))
-                                    put(VALUE_TAG, encodeValue(nested ?: throw IllegalArgumentException("Missing filter value"), depth + 1, count))
+                                    put(KEY_TAG, encodeValue(key ?: throw IllegalArgumentException("Missing filter key"), depth + 1, count, maxValues))
+                                    put(VALUE_TAG, encodeValue(nested ?: throw IllegalArgumentException("Missing filter value"), depth + 1, count, maxValues))
                                 },
                             )
                         }
@@ -459,8 +465,8 @@ private fun encodeValue(value: Any, depth: Int, count: IntArray): CompoundTag {
     }
 }
 
-private fun decodeValue(tag: CompoundTag, depth: Int, count: IntArray): Any {
-    if (depth > MAX_FILTER_DEPTH || ++count[0] > MAX_FILTER_VALUES) throw IllegalArgumentException("Subscription filter is too complex")
+private fun decodeValue(tag: CompoundTag, depth: Int, count: IntArray, maxValues: Int): Any {
+    if (depth > MAX_FILTER_DEPTH || ++count[0] > maxValues) throw IllegalArgumentException("Subscription filter is too complex")
     return when (tag.getByte(VALUE_TYPE_TAG)) {
         STRING_VALUE -> tag.getString(VALUE_TAG)
         NUMBER_VALUE -> tag.getDouble(VALUE_TAG).also { if (!it.isFinite()) throw IllegalArgumentException("Invalid filter number") }
@@ -468,9 +474,9 @@ private fun decodeValue(tag: CompoundTag, depth: Int, count: IntArray): Any {
         MAP_VALUE -> LinkedHashMap<Any, Any>().apply {
             tag.getList(ENTRIES_TAG, Tag.TAG_COMPOUND.toInt()).forEach { raw ->
                 val entry = raw as CompoundTag
-                val key = decodeValue(entry.getCompound(KEY_TAG), depth + 1, count)
+                val key = decodeValue(entry.getCompound(KEY_TAG), depth + 1, count, maxValues)
                 if (key !is String && key !is Number) throw IllegalArgumentException("Invalid filter key")
-                put(key, decodeValue(entry.getCompound(VALUE_TAG), depth + 1, count))
+                put(key, decodeValue(entry.getCompound(VALUE_TAG), depth + 1, count, maxValues))
             }
         }
         else -> throw IllegalArgumentException("Unknown filter value type")

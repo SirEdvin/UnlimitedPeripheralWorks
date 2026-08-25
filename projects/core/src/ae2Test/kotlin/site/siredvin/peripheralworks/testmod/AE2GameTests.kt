@@ -34,6 +34,7 @@ import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStack
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.integrations.ae2.AE2StorageSubscriptionPlugin
 import site.siredvin.peripheralworks.integrations.ae2.AE2StorageSubscriptionPluginProvider
+import site.siredvin.peripheralworks.integrations.ae2.AE2StorageSubscriptionTracker
 import site.siredvin.peripheralworks.integrations.ae2.AEFluidKeyFactory
 import site.siredvin.peripheralworks.integrations.ae2.Integration
 import site.siredvin.peripheralworks.integrations.ae2.MENetworkBlockPlugin
@@ -117,6 +118,33 @@ class AE2GameTests {
         }
         restored.loadTag(corrupt)
         check(AE2StorageSubscriptionPlugin(restored.subscriptionTracker).getSubscriptions().isEmpty())
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun storageSubscriptionLimits(helper: GameTestHelper) {
+        val tracker = AE2StorageSubscriptionTracker(maxSubscriptions = 2, maxItemFilterSize = 3)
+        val plugin = AE2StorageSubscriptionPlugin(tracker)
+        plugin.subscribe("first", "item", "minecraft:diamond")
+        plugin.subscribe("second", "fluid", "minecraft:water")
+        plugin.subscribe("first", "item", "minecraft:stone")
+        check(runCatching { plugin.subscribe("third", "fluid", null) }.exceptionOrNull() is dan200.computercraft.api.lua.LuaException)
+        check(plugin.getSubscriptions().map { it["name"] } == listOf("first", "second"))
+        check(
+            runCatching {
+                plugin.subscribe("first", "item", mapOf("all" to mapOf(1 to mapOf("name" to "minecraft:diamond"))))
+            }.exceptionOrNull() is dan200.computercraft.api.lua.LuaException,
+        )
+        check(plugin.getSubscriptions().first { it["name"] == "first" }["filter"] == "minecraft:stone")
+
+        val persisted = AE2StorageSubscriptionTracker(maxSubscriptions = 3).apply {
+            subscribe("a", "fluid", null)
+            subscribe("b", "fluid", null)
+            subscribe("c", "fluid", null)
+        }.save()
+        val restored = AE2StorageSubscriptionTracker(maxSubscriptions = 2)
+        check(restored.load(persisted))
+        check(restored.getSubscriptions().map { it["name"] } == listOf("a", "b"))
         helper.succeed()
     }
 
