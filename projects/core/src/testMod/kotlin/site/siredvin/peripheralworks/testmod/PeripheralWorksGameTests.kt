@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.testmod
 
+import com.electronwill.nightconfig.core.UnmodifiableConfig
 import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
@@ -7,11 +8,14 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
 import site.siredvin.peripheralworks.common.block.NetworkManager
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
+import site.siredvin.peripheralworks.common.configuration.ConfigHolder
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfigurationCatalog
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
@@ -26,6 +30,58 @@ import site.siredvin.testiarium.cct.thenLua
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
+    @GameTest(template = "empty")
+    fun integrationConfigurationCatalogIsCompleteAndLoaderSpecific(helper: GameTestHelper) {
+        val forgeNames = IntegrationConfigurationCatalog.forge.map { it.name }.toSet()
+        val fabricNames = IntegrationConfigurationCatalog.fabric.map { it.name }.toSet()
+        check(
+            forgeNames ==
+                setOf(
+                    "additionallanterns",
+                    "ae2",
+                    "ars_nouveau",
+                    "automobility",
+                    "create",
+                    "deep_resonance",
+                    "easy_villagers",
+                    "embers",
+                    "flux_networks",
+                    "integrateddynamics",
+                    "naturescompass",
+                    "occultism",
+                    "powah",
+                    "projecte",
+                    "theurgy",
+                    "toms_storage",
+                ),
+        )
+        check(
+            fabricNames ==
+                setOf(
+                    "additionallanterns",
+                    "ae2",
+                    "alloy_forgery",
+                    "automobility",
+                    "create",
+                    "modern_industrialization",
+                    "naturescompass",
+                    "powah",
+                    "toms_storage",
+                    "universal_shops",
+                ),
+        )
+
+        val activeIntegrations = ConfigHolder.commonSpec.values.get<UnmodifiableConfig>("integrations").valueMap().keys
+        check(activeIntegrations == forgeNames || activeIntegrations == fabricNames)
+        val ae2Subscriptions = ConfigHolder.commonSpec.spec
+            .get<ForgeConfigSpec.ValueSpec>("integrations.ae2.maxSubscriptions")
+        check(ae2Subscriptions.default == 16)
+        check(!ae2Subscriptions.test(0) && ae2Subscriptions.test(1) && ae2Subscriptions.test(Int.MAX_VALUE))
+        val powahEnergy = ConfigHolder.commonSpec.spec.get<ForgeConfigSpec.ValueSpec>("integrations.powah.enableEnergy")
+        check(powahEnergy.default == true)
+        helper.succeed()
+    }
+
     @GameTest(template = "empty")
     fun peripheralProxyRenderSettingsPersistAndFallback(helper: GameTestHelper) {
         val firstPos = BlockPos(1, 1, 1)

@@ -7,6 +7,7 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.shared.util.NBTUtil
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.TagParser
+import site.siredvin.peripheralworks.common.configuration.integration.integrateddynamics.Configuration
 
 class IntegratedDynamicsAPI(private val computerID: Int) : ILuaAPI {
     override fun getNames(): Array<String> = arrayOf("integrated_dynamics")

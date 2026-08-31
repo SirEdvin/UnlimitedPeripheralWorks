@@ -4,6 +4,7 @@ import dan200.computercraft.api.pocket.IPocketAccess
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.configuration.integration.projecte.Configuration
 import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.pocket.BasePocketUpgrade
 

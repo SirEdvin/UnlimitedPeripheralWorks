@@ -6,6 +6,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import site.siredvin.peripheralworks.common.configuration.integration.ars_nouveau.Configuration
 import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.pocket.BasePocketUpgrade
 

@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.integration.ae2.Configuration
 import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
 import site.siredvin.tweakium.modules.peripheral.api.IExpandedPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin

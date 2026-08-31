@@ -18,7 +18,7 @@ import org.cyclops.integrateddynamics.core.part.aspect.AspectRegistry
 import org.cyclops.integrateddynamics.core.part.aspect.build.AspectBuilder
 import org.cyclops.integrateddynamics.part.aspect.read.AspectReadBuilders
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.integrateddynamics.Configuration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModLanguageProvider
@@ -83,7 +83,6 @@ class Integration : Runnable {
             AspectRegistry.getInstance().register(PartTypes.MACHINE_READER, ccOutput)
             AspectRegistry.getInstance().register(PartTypes.MACHINE_WRITER, ccInput)
         }
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         ComputerCraftAPI.registerAPIFactory {
             IntegratedDynamicsAPI(it.id)
         }

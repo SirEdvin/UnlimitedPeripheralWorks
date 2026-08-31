@@ -25,7 +25,7 @@ import site.siredvin.broccolium.modules.storage.fluid.ForgeAgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.create.Configuration
 import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
@@ -96,7 +96,6 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(CreatePluginProvider)
         ComputerCraftProxy.addProvider(FilteringBehaviourPluginProvider)
         ComputerCraftProxy.addProvider(ScrollingBehaviourPluginProvider)
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         AgnosticItemStorageLookup.addEntityLookup { level, entity, direction ->
             if (entity is AbstractContraptionEntity) {
                 return@addEntityLookup AgnosticItemHandlerWrapper(entity.contraption.storage.allItems)

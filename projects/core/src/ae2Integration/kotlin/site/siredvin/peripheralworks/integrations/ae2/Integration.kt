@@ -12,6 +12,7 @@ import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
+import site.siredvin.peripheralworks.common.configuration.integration.ae2.Configuration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 
 class Integration : Runnable {

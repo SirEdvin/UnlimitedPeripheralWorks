@@ -11,7 +11,7 @@ import owmii.powah.lib.block.AbstractEnergyStorage
 import owmii.powah.lib.logistics.IRedstoneInteract
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.powah.Configuration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
@@ -63,7 +63,6 @@ class Integration : Runnable {
     override fun run() {
         ComputerCraftProxy.addProvider(GeneratorPluginProvider)
         ComputerCraftProxy.addProvider(RedstonePluginProvider)
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         if (Configuration.enableEnergy) {
             AgnosticEnergyStorageLookup.addBlockLookup { _, _, blockEntity, _ ->
                 if (blockEntity is ReactorPartTile) {

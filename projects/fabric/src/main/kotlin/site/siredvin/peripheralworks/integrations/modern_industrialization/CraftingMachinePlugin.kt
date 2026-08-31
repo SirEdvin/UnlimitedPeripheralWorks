@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.integration.modern_industrialization.Configuration
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class CraftingMachinePlugin(private val crafter: CrafterAccess) : IPeripheralPlugin {

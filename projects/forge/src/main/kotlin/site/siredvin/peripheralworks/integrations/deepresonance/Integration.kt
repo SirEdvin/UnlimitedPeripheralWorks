@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.deepresonance.Configuration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
@@ -67,6 +67,5 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(CrystalProvider)
         ComputerCraftProxy.addProvider(GeneratorPartProvider)
         ComputerCraftProxy.addProvider(TankStorageProvider)
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }

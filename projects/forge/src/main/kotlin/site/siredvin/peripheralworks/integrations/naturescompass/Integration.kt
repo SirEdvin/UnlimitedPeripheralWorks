@@ -10,7 +10,7 @@ import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.naturescompass.Configuration
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
@@ -61,8 +61,6 @@ class Integration : Runnable {
                 NaturesCompass.naturesCompass,
             ).requireMod(NaturesCompass.MODID)
         }
-
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
 
         ModEnLanguageProvider.addHook {
             it.addUpgrades(UPGRADE_ID, "Nature Compassing")

@@ -24,6 +24,7 @@ import site.siredvin.peripheralworks.api.IPlatformItemStorageHolder
 import site.siredvin.peripheralworks.common.block.PeripheralProxy
 import site.siredvin.peripheralworks.common.commands.DebugCommands
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfigurationCatalog
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.fabric.FabricCustomSlottedStorage
@@ -51,6 +52,8 @@ object FabricPeripheralWorks : ModInitializer {
         FabricPeripheralium.sayHi()
 
         PeripheralWorksCore.configure(FabricModPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
+        ConfigHolder.initialize(IntegrationConfigurationCatalog.fabric)
+        ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
         loader.maybeLoadIntegration("ae2", "Registration").ifPresent { (it as Runnable).run() }
         for (type in NetworkMessages.serverbound) {
             ServerPlayNetworking.registerGlobalReceiver(
@@ -74,8 +77,6 @@ object FabricPeripheralWorks : ModInitializer {
         loader.maybeLoadIntegration("modern_industrialization").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("emi").ifPresent { (it as Runnable).run() }
-        // Pretty important to setup configuration after integration loading!
-        ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
         PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->

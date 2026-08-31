@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.projecte.Configuration
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
@@ -69,8 +69,6 @@ class Integration : Runnable {
                 PEItems.TRANSMUTATION_TABLET.get(),
             ).requireMod(PECore.MODID)
         }
-
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
 
         VanillaDetailRegistries.ITEM_STACK.addProvider(
             DetailProvider { data, stack ->
