@@ -1,7 +1,6 @@
 package site.siredvin.peripheralworks.common.configuration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
 
 object ConfigHolder {
     private var configuredSpec: ForgeConfigSpec? = null
@@ -12,8 +11,9 @@ object ConfigHolder {
     val commonConfig: PeripheralWorksConfig.CommonConfig
         get() = checkNotNull(configuredCommon) { "Peripheral Works configuration has not been initialized" }
 
-    fun initialize(integrationConfigurations: List<IForgeConfigHandler>) {
+    fun initialize(isModPresent: (String) -> Boolean) {
         check(configuredSpec == null) { "Peripheral Works configuration is already initialized" }
+        val integrationConfigurations = IntegrationConfigurationDiscovery.discover(isModPresent)
         val (key, value) = ForgeConfigSpec.Builder()
             .configure { builder: ForgeConfigSpec.Builder -> PeripheralWorksConfig.CommonConfig(builder, integrationConfigurations) }
         configuredCommon = key

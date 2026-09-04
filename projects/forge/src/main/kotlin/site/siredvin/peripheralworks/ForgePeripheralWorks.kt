@@ -23,7 +23,6 @@ import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralworks.client.geometry.FlexibleRealityAnchorGeometryLoader
 import site.siredvin.peripheralworks.client.geometry.FlexibleStatueGeometryLoader
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
-import site.siredvin.peripheralworks.common.configuration.IntegrationConfigurationCatalog
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.forge.ForgeModBlocksReference
 import site.siredvin.peripheralworks.forge.ForgeModPlatform
@@ -65,7 +64,7 @@ object ForgePeripheralWorks {
     init {
         ForgePeripheralium.sayHi()
         PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
-        ConfigHolder.initialize(IntegrationConfigurationCatalog.forge)
+        ConfigHolder.initialize(loader::isModPresent)
         @Suppress("DEPRECATION", "removal")
         val context = ModLoadingContext.get()
         context.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")

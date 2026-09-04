@@ -5,10 +5,10 @@ Integration settings are currently registered by optional integrations after con
 ## What Changes
 
 - Define every integration setting in the always-loaded main configuration code rather than inside optional integration source packages.
-- Build each loader's configuration from a fixed catalog of the integrations that loader supports, regardless of whether those dependency mods are installed.
+- Discover integration configuration classes from one flat core package and include each configuration only when its declared dependency mod is installed.
 - Preserve existing TOML section names, setting keys, defaults, ranges, and runtime behavior.
 - Remove runtime integration-driven configuration registration and make integration implementations consume the centrally owned settings.
-- Add regression coverage for configuration availability without optional integration dependencies and for loader-specific catalog membership.
+- Add regression coverage for class discovery, dependency-mod filtering, and schema compatibility.
 
 ## Capabilities
 

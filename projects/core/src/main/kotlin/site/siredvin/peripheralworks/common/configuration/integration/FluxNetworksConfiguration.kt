@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.common.configuration.integration.fluxnetworks
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object FluxNetworksConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "fluxnetworks"
 
     private var enableFluxControllerConfig: ForgeConfigSpec.BooleanValue? = null
 

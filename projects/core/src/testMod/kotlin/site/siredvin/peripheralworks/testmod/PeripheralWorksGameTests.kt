@@ -15,7 +15,7 @@ import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntit
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
 import site.siredvin.peripheralworks.common.configuration.ConfigHolder
-import site.siredvin.peripheralworks.common.configuration.IntegrationConfigurationCatalog
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfigurationDiscovery
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
@@ -31,54 +31,51 @@ import site.siredvin.testiarium.cct.thenLua
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
     @GameTest(template = "empty")
-    fun integrationConfigurationCatalogIsCompleteAndLoaderSpecific(helper: GameTestHelper) {
-        val forgeNames = IntegrationConfigurationCatalog.forge.map { it.name }.toSet()
-        val fabricNames = IntegrationConfigurationCatalog.fabric.map { it.name }.toSet()
+    fun integrationConfigurationsAreDiscoveredAndFiltered(helper: GameTestHelper) {
+        val discovered = IntegrationConfigurationDiscovery.discover { true }
         check(
-            forgeNames ==
-                setOf(
-                    "additionallanterns",
-                    "ae2",
-                    "ars_nouveau",
-                    "automobility",
-                    "create",
-                    "deep_resonance",
-                    "easy_villagers",
-                    "embers",
-                    "flux_networks",
-                    "integrateddynamics",
-                    "naturescompass",
-                    "occultism",
-                    "powah",
-                    "projecte",
-                    "theurgy",
-                    "toms_storage",
+            discovered.associate { it.modID to it.name } ==
+                mapOf(
+                    "additionallanterns" to "additionallanterns",
+                    "ae2" to "ae2",
+                    "alloy_forgery" to "alloy_forgery",
+                    "ars_nouveau" to "ars_nouveau",
+                    "automobility" to "automobility",
+                    "create" to "create",
+                    "deepresonance" to "deep_resonance",
+                    "easy_villagers" to "easy_villagers",
+                    "embers" to "embers",
+                    "fluxnetworks" to "flux_networks",
+                    "integrateddynamics" to "integrateddynamics",
+                    "modern_industrialization" to "modern_industrialization",
+                    "naturescompass" to "naturescompass",
+                    "occultism" to "occultism",
+                    "powah" to "powah",
+                    "projecte" to "projecte",
+                    "theurgy" to "theurgy",
+                    "toms_storage" to "toms_storage",
+                    "universal_shops" to "universal_shops",
                 ),
         )
-        check(
-            fabricNames ==
-                setOf(
-                    "additionallanterns",
-                    "ae2",
-                    "alloy_forgery",
-                    "automobility",
-                    "create",
-                    "modern_industrialization",
-                    "naturescompass",
-                    "powah",
-                    "toms_storage",
-                    "universal_shops",
-                ),
-        )
+        val selected = IntegrationConfigurationDiscovery.discover { it == "ae2" || it == "powah" }
+        check(selected.map { it.modID }.toSet() == setOf("ae2", "powah"))
 
-        val activeIntegrations = ConfigHolder.commonSpec.values.get<UnmodifiableConfig>("integrations").valueMap().keys
-        check(activeIntegrations == forgeNames || activeIntegrations == fabricNames)
-        val ae2Subscriptions = ConfigHolder.commonSpec.spec
-            .get<ForgeConfigSpec.ValueSpec>("integrations.ae2.maxSubscriptions")
-        check(ae2Subscriptions.default == 16)
-        check(!ae2Subscriptions.test(0) && ae2Subscriptions.test(1) && ae2Subscriptions.test(Int.MAX_VALUE))
-        val powahEnergy = ConfigHolder.commonSpec.spec.get<ForgeConfigSpec.ValueSpec>("integrations.powah.enableEnergy")
-        check(powahEnergy.default == true)
+        val activeIntegrations = ConfigHolder.commonSpec.values
+            .get<UnmodifiableConfig>("integrations")
+            ?.valueMap()
+            ?.keys
+            .orEmpty()
+        check(activeIntegrations.all(discovered.map { it.name }.toSet()::contains))
+        if ("ae2" in activeIntegrations) {
+            val ae2Subscriptions = ConfigHolder.commonSpec.spec
+                .get<ForgeConfigSpec.ValueSpec>("integrations.ae2.maxSubscriptions")
+            check(ae2Subscriptions.default == 16)
+            check(!ae2Subscriptions.test(0) && ae2Subscriptions.test(1) && ae2Subscriptions.test(Int.MAX_VALUE))
+        }
+        if ("powah" in activeIntegrations) {
+            val powahEnergy = ConfigHolder.commonSpec.spec.get<ForgeConfigSpec.ValueSpec>("integrations.powah.enableEnergy")
+            check(powahEnergy.default == true)
+        }
         helper.succeed()
     }
 

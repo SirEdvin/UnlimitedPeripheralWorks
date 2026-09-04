@@ -1,6 +1,6 @@
 ## Purpose
 
-Ensure optional-integration settings are complete, compatible, and available at configuration startup without loading optional integration classes or dependency mods.
+Ensure optional-integration settings are discovered, compatible, and available at configuration startup without loading optional integration implementation classes.
 
 ## ADDED Requirements
 
@@ -9,22 +9,26 @@ The system SHALL construct the integration configuration catalog before any opti
 
 #### Scenario: Forge starts without optional dependency mods
 - **WHEN** the Forge build starts with no optional integration dependency mods installed
-- **THEN** configuration construction succeeds and includes every integration section supported by the Forge build
+- **THEN** configuration construction succeeds without adding optional integration sections
 
 #### Scenario: Fabric starts without optional dependency mods
 - **WHEN** the Fabric build starts with no optional integration dependency mods installed
-- **THEN** configuration construction succeeds and includes every integration section supported by the Fabric build
+- **THEN** configuration construction succeeds without adding optional integration sections
 
-### Requirement: Configuration catalog is loader-specific
-Each loader SHALL expose settings for all integrations supported by that loader, including absent dependency mods, and SHALL omit integrations that are supported only by the other loader.
+### Requirement: Configuration discovery follows installed mods
+The system SHALL discover integration configuration classes from the designated flat configuration package and SHALL include a discovered configuration only when its declared dependency mod ID is loaded.
 
-#### Scenario: Loader-exclusive integrations
-- **WHEN** the configuration catalog is constructed for a loader
-- **THEN** it contains that loader's shared and loader-exclusive integrations and excludes integrations exclusive to the other loader
+#### Scenario: Installed integration configuration
+- **WHEN** a discovered configuration declares a mod ID that is loaded
+- **THEN** its settings are included without a manually maintained catalog entry
 
-#### Scenario: Supported dependency mod is absent
-- **WHEN** a supported integration's dependency mod is not installed
-- **THEN** that integration's settings remain present and configurable
+#### Scenario: Dependency mod is absent
+- **WHEN** a discovered configuration declares a mod ID that is not loaded
+- **THEN** its settings are omitted from the generated configuration
+
+#### Scenario: New configuration class is added
+- **WHEN** a valid configuration class is added directly to the designated package
+- **THEN** discovery can load it without editing a central class list
 
 ### Requirement: Existing configuration remains compatible
 The system MUST preserve every existing integration section name, setting key, value type, default value, validation range, and meaning on each loader.
@@ -42,7 +46,7 @@ Configuration construction SHALL use only always-available main-code types and S
 
 #### Scenario: Minimal environment constructs configuration
 - **WHEN** the project runs in its minimal test environment with optional integration code excluded
-- **THEN** both loader-specific configuration catalogs can be constructed and validated successfully
+- **THEN** configuration discovery and mod filtering complete successfully
 
 ### Requirement: Integrations consume central settings
 When an optional integration is loaded, it SHALL read the centrally constructed settings for its loader and SHALL NOT mutate the configuration schema.

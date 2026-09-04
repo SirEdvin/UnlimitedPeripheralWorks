@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.deepresonance.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.DeepResonanceConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
@@ -18,7 +18,7 @@ class Integration : Runnable {
         override val pluginType: String
             get() = "resonating_crystal"
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableResonatingCrystal) {
+            if (!DeepResonanceConfiguration.enableResonatingCrystal) {
                 return null
             }
             val blockEntity = level.getBlockEntity(pos)
@@ -33,7 +33,7 @@ class Integration : Runnable {
         override val pluginType: String
             get() = "generator"
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableGeneratorPart) {
+            if (!DeepResonanceConfiguration.enableGeneratorPart) {
                 return null
             }
             val blockEntity = level.getBlockEntity(pos)
@@ -52,7 +52,7 @@ class Integration : Runnable {
             get() = 50
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableTank) {
+            if (!DeepResonanceConfiguration.enableTank) {
                 return null
             }
             val blockEntity = level.getBlockEntity(pos) ?: return null

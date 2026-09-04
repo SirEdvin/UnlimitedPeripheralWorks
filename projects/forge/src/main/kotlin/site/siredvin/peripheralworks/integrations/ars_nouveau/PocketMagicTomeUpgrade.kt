@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
-import site.siredvin.peripheralworks.common.configuration.integration.ars_nouveau.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.ArsNouveauConfiguration
 import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.pocket.BasePocketUpgrade
 
@@ -20,7 +20,7 @@ class PocketMagicTomeUpgrade(type: ResourceLocation, stack: ItemStack) :
         val STORED_DATA_TAG = ResourceLocation.fromNamespaceAndPath("ars_nouveau", "caster").toString()
     }
 
-    override fun getPeripheral(access: IPocketAccess): MagicTomePeripheral = MagicTomePeripheral(PocketPeripheralOwner(access), access.upgrade!!.upgradeItem, Configuration.enableCasterTomePocketUpgrade)
+    override fun getPeripheral(access: IPocketAccess): MagicTomePeripheral = MagicTomePeripheral(PocketPeripheralOwner(access), access.upgrade!!.upgradeItem, ArsNouveauConfiguration.enableCasterTomePocketUpgrade)
 
     override fun getUpgradeData(stack: ItemStack): CompoundTag {
         return stack.getTagElement(STORED_DATA_TAG) ?: return CompoundTag()

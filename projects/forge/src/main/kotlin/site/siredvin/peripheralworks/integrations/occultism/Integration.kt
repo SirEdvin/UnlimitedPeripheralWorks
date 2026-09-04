@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemHandlerWrapper
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.occultism.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.OccultismConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.computercraft.peripherals.EntityLinkPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
@@ -29,7 +29,7 @@ class Integration : Runnable {
         override val conflictWith: Set<String>
             get() = setOf(PeripheralPluginUtils.Type.INVENTORY, PeripheralPluginUtils.Type.ITEM_STORAGE)
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableOccultismStorage) {
+            if (!OccultismConfiguration.enableOccultismStorage) {
                 return null
             }
             val blockEntity = level.getBlockEntity(pos)
@@ -50,7 +50,7 @@ class Integration : Runnable {
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val entity = level.getBlockEntity(pos) ?: return null
             return when (entity::class.java) {
-                GoldenSacrificialBowlBlockEntity::class.java -> if (Configuration.enableOccultismGoldenBowl) {
+                GoldenSacrificialBowlBlockEntity::class.java -> if (OccultismConfiguration.enableOccultismGoldenBowl) {
                     GoldenSacrificialBowlPlugin(
                         entity as GoldenSacrificialBowlBlockEntity,
                     )

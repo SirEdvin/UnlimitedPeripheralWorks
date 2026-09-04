@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.common.configuration.integration.ars_nouveau
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object ArsNouveauConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "ars_nouveau"
     override val name: String
         get() = "ars_nouveau"
 

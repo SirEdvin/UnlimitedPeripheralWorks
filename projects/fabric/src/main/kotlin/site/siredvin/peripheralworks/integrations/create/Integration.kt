@@ -28,7 +28,7 @@ import site.siredvin.broccolium.modules.storage.fluid.FabricAgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
 import site.siredvin.broccolium.modules.storage.item.FabricStorageWrapper
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.create.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.CreateConfiguration
 import site.siredvin.peripheralworks.common.item.EntityCard
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
@@ -45,7 +45,7 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            if (!Configuration.enableCreateIntegration || blockEntity == null) return null
+            if (!CreateConfiguration.enableCreateIntegration || blockEntity == null) return null
             if (blockEntity is SmartBlockEntity) {
                 val behavior = blockEntity.getBehaviour(FilteringBehaviour.TYPE)
                 if (behavior != null) {
@@ -62,7 +62,7 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            if (!Configuration.enableCreateIntegration || blockEntity == null) return null
+            if (!CreateConfiguration.enableCreateIntegration || blockEntity == null) return null
             if (blockEntity is SmartBlockEntity) {
                 val behaviour = blockEntity.getBehaviour(ScrollOptionBehaviour.TYPE)
                 if (behaviour != null) {
@@ -79,7 +79,7 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            if (!Configuration.enableCreateIntegration || blockEntity == null) return null
+            if (!CreateConfiguration.enableCreateIntegration || blockEntity == null) return null
 
             if (blockEntity is SmartBlockEntity) {
                 if (blockEntity is BlazeBurnerBlockEntity) {

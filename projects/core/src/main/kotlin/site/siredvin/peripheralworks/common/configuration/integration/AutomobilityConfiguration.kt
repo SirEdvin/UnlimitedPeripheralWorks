@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.common.configuration.integration.automobility
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object AutomobilityConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "automobility"
 
     private var enableAutomobilityConfig: ForgeConfigSpec.BooleanValue? = null
 

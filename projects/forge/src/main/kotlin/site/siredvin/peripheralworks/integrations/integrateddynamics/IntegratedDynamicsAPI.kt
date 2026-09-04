@@ -7,7 +7,7 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.shared.util.NBTUtil
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.TagParser
-import site.siredvin.peripheralworks.common.configuration.integration.integrateddynamics.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.IntegratedDynamicsConfiguration
 
 class IntegratedDynamicsAPI(private val computerID: Int) : ILuaAPI {
     override fun getNames(): Array<String> = arrayOf("integrated_dynamics")
@@ -26,7 +26,7 @@ class IntegratedDynamicsAPI(private val computerID: Int) : ILuaAPI {
 
     @LuaFunction
     fun setOutput(json: String): MethodResult {
-        if (json.length > Configuration.maxJsonSize) {
+        if (json.length > IntegratedDynamicsConfiguration.maxJsonSize) {
             return MethodResult.of(null, "JSON size is bigger than allowed")
         }
         val parsedData: CompoundTag

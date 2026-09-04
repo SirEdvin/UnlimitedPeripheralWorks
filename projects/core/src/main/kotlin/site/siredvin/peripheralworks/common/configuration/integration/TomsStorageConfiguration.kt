@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.common.configuration.integration.toms_storage
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object TomsStorageConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "toms_storage"
 
     private var enableTomsStorageConfig: ForgeConfigSpec.BooleanValue? = null
 

@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.fluxnetworks.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.FluxNetworksConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import sonar.fluxnetworks.common.device.TileFluxController
@@ -16,7 +16,7 @@ class Integration : Runnable {
             get() = "flux_networks"
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos) ?: return null
-            if (blockEntity is TileFluxController && Configuration.enableFluxController) {
+            if (blockEntity is TileFluxController && FluxNetworksConfiguration.enableFluxController) {
                 return FluxControllerPlugin(blockEntity)
             }
             return null

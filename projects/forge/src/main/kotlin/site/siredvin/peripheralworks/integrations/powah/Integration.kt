@@ -11,7 +11,7 @@ import owmii.powah.lib.block.AbstractEnergyStorage
 import owmii.powah.lib.logistics.IRedstoneInteract
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.powah.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.PowahConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
@@ -22,19 +22,19 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            if (Configuration.enableReactor && blockEntity is ReactorTile) {
+            if (PowahConfiguration.enableReactor && blockEntity is ReactorTile) {
                 return ReactorPlugin(blockEntity)
             }
-            if (Configuration.enableReactor && blockEntity is ReactorPartTile) {
+            if (PowahConfiguration.enableReactor && blockEntity is ReactorPartTile) {
                 val reactorTile = blockEntity.core()
                 if (reactorTile.isPresent) {
                     return ReactorPlugin(reactorTile.get())
                 }
             }
-            if (Configuration.enableGenerator && blockEntity is AbstractEnergyProvider<*>) {
+            if (PowahConfiguration.enableGenerator && blockEntity is AbstractEnergyProvider<*>) {
                 return GeneratorPlugin(blockEntity)
             }
-            if (Configuration.enableEnderCell && blockEntity is AbstractEnderTile<*>) {
+            if (PowahConfiguration.enableEnderCell && blockEntity is AbstractEnderTile<*>) {
                 return EnderCellPlugin(blockEntity)
             }
             return null
@@ -47,7 +47,7 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            if (Configuration.enableRedstoneControl && blockEntity is IRedstoneInteract) {
+            if (PowahConfiguration.enableRedstoneControl && blockEntity is IRedstoneInteract) {
                 if (blockEntity is ReactorPartTile) {
                     val core = blockEntity.core()
                     if (core.isPresent) {
@@ -63,7 +63,7 @@ class Integration : Runnable {
     override fun run() {
         ComputerCraftProxy.addProvider(GeneratorPluginProvider)
         ComputerCraftProxy.addProvider(RedstonePluginProvider)
-        if (Configuration.enableEnergy) {
+        if (PowahConfiguration.enableEnergy) {
             AgnosticEnergyStorageLookup.addBlockLookup { _, _, blockEntity, _ ->
                 if (blockEntity is ReactorPartTile) {
                     val reactorTile = blockEntity.core()

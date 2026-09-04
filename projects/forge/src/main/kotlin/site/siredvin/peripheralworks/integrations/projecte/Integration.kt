@@ -14,7 +14,7 @@ import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
-import site.siredvin.peripheralworks.common.configuration.integration.projecte.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.ProjectEConfiguration
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
@@ -33,7 +33,7 @@ class Integration : Runnable {
         )
     }
 
-    private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): TransmutationTabletPeripheral<TurtlePeripheralOwner> = TransmutationTabletPeripheral(TurtlePeripheralOwner(turtle, side), Configuration.enableTransmutationTabletTurtleUpgrade)
+    private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): TransmutationTabletPeripheral<TurtlePeripheralOwner> = TransmutationTabletPeripheral(TurtlePeripheralOwner(turtle, side), ProjectEConfiguration.enableTransmutationTabletTurtleUpgrade)
 
     override fun run() {
         val turtleUpgradeSup = ModPlatform.registerTurtleUpgrade(

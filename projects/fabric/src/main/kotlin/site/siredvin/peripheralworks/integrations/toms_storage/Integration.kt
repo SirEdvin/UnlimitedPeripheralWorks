@@ -7,7 +7,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.toms_storage.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.TomsStorageConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
@@ -25,7 +25,7 @@ class Integration : Runnable {
             get() = 50
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableTomsStorage) {
+            if (!TomsStorageConfiguration.enableTomsStorage) {
                 return null
             }
             val entity = level.getBlockEntity(pos) as? InventoryConnectorBlockEntity ?: return null

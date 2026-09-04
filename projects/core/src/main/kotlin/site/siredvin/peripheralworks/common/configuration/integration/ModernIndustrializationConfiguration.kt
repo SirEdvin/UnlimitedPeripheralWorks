@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.common.configuration.integration.modern_industrialization
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object ModernIndustrializationConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "modern_industrialization"
 
     private var enableEnergyStorageConfig: ForgeConfigSpec.BooleanValue? = null
     private var enableCraftingMachineConfig: ForgeConfigSpec.BooleanValue? = null

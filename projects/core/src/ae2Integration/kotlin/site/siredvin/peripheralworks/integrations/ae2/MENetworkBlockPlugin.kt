@@ -11,7 +11,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.ae2.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.AE2Configuration
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.genericStackToMap
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
@@ -30,7 +30,7 @@ class MENetworkBlockPlugin(private val entity: AENetworkBlockEntity) : IPeripher
             get() = PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableMEInterface) {
+            if (!AE2Configuration.enableMEInterface) {
                 return null
             }
             val entity = level.getBlockEntity(pos)

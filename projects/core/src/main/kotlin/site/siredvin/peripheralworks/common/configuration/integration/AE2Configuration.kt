@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.common.configuration.integration.ae2
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object AE2Configuration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "ae2"
 
     private const val DEFAULT_MAX_SUBSCRIPTIONS = 16
     private const val DEFAULT_MAX_ITEM_FILTER_SIZE = 1024

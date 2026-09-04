@@ -31,3 +31,11 @@
 - [x] 5.2 Run `./gradlew gameTest --no-daemon -PminimalTestEnvironment` under `xvfb-run` to verify configuration construction without optional integration code
 - [x] 5.3 Run `./gradlew build --no-daemon` to verify the complete Forge and Fabric builds and tests
 - [x] 5.4 Inspect the final diff and schema paths to confirm only planning-approved configuration lifecycle changes occurred and existing TOML files require no migration
+
+## 6. Flatten and Discover Configurations
+
+- [x] 6.1 Flatten all integration configuration files into one package and rename each object/file for its mod
+- [x] 6.2 Add a dependency mod ID to every integration configuration type
+- [x] 6.3 Replace fixed Forge/Fabric catalogs with package autodiscovery and loader-provided mod-presence filtering
+- [x] 6.4 Update every integration consumer and the schema GameTest for renamed configurations and discovery behavior
+- [x] 6.5 Run minimal GameTests and the full build, then commit and push the verified follow-up to the existing PR

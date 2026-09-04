@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.common.configuration.integration.deepresonance
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object DeepResonanceConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "deepresonance"
 
     private var enableResonatingCrystalConfig: ForgeConfigSpec.BooleanValue? = null
     private var enableGeneratorPartConfig: ForgeConfigSpec.BooleanValue? = null

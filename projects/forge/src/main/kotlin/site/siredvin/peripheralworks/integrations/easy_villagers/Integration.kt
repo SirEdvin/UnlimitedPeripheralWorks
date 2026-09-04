@@ -6,7 +6,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.integration.easy_villagers.Configuration
+import site.siredvin.peripheralworks.common.configuration.integration.EasyVillagersConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
@@ -16,7 +16,7 @@ class Integration : Runnable {
         override val pluginType: String
             get() = "easy_villager_trader"
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableAutoTrader) {
+            if (!EasyVillagersConfiguration.enableAutoTrader) {
                 return null
             }
             val blockEntity = level.getBlockEntity(pos)
