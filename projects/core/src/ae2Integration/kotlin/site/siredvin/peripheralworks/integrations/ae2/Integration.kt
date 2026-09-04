@@ -12,6 +12,7 @@ import site.siredvin.broccolium.modules.storage.energy.api.AgnosticEnergyStorage
 import site.siredvin.broccolium.modules.storage.fluid.AgnosticFluidStorageLookup
 import site.siredvin.broccolium.modules.storage.fluid.api.AgnosticFluidStorage
 import site.siredvin.broccolium.modules.storage.item.AgnosticItemStorageLookup
+import site.siredvin.peripheralworks.common.configuration.integration.AE2Configuration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 
 class Integration : Runnable {
@@ -40,12 +41,12 @@ class Integration : Runnable {
     }
 
     override fun run() {
-        if (Configuration.enableStorageIntegrations) {
+        if (AE2Configuration.enableStorageIntegrations) {
             AgnosticItemStorageLookup.addBlockLookup(::extractItemStorage)
             AgnosticFluidStorageLookup.addBlockLookup(::extractFluidStorage)
             AgnosticEnergyStorageLookup.addBlockLookup(::extractEnergyStorage)
         }
-        if (Configuration.enableMEInterface) {
+        if (AE2Configuration.enableMEInterface) {
             ComputerCraftProxy.addProvider(MENetworkBlockPlugin.Provider)
             ComputerCraftProxy.addProvider(AE2StorageSubscriptionPluginProvider)
             ComputerCraftProxy.addProvider(AE2CraftingJobsPluginProvider)

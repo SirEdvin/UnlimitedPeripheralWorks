@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.integrations.alloy_forgery
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object AlloyForgeryConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "alloy_forgery"
 
     private var enableAlloyForgeryConfig: ForgeConfigSpec.BooleanValue? = null
 

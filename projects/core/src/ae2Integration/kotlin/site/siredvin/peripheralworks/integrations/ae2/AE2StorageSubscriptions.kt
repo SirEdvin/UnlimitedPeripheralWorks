@@ -23,6 +23,7 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.platform.PlatformRegistries
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.integration.AE2Configuration
 import site.siredvin.tweakium.modules.peripheral.api.IDataStorage
 import site.siredvin.tweakium.modules.peripheral.api.IExpandedPeripheral
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
@@ -83,8 +84,8 @@ private data class RuntimeSubscription(
 }
 
 class AE2StorageSubscriptionTracker(
-    private val maxSubscriptions: Int = Configuration.maxSubscriptions,
-    private val maxItemFilterSize: Int = Configuration.maxItemFilterSize,
+    private val maxSubscriptions: Int = AE2Configuration.maxSubscriptions,
+    private val maxItemFilterSize: Int = AE2Configuration.maxItemFilterSize,
 ) {
     private val subscriptions = TreeMap<String, RuntimeSubscription>()
     private val amounts = mutableMapOf<AEKey, Long>()
@@ -343,7 +344,7 @@ object AE2StorageSubscriptionPluginProvider : PeripheralPluginProvider {
     override val pluginType = "ae2_storage_subscriptions"
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-        if (!Configuration.enableMEInterface) return null
+        if (!AE2Configuration.enableMEInterface) return null
         val entity = level.getBlockEntity(pos) as? MENetworkPeripheralBlockEntity ?: return null
         return AE2StorageSubscriptionPlugin(entity.subscriptionTracker)
     }

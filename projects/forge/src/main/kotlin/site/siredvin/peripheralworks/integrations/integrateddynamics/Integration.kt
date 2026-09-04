@@ -18,7 +18,7 @@ import org.cyclops.integrateddynamics.core.part.aspect.AspectRegistry
 import org.cyclops.integrateddynamics.core.part.aspect.build.AspectBuilder
 import org.cyclops.integrateddynamics.part.aspect.read.AspectReadBuilders
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.IntegratedDynamicsConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModLanguageProvider
@@ -42,7 +42,7 @@ class Integration : Runnable {
         override val conflictWith: Set<String>
             get() = setOf(PeripheralPluginUtils.Type.INVENTORY, PeripheralPluginUtils.Type.ITEM_STORAGE)
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableVariableStore) {
+            if (!IntegratedDynamicsConfiguration.enableVariableStore) {
                 return null
             }
             val blockEntity = level.getBlockEntity(pos)
@@ -79,11 +79,10 @@ class Integration : Runnable {
                     setValue(it.left.target.pos, it.right.value.rawValue.get())
                 }
             }, "cc_input").buildWrite()
-        if (Configuration.enableComputerAspect) {
+        if (IntegratedDynamicsConfiguration.enableComputerAspect) {
             AspectRegistry.getInstance().register(PartTypes.MACHINE_READER, ccOutput)
             AspectRegistry.getInstance().register(PartTypes.MACHINE_WRITER, ccInput)
         }
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         ComputerCraftAPI.registerAPIFactory {
             IntegratedDynamicsAPI(it.id)
         }

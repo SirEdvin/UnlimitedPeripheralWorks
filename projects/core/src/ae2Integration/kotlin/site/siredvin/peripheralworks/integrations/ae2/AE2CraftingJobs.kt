@@ -12,6 +12,7 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.integration.AE2Configuration
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.buildKey
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.keyCounterToLua
 import site.siredvin.peripheralworks.integrations.ae2.AE2Helper.stackToMap
@@ -151,7 +152,7 @@ object AE2CraftingJobsPluginProvider : PeripheralPluginProvider {
     override val pluginType = "ae2_crafting_jobs"
 
     override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-        if (!Configuration.enableMEInterface) return null
+        if (!AE2Configuration.enableMEInterface) return null
         val entity = level.getBlockEntity(pos) as? AENetworkBlockEntity ?: return null
         return AE2CraftingJobsPlugin.forMachine(level, entity)
     }

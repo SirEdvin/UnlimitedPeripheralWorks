@@ -32,7 +32,6 @@ import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.data.ModBlockModelProvider
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
@@ -71,7 +70,6 @@ class Registration : Runnable {
     }
 
     override fun run() {
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         val wirelessTerminalUpgrade = ModPlatform.registerTurtleUpgrade(
             AE2WirelessTerminalUpgrade.UPGRADE_ID,
             TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack -> AE2WirelessTerminalUpgrade(id, stack) },

@@ -8,8 +8,6 @@ import site.siredvin.peripheralworks.computercraft.operations.UnconditionalFreeO
 
 object PeripheralWorksConfig {
 
-    private val INTEGRATION_CONFIGURATIONS: MutableMap<String, IForgeConfigHandler> = mutableMapOf()
-
     val cooldownTresholdLevel: Int
         get() = ConfigHolder.commonConfig.cooldownThresholdLevel.get()
 
@@ -123,11 +121,10 @@ object PeripheralWorksConfig {
     val hologramProjectorDistanceLimit: Double
         get() = ConfigHolder.commonConfig.hologramProjectorDistanceLimit.get()
 
-    fun registerIntegrationConfiguration(configuration: IForgeConfigHandler) {
-        INTEGRATION_CONFIGURATIONS[configuration.name] = configuration
-    }
-
-    class CommonConfig internal constructor(builder: ForgeConfigSpec.Builder) {
+    class CommonConfig internal constructor(
+        builder: ForgeConfigSpec.Builder,
+        integrationConfigurations: List<IForgeConfigHandler>,
+    ) {
 
         // Generic configuration
         var cooldownThresholdLevel: ForgeConfigSpec.IntValue
@@ -278,9 +275,9 @@ object PeripheralWorksConfig {
             register(UnconditionalFreeOperations.entries.toTypedArray(), builder)
             builder.pop()
             builder.push("integrations")
-            INTEGRATION_CONFIGURATIONS.entries.forEach {
-                builder.push(it.key)
-                it.value.addToConfig(builder)
+            integrationConfigurations.forEach {
+                builder.push(it.name)
+                it.addToConfig(builder)
                 builder.pop()
             }
             builder.pop()

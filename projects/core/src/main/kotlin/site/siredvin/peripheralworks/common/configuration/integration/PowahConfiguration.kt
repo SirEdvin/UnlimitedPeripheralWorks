@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.integrations.powah
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object PowahConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "powah"
 
     private var enableEnergyConfig: ForgeConfigSpec.BooleanValue? = null
     private var enableGeneraotrConfig: ForgeConfigSpec.BooleanValue? = null

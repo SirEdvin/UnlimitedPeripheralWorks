@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.integrations.easy_villagers
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object EasyVillagersConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "easy_villagers"
 
     private var enableAutoTradeConfig: ForgeConfigSpec.BooleanValue? = null
 

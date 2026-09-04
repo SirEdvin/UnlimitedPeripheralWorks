@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level
 import site.siredvin.broccolium.modules.storage.energy.AgnosticEnergyStorageLookup
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.ArsNouveauConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
@@ -28,7 +28,7 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            if (!Configuration.enableMobJarPlugin || blockEntity == null) return null
+            if (!ArsNouveauConfiguration.enableMobJarPlugin || blockEntity == null) return null
             if (blockEntity is MobJarTile) {
                 return MobJarPlugin(blockEntity)
             }
@@ -45,9 +45,8 @@ class Integration : Runnable {
     }
 
     override fun run() {
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
         ComputerCraftProxy.addProvider(MobJarPluginProvider)
-        if (Configuration.enableSourceStorage) {
+        if (ArsNouveauConfiguration.enableSourceStorage) {
             AgnosticEnergyStorageLookup.addBlockLookup { level, blockPos, blockEntity, direction ->
                 if (blockEntity == null) return@addBlockLookup null
                 val source = blockEntity as? ISourceTile ?: return@addBlockLookup null

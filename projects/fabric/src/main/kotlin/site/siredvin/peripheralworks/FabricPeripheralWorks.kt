@@ -51,6 +51,8 @@ object FabricPeripheralWorks : ModInitializer {
         FabricPeripheralium.sayHi()
 
         PeripheralWorksCore.configure(FabricModPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
+        ConfigHolder.initialize(loader::isModPresent)
+        ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
         loader.maybeLoadIntegration("ae2", "Registration").ifPresent { (it as Runnable).run() }
         for (type in NetworkMessages.serverbound) {
             ServerPlayNetworking.registerGlobalReceiver(
@@ -74,8 +76,6 @@ object FabricPeripheralWorks : ModInitializer {
         loader.maybeLoadIntegration("modern_industrialization").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("emi").ifPresent { (it as Runnable).run() }
-        // Pretty important to setup configuration after integration loading!
-        ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
         PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->

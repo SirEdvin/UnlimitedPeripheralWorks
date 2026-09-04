@@ -10,7 +10,7 @@ import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.NaturesCompassConfiguration
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModPocketUpgradeDataProvider
 import site.siredvin.peripheralworks.data.ModTurtleUpgradeDataProvider
@@ -25,7 +25,7 @@ class Integration : Runnable {
         val UPGRADE_ID = ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, NaturesCompassPeripheral.TYPE)
     }
 
-    private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): NaturesCompassPeripheral<TurtlePeripheralOwner> = NaturesCompassPeripheral(TurtlePeripheralOwner(turtle, side), Configuration.enableNaturesCompassTurtleUpgrade)
+    private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): NaturesCompassPeripheral<TurtlePeripheralOwner> = NaturesCompassPeripheral(TurtlePeripheralOwner(turtle, side), NaturesCompassConfiguration.enableNaturesCompassTurtleUpgrade)
 
     override fun run() {
         val turtleUpgradeSup = ModPlatform.registerTurtleUpgrade(
@@ -61,8 +61,6 @@ class Integration : Runnable {
                 NaturesCompass.naturesCompass,
             ).requireMod(NaturesCompass.MODID)
         }
-
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
 
         ModEnLanguageProvider.addHook {
             it.addUpgrades(UPGRADE_ID, "Nature Compassing")

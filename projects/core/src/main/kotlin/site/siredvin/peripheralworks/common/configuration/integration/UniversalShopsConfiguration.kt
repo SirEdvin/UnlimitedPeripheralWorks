@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.integrations.universal_shops
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object UniversalShopsConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "universal_shops"
 
     private var enableShopsConfig: ForgeConfigSpec.BooleanValue? = null
 

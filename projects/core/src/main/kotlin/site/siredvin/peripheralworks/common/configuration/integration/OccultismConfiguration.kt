@@ -1,9 +1,12 @@
-package site.siredvin.peripheralworks.integrations.occultism
+package site.siredvin.peripheralworks.common.configuration.integration
 
 import net.minecraftforge.common.ForgeConfigSpec
-import site.siredvin.peripheralworks.api.IForgeConfigHandler
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfiguration
 
-object Configuration : IForgeConfigHandler {
+object OccultismConfiguration : IntegrationConfiguration {
+
+    override val modID: String
+        get() = "occultism"
 
     private var enableOccultismStorageConfig: ForgeConfigSpec.BooleanValue? = null
     private var enableOccultismGoldenBowlConfig: ForgeConfigSpec.BooleanValue? = null
@@ -19,6 +22,6 @@ object Configuration : IForgeConfigHandler {
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
         enableOccultismStorageConfig = builder.comment("Enables occultism storage integration").define("enableOccultismStorage", true)
-        enableOccultismStorageConfig = builder.comment("Enables occultism golden bowl integration").define("enableOccultismGoldenBowl", true)
+        enableOccultismGoldenBowlConfig = builder.comment("Enables occultism golden bowl integration").define("enableOccultismGoldenBowl", true)
     }
 }
