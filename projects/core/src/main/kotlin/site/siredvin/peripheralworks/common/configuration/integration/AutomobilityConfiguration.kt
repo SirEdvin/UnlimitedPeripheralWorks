@@ -11,7 +11,7 @@ object AutomobilityConfiguration : IntegrationConfiguration {
     private var enableAutomobilityConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableAutomobile: Boolean
-        get() = enableAutomobilityConfig?.get() ?: true
+        get() = enableAutomobilityConfig.getOrDefault(true)
 
     override val name: String
         get() = "automobility"

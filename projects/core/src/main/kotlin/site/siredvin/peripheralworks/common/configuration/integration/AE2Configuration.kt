@@ -17,16 +17,16 @@ object AE2Configuration : IntegrationConfiguration {
     private var maxItemFilterSizeConfig: ForgeConfigSpec.IntValue? = null
 
     val enableMEInterface: Boolean
-        get() = enableMeInterfaceConfig?.get() ?: true
+        get() = enableMeInterfaceConfig.getOrDefault(true)
 
     val enableStorageIntegrations: Boolean
-        get() = enableStorageIntegrationConfig?.get() ?: true
+        get() = enableStorageIntegrationConfig.getOrDefault(true)
 
     val maxSubscriptions: Int
-        get() = maxSubscriptionsConfig?.get() ?: DEFAULT_MAX_SUBSCRIPTIONS
+        get() = maxSubscriptionsConfig.getOrDefault(DEFAULT_MAX_SUBSCRIPTIONS)
 
     val maxItemFilterSize: Int
-        get() = maxItemFilterSizeConfig?.get() ?: DEFAULT_MAX_ITEM_FILTER_SIZE
+        get() = maxItemFilterSizeConfig.getOrDefault(DEFAULT_MAX_ITEM_FILTER_SIZE)
 
     override val name: String
         get() = "ae2"

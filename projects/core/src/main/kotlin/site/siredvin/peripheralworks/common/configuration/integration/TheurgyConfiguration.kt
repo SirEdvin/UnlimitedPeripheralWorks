@@ -14,7 +14,7 @@ object TheurgyConfiguration : IntegrationConfiguration {
     private var enableMercuryFluxStorageConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableMercuryFluxStorage: Boolean
-        get() = enableMercuryFluxStorageConfig?.get() != false
+        get() = enableMercuryFluxStorageConfig.getOrDefault(true)
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
         enableMercuryFluxStorageConfig = builder.comment("Enables mercury flux storage integration")

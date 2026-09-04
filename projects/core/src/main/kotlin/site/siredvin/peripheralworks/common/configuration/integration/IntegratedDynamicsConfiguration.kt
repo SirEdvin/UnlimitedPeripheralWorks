@@ -15,13 +15,13 @@ object IntegratedDynamicsConfiguration : IntegrationConfiguration {
     private var maxJSONSizeConfig: ForgeConfigSpec.IntValue? = null
 
     val enableVariableStore: Boolean
-        get() = enableVariableStoreConfig?.get() ?: true
+        get() = enableVariableStoreConfig.getOrDefault(true)
 
     val enableComputerAspect: Boolean
-        get() = enableComputerAspectConfig?.get() ?: true
+        get() = enableComputerAspectConfig.getOrDefault(true)
 
     val maxJsonSize: Int
-        get() = maxJSONSizeConfig?.get() ?: DEFAULT_MAX_JSON_SIZE
+        get() = maxJSONSizeConfig.getOrDefault(DEFAULT_MAX_JSON_SIZE)
 
     override val name: String
         get() = "integrateddynamics"

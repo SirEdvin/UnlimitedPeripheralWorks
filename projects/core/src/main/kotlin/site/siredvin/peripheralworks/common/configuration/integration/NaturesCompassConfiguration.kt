@@ -12,10 +12,10 @@ object NaturesCompassConfiguration : IntegrationConfiguration {
     private var enablePocketUpgradeConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableNaturesCompassTurtleUpgrade: Boolean
-        get() = enableTurtleUpgradeConfig?.get() ?: true
+        get() = enableTurtleUpgradeConfig.getOrDefault(true)
 
     val enableNaturesCompassPocketUpgrade: Boolean
-        get() = enablePocketUpgradeConfig?.get() ?: true
+        get() = enablePocketUpgradeConfig.getOrDefault(true)
 
     override val name: String
         get() = "naturescompass"

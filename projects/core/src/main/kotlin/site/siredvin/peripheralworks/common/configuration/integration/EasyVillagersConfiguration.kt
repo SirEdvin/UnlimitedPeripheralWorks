@@ -11,7 +11,7 @@ object EasyVillagersConfiguration : IntegrationConfiguration {
     private var enableAutoTradeConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableAutoTrader: Boolean
-        get() = enableAutoTradeConfig?.get() ?: true
+        get() = enableAutoTradeConfig.getOrDefault(true)
 
     override val name: String
         get() = "easy_villagers"

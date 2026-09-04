@@ -11,7 +11,7 @@ object TomsStorageConfiguration : IntegrationConfiguration {
     private var enableTomsStorageConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableTomsStorage: Boolean
-        get() = enableTomsStorageConfig?.get() ?: true
+        get() = enableTomsStorageConfig.getOrDefault(true)
 
     override val name: String
         get() = "toms_storage"

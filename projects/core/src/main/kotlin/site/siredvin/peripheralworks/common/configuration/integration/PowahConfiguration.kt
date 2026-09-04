@@ -15,19 +15,19 @@ object PowahConfiguration : IntegrationConfiguration {
     private var enableRedstoneControlConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableEnergy: Boolean
-        get() = enableEnergyConfig?.get() ?: true
+        get() = enableEnergyConfig.getOrDefault(true)
 
     val enableGenerator: Boolean
-        get() = enableGeneraotrConfig?.get() ?: true
+        get() = enableGeneraotrConfig.getOrDefault(true)
 
     val enableEnderCell: Boolean
-        get() = enableEnergyCellConfig?.get() ?: true
+        get() = enableEnergyCellConfig.getOrDefault(true)
 
     val enableReactor: Boolean
-        get() = enableReactorConfig?.get() ?: true
+        get() = enableReactorConfig.getOrDefault(true)
 
     val enableRedstoneControl: Boolean
-        get() = enableRedstoneControlConfig?.get() ?: true
+        get() = enableRedstoneControlConfig.getOrDefault(true)
 
     override val name: String
         get() = "powah"

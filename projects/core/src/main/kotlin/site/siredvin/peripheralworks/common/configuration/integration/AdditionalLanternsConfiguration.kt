@@ -11,7 +11,7 @@ object AdditionalLanternsConfiguration : IntegrationConfiguration {
     private var enableLanternsConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableLanterns: Boolean
-        get() = enableLanternsConfig?.get() ?: true
+        get() = enableLanternsConfig.getOrDefault(true)
 
     override val name: String
         get() = "additionallanterns"

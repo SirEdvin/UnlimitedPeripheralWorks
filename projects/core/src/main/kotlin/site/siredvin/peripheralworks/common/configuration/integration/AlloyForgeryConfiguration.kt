@@ -11,7 +11,7 @@ object AlloyForgeryConfiguration : IntegrationConfiguration {
     private var enableAlloyForgeryConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableAlloyForgery: Boolean
-        get() = enableAlloyForgeryConfig?.get() ?: true
+        get() = enableAlloyForgeryConfig.getOrDefault(true)
 
     override val name: String
         get() = "alloy_forgery"

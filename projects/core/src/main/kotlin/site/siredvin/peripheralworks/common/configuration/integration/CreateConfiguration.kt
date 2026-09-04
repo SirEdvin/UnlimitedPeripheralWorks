@@ -11,7 +11,7 @@ object CreateConfiguration : IntegrationConfiguration {
     private var enableCreateIntegrationConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableCreateIntegration: Boolean
-        get() = enableCreateIntegrationConfig?.get() ?: true
+        get() = enableCreateIntegrationConfig.getOrDefault(true)
 
     override val name: String
         get() = "create"

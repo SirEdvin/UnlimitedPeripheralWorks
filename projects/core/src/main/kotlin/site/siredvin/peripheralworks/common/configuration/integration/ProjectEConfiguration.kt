@@ -12,10 +12,10 @@ object ProjectEConfiguration : IntegrationConfiguration {
     private var enablePocketUpgradeConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableTransmutationTabletTurtleUpgrade: Boolean
-        get() = enableTurtleUpgradeConfig?.get() ?: true
+        get() = enableTurtleUpgradeConfig.getOrDefault(true)
 
     val enableTransmutationTabletPocketUpgrade: Boolean
-        get() = enablePocketUpgradeConfig?.get() ?: true
+        get() = enablePocketUpgradeConfig.getOrDefault(true)
 
     override val name: String
         get() = "projecte"
