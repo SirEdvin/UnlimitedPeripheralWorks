@@ -18,17 +18,20 @@ object AE2Helper {
 
     fun genericStackToMap(stack: GenericStack): MutableMap<String, Any> {
         if (stack.what is AEItemKey) {
-            val base = LuaRepresentation.forItemStack((stack.what as AEItemKey).toStack(stack.amount.toInt()))
+            val base = LuaRepresentation.forItemStack((stack.what as AEItemKey).toStack())
+            base["count"] = stack.amount
             base["type"] = "item"
             return base
         }
         val key = stack.what as AEFluidKey
+        val divisor = PlatformToolkit.get().fluidCompactDivider.toLong()
+        val amount = if (stack.amount % divisor == 0L) (stack.amount / divisor).toDouble() else stack.amount.toDouble() / divisor
 
         @Suppress("UNCHECKED_CAST")
         val base = LuaRepresentation.forFluidStack(
             AgnosticFluidStack(
                 key.fluid,
-                stack.amount.toDouble() / PlatformToolkit.get().fluidCompactDivider,
+                amount,
                 key.tag,
             ),
         ) as MutableMap<String, Any>

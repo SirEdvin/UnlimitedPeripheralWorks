@@ -1,5 +1,6 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import org.gradle.api.artifacts.ExternalModuleDependency
+import java.util.UUID
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -110,7 +111,8 @@ dependencies {
 minecraft {
     runs {
         create("gameTestServer") {
-            workingDirectory(file("run/peripheralworks-gametest"))
+            // Saved fixture computers reboot before tests replace them; each run needs an isolated world.
+            workingDirectory(layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}").get().asFile)
             property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
             property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
@@ -131,7 +133,7 @@ minecraft {
             parent(runs.getByName("client"))
             workingDirectory(file("run/network-manager-client-gametest"))
             property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            property("testiarium.tags", "network-manager-client")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("network-manager-client").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
             property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)

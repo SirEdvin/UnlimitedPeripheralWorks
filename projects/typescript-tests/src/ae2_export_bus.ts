@@ -23,7 +23,7 @@ check(device && !error, "Fixture export bus did not become available");
 const target = device as AE2ExportBusObject;
 check(target.getDeviceType() === "export_bus", `Expected export_bus, got ${target.getDeviceType()}`);
 check(target.getConfiguration().upgradeSlotCount >= 3 && target.getConfiguration().filterSlotCount === 18,
-    "Export Bus side configuration is wrong");
+    `Export Bus side configuration is wrong: ${textutils.serialize(target.getConfiguration())}; upgrades=${textutils.serialize(target.listUpgrades())}`);
 target.setFilter(1, item("minecraft:iron_ingot"));
 check(target.pullUpgrade(inventoryName, 4, 1, 3) === 1, "Fuzzy Card did not transfer into the Export Bus");
 target.setFuzzyMode("percent_50");

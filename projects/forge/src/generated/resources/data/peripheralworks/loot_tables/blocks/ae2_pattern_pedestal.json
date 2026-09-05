@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "peripheralworks:ae2_pattern_pedestal"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "peripheralworks:blocks/ae2_pattern_pedestal"
+}

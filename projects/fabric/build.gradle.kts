@@ -1,4 +1,5 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
+import java.util.UUID
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -94,7 +95,8 @@ loom {
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             vmArg("-ea")
-            runDir("run/peripheralworks-gametest")
+            // Saved fixture computers reboot before tests replace them; each run needs an isolated world.
+            runDir(layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}").get().asFile.absolutePath)
         }
         create("peripheralWorksClientGameTest") {
             client()
@@ -103,7 +105,7 @@ loom {
             property("fabric.debug.disableModIds", "create,testiarium_testmod,testiarium_cct_testmod")
             property("fabric.debug.loadLate", "testiarium_testmod")
             property("testiarium.client", "true")
-            property("testiarium.tags", "network-manager-client")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("network-manager-client").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
             property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)

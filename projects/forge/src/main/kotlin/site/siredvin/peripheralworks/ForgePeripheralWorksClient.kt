@@ -27,6 +27,7 @@ object ForgePeripheralWorksClient {
 
     @SubscribeEvent
     fun onRegisterRenderers(event: RegisterRenderers) {
+        PeripheralWorksClientCore.onInit()
         PeripheralWorksClientCore.EXTRA_BLOCK_ENTITY_RENDERERS.forEach {
             event.registerBlockEntityRenderer(it.get(), PeripheralWorksClientCore.getBlockEntityRendererProvider(it.get()))
         }

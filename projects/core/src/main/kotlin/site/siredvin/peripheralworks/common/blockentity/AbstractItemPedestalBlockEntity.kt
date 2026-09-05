@@ -15,7 +15,7 @@ import site.siredvin.tweakium.modules.peripheral.api.IOwnedPeripheral
 import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import java.util.function.Predicate
 
-abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEntityType: BlockEntityType<*>, blockPos: BlockPos, blockState: BlockState, val holdingStacks: Int = 1) :
+abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEntityType: BlockEntityType<*>, blockPos: BlockPos, blockState: BlockState, val holdingStacks: Int = 1, capacity: Int? = null, accepts: (ItemStack) -> Boolean = { true }) :
     MutablePeripheralBlockEntity<T>(
         blockEntityType,
         blockPos,
@@ -37,7 +37,7 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
     init {
         val pair = ModPlatform.baseInnerPlatform.createSlottedItemStorage(1, holdingStacks, {
             this.pushInternalDataChangeToClient()
-        })
+        }, capacity, accepts)
         inventory = pair.first
         storage = pair.second
     }
@@ -48,6 +48,8 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
         }
 
     override fun getPlatformItemStorage(): Any = inventory
+
+    protected fun replaceStoredStack(expected: ItemStack, replacement: ItemStack): Boolean = ModPlatform.baseInnerPlatform.replaceSlottedItem(inventory, 0, expected, replacement)
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         if (data.contains(LEGACY_STORED_ITEM_STACK_TAG)) {

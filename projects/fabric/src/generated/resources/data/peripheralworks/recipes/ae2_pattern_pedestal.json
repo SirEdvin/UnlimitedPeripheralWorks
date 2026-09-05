@@ -1,0 +1,26 @@
+{
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "ae2"
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": {
+      "item": "ae2:blank_pattern"
+    },
+    "P": {
+      "item": "peripheralworks:item_pedestal"
+    }
+  },
+  "pattern": [
+    "B",
+    "P"
+  ],
+  "result": {
+    "item": "peripheralworks:ae2_pattern_pedestal"
+  }
+}
