@@ -6,6 +6,9 @@ object ConfigHolder {
     private var configuredSpec: ForgeConfigSpec? = null
     private var configuredCommon: PeripheralWorksConfig.CommonConfig? = null
 
+    internal val isLoaded: Boolean
+        get() = configuredSpec?.isLoaded == true
+
     val commonSpec: ForgeConfigSpec
         get() = checkNotNull(configuredSpec) { "Peripheral Works configuration has not been initialized" }
     val commonConfig: PeripheralWorksConfig.CommonConfig

@@ -15,13 +15,13 @@ object ArsNouveauConfiguration : IntegrationConfiguration {
     private var enableMobJarPluginConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableCasterTomePocketUpgrade: Boolean
-        get() = enableCasterTomePocketUpgradeConfig?.get() != false
+        get() = enableCasterTomePocketUpgradeConfig.getOrDefault(true)
 
     val enableSourceStorage: Boolean
-        get() = enableSourceStorageConfig?.get() != false
+        get() = enableSourceStorageConfig.getOrDefault(true)
 
     val enableMobJarPlugin: Boolean
-        get() = enableMobJarPluginConfig?.get() != false
+        get() = enableMobJarPluginConfig.getOrDefault(true)
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
         enableCasterTomePocketUpgradeConfig = builder.comment("Enables usage of caster tome as pocket computer upgrade")

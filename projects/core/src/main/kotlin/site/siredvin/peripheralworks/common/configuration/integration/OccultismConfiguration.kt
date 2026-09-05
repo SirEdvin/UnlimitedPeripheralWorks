@@ -12,10 +12,10 @@ object OccultismConfiguration : IntegrationConfiguration {
     private var enableOccultismGoldenBowlConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableOccultismStorage: Boolean
-        get() = enableOccultismStorageConfig?.get() ?: true
+        get() = enableOccultismStorageConfig.getOrDefault(true)
 
     val enableOccultismGoldenBowl: Boolean
-        get() = enableOccultismGoldenBowlConfig?.get() ?: true
+        get() = enableOccultismGoldenBowlConfig.getOrDefault(true)
 
     override val name: String
         get() = "occultism"

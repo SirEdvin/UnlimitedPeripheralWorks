@@ -11,7 +11,7 @@ object UniversalShopsConfiguration : IntegrationConfiguration {
     private var enableShopsConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableShops: Boolean
-        get() = enableShopsConfig?.get() ?: true
+        get() = enableShopsConfig.getOrDefault(true)
 
     override val name: String
         get() = "universal_shops"

@@ -12,9 +12,9 @@ object ModernIndustrializationConfiguration : IntegrationConfiguration {
     private var enableCraftingMachineConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableEnergyStorage: Boolean
-        get() = enableEnergyStorageConfig?.get() ?: true
+        get() = enableEnergyStorageConfig.getOrDefault(true)
     val enableCraftingMachine: Boolean
-        get() = enableCraftingMachineConfig?.get() ?: true
+        get() = enableCraftingMachineConfig.getOrDefault(true)
 
     override val name: String
         get() = "modern_industrialization"

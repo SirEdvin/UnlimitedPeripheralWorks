@@ -13,7 +13,7 @@ object EmbersConfiguration : IntegrationConfiguration {
     private var enableEmberStorageConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableEmberStorage: Boolean
-        get() = enableEmberStorageConfig?.get() != false
+        get() = enableEmberStorageConfig.getOrDefault(true)
 
     override fun addToConfig(builder: ForgeConfigSpec.Builder) {
         enableEmberStorageConfig = builder.comment("Enables ember storage integration")

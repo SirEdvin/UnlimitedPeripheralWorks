@@ -11,7 +11,7 @@ object FluxNetworksConfiguration : IntegrationConfiguration {
     private var enableFluxControllerConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableFluxController: Boolean
-        get() = enableFluxControllerConfig?.get() != false
+        get() = enableFluxControllerConfig.getOrDefault(true)
 
     override val name: String
         get() = "flux_networks"

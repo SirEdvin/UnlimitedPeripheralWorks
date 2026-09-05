@@ -13,13 +13,13 @@ object DeepResonanceConfiguration : IntegrationConfiguration {
     private var enableTankConfig: ForgeConfigSpec.BooleanValue? = null
 
     val enableResonatingCrystal: Boolean
-        get() = enableResonatingCrystalConfig?.get() ?: true
+        get() = enableResonatingCrystalConfig.getOrDefault(true)
 
     val enableGeneratorPart: Boolean
-        get() = enableGeneratorPartConfig?.get() ?: true
+        get() = enableGeneratorPartConfig.getOrDefault(true)
 
     val enableTank: Boolean
-        get() = enableTankConfig?.get() ?: true
+        get() = enableTankConfig.getOrDefault(true)
 
     override val name: String
         get() = "deep_resonance"
