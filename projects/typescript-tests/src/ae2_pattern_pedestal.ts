@@ -5,6 +5,12 @@ import type { Fallible } from "@siredvin/typed-peripheral-unlimitedperipheralwor
 interface TestApi { ok(marker?: string): void; }
 declare const test: TestApi;
 const check = (value: unknown, message: string): void => { if (!value) throw message; };
+const sameDefinition = (left: unknown, right: unknown): boolean => {
+    if (left === right) return true;
+    if (type(left) !== "table" || type(right) !== "table") return false;
+    const a = left as Record<string, unknown>, b = right as Record<string, unknown>;
+    return Object.keys(a).length === Object.keys(b).length && Object.keys(a).every(key => sameDefinition(a[key], b[key]));
+};
 const target = peripheral.wrap("front") as AE2PatternPedestal;
 check(target && peripheral.hasType("front", "peripheralworks:ae2_pattern_pedestal"), "Missing pattern pedestal");
 check(target.getPattern().state === "empty", "Initial state must be empty");
@@ -58,7 +64,11 @@ for (const encode of encoders) {
         } else if (pattern.type === "crafting") [restored] = target.encodeCraftingPattern(pattern.definition);
         else if (pattern.type === "stonecutting") [restored] = target.encodeStonecuttingPattern(pattern.definition);
         else [restored] = target.encodeSmithingTablePattern(pattern.definition);
-        check(restored === true && target.getPattern().state === "encoded", "Definition could not be re-encoded");
+        const restoredPattern = target.getPattern();
+        check(restored === true && restoredPattern.state === "encoded", "Definition could not be re-encoded");
+        if (restoredPattern.state === "encoded") {
+            check(restoredPattern.type === pattern.type && sameDefinition(pattern.definition, restoredPattern.definition), "Clear/re-encode changed the pattern definition");
+        }
         target.clearPattern();
     }
 }
@@ -78,6 +88,17 @@ check(successes === 1, "Competing calls both consumed the same blank");
 target.clearPattern();
 const [missingRecipe] = target.encodeCraftingPattern({ ...crafting, recipeId: "minecraft:missing_recipe" });
 check(missingRecipe === null && target.getPattern().state === "blank", "Missing recipe consumed blank");
+for (const [label, slots, material] of [
+    ["wrong ingredients", [1, 2, 4, 5], "minecraft:stone"],
+    ["wrong layout", [1, 3, 7, 9], "minecraft:oak_planks"],
+] as const) {
+    const invalidGrid = new LuaTable<number, AE2PatternIngredient>();
+    for (const slot of slots) invalidGrid.set(slot, item(material));
+    const before = target.getPattern();
+    const [result, reason] = target.encodeCraftingPattern({ ...crafting, grid: invalidGrid });
+    check(result === null && reason !== undefined, `Crafting table accepted ${label}`);
+    check(sameDefinition(before, target.getPattern()), `Rejected ${label} changed the blank pattern`);
+}
 const [wrongType] = target.encodeCraftingPattern({ ...crafting, recipeId: stonecutting.recipeId });
 const [wrongInputs] = target.encodeStonecuttingPattern({ ...stonecutting, input: item("minecraft:diamond") });
 const [wrongSmithing] = target.encodeSmithingTablePattern({ ...smithing, addition: item("minecraft:stone") });
