@@ -42,7 +42,8 @@ class AE2PatternPedestalClientGameTests {
                 check(model !== minecraft.modelManager.missingModel) { "Pedestal model is missing" }
                 @Suppress("DEPRECATION")
                 val particle = model.particleIcon
-                check(particle.contents().name() != net.minecraft.client.renderer.texture.MissingTextureAtlasSprite.getLocation()) { "Pedestal texture is missing" }
+                check(particle.contents().name().toString() == "ae2:block/quartz_block") { "Pedestal must use the certus quartz texture" }
+                check(ItemStack(Registration.PATTERN_PEDESTAL.get()).hoverName.string == "Pattern pedestal") { "Pedestal display name is wrong" }
             }
             .thenScreenshot("ae2-pattern-pedestal")
             .thenWaitUntil {

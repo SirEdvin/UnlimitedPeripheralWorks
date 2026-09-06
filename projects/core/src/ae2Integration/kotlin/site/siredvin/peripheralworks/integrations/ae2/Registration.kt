@@ -83,7 +83,7 @@ class Registration : Runnable {
     override fun run() {
         PeripheralWorksClientCore.addHook { AE2PatternPedestalClient.register() }
         ModBlockModelProvider.addHook { generators ->
-            ModBlockModelProvider.pedestalBlock(generators, PATTERN_PEDESTAL.get(), ResourceLocation("minecraft", "block/quartz_block_bottom"))
+            ModBlockModelProvider.pedestalBlock(generators, PATTERN_PEDESTAL.get(), ResourceLocation("ae2", "block/quartz_block"))
         }
         ModLootTableProvider.addBlockHook { loot, output -> loot.dropSelf(output, PATTERN_PEDESTAL) }
         ModRecipeProvider.addHook { output ->
@@ -94,8 +94,8 @@ class Registration : Runnable {
                 .pattern("P")
                 .save(AE2RecipeConditions.wrap(output))
         }
-        ModEnLanguageProvider.addHook { it.add(PATTERN_PEDESTAL.get(), "AE2 pattern pedestal", "§3§oInspect, clear and encode one AE2 pattern at a time. Encoding requires a blank pattern.") }
-        ModUaLanguageProvider.addHook { it.add(PATTERN_PEDESTAL.get(), "П'єдестал шаблонів AE2", "§3§oПереглядає, очищає та кодує один шаблон AE2. Кодування потребує порожнього шаблону.") }
+        ModEnLanguageProvider.addHook { it.add(PATTERN_PEDESTAL.get(), "Pattern pedestal", "§3§oInspect, clear and encode one AE2 pattern at a time. Encoding requires a blank pattern.") }
+        ModUaLanguageProvider.addHook { it.add(PATTERN_PEDESTAL.get(), "П'єдестал шаблонів", "§3§oПереглядає, очищає та кодує один шаблон AE2. Кодування потребує порожнього шаблону.") }
         val wirelessTerminalUpgrade = ModPlatform.registerTurtleUpgrade(
             AE2WirelessTerminalUpgrade.UPGRADE_ID,
             TurtleUpgradeSerialiser.simpleWithCustomItem { id, stack -> AE2WirelessTerminalUpgrade(id, stack) },

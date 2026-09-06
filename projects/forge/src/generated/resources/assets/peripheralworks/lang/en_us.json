@@ -1,7 +1,7 @@
 {
   "aspect.integrateddynamics.read.nbt.cc_output": "Output information from computer",
   "aspect.integrateddynamics.write.nbt.cc_input": "Input information to computer",
-  "block.peripheralworks.ae2_pattern_pedestal": "AE2 pattern pedestal",
+  "block.peripheralworks.ae2_pattern_pedestal": "Pattern pedestal",
   "block.peripheralworks.ae2_pattern_pedestal.tooltip": "§3§oInspect, clear and encode one AE2 pattern at a time. Encoding requires a blank pattern.",
   "block.peripheralworks.display_pedestal": "Display pedestal",
   "block.peripheralworks.display_pedestal.tooltip": "§3§oCute pedestal, that cannot store anything, but can display literally anything",
