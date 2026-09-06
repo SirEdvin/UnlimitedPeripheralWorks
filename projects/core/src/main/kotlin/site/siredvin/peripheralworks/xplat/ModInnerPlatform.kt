@@ -26,5 +26,7 @@ interface ModInnerPlatform : InnerComputerBasePlatform {
     // TODO: when move it to libs, split it into client code. I need to have client code at least sometimes
     fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener>
 
-    fun createSlottedItemStorage(slots: Int, slotScale: Int, trigger: Runnable): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>>
+    fun createSlottedItemStorage(slots: Int, slotScale: Int, trigger: Runnable, capacity: Int? = null, accepts: (ItemStack) -> Boolean = { true }): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>>
+
+    fun replaceSlottedItem(storage: ISavableComponent, slot: Int, expected: ItemStack, replacement: ItemStack): Boolean
 }

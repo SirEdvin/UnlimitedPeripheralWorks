@@ -30,6 +30,7 @@ public final class ForgePeripheralWorksTestMod {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2GameTests"));
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2ConfigurableObjectsGameTests"));
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2WirelessTerminalGameTests"));
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2PatternPedestalGameTests"));
             } catch (ClassNotFoundException exception) {
                 throw new IllegalStateException(exception);
             }
@@ -41,6 +42,13 @@ public final class ForgePeripheralWorksTestMod {
     private static final class ClientTests {
         private static void register() {
             Testiarium.register(NetworkManagerClientGameTests.class);
+            if (ModList.get().isLoaded("ae2")) {
+                try {
+                    Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2PatternPedestalClientGameTests"));
+                } catch (ClassNotFoundException exception) {
+                    throw new IllegalStateException(exception);
+                }
+            }
             if (System.getProperty("testiarium.client") == null) {
                 return;
             }

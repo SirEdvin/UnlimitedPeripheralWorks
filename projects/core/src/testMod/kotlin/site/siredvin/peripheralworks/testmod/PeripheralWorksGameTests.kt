@@ -25,11 +25,54 @@ import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
 import site.siredvin.peripheralworks.subsystem.configurator.PeripheralProxyMode
 import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
 import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
+import site.siredvin.peripheralworks.xplat.ModPlatform
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
+    @GameTest(template = "empty")
+    fun optionalPatternPedestalRegistration(helper: GameTestHelper) {
+        val blocks = net.minecraft.core.registries.BuiltInRegistries.BLOCK
+        val ae2Present = blocks.containsKey(net.minecraft.resources.ResourceLocation("ae2", "controller"))
+        val pedestalPresent = blocks.containsKey(net.minecraft.resources.ResourceLocation("peripheralworks", "ae2_pattern_pedestal"))
+        check(ae2Present == pedestalPresent) { "Pattern pedestal registration does not follow AE2 availability" }
+        println("Pattern pedestal registration: AE2=$ae2Present, pedestal=$pedestalPresent")
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun constrainedPedestalStorage(helper: GameTestHelper) {
+        val platform = ModPlatform.baseInnerPlatform
+        val stone = net.minecraft.world.item.Items.STONE
+        val dirt = net.minecraft.world.item.Items.DIRT
+        var changes = 0
+        val (saved, storage) = platform.createSlottedItemStorage(1, 1, { changes++ }, 1) { it.`is`(stone) }
+        check(storage.getLimit(0) == 1L)
+        check(storage.store(ItemStack(dirt, 5), false).count == 5)
+        check(storage.get(0).isEmpty && changes == 0)
+        check(storage.store(ItemStack(stone, 5), true).count == 4)
+        check(storage.get(0).isEmpty && changes == 0)
+        check(storage.store(ItemStack(stone, 5), false).count == 4)
+        check(storage.get(0).count == 1 && changes > 0)
+        val original = storage.get(0).copy()
+        val beforeReplace = changes
+        check(!platform.replaceSlottedItem(saved, 0, ItemStack(dirt), ItemStack(stone)))
+        check(!platform.replaceSlottedItem(saved, 0, original, ItemStack(stone, 2)))
+        check(!platform.replaceSlottedItem(saved, 0, original, ItemStack(dirt)))
+        check(ItemStack.matches(storage.get(0), original) && changes == beforeReplace)
+        val tagged = original.copy().apply { orCreateTag.putString("variant", "replacement") }
+        check(platform.replaceSlottedItem(saved, 0, original, tagged))
+        check(ItemStack.matches(storage.get(0), tagged) && changes > beforeReplace)
+        val (loaded, loadedStorage) = platform.createSlottedItemStorage(1, 1, {}, 1) { it.`is`(stone) }
+        loaded.load(saved.save())
+        check(ItemStack.matches(loadedStorage.get(0), tagged))
+        val (_, ordinary) = platform.createSlottedItemStorage(1, 1, {})
+        check(ordinary.store(ItemStack(stone, 64), false).isEmpty)
+        check(ordinary.get(0).count == 64)
+        helper.succeed()
+    }
+
     @GameTest(template = "empty")
     fun integrationConfigurationsAreDiscoveredAndFiltered(helper: GameTestHelper) {
         val discovered = IntegrationConfigurationDiscovery.discover { true }

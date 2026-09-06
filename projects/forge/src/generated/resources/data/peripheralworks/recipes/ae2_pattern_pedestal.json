@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "forge:conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "key": {
+    "B": {
+      "item": "ae2:blank_pattern"
+    },
+    "P": {
+      "item": "peripheralworks:item_pedestal"
+    }
+  },
+  "pattern": [
+    "B",
+    "P"
+  ],
+  "result": {
+    "item": "peripheralworks:ae2_pattern_pedestal"
+  }
+}

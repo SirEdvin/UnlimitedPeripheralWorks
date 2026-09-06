@@ -18,7 +18,7 @@ for (const peripheral of [
   "informative_registry", "statue_workbench", "entity_link", "network_manager",
   "hologram_projector", "ae2_interface", "ae2_import_bus", "ae2_export_bus", "ae2_storage_bus",
   "ae2_formation_plane", "ae2_storage_level_emitter", "ae2_energy_level_emitter", "ae2_pattern_provider",
-  "ae2_wireless_terminal",
+  "ae2_wireless_terminal", "ae2_pattern_pedestal",
 ]) {
   const result = spawnSync(
     process.execPath,

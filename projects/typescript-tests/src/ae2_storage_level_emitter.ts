@@ -24,6 +24,6 @@ target.setEmitterMode("high_signal");
 target.setCraftViaRedstone(true);
 check(target.getThreshold() === 4000 && target.getThresholdUnit() === "millibucket" && target.getEmitterMode() === "high_signal" &&
     target.shouldCraftViaRedstone(), "Storage Level Emitter settings did not apply");
-check(target.pullUpgrade(inventoryName, 3, 1, 1) === 1, "emitter upgrade did not transfer");
+check(target.pullUpgrade(inventoryName, 3, 1, 1) === 1, `emitter upgrade did not transfer: inventory=${textutils.serialize(itemInventory.list())}; upgrades=${textutils.serialize(target.listUpgrades())}`);
 check(target.pullUpgrade(inventoryName, 4, 1, 1) === 0 && itemInventory.list()[4]?.name === "ae2:fuzzy_card", "emitter accepted a second card");
 test.ok();

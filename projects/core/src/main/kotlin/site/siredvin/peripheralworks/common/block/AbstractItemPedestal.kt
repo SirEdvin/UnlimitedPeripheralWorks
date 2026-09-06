@@ -32,7 +32,8 @@ abstract class AbstractItemPedestal<T : BlockEntity>(properties: Properties = Bl
         if (interactionHand == InteractionHand.MAIN_HAND) {
             if (blockEntity is AbstractItemPedestalBlockEntity<*>) {
                 if (!itemInHand.isEmpty) {
-                    val leftover = blockEntity.storage.store(itemInHand, false)
+                    // Fabric storage mutates its argument; retain the hand stack for comparison and synchronization.
+                    val leftover = blockEntity.storage.store(itemInHand.copy(), false)
                     if (!ItemStack.matches(leftover, itemInHand)) {
                         player.setItemInHand(interactionHand, leftover)
                         return InteractionResult.CONSUME
