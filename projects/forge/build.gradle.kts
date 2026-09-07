@@ -12,6 +12,8 @@ val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+val testWithoutAE2 = providers.gradleProperty("testWithoutAE2").isPresent
+require(!testWithoutAE2 || minimalTestEnvironment) { "testWithoutAE2 requires minimalTestEnvironment" }
 
 tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
     source(project(":core").fileTree("src/ae2Integration/kotlin"))
@@ -86,7 +88,11 @@ dependencies {
     compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
 
     if (minimalTestEnvironment) {
-        implementation(fg.deobf(libs.ae2.forge.get()))
+        if (testWithoutAE2) {
+            compileOnly(fg.deobf(libs.ae2.forge.get()))
+        } else {
+            implementation(fg.deobf(libs.ae2.forge.get()))
+        }
     } else {
         runtimeOnly(fg.deobf(libs.jade.forge.get()))
         libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
