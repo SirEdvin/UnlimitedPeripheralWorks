@@ -14,6 +14,9 @@ check(itemInventory, "Fixture inventory did not become available");
 
 const target = peripheral.wrap("front") as AE2PatternProviderPeripheral;
 check(target, "Fixture pattern provider did not become available");
+// @ts-expect-error Legacy pattern providers deliberately have no subscription capability.
+check(target.subscribe === undefined, "Legacy pattern provider exposed subscriptions");
+check(target.getCraftingJobs().length === 0, "Disconnected pattern provider returned crafting jobs");
 check(target.getDeviceType() === "pattern_provider", `Expected pattern_provider, got ${target.getDeviceType()}`);
 target.setPriority(9);
 target.setBlocking(true);

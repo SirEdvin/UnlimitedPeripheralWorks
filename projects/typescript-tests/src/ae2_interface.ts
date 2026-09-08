@@ -14,6 +14,9 @@ const fluid = (name: string) => ({ type: "fluid" as const, name });
 
 const target = peripheral.wrap("front") as AE2InterfacePeripheral;
 check(target, "Fixture interface did not become available");
+// @ts-expect-error Legacy interfaces deliberately have no subscription capability.
+check(target.subscribe === undefined, "Legacy interface exposed subscriptions");
+check(target.getCraftingJobs().length === 0, "Disconnected interface returned crafting jobs");
 check(target.getDeviceType() === "interface", `Expected interface, got ${target.getDeviceType()}`);
 target.setStock(1, { ...item("minecraft:iron_ingot"), count: 32 });
 check(target.getStock(1)?.target?.count === 32, "interface item stock did not apply");

@@ -9,6 +9,7 @@ import appeng.api.networking.security.IActionSource
 import appeng.api.orientation.BlockOrientation
 import appeng.api.parts.PartHelper
 import appeng.api.stacks.AEItemKey
+import appeng.api.stacks.KeyCounter
 import appeng.api.storage.StorageCells
 import appeng.api.util.AECableType
 import appeng.api.util.AEColor
@@ -26,6 +27,7 @@ import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.NbtIo
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.material.Fluids
@@ -42,6 +44,11 @@ import site.siredvin.peripheralworks.integrations.ae2.MENetworkPeripheralBlockEn
 import site.siredvin.peripheralworks.integrations.ae2.Registration
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.DataInputStream
+import java.io.DataOutputStream
+import java.util.concurrent.atomic.AtomicReference
 import site.siredvin.peripheralworks.common.setup.Blocks as ModBlocks
 import site.siredvin.peripheralworks.common.setup.Items as ModItems
 
@@ -145,6 +152,100 @@ class AE2GameTests {
         val restored = AE2StorageSubscriptionTracker(maxSubscriptions = 2)
         check(restored.load(persisted))
         check(restored.getSubscriptions().map { it["name"] } == listOf("a", "b"))
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun storageSubscriptionWireLimitsAndAtomicity(helper: GameTestHelper) {
+        fun roundTrip(tracker: AE2StorageSubscriptionTracker, maxValues: Int = 1024) {
+            val bytes = ByteArrayOutputStream()
+            DataOutputStream(bytes).use { NbtIo.write(tracker.save(), it) }
+            val restored = AE2StorageSubscriptionTracker(maxItemFilterSize = maxValues)
+            check(!restored.load(DataInputStream(ByteArrayInputStream(bytes.toByteArray())).use { NbtIo.read(it)!! }))
+            check(restored.getSubscriptions() == tracker.getSubscriptions()) { "Definitions did not survive the NBT wire format" }
+        }
+        val limited = AE2StorageSubscriptionTracker(maxItemFilterSize = 3)
+        limited.subscribe("existing", "item", mapOf("displayName" to "Original"))
+        var persisted = limited.save()
+        limited.onDefinitionsChanged = { persisted = limited.save() }
+        val original = limited.getSubscriptions()
+        val originalTag = persisted.copy()
+        check(runCatching { limited.subscribe("existing", "item", mapOf("displayName" to "Stone", "tag" to "minecraft:logs")) }.exceptionOrNull() is dan200.computercraft.api.lua.LuaException)
+        check(limited.getSubscriptions() == original && persisted == originalTag)
+        roundTrip(limited, 3)
+        limited.onDefinitionsChanged = { error("Persistence unavailable") }
+        check(runCatching { limited.subscribe("existing", "item", "minecraft:stone") }.isFailure)
+        check(limited.getSubscriptions() == original)
+        check(runCatching { limited.subscribe("new", "fluid", null) }.isFailure)
+        check(limited.getSubscriptions() == original)
+
+        val tracker = AE2StorageSubscriptionTracker(maxItemFilterSize = 1024)
+        tracker.subscribe("tags", "item", mapOf("tag" to mapOf("in" to (1..509).associateWith { "example:tag$it" })))
+        roundTrip(tracker)
+        val before = tracker.getSubscriptions()
+        check(runCatching { tracker.subscribe("tags", "item", mapOf("tag" to mapOf("in" to (1..510).associateWith { "example:tag$it" }))) }.exceptionOrNull() is dan200.computercraft.api.lua.LuaException)
+        check(tracker.getSubscriptions() == before)
+        roundTrip(tracker)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun storageSubscriptionStringBounds(helper: GameTestHelper) {
+        val tracker = AE2StorageSubscriptionTracker()
+        listOf("a".repeat(65535), "\u0000".repeat(32767) + "a", "界".repeat(21845)).forEach { tracker.subscribe(it, "fluid", null) }
+        tracker.subscribe("large-filter", "item", mapOf("displayName" to "a".repeat(65000)))
+        val before = tracker.getSubscriptions()
+        val bytes = ByteArrayOutputStream()
+        DataOutputStream(bytes).use { NbtIo.write(tracker.save(), it) }
+        val restored = AE2StorageSubscriptionTracker()
+        check(!restored.load(DataInputStream(ByteArrayInputStream(bytes.toByteArray())).use { NbtIo.read(it)!! }))
+        check(restored.getSubscriptions() == before)
+        listOf("a".repeat(65536), "\u0000".repeat(32768), "界".repeat(21846), "🌳".repeat(10923)).forEach { name ->
+            check(runCatching { tracker.subscribe(name, "fluid", null) }.exceptionOrNull() is dan200.computercraft.api.lua.LuaException)
+        }
+        listOf(
+            mapOf("displayName" to "a".repeat(65536)),
+            mapOf("displayName" to "界".repeat(21846)),
+            mapOf("displayName" to "\u0000".repeat(32768)),
+            mapOf("a".repeat(65536) to "value"),
+            mapOf("displayName" to "a".repeat(33000), "tag" to "b".repeat(33000)),
+        ).forEach { filter ->
+            check(runCatching { tracker.subscribe("large-filter", "item", filter) }.exceptionOrNull() is dan200.computercraft.api.lua.LuaException)
+        }
+        check(tracker.getSubscriptions() == before) { "Rejected strings changed definitions" }
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun storageSubscriptionConcurrentAttachment(helper: GameTestHelper) {
+        val tracker = AE2StorageSubscriptionTracker()
+        tracker.subscribe("stone", "item", "minecraft:stone")
+        val key = AEItemKey.of(Items.STONE)
+        tracker.baseline(KeyCounter())
+        var oldSinkEvents = 0
+        var newSinkEvents = 0
+        val oldSink: (String, Map<String, Any>, Long, Long) -> Unit = { _, _, _, _ -> oldSinkEvents++ }
+        val newSink: (String, Map<String, Any>, Long, Long) -> Unit = { _, _, _, _ -> newSinkEvents++ }
+        val failure = AtomicReference<Throwable>()
+        tracker.addEventSink { _, _, _, _ ->
+            val attachment = Thread {
+                try {
+                    tracker.removeEventSink(oldSink)
+                    tracker.addEventSink(newSink)
+                } catch (error: Throwable) {
+                    failure.set(error)
+                }
+            }
+            attachment.start()
+            attachment.join(1000)
+            check(!attachment.isAlive) { "Attach/detach blocked on event dispatch" }
+            failure.get()?.let { throw it }
+        }
+        tracker.addEventSink(oldSink)
+        tracker.onStackChange(key, 1)
+        check(oldSinkEvents == 1 && newSinkEvents == 0) { "In-flight dispatch did not retain its snapshot" }
+        tracker.onStackChange(key, 2)
+        check(oldSinkEvents == 1 && newSinkEvents == 1) { "Subsequent dispatch did not see changed attachments" }
         helper.succeed()
     }
 

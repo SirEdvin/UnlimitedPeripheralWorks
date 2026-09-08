@@ -1,9 +1,12 @@
 package site.siredvin.peripheralworks.testmod
 
 import appeng.api.config.Actionable
+import appeng.api.crafting.PatternDetailsHelper
 import appeng.api.networking.IGrid
 import appeng.api.networking.security.IActionSource
 import appeng.api.stacks.AEItemKey
+import appeng.api.stacks.GenericStack
+import appeng.blockentity.crafting.PatternProviderBlockEntity
 import appeng.blockentity.networking.WirelessAccessPointBlockEntity
 import appeng.blockentity.storage.ChestBlockEntity
 import appeng.core.definitions.AEBlocks
@@ -90,6 +93,14 @@ class AE2WirelessTerminalGameTests {
         helper.level.setBlockAndUpdate(energyPos, AEBlocks.CREATIVE_ENERGY_CELL.block().defaultBlockState())
         helper.level.setBlockAndUpdate(chestPos, AEBlocks.CHEST.block().defaultBlockState())
         (helper.level.getBlockEntity(chestPos) as ChestBlockEntity).setCell(AEItems.ITEM_CELL_1K.stack())
+        val providerPos = energyPos.west()
+        helper.level.setBlockAndUpdate(energyPos.above(), AEBlocks.CRAFTING_STORAGE_1K.block().defaultBlockState())
+        helper.level.setBlockAndUpdate(providerPos, AEBlocks.PATTERN_PROVIDER.block().defaultBlockState())
+        helper.level.setBlockAndUpdate(providerPos.west(), net.minecraft.world.level.block.Blocks.CHEST.defaultBlockState())
+        (helper.level.getBlockEntity(providerPos) as PatternProviderBlockEntity).logic.patternInv.setItemDirect(
+            0,
+            PatternDetailsHelper.encodeProcessingPattern(arrayOf(GenericStack(AEItemKey.of(Items.DIRT), 1)), arrayOf(GenericStack(AEItemKey.of(Items.DIAMOND), 1))),
+        )
 
         val terminalItem = AEItems.WIRELESS_CRAFTING_TERMINAL.asItem()
         val terminal = AEItems.WIRELESS_CRAFTING_TERMINAL.stack().apply {
@@ -154,8 +165,8 @@ class AE2WirelessTerminalGameTests {
             .thenExecuteFailFast {
                 state().check("initial")
                 check(turtle.access.fuelLevel == 7) { "Expected three fuel-consuming calls, got ${turtle.access.fuelLevel}" }
-                check(turtle.contents[0].count == 5 && turtle.contents[0].`is`(Items.STONE))
-                check(turtle.contents[15].count == 5 && turtle.contents[15].`is`(Items.GOLD_INGOT))
+                check(turtle.contents[0].count == 5 && turtle.contents[0].`is`(Items.STONE)) { "Invalid slot calls changed turtle stone inventory" }
+                check(turtle.contents[15].count == 5 && turtle.contents[15].`is`(Items.GOLD_INGOT)) { "Invalid slot calls changed turtle gold inventory" }
                 check(grid.size() == gridSizeWithoutObserver + 1) { "Wireless storage observer was not attached" }
                 check(grid.pathingService.usedChannels == usedChannelsWithoutObserver) { "Wireless storage observer consumed an AE2 channel" }
                 turtle.access.fuelLevel = 0
@@ -202,8 +213,30 @@ class AE2WirelessTerminalGameTests {
                 helper.level.setBlockAndUpdate(energyPos, AEBlocks.CREATIVE_ENERGY_CELL.block().defaultBlockState())
             }
             .thenWaitUntil { await("reactivated") }
+            .thenWaitUntil {
+                grid = (helper.level.getBlockEntity(accessPointPos) as WirelessAccessPointBlockEntity).grid!!
+                if (!grid.craftingService.isCraftable(AEItemKey.of(Items.DIAMOND))) throw GameTestAssertException("Processing pattern is not yet available after network rejoin")
+            }
             .thenExecuteFailFast {
                 state().check("reactivated")
+                check(grid.storageService.inventory.insert(AEItemKey.of(Items.DIRT), 4, Actionable.MODULATE, IActionSource.empty()) == 4L) { "Failed to seed crafting ingredients after network rejoin" }
+            }
+            .thenWaitUntil { await("crafting-canceled") }
+            .thenWaitUntil { if (grid.craftingService.cpus.any { it.isBusy }) throw GameTestAssertException("Crafting CPU is still busy after cancellation") }
+            .thenExecuteFailFast {
+                state().check("crafting-canceled")
+                check(grid.storageService.inventory.insert(AEItemKey.of(Items.IRON_NUGGET), 1, Actionable.MODULATE, IActionSource.empty()) == 1L)
+            }
+            .thenWaitUntil { await("crafting-running") }
+            .thenWaitUntil { if (!grid.craftingService.isRequesting(AEItemKey.of(Items.DIAMOND))) throw GameTestAssertException("Crafting CPU has not requested output") }
+            .thenExecuteFailFast {
+                state().check("crafting-running")
+                // Simulate the external processing machine returning its output through AE2 storage.
+                check(grid.storageService.inventory.insert(AEItemKey.of(Items.DIAMOND), 1, Actionable.MODULATE, IActionSource.empty()) == 1L)
+            }
+            .thenWaitUntil { await("crafting-complete") }
+            .thenExecuteFailFast {
+                state().check("crafting-complete")
                 val data = turtle.access.getUpgradeNBTData(TurtleSide.LEFT)
                 val stored = ItemStack.of(data.getCompound("terminal"))
                 WirelessTerminalItem.LINKABLE_HANDLER.link(stored, GlobalPos.of(helper.level.dimension(), UNLOADED_POS))

@@ -19,6 +19,7 @@ object FabricPeripheralWorksTestMod : ModInitializer {
         Testiarium.register(PeripheralWorksGameTests::class.java)
         if (FabricLoader.getInstance().isModLoaded("ae2")) {
             Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2GameTests"))
+            Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2CraftingJobsGameTests"))
             Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2ConfigurableObjectsGameTests"))
             Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2WirelessTerminalGameTests"))
             Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2PatternPedestalGameTests"))

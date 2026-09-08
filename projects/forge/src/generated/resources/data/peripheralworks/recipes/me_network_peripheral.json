@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "forge:conditions": [
+  "conditions": [
     {
       "type": "forge:mod_loaded",
       "modid": "ae2"

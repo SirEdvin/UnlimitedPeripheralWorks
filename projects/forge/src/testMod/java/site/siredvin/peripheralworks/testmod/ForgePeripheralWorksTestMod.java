@@ -25,9 +25,11 @@ public final class ForgePeripheralWorksTestMod {
             CctFixtureCommands.INSTANCE.importFiles(event.getServer());
         });
         Testiarium.register(PeripheralWorksGameTests.class);
+        Testiarium.register(ForgeRecipeConditionsGameTests.class);
         if (ModList.get().isLoaded("ae2")) {
             try {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2GameTests"));
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2CraftingJobsGameTests"));
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2ConfigurableObjectsGameTests"));
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2WirelessTerminalGameTests"));
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2PatternPedestalGameTests"));

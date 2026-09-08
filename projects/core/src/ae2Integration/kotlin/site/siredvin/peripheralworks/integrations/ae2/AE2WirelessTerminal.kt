@@ -179,8 +179,8 @@ private class AE2WirelessTerminalPlugin(
         val transferLimit = min(PeripheralWorksConfig.itemStorageTransferLimit, limit.orElse(Int.MAX_VALUE))
         if (transferLimit < 0) throw LuaException("Limit must be non-negative")
         val inventorySize = owner.storage!!.size
+        if (slot.isPresent && slot.get() !in 1..inventorySize) throw LuaException("Slot must be between 1 and $inventorySize")
         val storageSlot = slot.map { it - 1 }.orElse(-1)
-        if (storageSlot !in -1 until inventorySize) throw LuaException("Slot must be between 1 and $inventorySize")
         return predicate to (transferLimit to storageSlot)
     }
 

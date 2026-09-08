@@ -43,6 +43,9 @@ export type AE2StorageSubscriptionResource =
 
 /** @noSelf **/
 export interface AE2StorageSubscriptionAPI {
+    /** Names are limited to 65535 modified-UTF-8 bytes. Item filters must fit both
+     * the configured value limit (including table keys) and 65536 encoded NBT bytes.
+     * Rejected registrations/replacements leave the existing definition unchanged. */
     subscribe(name: string, type: "item", filter?: ItemQuery): void;
     subscribe(name: string, type: "fluid", filter?: string): void;
     unsubscribe(name: string): boolean;
@@ -50,12 +53,14 @@ export interface AE2StorageSubscriptionAPI {
 }
 
 /** @noSelf **/
-export interface AE2NetworkAccessAPI
-    extends IPeripheral,
-        AE2StorageSubscriptionAPI {
+export interface AE2CraftingAPI {
     getCraftingJob(jobId: string): Fallible<AE2CraftingJob>;
     getCraftingJobs(): AE2CraftingJob[];
     cancelCrafting(jobId: string): Fallible<boolean>;
+    /** Yields while AE2 calculates without blocking the server tick. Access is rechecked
+     * before submission; losing the link/range or changing networks rejects the request.
+     * Standalone jobs return their output to network storage. Job IDs are process-local
+     * and only retained while their native AE2 links remain reachable. */
     scheduleCrafting(
         mode: "item" | "fluid",
         id: string,
@@ -72,7 +77,10 @@ export const ae2NetworkAccessProvider =
     new IPeripheralProvider<AE2NetworkAccessAPI>("ae2_network_access");
 
 /** @noSelf **/
-export interface AE2NetworkAPI extends AE2NetworkAccessAPI {
+export interface AE2NetworkAccessAPI extends IPeripheral, AE2CraftingAPI, AE2StorageSubscriptionAPI {}
+
+/** @noSelf **/
+export interface AE2NetworkAPI extends IPeripheral, AE2CraftingAPI {
     getAverageEnergyDemand(): number;
     getAverageEnergyIncome(): number;
     getChannelEnergyDemand(): number;

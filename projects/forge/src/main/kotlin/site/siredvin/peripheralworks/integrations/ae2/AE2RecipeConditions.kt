@@ -11,7 +11,7 @@ object AE2RecipeConditions {
             override fun serializeRecipeData(json: JsonObject) {
                 recipe.serializeRecipeData(json)
                 json.add(
-                    "forge:conditions",
+                    "conditions",
                     JsonArray().apply {
                         add(
                             JsonObject().apply {

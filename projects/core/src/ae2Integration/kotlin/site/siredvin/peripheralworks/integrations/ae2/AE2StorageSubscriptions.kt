@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.NbtIo
 import net.minecraft.nbt.Tag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.Level
@@ -30,7 +31,10 @@ import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 import site.siredvin.tweakium.modules.peripheral.representation.LuaRepresentation
 import site.siredvin.tweakium.modules.peripheral.representation.RepresentationMode
 import site.siredvin.tweakium.modules.plugins.PeripheralPluginUtils
+import java.io.DataOutputStream
+import java.io.OutputStream
 import java.util.TreeMap
+import java.util.concurrent.CopyOnWriteArraySet
 import java.util.function.Predicate
 
 private const val SUBSCRIPTIONS_TAG = "ae2StorageSubscriptions"
@@ -41,6 +45,8 @@ private const val VALUE_TAG = "value"
 private const val ENTRIES_TAG = "entries"
 private const val KEY_TAG = "key"
 private const val MAX_FILTER_DEPTH = 16
+private const val MAX_FILTER_BYTES = 65536
+private const val MAX_NBT_STRING_BYTES = 65535
 
 private const val STRING_VALUE: Byte = 1
 private const val NUMBER_VALUE: Byte = 2
@@ -89,7 +95,9 @@ class AE2StorageSubscriptionTracker(
 ) {
     private val subscriptions = TreeMap<String, RuntimeSubscription>()
     private val amounts = mutableMapOf<AEKey, Long>()
-    private val eventSinks = mutableSetOf<(String, Map<String, Any>, Long, Long) -> Unit>()
+
+    // Attach/detach may run on computer threads; dispatch uses a stable snapshot.
+    private val eventSinks = CopyOnWriteArraySet<(String, Map<String, Any>, Long, Long) -> Unit>()
     private var baselined = false
 
     var onDefinitionsChanged: (() -> Unit)? = null
@@ -99,7 +107,7 @@ class AE2StorageSubscriptionTracker(
         get() = subscriptions.isNotEmpty() && eventSinks.isNotEmpty()
 
     fun subscribe(name: String, typeName: String, filter: Any?) {
-        if (name.isBlank()) throw LuaException("Subscription name must not be empty")
+        validateName(name)
         if (name !in subscriptions && subscriptions.size >= maxSubscriptions) {
             throw LuaException("Peripheral cannot have more than $maxSubscriptions AE2 storage subscriptions")
         }
@@ -108,8 +116,13 @@ class AE2StorageSubscriptionTracker(
         val definition = AE2StorageSubscriptionDefinition(name, type, normalizedFilter)
         val runtime = compile(definition)
         val wasObserving = shouldObserve
-        subscriptions[name] = runtime
-        onDefinitionsChanged?.invoke()
+        val previous = subscriptions.put(name, runtime)
+        try {
+            onDefinitionsChanged?.invoke()
+        } catch (error: Exception) {
+            if (previous == null) subscriptions.remove(name) else subscriptions[name] = previous
+            throw error
+        }
         if (wasObserving != shouldObserve) onActivityChanged?.invoke()
     }
 
@@ -126,15 +139,12 @@ class AE2StorageSubscriptionTracker(
     fun getSubscriptions(): List<Map<String, Any>> = subscriptions.values.map { it.definition.toLua() }
 
     fun addEventSink(sink: (String, Map<String, Any>, Long, Long) -> Unit) {
-        val wasObserving = shouldObserve
-        eventSinks.add(sink)
-        if (wasObserving != shouldObserve) onActivityChanged?.invoke()
+        // Do not read the server-owned subscription map from an attachment thread.
+        if (eventSinks.add(sink)) onActivityChanged?.invoke()
     }
 
     fun removeEventSink(sink: (String, Map<String, Any>, Long, Long) -> Unit) {
-        val wasObserving = shouldObserve
-        eventSinks.remove(sink)
-        if (wasObserving != shouldObserve) onActivityChanged?.invoke()
+        if (eventSinks.remove(sink)) onActivityChanged?.invoke()
     }
 
     fun baseline(counter: KeyCounter) {
@@ -190,7 +200,7 @@ class AE2StorageSubscriptionTracker(
             try {
                 val entry = raw as CompoundTag
                 val name = entry.getString("name")
-                if (name.isBlank()) throw IllegalArgumentException("Empty subscription name")
+                validateName(name)
                 val type = AE2StorageSubscriptionType.parse(entry.getString("subscriptionType"))
                 val filter = if (entry.contains(FILTER_TAG, Tag.TAG_COMPOUND.toInt())) {
                     decodeValue(entry.getCompound(FILTER_TAG), 0, intArrayOf(0), maxItemFilterSize)
@@ -211,7 +221,16 @@ class AE2StorageSubscriptionTracker(
     private fun normalizeFilter(type: AE2StorageSubscriptionType, filter: Any?): Any? = when (type) {
         AE2StorageSubscriptionType.ITEM -> {
             if (filter != null && filter !is String && filter !is Map<*, *>) throw LuaException("Item query should be string or table")
-            normalizeValue(filter, 0, intArrayOf(0), maxItemFilterSize).also { PeripheralPluginUtils.itemQueryToPredicate(it) }
+            normalizeValue(filter, 0, intArrayOf(0), maxItemFilterSize).also {
+                PeripheralPluginUtils.itemQueryToPredicate(it)
+                if (it != null) {
+                    val encoded = encodeValue(it, 0, intArrayOf(0), maxItemFilterSize)
+                    DataOutputStream(OutputStream.nullOutputStream()).use { output ->
+                        NbtIo.write(encoded, output)
+                        if (output.size() > MAX_FILTER_BYTES) throw LuaException("Subscription filter exceeds $MAX_FILTER_BYTES encoded bytes")
+                    }
+                }
+            }
         }
         AE2StorageSubscriptionType.FLUID -> {
             if (filter == null) {
@@ -405,11 +424,31 @@ internal class AE2WirelessStorageObserver(private val tracker: AE2StorageSubscri
     }
 }
 
+private fun validateName(name: String) {
+    if (name.isBlank()) throw LuaException("Subscription name must not be empty")
+    checkStringBytes(name, MAX_NBT_STRING_BYTES)
+}
+
+private fun checkStringBytes(value: String, limit: Int) {
+    if (value.length > limit) throw LuaException("Subscription string exceeds $limit NBT bytes")
+    var bytes = 0
+    for (char in value) {
+        // NBT uses modified UTF-8: NUL takes two bytes and surrogates take three each.
+        bytes += when (char.code) {
+            in 1..127 -> 1
+            in 0..2047 -> 2
+            else -> 3
+        }
+        if (bytes > limit) throw LuaException("Subscription string exceeds $limit NBT bytes")
+    }
+}
+
 private fun normalizeValue(value: Any?, depth: Int, count: IntArray, maxValues: Int): Any? {
     if (value == null) return null
     if (depth > MAX_FILTER_DEPTH || ++count[0] > maxValues) throw LuaException("Subscription item filter exceeds the configured size limit of $maxValues values")
     return when (value) {
-        is String, is Boolean -> value
+        is String -> value.also { checkStringBytes(it, MAX_NBT_STRING_BYTES) }
+        is Boolean -> value
         is Number -> value.toDouble().also {
             if (!it.isFinite()) throw LuaException("Subscription filter contains an invalid number")
         }
@@ -422,6 +461,7 @@ private fun normalizeValue(value: Any?, depth: Int, count: IntArray, maxValues: 
                     }
                     else -> throw LuaException("Subscription filter table keys must be strings or numbers")
                 }
+                normalizeValue(normalizedKey, depth + 1, count, maxValues)
                 put(normalizedKey, normalizeValue(nested, depth + 1, count, maxValues) ?: throw LuaException("Subscription filter table values must not be nil"))
             }
         }
