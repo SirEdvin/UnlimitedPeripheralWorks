@@ -14,13 +14,23 @@ import net.neoforged.neoforge.items.ItemStackHandler
 import net.neoforged.neoforge.server.ServerLifecycleHooks
 import site.siredvin.peripheralworks.api.ISavableComponent
 
-class ForgeCustomSlottedStorage(size: Int, private val slotScale: Int, private val trigger: Runnable) :
+class ForgeCustomSlottedStorage(size: Int, private val slotScale: Int, private val trigger: Runnable, private val capacity: Int? = null, private val accepts: (ItemStack) -> Boolean = { true }) :
     ItemStackHandler(size),
     ISavableComponent {
 
-    override fun getSlotLimit(slot: Int): Int = 64 * slotScale
+    override fun getSlotLimit(slot: Int): Int = capacity ?: (64 * slotScale)
+
+    override fun isItemValid(slot: Int, stack: ItemStack): Boolean = accepts(stack)
+
+    fun replace(slot: Int, expected: ItemStack, replacement: ItemStack): Boolean {
+        if (!ItemStack.matches(getStackInSlot(slot), expected)) return false
+        if (!isItemValid(slot, replacement) || replacement.count > getStackLimit(slot, replacement)) return false
+        setStackInSlot(slot, replacement.copy())
+        return true
+    }
 
     override fun getStackLimit(slot: Int, stack: ItemStack): Int {
+        if (capacity != null) return capacity
         if (stack.isEmpty) {
             return 64 * slotScale
         }

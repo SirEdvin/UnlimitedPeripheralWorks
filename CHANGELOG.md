@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [1.9.0] - 2026-09-08
+
+### Added
+
+- Dedicated AE2 ME network peripheral and CC:Tweaked wired-network P2P tunnel.
+- Any cable part from AE2 now can be a peripheral!
+- Pattern provider exposed as peripheral
+- Wireless terminal now can used as upgrade for turtles and pocket computers
+- Network peripheral can be used to subscribe to changes in AE2 storage
+- Dedicated and wireless AE2 network peripherals share the `ae2_network_access` type and TypeScript provider
+- Specific pedestal for pattern encoding
+
+### Changed
+
+- Existing computers wrapping AE2 network blocks retain the `ae2` peripheral API; the dedicated ME network peripheral adds an explicit channel-owning option.
 ## [1.8.1] - 2026-08-26
 
 ### Fixed

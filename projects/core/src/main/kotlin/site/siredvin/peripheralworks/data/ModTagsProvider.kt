@@ -12,6 +12,11 @@ import site.siredvin.peripheralworks.xplat.ModBlocksReference
 import java.util.function.Supplier
 
 object ModTagsProvider {
+    private val itemHooks = mutableListOf<(ItemTagConsumer) -> Unit>()
+
+    fun addItemHook(hook: (ItemTagConsumer) -> Unit) {
+        itemHooks.add(hook)
+    }
     private val DEFAULT_PERIPHERAL_PROXY_BLOCKED_BLOCKS = listOf(
         Blocks.PERIPHERAL_PROXY,
         Supplier { ModBlocksReference.get().wiredModem },
@@ -173,6 +178,7 @@ object ModTagsProvider {
     fun itemTags(consumer: ItemTagConsumer) {
         DEFAULT_PERIPHERAL_PROXY_BLOCKED_BLOCKS.forEach { consumer.tag(ItemTags.PERIPHERAL_PROXY_FORBIDDEN).add(it.get().asItem()) }
         DEFAULT_MIMIC_BLOCKED_BLOCKS.forEach { consumer.tag(ItemTags.REALITY_FORGER_FORBIDDEN).add(it.get().asItem()) }
+        itemHooks.forEach { it(consumer) }
     }
 
     @JvmStatic

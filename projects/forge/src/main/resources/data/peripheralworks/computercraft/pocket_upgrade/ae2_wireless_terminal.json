@@ -1,0 +1,10 @@
+{
+  "type": "peripheralworks:ae2_wireless_terminal",
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "item": "ae2:wireless_terminal"
+}

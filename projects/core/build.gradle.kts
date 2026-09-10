@@ -8,6 +8,8 @@ val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
 
+spotless { kotlin { target("src/**/*.kt") } }
+
 baseShaking {
     projectPart.set("common")
     shake()
@@ -41,7 +43,8 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.kotlin)
-    implementation(if (minimalTestEnvironment) libs.bundles.cccommon.minimal else libs.bundles.cccommon)
+    implementation(libs.bundles.cccommon.minimal)
+    compileOnly(libs.emi.common)
     api(libs.bundles.apicommon)
     compileOnly(libs.mixin)
     add(testMod.implementationConfigurationName, libs.testiarium.core)

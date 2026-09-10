@@ -9,6 +9,11 @@ import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.tweakium.modules.data.turtleUpgrades
 
 object ModItemModelProvider {
+    private val hooks = mutableListOf<(ItemModelGenerators) -> Unit>()
+
+    fun addHook(hook: (ItemModelGenerators) -> Unit) {
+        hooks.add(hook)
+    }
 
     fun addModels(generators: ItemModelGenerators) {
         generators.generateFlatItem(Items.PERIPHERALIUM_HUB.get(), ModelTemplates.FLAT_ITEM)
@@ -29,5 +34,6 @@ object ModItemModelProvider {
         turtleUpgrades(generators, Blocks.UNIVERSAL_SCANNER.get(), "_side")
         turtleUpgrades(generators, Blocks.ULTIMATE_SENSOR.get(), "_side")
         turtleUpgrades(generators, Blocks.HOLOGRAM_PROJECTOR.get(), "_side")
+        hooks.forEach { it(generators) }
     }
 }

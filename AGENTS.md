@@ -45,6 +45,13 @@ Production code lives in `src/main/`. Shared GameTests and fixtures live in `pro
 - Reuse existing project patterns before adding helpers, abstractions, or dependencies.
 - Comments explain why, not what.
 
+## OpenSpec Delivery Workflow
+
+- Before applying an OpenSpec change, create a new feature branch from the intended base branch.
+- Implement, verify, commit, and push the change only on that feature branch; never push OpenSpec feature work directly to the base or release branch.
+- Open a pull request targeting the intended base branch and report its URL for review instead of merging it directly.
+- Only bypass this workflow when the user explicitly requests a direct push for that specific OpenSpec change.
+
 ## DO NOT MODIFY
 
 - Never edit generated build output; change its source and rerun the relevant Gradle task.

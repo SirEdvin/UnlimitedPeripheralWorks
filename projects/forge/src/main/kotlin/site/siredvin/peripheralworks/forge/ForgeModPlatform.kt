@@ -62,10 +62,14 @@ object ForgeModPlatform : ForgeInnerComputerBasePlatform(), ModInnerPlatform {
         slots: Int,
         slotScale: Int,
         trigger: Runnable,
+        capacity: Int?,
+        accepts: (ItemStack) -> Boolean,
     ): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>> {
-        val platformStorage = ForgeCustomSlottedStorage(slots, slotScale, trigger)
+        val platformStorage = ForgeCustomSlottedStorage(slots, slotScale, trigger, capacity, accepts)
         return Pair(platformStorage, AgnosticItemHandlerWrapper(platformStorage))
     }
+
+    override fun replaceSlottedItem(storage: ISavableComponent, slot: Int, expected: ItemStack, replacement: ItemStack): Boolean = (storage as ForgeCustomSlottedStorage).replace(slot, expected, replacement)
 
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID

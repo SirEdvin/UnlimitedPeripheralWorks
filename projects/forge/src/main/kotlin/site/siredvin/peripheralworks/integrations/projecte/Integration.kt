@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation
 import site.siredvin.peripheralworks.PeripheralWorksClientCore
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.client.turtle.ScaledItemModeller
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.ProjectEConfiguration
 import site.siredvin.peripheralworks.data.ModEnLanguageProvider
 import site.siredvin.peripheralworks.data.ModUaLanguageProvider
 import site.siredvin.peripheralworks.xplat.ModPlatform
@@ -29,7 +29,7 @@ class Integration : Runnable {
         )
     }
 
-    private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): TransmutationTabletPeripheral<TurtlePeripheralOwner> = TransmutationTabletPeripheral(TurtlePeripheralOwner(turtle, side), Configuration.enableTransmutationTabletTurtleUpgrade)
+    private fun forTurtle(turtle: ITurtleAccess, side: TurtleSide): TransmutationTabletPeripheral<TurtlePeripheralOwner> = TransmutationTabletPeripheral(TurtlePeripheralOwner(turtle, side), ProjectEConfiguration.enableTransmutationTabletTurtleUpgrade)
 
     override fun run() {
         lateinit var turtleUpgradeSup: Supplier<UpgradeType<PeripheralTurtleUpgrade<TransmutationTabletPeripheral<TurtlePeripheralOwner>>>>
@@ -51,8 +51,6 @@ class Integration : Runnable {
                 PocketTransmutationTabletUpgrade(stack) { pocketUpgrade.get() }
             },
         )
-
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
 
         VanillaDetailRegistries.ITEM_STACK.addProvider(
             DetailProvider { data, stack ->

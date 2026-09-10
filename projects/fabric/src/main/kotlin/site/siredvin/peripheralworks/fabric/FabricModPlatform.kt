@@ -43,10 +43,12 @@ object FabricModPlatform : FabricInnerComputerBasePlatform(), ModInnerPlatform {
     @Suppress("UNCHECKED_CAST")
     override fun createServerPacket(message: NetworkMessage<ServerNetworkContext>): Packet<ServerGamePacketListener> = ClientPlayNetworking.createC2SPacket(FabricMessageType.toFabricPacket(message)) as Packet<ServerGamePacketListener>
 
-    override fun createSlottedItemStorage(slots: Int, slotScale: Int, trigger: Runnable): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>> {
-        val platformStorage = FabricCustomSlottedStorage(slots, slotScale, trigger)
+    override fun createSlottedItemStorage(slots: Int, slotScale: Int, trigger: Runnable, capacity: Int?, accepts: (ItemStack) -> Boolean): Pair<ISavableComponent, SlottedAgnosticStorage<ItemStack, Int>> {
+        val platformStorage = FabricCustomSlottedStorage(slots, slotScale, trigger, capacity, accepts)
         return Pair(platformStorage, FabricSlottedStorageWrapper(platformStorage))
     }
+
+    override fun replaceSlottedItem(storage: ISavableComponent, slot: Int, expected: ItemStack, replacement: ItemStack): Boolean = (storage as FabricCustomSlottedStorage).replace(slot, expected, replacement)
 
     override val modID: String
         get() = PeripheralWorksCore.MOD_ID

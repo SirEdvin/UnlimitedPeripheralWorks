@@ -1,5 +1,6 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import site.siredvin.peripheralium.gradle.mavenDependencies
+import java.util.UUID
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -12,6 +13,13 @@ val minecraftVersion: String by extra
 val modBaseName: String by extra
 
 evaluationDependsOn(":core")
+val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+val testWithoutAE2 = providers.gradleProperty("testWithoutAE2").isPresent
+require(!testWithoutAE2 || minimalTestEnvironment) { "testWithoutAE2 requires minimalTestEnvironment" }
+
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
+    source(project(":core").fileTree("src/ae2Integration/kotlin"))
+}
 
 val embeddedIntegrationDependencies = configurations.create("embeddedIntegrationDependencies")
 val embeddedIntegrationJars = layout.buildDirectory.dir("embedded-integration-dependencies")
@@ -58,6 +66,17 @@ val testMod = sourceSets.create("testMod") {
 }
 configurations.named(testMod.implementationConfigurationName) {
     extendsFrom(cctTestMod)
+}
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
+    source(project(":core").fileTree("src/ae2Test/kotlin"))
+}
+
+if (minimalTestEnvironment) {
+    val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
+        .filter { it.isDirectory && it.name != "ae2" }
+        .map { "**/integrations/${it.name}/**" }
+    sourceSets.main { kotlin.exclude(excludedIntegrations) }
+    tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
 }
 
 repositories {
@@ -160,9 +179,17 @@ dependencies {
 
     runtimeOnly(libs.bundles.externalMods.forge.runtime)
 
-    libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(it) }
-    libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(it) }
-    libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(it) }
+    if (minimalTestEnvironment) {
+        compileOnly(libs.ae2.forge)
+        if (!testWithoutAE2) {
+            runtimeOnly(libs.ae2.forge)
+            runtimeOnly(libs.guideme)
+        }
+    } else {
+        libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(it) }
+        libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(it) }
+        libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(it) }
+    }
 
     jarJar(libs.bundles.forge.jjar) {
         isTransitive = false
@@ -187,7 +214,7 @@ dependencies {
     add(developmentRuntime.name, "site.siredvin:testiarium-forge-1.21.1:0.1.1:test-mod@jar") {
         isTransitive = false
     }
-    add(developmentRuntime.name, "maven.modrinth:refined-storage:lHHiI26k")
+    if (!minimalTestEnvironment) add(developmentRuntime.name, "maven.modrinth:refined-storage:lHHiI26k")
 }
 
 tasks.named<ProcessResources>(testMod.processResourcesTaskName) {
@@ -205,9 +232,9 @@ neoForge {
     runs {
         register("gameTestServer") {
             type = "gameTestServer"
-            gameDirectory = file("run/peripheralworks-gametest")
+            gameDirectory = layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}").get().asFile
             systemProperty("neoforge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            systemProperty("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks").get())
+            systemProperty("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
             systemProperty("testiarium.structures", project.project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             systemProperty("testiarium.fixture-source", project.project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             systemProperty("testiarium.cct-fixtures", project.project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
@@ -277,6 +304,6 @@ modPublishing {
     )
     shake()
 }
-tasks.named<TaskPublishCurseForge>("publishCurseForge") {
+tasks.withType<TaskPublishCurseForge>().configureEach {
     uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }

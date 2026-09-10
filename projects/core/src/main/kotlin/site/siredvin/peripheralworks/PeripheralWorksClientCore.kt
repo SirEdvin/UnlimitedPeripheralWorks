@@ -116,6 +116,7 @@ object PeripheralWorksClientCore {
     }
 
     fun onInit() {
+        if (inited) return
         inited = true
         HOOKS.forEach(Runnable::run)
     }

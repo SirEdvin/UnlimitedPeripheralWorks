@@ -13,6 +13,10 @@
     },
     "author": "SirEdvin",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SirEdvin/UnlimitedPeripheralWorks"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tstl",

@@ -9,6 +9,7 @@ import net.minecraft.core.component.DataComponentPatch
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
+import site.siredvin.peripheralworks.common.configuration.integration.ArsNouveauConfiguration
 import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.pocket.BasePocketUpgrade
 
@@ -20,7 +21,7 @@ class PocketMagicTomeUpgrade(type: ResourceLocation, stack: ItemStack) :
 
     override fun getType(): UpgradeType<out IPocketUpgrade> = Integration.magicTomeUpgradeType.get()
 
-    override fun getPeripheral(access: IPocketAccess): MagicTomePeripheral = MagicTomePeripheral(PocketPeripheralOwner(access), getUpgradeItem(access.upgradeData), Configuration.enableCasterTomePocketUpgrade)
+    override fun getPeripheral(access: IPocketAccess): MagicTomePeripheral = MagicTomePeripheral(PocketPeripheralOwner(access), getUpgradeItem(access.upgradeData), ArsNouveauConfiguration.enableCasterTomePocketUpgrade)
 
     override fun getUpgradeData(stack: ItemStack): DataComponentPatch = DataComponentPatch.builder().apply {
         stack.get(DataComponentRegistry.SPELL_CASTER.get())?.let { set(DataComponentRegistry.SPELL_CASTER.get(), it) }

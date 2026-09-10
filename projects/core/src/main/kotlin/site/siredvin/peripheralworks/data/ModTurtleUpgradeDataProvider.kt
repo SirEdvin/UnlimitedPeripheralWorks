@@ -34,8 +34,8 @@ object ModTurtleUpgradeDataProvider {
         upgrades.register(
             ResourceKey.create(ITurtleUpgrade.REGISTRY, ModTurtleUpgrades.NETHERITE_PERIPHERALIUM_HUB.id),
             PeripheraliumHubTurtleUpgrade(
-                PeripheralWorksConfig::peripheraliumHubUpgradeCount,
-                PeripheraliumHubPeripheral.TYPE,
+                PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
+                PeripheraliumHubPeripheral.NETHERITE_TYPE,
                 Items.NETHERITE_PERIPHERALIUM_HUB.get().defaultInstance,
             ),
         )
