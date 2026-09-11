@@ -11,10 +11,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "peripheralworks:me_network_peripheral"
+          "name": "peripheralworks:ae2_pattern_pedestal"
         }
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "peripheralworks:blocks/ae2_pattern_pedestal"
 }

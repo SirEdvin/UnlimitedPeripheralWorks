@@ -4,6 +4,10 @@ import dan200.computercraft.api.ForgeComputerCraftAPI
 import dan200.computercraft.api.pocket.PocketUpgradeSerialiser
 import dan200.computercraft.api.turtle.TurtleUpgradeSerialiser
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.repository.Pack
+import net.minecraft.server.packs.repository.PackSource
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.RecipeSerializer
@@ -11,6 +15,8 @@ import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraftforge.client.event.ModelEvent
 import net.minecraftforge.common.util.LazyOptional
+import net.minecraftforge.event.AddPackFindersEvent
+import net.minecraftforge.fml.ModList
 import net.minecraftforge.fml.ModLoadingContext
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.config.ModConfig
@@ -18,6 +24,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import net.minecraftforge.registries.DeferredRegister
 import net.minecraftforge.registries.ForgeRegistries
 import net.minecraftforge.registries.NewRegistryEvent
+import net.minecraftforge.resource.PathPackResources
 import site.siredvin.broccolium.modules.base.ForgeIntegrationLoader
 import site.siredvin.peripheralium.ForgePeripheralium
 import site.siredvin.peripheralworks.client.geometry.FlexibleRealityAnchorGeometryLoader
@@ -74,6 +81,7 @@ object ForgePeripheralWorks {
         eventBus.addListener(this::commonSetup)
         eventBus.addListener(this::registrySetup)
         eventBus.addListener(this::registryModel)
+        eventBus.addListener(this::addIntegrationPacks)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         blocksRegistry.register(eventBus)
@@ -85,6 +93,26 @@ object ForgePeripheralWorks {
         pocketSerializers.register(eventBus)
 
         ForgeRecipeTransformers.init()
+    }
+
+    fun addIntegrationPacks(event: AddPackFindersEvent) {
+        if (event.packType != PackType.SERVER_DATA || !loader.isModPresent("ae2")) return
+        val root = ModList.get().getModFileById(PeripheralWorksCore.MOD_ID).file.findResource("resourcepacks/ae2")
+        event.addRepositorySource { consumer ->
+            consumer.accept(
+                checkNotNull(
+                    Pack.readMetaAndCreate(
+                        "peripheralworks:ae2",
+                        Component.literal("UnlimitedPeripheralWorks AE2 integration"),
+                        true,
+                        { id -> PathPackResources(id, true, root) },
+                        PackType.SERVER_DATA,
+                        Pack.Position.BOTTOM,
+                        PackSource.BUILT_IN,
+                    ),
+                ) { "Missing built-in AE2 data pack" },
+            )
+        }
     }
 
     @Suppress("UNUSED_PARAMETER")

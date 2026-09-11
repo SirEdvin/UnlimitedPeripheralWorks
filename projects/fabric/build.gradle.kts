@@ -12,6 +12,8 @@ val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+val testWithoutAE2 = providers.gradleProperty("testWithoutAE2").isPresent
+require(!testWithoutAE2 || minimalTestEnvironment) { "testWithoutAE2 requires minimalTestEnvironment" }
 
 tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
     source(project(":core").fileTree("src/ae2Integration/kotlin"))
@@ -159,7 +161,11 @@ dependencies {
     }
 
     if (minimalTestEnvironment) {
-        modImplementation(libs.ae2.fabric)
+        if (testWithoutAE2) {
+            modCompileOnly(libs.ae2.fabric)
+        } else {
+            modImplementation(libs.ae2.fabric)
+        }
     } else {
         modRuntimeOnly(libs.jade.fabric)
         libs.bundles.externalMods.fabric.integrations.full.get().map { modCompileOnly(it) }
