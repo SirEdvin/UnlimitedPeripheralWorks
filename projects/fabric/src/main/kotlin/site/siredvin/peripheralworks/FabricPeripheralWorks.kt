@@ -6,8 +6,12 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.player.AbstractClientPlayer
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.InteractionResult
@@ -54,6 +58,13 @@ object FabricPeripheralWorks : ModInitializer {
         ConfigHolder.initialize(loader::isModPresent)
         ForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
         loader.maybeLoadIntegration("ae2", "Registration").ifPresent { (it as Runnable).run() }
+        if (loader.isModPresent("ae2")) {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                ResourceLocation(PeripheralWorksCore.MOD_ID, "ae2"),
+                FabricLoader.getInstance().getModContainer(PeripheralWorksCore.MOD_ID).orElseThrow(),
+                ResourcePackActivationType.ALWAYS_ENABLED,
+            )
+        }
         for (type in NetworkMessages.serverbound) {
             ServerPlayNetworking.registerGlobalReceiver(
                 FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type),

@@ -2,12 +2,16 @@ package site.siredvin.peripheralworks.testmod
 
 import com.electronwill.nightconfig.core.UnmodifiableConfig
 import net.minecraft.core.BlockPos
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.Block
+import net.minecraft.world.level.storage.loot.LootDataType
+import net.minecraft.world.level.storage.loot.LootTable
 import net.minecraftforge.common.ForgeConfigSpec
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
 import site.siredvin.peripheralworks.common.block.NetworkManager
@@ -32,12 +36,31 @@ import site.siredvin.testiarium.cct.thenLua
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
     @GameTest(template = "empty")
-    fun optionalPatternPedestalRegistration(helper: GameTestHelper) {
-        val blocks = net.minecraft.core.registries.BuiltInRegistries.BLOCK
-        val ae2Present = blocks.containsKey(net.minecraft.resources.ResourceLocation("ae2", "controller"))
-        val pedestalPresent = blocks.containsKey(net.minecraft.resources.ResourceLocation("peripheralworks", "ae2_pattern_pedestal"))
-        check(ae2Present == pedestalPresent) { "Pattern pedestal registration does not follow AE2 availability" }
-        println("Pattern pedestal registration: AE2=$ae2Present, pedestal=$pedestalPresent")
+    fun optionalAE2Resources(helper: GameTestHelper) {
+        val ae2Present = BuiltInRegistries.BLOCK.containsKey(ResourceLocation("ae2", "controller"))
+        val server = helper.level.server
+        val loot = server.lootData
+        listOf("ae2_pattern_pedestal", "me_network_peripheral").forEach { name ->
+            val id = ResourceLocation("peripheralworks", name)
+            val table = ResourceLocation("peripheralworks", "blocks/$name")
+            check(BuiltInRegistries.BLOCK.containsKey(id) == ae2Present) { "$id block registration does not follow AE2 presence" }
+            check(BuiltInRegistries.ITEM.containsKey(id) == ae2Present) { "$id item registration does not follow AE2 presence" }
+            check(server.resourceManager.getResource(ResourceLocation("peripheralworks", "loot_tables/blocks/$name.json")).isPresent == ae2Present) {
+                "$id loot resource must not be exposed to parsing without AE2"
+            }
+            check(loot.getKeys(LootDataType.TABLE).contains(table) == ae2Present) { "$id loot table presence does not follow AE2 presence" }
+            check(server.recipeManager.byKey(id).isPresent == ae2Present) { "$id recipe presence does not follow AE2 presence" }
+            if (ae2Present) {
+                check(loot.getLootTable(table) !== LootTable.EMPTY) { "$id loot table failed to load" }
+                val block = BuiltInRegistries.BLOCK.get(id)
+                val drops = Block.getDrops(block.defaultBlockState(), helper.level, helper.absolutePos(BlockPos(1, 1, 1)), null)
+                check(drops.size == 1 && drops.single().`is`(block.asItem()) && drops.single().count == 1) { "$id must drop exactly itself" }
+            }
+        }
+        check(BuiltInRegistries.ITEM.containsKey(ResourceLocation("peripheralworks", "wired_network_p2p_tunnel")) == ae2Present)
+        val baseTable = ResourceLocation("peripheralworks", "blocks/item_pedestal")
+        check(loot.getKeys(LootDataType.TABLE).contains(baseTable) && loot.getLootTable(baseTable) !== LootTable.EMPTY) { "Base loot tables must remain available" }
+        println("Optional AE2 registrations, recipes and loot verified: AE2=$ae2Present")
         helper.succeed()
     }
 
