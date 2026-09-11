@@ -11,21 +11,24 @@ import site.siredvin.peripheralworks.xplat.ModPlatform
 import java.util.function.BiConsumer
 
 object ModLootTableProvider {
-    private val blockHooks = mutableListOf<BiConsumer<LootTableHelper, BiConsumer<ResourceKey<LootTable>, LootTable.Builder>>>()
+    private val ae2BlockHooks = mutableListOf<BiConsumer<LootTableHelper, BiConsumer<ResourceKey<LootTable>, LootTable.Builder>>>()
 
-    fun addBlockHook(hook: BiConsumer<LootTableHelper, BiConsumer<ResourceKey<LootTable>, LootTable.Builder>>) {
-        blockHooks.add(hook)
+    fun addAE2BlockHook(hook: BiConsumer<LootTableHelper, BiConsumer<ResourceKey<LootTable>, LootTable.Builder>>) {
+        ae2BlockHooks.add(hook)
     }
 
-    fun getTables(): List<LootTableProvider.SubProviderEntry> = listOf(
+    fun getTables(integration: Boolean = false): List<LootTableProvider.SubProviderEntry> = listOf(
         LootTableProvider.SubProviderEntry({
             LootTableSubProvider {
-                registerBlocks(it)
+                registerBlocks(it, integration)
             }
         }, LootContextParamSets.BLOCK),
     )
 
-    fun registerBlocks(consumer: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>) {
+    fun registerBlocks(output: BiConsumer<ResourceKey<LootTable>, LootTable.Builder>, integration: Boolean = false) {
+        val consumer = BiConsumer<ResourceKey<LootTable>, LootTable.Builder> { id, table ->
+            if (!integration) output.accept(id, table)
+        }
         val lootTable = LootTableHelper(ModPlatform.holder)
         lootTable.dropSelf(consumer, Blocks.ULTIMATE_SENSOR)
         lootTable.dropSelf(consumer, Blocks.UNIVERSAL_SCANNER)
@@ -44,7 +47,10 @@ object ModLootTableProvider {
         lootTable.computedDrop(Blocks.FLEXIBLE_REALITY_ANCHOR)
         lootTable.computedDrop(Blocks.FLEXIBLE_STATUE)
         lootTable.computedDrop(Blocks.HOLOGRAM_PROJECTOR)
-        blockHooks.forEach { it.accept(lootTable, consumer) }
+        val integrationConsumer = BiConsumer<ResourceKey<LootTable>, LootTable.Builder> { id, table ->
+            if (integration) output.accept(id, table)
+        }
+        ae2BlockHooks.forEach { it.accept(lootTable, integrationConsumer) }
         lootTable.validate()
     }
 }

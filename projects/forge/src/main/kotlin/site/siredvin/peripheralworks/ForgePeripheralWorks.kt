@@ -6,6 +6,11 @@ import dan200.computercraft.api.upgrades.UpgradeType
 import net.minecraft.advancements.CriterionTrigger
 import net.minecraft.core.component.DataComponentType
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.repository.Pack
+import net.minecraft.server.packs.repository.PackSource
 import net.minecraft.world.item.CreativeModeTab
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.crafting.RecipeSerializer
@@ -17,6 +22,7 @@ import net.neoforged.fml.ModContainer
 import net.neoforged.fml.common.Mod
 import net.neoforged.fml.config.ModConfig
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
+import net.neoforged.neoforge.event.AddPackFindersEvent
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NewRegistryEvent
 import site.siredvin.broccolium.modules.base.ForgeIntegrationLoader
@@ -75,6 +81,7 @@ class ForgePeripheralWorks(modEventBus: IEventBus, modContainer: ModContainer) {
         // ponytail: NeoForge provider ordering gives this catch-all registration fallback semantics.
         modEventBus.addListener(EventPriority.LOWEST, ForgeCommonHooks::registerCapabilities)
 
+        modEventBus.addListener(this::addIntegrationPacks)
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         blocksRegistry.register(modEventBus)
@@ -88,6 +95,18 @@ class ForgePeripheralWorks(modEventBus: IEventBus, modContainer: ModContainer) {
         pocketUpgradeTypes.register(modEventBus)
 
         ForgeRecipeTransformers.init()
+    }
+
+    fun addIntegrationPacks(event: AddPackFindersEvent) {
+        if (event.packType != PackType.SERVER_DATA || !loader.isModPresent("ae2")) return
+        event.addPackFinders(
+            ResourceLocation.fromNamespaceAndPath(PeripheralWorksCore.MOD_ID, "resourcepacks/ae2"),
+            PackType.SERVER_DATA,
+            Component.literal("UnlimitedPeripheralWorks AE2 integration"),
+            PackSource.BUILT_IN,
+            true,
+            Pack.Position.BOTTOM,
+        )
     }
 
     @Suppress("UNUSED_PARAMETER")

@@ -82,7 +82,7 @@ class Registration : Runnable {
         ModBlockModelProvider.addHook { generators ->
             ModBlockModelProvider.pedestalBlock(generators, PATTERN_PEDESTAL.get(), ResourceLocation.fromNamespaceAndPath("ae2", "block/quartz_block"))
         }
-        ModLootTableProvider.addBlockHook { loot, output -> loot.dropSelf(output, PATTERN_PEDESTAL) }
+        ModLootTableProvider.addAE2BlockHook { loot, output -> loot.dropSelf(output, PATTERN_PEDESTAL) }
         ModRecipeProvider.addHook { output ->
             TweakedShapedRecipeBuilder(PATTERN_PEDESTAL.get().asItem().defaultInstance)
                 .define('P', Blocks.ITEM_PEDESTAL.get())
@@ -137,7 +137,7 @@ class Registration : Runnable {
                 .pattern(" M ")
                 .save(conditionalOutput)
         }
-        ModLootTableProvider.addBlockHook { loot, output -> loot.dropSelf(output, ME_NETWORK_PERIPHERAL) }
+        ModLootTableProvider.addAE2BlockHook { loot, output -> loot.dropSelf(output, ME_NETWORK_PERIPHERAL) }
         ModBlockModelProvider.addHook { generators ->
             val model = ModelTemplates.CUBE_ALL.create(
                 ME_NETWORK_PERIPHERAL.get(),
