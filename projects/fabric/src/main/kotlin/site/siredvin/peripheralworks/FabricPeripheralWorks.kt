@@ -52,6 +52,8 @@ object FabricPeripheralWorks : ModInitializer {
         FabricPeripheralium.sayHi()
 
         PeripheralWorksCore.configure(FabricModPlatform, FabricModRecipeIngredients, FabricModBlocksReference)
+        ConfigHolder.initialize(loader::isModPresent)
+        NeoForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
         for (type in NetworkMessages.serverbound) {
             val fabricType = FabricMessageType.toFabricType<NetworkMessage<ServerNetworkContext>>(type)
             PayloadTypeRegistry.playC2S().register(fabricType.type, fabricType.codec)
@@ -66,6 +68,7 @@ object FabricPeripheralWorks : ModInitializer {
         PeripheralWorksCommonHooks.onRegister()
         // Load all integrations
         loader.maybeLoadIntegration("automobility").ifPresent { (it as Runnable).run() }
+
 //        loader.maybeLoadIntegration("ae2").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("naturescompass").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("toms_storage").ifPresent { (it as Runnable).run() }
@@ -75,8 +78,7 @@ object FabricPeripheralWorks : ModInitializer {
 //        loader.maybeLoadIntegration("powah").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("modern_industrialization").ifPresent { (it as Runnable).run() }
 //        loader.maybeLoadIntegration("create").ifPresent { (it as Runnable).run() }
-        // Pretty important to setup configuration after integration loading!
-        NeoForgeConfigRegistry.INSTANCE.register(PeripheralWorksCore.MOD_ID, ModConfig.Type.COMMON, ConfigHolder.commonSpec)
+        loader.maybeLoadIntegration("emi").ifPresent { (it as Runnable).run() }
         PeripheralWorksCommonHooks.afterConfigurationLoaded()
         // Register block lookup
         PeripheralLookup.get().registerFallback { world, pos, state, blockEntity, context ->

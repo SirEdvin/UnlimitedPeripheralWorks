@@ -61,14 +61,20 @@ class ForgePeripheralWorks(modEventBus: IEventBus, modContainer: ModContainer) {
 
     init {
         ForgePeripheralium.sayHi()
-        // Configure configuration
-        modContainer.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
         PeripheralWorksCore.configure(ForgeModPlatform, ForgeModRecipeIngredients, ForgeModBlocksReference)
+        ConfigHolder.initialize(loader::isModPresent)
+        modContainer.registerConfig(ModConfig.Type.COMMON, ConfigHolder.commonSpec, "${PeripheralWorksCore.MOD_ID}.toml")
+        loader.maybeLoadIntegration("ae2", "Registration").ifPresent { (it as Runnable).run() }
+        if (loader.isModPresent("ae2")) {
+            modEventBus.addListener(site.siredvin.peripheralworks.integrations.ae2.AE2Setup::registerCapabilities)
+            modEventBus.addListener(site.siredvin.peripheralworks.integrations.ae2.AE2Setup::registerPartCapabilities)
+        }
         modEventBus.addListener(this::commonSetup)
         modEventBus.addListener(this::registrySetup)
         modEventBus.addListener(ForgeNetworkHandler::setup)
         // ponytail: NeoForge provider ordering gives this catch-all registration fallback semantics.
         modEventBus.addListener(EventPriority.LOWEST, ForgeCommonHooks::registerCapabilities)
+
         // Register items and blocks
         PeripheralWorksCommonHooks.onRegister()
         blocksRegistry.register(modEventBus)

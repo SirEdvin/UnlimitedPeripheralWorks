@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
+import site.siredvin.peripheralworks.common.configuration.integration.ModernIndustrializationConfiguration
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
 class CraftingMachinePlugin(private val crafter: CrafterAccess) : IPeripheralPlugin {
@@ -20,7 +21,7 @@ class CraftingMachinePlugin(private val crafter: CrafterAccess) : IPeripheralPlu
             get() = PLUGIN_TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            if (!Configuration.enableCraftingMachine) {
+            if (!ModernIndustrializationConfiguration.enableCraftingMachine) {
                 return null
             }
             val blockEntity = level.getBlockEntity(pos) ?: return null

@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "ae2:blank_pattern"
+    },
+    "P": {
+      "item": "peripheralworks:item_pedestal"
+    }
+  },
+  "pattern": [
+    "B",
+    "P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:ae2_pattern_pedestal"
+  },
+  "show_notification": false
+}

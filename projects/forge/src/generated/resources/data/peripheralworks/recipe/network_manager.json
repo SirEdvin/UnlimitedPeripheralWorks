@@ -6,7 +6,7 @@
       "item": "minecraft:string"
     },
     "K": {
-      "item": "computercraft:cable"
+      "item": "computercraft:wired_modem"
     },
     "P": {
       "item": "peripheralworks:peripheral_casing"

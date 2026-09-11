@@ -4,5 +4,7 @@
 
 This mod provide a lot of integrations and extension for minecraft and other mods! You can find list of available integrations and another features in [documentation](https://docs.siredvin.site/UnlimitedPeripheralWorks/)
 
+[AE2 Pattern Pedestal API definitions](projects/typed-peripheral-unlimitedperipheralworks/integrations/ae2PatternPedestal.ts)
+
 [curseforge]: https://www.curseforge.com/minecraft/mc-mods/unlimitedperipheralworks "Download UnlimitedPeripheralWorks from CurseForge"
 [modrinth]: https://modrinth.com/mod/unlimitedperipheralworks "Download UnlimitedPeripheralWork from Modrinth"

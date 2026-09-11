@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "B": {
       "item": "minecraft:blue_stained_glass"
@@ -20,6 +21,8 @@
     "DRD"
   ],
   "result": {
-    "item": "peripheralworks:hologram_projector"
-  }
+    "count": 1,
+    "id": "peripheralworks:hologram_projector"
+  },
+  "show_notification": false
 }

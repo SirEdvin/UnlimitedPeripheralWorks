@@ -1,5 +1,6 @@
 package site.siredvin.peripheralworks.testmod
 
+import com.electronwill.nightconfig.core.UnmodifiableConfig
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
@@ -16,6 +17,8 @@ import site.siredvin.peripheralworks.common.block.NetworkManager
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
+import site.siredvin.peripheralworks.common.configuration.ConfigHolder
+import site.siredvin.peripheralworks.common.configuration.IntegrationConfigurationDiscovery
 import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
@@ -26,12 +29,105 @@ import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
 import site.siredvin.peripheralworks.subsystem.configurator.PeripheralProxyMode
 import site.siredvin.peripheralworks.subsystem.configurator.RemoteObserverMode
 import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
+import site.siredvin.peripheralworks.xplat.ModPlatform
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
 import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
+import net.neoforged.neoforge.common.ModConfigSpec as ForgeConfigSpec
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
+    @GameTest(template = "empty")
+    fun optionalPatternPedestalRegistration(helper: GameTestHelper) {
+        val blocks = net.minecraft.core.registries.BuiltInRegistries.BLOCK
+        val ae2Present = blocks.containsKey(ResourceLocation.fromNamespaceAndPath("ae2", "controller"))
+        val pedestalPresent = blocks.containsKey(ResourceLocation.fromNamespaceAndPath("peripheralworks", "ae2_pattern_pedestal"))
+        check(ae2Present == pedestalPresent) { "Pattern pedestal registration does not follow AE2 availability" }
+        println("Pattern pedestal registration: AE2=$ae2Present, pedestal=$pedestalPresent")
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun constrainedPedestalStorage(helper: GameTestHelper) {
+        val platform = ModPlatform.baseInnerPlatform
+        val stone = net.minecraft.world.item.Items.STONE
+        val dirt = net.minecraft.world.item.Items.DIRT
+        var changes = 0
+        val (saved, storage) = platform.createSlottedItemStorage(1, 1, { changes++ }, 1) { it.`is`(stone) }
+        check(storage.getLimit(0) == 1L)
+        check(storage.store(ItemStack(dirt, 5), false).count == 5)
+        check(storage.get(0).isEmpty && changes == 0)
+        check(storage.store(ItemStack(stone, 5), true).count == 4)
+        check(storage.get(0).isEmpty && changes == 0)
+        check(storage.store(ItemStack(stone, 5), false).count == 4)
+        check(storage.get(0).count == 1 && changes > 0)
+        val original = storage.get(0).copy()
+        val beforeReplace = changes
+        check(!platform.replaceSlottedItem(saved, 0, ItemStack(dirt), ItemStack(stone)))
+        check(!platform.replaceSlottedItem(saved, 0, original, ItemStack(stone, 2)))
+        check(!platform.replaceSlottedItem(saved, 0, original, ItemStack(dirt)))
+        check(ItemStack.matches(storage.get(0), original) && changes == beforeReplace)
+        val tagged = original.copy().apply { set(DataComponents.CUSTOM_DATA, CustomData.of(CompoundTag().apply { putString("variant", "replacement") })) }
+        check(platform.replaceSlottedItem(saved, 0, original, tagged))
+        check(ItemStack.matches(storage.get(0), tagged) && changes > beforeReplace)
+        val (loaded, loadedStorage) = platform.createSlottedItemStorage(1, 1, {}, 1) { it.`is`(stone) }
+        loaded.load(saved.save())
+        check(ItemStack.matches(loadedStorage.get(0), tagged))
+        val (_, ordinary) = platform.createSlottedItemStorage(1, 1, {})
+        check(ordinary.store(ItemStack(stone, 64), false).isEmpty)
+        check(ordinary.get(0).count == 64)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun integrationConfigurationsAreDiscoveredAndFiltered(helper: GameTestHelper) {
+        val discovered = IntegrationConfigurationDiscovery.discover { true }
+        check(
+            discovered.associate { it.modID to it.name } ==
+                mapOf(
+                    "additionallanterns" to "additionallanterns",
+                    "ae2" to "ae2",
+                    "alloy_forgery" to "alloy_forgery",
+                    "ars_nouveau" to "ars_nouveau",
+                    "automobility" to "automobility",
+                    "create" to "create",
+                    "deepresonance" to "deep_resonance",
+                    "easy_villagers" to "easy_villagers",
+                    "embers" to "embers",
+                    "fluxnetworks" to "flux_networks",
+                    "integrateddynamics" to "integrateddynamics",
+                    "modern_industrialization" to "modern_industrialization",
+                    "naturescompass" to "naturescompass",
+                    "occultism" to "occultism",
+                    "powah" to "powah",
+                    "projecte" to "projecte",
+                    "theurgy" to "theurgy",
+                    "toms_storage" to "toms_storage",
+                    "universal_shops" to "universal_shops",
+                ),
+        )
+        val selected = IntegrationConfigurationDiscovery.discover { it == "ae2" || it == "powah" }
+        check(selected.map { it.modID }.toSet() == setOf("ae2", "powah"))
+
+        val activeIntegrations = ConfigHolder.commonSpec.values
+            .get<UnmodifiableConfig>("integrations")
+            ?.valueMap()
+            ?.keys
+            .orEmpty()
+        check(activeIntegrations.all(discovered.map { it.name }.toSet()::contains))
+        if ("ae2" in activeIntegrations) {
+            val ae2Subscriptions = ConfigHolder.commonSpec.spec
+                .get<ForgeConfigSpec.ValueSpec>("integrations.ae2.maxSubscriptions")
+            check(ae2Subscriptions.default == 16)
+            check(!ae2Subscriptions.test(0) && ae2Subscriptions.test(1) && ae2Subscriptions.test(Int.MAX_VALUE))
+        }
+        if ("powah" in activeIntegrations) {
+            val powahEnergy = ConfigHolder.commonSpec.spec.get<ForgeConfigSpec.ValueSpec>("integrations.powah.enableEnergy")
+            check(powahEnergy.default == true)
+        }
+        helper.succeed()
+    }
+
     @GameTest(template = "empty")
     fun peripheralProxyRenderSettingsPersistAndFallback(helper: GameTestHelper) {
         val firstPos = BlockPos(1, 1, 1)

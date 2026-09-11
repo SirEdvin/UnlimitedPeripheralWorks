@@ -22,6 +22,11 @@ import site.siredvin.peripheralworks.utils.horizontalOrientedModelWithOverride
 import java.util.*
 
 object ModBlockModelProvider {
+    private val hooks = mutableListOf<(BlockModelGenerators) -> Unit>()
+
+    fun addHook(hook: (BlockModelGenerators) -> Unit) {
+        hooks.add(hook)
+    }
 
     @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
     val PEDESTAL = ModelTemplate(
@@ -330,5 +335,6 @@ object ModBlockModelProvider {
             NetworkManager.CONNECTED,
             isItemConnected = true,
         )
+        hooks.forEach { it(generators) }
     }
 }

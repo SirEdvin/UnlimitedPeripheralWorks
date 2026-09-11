@@ -6,6 +6,7 @@ import dan200.computercraft.api.upgrades.UpgradeType
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import site.siredvin.peripheralworks.PeripheralWorksCore
+import site.siredvin.peripheralworks.common.configuration.integration.NaturesCompassConfiguration
 import site.siredvin.tweakium.modules.peripheral.owner.PocketPeripheralOwner
 import site.siredvin.tweakium.modules.pocket.BasePocketUpgrade
 import java.util.function.Supplier
@@ -22,5 +23,5 @@ class PocketNaturesCompassUpgrade(stack: ItemStack, private val typeSupplier: Su
 
     override fun getType(): UpgradeType<out IPocketUpgrade> = typeSupplier.get()
 
-    override fun getPeripheral(access: IPocketAccess): NaturesCompassPeripheral<PocketPeripheralOwner> = NaturesCompassPeripheral(PocketPeripheralOwner(access), Configuration.enableNaturesCompassPocketUpgrade)
+    override fun getPeripheral(access: IPocketAccess): NaturesCompassPeripheral<PocketPeripheralOwner> = NaturesCompassPeripheral(PocketPeripheralOwner(access), NaturesCompassConfiguration.enableNaturesCompassPocketUpgrade)
 }

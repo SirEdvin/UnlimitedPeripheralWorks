@@ -1,0 +1,34 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "peripheralworks:peripheral_casing"
+    },
+    "E": {
+      "item": "ae2:export_bus"
+    },
+    "I": {
+      "item": "ae2:interface"
+    },
+    "M": {
+      "item": "ae2:import_bus"
+    }
+  },
+  "pattern": [
+    " E ",
+    "ICI",
+    " M "
+  ],
+  "result": {
+    "count": 1,
+    "id": "peripheralworks:me_network_peripheral"
+  },
+  "show_notification": false
+}

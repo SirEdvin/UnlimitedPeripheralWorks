@@ -34,8 +34,8 @@ object ModPocketUpgradeDataProvider {
         upgrades.register(
             ResourceKey.create(IPocketUpgrade.REGISTRY, ModPocketUpgrades.NETHERITE_PERIPHERALIUM_HUB.id),
             PeripheraliumHubPocketUpgrade(
-                PeripheralWorksConfig::peripheraliumHubUpgradeCount,
-                PeripheraliumHubPeripheral.TYPE,
+                PeripheralWorksConfig::netheritePeripheraliumHubUpgradeCount,
+                PeripheraliumHubPeripheral.NETHERITE_TYPE,
                 Items.NETHERITE_PERIPHERALIUM_HUB.get().defaultInstance,
             ),
         )

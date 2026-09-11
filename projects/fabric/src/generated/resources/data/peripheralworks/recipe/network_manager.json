@@ -1,11 +1,12 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "C": {
       "item": "minecraft:string"
     },
     "K": {
-      "item": "computercraft:cable"
+      "item": "computercraft:wired_modem"
     },
     "P": {
       "item": "peripheralworks:peripheral_casing"
@@ -17,6 +18,8 @@
     "KCK"
   ],
   "result": {
-    "item": "peripheralworks:network_manager"
-  }
+    "count": 1,
+    "id": "peripheralworks:network_manager"
+  },
+  "show_notification": false
 }

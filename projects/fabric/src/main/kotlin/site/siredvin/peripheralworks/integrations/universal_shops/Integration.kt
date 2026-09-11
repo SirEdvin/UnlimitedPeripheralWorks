@@ -5,7 +5,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
-import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
+import site.siredvin.peripheralworks.common.configuration.integration.UniversalShopsConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
 
@@ -17,7 +17,7 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            if (Configuration.enableShops && blockEntity is TradeShopBlockEntity) {
+            if (UniversalShopsConfiguration.enableShops && blockEntity is TradeShopBlockEntity) {
                 return UniversalShopPlugin(blockEntity)
             }
             return null
@@ -25,6 +25,5 @@ class Integration : Runnable {
     }
     override fun run() {
         ComputerCraftProxy.addProvider(UniversalShopPluginProvider)
-        PeripheralWorksConfig.registerIntegrationConfiguration(Configuration)
     }
 }

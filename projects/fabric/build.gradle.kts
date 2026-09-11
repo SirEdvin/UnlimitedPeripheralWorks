@@ -1,5 +1,6 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
 import java.io.ByteArrayInputStream
+import java.util.UUID
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
@@ -11,6 +12,8 @@ plugins {
 val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
+
+val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
 
 baseShaking {
     projectPart.set("fabric")
@@ -57,6 +60,7 @@ val testMod = sourceSets.create("testMod") {
     runtimeClasspath += sourceSets.main.get().output
     runtimeClasspath += project(":core").sourceSets["testMod"].output
 }
+sourceSets.named("testMod") { kotlin.exclude("**/AE2TestWiredLookup.kt") }
 
 net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)
 
@@ -91,7 +95,8 @@ loom {
             property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
             property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             vmArg("-ea")
-            runDir("run/peripheralworks-gametest")
+            // Saved fixture computers reboot before tests replace them; each run needs an isolated world.
+            runDir(layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}").get().asFile.absolutePath)
         }
         create("peripheralWorksClientGameTest") {
             client()
@@ -104,6 +109,19 @@ loom {
             property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
             vmArg("-ea")
             runDir("run/network-manager-client-gametest")
+        }
+        create("peripheralWorksTestClient") {
+            client()
+            source(testMod)
+            property("fabric-api.gametest", "true")
+            property("fabric.debug.disableModIds", "create,testiarium_testmod,testiarium_cct_testmod")
+            property("fabric.debug.loadLate", "testiarium_testmod")
+            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
+            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
+            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
+            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
+            vmArg("-ea")
+            runDir("run/test-client")
         }
     }
 }
@@ -196,7 +214,7 @@ dependencies {
 
     modImplementation(libs.bundles.fabric.core)
     modImplementation(libs.bundles.fabric)
-    compileOnly(libs.emi.common)
+
     modCompileOnly(libs.emi.fabric)
     modCompileOnly(libs.endec)
     modCompileOnly(libs.automobility.fabric)
@@ -220,8 +238,10 @@ dependencies {
     runtimeOnly(libs.endec.gson)
     runtimeOnly(libs.endec.jankson)
     runtimeOnly(libs.endec.netty)
-    libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
-    libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+    if (!minimalTestEnvironment) {
+        libs.bundles.externalMods.fabric.integrations.active.get().map { modRuntimeOnly(it) }
+        libs.bundles.externalMods.fabric.integrations.activedep.get().map { modRuntimeOnly(it) }
+    }
 
     add("modTestModImplementation", files(testiariumMainArtifacts))
     add("modTestModImplementation", files(testiariumTestArtifacts))
@@ -244,6 +264,6 @@ modPublishing {
     shake()
 }
 
-tasks.named<TaskPublishCurseForge>("publishCurseForge") {
+tasks.withType<TaskPublishCurseForge>().configureEach {
     uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }

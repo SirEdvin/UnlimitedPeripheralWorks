@@ -16,6 +16,14 @@ import site.siredvin.peripheralworks.xplat.ModRecipeIngredients
 import java.util.concurrent.CompletableFuture
 
 class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<HolderLookup.Provider>) : RecipeProvider(output, registries) {
+    companion object {
+        private val hooks = mutableListOf<java.util.function.Consumer<RecipeOutput>>()
+
+        fun addHook(hook: java.util.function.Consumer<RecipeOutput>) {
+            hooks.add(hook)
+        }
+    }
+
     override fun buildRecipes(consumer: RecipeOutput) {
         val ingredients = ModRecipeIngredients.get()
 
@@ -222,5 +230,6 @@ class ModRecipeProvider(output: PackOutput, registries: CompletableFuture<Holder
             .save(consumer, "anchor_clean")
         SpecialRecipeBuilder.special(::CardCleanRecipe)
             .save(consumer, "card_clean")
+        hooks.forEach { it.accept(consumer) }
     }
 }

@@ -1,0 +1,54 @@
+name: Publish peripheral typings
+
+on:
+  push:
+    tags:
+      - "v1.20.1-*"
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish npm package
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: projects/typed-peripheral-unlimitedperipheralworks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Verify tag belongs to 1.20
+        run: |
+          git fetch --no-tags origin 1.20
+          git merge-base --is-ancestor "$GITHUB_SHA" FETCH_HEAD
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+          package-manager-cache: false
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Set package version from tag
+        run: npm version "${GITHUB_REF_NAME#v1.20.1-}" --no-git-tag-version
+
+      - name: Publish package
+        run: |
+          VERSION="${GITHUB_REF_NAME#v1.20.1-}"
+          if [[ "$VERSION" == *-* ]]; then
+            npm publish --tag next
+          else
+            npm publish
+          fi
