@@ -26,6 +26,16 @@ public final class ForgePeripheralWorksTestMod {
         });
         Testiarium.register(PeripheralWorksGameTests.class);
         Testiarium.register(ForgeRecipeConditionsGameTests.class);
+        try {
+            if (ModList.get().isLoaded("hostilenetworks")) {
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.NeuralNetworksGameTests"));
+            }
+            if (ModList.get().isLoaded("extrahnn")) {
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.ExtraNeuralNetworksGameTests"));
+            }
+        } catch (ClassNotFoundException exception) {
+            throw new IllegalStateException(exception);
+        }
         if (ModList.get().isLoaded("ae2")) {
             try {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2GameTests"));
