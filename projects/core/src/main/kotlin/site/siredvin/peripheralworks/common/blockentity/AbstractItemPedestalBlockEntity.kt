@@ -6,18 +6,16 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.broccolium.modules.storage.base.api.SlottedAgnosticStorage
 import site.siredvin.peripheralworks.api.IItemStackStorage
 import site.siredvin.peripheralworks.api.IPlatformItemStorageHolder
 import site.siredvin.peripheralworks.api.ISavableComponent
 import site.siredvin.peripheralworks.xplat.ModPlatform
 import site.siredvin.tweakium.modules.peripheral.api.IOwnedPeripheral
-import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import java.util.function.Predicate
 
 abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEntityType: BlockEntityType<*>, blockPos: BlockPos, blockState: BlockState, val holdingStacks: Int = 1, capacity: Int? = null, accepts: (ItemStack) -> Boolean = { true }) :
-    MutablePeripheralBlockEntity<T>(
+    RegistryAwarePeripheralBlockEntity<T>(
         blockEntityType,
         blockPos,
         blockState,
@@ -56,24 +54,24 @@ abstract class AbstractItemPedestalBlockEntity<T : IOwnedPeripheral<*>>(blockEnt
         if (data.contains(LEGACY_STORED_ITEM_STACK_TAG)) {
             val tag = data.get(LEGACY_STORED_ITEM_STACK_TAG)
             if (tag is CompoundTag) {
-                inventory.load(tag)
+                inventory.load(tag, itemRegistries)
             } else if (tag is ListTag) {
                 tag.forEach {
                     if (it is CompoundTag) {
-                        val stack = ItemStack.parseOptional(PlatformToolkit.get().registries!!, it)
+                        val stack = ItemStack.parseOptional(itemRegistries, it)
                         storage.store(stack, false)
                     }
                 }
             }
         }
         if (data.contains(STORED_ITEM_STACK_TAG)) {
-            inventory.load(data.get(STORED_ITEM_STACK_TAG)!!)
+            inventory.load(data.get(STORED_ITEM_STACK_TAG)!!, itemRegistries)
         }
         return state ?: blockState
     }
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {
-        data.put(STORED_ITEM_STACK_TAG, inventory.save())
+        data.put(STORED_ITEM_STACK_TAG, inventory.save(itemRegistries))
         return data
     }
 }
