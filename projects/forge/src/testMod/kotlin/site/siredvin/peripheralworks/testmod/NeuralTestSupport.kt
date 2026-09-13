@@ -116,6 +116,15 @@ object NeuralTestSupport {
         val result = VanillaDetailRegistries.ITEM_STACK.getDetails(stack)
         check(ItemStack.matches(stack, before)) { "Detail query mutated item" }
         check(!VanillaDetailRegistries.ITEM_STACK.getBasicDetails(stack).containsKey("dataModel"))
+        val model = result["dataModel"] as? Map<*, *>
+        if (model != null) {
+            val identities = model["models"] as List<*>
+            for (identity in identities) {
+                val fields = identity as Map<*, *>
+                check(fields.keys == setOf("modelId", "entityId")) { "Unexpected model identity fields" }
+                check(fields["entityId"] is String && fields["modelId"] is String)
+            }
+        }
         return result
     }
 }

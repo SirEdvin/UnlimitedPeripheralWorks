@@ -1,10 +1,9 @@
 import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 
-/** Native identity; entityIds includes the primary entity and registered subtypes. */
+/** Native model identity and its primary Minecraft entity ID. */
 export type NeuralModelIdentity = {
     modelId: string;
     entityId: string;
-    entityIds: string[];
 };
 
 export type NeuralModelProgression = {

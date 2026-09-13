@@ -31,7 +31,6 @@ object NeuralModels {
     fun identity(model: DataModel): Map<String, Any> = mapOf(
         "modelId" to DataModelRegistry.INSTANCE.getKey(model).toString(),
         "entityId" to BuiltInRegistries.ENTITY_TYPE.getKey(model.type()).toString(),
-        "entityIds" to entities(model),
     )
 
     // Validate before native getters: ResourceLocation constructors and display-name code can throw on bad saves.

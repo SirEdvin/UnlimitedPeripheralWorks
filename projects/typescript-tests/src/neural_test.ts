@@ -44,6 +44,12 @@ export function runNeuralTest(type: string): void {
         if (!detail || !detail.dataModel) throw `Missing model details in slot ${slot}`;
         const model = detail.dataModel;
         if (model.models.length !== (model.kind === "combined" ? 4 : 1)) throw "Wrong constituent count";
+        for (const identity of model.models) {
+            if (!identity.entityId || !identity.modelId) throw "Missing model identity";
+            for (const [key] of pairs(identity)) {
+                if (key !== "entityId" && key !== "modelId") throw "Unexpected model identity field";
+            }
+        }
         if (model.progression.iterations !== 7) throw "Wrong iterations";
         if (model.progression.maxRank !== (slot % 2 === 0)) throw "Wrong maximum flag";
         if (model.progression.maxRank && (model.progression.nextTierData !== null || model.progression.remainingData !== null)) throw "Max tier not nullable";
