@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.1] - 2026-09-13
+
+### Added
+
+- Extra and regular Hostile neural network integration: now you can read information from data models
+- Extra and regular Hostile neural network integration: now you can configure loot fabricators as peripherals
+
 ## [1.9.0] - 2026-09-08
 
 ### Added
