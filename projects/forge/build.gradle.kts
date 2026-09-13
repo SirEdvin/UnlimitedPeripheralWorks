@@ -14,6 +14,9 @@ val modBaseName: String by extra
 
 evaluationDependsOn(":core")
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+val neuralTestEnvironment = providers.gradleProperty("neuralTestEnvironment").orElse("none").get()
+require(neuralTestEnvironment in setOf("none", "hnn", "extra")) { "neuralTestEnvironment must be none, hnn or extra" }
+val gameTestRunDirectory = layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}")
 val testWithoutAE2 = providers.gradleProperty("testWithoutAE2").isPresent
 require(!testWithoutAE2 || minimalTestEnvironment) { "testWithoutAE2 requires minimalTestEnvironment" }
 
@@ -73,13 +76,17 @@ tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotl
 
 if (minimalTestEnvironment) {
     val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
-        .filter { it.isDirectory && it.name != "ae2" }
+        .filter { it.isDirectory && it.name !in setOf("ae2", "hostilenetworks", "extrahnn") }
         .map { "**/integrations/${it.name}/**" }
     sourceSets.main { kotlin.exclude(excludedIntegrations) }
     tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
 }
 
 repositories {
+    maven {
+        url = uri("https://cursemaven.com")
+        content { includeModule("curse.maven", "extra-hostile-neural-networks-1162278") }
+    }
     mavenLocal()
     // location of the maven that hosts JEI files since January 2023
     maven {
@@ -173,6 +180,14 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.kotlin)
+    listOf(libs.hostile.networks.get(), libs.extra.hnn.get(), libs.placebo.get()).forEach { compileOnly(it) }
+    if (!minimalTestEnvironment || neuralTestEnvironment != "none") {
+        runtimeOnly(libs.hostile.networks)
+        runtimeOnly(libs.placebo)
+    }
+    if (!minimalTestEnvironment || neuralTestEnvironment == "extra") {
+        runtimeOnly(libs.extra.hnn)
+    }
     implementation(libs.bundles.forge.raw)
     implementation(libs.bundles.forge.base)
     implementation(libs.bundles.forge.include)
@@ -232,7 +247,7 @@ neoForge {
     runs {
         register("gameTestServer") {
             type = "gameTestServer"
-            gameDirectory = layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}").get().asFile
+            gameDirectory = gameTestRunDirectory.get().asFile
             systemProperty("neoforge.enabledGameTestNamespaces", "peripheralworks_testmod")
             systemProperty("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
             systemProperty("testiarium.structures", project.project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
@@ -304,6 +319,16 @@ modPublishing {
     )
     shake()
 }
+tasks.withType<JavaExec>().configureEach {
+    if (name == "runGameTestServer" && providers.gradleProperty("neuralTestDisabled").isPresent) {
+        doFirst {
+            val config = gameTestRunDirectory.get().asFile.resolve("config/peripheralworks.toml")
+            config.parentFile.mkdirs()
+            config.writeText("[integrations.hostilenetworks]\nenabled=false\n[integrations.extrahnn]\nenabled=false\n")
+        }
+    }
+}
+
 tasks.withType<TaskPublishCurseForge>().configureEach {
     uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
 }

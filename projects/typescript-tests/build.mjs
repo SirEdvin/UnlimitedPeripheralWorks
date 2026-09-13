@@ -19,6 +19,7 @@ for (const peripheral of [
   "hologram_projector", "ae2_interface", "ae2_import_bus", "ae2_export_bus", "ae2_storage_bus",
   "ae2_formation_plane", "ae2_storage_level_emitter", "ae2_energy_level_emitter", "ae2_pattern_provider",
   "ae2_wireless_terminal", "ae2_pattern_pedestal",
+  "hnn", "extra_hnn_v1", "extra_hnn_v2", "extra_hnn_v3", "extra_hnn_v4",
 ]) {
   const result = spawnSync(
     process.execPath,
