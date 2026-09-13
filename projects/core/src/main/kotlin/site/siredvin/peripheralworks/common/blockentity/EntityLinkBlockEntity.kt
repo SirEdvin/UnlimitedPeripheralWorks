@@ -9,7 +9,6 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.state.BlockState
 import site.siredvin.broccolium.modules.base.block.FacingBlockEntityBlock
-import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.block.EntityLink
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
@@ -19,13 +18,12 @@ import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
 import site.siredvin.peripheralworks.computercraft.operations.SphereOperations
 import site.siredvin.peripheralworks.computercraft.peripherals.EntityLinkPeripheral
-import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 import site.siredvin.tweakium.modules.peripheral.boon.PeripheralOwnerBoonKey
 import site.siredvin.tweakium.modules.peripheral.boon.ScanningBoon
 import site.siredvin.tweakium.modules.peripheral.owner.BlockEntityPeripheralOwner
 import site.siredvin.tweakium.modules.peripheral.owner.EntityProxyPeripheralOwner
 
-class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : MutablePeripheralBlockEntity<EntityLinkPeripheral>(BlockEntityTypes.ENTITY_LINK.get(), blockPos, blockState) {
+class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : RegistryAwarePeripheralBlockEntity<EntityLinkPeripheral>(BlockEntityTypes.ENTITY_LINK.get(), blockPos, blockState) {
     companion object {
         const val STORED_CARD_TAG = "storedCard"
         const val UPGRADES_TAG = "upgrades"
@@ -181,7 +179,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mutabl
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         var resultState = state ?: blockState
         if (data.contains(STORED_CARD_TAG)) {
-            _storedStack = ItemStack.parseOptional(PlatformToolkit.get().registries!!, data.getCompound(STORED_CARD_TAG))
+            _storedStack = ItemStack.parseOptional(itemRegistries, data.getCompound(STORED_CARD_TAG))
             resultState = resultState.setValue(EntityLink.CONFIGURED, true)
         } else {
             resultState = resultState.setValue(EntityLink.CONFIGURED, false)
@@ -192,7 +190,7 @@ class EntityLinkBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mutabl
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {
         if (!_storedStack.isEmpty) {
-            data.put(STORED_CARD_TAG, _storedStack.save(PlatformToolkit.get().registries!!))
+            data.put(STORED_CARD_TAG, _storedStack.save(itemRegistries))
         }
         data.put(UPGRADES_TAG, upgrades.save())
         return data

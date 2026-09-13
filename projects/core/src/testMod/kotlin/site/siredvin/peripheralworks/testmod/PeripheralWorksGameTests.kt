@@ -17,8 +17,13 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.storage.loot.LootTable
+import site.siredvin.broccolium.modules.platform.PlatformToolkit
+import site.siredvin.broccolium.modules.platform.api.InnerPlatformToolkit
 import site.siredvin.peripheralworks.client.configurator.NetworkManagerGroupHierarchy
 import site.siredvin.peripheralworks.common.block.NetworkManager
+import site.siredvin.peripheralworks.common.blockentity.DisplayPedestalBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.EntityLinkBlockEntity
+import site.siredvin.peripheralworks.common.blockentity.ItemPedestalBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.NetworkManagerBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.PeripheralProxyBlockEntity
 import site.siredvin.peripheralworks.common.blockentity.RemoteObserverBlockEntity
@@ -42,6 +47,78 @@ import net.neoforged.neoforge.common.ModConfigSpec as ForgeConfigSpec
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
+    @GameTest(template = "empty", batch = "registry-context")
+    fun displayPedestalRegistryContext(helper: GameTestHelper) {
+        val registries = helper.level.registryAccess()
+        val originalPlatform = PlatformToolkit.get()
+        val stack = ItemStack(net.minecraft.world.item.Items.DIAMOND_SWORD).apply {
+            set(DataComponents.CUSTOM_NAME, net.minecraft.network.chat.Component.literal("Registry round trip"))
+            enchant(registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(net.minecraft.world.item.enchantment.Enchantments.SHARPNESS), 3)
+        }
+        val samples = listOf(ItemStack.EMPTY, stack, ItemStack.EMPTY)
+        val pedestal = DisplayPedestalBlockEntity(BlockPos.ZERO, Blocks.DISPLAY_PEDESTAL.get().defaultBlockState())
+        // Model a remote client: no server-global registry and no level assigned during native loading.
+        PlatformToolkit.configure(object : InnerPlatformToolkit by originalPlatform {
+            override val minecraftServer: net.minecraft.server.MinecraftServer? = null
+            override val registries: net.minecraft.core.HolderLookup.Provider? = null
+        })
+        try {
+            for (sample in samples) {
+                val data = CompoundTag().apply {
+                    put("storedItemStack", sample.saveOptional(registries))
+                    putBoolean("renderItem", false)
+                    putBoolean("renderLabel", false)
+                }
+                pedestal.loadWithComponents(data, registries)
+                check(ItemStack.matches(pedestal.storedStack, sample)) { "Client loading lost item components" }
+                check(!pedestal.renderItem && !pedestal.renderLabel)
+                val saved = pedestal.saveWithoutMetadata(registries)
+                val synced = pedestal.getUpdateTag(registries)
+                for (roundTrip in listOf(saved, synced)) {
+                    val loaded = DisplayPedestalBlockEntity(BlockPos.ZERO, pedestal.blockState)
+                    loaded.loadWithComponents(roundTrip, registries)
+                    check(ItemStack.matches(loaded.storedStack, sample)) { "Save/update-tag round trip changed stack" }
+                    check(!loaded.renderItem && !loaded.renderLabel)
+                }
+            }
+            val card = ItemStack(Items.ENTITY_CARD.get()).apply {
+                set(DataComponents.CUSTOM_NAME, stack.get(DataComponents.CUSTOM_NAME)!!)
+                set(DataComponents.ENCHANTMENTS, stack.get(DataComponents.ENCHANTMENTS)!!)
+                set(DataComponents.CUSTOM_DATA, CustomData.of(CompoundTag().apply { putString("registryTest", "preserved") }))
+            }
+            val link = EntityLinkBlockEntity(BlockPos.ZERO, Blocks.ENTITY_LINK.get().defaultBlockState())
+            link.loadWithComponents(CompoundTag().apply { put("storedCard", card.save(registries)) }, registries)
+            check(ItemStack.matches(link.storedStack, card))
+            val restoredLink = EntityLinkBlockEntity(BlockPos.ZERO, link.blockState)
+            restoredLink.loadWithComponents(link.getUpdateTag(registries), registries)
+            check(ItemStack.matches(restoredLink.storedStack, card))
+            restoredLink.loadWithComponents(link.saveWithoutMetadata(registries), registries)
+            check(ItemStack.matches(restoredLink.storedStack, card))
+
+            val itemPedestal = ItemPedestalBlockEntity(BlockPos.ZERO, Blocks.ITEM_PEDESTAL.get().defaultBlockState())
+            itemPedestal.loadWithComponents(
+                CompoundTag().apply {
+                    put("storedItemStack", ListTag().apply { add(stack.save(registries)) })
+                },
+                registries,
+            )
+            check(ItemStack.matches(itemPedestal.storedStack, stack)) { "Legacy pedestal load lost components" }
+            for (data in listOf(itemPedestal.saveWithoutMetadata(registries), itemPedestal.getUpdateTag(registries))) {
+                val restored = ItemPedestalBlockEntity(BlockPos.ZERO, itemPedestal.blockState)
+                restored.loadWithComponents(data, registries)
+                check(ItemStack.matches(restored.storedStack, stack)) { "Platform storage round trip lost components" }
+            }
+            // Direct internal-data callers use their owning level, not a server-global fallback.
+            pedestal.setLevel(helper.level)
+            pedestal.loadInternalData(CompoundTag().apply { put("storedItemStack", stack.save(registries)) }, null)
+            check(ItemStack.matches(pedestal.storedStack, stack))
+            check(pedestal.saveInternalData(CompoundTag()).getCompound("storedItemStack") == stack.save(registries))
+        } finally {
+            PlatformToolkit.configure(originalPlatform)
+        }
+        helper.succeed()
+    }
+
     @GameTest(template = "empty")
     fun optionalAE2Resources(helper: GameTestHelper) {
         val ae2Present = BuiltInRegistries.BLOCK.containsKey(ResourceLocation.fromNamespaceAndPath("ae2", "controller"))
@@ -95,7 +172,7 @@ class PeripheralWorksGameTests {
         check(platform.replaceSlottedItem(saved, 0, original, tagged))
         check(ItemStack.matches(storage.get(0), tagged) && changes > beforeReplace)
         val (loaded, loadedStorage) = platform.createSlottedItemStorage(1, 1, {}, 1) { it.`is`(stone) }
-        loaded.load(saved.save())
+        loaded.load(saved.save(helper.level.registryAccess()), helper.level.registryAccess())
         check(ItemStack.matches(loadedStorage.get(0), tagged))
         val (_, ordinary) = platform.createSlottedItemStorage(1, 1, {})
         check(ordinary.store(ItemStack(stone, 64), false).isEmpty)

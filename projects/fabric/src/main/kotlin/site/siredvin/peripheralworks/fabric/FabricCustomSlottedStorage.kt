@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedSlottedStorage
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtOps
@@ -53,22 +54,22 @@ class FabricCustomSlottedStorage(slots: Int, slotScale: Int, trigger: Runnable, 
         return true
     }
 
-    override fun save(): Tag {
+    override fun save(registries: HolderLookup.Provider): Tag {
         val list = ListTag()
         for (slot in slots) {
             val tag = CompoundTag()
-            tag.put("Variant", ItemVariant.CODEC.encodeStart(NbtOps.INSTANCE, slot.resource).getOrThrow())
+            tag.put("Variant", ItemVariant.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), slot.resource).getOrThrow())
             tag.putLong("Amount", slot.amount)
             list.add(tag)
         }
         return list
     }
 
-    override fun load(tag: Tag) {
+    override fun load(tag: Tag, registries: HolderLookup.Provider) {
         val list = tag as ListTag
         for (i in 0 until list.size) {
             val innerTag = list.get(i) as CompoundTag
-            parts.get(i).variant = ItemVariant.CODEC.parse(NbtOps.INSTANCE, innerTag.getCompound("Variant")).getOrThrow()
+            parts.get(i).variant = ItemVariant.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), innerTag.getCompound("Variant")).getOrThrow()
             parts.get(i).amount = innerTag.getLong("Amount")
         }
     }

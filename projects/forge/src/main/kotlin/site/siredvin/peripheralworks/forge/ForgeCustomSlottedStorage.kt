@@ -1,8 +1,7 @@
 package site.siredvin.peripheralworks.forge
 
 import com.mojang.serialization.Dynamic
-import net.minecraft.core.RegistryAccess
-import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.NbtOps
@@ -11,7 +10,6 @@ import net.minecraft.util.datafix.DataFixers
 import net.minecraft.util.datafix.fixes.References
 import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.items.ItemStackHandler
-import net.neoforged.neoforge.server.ServerLifecycleHooks
 import site.siredvin.peripheralworks.api.ISavableComponent
 
 class ForgeCustomSlottedStorage(size: Int, private val slotScale: Int, private val trigger: Runnable, private val capacity: Int? = null, private val accepts: (ItemStack) -> Boolean = { true }) :
@@ -41,8 +39,7 @@ class ForgeCustomSlottedStorage(size: Int, private val slotScale: Int, private v
         trigger.run()
     }
 
-    override fun save(): Tag {
-        val registries = registryAccess()
+    override fun save(registries: HolderLookup.Provider): Tag {
         val nbtTagList = ListTag()
         for (i in stacks.indices) {
             if (!stacks[i].isEmpty) {
@@ -58,8 +55,7 @@ class ForgeCustomSlottedStorage(size: Int, private val slotScale: Int, private v
         return nbt
     }
 
-    override fun load(tag: Tag) {
-        val registries = registryAccess()
+    override fun load(tag: Tag, registries: HolderLookup.Provider) {
         val nbt = tag as? CompoundTag ?: return
         setSize(if (nbt.contains("Size", Tag.TAG_INT.toInt())) nbt.getInt("Size") else stacks.size)
         val tagList: ListTag = nbt.getList("Items", Tag.TAG_COMPOUND.toInt())
@@ -82,9 +78,6 @@ class ForgeCustomSlottedStorage(size: Int, private val slotScale: Int, private v
         }
         onLoad()
     }
-
-    private fun registryAccess(): RegistryAccess = ServerLifecycleHooks.getCurrentServer()?.registryAccess()
-        ?: RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY)
 
     companion object {
         private const val LEGACY_DATA_VERSION = 3465

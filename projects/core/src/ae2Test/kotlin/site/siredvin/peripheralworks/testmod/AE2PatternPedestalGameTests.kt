@@ -106,7 +106,7 @@ class AE2PatternPedestalGameTests {
         // Load deliberately malformed data through the real save format without truncating it.
         val unconstrained = site.siredvin.peripheralworks.xplat.ModPlatform.baseInnerPlatform.createSlottedItemStorage(1, 2, {})
         unconstrained.second.store(overCount.copy(), false)
-        entity.loadInternalData(CompoundTag().apply { put("storedItemStackV2", unconstrained.first.save()) }, null)
+        entity.loadInternalData(CompoundTag().apply { put("storedItemStackV2", unconstrained.first.save(helper.level.registryAccess())) }, null)
         check(entity.storedStack.count == 2)
         check(peripheral.clearPattern().result!![0] == null && entity.storedStack.count == 2)
         check(peripheral.encodeProcessingPattern(emptyMap<Any, Any>()).result!![0] == null)

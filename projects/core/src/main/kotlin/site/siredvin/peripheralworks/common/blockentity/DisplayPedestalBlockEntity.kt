@@ -6,14 +6,12 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
-import site.siredvin.broccolium.modules.platform.PlatformToolkit
 import site.siredvin.peripheralworks.api.IItemStackHolder
 import site.siredvin.peripheralworks.common.setup.BlockEntityTypes
 import site.siredvin.peripheralworks.computercraft.peripherals.DisplayPedestalPeripheral
-import site.siredvin.tweakium.modules.peripheral.blockentity.MutablePeripheralBlockEntity
 
 class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState, blockEntityType: BlockEntityType<*> = BlockEntityTypes.DISPLAY_PEDESTAL.get()) :
-    MutablePeripheralBlockEntity<DisplayPedestalPeripheral>(
+    RegistryAwarePeripheralBlockEntity<DisplayPedestalPeripheral>(
         blockEntityType,
         blockPos,
         blockState,
@@ -54,7 +52,7 @@ class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState, blo
 
     override fun loadInternalData(data: CompoundTag, state: BlockState?): BlockState {
         if (data.contains(STORED_ITEM_STACK_TAG)) {
-            _storedStack = ItemStack.parseOptional(PlatformToolkit.get().registries!!, data.getCompound(STORED_ITEM_STACK_TAG))
+            _storedStack = ItemStack.parseOptional(itemRegistries, data.getCompound(STORED_ITEM_STACK_TAG))
         }
         if (data.contains(RENDER_LABEL_TAG)) {
             _renderLabel = data.getBoolean(RENDER_LABEL_TAG)
@@ -66,7 +64,7 @@ class DisplayPedestalBlockEntity(blockPos: BlockPos, blockState: BlockState, blo
     }
 
     override fun saveInternalData(data: CompoundTag): CompoundTag {
-        data.put(STORED_ITEM_STACK_TAG, _storedStack.saveOptional(PlatformToolkit.get().registries!!))
+        data.put(STORED_ITEM_STACK_TAG, _storedStack.saveOptional(itemRegistries))
         data.putBoolean(RENDER_ITEM_TAG, _renderItem)
         data.putBoolean(RENDER_LABEL_TAG, _renderLabel)
         return data
