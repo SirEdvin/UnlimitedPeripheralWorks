@@ -12,7 +12,10 @@ val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+val neuralTestEnvironment = providers.gradleProperty("neuralTestEnvironment").orElse("none").get()
+require(neuralTestEnvironment in setOf("none", "hnn", "extra")) { "neuralTestEnvironment must be none, hnn or extra" }
 val testWithoutAE2 = providers.gradleProperty("testWithoutAE2").isPresent
+val gameTestRunDirectory = layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}")
 require(!testWithoutAE2 || minimalTestEnvironment) { "testWithoutAE2 requires minimalTestEnvironment" }
 
 tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
@@ -43,7 +46,7 @@ forgeShaking {
 
 if (minimalTestEnvironment) {
     val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
-        .filter { it.isDirectory && it.name != "ae2" }
+        .filter { it.isDirectory && it.name !in setOf("ae2", "hostilenetworks", "extrahnn") }
         .map { "**/integrations/${it.name}/**" }
     sourceSets.main { kotlin.exclude(excludedIntegrations) }
     tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
@@ -62,6 +65,10 @@ tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotl
 }
 
 repositories {
+    maven {
+        url = uri("https://cursemaven.com")
+        content { includeModule("curse.maven", "extra-hostile-neural-networks-1162278") }
+    }
     mavenLocal()
     maven {
         name = "SirEdvin's Maven proxy"
@@ -70,6 +77,14 @@ repositories {
 }
 
 dependencies {
+    listOf(libs.hostile.networks.get(), libs.extra.hnn.get(), libs.placebo.get()).forEach { compileOnly(fg.deobf(it)) }
+    if (!minimalTestEnvironment || neuralTestEnvironment != "none") {
+        runtimeOnly(fg.deobf(libs.hostile.networks.get()))
+        runtimeOnly(fg.deobf(libs.placebo.get()))
+    }
+    if (!minimalTestEnvironment || neuralTestEnvironment == "extra") {
+        runtimeOnly(fg.deobf(libs.extra.hnn.get()))
+    }
     implementation(libs.bundles.forge.raw)
     libs.bundles.forge.base.get().map { implementation(fg.deobf(it)) }
     libs.bundles.forge.include.get().map { implementation(fg.deobf(it)) }
@@ -118,7 +133,7 @@ minecraft {
     runs {
         create("gameTestServer") {
             // Saved fixture computers reboot before tests replace them; each run needs an isolated world.
-            workingDirectory(layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}").get().asFile)
+            workingDirectory(gameTestRunDirectory.get().asFile)
             property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
             property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
             property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
@@ -176,6 +191,16 @@ minecraft {
 
 publishingShaking {
     shake()
+}
+
+tasks.withType<JavaExec>().configureEach {
+    if (name == "runGameTestServer" && providers.gradleProperty("neuralTestDisabled").isPresent) {
+        doFirst {
+            val config = gameTestRunDirectory.get().asFile.resolve("config/peripheralworks.toml")
+            config.parentFile.mkdirs()
+            config.writeText("[integrations.hostilenetworks]\nenabled=false\n[integrations.extrahnn]\nenabled=false\n")
+        }
+    }
 }
 
 modPublishing {

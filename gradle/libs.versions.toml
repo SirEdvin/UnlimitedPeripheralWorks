@@ -72,6 +72,9 @@ kubejs-fabric = "2001.6.5-build.20"
 rhino-fabric = "2001.2.3-build.10"
 
 # Integration mod dependencies (forge)
+hostile-networks = "5.3.3"
+extra-hnn = "8004392" # Extra HNN 1.20.1 1.2.2
+placebo = "8.6.3"
 occultism = "1.20.1-1.141.3"
 theurgy = "1.20.1-1.23.4"
 modonomicon = "1.77.6"
@@ -204,6 +207,9 @@ iris = { module = "maven.modrinth:iris", version.ref = "iris" }
 sodium = { module = "maven.modrinth:sodium", version.ref = "sodium" }
 
 # Forge integration dependencies
+hostile-networks = {module = "maven.modrinth:hostile-neural-networks", version.ref = "hostile-networks"}
+extra-hnn = {module = "curse.maven:extra-hostile-neural-networks-1162278", version.ref = "extra-hnn"}
+placebo = {module = "maven.modrinth:placebo", version.ref = "placebo"}
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
 theurgy = {module = "maven.modrinth:theurgy", version.ref = "theurgy"}
 curios-forge = {module = "top.theillusivec4.curios:curios-forge", version.ref = "curios-forge"}
