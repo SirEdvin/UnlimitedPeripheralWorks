@@ -59,6 +59,9 @@ universal-shops = "BfXSBkjs"
 teamreborn-energy = "4.1.0"
 
 # Integration mod dependencies (forge)
+hostile-networks = "ikdLP02G" # Hostile Neural Networks 1.21.1 6.5.1
+extra-hnn = "8531861" # Extra HNN 1.21.1 2.2.5 NeoForge
+placebo = "1Ypo4tf4" # Placebo 1.21.1 9.9.2
 additional-lanterns-forge = "8KgjK1wm"
 supermartijn642s-core-lib-forge = "hcYSe7v7"
 ae2-forge = "kfyIqgJ6"
@@ -177,6 +180,9 @@ universal-shops = {module = "maven.modrinth:universal-shops", version.ref="unive
 automobility-fabric = {module = "maven.modrinth:automobility", version.ref="automobility-fabric"}
 
 # Forge integration dependencies
+hostile-networks = {module = "maven.modrinth:hostile-neural-networks", version.ref = "hostile-networks"}
+extra-hnn = {module = "curse.maven:extra-hostile-neural-networks-1162278", version.ref = "extra-hnn"}
+placebo = {module = "maven.modrinth:placebo", version.ref = "placebo"}
 occultism = {module = "maven.modrinth:occultism", version.ref = "occultism"}
 theurgy = {module = "maven.modrinth:theurgy", version.ref = "theurgy"}
 curios-forge = {module = "maven.modrinth:curios", version.ref = "curios-forge"}

@@ -62,3 +62,17 @@ type="required"
 versionRange="[${tweakiumVersion},)"
 ordering="NONE"
 side="BOTH"
+
+[[dependencies.peripheralworks]]
+modId="hostilenetworks"
+type="optional"
+versionRange="[6.5.1,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.peripheralworks]]
+modId="extrahnn"
+type="optional"
+versionRange="[2.2.5,)"
+ordering="AFTER"
+side="BOTH"

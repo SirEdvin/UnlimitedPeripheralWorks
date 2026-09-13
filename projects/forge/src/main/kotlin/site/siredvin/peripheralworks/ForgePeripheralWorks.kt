@@ -112,6 +112,10 @@ class ForgePeripheralWorks(modEventBus: IEventBus, modContainer: ModContainer) {
     @Suppress("UNUSED_PARAMETER")
     fun commonSetup(event: FMLCommonSetupEvent) {
         // Load all integrations
+        loader.maybeLoadIntegration("hostilenetworks").ifPresent { (it as Runnable).run() }
+        if (loader.isModPresent("hostilenetworks")) {
+            loader.maybeLoadIntegration("extrahnn").ifPresent { (it as Runnable).run() }
+        }
         loader.maybeLoadIntegration("additionallanterns").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("occultism").ifPresent { (it as Runnable).run() }
         loader.maybeLoadIntegration("easy_villagers").ifPresent { (it as Runnable).run() }
