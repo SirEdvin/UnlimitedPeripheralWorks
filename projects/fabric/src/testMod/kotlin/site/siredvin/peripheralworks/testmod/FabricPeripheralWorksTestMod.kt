@@ -26,6 +26,7 @@ object FabricPeripheralWorksTestMod : ModInitializer {
         }
         if (FabricLoader.getInstance().environmentType == EnvType.CLIENT) {
             Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.NetworkManagerClientGameTests"))
+            Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.StatueUpdateClientGameTests"))
             if (FabricLoader.getInstance().isModLoaded("ae2")) {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2PatternPedestalClientGameTests"))
             }

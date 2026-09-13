@@ -33,7 +33,6 @@ import site.siredvin.peripheralworks.utils.QuadData
 import site.siredvin.peripheralworks.utils.QuadList
 import site.siredvin.peripheralworks.utils.modId
 import java.util.concurrent.TimeUnit
-import java.util.stream.Collectors
 
 val emptyFlexibleStatueModel by lazy {
     Minecraft.getInstance().blockRenderer.getBlockModel(Blocks.FLEXIBLE_STATUE.get().defaultBlockState())
@@ -52,9 +51,9 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
             .expireAfterAccess(30, TimeUnit.SECONDS).build(CacheLoader.from(::bakeQuads))
         val bakery by lazy { FaceBakery() }
 
-        private fun bakeQuads(triple: Triple<QuadList, Direction, ModelState>): MutableList<BakedQuad> = triple.first.list.stream().map { data ->
-            bake(data, triple.second, triple.third)
-        }.collect(Collectors.toList())
+        private fun bakeQuads(pair: Pair<QuadList, ModelState>): MutableList<BakedQuad> = pair.first.list.flatMap { data ->
+            Direction.entries.map { side -> bake(data, side, pair.second) }
+        }.toMutableList()
 
         protected fun bake(data: QuadData, side: Direction, modelState: ModelState = identityModel): BakedQuad {
             val alpha = ((data.opacity * 255f) + 0.5).toInt()
@@ -63,9 +62,11 @@ abstract class AbstractFlexibleStatueModel : IDynamicBakedModel {
                 null,
                 tint,
                 data.texture.toString(),
-                BlockFaceUV(data.uv, 0),
+                BlockFaceUV(null, 0),
                 ForgeFaceData(tint, 0, 0, true),
             )
+            // Let vanilla project UVs onto each face in model pixels, without stretching small cubes.
+            BlockElement(data.start, data.end, mapOf(side to face), null, true)
             return bakery.bakeQuad(
                 data.start, data.end, face, getTexture(data.texture), side,
                 modelState, null, true, DUMMY,
@@ -96,14 +97,16 @@ object FlexibleStatueModel : AbstractFlexibleStatueModel() {
         renderType: RenderType?,
     ): MutableList<BakedQuad> {
         val quadsData = extraData.get(QUADS) ?: return emptyFlexibleStatueModel.getQuads(state, side, rand, extraData, renderType)
-        val safeSide = side ?: Direction.SOUTH
+        // Statues can have inset and out-of-block cubes. Like Fabric, emit their faces only
+        // in the unculled pass: a solid neighbor must not hide unrelated geometry.
+        if (side != null) return mutableListOf()
         val rotation = when (extraData.get(FACING) ?: Direction.EAST) {
             Direction.SOUTH -> Axis.YP.rotationDegrees(180f)
             Direction.WEST -> Axis.YP.rotationDegrees(90f)
             Direction.EAST -> Axis.YN.rotationDegrees(90f)
             else -> Axis.YP.rotationDegrees(0f)
         }
-        return quadsCache.get(Triple(quadsData, safeSide, getModelState(rotation)))
+        return quadsCache.get(Pair(quadsData, getModelState(rotation)))
     }
 
     @Deprecated("Deprecated in Java")
@@ -149,7 +152,7 @@ class ItemFlexibleStatueModel(private val quads: QuadList) : AbstractFlexibleSta
         rand: RandomSource,
         extraData: ModelData,
         renderType: RenderType?,
-    ): MutableList<BakedQuad> = quadsCache.get(Triple(quads, side ?: Direction.SOUTH, identityModel))
+    ): MutableList<BakedQuad> = if (side == null) quadsCache.get(Pair(quads, identityModel)) else mutableListOf()
 
     override fun getOverrides(): ItemOverrides = ItemOverrides.EMPTY
 

@@ -54,6 +54,8 @@ public final class ForgePeripheralWorksTestMod {
     private static final class ClientTests {
         private static void register() {
             Testiarium.register(NetworkManagerClientGameTests.class);
+            Testiarium.register(StatueModelClientGameTests.class);
+            Testiarium.register(StatueUpdateClientGameTests.class);
             if (ModList.get().isLoaded("ae2")) {
                 try {
                     Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.AE2PatternPedestalClientGameTests"));
