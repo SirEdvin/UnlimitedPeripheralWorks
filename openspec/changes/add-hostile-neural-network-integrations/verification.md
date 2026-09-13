@@ -2,7 +2,7 @@
 
 Implementation targets Minecraft 1.20.1 / Forge 47, CC:Tweaked 1.116.1, HNN 5.3.3, Extra HNN 1.2.2 (CurseForge file 8004392), and Placebo 8.6.3. Fabric has no HNN/Extra HNN dependencies. Published artifact metadata and mapped APIs were inspected before implementation.
 
-## Final local runs
+## Original local runs (before guard removal)
 
 All commands ran from the repository root, with complete output redirected to the log below. Every listed run exited **0**. The `build/` logs and reports are intentionally not committed.
 
@@ -38,7 +38,7 @@ The Lua fixtures exercise all selection methods, index validation, nil/null and 
 
 Native reload tests cover changed/removed/empty/duplicate drop entries, subtype ambiguity, primary precedence, stale indices and custom progression/cost data. HNN rejects duplicate primary entity models at registry load; the ambiguity fixture therefore uses overlapping subtypes with distinct primary entities rather than weakening native validation.
 
-Detail tests cover every ordinary and Extra HNN tier, four ordered combined constituents with duplicates, maximum-tier null semantics, malformed and unresolved models, provider coexistence and the approved name guard. The final guard preserves custom names and safe native broken-model names, and catches only malformed resource-ID and constituent-index failures for registered invalid neural items.
+Detail tests cover every ordinary and Extra HNN tier, four ordered combined constituents with duplicates, maximum-tier null semantics, malformed and unresolved models and provider coexistence. The user subsequently requested removal of the name guard. Current malformed-name fixtures use custom names to reach enrichment; an explicit regression verifies the native empty-constituent exception remains unhandled. No production name interception remains.
 
 ## Packaging
 
@@ -53,3 +53,20 @@ Inspected `projects/forge/build/libs/peripheralworks-forge-1.20.1-1.9.0.jar`: co
 - Prepared disabled configuration in the exact Forge run directory rather than the task's pre-launch working directory.
 
 These earlier failures are not counted as passing runs. Final runs above validate the corrected implementation.
+
+## Verification after removing the guard
+
+The name guard, mixin, registration and native exception handling were removed at the user's request. Provider validation remains unchanged. The native empty-constituent display-name exception is explicitly asserted through the real detail registry; custom-named malformed fixtures then exercise enrichment rejection without changing production name behavior.
+
+All commands below exited 0; XML reports record zero failures and skips.
+
+| Command | Duration | Log | Result |
+|---|---|---|---|
+| `timeout --foreground 20m xvfb-run -a ./gradlew :core:spotlessApply :forge:spotlessApply :typescript-tests:compileTestLua :forge:runGameTestServer --no-daemon -PminimalTestEnvironment -PneuralTestEnvironment=extra -PtestiariumTags=neural` | 85s | `build/hnn-no-guard-extra-20260913-112445.log` | 8 tests |
+| `timeout --foreground 20m xvfb-run -a ./gradlew :forge:runGameTestServer --no-daemon -PminimalTestEnvironment -PneuralTestEnvironment=hnn -PtestiariumTags=neural` | 59s | `build/hnn-no-guard-only-20260913-112628.log` | 3 tests |
+| `timeout --foreground 20m xvfb-run -a ./gradlew :forge:runGameTestServer --no-daemon -PminimalTestEnvironment -PneuralTestEnvironment=extra -PneuralTestDisabled -PtestiariumTags=neural-disabled` | 51s | `build/hnn-no-guard-disabled-20260913-112727.log` | 2 tests |
+| `timeout --foreground 20m xvfb-run -a ./gradlew gameTest --no-daemon -PminimalTestEnvironment` | 96s | `build/hnn-no-guard-regression-20260913-112818.log` | 55 Forge / 54 Fabric tests |
+| `timeout --foreground 10m xvfb-run -a ./gradlew build --no-daemon` | 47s | `build/hnn-no-guard-build-20260913-112955.log` | Passed |
+| `timeout --foreground 10m ./gradlew :core:clean :fabric:clean :forge:clean build --no-daemon` | 74s | `build/hnn-no-guard-clean-build-20260913-113127.log` | Passed |
+
+A packaging inspection found stale, unregistered guard classes in the incremental Fabric artifact. The clean multi-loader rebuild removed stale outputs; inspection verified neither final JAR contains those classes or their mixin registration. Saved post-removal reports are `build/hnn-no-guard-{extra,only,disabled,regression,fabric}.xml`.

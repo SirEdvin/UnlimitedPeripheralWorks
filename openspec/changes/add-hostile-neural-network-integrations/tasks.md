@@ -15,9 +15,9 @@
 
 - [x] 3.1 Add ordinary-model detail enrichment through the existing CC:Tweaked detail registry; verify native identities, tiers, counters, cumulative thresholds, remaining data, FE/tick and maximum-tier null behavior through detailed inventory Lua queries.
 - [x] 3.2 Add Extra HNN combined-model enrichment with ordered constituent identities and shared native progression; verify four constituents, duplicate identities, rank transitions, combined cost and highest Extra HNN tier without ordinary-tier coercion.
-- [x] 3.3 Harden both providers for malformed NBT, invalid resource IDs, wrong constituent counts, missing/unbound models and invalid progression; verify ordinary details survive, the extension is absent on invalid/blank/unrelated items, basic listings stay unchanged, other providers coexist and NBT snapshots remain identical.
+- [x] 3.3 Harden both providers for malformed NBT, invalid resource IDs, wrong constituent counts, missing/unbound models and invalid progression; verify ordinary details survive when upstream extraction succeeds, the extension is absent on invalid/blank/unrelated items, basic listings stay unchanged, other providers coexist and NBT snapshots remain identical.
 
-- [x] 3.4 Add the approved narrowly gated malformed-model display-name compatibility guard; verify malformed models through the real CC:Tweaked detail registry and preserve valid names, unrelated items and NBT.
+- [x] 3.4 Remove the display-name compatibility guard and mixin at the user's request. Preserve provider validation and native name behavior; test malformed enrichment using custom-named fixtures and verify upstream name failures remain unhandled.
 
 ## 4. TypeScript contracts and executable fixtures
 

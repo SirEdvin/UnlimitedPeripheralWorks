@@ -12,7 +12,6 @@ import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.common.configuration.integration.ExtraHNNConfiguration
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
-import site.siredvin.peripheralworks.computercraft.NeuralModelNameGuard
 import site.siredvin.peripheralworks.integrations.hostilenetworks.LootFabricatorPlugin
 import site.siredvin.peripheralworks.integrations.hostilenetworks.NeuralModels
 import site.siredvin.tweakium.modules.peripheral.api.IPeripheralPlugin
@@ -29,9 +28,6 @@ class Integration : Runnable {
 
     override fun run() {
         ComputerCraftProxy.addProvider(Provider)
-        NeuralModelNameGuard.register { stack ->
-            ExtraHNNConfiguration.enabled && stack.item is ExtraDataModelItem && NeuralModels.storedModels(stack, true) == null
-        }
         VanillaDetailRegistries.ITEM_STACK.addProvider(
             DetailProvider { data, stack ->
                 if (ExtraHNNConfiguration.enabled && stack.item is ExtraDataModelItem && NeuralModels.validProgress(stack)) {

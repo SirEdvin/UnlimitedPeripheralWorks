@@ -56,7 +56,10 @@ class NeuralNetworksGameTests {
         val expectedName = valid.hoverName.string
         check(NeuralTestSupport.checkDetail(valid)["displayName"] == expectedName)
         for (id in listOf("BAD!", "missing:model", "")) {
-            val broken = valid.copy().apply { getOrCreateTagElement("data_model").putString("id", id) }
+            val broken = valid.copy().apply {
+                getOrCreateTagElement("data_model").putString("id", id)
+                setHoverName(net.minecraft.network.chat.Component.literal("Malformed model fixture"))
+            }
             check(!NeuralTestSupport.checkDetail(broken).containsKey("dataModel"))
         }
         val observer = dan200.computercraft.api.detail.DetailProvider<net.minecraft.world.item.ItemStack> { data, stack ->

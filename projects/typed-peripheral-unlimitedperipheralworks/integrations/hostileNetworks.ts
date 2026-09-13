@@ -32,6 +32,7 @@ export type NeuralModelDetail =
 /** Detailed queries only. Absent on blank, malformed, unresolved and unrelated items.
  * Combined models preserve constituent order/duplicates and have one shared progression.
  * Nullable fields are absent in Lua when nil; inspection never changes the stack.
+ * Upstream item-name failures on malformed models are not intercepted and can fail the query.
  */
 export type NeuralModelItemDetail = ItemDetail & { dataModel?: NeuralModelDetail };
 

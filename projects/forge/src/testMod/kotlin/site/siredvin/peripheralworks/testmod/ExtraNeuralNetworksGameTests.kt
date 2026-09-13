@@ -61,13 +61,20 @@ class ExtraNeuralNetworksGameTests {
             val malformed = combined(ExtraModelTier.AUTONOMOUS).apply {
                 getOrCreateTagElement("data_model").put("ids", ListTag().apply { ids.forEach { add(StringTag.valueOf(it)) } })
             }
-            val result = NeuralTestSupport.checkDetail(malformed)
-            check(!result.containsKey("dataModel") && result["displayName"] is String)
+            if (ids.isEmpty()) {
+                val before = malformed.copy()
+                val failure = runCatching { NeuralTestSupport.checkDetail(malformed) }.exceptionOrNull()
+                check(failure is IndexOutOfBoundsException) { "Upstream name failures must remain unhandled" }
+                check(ItemStack.matches(malformed, before))
+            }
             if (ids == List(4) { "missing:model" }) {
+                val result = NeuralTestSupport.checkDetail(malformed)
                 check(result["displayName"] == malformed.item.getName(malformed).string) { "Safe native broken-model name was replaced" }
             }
+            // Custom names let the real detail registry reach our provider despite upstream name bugs.
             malformed.setHoverName(net.minecraft.network.chat.Component.literal("Custom model name"))
-            check(NeuralTestSupport.checkDetail(malformed)["displayName"] == "Custom model name")
+            val result = NeuralTestSupport.checkDetail(malformed)
+            check(!result.containsKey("dataModel") && result["displayName"] == "Custom model name")
         }
         helper.succeed()
     }

@@ -48,6 +48,8 @@ object NeuralTestSupport {
             (combined?.first()?.copy() ?: single(false)).apply {
                 getOrCreateTagElement("data_model").putString("id", "INVALID!")
                 getOrCreateTagElement("data_model").put("ids", net.minecraft.nbt.ListTag())
+                // Bypass the upstream name bug so the Lua query exercises our provider's validation.
+                setHoverName(net.minecraft.network.chat.Component.literal("Malformed model fixture"))
             },
             single(false).apply { getOrCreateTagElement("data_model").putInt("data", -1) },
             ItemStack(Items.DIRT),

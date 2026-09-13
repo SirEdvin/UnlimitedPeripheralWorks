@@ -27,10 +27,10 @@ Valid Extra HNN combined model items SHALL use the same `dataModel` namespace wi
 - **THEN** its native tier name is exposed without coercion into the ordinary HNN tier range and maximum-rank null semantics apply
 
 ### Requirement: Defensive read-only enrichment
-Providers SHALL preserve existing item fields and other providers' details, SHALL NOT mutate item NBT or progression during inspection, and SHALL NOT introduce this enrichment into basic inventory listings. Unrelated items, blank models, and invalid or unresolved model items SHALL omit `dataModel`. A malformed combined item SHALL omit the entire extension rather than return a misleading valid subset. Malformed or missing IDs, invalid constituent counts, removed registry entries and malformed progression SHALL NOT crash ordinary item queries. Prediction and deep-learner items are outside this extension's scope.
+Providers SHALL preserve existing item fields and other providers' details, SHALL NOT mutate item NBT or progression during inspection, and SHALL NOT introduce this enrichment into basic inventory listings. Unrelated items, blank models, and invalid or unresolved model items SHALL omit `dataModel`. A malformed combined item SHALL omit the entire extension rather than return a misleading valid subset. The enrichment providers SHALL reject malformed or missing IDs, invalid constituent counts, removed registry entries and malformed progression without throwing. Native item-name behavior SHALL NOT be patched or intercepted; upstream failures before enrichment MAY still fail the complete detail query. Prediction and deep-learner items are outside this extension's scope.
 
 #### Scenario: Invalid and unrelated items
-- **WHEN** detailed queries inspect blank, unrelated, malformed or unresolved model items
+- **WHEN** detailed queries inspect blank, unrelated, malformed or unresolved model items and native detail extraction succeeds
 - **THEN** ordinary item details remain usable without `dataModel` and the item is unchanged
 
 #### Scenario: Multiple providers and repeated reads
