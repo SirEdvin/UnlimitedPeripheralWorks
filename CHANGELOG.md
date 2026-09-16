@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Preserve GTCEu's energy, turbine, cover and central-monitor peripheral methods when UPW supplies the peripheral, delegating to GTCEu's native implementation.
+
 ## [1.9.1] - 2026-09-13
 
 ### Added
