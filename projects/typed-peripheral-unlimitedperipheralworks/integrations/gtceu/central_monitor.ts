@@ -18,7 +18,7 @@ export interface MonitorGroup {
     getModule(): MonitorModule;
 }
 
-/** GTCEu 7.4.1 native API, delegated without changing return values. @noSelf **/
+/** GTCEu 7.5.3 native API, delegated without changing return values. @noSelf **/
 export interface CentralMonitor extends ConfigurationAPI<object> {
     getGroups(): MonitorGroup[];
 }

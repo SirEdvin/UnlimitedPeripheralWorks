@@ -1,7 +1,7 @@
 import { ConfigurationAPI } from "@siredvin/typed-peripheral-api/configuration";
 import { IPeripheralProvider } from "@siredvin/typed-peripheral-base";
 
-/** GTCEu 7.4.1 native API, delegated without changing return values. @noSelf **/
+/** GTCEu 7.5.3 native API, delegated without changing return values. @noSelf **/
 export interface EnergyInfo extends ConfigurationAPI<object> {
     /** Stored EU and capacity; Lua numbers may lose precision for large values. */
     getEnergyStored(): number;

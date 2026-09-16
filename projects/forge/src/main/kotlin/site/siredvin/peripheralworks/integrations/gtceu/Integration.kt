@@ -63,9 +63,9 @@ class Integration : Runnable {
                 val definition = blockEntity.definition
                 val metaMachine = blockEntity.metaMachine
                 if (metaMachine is MultiblockControllerMachine && definition is MultiblockMachineDefinition) {
-                    return MultiblockMachinePlugin(definition, metaMachine)
+                    return MultiblockMachinePlugin(metaMachine, side)
                 }
-                return MachinePlugin(blockEntity.definition)
+                return MachinePlugin(metaMachine, side)
             }
             return null
         }

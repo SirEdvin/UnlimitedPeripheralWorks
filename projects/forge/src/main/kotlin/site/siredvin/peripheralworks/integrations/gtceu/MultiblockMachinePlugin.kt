@@ -1,13 +1,13 @@
 package site.siredvin.peripheralworks.integrations.gtceu
 
-import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IComputerAccess
+import net.minecraft.core.Direction
 import site.siredvin.peripheralworks.utils.extractPosition
 
-class MultiblockMachinePlugin(private val def: MultiblockMachineDefinition, private val meta: MultiblockControllerMachine) : MachinePlugin(def) {
+class MultiblockMachinePlugin(private val meta: MultiblockControllerMachine, side: Direction) : MachinePlugin(meta, side) {
     companion object {
         val TYPE = "gtceu:multiblock_machine"
     }

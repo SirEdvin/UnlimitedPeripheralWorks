@@ -29,6 +29,7 @@ public final class ForgePeripheralWorksTestMod {
         try {
             if (ModList.get().isLoaded("gtceu")) {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.GTCEUPeripheralGameTests"));
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.GTCEUInfoGameTests"));
             }
             if (ModList.get().isLoaded("hostilenetworks")) {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.NeuralNetworksGameTests"));
