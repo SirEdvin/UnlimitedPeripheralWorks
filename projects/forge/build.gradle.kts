@@ -14,6 +14,7 @@ val modBaseName: String by extra
 
 evaluationDependsOn(":core")
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+val gtceuTestEnvironment = providers.gradleProperty("gtceuTestEnvironment").isPresent
 val neuralTestEnvironment = providers.gradleProperty("neuralTestEnvironment").orElse("none").get()
 require(neuralTestEnvironment in setOf("none", "hnn", "extra")) { "neuralTestEnvironment must be none, hnn or extra" }
 val gameTestRunDirectory = layout.buildDirectory.dir("gametest-runs/${UUID.randomUUID()}")
@@ -72,11 +73,14 @@ configurations.named(testMod.implementationConfigurationName) {
 }
 tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
     source(project(":core").fileTree("src/ae2Test/kotlin"))
+    if (!minimalTestEnvironment || gtceuTestEnvironment) {
+        source(fileTree("src/gtceuTest/kotlin"))
+    }
 }
 
 if (minimalTestEnvironment) {
     val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
-        .filter { it.isDirectory && it.name !in setOf("ae2", "hostilenetworks", "extrahnn") }
+        .filter { it.isDirectory && it.name !in setOf("ae2", "hostilenetworks", "extrahnn") && !(gtceuTestEnvironment && it.name == "gtceu") }
         .map { "**/integrations/${it.name}/**" }
     sourceSets.main { kotlin.exclude(excludedIntegrations) }
     tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
@@ -181,6 +185,9 @@ repositories {
 dependencies {
     implementation(libs.bundles.kotlin)
     listOf(libs.hostile.networks.get(), libs.extra.hnn.get(), libs.placebo.get()).forEach { compileOnly(it) }
+    if (minimalTestEnvironment && gtceuTestEnvironment) {
+        implementation(libs.gtceu)
+    }
     if (!minimalTestEnvironment || neuralTestEnvironment != "none") {
         runtimeOnly(libs.hostile.networks)
         runtimeOnly(libs.placebo)
@@ -253,7 +260,7 @@ neoForge {
             systemProperty("testiarium.structures", project.project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
             systemProperty("testiarium.fixture-source", project.project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
             systemProperty("testiarium.cct-fixtures", project.project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
-            systemProperty("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
+            systemProperty("testiarium.gametest-report", layout.buildDirectory.file(if (gtceuTestEnvironment) "test-results/gtceu-server-gametest.xml" else "test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
             jvmArgument("-ea")
             programArgument("--nogui")
             loadedMods.add(peripheralworks.get())
@@ -261,12 +268,13 @@ neoForge {
         }
         register("clientGameTest") {
             type = "client"
-            gameDirectory = file("run/network-manager-client-gametest")
+            gameDirectory = if (gtceuTestEnvironment) gameTestRunDirectory.get().asFile else file("run/network-manager-client-gametest")
             systemProperty("neoforge.enabledGameTestNamespaces", "peripheralworks_testmod")
             systemProperty("testiarium.client", "true")
             systemProperty("testiarium.tags", providers.gradleProperty("testiariumClientTags").orElse("network-manager-client,display-pedestal-client").get())
             systemProperty("testiarium.structures", project.project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
-            systemProperty("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            systemProperty("testiarium.cct-fixtures", project.project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
+            systemProperty("testiarium.gametest-report", layout.buildDirectory.file(if (gtceuTestEnvironment) "test-results/gtceu-client-gametest.xml" else "test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
             systemProperty("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
             jvmArgument("-ea")
             loadedMods.add(peripheralworks.get())
@@ -320,6 +328,12 @@ modPublishing {
     shake()
 }
 tasks.withType<JavaExec>().configureEach {
+    if (gtceuTestEnvironment && name in setOf("runGameTestServer", "runClientGameTest")) {
+        val report = layout.buildDirectory.file(if (name == "runGameTestServer") "test-results/gtceu-server-gametest.xml" else "test-results/gtceu-client-gametest.xml")
+        // NeoForge can return zero after a mod-loading crash; reject missing/stale reports.
+        doFirst { report.get().asFile.delete() }
+        doLast { check(report.get().asFile.isFile) { "GameTests did not produce a fresh report; inspect the game log for startup failures" } }
+    }
     if (name == "runGameTestServer" && providers.gradleProperty("neuralTestDisabled").isPresent) {
         doFirst {
             val config = gameTestRunDirectory.get().asFile.resolve("config/peripheralworks.toml")
