@@ -12,6 +12,7 @@ import dan200.computercraft.api.detail.VanillaDetailRegistries
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
+import net.minecraftforge.common.capabilities.Capability
 import site.siredvin.peripheralworks.api.PeripheralPluginProvider
 import site.siredvin.peripheralworks.computercraft.ComputerCraftProxy
 import site.siredvin.peripheralworks.subsystem.recipe.RecipeRegistryToolkit
@@ -26,7 +27,9 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            val capability = blockEntity?.getCapability(GTCapability.CAPABILITY_WORKABLE)
+            val capability = blockEntity?.getCapability(GTCapability.CAPABILITY_WORKABLE)?.let {
+                if (it.isPresent) it else blockEntity.getCapability(GTCapability.CAPABILITY_WORKABLE, side)
+            }
             if (capability != null && capability.isPresent) {
                 return WorkablePeripheralPlugin(capability.resolve().get())
             }
@@ -40,7 +43,9 @@ class Integration : Runnable {
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
             val blockEntity = level.getBlockEntity(pos)
-            val capability = blockEntity?.getCapability(GTCapability.CAPABILITY_CONTROLLABLE)
+            val capability = blockEntity?.getCapability(GTCapability.CAPABILITY_CONTROLLABLE)?.let {
+                if (it.isPresent) it else blockEntity.getCapability(GTCapability.CAPABILITY_CONTROLLABLE, side)
+            }
             if (capability != null && capability.isPresent) {
                 return ControllablePeripheralPlugin(capability.resolve().get())
             }
@@ -58,9 +63,9 @@ class Integration : Runnable {
                 val definition = blockEntity.definition
                 val metaMachine = blockEntity.metaMachine
                 if (metaMachine is MultiblockControllerMachine && definition is MultiblockMachineDefinition) {
-                    return MultiblockMachinePlugin(definition, metaMachine)
+                    return MultiblockMachinePlugin(metaMachine, side)
                 }
-                return MachinePlugin(blockEntity.definition)
+                return MachinePlugin(metaMachine, side)
             }
             return null
         }
@@ -70,6 +75,10 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(WorkablePeripheralPluginProvider)
         ComputerCraftProxy.addProvider(ControllablePeripheralPluginProvider)
         ComputerCraftProxy.addProvider(MachinePeripheralPluginProvider)
+        addCapabilityProvider(EnergyInfoPeripheralPlugin.TYPE, GTCapability.CAPABILITY_ENERGY_INFO_PROVIDER, ::EnergyInfoPeripheralPlugin)
+        addCapabilityProvider(TurbineMachinePeripheralPlugin.TYPE, GTCapability.CAPABILITY_TURBINE_MACHINE, ::TurbineMachinePeripheralPlugin)
+        addCapabilityProvider(CoverHolderPeripheralPlugin.TYPE, GTCapability.CAPABILITY_COVERABLE, ::CoverHolderPeripheralPlugin)
+        addCapabilityProvider(CentralMonitorPeripheralPlugin.TYPE, GTCapability.CAPABILITY_CENTRAL_MONITOR, ::CentralMonitorPeripheralPlugin)
 
         RecipeRegistryToolkit.registerRecipeSerializer(GTRecipe::class.java, GTCEURecipeTransformer())
 
@@ -110,5 +119,20 @@ class Integration : Runnable {
                 }
             },
         )
+    }
+
+    private fun <T : Any> addCapabilityProvider(type: String, capability: Capability<T>, wrap: (T) -> IPeripheralPlugin) {
+        ComputerCraftProxy.addProvider(object : PeripheralPluginProvider {
+            override val pluginType: String = type
+
+            override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+                val blockEntity = level.getBlockEntity(pos) ?: return null
+                // CC:Tweaked checks the unsided capability before the requested side.
+                val target = blockEntity.getCapability(capability).resolve().orElse(null)
+                    ?: blockEntity.getCapability(capability, side).resolve().orElse(null)
+                    ?: return null
+                return wrap(target)
+            }
+        })
     }
 }

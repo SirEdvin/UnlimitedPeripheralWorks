@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- GTCEu machines expose a read-only `getInfo()` snapshot grouping machine, status, energy, recipe, maintenance and multiblock information, with TypeScript definitions.
+
+### Changed
+
+- Update the GTCEu integration dependency to 7.5.3 and verify native peripheral parity against that version.
+
+### Fixed
+
+- Preserve GTCEu's energy, turbine, cover and central-monitor peripheral methods when UPW supplies the peripheral, delegating to GTCEu's native implementation.
+
 ## [1.9.1] - 2026-09-13
 
 ### Added

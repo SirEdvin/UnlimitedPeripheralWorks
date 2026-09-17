@@ -12,6 +12,7 @@ val modVersion: String by extra
 val minecraftVersion: String by extra
 val modBaseName: String by extra
 val minimalTestEnvironment = providers.gradleProperty("minimalTestEnvironment").isPresent
+val gtceuTestEnvironment = providers.gradleProperty("gtceuTestEnvironment").isPresent
 val neuralTestEnvironment = providers.gradleProperty("neuralTestEnvironment").orElse("none").get()
 require(neuralTestEnvironment in setOf("none", "hnn", "extra")) { "neuralTestEnvironment must be none, hnn or extra" }
 val testWithoutAE2 = providers.gradleProperty("testWithoutAE2").isPresent
@@ -46,7 +47,7 @@ forgeShaking {
 
 if (minimalTestEnvironment) {
     val excludedIntegrations = file("src/main/kotlin/site/siredvin/peripheralworks/integrations").listFiles().orEmpty()
-        .filter { it.isDirectory && it.name !in setOf("ae2", "hostilenetworks", "extrahnn") }
+        .filter { it.isDirectory && it.name !in setOf("ae2", "hostilenetworks", "extrahnn") && !(gtceuTestEnvironment && it.name == "gtceu") }
         .map { "**/integrations/${it.name}/**" }
     sourceSets.main { kotlin.exclude(excludedIntegrations) }
     tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { exclude(excludedIntegrations) }
@@ -62,6 +63,9 @@ val testMod = sourceSets.create("testMod") {
 }
 tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotlin") {
     source(project(":core").fileTree("src/ae2Test/kotlin"))
+    if (!minimalTestEnvironment || gtceuTestEnvironment) {
+        source(fileTree("src/gtceuTest/kotlin"))
+    }
 }
 
 repositories {
@@ -77,6 +81,9 @@ repositories {
 }
 
 dependencies {
+    if (minimalTestEnvironment && gtceuTestEnvironment) {
+        listOf(libs.gregetch.get(), libs.ldlib.get()).forEach { implementation(fg.deobf(it)) }
+    }
     listOf(libs.hostile.networks.get(), libs.extra.hnn.get(), libs.placebo.get()).forEach { compileOnly(fg.deobf(it)) }
     if (!minimalTestEnvironment || neuralTestEnvironment != "none") {
         runtimeOnly(fg.deobf(libs.hostile.networks.get()))
