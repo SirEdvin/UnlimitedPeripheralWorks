@@ -6,13 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.2] - 2026-09-17
+
 ### Added
 
 - GTCEu machines expose a read-only `getInfo()` snapshot grouping machine, status, energy, recipe, maintenance and multiblock information, with TypeScript definitions.
-
-### Changed
-
-- Port GTCEu information and peripheral support to NeoForge 1.21.1 against its latest published GTCEu build, 7.0.2. This version lacks the 1.20.1 central-monitor and programmable-cover APIs, and the suspend-after-finish snapshot field.
 
 ### Fixed
 
