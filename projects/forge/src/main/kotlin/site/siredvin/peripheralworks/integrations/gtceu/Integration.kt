@@ -7,6 +7,7 @@ import com.gregtechceu.gtceu.api.machine.MultiblockMachineDefinition
 import com.gregtechceu.gtceu.api.machine.multiblock.MultiblockControllerMachine
 import com.gregtechceu.gtceu.api.recipe.kind.GTRecipe
 import com.gregtechceu.gtceu.common.item.behavior.IntCircuitBehaviour
+import com.gregtechceu.gtceu.common.machine.multiblock.generator.LargeTurbineMachine
 import dan200.computercraft.api.detail.DetailProvider
 import dan200.computercraft.api.detail.VanillaDetailRegistries
 import net.minecraft.core.BlockPos
@@ -25,7 +26,7 @@ class Integration : Runnable {
             get() = WorkablePeripheralPlugin.TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            val workable = GTCapabilityHelper.getWorkable(level, pos, side) ?: return null
+            val workable = GTCapabilityHelper.getWorkable(level, pos, null) ?: GTCapabilityHelper.getWorkable(level, pos, side) ?: return null
             return WorkablePeripheralPlugin(workable)
         }
     }
@@ -35,7 +36,7 @@ class Integration : Runnable {
             get() = ControllablePeripheralPlugin.TYPE
 
         override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
-            val controllable = GTCapabilityHelper.getControllable(level, pos, side) ?: return null
+            val controllable = GTCapabilityHelper.getControllable(level, pos, null) ?: GTCapabilityHelper.getControllable(level, pos, side) ?: return null
             return ControllablePeripheralPlugin(controllable)
         }
     }
@@ -50,11 +51,21 @@ class Integration : Runnable {
                 val definition = blockEntity.definition
                 val metaMachine = blockEntity.metaMachine
                 if (metaMachine is MultiblockControllerMachine && definition is MultiblockMachineDefinition) {
-                    return MultiblockMachinePlugin(definition, metaMachine)
+                    return MultiblockMachinePlugin(metaMachine, side)
                 }
-                return MachinePlugin(blockEntity.definition)
+                return MachinePlugin(metaMachine, side)
             }
             return null
+        }
+    }
+
+    object EnergyInfoPeripheralPluginProvider : PeripheralPluginProvider {
+        override val pluginType: String = EnergyInfoPeripheralPlugin.TYPE
+
+        override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+            val energy = GTCapabilityHelper.getEnergyInfoProvider(level, pos, null)
+                ?: GTCapabilityHelper.getEnergyInfoProvider(level, pos, side) ?: return null
+            return EnergyInfoPeripheralPlugin(energy)
         }
     }
 
@@ -62,6 +73,16 @@ class Integration : Runnable {
         ComputerCraftProxy.addProvider(WorkablePeripheralPluginProvider)
         ComputerCraftProxy.addProvider(ControllablePeripheralPluginProvider)
         ComputerCraftProxy.addProvider(MachinePeripheralPluginProvider)
+        ComputerCraftProxy.addProvider(EnergyInfoPeripheralPluginProvider)
+        ComputerCraftProxy.addProvider(object : PeripheralPluginProvider {
+            override val pluginType: String = TurbineMachinePeripheralPlugin.TYPE
+
+            override fun provide(level: Level, pos: BlockPos, side: Direction): IPeripheralPlugin? {
+                val entity = level.getBlockEntity(pos) as? IMachineBlockEntity ?: return null
+                val turbine = entity.metaMachine as? LargeTurbineMachine ?: return null
+                return TurbineMachinePeripheralPlugin(turbine)
+            }
+        })
 
         RecipeRegistryToolkit.registerRecipeSerializer(GTRecipe::class.java, GTCEURecipeTransformer())
 
