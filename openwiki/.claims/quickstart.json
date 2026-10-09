@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:5b8eba0c6fb16d15281ca150ec422e69cd6564ee151ce19cf9f7e75c97c12920",
+  "claims": [
+    {
+      "id": "claim_0f3b433aba824c8ea7f557d3a77c762e",
+      "statement": "The repository contains five shared/loader/typed/test modules and targets Minecraft 1.20.1 mod 1.9.2 with Java 17, Kotlin 2.0.0, Gradle 8.14, CC:Tweaked 1.116.1, Fabric Loader 0.17.2 and Forge 47.3.39.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/gametest.yml#L22-L26",
+          "version": "repo-lines-v1:sha256:93ed34ffefdb44359ee01533e7aae513565460d1413d4adad9ba6ef6228cdf7c:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2RiOTRmZjI1ODlhMTFmODg0MTQ1YTNmMTNmYmYzMjAwODM4ZWY5ZWMxYjgxOGFlN2FmYWI4Mjc3Y2E2MzdiZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDkzMzExZGNiNDM4YjYxOWU2ZGU1YTk4MWEyMWNhN2QzOWYyMmMwMzQ4Yjk2OTNlNWFiNjQzNzdkMzVlYzViMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGQzODkyNDI4YzM2NmZlMGMwNDIxMDNiZjJiYzdmMzcxOGVlYTE2ZWE5Zjc5OGFmMjAwMDc3MTAyYzU4ZWY2ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTlmMzk0M2JjMTQzNWUxYTRiNGEzN2U4MWIzN2IzYzZiYWI1MjdjNjhmYmE2YzQyZDJjMTQ2M2M3OGRhZDk4NCJ9"
+        },
+        {
+          "resource": "repo://gradle.properties#L1-L11",
+          "version": "repo-lines-v1:sha256:6efa30267761a2970f9be694796972c0bcc3502487c77f0e3cd742f524f90c2e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4MTNmZWJkOGI4MGQxZjQ1YmU2YmFjMWRmY2EwMjUwMTNkYjk1OWI3ODExNzY0MzBiMzJjNjczOTZlYWMyZGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmMDBlNmJiZDgyOWE0OWFkY2NmODI1ZjExNjZlNzdjYTNiMjdlNDVkMzlhN2FmMWVkYjU2ZmY1YjYyNDE5MjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1ZGRjMzI0ZjZkYmJhNTE0N2RiNTZlY2Q3OGZiOWU4ODZhMmY4YTZhNGJmYWZiODk4ODlhZDc4MjIyMjUzZDQifQ"
+        },
+        {
+          "resource": "repo://gradle/libs.versions.toml#L3-L39",
+          "version": "repo-lines-v1:sha256:7710b49249fe4b17d5061ce6196d4e1709029a0bdd5e320f0fe8c8fabdba5161:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2NjdhNDBjMzA5ZTgzODNiYmY1YjYxZDZhNjQ0ZjZkMTUxYjZkYjUwYjcwZWUyZmJiNWQ5OWI2ZmVhYmY5M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhZWI3MGI1OGY4OTY4YThhODU5NTFjMTJkMTJkYzUwN2Y3N2RkYzFlODg4NTFiYmI2MGI5M2E2ZjgwNjU2ZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMDQ1Njc4ZGNkYzY0NTRjMTM2MjllMjY5NDBjMWYwN2RjMGM2MTdjZGU4NjEwMzhmYmZkNzEwOTYxZTVjZGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxMjE3MzkzN2JlMTFlNGVjODhkNTY5ZDI5NThiNDM0NjAzNTI4NTM0ODE5NWUwNzc3ZDdmZTUzZmIzOWI4MDIifQ"
+        },
+        {
+          "resource": "repo://gradle/wrapper/gradle-wrapper.properties#L1-L5",
+          "version": "repo-lines-v1:sha256:61b9e8ea5fca48a4dda7a751f702f7f7d5a83a3c04bdf33976cac92c0479655f:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzdlMTAzZjI3YzkwODIyNzQ4ZGJmYzczYWM0YWI2OTZhNzU5NTAxNTNiNzlkMzI1NjUyOGI4N2IxMTU0MjZiNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2ZmZjhiYWJhN2I5YmI5MTlkZDA3ZjUwZjVjNmU3ZTY3ZjI3MTRkMTQwNTg1MDNiOTAyZjg3ZDQ3NzdhOWJkMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://settings.gradle.kts#L20-L32",
+          "version": "repo-lines-v1:sha256:62bb94e972bb56b723f226a7810b668d133f2c4ef3e3f3f0bfd0a36ed7d8adc2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmNWJhODBmY2Y1YjVkYTUwNjEyNTRhYjNhZmU5YjliOTQxZTIyNzliOGM3YjAwOTRjMWQ4ZmI5ZmY1MDg5ODkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5ZTc2MzU1Y2YxMTk5NDgwYzNmOTk4MzZiMTQ4NmM4NDFkODkxZmFhZDkwNGM2MDhlMDkzMDIyZDM3NTdhZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a2986f5b28fa49cd87ecac7ce8146b8d",
+      "statement": "Root server and client GameTest tasks each span both loaders, but default PR CI explicitly invokes only the minimal server task.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/gametest.yml#L31-L44",
+          "version": "repo-lines-v1:sha256:713fd42943ec386d6dba387c017c19802bd955d6f2f3403414a2d756026503a9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjNjI3ZjkxYmE0NWRiOGQ3MjFjMGU3Y2MyOGYyNjlmMzVmNDhkMjVkZDZiZGI3OTU4ZGJkZWM1MGQ5OWZiZjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBiNDk0MDYyNDFjNWUxYWQyZTE1ZjI2OTE4MzUwMjk0ZmJmMWMwYzFhYjM3NDJiN2U3OWU3YzM4ZWMxNDEyNjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM3YTJhZGNjYmE3YTgxNTMwNDVmYzkwNzk5ZWI4ZjVhZGIyNzFhMmRmYTcwZTRlNDk4MjczNzhjM2NiOTA3NDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2NmQwNGZhNzkyMDQxYWEwNGMxY2ZmYjZkN2IxNWFkYTc1N2UxZGU4OTFlNDY2MzFmYmZmYzU2YTFhZThmNjkifQ"
+        },
+        {
+          "resource": "repo://build.gradle.kts#L9-L19",
+          "version": "repo-lines-v1:sha256:22078184bb58f22b92df71af67176274c910910d6f3ddc11987352923bdad6d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNGZhMDRhYjhjY2Q3MjIzNTZkYjA1MjQzMTNjNTQ4ODZiZWQ5N2YyYzhkN2RhYTIyMTRkZjA0ZGYwOWVkMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhlOGM4ODYzNzMzNDU4NWM2NjAyMzNhMzAzYjFlMzEwMDljYjQxNDUzYWRmMWYwMDViNjBiNmQ4MTJmYjA1YzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2NDIwMTNlOGQwODM5M2QwYjVjYjI5ODJlMjllZDNlNjU4MzgzOTUxZjQzYjQ4OTc3MDBmMTljZDIxYzFhYTIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1a9f8d9b6c9e4161bec24f0351f72115",
+      "statement": "Build inspection must account for Forge source-copy dependencies and typed-peripheral Lua/declaration generation in the project tree rather than treating all builds as read-only verification.",
+      "evidence": [
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L228-L267",
+          "version": "repo-lines-v1:sha256:04825e944932d48c568fcc74463c668837fa1f435648f009c20893b2aa70a8cf:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3Yzg5NWU1YjUxNThjMzVlYTc0MzM3OGM3NmVlNmYxZmJiZjA2MDBhNjgxNjQxOWYyZWE4ZGU5MWM3NmZmZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyNjMzNjI3ZDhkODgwZTFkY2EwZjllZGIzNDA5OGMyOTYyZTg1OGIyNzgyZjljNzc5MzhhMDUyMmQ1YTljMGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://projects/typed-peripheral-unlimitedperipheralworks/build.gradle.kts#L17-L38",
+          "version": "repo-lines-v1:sha256:9df03b6142a5d78d006066b5990f751dff0dd5e3e2722fcf8c3ad5cca67a0162:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhNjE5N2EwMTg1ZTQwZDQ5ZGVlMzhkNjk5NjJhYjM4MzY0ZjA2MzNkMmJmNWIyNTM3NDRkYjZiZjU4M2Y3MzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0NzVlOTRhOTA0YWM0OWIzMTU0ZDQ2NzJhNjZlODYyOWI4NmRhYzc0ZTNlMjkzN2JlNjkyN2FlM2RhMTFjNTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjNGM4ZDIzZjRhNGJlNWRiMTQ2MDY5NzYxNDEwMTliMTFkOTE4Mzc4MjU3Nzg3NjFmZDQyNWE3YzMwNzUxMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://projects/typed-peripheral-unlimitedperipheralworks/tsconfig.json#L3-L21",
+          "version": "repo-lines-v1:sha256:38f98c373eb31efd943187d54901007f0ac598adec8aeed2651b3990eaa4076b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0YjYyYmM3ODk4NjUwYjkyZjIxMGYyNjlkMDM1Y2E1NzgzNDkzYWVjOTllMzA1OTIzZDk5YmNjM2JmOTdiZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNjYWY4OTJhY2U2OWM0MTFlMDhkMWFlOGMzMjVlOWU4ZjRjM2I0ZmRhMzBlMDU5YWZhYmZkNjliMjdlOGMzOGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUxYjdjMzVkNTVjZTk2OWQxNTc0Mjg5NWY2ODUyNWJmYTQxZWRkMWRjN2Y1MmE4Mjk3MTZmZWJlYTdmMTMxOWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}

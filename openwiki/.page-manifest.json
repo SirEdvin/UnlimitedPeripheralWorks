@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "pages": {
+    "/openwiki/architecture/runtime-and-platforms.md": {
+      "pageVersion": "sha256:ed31a381600fee79b193d93f11c6ecf9e3f9e61e9f195dc456a4bd1f43fc6b75",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/integrations/optional-mods.md": {
+      "pageVersion": "sha256:ed803d3d77c8153d008cf26aa89c97146fc1a639a47f0b82f3eef17510703ceb",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/operations/configuration-and-release.md": {
+      "pageVersion": "sha256:72e0c0c9e1fbd3f50c2d002cf950632189643fc8be317cb1351ac3a203d09820",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/quickstart.md": {
+      "pageVersion": "sha256:5b8eba0c6fb16d15281ca150ec422e69cd6564ee151ce19cf9f7e75c97c12920",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/testing/gametests-and-fixtures.md": {
+      "pageVersion": "sha256:393c724ece6fff1e78b55bb94775abf88de3c1dc5e51f87647185f2dfc8004fa",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/workflows/network-manager-and-configurator.md": {
+      "pageVersion": "sha256:9f9e9aef665a18b2512d4cc087f893bf19337d3331f15f0739c6f00e1dd8dc0b",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/workflows/peripheral-discovery-and-extensions.md": {
+      "pageVersion": "sha256:6ae6085d7b886280f33940f87ee6926aa86c947cc67c5d29c083d097b8097f76",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/workflows/sensing-world-and-recipes.md": {
+      "pageVersion": "sha256:8c0e6223bf28705f32b09413f5fe1b5d7c7c7becd045fdc70099d39173d76a01",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    },
+    "/openwiki/workflows/setup-and-build.md": {
+      "pageVersion": "sha256:d761d190a4d7cdf70929d6a2219d828c941b79f5accb13cf2fa44678cc7a1234",
+      "completedBy": "hermes",
+      "completedRunId": "462b6728-f642-4d31-a39a-35e3b422a51e",
+      "gitHead": "2ab35ee0710c34642e7854b7b364cdad80651eb9",
+      "sourceFingerprint": "sha256:cb855882d9e478018b61e26fe3a175eb3930cc1fcf91c05d946fc43de3f6da3e"
+    }
+  }
+}

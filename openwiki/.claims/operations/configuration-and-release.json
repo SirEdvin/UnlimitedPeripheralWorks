@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:72e0c0c9e1fbd3f50c2d002cf950632189643fc8be317cb1351ac3a203d09820",
+  "claims": [
+    {
+      "id": "claim_148a48b2383740d587a630115a59cade",
+      "statement": "Configuration initializes exactly once, discovers and presence-filters integration singleton configurations with duplicate-name checks, and optional getters fall back until spec loading.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/ConfigHolder.kt#L5-L24",
+          "version": "repo-lines-v1:sha256:524812d7284fbc6e18a0540602ea104cdbb892fe91b151229aa81bb29a21e051:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjYzg0ODEwODJkN2FmZWFhZjM5MDRkOGUzM2RkYTcyODFmZWM3Mzg5OTkyNDJmNzY1MGI2NWJmZjUxZmU2ZmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmMDRlYjI1Nzg2Zjg5NzgxMzRhMzM4NzAxYzljZjU2ZDM0MTA0YjdkMDAwMDdhZjZjYjc4NWYxMDk0YjNlOWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/IntegrationConfiguration.kt#L6-L9",
+          "version": "repo-lines-v1:sha256:7a45e96f76e440af006acff50130dc7f6c9a15125be6c56e01192babdb9b1e21:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzNlZDg4YWFhYTFhYzQ0ZjdhYWZhZDk0NTMwYTRiMGVkODZkYjQ4ODMyN2RlM2M5MThmNDg5ZGNjODUwYjhhMiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzZkYmMwYTk5OTY5OGQxZWZmNTNjOTUxMWM4NTAyMGEzMzBlODdjYzNhOWE2YjBmZTFlZmUwNzUwNjQwZTYyMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWE1MDAxNTI5NGI3YjY3OGZhYzkzMGQyNDQ0Y2U0ZmUzY2NkOWE5Njk5NTZmNWJmNmY1Yjc0Mzg4YzBkNzhiMCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSJ9"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/IntegrationConfigurationDiscovery.kt#L12-L40",
+          "version": "repo-lines-v1:sha256:f170bfd996b6ee1b69b4cacb82268ab789b5717afa9d91441ea437726023da01:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0MmEzOWNhZTBiMjgzN2QyODViZDA0NmQ0NTQzZTE0YTY5MGQ1YmQyMTMzMDMwOTEyNzRjMTQ2N2E5YWJkYTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiNTg2ZWNiYmNiNGNmNmY3Njc0ZjliNDBiMjA5NTgzMTkxZWM1MjcyM2YzMWI4YmEwM2ZmNmU1MTk1M2FkMjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1MzQ5NWYwMGY1MDg3NmFiMjIzZmQ2MjkwMTk4OTQ1YTU3ZjAwYzRmMmEzYzU2MDc5Y2I0NjExMzQzNjJiNDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a6faa91d4b5b430da7e3e77820d436fb",
+      "statement": "Current energy, ultimate-sensor and display-pedestal enable getters read other feature settings, and the proxy enable builder reuses the observer's enableRemoteObserver key.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/PeripheralWorksConfig.kt#L14-L29",
+          "version": "repo-lines-v1:sha256:107b92c006a85602d7f12312cc20e8e411caf1b4408509fb40764cdb944e9cdf:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyNjI0ZDUwZTA2NzBkYjMyYWVhYzBiNWFmNzkxN2ZjYjFhNTgwMzBkOWFiOWE0N2Q5OTU3OTlhYzdkYzBmMGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjYjVmMmFkZjViODMwNzc2NTgwMTEyNzE1YzcwZWM0ZmZhNTg0ZDYwNWI0NjNjNzRiZWM2NjVhNmFjNTU1ZDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE4OWI5YTAzYmY4ODFiMWJmMDY1OWMxYTY5ODVlYTFiMmM2ZDQ3ZDY3NjU4ZGEwYTRjYWEwNDYzM2Q1MTEyODQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNlYmEwNjVmNzE0YmIzN2MzZDJlYTVhZGM5OTMzMTU5MDMyY2UyMjliOTYyNzUyZWNjNGViN2MxZTRjZGViMmEifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/PeripheralWorksConfig.kt#L236-L247",
+          "version": "repo-lines-v1:sha256:f0d13c6995e90e2d48f9a5fc7af2b2d35eed4436b97d9019a1986d2b35395165:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhYWMxMmQxOTMzMzgyMTE0ZDdiZjlmMmM5Y2Q1ZTRlYjFkNGU4NzcwY2MyY2M0ODhlZTAyOWRmZDc2OTU2NTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMzY2Y4NGUzYWI4YzA4NTAxODliYzJkYjYyMWU5NjVhNjM2MmM3NDZkNGQ0OGEwYjJlNjQzY2ZhMjExYWIzZTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg0MWZiYWY4MDFhMjhhZTI0Y2Y4MDUwNmJjYmFhY2NmN2UyNGQ1MGQzNDdkMzEzYTJlOWU4MGFjYzI3NTE4ZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYzZDMxZTZmMTc2YTMxMWJjMGE5ZjlmMTEzMTEzZGU1ZWFhOWI1MjM3M2UxYjE5ZmZlNDY3ODVlMTUzNGQ3ZWYifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/PeripheralWorksConfig.kt#L55-L68",
+          "version": "repo-lines-v1:sha256:661d213e45ba51adeb200a4b19b2456094f49367ff238590b3544045aaf62675:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNlN2M0YjdhZDEzYmVjOTkzMWQ1ZmNlZWQ4ZjkxYWRmZmJiZGZkMDMzYzE4M2YxNWZmYjA5ZWJkYWI0YTk1MDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiM2RjNGI3NjI0YjAzZjQyOTlkMWVmNjVhNDgxMWI1Yjg0MjlmYzcwOTJkYzlhN2E3ZWFkODVmMWJhY2U4ZDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVmNDE1N2VhMDQxNjc1MGM3MjNjN2MxNzczNTU0YzY2ZWZlZTdiMTY4NjFlMzQzN2YyNTA0OTVmYjc0ZjNmOTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVjNjEzOWUxZWIxMmRjMTZmYjQwMzBmNjQzOWI2NjJlMDY4ODM1ODg3YWNlMDllZDkwY2YwNzg1NjYwMjZiODAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0c194ad57f184f2493f034d08031c813",
+      "statement": "Common config provides bounded transfer, hub, target range/capacity and visual-object limits, while AE2 separately defaults to 16 subscriptions and 1024 persisted item-filter values.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/PeripheralWorksConfig.kt#L179-L275",
+          "version": "repo-lines-v1:sha256:faf4eca5f541cc2717c5642115eeea9202fd8a2e7d9cab01abaef5ad8db6e1af:eyJzZWxlY3RlZExpbmVDb3VudCI6OTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlYzEyNDQ3YTQ2NjcxYWJiN2IzZGI2NjczZmFhMTU0YjI1Mzk2YWY5ZTU0ZDU4ZTI4NDRkYjNlZmU3ZjBiYTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjYmNiNTA3YjQ5ZWE3ODI0MjM2NzIwOTBjZWI0MDRiNmVkYjEyOTRhMjk5Zjc3OWE4YTJjYmNiNzcyNDVkOGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRiMTcwNDJhNzYxNjI1ZjI4ZDY1ZmRiMGY3YTRkMzU1ZDVkYzgyZjljMWMxNzE0NTRiOGQzYWJlODAwZGU1NDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVkMmY0NDNkM2M5ZmQ1MWFiZjljNWJkZjgyOTg1ZWMzYTJmY2U0NTEyNDE4YzljYWFmYzc5ZWM4ZDYyMzFjYmUifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/configuration/integration/AE2Configuration.kt#L11-L40",
+          "version": "repo-lines-v1:sha256:839cfa21fd3f65c3a5e9ed74b9e47a06278979da4caeb3e2a3c7985105927e2a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0NTM3MzZkZjk5OTQwZjYyNWU4NTA5NmMzZjNmNTJlNjgzYmIxYTExMmY2NjEwYmM3MjNjYzlmNTFlMGRkYzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwYzRmZjRhZGIxZDkzMmI1ZGYwYWU3NDFkNzBjMmY5Mzk0YjZkODU1ODRlYzA0YmMxOWQ1NzM5NTcyYjM3Y2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIwOWEzMDBhNDYxYjJlZTVhMjYwMzFjNmY0OWIwM2QyMDIwMGU0ODhkNTExMjIyMWM1MzJkM2ZkNDU3ZjQxMGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_78ed7d2ab1254f2caeb4b0c932453371",
+      "statement": "All shared upw diagnostic commands require permission level 3 and a player, with held-item inspection displaying that item's NBT.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/commands/DebugCommands.kt#L9-L47",
+          "version": "repo-lines-v1:sha256:ca9bec36844e444bc8b1ae64c369ef1b0c46c187c098729f5af9b1161b8329b9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1OTYyYjcwOWQwZWFiNzI1ZTAxMDA5ODg5OWU1ZWJkYzI5Y2YwMjI5NDA2ZDE5M2IwNWI2OGFjYzgyYTVhZjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjNTQ5ZmFiYjg1OTAyYmZjZTk1MWQyYzlmMjk1NmUwMzQxNzQwZDdjZTEwYmFjNTBmMWIxNzM5NTZiYjA4ZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0671f2facbdc4c05942fe3ccf7274bba",
+      "statement": "Typed peripheral release CI verifies v1.20.1-* tags belong to 1.20, builds with Node 24 and publishes tag-derived versions using next for prereleases; local Gradle Node tasks use 22.14.0.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/publish-npm.yml#L3-L54",
+          "version": "repo-lines-v1:sha256:eb649bda68c0f80b1e0377ba69025f143440b87db334d5b3e58057c9c88dfd27:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5NmRjNDgxNDlmNWE4M2QxZWQ2ZGJiMzliYmM3ZTJiOTAyYWEzZDM0ZDZiZDVhZTRiMjkxYjY4ZGYwY2E3OWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmNTU5NzljZTczMDIwMzNlNmIyZmQ3ZDg4ZjUzN2EzYjhlMDkxZWEzMDVjODExZmZhMTI3NGJmNTc2NGVhNWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQyZWY2N2E0MGNmNzAxMWY3OTM0ZGFiYjhmMjliNTllZTE5OTBkYjQ0YjMxM2UxOWMyNGRjMzNhYzM2MTcyNzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://projects/typed-peripheral-unlimitedperipheralworks/build.gradle.kts#L8-L15",
+          "version": "repo-lines-v1:sha256:3094a1d4eb0cdfe3ecc4e3e1ec1a6d7f2ecad5739903d693967fba96b33f8ef8:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjNmNjNkMThlNjA2NDQzMzVjZjlkNzIwYTlhM2JjMzg5MzIzNjkwM2I1NmM5ZTFhMWI5MzhjMDgzMjk5OThlYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODc5OGQ1MGM4ZmZiM2Q0NTY0NDIzODkzODEzNjM4ZDQ4ZDczMjYyOTA3N2M3YzU1MGUzZGU0NGFhZTEwZTg0ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjAwMWFjNDE4YmUzZjhhYjIyOGM1NmY0YjBjOTliNTRhZTM3NDVmYTgzMDliNzI0NDE0ZWJjM2VjNGU4OGZiYSJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}

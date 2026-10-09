@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:393c724ece6fff1e78b55bb94775abf88de3c1dc5e51f87647185f2dfc8004fa",
+  "claims": [
+    {
+      "id": "claim_f54208d893f3438d9f86b5d13a102098",
+      "statement": "Root server/client GameTest tasks cover both loaders, with shared testMod resources and AE2 test sources compiled into loader-specific test mods.",
+      "evidence": [
+        {
+          "resource": "repo://build.gradle.kts#L9-L19",
+          "version": "repo-lines-v1:sha256:22078184bb58f22b92df71af67176274c910910d6f3ddc11987352923bdad6d9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNGZhMDRhYjhjY2Q3MjIzNTZkYjA1MjQzMTNjNTQ4ODZiZWQ5N2YyYzhkN2RhYTIyMTRkZjA0ZGYwOWVkMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhlOGM4ODYzNzMzNDU4NWM2NjAyMzNhMzAzYjFlMzEwMDljYjQxNDUzYWRmMWYwMDViNjBiNmQ4MTJmYjA1YzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2NDIwMTNlOGQwODM5M2QwYjVjYjI5ODJlMjllZDNlNjU4MzgzOTUxZjQzYjQ4OTc3MDBmMTljZDIxYzFhYTIifQ"
+        },
+        {
+          "resource": "repo://projects/core/build.gradle.kts#L24-L59",
+          "version": "repo-lines-v1:sha256:e18c9a67f08702354c21e47684e5ad49261adfe87077d603830aafb6e4d4830d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliYmYwODNkMDU5MGY1ZTU4MzZjYWEyMmQyOWNlZWU5ZTU0M2Q4M2I2NmFkYzMxMWIwMTU2NGM4YjczYTFmMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM2YzkzNzZmNDcxYzE4Njc5NTliZWFhOGEwZjA4YzQyYTJhOTFiOTI4YWNhYTBjMDA2NjBhNDQ1MTBkYTkzMDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://projects/fabric/build.gradle.kts#L52-L62",
+          "version": "repo-lines-v1:sha256:46fe0b3726ba5925e2efb1aa679e5d1daebd49e0fff488ed2683b4c0c59f1235:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliYmYwODNkMDU5MGY1ZTU4MzZjYWEyMmQyOWNlZWU5ZTU0M2Q4M2I2NmFkYzMxMWIwMTU2NGM4YjczYTFmMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliZWYxZTgzZTAwZjdjODM2YTg4MDdkNDExY2E5ZTI5ZTM3NjI4ZWJjZWFhNjA3OTlkZjc0MTI5N2ZiY2M3YmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjliZDU1MmNkMjAzM2JiNWFkZGViOTAwYzY2OGFjZGM4YWY4ZGUzZmE4YWFmZDFiMjVjZGFjOWEzZDlmYmU3YTYifQ"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L56-L68",
+          "version": "repo-lines-v1:sha256:c8db45cc46793f13eb17b0804673538741844dd8d426f2aa92d19efd7ec47bbf:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliYmYwODNkMDU5MGY1ZTU4MzZjYWEyMmQyOWNlZWU5ZTU0M2Q4M2I2NmFkYzMxMWIwMTU2NGM4YjczYTFmMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliZWYxZTgzZTAwZjdjODM2YTg4MDdkNDExY2E5ZTI5ZTM3NjI4ZWJjZWFhNjA3OTlkZjc0MTI5N2ZiY2M3YmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkxOGQ1MzIzNWM4MWZjZWRhYzVhZmZlZTVjMDE2YWRiYTA3NzNmNWJhODEwMTUwZjlhZjI1MTM0YmFiNDAzZDMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_98ab39d61e3e4dd19cfb8e68b8d78814",
+      "statement": "Server GameTests isolate saved computer fixtures in UUID run directories, select tags from Gradle properties and write per-loader reports; client runs use distinct tags, report and screenshot outputs.",
+      "evidence": [
+        {
+          "resource": "repo://projects/fabric/build.gradle.kts#L88-L115",
+          "version": "repo-lines-v1:sha256:55537f00d2f3a211da8df2d55b85e36df24f8afa2e3aa68329a92efb58146f20:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMwODFjMmIwYjMyYTA0YWM2N2MxM2YzZGRhODIxNTI0ODMyMWIzNjY2ZTQxYmI2NTFhYmJiMzcyYjMxYjdjYjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhYTcyNDRhOTI5MmVmODQwYWM2YWVmMDU3Y2M3NDBjZjc2ZTUxYWM1MGZlOWQzNTViMjViZDcwMjA1ZTZmYWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiMTdkNGY5NGI2NGJjMDA4ODk4MjMxNDcwYzFiMjY0ODAzMTQ4YmZlOGUzNTRmZDM0YWQ4MTJjYzhkMGEyMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhkYWZlMDFkZGQ2ZjM0ODIwMTEzZTBlYjYxNGYwNDVhNjg5NDg1MTZlNjQzNjM1OTViMjQyNjBlOWMzYTIzNDgifQ"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L139-L168",
+          "version": "repo-lines-v1:sha256:b65d7175e32ea704ec25d7968f5f70147967a09e045053ac96abdd7ad70b3d8d:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjMmQ5YmJiNmMwZTEwODJjOGY4MDg1MDgwNzEyMDA1NjY4ODA3N2ZiZjhjOGJiZDQ3OWQ1NjYxZGI1ODMwZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzYjc4M2UzYzU0MDZhZjliMmI2ZTliNzAxNWQ3ZTU0Y2ExMjM0ZDFmMWE4NDVlYmVkZWYyNGQ3NzViMmNlNGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYzN2E3MTk0ZmVmMWEyMmY3ZGFiYTMxMzU5ZDkyMWRjN2RmOTkyNTk3YWViMDA1ZTgwNDc3ZDdjZThjYTRjNjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIzNzlhZWU2Y2M1NzcyZTBkMzE2NTgyOGM1MjRlMmU1YTA2NjkxMTY1NmU4ZjBmZGI1ZjNkY2M3NGE1MWFmN2MifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_eadcf30c80694a37b9cf0dadeeed2c95",
+      "statement": "Focused optional-mod matrices control AE2 runtime absence, Forge GTCEu inclusion and neural none/hnn/extra runtime dependencies, with a pre-start disabled-neural config option.",
+      "evidence": [
+        {
+          "resource": "repo://projects/fabric/build.gradle.kts#L14-L16",
+          "version": "repo-lines-v1:sha256:8f1b0fab545944747e09e10121cf4269a6e2fd803d39027a19cc20e39203afd1:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmZiMGQ3NGMyYjkxMzExMzIwY2RmOTkyOTliNTI3ZDFmNmFlN2FhNDhjMzg4NTQzMTZjZmUzMGYzYmJiZTA2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODAzNDZkMDViNWMyMzk5ODliYTYwZjc2ZDdiMWMxYzA4ZjRmMDlmZDk2ODBlZDE4ZjdjY2JiN2NkNmYyMDhiOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGU0ZjY3ZjlkZjdlOTU2MjdkZWFjMGFlMWIyYTg4MTM2ODkyZjY3MjhhODMxYzc4MGNiOTM1ZWFhNzMwNjFkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjIxMTUwOTM3OGY0YzhjYzY2NjFjNGJkYTNjNmNmNzkzMWZlNzRiN2Q2NWM2ZTBjOGY5ODg5MTI4YWI1NjVmNyJ9"
+        },
+        {
+          "resource": "repo://projects/fabric/build.gradle.kts#L163-L168",
+          "version": "repo-lines-v1:sha256:c8cac536fbbfac34c0a33aae96868069413fbd0238a63f81b43d35ce1187000b:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWNlMmRhZmQyMDA3Y2JjOTU4Yjk3NzEwYzQxYjgzN2I0N2UwNjVkYWVkOWIwMzVkNWY1NDdkNzkzODM0MTBhZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTZiMDQ0OTE0Njk3MjJlODM2M2E5NGU0MDQ0NTM4ZTAxM2EyYTIxN2UzNmIxZTU2OGJhNjBhY2I3YjRjOGYyZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDgzNmMxMzYzYjI3ZjQwZjM4ZTZkZDE4N2Y3YmQ1ODYzNTEyMjYwMWVhY2U4YWY4OTFhZjAwOTA4MWNlZmY4MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTFlMDc0OGUxNTc5YzVhMjlmYzU5NWUyNjBlZTQ0NzdjNWZhODU4MWMzZDI4NGU4MTJmOTBjZDUzMGU0YmNkNiJ9"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L14-L20",
+          "version": "repo-lines-v1:sha256:99a4d9423bfd896c2d6ad779aa948c402041cd9262895c64c1e357167f19ef14:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmZiMGQ3NGMyYjkxMzExMzIwY2RmOTkyOTliNTI3ZDFmNmFlN2FhNDhjMzg4NTQzMTZjZmUzMGYzYmJiZTA2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODAzNDZkMDViNWMyMzk5ODliYTYwZjc2ZDdiMWMxYzA4ZjRmMDlmZDk2ODBlZDE4ZjdjY2JiN2NkNmYyMDhiOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGU0ZjY3ZjlkZjdlOTU2MjdkZWFjMGFlMWIyYTg4MTM2ODkyZjY3MjhhODMxYzc4MGNiOTM1ZWFhNzMwNjFkNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjIxMTUwOTM3OGY0YzhjYzY2NjFjNGJkYTNjNmNmNzkzMWZlNzRiN2Q2NWM2ZTBjOGY5ODg5MTI4YWI1NjVmNyJ9"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L203-L209",
+          "version": "repo-lines-v1:sha256:f62a88559c598c58b848a8ba81e27c1a35775741d8c2a34985dd8c32fb2cc41f:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODQwMTYwOWFlNmVjYmUxODhjOWNiMThlZGFkOGFiNGE0NDZiNzZlMDY0ODU1M2E4OGRmMzNjOTlkYzc2MTg4OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTZiMDQ0OTE0Njk3MjJlODM2M2E5NGU0MDQ0NTM4ZTAxM2EyYTIxN2UzNmIxZTU2OGJhNjBhY2I3YjRjOGYyZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzZjOTM3NmY0NzFjMTg2Nzk1OWJlYWE4YTBmMDhjNDJhMmE5MWI5MjhhY2FhMGMwMDY2MGE0NDUxMGRhOTMwMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTllNzYzNTVjZjExOTk0ODBjM2Y5OTgzNmIxNDg2Yzg0MWQ4OTFmYWFkOTA0YzYwOGUwOTMwMjJkMzc1N2FlZSJ9"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L48-L53",
+          "version": "repo-lines-v1:sha256:f2f0e61e428199be9ba653f6b6d84c1c00f4b48bb9791dbb95513e3a69cef3e3:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTJiM2ZhMTg4NjRlMmU1YTc1MGY1ZTAyMWJlNWYxZjM2M2Q0ZGFmYTY4NzA0NTA4ZjE2MTcxMTBjZmNkYWQ3OSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGMxNDViMjExY2NlOTI4YjRkZDhmNWM1YTY1NDc4ZGE1OWJmNzk1MGU3NjM4ODdiZmZkMjdmMTE1M2IwZTE3NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzZjOTM3NmY0NzFjMTg2Nzk1OWJlYWE4YTBmMDhjNDJhMmE5MWI5MjhhY2FhMGMwMDY2MGE0NDUxMGRhOTMwMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjM0OGYxNTU2ZGY2MGY0NWFhMTQ2ZjlkN2E3NjlmZTQxNzUxYmZjZDNiOWIwMGIyZDljODY1ZjdjNmI0ZWFlOCJ9"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L83-L94",
+          "version": "repo-lines-v1:sha256:9a6ebb0b33b168a764753b6aae639db71328f1801a263603c5101241850e911d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNiYTMxNDVhZWUwZGEwNTkyNGQzYWQwYjFlZWI0YWRlNzc2MWI2NjdkOGE5NjE0NmRlZWYzOWFiZDFjZTQ4Y2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5ZTc2MzU1Y2YxMTk5NDgwYzNmOTk4MzZiMTQ4NmM4NDFkODkxZmFhZDkwNGM2MDhlMDkzMDIyZDM3NTdhZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3NmQxZjI1MTQ3ZDUzZDgwYmI1NzFiZjA1YTNiMWZkMTg0ZmIxYzFlNTFjOTE0OTZlMDkwY2Q2YWU0YTM4MzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4b36e1b0c7b84618b283482cd8e3a780",
+      "statement": "Fixture generation builds local typings, compiles entrypoints into Lua 5.1 bundles and copies them into core computer/tests resources; compilation is separate from Minecraft execution.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/build.gradle.kts#L55-L59",
+          "version": "repo-lines-v1:sha256:a1e2a6873cf3e6a272f10d5e781977bb03afd50cc0594cc1e7cdbfc664aaf801:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzRhMmQzYzZkZmNjYzMwODhhYTM1ODY4NGYyMjVjOWM0ODFmNTA5ZTQ1NjExMGI4YTQwMWRjMWQzNzNjY2I4NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzBmMzNkM2Y5NWE4NDBhZWNmMDdjMjM2YjM0NDhmYzAxNjkxZDIyOWJiYmMyNTYwMDdkZDZlMmFhY2EyNTQwMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSJ9"
+        },
+        {
+          "resource": "repo://projects/typescript-tests/build.gradle.kts#L16-L28",
+          "version": "repo-lines-v1:sha256:fe83a01bb706728d2027680303836505eaeb88b23756c9a59edf9fe195af6705:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlZjA0YjA4NWI3ZDU2MWE4NzBkZDY5NDI5YTU0MWIyZGZlNmYwNjI5NmU0NzViMGUyN2I0NWJhYTlmOGZkOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjNGM4ZDIzZjRhNGJlNWRiMTQ2MDY5NzYxNDEwMTliMTFkOTE4Mzc4MjU3Nzg3NjFmZDQyNWE3YzMwNzUxMjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://projects/typescript-tests/build.mjs#L5-L29",
+          "version": "repo-lines-v1:sha256:9c4f9885ec268450295d7ea2233faa35221f27d998816900093cad1bd4f2e4a2:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU3OTVjOTg4ZDIzNjVlYzJkZWRjOTEzZTBmMjE4NmE1MGIyNjlkZDUyMWVhZDdmYTY1M2M2NGExZGI0YWNhMWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmNjUzZjQ4ZjlkNWNjMmY0YmVhN2JkNmJlM2NmZWQwOTQwZDNjYzJlZWUyZWZhMmFkOTA2OGQyZjEyMzRiYjIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdkZjE4ZDc1NmVjZjRlZGQ3ZTYzMDYxZDg5ZTFiZDBhM2VhMjRjYWFkZmZlNDU4OWQ5YzU3YzBkM2U5MmU0MGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://projects/typescript-tests/tsconfig.json#L19-L25",
+          "version": "repo-lines-v1:sha256:65050106c64671787481aa2ed155e82f5543e97e2215c562fe30395ec55a8200:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYTcwMTljYzNkMTMwNDUxNjRjYzliMzA5ZDkyYWRjMGMxZGJlMzI2MjljZTE0ZTc3OTY0NzJjMWFjOWJkNWQ1MSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGQ5YTdmYmRkNDVkYzBkZjRiZTQwODA4NjlmOWNlYjlmMWQ3ZDIzYzZmYmZmNzE3MDJkMjVhOTBjODA0ODhlYiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmY1ZjlhYjFlMDcyNGM0ZWJmNjI0N2IyZTg2ZjBhZjliZGUwNzUyNTU4OTc2YzAzZTBjZjZlYjE3YjU3ZDU5MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_27f6df3517774ba5b7eff3d0e2787004",
+      "statement": "Default PR CI runs Java 17 minimal cross-loader server GameTests under Xvfb and always uploads report paths, but does not run client or explicitly select neural/GTCEu suites.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/gametest.yml#L13-L45",
+          "version": "repo-lines-v1:sha256:fb12bde78b71b5853796458e4ce687c5c5283ec953fac221ba5a637c9190d25c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2NmQwNGZhNzkyMDQxYWEwNGMxY2ZmYjZkN2IxNWFkYTc1N2UxZGU4OTFlNDY2MzFmYmZmYzU2YTFhZThmNjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxNjdkNDFiY2IyOTQ1MmE0ZGUwODI5NTZhNjYyZGQ1ZDMyZWVjNzYwODRmZDAwZjE3MjE0MDg5ZDk1YTUzNDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}

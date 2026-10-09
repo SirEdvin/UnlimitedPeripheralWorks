@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ed31a381600fee79b193d93f11c6ecf9e3f9e61e9f195dc456a4bd1f43fc6b75",
+  "claims": [
+    {
+      "id": "claim_405732b274a744e48a90fb57ae82cf52",
+      "statement": "Both loader entrypoints install shared platform facades before configuration initialization and shared registrations; Forge separates integration loading across registry and common setup stages.",
+      "evidence": [
+        {
+          "resource": "repo://projects/fabric/src/main/kotlin/site/siredvin/peripheralworks/FabricPeripheralWorks.kt#L53-L97",
+          "version": "repo-lines-v1:sha256:64d37415b3c20f0caa4b08c8fd22db650a4eef6158f4645aa64781de923b2b32:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU1YTBhYzUwNjY1Y2VmOWNmM2VkNDcwOTgyMmRkN2I1NDBlZDM2MTc0ZDJhNzhmOGMxN2UxZTRlNjlhZDBiMTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMwOGJmNTQ0ZGJlZjA2NTEyYTQ0M2Y3YjZhY2E3NDZiZTg2YTQwNTI2ZWY2MmVjZGE4OGVkNDFkODI1MzZlNGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU3YzM0OThiY2QwYTZmMjAxODgxMGRiMzEwYzcyNzMxNDdiZGVkNDVlYzFhYzA2NDdiOWFhYjUyZmJhMzk1OGYifQ"
+        },
+        {
+          "resource": "repo://projects/forge/src/main/kotlin/site/siredvin/peripheralworks/ForgePeripheralWorks.kt#L119-L162",
+          "version": "repo-lines-v1:sha256:e6eaf91ca65c473892401891e20495017e5b5ddab8b4f4c598ab5893e030a4a5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiNjY2YzhmZTMwNGM0MzViMGQwMGM2MzJkNWExNWI2YTUwMmVlOGIwYmViNjVmOWQyYTYyZGRlYzg0YmNkZmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1NzA5MjU2ZWZjMDQ1MmJmZmZiMmM1Mzg0NjMyMGVmZmY2YjU1NTI0ODcxOGM5MTVlM2ZlMDZlMTQ2ZGVlZjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZmOTY3YTg2MTZmYWY3YTgzZDBjZTc5ZThhMTU4MGIzNDAzMmJlMGIzMTI3ZWI1ZThlOTlhZjBjMjJlYzE3YjQifQ"
+        },
+        {
+          "resource": "repo://projects/forge/src/main/kotlin/site/siredvin/peripheralworks/ForgePeripheralWorks.kt#L71-L96",
+          "version": "repo-lines-v1:sha256:0bb91062968399a419ec858ed5c9da8d28f1a22847d94dc2d721cec324ed0d57:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRkZTAzY2Y2NTQ1YTZmNjA1MWQzYWZmNjM2M2I5MmUzYzgxNTMzZDcxNThiMjJhODlkNGNjNWUwZTQ1YjFlZjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMwOGJmNTQ0ZGJlZjA2NTEyYTQ0M2Y3YjZhY2E3NDZiZTg2YTQwNTI2ZWY2MmVjZGE4OGVkNDFkODI1MzZlNGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFmYjZkMjI2MTEwY2Y3NzZmZWRhNjUzNDlhYjBkNWIzOTUyYjVhYzM0OTc5YjJhNTQ0MTQ5MDZkNDJkOWJmNDgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_02c1b435e9b44425afa38186e4cc5577",
+      "statement": "Core configuration installs generic storage and specific plugin providers, entity storage lookups and the energy refuel handler through external CC:Tweaked, Broccolium and Tweakium APIs.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/PeripheralWorksCore.kt#L2-L16",
+          "version": "repo-lines-v1:sha256:c599b91910c9bfca5d29e92d962c0d405cc0e391293cb1dc0b8c9b4264b33bb8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5MzViYWQ1MDk4MzcwZTdkMjI4ODUzMTY1ZGQ4YzRhMmQyNWIxOGUwMjk2Y2RmYjBjMjYwYjZkNDgwOTk5YmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmOWQ2MTQwMzA4M2FiNjE1ODFlYmU2MTRiZjc4ZWU5ZmVkYzk3YzdmYmU2N2UzOTJiNmY3MGE0MWVmZTk3MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoxLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEzNDA2Nzk5YzdkNWNhNzQ3Y2ZmNWMzYTAzNTNjZDY0OWJiYzhmNWQ5NGE5OTIxOTBhOTA5M2U1ZDA4N2ViMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNlZDE2NjgzMjgxYzRhNmRlNjkzYTYzMTUwZTZmOTI3MzYwMzI2OGQ0YTFiMjRkY2ZiNmVjMWU1MzJjNjgxZWQifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/PeripheralWorksCore.kt#L33-L46",
+          "version": "repo-lines-v1:sha256:fb3a422cede9773328dfc485a6f89082f8d3256c79cdf541e07efc0e967aa5ab:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlNDUwNTE0NDg5ZTJhOGY4MWQxYTZiMDJhNWE1YmM0ZGQ1MDY1MmFkMzljMjQyMTE4NmJhMjIyMWMxZTFiNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE2Y2EzYjY2NWM4ZmIwMWMyMWMxMjAxM2I2M2MyMGI1ZGI2NWFmNmY2MzRiMDMyZDY1YmRmMzY0MjE5NGUwZGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b444643b15164ddeb15ca84a48c3a342",
+      "statement": "Shared AE2 integration sources are added to the Kotlin compilation of each loader rather than core main sources.",
+      "evidence": [
+        {
+          "resource": "repo://projects/fabric/build.gradle.kts#L18-L20",
+          "version": "repo-lines-v1:sha256:7a836411201e62f5dd5c8b8e9382f1151c1962d79c3c6ca3d1bb91ce1aa5df34:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWQwMTEzZGU0NmMyYTk5NjI3ZGMxZDJlNTQ4MjEyYWZkOWYxZDFkN2VkNTliNjliZDg1OGJiYzgwMTJhYmFkMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYmNkMjM2MDk2ZjIyOWQ4N2NjNmMwNDNiZDU0MDU0NjMyZjNjYzQzZmY2NmQzMGRlNmU0NmZiZGZjMWMyZDdjZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWQ4OTYyNGZlNDUyNmE0ZjVmMmEyZjkwZDZhZDYyZjgyOWMxNmQwYWQxMTM5NGQwOWI5NTEwZTYxMmVhMTQwMiJ9"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L22-L24",
+          "version": "repo-lines-v1:sha256:7a836411201e62f5dd5c8b8e9382f1151c1962d79c3c6ca3d1bb91ce1aa5df34:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWQwMTEzZGU0NmMyYTk5NjI3ZGMxZDJlNTQ4MjEyYWZkOWYxZDFkN2VkNTliNjliZDg1OGJiYzgwMTJhYmFkMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjQ4YWMyMmNhYWI4N2ZmODNjYzA5ZmQ5MmY0MGVjYmQ3MDQ4MWU1NWQ3ZGEwYTE0YWI2MjNhNDM2NzM1YmRlYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTA3M2MzYTRlYzliNTUxMzdiNDhlNDg4NjdkOTk4OGMxYmE0YmVjYzA5YTIwZmI4NzBhNTAzMzkxOWRmYmRhNSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_2c37cdfd8f7b42a68044a01cce4dcb1b",
+      "statement": "ModPlatform fails before platform configuration, while client hooks queue until idempotent client initialization and execute immediately after initialization.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/PeripheralWorksClientCore.kt#L119-L127",
+          "version": "repo-lines-v1:sha256:fd52ad4601f55b4d9e18509f5c48b8e3dac978c2584968b42111fe0e9887182f:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNDFlNTc2ZDQ0MGQ4MmQ0MGVmMjE3NGYzMDlhZTM4ODU4MTljZjI4ZjA4YjE5NzcwMmQ3ZmZlYzNkMTExNTExZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTk5YmRlZmVlYWNhNjM0MGUwMjkwZGM4NmU4ODljODlkNWUxODlhYTViYTQ0YjU4NWIzYjcwNzM0ZjRhNjJkOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSJ9"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/PeripheralWorksClientCore.kt#L74-L79",
+          "version": "repo-lines-v1:sha256:d8fa617ba6dbaaaacf7a0597c8c35a76ad5fc68033ba7e0815c5cea78d16e1de:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2FkNjRhMjM2YmU2MjQ4NGQ2Y2UzMDM4MDRmMTc2NWJmZjU5ODBlYzU4NzMyOGExYjM3OWNiMTBjMjU5M2Q5MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTZiMDQ0OTE0Njk3MjJlODM2M2E5NGU0MDQ0NTM4ZTAxM2EyYTIxN2UzNmIxZTU2OGJhNjBhY2I3YjRjOGYyZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjkxYjFmYzRjZDI3NzVhNDRmY2NiZmJlMjE1NmEzYTQ4YmVlODBlMTViMDU3YmRhNDE2MmE5YTk0MmRjM2UzNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzcxZjY4MzE1YWZiODc2MDNiNmU0Y2ZhOGYzYWFhNTMzNzk5NjQ4ZTUwNDM5MWI3NGJlMmUyZmFlZjY4N2Q1NyJ9"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/xplat/ModPlatform.kt#L6-L20",
+          "version": "repo-lines-v1:sha256:e9f615338948c9ea28b1990dc4a9fa2240cb4a0cbfff686db75929bc05723bf8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkZTgwNDk1ZjQ3MDAzMGRmYWNiMjc4NzFhYWIwMjk1MTNkNzBkOGE0Njc1MWUyM2E0MTM1NDNiMDk5NTE4MGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdkZDZiMmViMzUzZDdiOTRiODJhNmYzNDQ5ZmFiOGUwNTJkYjZmNDg1NDg1MTkyOGFjMTQ4MDY0MGYxN2IxNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE4NGViNzVmN2JjMzFkZWQ3OWM2N2VlODYyMDdhZTFiMTViOWYzN2NmNDIzYTlhYWM0MzBhMTQ0NGM3ZjkxY2IifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}

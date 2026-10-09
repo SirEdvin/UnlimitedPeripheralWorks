@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:8c0e6223bf28705f32b09413f5fe1b5d7c7c7becd045fdc70099d39173d76a01",
+  "claims": [
+    {
+      "id": "claim_fc203986aaca492e8d6cb3756b8bceaa",
+      "statement": "Scanner factories select portable/stationary operations by owner fuel support and attach external scanning behavior; configured costs use cube-volume differences, with a stationary zero default versus positive declared extra-cost minimum.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/operations/SphereOperations.kt#L17-L58",
+          "version": "repo-lines-v1:sha256:a934a357d7dc1ffea92f7a0e39bbacc76f5c348bbe1d93a165eb53f7072929cc:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5NTQ0MjVhZGM4YjMxZWNlZWQxZDVjNzg2ZTFmMjc1Y2ZkODBiNjJiOWQ4OWVjOTIwMDQwNjE3YmNmM2IyODIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxOGViODEwYmZlYmEwYTRlY2IzYTQ2YWVjZWFkNGJjNWQ4ZDhkNmUzNzJhODQ0MDJkM2Y3NjUyN2Y0NjZkMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBmZTMxMzRlM2EyYjM3MGJkNmY3YjFmYjdjMjQ0MTgyNjFhYWVlNTkwNWY0ZmRiYWY3ZGRhYTU3MzNlN2Q2NjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc0NmU4MDIxMmU2MmI1MWE0OWI3NmE5NDk2MDUyZmEzYjgxMTIwOTNiYTgyYWY0ZGE2ZDIzNDkxZWJkNGJiNTkifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/UniversalScannerPeripheral.kt#L27-L68",
+          "version": "repo-lines-v1:sha256:c4eedad599a8c243a91dbcd95500c83580da351d15d60f46b305b159c3664e9d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0NzZmYzIxYjZhNjEzNzhkNjIzOTNkNzViMGNkZTAxOGVlNDg5Y2E0YmJmOGM2NzVhYzgxNTA4YWVkMGEzZmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5OTQ3N2RkYzllYjZmNjU2YmFmMTkxZDAwZGQ4ZTMxNzVkMzQ2YTE0YWE5NDg0YmRiODQ2NzMxM2RlZmUxMzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE0YzI1MDI3M2M1NWJiOTUwZTBiNzQ2MDJkMzc1MjFkOGEzZGM2M2VlMjQ1NTNjMDQ1ZWY1MzQzMjg3ZTk3MmEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_80cae76abc994722aff2af44e5d8ba55",
+      "statement": "Sensor analyzers/inspectors reject duplicate registration, optionally execute through owner operations and expose main-thread named dispatch rejecting unknown names.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/UltimateSensorPeripheral.kt#L25-L67",
+          "version": "repo-lines-v1:sha256:bccce42701486e208d3677786ee58fc96145bffdaca1a8e8210552661a1482ef:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1MWRjZTMxM2Q0ODcxNmI0OWM4ZDA0ZmY2NGRlMzcyYTMxODBjNWY3YTU0OGNmOTBlMjU0NzliOTY3NWY2MWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyNTdlMzJiZTcyZGM0ZWEyNDQ5OTdhMDdjOWI2NDc0YWY0ZmY5ZmE0Y2M3MmI5YjQ5ZjNiOWI2N2U2NjI3YTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhMTg2YTY1ZGNhNTMyZjlhYmMwZmYyZDdlZjZmNTkwMDlmMDgzZGZmY2FmOGZkM2YxMGY1ZjAyYzA4NTg3ZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAyZWY1MjQ4MjY1Yjc0NzA0NmUyYTA2YmZlNDdhODM4YzM2M2Y2ZGM3ZDVmOTM0ZDcyYWUxNGE5ZjQxMzdiYWEifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/UltimateSensorPeripheral.kt#L91-L118",
+          "version": "repo-lines-v1:sha256:d551753080c0a38304ef1c0025cb2a9c40721549b0a0c6b0010a04451b2b703c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRkZTAzY2Y2NTQ1YTZmNjA1MWQzYWZmNjM2M2I5MmUzYzgxNTMzZDcxNThiMjJhODlkNGNjNWUwZTQ1YjFlZjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4NWFlMzc3YjQ1MTkzZjczM2YxNjY0ZDhhOWU4OGZiYTIwYTM0YmZhMTIwMmEwODRlODQ3ZDg3MTQxZWZkMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhMTNmNjc0NTVkODU4NDcyZTJhMjUwOGZjYjQ2Zjk5NmNlMmJhOWZkMzRhYjFjMWY0MzM5NjYwYmJhYTM4OWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f249d483a2da44b7ac9fbde0b2a9d91b",
+      "statement": "Observers persist targets/styles and register/unregister shared block-state tracking; Lua add checks range but not capacity or deduplication, and observer event traversal has no per-observer tracked-list filter.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/RemoteObserverBlockEntity.kt#L60-L147",
+          "version": "repo-lines-v1:sha256:749b186614f5de435a45cf439f98547736117dd7ace8be896d60ac843b333551:eyJzZWxlY3RlZExpbmVDb3VudCI6ODgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkOWIzYmM1MzdlMWVmZjkxODRmMGYyOTA1YWFmNTA5NDkzNDRhZjZlODNmNDZiZmNmMTQxNDFiY2NkNDFhNDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNiZTI5YWQ2MTFjMGEyOGZmZjNlYTU0YTQ2ZmIzYjE0Yzc1M2JhNzI3NWI1NjFjZDYyMWU4YjZmMTIyOTg1OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/RemoteObserverPeripheral.kt#L49-L80",
+          "version": "repo-lines-v1:sha256:90607f64b948f47e641b3130561234b7b53f2ce31d8f4b9bcbf0509de5e39a3f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlNzUwNzI2NmM2M2I0YWEyNWY2ZTc0NWEzYTJmY2NlMDQ2ZjM1Njk4OTNlZGEzNGVlYzM1NjdkMWU1MDYxZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQxZmMwYzIwNTFkM2YyYTNkNDdhZTAyZmZkZjRiYjU2ZTg5ZjU1OWQ1MmI3YWY3NDE2YTI0NzQxZTcxODdmNzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhMTNmNjc0NTVkODU4NDcyZTJhMjUwOGZjYjQ2Zjk5NmNlMmJhOWZkMzRhYjFjMWY0MzM5NjYwYmJhYTM4OWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e848b1e5a3a54275a9277dbc8feff959",
+      "statement": "Reality forging mutates anchor mimic state with per-request position/tag prevalidation; batch requests apply sequentially without whole-batch rollback, and explicit clear positions lack the forge-pieces radius check.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/RealityForgerPeripheral.kt#L145-L189",
+          "version": "repo-lines-v1:sha256:95d743f37fd8ec775118be17e8321d2772fcae591b41bc336dfd473aec18bf92:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlNzUwNzI2NmM2M2I0YWEyNWY2ZTc0NWEzYTJmY2NlMDQ2ZjM1Njk4OTNlZGEzNGVlYzM1NjdkMWU1MDYxZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2ZDMwZTdmMjFhNDE1MDYzMjNjMzc5ODYyN2E3OWE0ZWI1Mzc5ZmYzOTI3NmFmNWFiNTFiZDdiY2FhNjY5N2EiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFkZDRhNzg1ODc4NjU5OTFkYzUzNDYwZGJlMzljZGZhZmEwNzBjODVhNjcxYWM3ZTY0ZmU5MjNkYzY2YzNmOGQifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/RealityForgerPeripheral.kt#L89-L142",
+          "version": "repo-lines-v1:sha256:682bc0571fa7c2a044bd49235bc95b1f59bf361e908ba21f1aaf9e1e43a2bcff:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlNzUwNzI2NmM2M2I0YWEyNWY2ZTc0NWEzYTJmY2NlMDQ2ZjM1Njk4OTNlZGEzNGVlYzM1NjdkMWU1MDYxZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0ZTAyMjliYTBmM2JmYjkyNjJiZGZkYmFjNTVjM2IwMzJmN2VhNmM4Mzc5ZTk2MjMxMmY3YThhMmFjZTZjNzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4MzUwYzdhMGYwNjJhZTRjYTZlODU3Y2VmMzZiOGU0YTUzMjNiMGU5YjVlYzlkNzY2YzA2ZWY3NzAwZTRlZjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUyODVkZDhlMzI2OWFiNTI0YTYyMmM5ZTZiMmI0ZWYxNjgxMWNhNzVjYTdhMmEwNzA4MzE0ODM2ZTEyZjUxN2EifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_843d80001ae1419789581d8bf95a89b7",
+      "statement": "Recipe queries separate runtime recipe serialization from raw resource reads, use extensible class-based transformers/default fallback and flexible type selection, and only getTypes directly filters excluded IDs; Lua search compares result items rather than invoking custom toolkit predicates.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/RecipeRegistryPeripheral.kt#L57-L128",
+          "version": "repo-lines-v1:sha256:1298f0926e76fe96bba3204ebace50db55f78d2383db40d5ed95efd0a173ee62:eyJzZWxlY3RlZExpbmVDb3VudCI6NzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2ZmM3YTE1ZWUxYjYwNjI0NGFmYWVkZjEwNGVlMTIyMmVkNGNlMTk3Mzc1MDljMjVjNWEzNWM5ZGJmMjBjZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxYzk3N2JiMWFmZTcxYTRkNWE0OTQ1NTAxODBkOWU2YTAwNDg5YTdmNTM4NTA2MGVjNGY4Y2FjMjhiMmRmMjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmZDNkYmMzZDBlNTk0YmYxN2JiYTdjMmNjNTU2YTVmNDU2Y2YyN2Y5YWQ2OGE1OTAzOTA3OTRhOWJlNjNmMGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZmMGQ3NTk1MGRmMGZmOWEzZWU5NjYzOWRjYzhmZjVlYWVkYjQwZDY4MmJlYTkyNjIyYjUyMGRkODg3ZDkzZTkifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/subsystem/recipe/RecipeRegistryToolkit.kt#L33-L50",
+          "version": "repo-lines-v1:sha256:4f3e7a71092918948cc81002269f92c7b97630ea3683bbbcc8517d4ddc1b671d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiZmUyOTk3NzNiZmMwNWY5OTg2ZWEzMjBmZjZjYzllNTA1NjQ1ODIxMTA5ZDlkZWI2YjA5MGU4MGYyYWI3YjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5NTAxZGU3NzAzMzYxODUzYjE3YjNmYjBkMTQwMmIzNDg4ODQyMzZjNmMxMThhNDI5M2EwZWQzNDE2ZmRhMjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3MTE1OWRmMjZjMzNmODljMmRmN2ZjMDQ5NDU3ODlhMTljNWRlOWRmZjY0NjMzNjA2MGIxZDEzNzNhMzdlOGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk2ZGI1YzJjOTZmYjJiNzNmYzgzMjllYjY4MzE2Y2UyNjZhZWQ4ZTI0OWEzMjE2NmQ4MzdlYzYzNzYyNTE5MGIifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/subsystem/recipe/RecipeRegistryToolkit.kt#L86-L189",
+          "version": "repo-lines-v1:sha256:3e45987e8952e12d9ddbbe13e1b3b078d35c5fe38d0f6c01a476cdbfac0a02f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJkOWYyMjliMWVmZjFiYTk0MjczOTYyMDYyZTY3OTczMDliNzlhNTA4MjlhNTQyNDc2NjdhMzkyZTFjNTQ3NGQ0IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJjODdjOTkyY2M1ZjYwNTMxZDAzNTI4OGU2YTRmNmYxYjgwMDE2YmQyYzM0MDIzZmUwYTg1ZDZjZTVhOWFkMWM5IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI1YjI1NmZhODU3YWUzZjBlM2M4NjIwOTgxODM0OWI2YzdmZjRkNGQ1ZGM0NzZjZjk1YTU4MTc2N2ZiZDMwMzZiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MiwiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzNzk0ZDAyYTgxMjE5NDRkMTc2ZDI2NWU5YmI5Y2M1OWY2YWI4OTBiY2FkZjhhZWZkZWJkYmJiNGYyZWE4NDQ0In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_b73d56a55aac44b7ba8fe9b73e51e88b",
+      "statement": "Informative lists are extensible with replacement by name, and the mod blocklist is specifically applied to mod listing/describing rather than a universal registry privacy filter.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/InformativeRegistryPeripheral.kt#L31-L74",
+          "version": "repo-lines-v1:sha256:4522645332671bca9cdbee1c1fda9d371409fc24db8a48f68cb408f5bba6ee66:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmYTdhMWY5MGU3NDY3ZmVmNzY0YTBhZGJiY2NlMDNkYzE2ZWI3NzIwMTAxZDZkZjM0ZTg4YmIwZjhmOTNiMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxY2E3YWJiNzg3Mzc2NTY1ODQxNzRlNjcyMGIwYjk1MGU3NmU0ZDlkNjJlMjdhODJiYWNkY2I4NGViNTZkYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmMjZhNjJlMDI4ZGExNWM4ZTFkYmMwM2Q3MjIyMzIxMDNjNjQ2NWFjMmJmMDQwODAxNGU1ZTk1NzVmMGMwN2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZmN2NlNDBmMzNiZGY2OGNlZmNmZmM0ZWFiNmJhZDI2ODhhZTA0MjFlNDc3ZmI1M2FmZGIyYTc1ZWMzZWJlYjAifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}

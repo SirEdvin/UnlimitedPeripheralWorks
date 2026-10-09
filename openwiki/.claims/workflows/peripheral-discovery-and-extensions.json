@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:6ae6085d7b886280f33940f87ee6926aa86c947cc67c5d29c083d097b8097f76",
+  "claims": [
+    {
+      "id": "claim_45c581bf17684ddd8fdf4a471fd3d4f7",
+      "statement": "Providers run in ascending priority with type/conflict suppression only after successful selection; protected jukebox priority 50 suppresses generic inventory/item-storage plugins.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/api/PeripheralPluginProvider.kt#L8-L22",
+          "version": "repo-lines-v1:sha256:d868ea78cf55f7989e43ca7ec5801d50ee62af936a460ce2a63918af2771e518:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3MjU3YTZiYTBlN2ZmY2UxZmU2NjJhZDJkNGYzNjEwYjc5NmJkNWU5OWQxNjc4ODI0MGZiNjM2ZTYyNTM1Y2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhZDRjZGIyZDU4ZDA2YTM3YmZlYjM3MGEwYTFmNDAwNjU0MjI1MGI4NDBjNjU1MjAyNWQyOGMzYTJjMzgxNmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVhNWY0NDJmNjY5MTZjM2E0NWFhN2E2YjkwMDFmNmVlODRmMGExOWI1YmNjOTQ4YTNkYzg5OWExZjg5MTZhMmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/ComputerCraftProxy.kt#L21-L43",
+          "version": "repo-lines-v1:sha256:3cf42b0096746484c34afcdd5361a1c77a18acca3e4978fad133258752f5168e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2MmQzNGMxZGI2YjA0NzEyNzFkYTI2MjFhYzgyYmM2Nzk1MjhlOWU5MzAzZjZiMjJmZjNhODRkYjY5ZjhhNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIxZDQ1N2JhNzRhMjE3Yzc1NzliYTk3OGEwZTA3NWU4ODFkYWU5ZWFiZjMxYzA3ZTFiOWYyODliMTlkOGEzMzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMwNDk0NjVhOTg0MmVmYjIxNmNiNDhhMmU3NmFmYmQ3NGJjNDEwMTM3NGE4ZjhiNTg5YWNhY2M4ODdmNGU2MTYifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/plugins/specific/SpecificPluginProviders.kt#L40-L54",
+          "version": "repo-lines-v1:sha256:74e2c768e34bab3d9382916f672f419b1090cc2f9eb4f7f3573b52e8038498d6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjllMTVlNjE0YzE4MjQ0NTI5M2ZjZjkwMzcxYmViZmY4NWI0MTE5NGY3MGE5NTE1ODEyMTkwMGYzMDE1NzVhMmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwNTFmNTE2ZjY0NzVlZjVmOTA5MDE0OWYxZGVlNmE3Mzc0OWMyMzIzMjg3N2VmNDNkMTUyM2QzM2UwMjQ3ZDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9911746536bc48f2ac73297d7b009376",
+      "statement": "Loader fallback discovery favors owned block-entity peripherals, with Fabric returning their result directly and Forge falling back on null; generic discovery rejects ignored blocks, chooses owner kind and returns null for no plugins.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/ComputerCraftProxy.kt#L45-L82",
+          "version": "repo-lines-v1:sha256:9e580081891eeafde222cc91e7a8e94b3ad6ed9c1e23ae9f1e17ff3806abb003:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiYThmYzUzNzg4YTJkZDBhYWM0MmMyNTBhZjU1Njc1ZmZkNWI4MGU4NjU0NWRkZmM3MWMwODRkMzM0ZGVhY2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5Nzg0ZGVhZDZjODVjNzRlMWYwZTI1NTI1N2U3ZGI1MWY2Yjg4MmU2OTk5YWYzZjdiMDVmNzI5OTJjNzZiOGIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmNzkyNDA0NDIxYWEyMmFlZGYyOGE3MzU3MTc1OTRmMmRjMDc0ZTdlOTdlYmI3NWZmNTZiMmQ1N2QwZjU5MjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        },
+        {
+          "resource": "repo://projects/fabric/src/main/kotlin/site/siredvin/peripheralworks/FabricPeripheralWorks.kt#L91-L97",
+          "version": "repo-lines-v1:sha256:aa7833aa0185cb5c51c9d510806ee3be6ce08390a4ea81e6528d1d1d568669f4:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjNjZmY3YjIzY2Q0YjYyMGQ4ODBiODZiODUyNmMyZTA2MmQ1YjhkNzZiZGRhNzQyYzUyYjQ3YTA5MDhmYTBjOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTZiMDQ0OTE0Njk3MjJlODM2M2E5NGU0MDQ0NTM4ZTAxM2EyYTIxN2UzNmIxZTU2OGJhNjBhY2I3YjRjOGYyZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZDdlMzRmNjJlZmIwZjM1ZTY4MGY4ZjAyOTk1MzA1NTUwM2M1OTUzNGM5MzBjYzg1ZjYxYjM5ZTcxZDYxN2Q5YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTdjMzQ5OGJjZDBhNmYyMDE4ODEwZGIzMTBjNzI3MzE0N2JkZWQ0NWVjMWFjMDY0N2I5YWFiNTJmYmEzOTU4ZiJ9"
+        },
+        {
+          "resource": "repo://projects/forge/src/main/kotlin/site/siredvin/peripheralworks/ForgePeripheralWorks.kt#L141-L153",
+          "version": "repo-lines-v1:sha256:2e5e81a6b0ee609871f782d363d1bc0a3a23d69f2e7d8e51657a1d6d281750ec:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3ZTFhZGNkZjk0ZmVjMjdiMTFjODE2NzBjYmQ2NDUzZjA0OGEyNjAwOTI4NTgyNGRmZTk0NWQyODE0YzEyN2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY2NWI1YzZkZWE5MmNkZjFmYzM5NDg2Yjk0NGM4OGZlNmMyYjcyYjgyNjA1NDA4ZmUyZmU0ZGI2MDEzY2U1Y2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU1NzA5MjU2ZWZjMDQ1MmJmZmZiMmM1Mzg0NjMyMGVmZmY2YjU1NTI0ODcxOGM5MTVlM2ZlMDZlMTQ2ZGVlZjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c7865d8db8cb4240b9803bf8172714a9",
+      "statement": "Generic item adaptation prefers enabled nonempty slotted inventory, fluid adaptation applies its transfer limit, and energy adaptation selects full transfer versus energy-only plugins by configured or registered transferability.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/GenericProvider.kt#L17-L60",
+          "version": "repo-lines-v1:sha256:e83ac00048f0051758c1d1f9c4b40f914e9f28e1e5d84d7f56c29538719c4b08:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZiZjIxNDQyNDdmMmViNzIyZmU1Yjk2MGNhMDYxMmZkMDBkMDIyZDQ3YmU5NDBhMzk4ZmMwZGYyY2U5MjJmMzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdiYjExMDg1YzgzMTQyMTMyNjI2ZDIyNjYxNDg1NzhkZTRkZjg5MTU3NWU3NjEyNzgwMWRmMTAzZmU5OWFjZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a7705e70b3bc43ed9bb10fddcee3f428",
+      "statement": "Peripheral hubs compose named remote records with synchronized computer attachment and identity deduplication, exposing delegated callRemote and remote name/type/method queries.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/modem/PeripheralHubPeripheral.kt#L100-L136",
+          "version": "repo-lines-v1:sha256:d87d2e50bccd9d63a2b33e70333626547fa4bd809d77e27e3e74232b31b56562:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjMGQzYmYwOGY5NWFlMzc4YzY2OWViNGQ3MjY4YTdhMGY5YjhhNjBlY2RiYTJhMDQwYTgzZjIxNjU5OTEzYzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2NTc1MjdlNDI0YWMzZTE3OGY2NTUxNzM5YTM2OGYxMTliNGMxYjIzNGFiMmI4OGU1NmM2Nzc0YmNiOTBlNjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/modem/PeripheralHubPeripheral.kt#L15-L97",
+          "version": "repo-lines-v1:sha256:20b0b30af9ea8769c5cf06fe1cd2988b3d9b92bd246ac3b5727a4d84059928af:eyJzZWxlY3RlZExpbmVDb3VudCI6ODMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxY2FmYzE5NmJjYzFjYWQ1YmYyNDdiM2M4Y2Y4YzQ4MTUzNTcyOGRkZTljMmM3NWU4MmJhYmNlOTYzYTFjNDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVmZTI0ZWZjMDU3OGQzN2ZlNDVhYWQ4NzJmNjVmZjA0OWVkNTM1ZWI1NGU2NjRlNjVjYTAzMTNhYzEyZWU5OGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU4NGJmMDcxM2ViNDU5NzEzNTZkNzZlYThkZjJkZTU0YTQ4MTkxYTVlNTI0NjFjY2YxMDJmNzAwM2ZkYjZhZjMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ea099d13e3554e4582bb1d33996eaf3e",
+      "statement": "Peripheralium hubs persist upgrade IDs and per-upgrade data, reconstruct resolvable turtle upgrades and reject duplicates; equip restores the removed item on unsuccessful results but currently checks capacity with greater-than rather than greater-than-or-equal.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/PeripheraliumHubPeripheral.kt#L23-L43",
+          "version": "repo-lines-v1:sha256:cff3ba5b46dfa6c633a6c2822c2ae708a0afa4ae14e850b5514cf3a46dbb3e4b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4OWJiZmYyZjIyZTgyMzcxYWQwMjYzMzE4N2U1NzE3YzM0YmRiM2YzZmM0NGE2YTQ1YTJjNmRmMGQ4MjM5ZjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyMDgzNGMxYzJlMDM2ZDNkZTBlNmU1NmE3MDA5ZTUzYmJiZTVjZTg0YTYxMzFiMDFlMmYyZWExNzQ1NjBhODIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjMGFlMzE0YzcxZWFkYWI0NzI2ZTdmNjdiZDM4NzM5NGE0ZTQ0ZjA3ZmJkMDA0MGM3ZWQxZGMwNzUwOTc1ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/PeripheraliumHubPeripheral.kt#L68-L143",
+          "version": "repo-lines-v1:sha256:febb26bb68eaef6e1d8a407fad1ddab65fb95d1d22c0ca407135ece8f881a475:eyJzZWxlY3RlZExpbmVDb3VudCI6NzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM5MzY0ZGQ5ZmIwODBlMjg3NGIzNDViZDgxZmE4MzAzYjc2MmQ3MTQ2NWVmODYzYTc5OWMwY2Y4MzY2OGNkMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5NzJjMTRjMjgzZTlmZWFlMGZkNWY1MGNhYmJmNjQ4NWRjMzY0OWQ3MjFiNDlhMDRhYjI4ZDY2OWRkMWY0M2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgwOWM3ZWJjNjQ4NzNlNzY3ZjZmYzY4Yjc0MWFiNmU4NTM3ZTdmNzEyYjg2MmRhMTM2NzNiYmU3ZWU3YWE4MGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU0ZWQ0YTk5NjY0YjY4MTliYWY5ZDk0ZGIxMmJlNjJmMTgwYmU2ZDI2YzgxYjViYWJiMGVmZTk3Y2QwM2ZkZTkifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/turtles/TurtlePeripheraliumHubPeripheral.kt#L32-L99",
+          "version": "repo-lines-v1:sha256:5e37f9103d1aaf2237d7ebc181457814d3ad57fb4e1c6eb80b1f14a509342125:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRkZTAzY2Y2NTQ1YTZmNjA1MWQzYWZmNjM2M2I5MmUzYzgxNTMzZDcxNThiMjJhODlkNGNjNWUwZTQ1YjFlZjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwOGYxZjFiYTY0YWVjNjNmYzUyYjBmODhkZDNhZjgwMzhjMjQ2ODIxZGYyZTMyYWE3YWEwMjA1ZGIwNzVlNmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkNmFjM2E4ZGQxNTZiMmVkMjVlYTdmNGJiNDlhNWE2NmZiMzNhNzA5ZTI0YjY1M2M2NTBhZThlZmE3NjRmNGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhkNTc0N2I2OGQ3ZjZkZGQzNGIwNTQ3MWRjOGZlMTJhNDkwYmQ2MzQxOWQyM2NiOTg0NGI4NWE2ZjRlNzM5Y2UifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}

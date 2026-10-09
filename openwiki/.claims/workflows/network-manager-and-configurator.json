@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:9f9e9aef665a18b2512d4cc087f893bf19337d3331f15f0739c6f00e1dd8dc0b",
+  "claims": [
+    {
+      "id": "claim_0928675e847c4d0eba4a518234495eb1",
+      "statement": "The network manager discovers locatable wired peripherals, separately persists display/group data, connects loaded non-facing neighbors, publishes a stable allocated name and removes its node on removal/destruction.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/NetworkManagerBlockEntity.kt#L147-L169",
+          "version": "repo-lines-v1:sha256:89e47b1c63a684c0cf3762beaacb92b7d2340312ea0a1cbe8771491629f9ba8a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2NzhjNWZlZDk2ODVjNTJmYzE3ZGIwYTlkNGM3ZjQwMTlmNGQxOTc2NjBmNzExNTE0NjA0NjdkOGNjNWQ0NzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBiMmZmYzJhY2I2NjgyNzNmOWFlMDc4YWMxM2YwMTg0NzBkYzU0YzkwYWVkODhlYWNkNjU4ZTYyMjhmNTEzZTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhMDk5YWRhOTZhNzczMmZmNTA0MzIyNzQxZjA0YjgzZWJkMWNlN2U1MzdjYWFmZGVjNWE1M2ZlNTVmNTkzOWYifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/NetworkManagerBlockEntity.kt#L276-L318",
+          "version": "repo-lines-v1:sha256:1d5e03390f4068af359a4775e2075c3240ee3a2ed3e933fefe1e88721081b525:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4YzZkZDEzYjQ2MTYyMjAyMGNiYWQyNDlhOWYyNzA2ZWJjNzg4NzQyYTE4NDkzODJjYTFkOTg5M2U4NDRiMTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzNTlkNzA4MWVkZGVmZDI0YTc0ZTQ0NTZlMmFlNmEyZmY3NWJlMmE4ODA4ZGZjNjM4NDc0ZTAzMTI0ZTkzZGMifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/NetworkManagerBlockEntity.kt#L328-L418",
+          "version": "repo-lines-v1:sha256:b9426f2274a0b0eff53a193495c7b712f70425fbe68652b273ea1167ea3b0d9d:eyJzZWxlY3RlZExpbmVDb3VudCI6OTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0OGNlMTU5NGZmNTEyNzhjMWQzNTEwOTZiYThkZjA0OWE5ZmJjMTQ1ODYzZDA3MTRkODE4ZjFiOTMyOWI4M2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c8b026da80c74eeab1a069a7c43984a1",
+      "statement": "Group membership validates live peripherals, supports expected-state checks and emits change events; descendant grouping is delimiter-prefix based, and Lua removal rejects groups containing live members unlike direct UI deletion.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/NetworkManagerBlockEntity.kt#L172-L246",
+          "version": "repo-lines-v1:sha256:535c5a12c79fe5e2dc4a8119a82288b82884688c3e0884384d61a9a999a16f61:eyJzZWxlY3RlZExpbmVDb3VudCI6NzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1MzhjZmE4ZDZiY2E5MjBjYTI5NmYzM2IyODk4ZmI5MzU2YjhkNDJlMGJmMTUzN2RmZjlkM2Q0MTBmMWJkYjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI4YWJkYzFjNzc2YTA2MmNlNjIyYTkwODIwMTA2ODc4ZmI3NzQyNTc3MDkyNDk0N2M1MDAxZGM4NGU0YzIwYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAxY2MwOGY1M2Y2NzM4NmJlMGI1YzlkYWI4OTI0N2NlNTBiNjM5ZDg2MWUyODBjNzFmZDBjNmI4N2YwMzYwYzcifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/NetworkManagerPeripheral.kt#L45-L67",
+          "version": "repo-lines-v1:sha256:079add83e1a5782bf61b78923447a1276e6d3e5340acd2ba8552018d2e4b8356:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlNzUwNzI2NmM2M2I0YWEyNWY2ZTc0NWEzYTJmY2NlMDQ2ZjM1Njk4OTNlZGEzNGVlYzM1NjdkMWU1MDYxZGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc1YzQ3NTc3NzU1M2I0NTRiNTAzYzQ5MWI0ZDJkNmI4ODRhZTE5MTdmNzYxZmJjOTk4ZjkzN2ZlZjNlYzVlNzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY3ODUxZTIxOGI0NmQxNDkxNzIwMjM4Y2ExMDYyYzdlMmJjMjA1MTcwNDM4NzgzYmExNzExNmFjMmVmN2UwY2EifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/computercraft/peripherals/NetworkManagerPeripheral.kt#L94-L97",
+          "version": "repo-lines-v1:sha256:18a7a48bebb21791f16862bfeeb7b0d76b83acd15515dff5c7592397a8a72740:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMmU3NTA3MjY2YzYzYjRhYTI1ZjZlNzQ1YTNhMmZjY2UwNDZmMzU2OTg5M2VkYTM0ZWVjMzU2N2QxZTUwNjFkZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTExNTZhNDY1NjMxNTk3YWFjYTM0N2E3M2VhMzE0MzczZTU2OTA5ZDVlNWY0M2Q4NDk0N2E0YWI0ZDI5ZDQ3NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNzZhNGIyOGEwODU4YmMzMzFiYWVlNTQ0NWEzYmQzNDg4MTcwMjVhNmNiMWJlOTU1MWUzNWRjZGI0M2Q2Y2E1MSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_28ca2da066c04be391fbc6a523d73662",
+      "statement": "Configurator state is item-persisted with three nonfavorite recents and sixteen favorites; selection revalidates stored target dimension, chunk loading and mode, while attached interactions take precedence over detached history.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/item/UltimateConfigurator.kt#L191-L239",
+          "version": "repo-lines-v1:sha256:f9255a271fbfae68f0488dfd1f0514369cf7caa17abbffcb3f78327ad13de98e:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2MjkwMGQxZWQ0NjI2NmY3ZTFiMjJhZmE1ZjJhNzcwNDgxNGY2NDcxNjMwYTBkZTQ1YzJhYmEzYTAwMGNjZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM4MDU1NTIyN2IxNGM1ZmEwYTQ0NTA1NjhmM2U0N2RmNzAxMDg1NjFlZDU4NjM3ZTZiODlkZDc5ZmVhOGE3NzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM0NGE4M2RmZDkzMDczOTcwN2ViM2YyNjBjZGU2M2QxNzQxZGY3YzRiZGUyMzg2Njc0YzhjZmIwNGUwMThlNjMifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/item/UltimateConfigurator.kt#L30-L43",
+          "version": "repo-lines-v1:sha256:2ccfd3d633bf1f10abdff79697cc12b8b37311c74c94233531181c2de6993a3e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzMwMjdiYzIwYjViY2M0YjEzOTBiNjM2YjJhY2E4YjA4NTNiZjUwMjA0YjAyMDlhMTdiOGY0ODQwN2M3OGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNGIzZjFjODk0NWU2ZDM2NWIxYTYwNGNlMWJkMzVhMGUyM2ZkZWRkMjNmOGNkMWYwMTgzY2Y5OTAzZGJkMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQzYWQ5ZjJmZDQ3ZWFhODhhYjQzOWE4Zjk0OTZiNzQ1NjkwODFhMWY3MjNmMWUyNzRlYzFlZDNjZGEwZWE0NDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OGFjZGNjOGVmMjk4NjE1ODMyYjRmOTE1YmViMzI2MWQzODE5ZjFhYTIzZTAzYzBlZmVjYzQ1YzFhNDlhOTUifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/item/UltimateConfigurator.kt#L78-L158",
+          "version": "repo-lines-v1:sha256:1ccc3e88b0a3fcf7c656797bc274760abe4e3b4bce1595fe6ef0e1fe0ad0f17f:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzODQ0OGU3ZDJmZjI2OWQyMTQ2OTk4ODVkZGRlYTljMGQ0ZWM5ZTBkNjg4YjE3OWNjZTA1NzlhMTMwMmYzYzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxNjA3ZGM4YzU5NDM3NTA3NzIzZDhlMWJkMDkxM2RmN2UxNTA3YzNmOWFjMzhhNTEyYTkyOGM0NWI5ZDQ5NWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmMGQ3NTk1MGRmMGZmOWEzZWU5NjYzOWRjYzhmZjVlYWVkYjQwZDY4MmJlYTkyNjIyYjUyMGRkODg3ZDkzZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE2MmU2ODU1NDUwNDRmY2M0YWQ5NmI0MjNlMmJjMjIyNDIxZWYxOWE0MTAyYzIyODdmODUxNzEzNjViNGVlOGYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_afc6e40cb523457c944e1153ee5e4b5b",
+      "statement": "Common server handlers validate held configurator state and target eligibility, selected-group intent, enum/style values and expected membership before applying client-originated changes.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/networking/ConfiguratorTargetActionMessage.kt#L40-L67",
+          "version": "repo-lines-v1:sha256:f24bfece396da9dc6d693e5fadeab29bae5be37bb2620e3270c17c880544e3cb:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzN2YxYjgyMTUxOTg1MGU1NzNmYWRiYjkwYTEwYmZlNTdkMTEzNjQ3ZTA0NDRjNTllN2ViMDkyM2Y3NzAxMDIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2MjBhMjE1MGVmMWYyYWQ4Y2RiZTVlMGRmN2MyYTA4NDRkNDdiY2I4M2VkZGQzNTA4MGY3MWQzMzg0MGM3NjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjllM2FiYTA5OWI1MTM1YTFjYWZiY2QwM2Y5NjcyNDI4OGJhZjg2NzEwMjc2MmUwNGQyOGY2ZTVkOGZiYjlmNTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3MjYwZDY1YjY1YTJjMGJkY2Q4NDFhZDYyMTVmNmQyYzZlNmM1MDVmOTM1M2UyMjM2NWRiNjA1NTI0ZjZjMjgifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/networking/NetworkManagerGroupMessage.kt#L24-L104",
+          "version": "repo-lines-v1:sha256:0746c0de2bc237f89478fcca20c86ac968e7481870fa20e5dae24da075a7a338:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRjNTAxZGIwMWU4MDE4ZDQxMGQzOTM3YjI2NmM1NjgxNjk1ODY1Y2M4M2E0OTFjNjRhZjgzN2M4M2U3NGZhNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxNWVkYjBmMTljMjE5MjEyMDA4M2ZmYjdiZTk3NWJhODQ0NDQ3ZTNiMjViODVlYmQyY2I2ZTE4N2ZiYzkzNjQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVlZmJhYWFiYWY5YmUyNjczNWQ2MTg4NmIyMjBkNDFiYjcwNDNjZjAxM2RkN2Q5ZmY0ZjFkMDhkNzBmZTk1NDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3MjYwZDY1YjY1YTJjMGJkY2Q4NDFhZDYyMTVmNmQyYzZlNmM1MDVmOTM1M2UyMjM2NWRiNjA1NTI0ZjZjMjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_1d02b1d8576a42a78a35b170f22e47b5",
+      "statement": "Proxy selection enforces self/tag/range/capacity checks and persists target faces/names, retries incomplete connections and cleans up listeners/nodes; initial reconnect currently resolves NORTH while event refresh uses the stored face.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/PeripheralProxyBlockEntity.kt#L230-L243",
+          "version": "repo-lines-v1:sha256:906c3d055d4770ceb1a6b3863eaa7eb23f9707fa0d2ac6c0b0a8ee77e0464bab:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEzMmI4YmQyNjY2NTdiOTRkZTFmMjAwNjZiYmU0ZTAyNDcyMzRmMGYxZjc2NmZmNTNhOThhNDc3MDU2ZjkyZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdiNTE4OWY3MTM5ZDlkYjBhNDc3ZWQzMjRmMTlhNmYxZjAyMjIyNzI5MzY1ZDUwZjkwMTRjNzhjYmMxMjM1NGEifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/PeripheralProxyBlockEntity.kt#L310-L372",
+          "version": "repo-lines-v1:sha256:991ea384cb41e6d6921c22e1b53ac8dc91a4e65fd1137fe48592f8e58291c7d6:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3YWQwNWZlOWY4MjM3ZTQxZjFhNWQ5NDg3ZTIyZWUyNTNhMWU1OGI1MDA1YjUyOWVkNWZjM2NhZTI4ZmZmMmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUzYTFlNTFhNjk3MjkzMjY0NzcyZDRlZjBkOTA2YmIwOTAyMTIyOTRkYmYzMzlmOTkxZjQ0ZWY1MjhjMDRkNjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlhZDA5ODk3MWVkMGIwMzkzZWYxMWE0MjRlOTM4ZGVhNGU3MzNhYWQ0NzFiMmFmMmQ5YmIxOWMzOTQ4NzUxNWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/common/blockentity/PeripheralProxyBlockEntity.kt#L77-L90",
+          "version": "repo-lines-v1:sha256:9f733ded32bfc4f2d47e951aa33cb11101cc13456ed145bd051c33d8c899c106:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3YjIxNjNlOWUxNDFhYTQzNDdiYzNjMzE2Mzg1MTcxMjdjOTQzMGMyYTJlZWRlZmIwMzQ0MzlhNjM3MDhhNzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkYTlhYzc1ODFmZGRjZjQ5ZWU4ZTc2MDJjZDY2YjcyOTgwN2M0MDdkZjcwNjRiMTU2ODc4Y2Q3NWZmMmZhODgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwMjdjMDNhNzdjZTFjYmJlMzA0Zjg4ODA1NTFhY2Q3N2NhODZmYmU4ZGU1ODZiOWZmZDBmNWZmNWUxNzk1NmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk5OWJkZWZlZWFjYTYzNDBlMDI5MGRjODZlODg5Yzg5ZDVlMTg5YWE1YmE0NGI1ODViM2I3MDczNGY0YTYyZDgifQ"
+        },
+        {
+          "resource": "repo://projects/core/src/main/kotlin/site/siredvin/peripheralworks/subsystem/configurator/PeripheralProxyMode.kt#L33-L82",
+          "version": "repo-lines-v1:sha256:2122c3b035b3d956f0c81d4fa36331999277d5f7e2d5532162c1d0ada5b4f6b7:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNjMyMWJkYjI1MzU4NzI1ZmJmNWQzMmQ0MmM5ODM1OGJjODc5YjQyZmRiY2U1Njk5YTRiNGJmYTY2YmZkYzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjZGZmNDAzMWVjZDg5M2NmZmQ0NDQxNTU5ZGZjNTM5MWQyZDMyODk5MWVjZGVmNTI2NzU2Yjg2ZDRlY2E3MTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE1NWU2ZmNkYTJjMGRmOTM2YTRmYmUyYmQ3MTJhZGY3NmVmZTM0ZmM3MTliZmVjOTg0NWE1MzkyZTExMTc2MTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}

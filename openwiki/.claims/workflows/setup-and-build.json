@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:d761d190a4d7cdf70929d6a2219d828c941b79f5accb13cf2fa44678cc7a1234",
+  "claims": [
+    {
+      "id": "claim_2588e528025c49e296cb0ad7df588699",
+      "statement": "The checkout targets Java 17, Minecraft 1.20.1, Gradle 8.14, Kotlin 2.0.0, CC:Tweaked 1.116.1, Fabric Loader 0.17.2 and Forge 47.3.39, with a 4 GiB Gradle heap and daemon disabled.",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/gametest.yml#L22-L32",
+          "version": "repo-lines-v1:sha256:71fba2121fb3f989a8fa5872c085664c5bddac4f120c99b5d93fd77545cec169:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkYjk0ZmYyNTg5YTExZjg4NDE0NWEzZjEzZmJmMzIwMDgzOGVmOWVjMWI4MThhZTdhZmFiODI3N2NhNjM3YmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1Y2VmNjJmNDRmNGIyZTRkMDViMWZlMDJhYzBlYjU2YmExZDVjYTQ2MWNmMjJlYTllMjE2YjM3ZWUxNTU4ODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkMzg5MjQyOGMzNjZmZTBjMDQyMTAzYmYyYmM3ZjM3MThlZWExNmVhOWY3OThhZjIwMDA3NzEwMmM1OGVmNmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjlmNGI2MDM5NTI0Y2RhNTg1OTI0OThjNzA0Nzk2YzJmMDgzNDNjYWE4OGI0ZmUyYWJmZGExNjExYjA4NmJkZGMifQ"
+        },
+        {
+          "resource": "repo://build.gradle.kts#L21-L32",
+          "version": "repo-lines-v1:sha256:183908012c2a42570fbfe58b1c87faf012cfa51e883e76ca237311b805015fa6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0OTg4NjY1MWMyYjc4M2QyMjVkMjU3ZmI3OTE5MzlkYjdlYWQ2ODRiNGVhYjQzZmU1MGVjNjE5NjE5Y2EzNWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEzOTAzY2VmZTcyNzQ4OTdkZjA5NDQ5Y2Q4ZDg3ZTU2NDlmNmNjOWI1ZTZiMWZiNmYzMzU1YTkwMjUzOWQxMTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgwMjcyMWE4ZWJhNTE0YzAzYjZlNmJhMDdhYjc5NjJlMDVjMmI1YWQzYmM4Y2Y0MGM5N2MxNmI4YmU4ZjhlZTAifQ"
+        },
+        {
+          "resource": "repo://gradle.properties#L1-L11",
+          "version": "repo-lines-v1:sha256:6efa30267761a2970f9be694796972c0bcc3502487c77f0e3cd742f524f90c2e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA4MTNmZWJkOGI4MGQxZjQ1YmU2YmFjMWRmY2EwMjUwMTNkYjk1OWI3ODExNzY0MzBiMzJjNjczOTZlYWMyZGIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmMDBlNmJiZDgyOWE0OWFkY2NmODI1ZjExNjZlNzdjYTNiMjdlNDVkMzlhN2FmMWVkYjU2ZmY1YjYyNDE5MjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1ZGRjMzI0ZjZkYmJhNTE0N2RiNTZlY2Q3OGZiOWU4ODZhMmY4YTZhNGJmYWZiODk4ODlhZDc4MjIyMjUzZDQifQ"
+        },
+        {
+          "resource": "repo://gradle/libs.versions.toml#L3-L39",
+          "version": "repo-lines-v1:sha256:7710b49249fe4b17d5061ce6196d4e1709029a0bdd5e320f0fe8c8fabdba5161:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2NjdhNDBjMzA5ZTgzODNiYmY1YjYxZDZhNjQ0ZjZkMTUxYjZkYjUwYjcwZWUyZmJiNWQ5OWI2ZmVhYmY5M2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhZWI3MGI1OGY4OTY4YThhODU5NTFjMTJkMTJkYzUwN2Y3N2RkYzFlODg4NTFiYmI2MGI5M2E2ZjgwNjU2ZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAwMDQ1Njc4ZGNkYzY0NTRjMTM2MjllMjY5NDBjMWYwN2RjMGM2MTdjZGU4NjEwMzhmYmZkNzEwOTYxZTVjZGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxMjE3MzkzN2JlMTFlNGVjODhkNTY5ZDI5NThiNDM0NjAzNTI4NTM0ODE5NWUwNzc3ZDdmZTUzZmIzOWI4MDIifQ"
+        },
+        {
+          "resource": "repo://gradle/wrapper/gradle-wrapper.properties#L1-L5",
+          "version": "repo-lines-v1:sha256:61b9e8ea5fca48a4dda7a751f702f7f7d5a83a3c04bdf33976cac92c0479655f:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzdlMTAzZjI3YzkwODIyNzQ4ZGJmYzczYWM0YWI2OTZhNzU5NTAxNTNiNzlkMzI1NjUyOGI4N2IxMTU0MjZiNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2ZmZjhiYWJhN2I5YmI5MTlkZDA3ZjUwZjVjNmU3ZTY3ZjI3MTRkMTQwNTg1MDNiOTAyZjg3ZDQ3NzdhOWJkMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_62e137384ab1468a90eb595c7d97fc89",
+      "statement": "Five Gradle modules map to projects directories; plugin management and project dependencies use the Maven proxy, modules include Maven-local resolution and Forge adds an Extra-HNN-filtered CurseMaven repository.",
+      "evidence": [
+        {
+          "resource": "repo://projects/core/build.gradle.kts#L36-L42",
+          "version": "repo-lines-v1:sha256:5e660176935fcad0aa58e52f6d1261d590c3648051e6960eadb2348e5fda761f:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWU5NmFkNTJlMzg1MjllM2ZhNzZiMjZiNWM4YTkxZTA3MTYzYzA5Yjk5YzMzMDQyYTY3ZDMzNDdhMGEyOWVkYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOWEwYTBmZDI3MjE0MGE4OGQzNTYzZjJmYzZkZTY0Y2YzODc3YWQ1ZTdjMzBmMGE5M2I5M2I2MTJlMmZlZGI4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYmYwNzA1M2E3YWY5OWJmZDFmMTNlZThhN2ZkNjk0NTkwYmY4YTAyMTkzOGJiMDg2ZjdiNTg1NDBmZDk1N2I4ZCJ9"
+        },
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L71-L81",
+          "version": "repo-lines-v1:sha256:60235b2276a7ded6e0b601b35c348ea232109e3e65212d6aa84ae83a73d6b4e3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFlOTZhZDUyZTM4NTI5ZTNmYTc2YjI2YjVjOGE5MWUwNzE2M2MwOWI5OWMzMzA0MmE2N2QzMzQ3YTBhMjllZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5ZTc2MzU1Y2YxMTk5NDgwYzNmOTk4MzZiMTQ4NmM4NDFkODkxZmFhZDkwNGM2MDhlMDkzMDIyZDM3NTdhZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFmYTQwMmRkYTRmNTRiMjBkZDkwZmIzOTY2ZWJiMTExYzFlZDNlMjM2ZmM0Zjg0ODI5MDI2YjJmZjg2YWQ3OTMifQ"
+        },
+        {
+          "resource": "repo://settings.gradle.kts#L1-L32",
+          "version": "repo-lines-v1:sha256:73e34e4c70dd95b9f70160a28d7be29ca4e0b2173e5466fd6107784393a63924:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIxOTU3YjIzMTA3YWE5ZDE0NDJlMzk0ZWUyNTAxMTI1NDhhNGEyZThiOGM4NTMzNmQ5YjQ0ZTg0MWI1ZWYxNjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f149bc2893234f84a25cae064a5ce2f5",
+      "statement": "Forge compilation and Spotless depend on source-copy tasks for Powah, Additional Lanterns, Automobility and KubeJS, so build/format tasks can alter Forge main source; copyCreate is not among those dependencies.",
+      "evidence": [
+        {
+          "resource": "repo://projects/forge/build.gradle.kts#L228-L267",
+          "version": "repo-lines-v1:sha256:04825e944932d48c568fcc74463c668837fa1f435648f009c20893b2aa70a8cf:eyJzZWxlY3RlZExpbmVDb3VudCI6NDAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3Yzg5NWU1YjUxNThjMzVlYTc0MzM3OGM3NmVlNmYxZmJiZjA2MDBhNjgxNjQxOWYyZWE4ZGU5MWM3NmZmZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYyNjMzNjI3ZDhkODgwZTFkY2EwZjllZGIzNDA5OGMyOTYyZTg1OGIyNzgyZjljNzc5MzhhMDUyMmQ1YTljMGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0dad265fea6241caab72520e63ec5e24",
+      "statement": "Local typed API tasks download Node 22.14.0, install with npm ci and compile declaration/Lua output in the project tree; clean deletes Lua outside node_modules and npm test is only a failing placeholder.",
+      "evidence": [
+        {
+          "resource": "repo://projects/typed-peripheral-unlimitedperipheralworks/build.gradle.kts#L8-L38",
+          "version": "repo-lines-v1:sha256:420a6e42abc550e1f9dd19f641808c543757767cded43547ef348678a21fa913:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzZjYzZDE4ZTYwNjQ0MzM1Y2Y5ZDcyMGE5YTNiYzM4OTMyMzY5MDNiNTZjOWUxYTFiOTM4YzA4MzI5OTk4ZWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0NzVlOTRhOTA0YWM0OWIzMTU0ZDQ2NzJhNjZlODYyOWI4NmRhYzc0ZTNlMjkzN2JlNjkyN2FlM2RhMTFjNTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg3OThkNTBjOGZmYjNkNDU2NDQyMzg5MzgxMzYzOGQ0OGQ3MzI2MjkwNzdjN2M1NTBlM2RlNDRhYWUxMGU4NGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        },
+        {
+          "resource": "repo://projects/typed-peripheral-unlimitedperipheralworks/package.json#L20-L25",
+          "version": "repo-lines-v1:sha256:1a1b7d0ca04cf4c8b33c535c9b3117e695c0251ddc999ba72019144ae72ef504:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTA4ZjFiMzE4ODdjZTRlYTY2ZTQ4MjcyN2IxNjkxZTEwNGYyNWZlMTNhZmJiNWNkNzNiMjQ2MTEyNGQzOTNlNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzIxYzU0ODVhZDk0MTA2MjIwYTEwYmQ4OTc4ODUwNzkyOGJlODU4ZTI2NzIyM2ExYzExMDI4MjNlYTY1YTA2NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjQwM2JiMDU1NjAxNTAzYjA2MjM5YzY1MmZhMTc1OTM4OTU3OWNiOGVlMzA5MmI4Yjk0NDlhMzMwNzRjMDYxNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWFiYTExNmJmMzViMjFhZmIyZDIyYmRlNTdhMjc0MDcwNDM5NzNiMmYyMThjNzA0ODA2MWQzMWMxNzUzN2U5NiJ9"
+        },
+        {
+          "resource": "repo://projects/typed-peripheral-unlimitedperipheralworks/tsconfig.json#L3-L21",
+          "version": "repo-lines-v1:sha256:38f98c373eb31efd943187d54901007f0ac598adec8aeed2651b3990eaa4076b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0YjYyYmM3ODk4NjUwYjkyZjIxMGYyNjlkMDM1Y2E1NzgzNDkzYWVjOTllMzA1OTIzZDk5YmNjM2JmOTdiZjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNjYWY4OTJhY2U2OWM0MTFlMDhkMWFlOGMzMjVlOWU4ZjRjM2I0ZmRhMzBlMDU5YWZhYmZkNjliMjdlOGMzOGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUxYjdjMzVkNTVjZTk2OWQxNTc0Mjg5NWY2ODUyNWJmYTQxZWRkMWRjN2Y1MmE4Mjk3MTZmZWJlYTdmMTMxOWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_66e84a019b854215be471e683d135092",
+      "statement": "Loader data generation delegates to shared ModDataProviders, while project verification conventions require timed quiet full logs and prohibit committing build/run artifacts or modifying generated output directly.",
+      "evidence": [
+        {
+          "resource": "repo://AGENTS.md#L18-L24",
+          "version": "repo-lines-v1:sha256:20d7ebf4da87bdc10e71dacbb7feb1d3f04d88265865580714f1b1c5f679bbeb:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWExNjU4ZDlhNWE5OTE2ZWVkMDU2YmQ2NWRlOGNkOWY2NGNjMmU0MDRmMzBjYzQ2MWY2N2VjODI5ODZhZjk5NSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzQyMzBlYmU5NjJmYmEyZmEzZDRiOGNmMjYwMzUyNjY4ZTdlZjI3NGIzYjg0ODg5NTJiMTRlOGVkNmU2M2Q3YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGYwYjBiYzdiOWQ1NmQ0NmYyZTliMWU0NTQ0OWRjYmVjNjgyYmY2NjVjYmIxYmMwY2U2NmMzNjYyNWI5NDJjNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMjAyNGY1NDhjZGZmMGMxMzcxZmQxNzJhZGRiMWRlMjgzOTIzM2RiNDBjZjYxYzZlZTRlMDMzNjZiOWNmMjNjMiJ9"
+        },
+        {
+          "resource": "repo://AGENTS.md#L55-L65",
+          "version": "repo-lines-v1:sha256:4a186fde4298c86b1af21080b2798c440ee0aa8c47b88bfc7503b6c92097e01a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNTU5MjYzYjhiYjUyMTBkNTllMDMwZTRiMGM2ZGY1Y2U4NWI0YTljZDA3ODYyYTdhNmJlYTNmZDY4ZWEwYjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgzOTIwYTY0NGU2NTg5Mjk4YzQxNzJiZmJiNmFmYzMyNjRjZWVkNDcwNGRlZmE1OTBkN2VjOWI3NTc3ZTE1NDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE3NTI0ZTgzZTJmNDVhODM5NTU5ODRjYjA5N2RhYmYxZDI2MDAwZTI1MmI5MTEzYWY4MWVhMWY5M2ExYzA2MDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFkMTNmYWE2ODlhN2Y2ZDBhNjljOGI0NWNlZjhiNTE5ZWNlOGIwNDNhNjdmNmU2NTMzYzgzNzZlMGMwYzZlODYifQ"
+        },
+        {
+          "resource": "repo://projects/fabric/src/main/kotlin/site/siredvin/peripheralworks/data/FabricDataGenerators.kt#L7-L12",
+          "version": "repo-lines-v1:sha256:afd784185aed33c5f75c4a7409ae1a73d7667361416d95dafc811d817b8e5f60:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYmJlNGVhZmMxZmFiNmM3YjZjNzY5NzY2ODljODYyNzhhMTliODE1ZTJlMTg1OTRjM2FjMGYxYmFhNGJkNGUxZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDg5M2Y0MGUzNzgxZWI4OTZjODJkMDQ2YTA4MDY3YTExZTM1Y2RmMmYxZGZhZjI2ZmVhOTBiOGRiNjY3NjQxMyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiODIxYTI2NGQwOWZmMDhkY2QwYjJlYTBmZTAwZjEyZWUyYzE0OTFkYjRkNTUyYTAyY2NlMDYxOTMwOThiY2Y5NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjEsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDEyY2EzNDVjY2Y3NWJmOWMwODA2YmNlNjk1YmU4ZGU4MDhiNzk5ODQyNTFhN2E1NGQyMDJjZjYxMDFkZDQ1MSJ9"
+        },
+        {
+          "resource": "repo://projects/forge/src/main/kotlin/site/siredvin/peripheralworks/data/ForgeDataGenerators.kt#L9-L20",
+          "version": "repo-lines-v1:sha256:f54f95acc88979965ee4d43fe6533bdb279be7e27c2e8d0bd7dd15324244ad2c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhOGQ2NTM3ZDlkYjRmYmIzMDViNTFhODg1MGNhYjM3ZTdjMmJiMmUxNWJlMzA1YjRhMzFiOWE2ODNkYmM4YmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI3M2FhMzJkNjQxODY4YzAzYjAzNGUxYjA5ZjBiMzA1MmZkNzdkYzU0MjgxZGY2NjdkZjI5NmQ1MWIxYzgwODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3OTRkMDJhODEyMTk0NGQxNzZkMjY1ZTliYjljYzU5ZjZhYjg5MGJjYWRmOGFlZmRlYmRiYmI0ZjJlYTg0NDQifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.7.1",
+    "at": "2026-10-09T21:19:27.304Z"
+  }
+}
