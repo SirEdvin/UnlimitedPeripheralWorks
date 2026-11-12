@@ -1,7 +1,7 @@
 package site.siredvin.peripheralworks.testmod
 
 import dan200.computercraft.api.network.wired.WiredElement
-import dan200.computercraft.api.node.wired.WiredElementLookup
+import dan200.computercraft.api.network.wired.WiredElementLookup
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level

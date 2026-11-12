@@ -5,6 +5,7 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.turtle.*
 import dan200.computercraft.api.upgrades.UpgradeData
+import dan200.computercraft.api.upgrades.UpgradeHandle
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.nbt.CompoundTag
@@ -12,7 +13,12 @@ import net.minecraft.world.Container
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 
+// The hub keeps nested upgrades on CC's deprecated item-less data API, like Tweakium's upgrade bases.
+@Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, val upgrade: ITurtleUpgrade, val id: String, private val origin: TurtlePeripheraliumHubPeripheral) : ITurtleAccess {
+
+    // Declared before the peripheral, whose construction may already ask for the handle.
+    private val handle = LocalUpgradeHandle(upgrade, origin, { access.updateUpgradeNBTData(tweakedSide) }) { setUpgradeWithData(tweakedSide, null) }
 
     val peripheral: IPeripheral? = upgrade.createPeripheral(this, tweakedSide)
 
@@ -20,7 +26,7 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
         get() = getUpgradeNBTData(tweakedSide)
 
     val upgradeData: UpgradeData<ITurtleUpgrade>
-        get() = UpgradeData.of(upgrade, tweakedData)
+        get() = origin.getUpgradeData(upgrade)
 
     override fun getLevel(): Level = access.level
 
@@ -79,23 +85,13 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
         return access.getUpgrade(side)
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun setUpgrade(side: TurtleSide, upgrade: ITurtleUpgrade?) {
-        if (side == tweakedSide) {
-            origin.swapUpgrade(UpgradeData.ofDefault(this.upgrade), UpgradeData.ofDefault(upgrade))
-        } else {
-            @Suppress("DEPRECATION")
-            access.setUpgrade(side, upgrade)
-        }
-    }
+    override fun getUpgradeWithData(side: TurtleSide): UpgradeData<ITurtleUpgrade>? = if (side == tweakedSide) upgradeData else access.getUpgradeWithData(side)
 
-    override fun setUpgradeWithData(side: TurtleSide?, upgrade: UpgradeData<ITurtleUpgrade>?) {
+    override fun getUpgradeHandle(side: TurtleSide): UpgradeHandle<ITurtleUpgrade>? = if (side == tweakedSide) handle else access.getUpgradeHandle(side)
+
+    override fun setUpgradeWithData(side: TurtleSide, upgrade: UpgradeData<ITurtleUpgrade>?) {
         if (side == tweakedSide) {
-            if (upgrade == null) {
-                origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), null)
-            } else {
-                origin.swapUpgrade(UpgradeData.of(this.upgrade, tweakedData), upgrade)
-            }
+            origin.swapUpgrade(upgradeData, upgrade)
         } else {
             access.setUpgradeWithData(side, upgrade)
         }

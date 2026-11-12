@@ -69,7 +69,7 @@ class PeripheralProxyBlockEntity(blockPos: BlockPos, blockState: BlockState) :
             be.peripheral?.removeRemotePeripheral(name)
         }
 
-        override fun getLevel(): Level? = be.level
+        override fun getLevel(): Level = be.level!!
 
         override fun getPosition(): Vec3 = be.blockPos.toVec3()
     }

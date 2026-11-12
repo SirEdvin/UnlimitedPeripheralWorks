@@ -1,3 +1,6 @@
+// A linked terminal is a stateful item: its upgrades stay on CC's deprecated item-less data API, like Tweakium's bases.
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.implementations.blockentities.IWirelessAccessPoint

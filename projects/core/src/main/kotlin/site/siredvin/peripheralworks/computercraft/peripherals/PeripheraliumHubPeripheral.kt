@@ -3,6 +3,8 @@ package site.siredvin.peripheralworks.computercraft.peripherals
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.MethodResult
+import dan200.computercraft.api.upgrades.UpgradeBase
+import dan200.computercraft.api.upgrades.UpgradeData
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.StringTag
 import net.minecraft.resources.ResourceLocation
@@ -29,6 +31,17 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
         @Suppress("DEPRECATION", "KotlinRedundantDiagnosticSuppress")
         val NETHERITE_ID = ResourceLocation(PeripheralWorksCore.MOD_ID, NETHERITE_TYPE)
         const val TWEAKED_STORAGES = "__TWEAKED_STORAGES__"
+        const val TWEAKED_ITEMS = "__TWEAKED_ITEMS__"
+
+        // Hubs saved before CC:Tweaked 1.121.0 have no stored item; CC then derives it from the data.
+        @Suppress("DEPRECATION")
+        fun <T : UpgradeBase> getUpgradeData(upgrade: T, dataStorage: IDataStorage): UpgradeData<T> {
+            val id = upgrade.upgradeID.toString()
+            val data = getDataForUpgrade(id, dataStorage)
+            val item = ItemStack.of(dataStorage.getCompound(TWEAKED_ITEMS).getCompound(id))
+            if (item.isEmpty || !upgrade.craftingIngredient.test(item) || !upgrade.isItemSuitable(item)) return UpgradeData.of(upgrade, data)
+            return UpgradeData.of(upgrade, item, data)
+        }
 
         fun getActiveUpgrades(dataStorage: IDataStorage): List<String> = dataStorage.getList(UPGRADES_TAG, 8).map { it.asString }
 
@@ -84,6 +97,14 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner>(private val maxU
     }
 
     fun getDataForUpgrade(id: String): CompoundTag = getDataForUpgrade(id, peripheralOwner.dataStorage)
+
+    fun <T : UpgradeBase> getUpgradeData(upgrade: T): UpgradeData<T> = getUpgradeData(upgrade, peripheralOwner.dataStorage)
+
+    fun setItemForUpgrade(id: String, item: ItemStack?) = peripheralOwner.dataStorage.mutate {
+        val items = it.getCompound(TWEAKED_ITEMS)
+        if (item == null) items.remove(id) else items.put(id, item.copyWithCount(1).save(CompoundTag()))
+        it.put(TWEAKED_ITEMS, items)
+    }
 
     fun setDataForUpdate(id: String, data: CompoundTag?) {
         val base = peripheralOwner.dataStorage

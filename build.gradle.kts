@@ -1,7 +1,10 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("site.siredvin.root") version "0.8.26"
-    id("site.siredvin.release") version "0.8.26"
+    // Buildenv bundles an older Loom; CC:Tweaked 1.121.0 Fabric jars need 1.18+.
+    alias(libs.plugins.loom) apply false
+    id("net.neoforged.moddev.legacyforge") version "2.0.142" apply false
+    id("site.siredvin.root") version "0.9.4"
+    id("site.siredvin.release") version "0.9.4"
     id("com.dorongold.task-tree") version "4.0.0"
     id("com.github.ben-manes.versions") version "0.51.0"
 }
@@ -41,7 +44,5 @@ githubShaking {
 }
 
 repositories {
-    maven("https://mvn.siredvin.site/minecraft") {
-        name = "SirEdvin's Maven proxy"
-    }
+    mavenCentral()
 }

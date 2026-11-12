@@ -1,3 +1,6 @@
+// Stateful upgrade items stay on CC's deprecated item-less data API, like Tweakium's bases.
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+
 package site.siredvin.peripheralworks.integrations.ars_nouveau
 
 import dan200.computercraft.api.peripheral.IPeripheral
@@ -33,7 +36,7 @@ class PocketMagicTomeUpgrade(type: ResourceLocation, stack: ItemStack) :
         return base
     }
 
-    override fun onRightClick(world: Level?, access: IPocketAccess?, peripheral: IPeripheral?): Boolean = super.onRightClick(world, access, peripheral)
+    override fun onRightClick(world: Level, access: IPocketAccess, peripheral: IPeripheral?): Boolean = super.onRightClick(world, access, peripheral)
 
     override fun isItemSuitable(stack: ItemStack): Boolean {
         if (stack.getTagElement(STORED_DATA_TAG) == null) return super.isItemSuitable(stack)
