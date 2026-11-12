@@ -153,10 +153,31 @@ repositories {
     maven("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/") { content { includeGroup("com.klikli_dev") } }
     maven("https://maven.theillusivec4.top/") { content { includeGroup("top.theillusivec4.curios") } }
     maven("https://dl.cloudsmith.io/public/tslat/sbl/maven/") { content { includeGroup("net.tslat.smartbrainlib") } }
-    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") { content { includeGroup("com.eliotlash.mclib"); includeGroupByRegex("software\\.bernie.*") } }
-    maven("https://maven.tterrag.com/") { content { includeGroup("com.tterrag.registrate"); includeGroup("com.jozufozu.flywheel") } }
-    maven("https://maven.createmod.net") { content { includeGroup("com.simibubi.create"); includeGroup("net.createmod.ponder"); includeGroup("dev.engine-room.flywheel") } }
-    maven("https://maven.latvian.dev/releases") { content { includeGroup("dev.latvian.mods"); includeGroup("dev.latvian.apps") } }
+    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
+        content {
+            includeGroup("com.eliotlash.mclib")
+            includeGroupByRegex("software\\.bernie.*")
+        }
+    }
+    maven("https://maven.tterrag.com/") {
+        content {
+            includeGroup("com.tterrag.registrate")
+            includeGroup("com.jozufozu.flywheel")
+        }
+    }
+    maven("https://maven.createmod.net") {
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("net.createmod.ponder")
+            includeGroup("dev.engine-room.flywheel")
+        }
+    }
+    maven("https://maven.latvian.dev/releases") {
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
     maven("https://jitpack.io") { content { includeGroup("com.github.rtyley") } }
 }
 
@@ -314,5 +335,9 @@ tasks.spotlessJava {
 }
 
 tasks.spotlessKotlin {
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
+}
+
+tasks.named("sourcesJar") {
     dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }

@@ -8,10 +8,10 @@ Unlimited Peripheral Works is a Minecraft 1.20.1 mod that adds peripherals and i
 
 - Runtime: Minecraft 1.20.1 / Java 17
 - Languages: Kotlin 2.0, Java, TypeScript, and Lua
-- Loaders: Fabric Loader 0.17 and Forge 47
-- Computer mod: CC:Tweaked 1.116
+- Loaders: Fabric Loader 0.18 and Forge 47
+- Computer mod: CC:Tweaked 1.121
 - Testing: Testiarium GameTests and TypeScript-to-Lua fixtures
-- Build system: Gradle Wrapper
+- Build system: Gradle Wrapper 9.9; start it on Java 25 (`JAVA_HOME`), Minecraft compiles on a Java 17 toolchain. Fabric uses Loom, Forge uses ModDevGradle legacy
 
 ## Key Commands
 

@@ -135,14 +135,47 @@ repositories {
     maven("https://maven.fabricmc.net/") { content { includeGroup("teamreborn") } }
     maven("https://maven.blamejared.com/") { content { includeGroup("mezz.jei") } }
     maven("https://maven.wispforest.io") { content { includeGroup("io.wispforest") } }
-    maven("https://maven.nucleoid.xyz") { content { includeGroup("eu.pb4"); includeGroup("xyz.nucleoid") } }
-    maven("https://maven.terraformersmc.com/") { content { includeGroup("com.terraformersmc"); includeGroup("dev.emi") } }
-    maven("https://maven.ladysnake.org/releases") { content { includeGroup("io.github.ladysnake"); includeGroupByRegex("io\\.github\\.onyxstudios.*") } }
-    maven("https://mvn.devos.one/snapshots/") { content { includeGroup("com.simibubi.create"); includeGroup("com.tterrag.registrate_fabric"); includeGroup("io.github.tropheusj"); includeGroupByRegex("io\\.github\\.fabricators_of_create.*") } }
+    maven("https://maven.nucleoid.xyz") {
+        content {
+            includeGroup("eu.pb4")
+            includeGroup("xyz.nucleoid")
+        }
+    }
+    maven("https://maven.terraformersmc.com/") {
+        content {
+            includeGroup("com.terraformersmc")
+            includeGroup("dev.emi")
+        }
+    }
+    maven("https://maven.ladysnake.org/releases") {
+        content {
+            includeGroup("io.github.ladysnake")
+            includeGroupByRegex("io\\.github\\.onyxstudios.*")
+        }
+    }
+    maven("https://mvn.devos.one/snapshots/") {
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("com.tterrag.registrate_fabric")
+            includeGroup("io.github.tropheusj")
+            includeGroupByRegex("io\\.github\\.fabricators_of_create.*")
+        }
+    }
     maven("https://maven.jamieswhiteshirt.com/libs-release/") { content { includeGroup("com.jamieswhiteshirt") } }
     maven("https://modmaven.dev/") { content { includeGroup("com.jozufozu.flywheel") } }
-    maven("https://maven.latvian.dev/releases") { content { includeGroup("dev.latvian.mods"); includeGroup("dev.latvian.apps") } }
-    maven("https://jitpack.io") { content { includeGroup("com.github.llamalad7.mixinextras"); includeGroup("com.github.Chocohead"); includeGroup("com.github.rtyley") } }
+    maven("https://maven.latvian.dev/releases") {
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+    maven("https://jitpack.io") {
+        content {
+            includeGroup("com.github.llamalad7.mixinextras")
+            includeGroup("com.github.Chocohead")
+            includeGroup("com.github.rtyley")
+        }
+    }
 }
 
 dependencies {

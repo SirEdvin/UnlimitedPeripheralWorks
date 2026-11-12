@@ -1,6 +1,8 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("site.siredvin.vanilla")
+    // Loom 1.18 run tasks resolve a classpath variant from every project the Fabric module depends on.
+    id("net.fabricmc.fabric-loom-companion")
     id("site.siredvin.publishing")
 }
 
