@@ -1,10 +1,9 @@
 package site.siredvin.peripheralworks.testmod;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.gui.LoadingErrorScreen;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.DistExecutor;
@@ -14,7 +13,6 @@ import site.siredvin.testiarium.ForgeTestiarium;
 import site.siredvin.testiarium.Testiarium;
 import site.siredvin.testiarium.cct.CctComputers;
 import site.siredvin.testiarium.cct.CctFixtureCommands;
-import site.siredvin.testiarium.fixture.client.ForgeClientTestHooks;
 
 @Mod("peripheralworks_testmod")
 public final class ForgePeripheralWorksTestMod {
@@ -68,12 +66,12 @@ public final class ForgePeripheralWorksTestMod {
             if (System.getProperty("testiarium.client") == null) {
                 return;
             }
-            ForgeClientTestHooks.register();
-            // ponytail: Forge's headless loading overlay never opens a title screen, so trigger Testiarium after resources settle.
-            CompletableFuture.delayedExecutor(20, TimeUnit.SECONDS).execute(() -> Minecraft.getInstance().execute(() -> {
-                Minecraft.getInstance().setOverlay(null);
-                site.siredvin.testiarium.fixture.client.ClientTestHooks.onOpenScreen(new TitleScreen());
-            }));
+            // Fixture jars without pack.mcmeta make Forge open a warning screen; Testiarium only starts from the title screen.
+            MinecraftForge.EVENT_BUS.addListener((ScreenEvent.Opening event) -> {
+                if (event.getScreen() instanceof LoadingErrorScreen) {
+                    event.setNewScreen(new TitleScreen());
+                }
+            });
         }
     }
 }

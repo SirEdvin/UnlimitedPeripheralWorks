@@ -2,6 +2,9 @@ package site.siredvin.peripheralworks.testmod
 
 import com.electronwill.nightconfig.core.UnmodifiableConfig
 import dan200.computercraft.api.turtle.TurtleSide
+import dan200.computercraft.api.upgrades.UpgradeData
+import dan200.computercraft.impl.PocketUpgrades
+import dan200.computercraft.impl.TurtleUpgrades
 import dan200.computercraft.shared.ModRegistry
 import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity
 import net.minecraft.core.BlockPos
@@ -487,6 +490,13 @@ class PeripheralWorksGameTests {
     }
 
     @GameTest(template = "empty")
+    fun upgradesHaveSuitableDefaultItems(helper: GameTestHelper) {
+        // CC:Tweaked builds this for every registered upgrade (creative tab, recipe viewers) and throws on an unsuitable crafting item.
+        (TurtleUpgrades.instance().upgrades + PocketUpgrades.instance().upgrades).forEach { UpgradeData.ofDefault(it) }
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
     fun peripheraliumHubReturnsEquippedItem(helper: GameTestHelper) {
         val pos = BlockPos(1, 1, 1)
         helper.setBlock(pos, ModRegistry.Blocks.TURTLE_NORMAL.get())
@@ -496,8 +506,13 @@ class PeripheralWorksGameTests {
         // A CC tool keeps its state on the equipped item only, so the name is lost unless the hub stores that item.
         val pickaxe = ItemStack(net.minecraft.world.item.Items.DIAMOND_PICKAXE).setHoverName(Component.literal("Hub pickaxe"))
         check(hub.equipImpl(pickaxe).first == true) { "Hub rejected a named pickaxe" }
+        val handle = hub.activeTurtleUpgrades.single().getUpgradeHandle(TurtleSide.LEFT)!!
+        check(ItemStack.matches(pickaxe, handle.item)) { "Hub stored ${handle.item} (${handle.item.tag}) instead of the equipped item" }
+        // A nested upgrade rewrites its own item through the handle, as CC tools do when they take damage.
+        val renamed = pickaxe.copy().setHoverName(Component.literal("Renamed"))
+        handle.setItem(renamed)
         val returned = hub.unequipImpl(hub.getUpgrades().single())
-        check(ItemStack.matches(pickaxe, returned)) { "Hub returned $returned (${returned.tag}) instead of the equipped item" }
+        check(ItemStack.matches(renamed, returned)) { "Hub returned $returned (${returned.tag}) instead of the stored item" }
         check(hub.getUpgrades().isEmpty() && hub.peripheralOwner.dataStorage.getCompound(PeripheraliumHubPeripheral.TWEAKED_ITEMS).isEmpty) { "Hub kept data of an unequipped upgrade" }
         helper.succeed()
     }

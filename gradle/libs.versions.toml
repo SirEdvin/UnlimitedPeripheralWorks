@@ -30,7 +30,7 @@ parchment = "2023.09.03"
 parchmentMc = "1.20.1"
 # Extra mod dependencies
 cloth-config = "11.0.99"
-architectury = "9.0.8"
+architectury = "9.2.14"
 emi = "1.1.22+1.20.1"
 emi-fabric = "1.1.22+1.20.1+fabric"
 emi-forge = "1.1.22+1.20.1+forge"
