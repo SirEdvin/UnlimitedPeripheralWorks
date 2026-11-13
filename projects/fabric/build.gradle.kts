@@ -70,9 +70,9 @@ val testiariumMainArtifacts = configurations.detachedConfiguration(
 ).apply { isTransitive = false }
 
 val testiariumTestArtifacts = configurations.detachedConfiguration(
-    dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar"),
-    dependencies.create("site.siredvin:testiarium-core-1.21.1:0.1.1:cct-test-mod@jar"),
-    dependencies.create("site.siredvin:testiarium-fabric-1.21.1:0.1.1:test-mod@jar"),
+    dependencies.create("site.siredvin:testiarium-core-1.21.1:${libs.versions.testiarium.get()}:test-mod@jar"),
+    dependencies.create("site.siredvin:testiarium-core-1.21.1:${libs.versions.testiarium.get()}:cct-test-mod@jar"),
+    dependencies.create("site.siredvin:testiarium-fabric-1.21.1:${libs.versions.testiarium.get()}:test-mod@jar"),
 ).apply { isTransitive = false }
 
 loom {

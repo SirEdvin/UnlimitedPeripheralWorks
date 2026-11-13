@@ -18,6 +18,8 @@ class PeripheraliumHub(
     vararg tooltipHook: Function<HiddenDescriptiveItemItem, List<Component>>,
 ) : HiddenDescriptiveItemItem(properties, enableSup, alwaysShow, *tooltipHook) {
 
+    // The tooltip names each stored upgrade by its crafting item, not by the item it was equipped with.
+    @Suppress("DEPRECATION")
     override fun appendHoverText(
         itemStack: ItemStack,
         context: TooltipContext,

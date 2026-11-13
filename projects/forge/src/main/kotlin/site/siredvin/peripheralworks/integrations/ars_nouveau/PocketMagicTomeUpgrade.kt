@@ -1,3 +1,6 @@
+// Stateful upgrade items stay on CC's deprecated item-less data API, like Tweakium's bases.
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+
 package site.siredvin.peripheralworks.integrations.ars_nouveau
 
 import com.hollingsworth.arsnouveau.setup.registry.DataComponentRegistry
@@ -35,7 +38,7 @@ class PocketMagicTomeUpgrade(type: ResourceLocation, stack: ItemStack) :
         return base
     }
 
-    override fun onRightClick(world: Level?, access: IPocketAccess?, peripheral: IPeripheral?): Boolean = super.onRightClick(world, access, peripheral)
+    override fun onRightClick(world: Level, access: IPocketAccess, peripheral: IPeripheral?): Boolean = super.onRightClick(world, access, peripheral)
 
     override fun isItemSuitable(stack: ItemStack): Boolean {
         val tweakedStack = stack.copy()

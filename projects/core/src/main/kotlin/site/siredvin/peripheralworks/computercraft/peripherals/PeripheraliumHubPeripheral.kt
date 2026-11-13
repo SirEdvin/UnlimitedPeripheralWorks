@@ -57,7 +57,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
 
     fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(PlatformToolkit.get().registries!!, stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activeUpgrades.any { it.holder.key() == upgrade.holder.key() }) {
+        if (activeUpgrades.any { it.holder().key() == upgrade.holder().key() }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
         return Pair(true, null)
@@ -65,7 +65,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
 
     fun equipImpl(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = getUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activeUpgrades.any { it.holder.key() == upgrade.holder.key() }) {
+        if (activeUpgrades.any { it.holder().key() == upgrade.holder().key() }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
         attachUpgrade(upgrade)
@@ -74,10 +74,12 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
     }
 
     fun unequipImpl(id: String): ItemStack {
-        val wrapper = activeWrappers.find { it.fullUpgrade.holder.key().location().toString() == id } ?: return ItemStack.EMPTY
-        detachUpgrade(wrapper.fullUpgrade)
-        disconnectUpgrade(wrapper.fullUpgrade)
-        return wrapper.fullUpgrade.upgradeItem
+        val wrapper = activeWrappers.find { it.id == id } ?: return ItemStack.EMPTY
+        // Captured first: the wrapper reads the stored copy, which detaching removes.
+        val upgrade = wrapper.fullUpgrade
+        detachUpgrade(upgrade)
+        disconnectUpgrade(upgrade)
+        return upgrade.upgradeItem
     }
 
     protected fun attachUpgrade(upgrade: UpgradeData<T>) {
@@ -88,32 +90,39 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
 
     protected fun detachUpgrade(upgrade: UpgradeData<T>) {
         var peripheralUpgrades = peripheralOwner.dataStorage.patch.get(component)?.getOrDefault(PeripheralUpgrades()) ?: PeripheralUpgrades()
-        peripheralUpgrades = PeripheralUpgrades(peripheralUpgrades.upgrades.filter { it.holder.key().equals(upgrade.holder.key()) })
+        peripheralUpgrades = PeripheralUpgrades(peripheralUpgrades.upgrades.filterNot { it.holder().key().equals(upgrade.holder().key()) })
         peripheralOwner.dataStorage.patch = DataComponentPatch.builder().set(component, peripheralUpgrades).build()
     }
 
     fun connectUpgrade(upgrade: UpgradeData<T>) {
         val wrapper = wrap(peripheralOwner, upgrade)
-        if (!upgrade.data.isEmpty) setDataForUpdate(wrapper.id, upgrade.data)
         activeWrappers.add(wrapper)
         if (wrapper.peripheral != null) {
-            attachRemotePeripheral(wrapper.peripheral!!, upgrade.holder.key().location().toString())
+            attachRemotePeripheral(wrapper.peripheral!!, upgrade.holder().key().location().toString())
         }
     }
 
     fun disconnectUpgrade(upgrade: UpgradeData<T>) {
-        val wrapper = activeWrappers.find { it.fullUpgrade.holder.key().equals(upgrade.holder.key()) } ?: return
+        val wrapper = activeWrappers.find { it.fullUpgrade.holder().key().equals(upgrade.holder().key()) } ?: return
         activeWrappers.remove(wrapper)
-        removeRemotePeripheral(upgrade.holder.key().location().toString())
+        removeRemotePeripheral(upgrade.holder().key().location().toString())
     }
 
-    fun setDataForUpdate(id: String, data: DataComponentPatch?) {
-        var peripheralUpgrades = peripheralOwner.dataStorage.patch.get(component)?.getOrDefault(PeripheralUpgrades()) ?: PeripheralUpgrades()
-        val upgradeData = peripheralUpgrades.upgrades.find { it.holder.key().location().toString() == id } ?: return
-        val emptyList = peripheralUpgrades.upgrades.filterNot { it == upgradeData }
-        peripheralUpgrades = PeripheralUpgrades(emptyList + UpgradeData.of(upgradeData.holder, data))
-        peripheralOwner.dataStorage.patch = DataComponentPatch.builder().set(component, peripheralUpgrades).build()
+    fun storedUpgrade(id: String): UpgradeData<T>? = activeUpgrades.find { it.holder().key().location().toString() == id }
+
+    private fun replaceUpgrade(id: String, replacement: (UpgradeData<T>) -> UpgradeData<T>) {
+        val current = storedUpgrade(id) ?: return
+        val upgrades = PeripheralUpgrades(activeUpgrades.filterNot { it == current } + replacement(current))
+        peripheralOwner.dataStorage.patch = DataComponentPatch.builder().set(component, upgrades).build()
     }
+
+    // A legacy data write leaves the item to be derived from the data, as CC:Tweaked itself does.
+    @Suppress("DEPRECATION")
+    fun setDataForUpdate(id: String, data: DataComponentPatch) = replaceUpgrade(id) { UpgradeData.of(it.holder(), data) }
+
+    fun setUpgradeItem(id: String, item: ItemStack) = replaceUpgrade(id) { UpgradeData.of(it.holder(), item, it.data()) }
+
+    fun setUpgradeData(id: String, data: DataComponentPatch) = replaceUpgrade(id) { UpgradeData.of(it.holder(), it.upgradeItem, data) }
 
     @LuaFunction(mainThread = true)
     fun isUpgrade(slot: Int): Boolean {
@@ -150,7 +159,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
     @LuaFunction(mainThread = true)
     fun unequip(id: String): MethodResult {
         val storage = peripheralOwner.storage ?: return MethodResult.of(null, "Cannot access inventory for some reason")
-        if (!activeUpgrades.any { it.holder.key().location().toString() == id }) {
+        if (!activeUpgrades.any { it.holder().key().location().toString() == id }) {
             throw LuaException("Cannot find upgrade with id $id")
         }
         val stack = unequipImpl(id)
@@ -162,7 +171,7 @@ abstract class PeripheraliumHubPeripheral<O : IPeripheralOwner, T : UpgradeBase,
     }
 
     @LuaFunction(mainThread = true)
-    fun getUpgrades(): List<String> = activeUpgrades.map { it.holder.key().location().toString() }
+    fun getUpgrades(): List<String> = activeUpgrades.map { it.holder().key().location().toString() }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

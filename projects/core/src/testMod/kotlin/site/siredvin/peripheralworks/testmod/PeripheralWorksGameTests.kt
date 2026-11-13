@@ -1,6 +1,12 @@
 package site.siredvin.peripheralworks.testmod
 
 import com.electronwill.nightconfig.core.UnmodifiableConfig
+import dan200.computercraft.api.pocket.IPocketUpgrade
+import dan200.computercraft.api.turtle.ITurtleUpgrade
+import dan200.computercraft.api.turtle.TurtleSide
+import dan200.computercraft.api.upgrades.UpgradeData
+import dan200.computercraft.shared.ModRegistry
+import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponents
@@ -11,6 +17,7 @@ import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
@@ -33,6 +40,7 @@ import site.siredvin.peripheralworks.common.events.BlockStateUpdateEventBus
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorTarget
 import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
@@ -643,6 +651,37 @@ class PeripheralWorksGameTests {
         CustomData.update(DataComponents.CUSTOM_DATA, stack) { it.put(UltimateConfigurator.RECENT_TARGETS, ListTag().apply { add(unloaded.toNBT()) }) }
         check(!helper.level.isLoaded(unloaded.pos))
         check(configurator.selectTarget(stack, helper.level, unloaded) == UltimateConfigurator.SelectionResult.UNAVAILABLE)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun upgradesHaveSuitableDefaultItems(helper: GameTestHelper) {
+        // CC:Tweaked builds this for every registered upgrade (creative tabs on server start, recipe viewers) and throws on an unsuitable crafting item.
+        helper.level.registryAccess().lookupOrThrow(ITurtleUpgrade.REGISTRY).listElements().forEach { UpgradeData.ofDefault(it) }
+        helper.level.registryAccess().lookupOrThrow(IPocketUpgrade.REGISTRY).listElements().forEach { UpgradeData.ofDefault(it) }
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun peripheraliumHubReturnsEquippedItem(helper: GameTestHelper) {
+        val pos = BlockPos(1, 1, 1)
+        helper.setBlock(pos, ModRegistry.Blocks.TURTLE_NORMAL.get())
+        val turtle = (helper.getBlockEntity(pos) as TurtleBlockEntity).access
+        turtle.setUpgrade(TurtleSide.LEFT, ComputerPlatformToolkit.get().getTurtleUpgrade(helper.level.registryAccess(), ItemStack(Items.PERIPHERALIUM_HUB.get())))
+        val hub = turtle.getPeripheral(TurtleSide.LEFT) as TurtlePeripheraliumHubPeripheral
+        // A CC tool keeps its state on the equipped item only, so the name is lost unless the hub stores that item.
+        val pickaxe = ItemStack(net.minecraft.world.item.Items.DIAMOND_PICKAXE)
+        pickaxe.set(DataComponents.CUSTOM_NAME, Component.literal("Hub pickaxe"))
+        check(hub.equipImpl(pickaxe).first == true) { "Hub rejected a named pickaxe" }
+        val handle = hub.activeWrappers.single().getUpgradeHandle(TurtleSide.LEFT)!!
+        check(ItemStack.matches(pickaxe, handle.item)) { "Hub stored ${handle.item} instead of the equipped item" }
+        // A nested upgrade rewrites its own item through the handle, as CC tools do when they take damage.
+        val renamed = pickaxe.copy()
+        renamed.set(DataComponents.CUSTOM_NAME, Component.literal("Renamed"))
+        handle.setItem(renamed)
+        val returned = hub.unequipImpl(hub.getUpgrades().single())
+        check(ItemStack.matches(renamed, returned)) { "Hub returned $returned (${returned.componentsPatch}) instead of the stored item" }
+        check(hub.getUpgrades().isEmpty()) { "Hub kept an unequipped upgrade" }
         helper.succeed()
     }
 

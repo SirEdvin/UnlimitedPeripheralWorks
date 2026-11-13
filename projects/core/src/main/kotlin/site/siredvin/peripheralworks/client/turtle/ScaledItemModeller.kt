@@ -42,5 +42,7 @@ class ScaledItemModeller<T : ITurtleUpgrade>(scaleFactor: Float, modelPixelSize:
     private val leftTransformation = buildMatrix(TurtleSide.LEFT, scaleFactor, modelPixelSize, xRotationDegrees, heightShift)
     private val rightTransformation = buildMatrix(TurtleSide.RIGHT, scaleFactor, modelPixelSize, xRotationDegrees, heightShift)
 
-    override fun getModel(upgrade: T, turtle: ITurtleAccess?, side: TurtleSide?, data: DataComponentPatch?): TransformedModel = TransformedModel.of(upgrade.craftingItem, if (side == TurtleSide.LEFT) leftTransformation else rightTransformation)
+    // Models stay item-less: these upgrades render their crafting item whatever was equipped.
+    @Suppress("DEPRECATION")
+    override fun getModel(upgrade: T, turtle: ITurtleAccess?, side: TurtleSide, data: DataComponentPatch): TransformedModel = TransformedModel.of(upgrade.craftingItem, if (side == TurtleSide.LEFT) leftTransformation else rightTransformation)
 }

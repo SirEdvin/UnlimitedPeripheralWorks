@@ -1,3 +1,6 @@
+// A linked terminal is a stateful item: its upgrades stay on CC's deprecated item-less data API, like Tweakium's bases.
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+
 package site.siredvin.peripheralworks.integrations.ae2
 
 import appeng.api.implementations.blockentities.IWirelessAccessPoint
@@ -18,8 +21,10 @@ import dan200.computercraft.api.turtle.ITurtleUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.upgrades.UpgradeType
 import net.minecraft.core.component.DataComponentPatch
+import net.minecraft.core.component.DataComponents
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import site.siredvin.peripheralworks.PeripheralWorksCore
 import site.siredvin.peripheralworks.common.configuration.PeripheralWorksConfig
 import site.siredvin.tweakium.modules.peripheral.OwnedPeripheral
@@ -72,7 +77,16 @@ private fun wirelessTerminalItem(data: DataComponentPatch, fallback: ItemStack):
 
 private fun isLinkedWirelessTerminal(stack: ItemStack): Boolean = (stack.item as? WirelessTerminalItem)?.getLinkedPosition(stack) != null
 
-class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack, private val typeSupplier: Supplier<UpgradeType<AE2WirelessTerminalUpgrade>>) : PeripheralTurtleUpgrade<AE2WirelessTerminalPeripheral>(id, stack) {
+private const val DISPLAY_TAG = "peripheralworks_display"
+
+// CC:Tweaked 1.121.0 builds UpgradeData.ofDefault for every upgrade (creative tabs on each server start, recipe
+// viewers) and throws when the crafting item is not suitable. An unlinked terminal must stay unequippable, so the
+// upgrade's own display stack carries a marker instead of a link.
+private fun displayTerminal(stack: ItemStack): ItemStack = stack.copy().apply { CustomData.update(DataComponents.CUSTOM_DATA, this) { it.putBoolean(DISPLAY_TAG, true) } }
+
+private fun isDisplayTerminal(stack: ItemStack): Boolean = stack.get(DataComponents.CUSTOM_DATA)?.contains(DISPLAY_TAG) == true
+
+class AE2WirelessTerminalUpgrade(id: ResourceLocation, private val terminal: ItemStack, private val typeSupplier: Supplier<UpgradeType<AE2WirelessTerminalUpgrade>>) : PeripheralTurtleUpgrade<AE2WirelessTerminalPeripheral>(id, displayTerminal(terminal)) {
     override fun getType(): UpgradeType<out ITurtleUpgrade> = typeSupplier.get()
     override fun buildPeripheral(turtle: ITurtleAccess, side: TurtleSide): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(turtle, side)
 
@@ -82,9 +96,9 @@ class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack, private
 
     override fun getUpgradeData(stack: ItemStack): DataComponentPatch = stack.componentsPatch
 
-    override fun getUpgradeItem(upgradeData: DataComponentPatch): ItemStack = wirelessTerminalItem(upgradeData, craftingItem)
+    override fun getUpgradeItem(upgradeData: DataComponentPatch): ItemStack = wirelessTerminalItem(upgradeData, terminal)
 
-    override fun isItemSuitable(stack: ItemStack): Boolean = stack.item === craftingItem.item && isLinkedWirelessTerminal(stack)
+    override fun isItemSuitable(stack: ItemStack): Boolean = stack.item === terminal.item && (isLinkedWirelessTerminal(stack) || isDisplayTerminal(stack))
 
     companion object {
         @Suppress("DEPRECATION")
@@ -95,7 +109,7 @@ class AE2WirelessTerminalUpgrade(id: ResourceLocation, stack: ItemStack, private
     }
 }
 
-class AE2WirelessTerminalPocketUpgrade(id: ResourceLocation, stack: ItemStack, private val typeSupplier: Supplier<UpgradeType<AE2WirelessTerminalPocketUpgrade>>) : BasePocketUpgrade<AE2WirelessTerminalPeripheral>(id, stack) {
+class AE2WirelessTerminalPocketUpgrade(id: ResourceLocation, private val terminal: ItemStack, private val typeSupplier: Supplier<UpgradeType<AE2WirelessTerminalPocketUpgrade>>) : BasePocketUpgrade<AE2WirelessTerminalPeripheral>(id, displayTerminal(terminal)) {
     override fun getType(): UpgradeType<out IPocketUpgrade> = typeSupplier.get()
     override fun getPeripheral(access: IPocketAccess): AE2WirelessTerminalPeripheral = AE2WirelessTerminalPeripheral.create(access)
 
@@ -105,9 +119,9 @@ class AE2WirelessTerminalPocketUpgrade(id: ResourceLocation, stack: ItemStack, p
 
     override fun getUpgradeData(stack: ItemStack): DataComponentPatch = stack.componentsPatch
 
-    override fun getUpgradeItem(upgradeData: DataComponentPatch): ItemStack = wirelessTerminalItem(upgradeData, craftingItem)
+    override fun getUpgradeItem(upgradeData: DataComponentPatch): ItemStack = wirelessTerminalItem(upgradeData, terminal)
 
-    override fun isItemSuitable(stack: ItemStack): Boolean = stack.item === craftingItem.item && isLinkedWirelessTerminal(stack)
+    override fun isItemSuitable(stack: ItemStack): Boolean = stack.item === terminal.item && (isLinkedWirelessTerminal(stack) || isDisplayTerminal(stack))
 }
 
 class AE2WirelessTerminalPeripheral private constructor(owner: BasePeripheralOwner) : OwnedPeripheral<BasePeripheralOwner>(TYPE, owner) {
