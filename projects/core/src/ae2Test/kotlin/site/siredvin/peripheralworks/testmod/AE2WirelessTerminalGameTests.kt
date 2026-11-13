@@ -1,3 +1,6 @@
+// Stateful upgrade items stay on CC's deprecated item-less data API, like Tweakium's bases.
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+
 package site.siredvin.peripheralworks.testmod
 
 import appeng.api.config.Actionable
@@ -16,6 +19,7 @@ import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.pocket.IPocketUpgrade
 import dan200.computercraft.api.turtle.TurtleSide
 import dan200.computercraft.api.upgrades.UpgradeData
+import dan200.computercraft.api.upgrades.UpgradeHandle
 import dan200.computercraft.impl.PocketUpgrades
 import dan200.computercraft.impl.TurtleUpgrades
 import dan200.computercraft.shared.config.Config
@@ -73,9 +77,10 @@ class AE2WirelessTerminalGameTests {
             override fun setUpgrade(upgrade: UpgradeData<IPocketUpgrade>?) {
                 currentUpgrade = upgrade
             }
-            override fun getUpgradeData(): DataComponentPatch = currentUpgrade!!.data
+            override fun getUpgradeHandle(): UpgradeHandle<IPocketUpgrade>? = null
+            override fun getUpgradeData(): DataComponentPatch = currentUpgrade!!.data()
             override fun setUpgradeData(data: DataComponentPatch) {
-                currentUpgrade = UpgradeData.of(currentUpgrade!!.holder, data)
+                currentUpgrade = UpgradeData.of(currentUpgrade!!.holder(), data)
             }
             override fun invalidatePeripheral() = Unit
         }
@@ -129,20 +134,20 @@ class AE2WirelessTerminalGameTests {
             WirelessTerminalItem.LINKABLE_HANDLER.link(standardTerminal, GlobalPos.of(helper.level.dimension(), accessPointPos))
             it.injectAEPower(standardTerminal, 100.0, Actionable.MODULATE)
         }
-        check(TurtleUpgrades.instance().get(helper.level.registryAccess(), standardTerminal)?.holder?.key()?.location() == AE2WirelessTerminalUpgrade.UPGRADE_ID) {
+        check(TurtleUpgrades.instance().get(helper.level.registryAccess(), standardTerminal)?.holder()?.key()?.location() == AE2WirelessTerminalUpgrade.UPGRADE_ID) {
             "Linked standard wireless terminal was not accepted as a turtle upgrade"
         }
         val standardPocketUpgrade = PocketUpgrades.instance().get(helper.level.registryAccess(), standardTerminal)
-        check(standardPocketUpgrade?.holder?.key()?.location() == AE2WirelessTerminalUpgrade.UPGRADE_ID && ItemStack.matches(standardTerminal, standardPocketUpgrade.getUpgradeItem())) {
+        check(standardPocketUpgrade?.holder()?.key()?.location() == AE2WirelessTerminalUpgrade.UPGRADE_ID && ItemStack.matches(standardTerminal, standardPocketUpgrade.getUpgradeItem())) {
             "Linked standard wireless terminal was not accepted as a pocket upgrade"
         }
         val upgradeData = TurtleUpgrades.instance().get(helper.level.registryAccess(), terminal)
             ?: error("Linked wireless terminal was not accepted as a turtle upgrade")
-        check(upgradeData.holder.key().location() == AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID) {
+        check(upgradeData.holder().key().location() == AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID) {
             "Linked wireless crafting terminal resolved to the wrong turtle upgrade"
         }
         val craftingPocketUpgrade = PocketUpgrades.instance().get(helper.level.registryAccess(), terminal)
-        check(craftingPocketUpgrade?.holder?.key()?.location() == AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID && ItemStack.matches(terminal, craftingPocketUpgrade.getUpgradeItem())) {
+        check(craftingPocketUpgrade?.holder()?.key()?.location() == AE2WirelessTerminalUpgrade.CRAFTING_UPGRADE_ID && ItemStack.matches(terminal, craftingPocketUpgrade.getUpgradeItem())) {
             "Linked wireless crafting terminal resolved to the wrong pocket upgrade"
         }
         val upgrade = upgradeData.upgrade() as AE2WirelessTerminalUpgrade

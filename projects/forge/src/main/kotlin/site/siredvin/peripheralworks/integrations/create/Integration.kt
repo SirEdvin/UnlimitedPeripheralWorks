@@ -139,9 +139,9 @@ class Integration : Runnable {
         RecipeRegistryToolkit.registerSerializer(ProcessingOutput::class.java) { serializeCodec(ProcessingOutput.CODEC_NEW, it) }
         VanillaDetailRegistries.ITEM_STACK.addProvider(
             DetailProvider { data, stack ->
-                stack.get(AllDataComponents.SEQUENCED_ASSEMBLY)?.let {
-                    data["SequencedAssembly"] = serializeCodec(SequencedAssemblyRecipe.SequencedAssembly.CODEC, it)
-                }
+                stack.get(AllDataComponents.SEQUENCED_ASSEMBLY)
+                    ?.let { serializeCodec(SequencedAssemblyRecipe.SequencedAssembly.CODEC, it) }
+                    ?.let { data["SequencedAssembly"] = it }
             },
         )
     }

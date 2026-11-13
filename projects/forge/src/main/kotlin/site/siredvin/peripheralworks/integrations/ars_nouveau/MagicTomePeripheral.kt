@@ -34,6 +34,8 @@ class MagicTomePeripheral(peripheralOwner: PocketPeripheralOwner, val casterTome
     @LuaFunction(mainThread = true)
     fun getSelectedSpell(): MutableMap<String, Any> = LuaRepresentation.forSpell(spellCaster.spell)
 
+    // The tome is a stateful upgrade item: it stays on CC's deprecated item-less data API, like Tweakium's bases.
+    @Suppress("DEPRECATION")
     @LuaFunction(mainThread = true)
     fun select(slot: Int) {
         spellCaster = spellCaster.setCurrentSlot(slot - 1)

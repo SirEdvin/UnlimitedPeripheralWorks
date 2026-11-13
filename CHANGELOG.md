@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-12
+
+### Changed
+
+- CC:Tweaked 1.121.0 is now the minimum version; the bundled Peripheralium, Tweakium and Broccolium are 2.1.0.
+- Peripheralium hubs return the exact item an upgrade was installed with, for example a named or enchanted tool.
+
+### Fixed
+
+- Removing an upgrade from a peripheralium hub no longer keeps it stored and drops the hub's other upgrades.
+
 ## [1.9.2] - 2026-09-17
 
 ### Added

@@ -5,6 +5,7 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.peripheral.IPeripheral
 import dan200.computercraft.api.turtle.*
 import dan200.computercraft.api.upgrades.UpgradeData
+import dan200.computercraft.api.upgrades.UpgradeHandle
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.component.DataComponentPatch
@@ -12,9 +13,20 @@ import net.minecraft.world.Container
 import net.minecraft.world.level.Level
 import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 
-class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, override val fullUpgrade: UpgradeData<ITurtleUpgrade>, private val origin: TurtlePeripheraliumHubPeripheral) :
+// The hub keeps nested upgrades readable through CC's deprecated item-less data API, like Tweakium's upgrade bases.
+@Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide, private val initial: UpgradeData<ITurtleUpgrade>, private val origin: TurtlePeripheraliumHubPeripheral) :
     ITurtleAccess,
     LocalWrapper<ITurtleUpgrade> {
+
+    override val id: String = initial.holder().key().location().toString()
+
+    // The hub's stored copy changes under the wrapper (data and item writes); always read the current one.
+    override val fullUpgrade: UpgradeData<ITurtleUpgrade>
+        get() = origin.storedUpgrade(id) ?: initial
+
+    // Declared before the peripheral, whose construction may already ask for the handle.
+    private val handle = LocalUpgradeHandle(this, origin) { setUpgrade(tweakedSide, null) }
 
     override val peripheral: IPeripheral? = fullUpgrade.upgrade().createPeripheral(this, tweakedSide)
 
@@ -96,7 +108,9 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
         }
     }
 
-    override fun getUpgradeWithData(side: TurtleSide?): UpgradeData<ITurtleUpgrade>? {
+    override fun getUpgradeHandle(side: TurtleSide): UpgradeHandle<ITurtleUpgrade>? = if (side == tweakedSide) handle else access.getUpgradeHandle(side)
+
+    override fun getUpgradeWithData(side: TurtleSide): UpgradeData<ITurtleUpgrade>? {
         if (side == tweakedSide) {
             return fullUpgrade
         }
@@ -113,7 +127,7 @@ class LocalTurtleWrapper(val access: ITurtleAccess, val tweakedSide: TurtleSide,
     override fun getUpgradeData(side: TurtleSide): DataComponentPatch {
         val base = access.getUpgradeData(side)
         if (side == tweakedSide) {
-            return fullUpgrade.data
+            return fullUpgrade.data()
         }
         return base
     }

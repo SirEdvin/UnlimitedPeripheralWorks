@@ -110,7 +110,7 @@ class NetworkManagerBlockEntity(blockPos: BlockPos, blockState: BlockState) :
 
         override fun getSenderID(): String = NetworkManagerPeripheral.TYPE
 
-        override fun getLevel(): Level? = be.level
+        override fun getLevel(): Level = be.level!!
 
         override fun getPosition(): Vec3 = be.blockPos.toVec3()
     }

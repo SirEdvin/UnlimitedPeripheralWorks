@@ -223,17 +223,17 @@ dependencies {
 
     add(testMod.implementationConfigurationName, libs.testiarium.core)
     add(testMod.implementationConfigurationName, libs.testiarium.forge)
-    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.21.1:0.1.1:test-mod@jar") {
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.21.1:${libs.versions.testiarium.get()}:test-mod@jar") {
         isTransitive = false
     }
-    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-forge-1.21.1:0.1.1:test-mod@jar") {
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-forge-1.21.1:${libs.versions.testiarium.get()}:test-mod@jar") {
         isTransitive = false
     }
-    add(cctTestMod.name, "site.siredvin:testiarium-core-1.21.1:0.1.1:cct-test-mod@jar") {
+    add(cctTestMod.name, "site.siredvin:testiarium-core-1.21.1:${libs.versions.testiarium.get()}:cct-test-mod@jar") {
         isTransitive = false
     }
     add(developmentRuntime.name, libs.testiarium.forge)
-    add(developmentRuntime.name, "site.siredvin:testiarium-forge-1.21.1:0.1.1:test-mod@jar") {
+    add(developmentRuntime.name, "site.siredvin:testiarium-forge-1.21.1:${libs.versions.testiarium.get()}:test-mod@jar") {
         isTransitive = false
     }
     if (!minimalTestEnvironment) add(developmentRuntime.name, "maven.modrinth:refined-storage:lHHiI26k")
