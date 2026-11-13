@@ -1,12 +1,12 @@
 import net.darkhax.curseforgegradle.TaskPublishCurseForge
-import org.gradle.api.artifacts.ExternalModuleDependency
+import net.neoforged.moddevgradle.legacyforge.dsl.ObfuscationExtension
 import java.util.UUID
 
-@Suppress("DSL_SCOPE_VIOLATION")
+// ForgeGradle 6 (site.siredvin.forge) refuses Gradle 9, which Loom 1.18 needs for CC:Tweaked 1.121.0.
 plugins {
+    id("net.neoforged.moddev.legacyforge")
     id("site.siredvin.publishing")
     id("site.siredvin.mod-publishing")
-    id("site.siredvin.forge")
 }
 val modVersion: String by extra
 val minecraftVersion: String by extra
@@ -25,23 +25,7 @@ tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
 
 baseShaking {
     projectPart.set("forge")
-    integrationRepositories.set(false)
-    shake()
-}
-
-forgeShaking {
-    commonProjectName.set("core")
-    useAT.set(true)
-    useMixins.set(true)
-    useJarJar.set(true)
-    extraVersionMappings.set(
-        mapOf(
-            "computercraft" to "cc-tweaked",
-            "peripheralium" to "peripheralium",
-            "broccolium" to "broccolium",
-            "tweakium" to "tweakium",
-        ),
-    )
+    integrationRepositories.set(true)
     shake()
 }
 
@@ -68,34 +52,162 @@ tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotl
     }
 }
 
+val testSystemProperties = mapOf(
+    "forge.enabledGameTestNamespaces" to "peripheralworks_testmod",
+    "testiarium.structures" to project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath,
+)
+val fixtureSystemProperties = mapOf(
+    "testiarium.fixture-source" to project(":core").file("src/testMod/resources/gameteststructures").absolutePath,
+    "testiarium.cct-fixtures" to project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath,
+)
+
+// Resolved outside the extension, whose own minecraftVersion is unset until enable().
+val forgeArtifactVersion = "$minecraftVersion-${libs.versions.forge.asProvider().get()}"
+legacyForge {
+    enable { forgeVersion = forgeArtifactVersion }
+    parchment {
+        minecraftVersion = libs.versions.parchmentMc.get()
+        mappingsVersion = libs.versions.parchment.get()
+    }
+    mods {
+        create("peripheralworks") { sourceSet(sourceSets.main.get()) }
+        create("peripheralworks_testmod") {
+            sourceSet(testMod)
+            sourceSet(project(":core").sourceSets["testMod"])
+        }
+    }
+    runs {
+        configureEach {
+            systemProperty("forge.logging.markers", "REGISTRIES")
+            systemProperty("forge.logging.console.level", "debug")
+            loadedMods.add(mods.named("peripheralworks"))
+        }
+        create("client") {
+            client()
+            gameDirectory = file("run")
+        }
+        create("server") {
+            server()
+            gameDirectory = file("run/server")
+            programArgument("--nogui")
+        }
+        create("data") {
+            data()
+            gameDirectory = file("run")
+            programArguments.addAll(
+                "--mod", "peripheralworks", "--all", "--output", file("src/generated/resources").absolutePath,
+                "--existing", rootProject.file("projects/core/src/main/resources").absolutePath,
+                "--existing", file("src/main/resources").absolutePath,
+            )
+        }
+        create("gameTestServer") {
+            type = "gameTestServer"
+            sourceSet = testMod
+            // Saved fixture computers reboot before tests replace them; each run needs an isolated world.
+            gameDirectory = gameTestRunDirectory
+            systemProperties.putAll(testSystemProperties + fixtureSystemProperties)
+            systemProperty("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
+            systemProperty("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
+            jvmArgument("-ea")
+            programArgument("--nogui")
+            loadedMods.add(mods.named("peripheralworks_testmod"))
+        }
+        create("clientGameTest") {
+            client()
+            sourceSet = testMod
+            gameDirectory = file("run/network-manager-client-gametest")
+            systemProperties.putAll(testSystemProperties)
+            systemProperty("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("network-manager-client").get())
+            systemProperty("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
+            systemProperty("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
+            jvmArguments.addAll("-ea", "-Dtestiarium.client=true", "-Dforge.disableEarlyProgressWindow=true")
+            programArguments.addAll("--mixin.config", "testiarium-testmod.mixins.json")
+            loadedMods.add(mods.named("peripheralworks_testmod"))
+        }
+        create("testClient") {
+            client()
+            sourceSet = testMod
+            gameDirectory = file("run/test-client")
+            systemProperties.putAll(testSystemProperties + fixtureSystemProperties)
+            systemProperty("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
+            jvmArgument("-ea")
+            programArguments.addAll("--mixin.config", "testiarium-testmod.mixins.json")
+            loadedMods.add(mods.named("peripheralworks_testmod"))
+        }
+    }
+}
+
+mixin {
+    add(sourceSets.main.get(), "peripheralworks.refmap.json")
+    config("peripheralworks.mixins.json")
+}
+
 repositories {
     maven {
         url = uri("https://cursemaven.com")
         content { includeModule("curse.maven", "extra-hostile-neural-networks-1162278") }
     }
     mavenLocal()
-    maven {
-        name = "SirEdvin's Maven proxy"
-        url = uri("https://mvn.siredvin.site/minecraft")
+    maven("https://thedarkcolour.github.io/KotlinForForge/") { content { includeGroup("thedarkcolour") } }
+    maven("https://maven.blamejared.com/") { content { includeGroup("mezz.jei") } }
+    maven("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/") { content { includeGroup("com.klikli_dev") } }
+    maven("https://maven.theillusivec4.top/") { content { includeGroup("top.theillusivec4.curios") } }
+    maven("https://dl.cloudsmith.io/public/tslat/sbl/maven/") { content { includeGroup("net.tslat.smartbrainlib") } }
+    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
+        content {
+            includeGroup("com.eliotlash.mclib")
+            includeGroupByRegex("software\\.bernie.*")
+        }
     }
+    maven("https://maven.tterrag.com/") {
+        content {
+            includeGroup("com.tterrag.registrate")
+            includeGroup("com.jozufozu.flywheel")
+        }
+    }
+    maven("https://maven.createmod.net") {
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("net.createmod.ponder")
+            includeGroup("dev.engine-room.flywheel")
+        }
+    }
+    maven("https://maven.latvian.dev/releases") {
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+    maven("https://jitpack.io") { content { includeGroup("com.github.rtyley") } }
 }
 
+val obfuscation = extensions.getByType<ObfuscationExtension>()
+val modTestModImplementation = obfuscation.createRemappingConfiguration(configurations.getByName(testMod.implementationConfigurationName))
+
 dependencies {
-    if (minimalTestEnvironment && gtceuTestEnvironment) {
-        listOf(libs.gregetch.get(), libs.ldlib.get()).forEach { implementation(fg.deobf(it)) }
+    compileOnly(project(":core")) {
+        exclude("cc.tweaked")
+        exclude("fuzs.forgeconfigapiport")
+        exclude("dan200.computercraft")
     }
-    listOf(libs.hostile.networks.get(), libs.extra.hnn.get(), libs.placebo.get()).forEach { compileOnly(fg.deobf(it)) }
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+
+    if (minimalTestEnvironment && gtceuTestEnvironment) {
+        modImplementation(libs.gregetch)
+        modImplementation(libs.ldlib)
+    }
+    listOf(libs.hostile.networks, libs.extra.hnn, libs.placebo).forEach { modCompileOnly(it) }
     if (!minimalTestEnvironment || neuralTestEnvironment != "none") {
-        runtimeOnly(fg.deobf(libs.hostile.networks.get()))
-        runtimeOnly(fg.deobf(libs.placebo.get()))
+        modRuntimeOnly(libs.hostile.networks)
+        modRuntimeOnly(libs.placebo)
     }
     if (!minimalTestEnvironment || neuralTestEnvironment == "extra") {
-        runtimeOnly(fg.deobf(libs.extra.hnn.get()))
+        modRuntimeOnly(libs.extra.hnn)
     }
     implementation(libs.bundles.forge.raw)
-    libs.bundles.forge.base.get().map { implementation(fg.deobf(it)) }
-    libs.bundles.forge.include.get().map { implementation(fg.deobf(it)) }
-    libs.bundles.externalMods.forge.runtime.get().map { runtimeOnly(fg.deobf(it)) }
+    modImplementation(libs.bundles.forge.base)
+    modImplementation(libs.bundles.forge.include)
+    modRuntimeOnly(libs.bundles.externalMods.forge.runtime)
 
     jarJar(libs.bundles.forge.jjar) {
         isTransitive = false
@@ -104,97 +216,52 @@ dependencies {
 //    // WHY ?!?!?!
 //    // Well, I didn't find any way to actually provide `configuration` information to
 //    // a libs.version.toml, so I ended up with this garbabe of solution
-    compileOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.6-150:all"))
-    compileOnly(fg.deobf("com.tterrag.registrate:Registrate:MC1.20-1.3.3"))
-//    runtimeOnly(fg.deobf("com.simibubi.create:create-1.20.1:6.0.0-84:all"))
-    compileOnly(fg.deobf("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51"))
+    modCompileOnly("com.simibubi.create:create-1.20.1:6.0.6-150:all")
+    modCompileOnly("com.tterrag.registrate:Registrate:MC1.20-1.3.3")
+    modCompileOnly("net.createmod.ponder:Ponder-Forge-1.20.1:1.0.51")
 
     if (minimalTestEnvironment) {
         if (testWithoutAE2) {
-            compileOnly(fg.deobf(libs.ae2.forge.get()))
+            modCompileOnly(libs.ae2.forge)
         } else {
-            implementation(fg.deobf(libs.ae2.forge.get()))
+            modImplementation(libs.ae2.forge)
         }
     } else {
-        runtimeOnly(fg.deobf(libs.jade.forge.get()))
-        libs.bundles.externalMods.forge.integrations.full.get().map { compileOnly(fg.deobf(it)) }
-        libs.bundles.externalMods.forge.integrations.raw.full.get().map { compileOnly(it) }
-        libs.bundles.externalMods.forge.integrations.active.get().map { runtimeOnly(fg.deobf(it)) }
-        libs.bundles.externalMods.forge.integrations.raw.active.get().map { runtimeOnly(it) }
-        libs.bundles.externalMods.forge.integrations.activedep.get().map { runtimeOnly(fg.deobf(it)) }
+        modRuntimeOnly(libs.jade.forge)
+        modCompileOnly(libs.bundles.externalMods.forge.integrations.full)
+        modCompileOnly(libs.bundles.externalMods.forge.integrations.raw.full)
+        modRuntimeOnly(libs.bundles.externalMods.forge.integrations.active)
+        modRuntimeOnly(libs.bundles.externalMods.forge.integrations.raw.active)
+        modRuntimeOnly(libs.bundles.externalMods.forge.integrations.activedep)
     }
 
-    listOf(
-        "site.siredvin:testiarium-forge-1.20.1:0.1.1",
-        "site.siredvin:testiarium-forge-1.20.1:0.1.1:cct-test-mod@jar",
-    ).forEach { notation ->
-        add(
-            testMod.implementationConfigurationName,
-            fg.deobf((project.dependencies.create(notation) as ExternalModuleDependency).apply { isTransitive = false }),
-        )
-    }
-    add(testMod.implementationConfigurationName, fg.deobf("site.siredvin:testiarium-forge-1.20.1:0.1.1:test-mod@jar"))
-}
-
-minecraft {
-    runs {
-        create("gameTestServer") {
-            // Saved fixture computers reboot before tests replace them; each run needs an isolated world.
-            workingDirectory(gameTestRunDirectory.get().asFile)
-            property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse(if (minimalTestEnvironment) "peripheralworks,ae2,ae2-configurable-peripherals" else "peripheralworks").get())
-            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
-            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
-            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
-            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/peripheralworks-gametest.xml").get().asFile.absolutePath)
-            jvmArgs("-ea")
-            args("--nogui")
-            mods {
-                create("peripheralworks") { source(sourceSets.main.get()) }
-                create("peripheralworks_testmod") {
-                    source(testMod)
-                    source(project(":core").sourceSets["testMod"])
-                }
-            }
-        }
-        create("clientGameTest") {
-            parent(runs.getByName("client"))
-            workingDirectory(file("run/network-manager-client-gametest"))
-            property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("network-manager-client").get())
-            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
-            property("testiarium.gametest-report", layout.buildDirectory.file("test-results/network-manager-client-gametest.xml").get().asFile.absolutePath)
-            property("testiarium.screenshots", layout.buildDirectory.dir("screenshots/network-manager-client").get().asFile.absolutePath)
-            jvmArgs("-ea", "-Dtestiarium.client=true", "-Dforge.disableEarlyProgressWindow=true")
-            args("--mixin.config", "testiarium-testmod.mixins.json")
-            mods {
-                create("peripheralworks") { source(sourceSets.main.get()) }
-                create("peripheralworks_testmod") {
-                    source(testMod)
-                    source(project(":core").sourceSets["testMod"])
-                }
-            }
-        }
-        create("testClient") {
-            parent(runs.getByName("client"))
-            workingDirectory(file("run/test-client"))
-            property("forge.enabledGameTestNamespaces", "peripheralworks_testmod")
-            property("testiarium.tags", providers.gradleProperty("testiariumTags").orElse("peripheralworks,ae2-configurable-peripherals").get())
-            property("testiarium.structures", project(":core").layout.buildDirectory.dir("resources/testMod/gameteststructures").get().asFile.absolutePath)
-            property("testiarium.fixture-source", project(":core").file("src/testMod/resources/gameteststructures").absolutePath)
-            property("testiarium.cct-fixtures", project(":core").layout.buildDirectory.dir("resources/testMod/computer").get().asFile.absolutePath)
-            jvmArgs("-ea")
-            args("--mixin.config", "testiarium-testmod.mixins.json")
-            mods {
-                create("peripheralworks") { source(sourceSets.main.get()) }
-                create("peripheralworks_testmod") {
-                    source(testMod)
-                    source(project(":core").sourceSets["testMod"])
-                }
-            }
+    add(modTestModImplementation.name, libs.testiarium.forge)
+    for (feature in listOf("test-mod", "cct-test-mod")) {
+        add(modTestModImplementation.name, libs.testiarium.forge.get().toString()) {
+            capabilities { requireCapability("site.siredvin:testiarium-forge-$feature") }
         }
     }
 }
+
+tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") { source(project(":core").sourceSets.main.get().allSource) }
+tasks.named<JavaCompile>("compileJava") { source(project(":core").sourceSets.main.get().allSource) }
+tasks.processResources {
+    from(project(":core").sourceSets.main.get().resources)
+    val versions = mapOf(
+        "version" to project.version,
+        "file" to mapOf("jarVersion" to project.version),
+        "forgeVersion" to libs.versions.forge.asProvider().get(),
+        "computercraftVersion" to libs.versions.cc.tweaked.get(),
+        "peripheraliumVersion" to libs.versions.peripheralium.asProvider().get(),
+        "broccoliumVersion" to libs.versions.broccolium.asProvider().get(),
+        "tweakiumVersion" to libs.versions.tweakium.asProvider().get(),
+    )
+    inputs.properties(versions)
+    filesMatching("META-INF/mods.toml") { expand(versions) }
+    exclude(".cache")
+}
+tasks.jar { manifest.attributes["MixinConfigs"] = "peripheralworks.mixins.json" }
+extra["releaseJar"] = "reobfJar"
 
 publishingShaking {
     shake()
@@ -211,7 +278,7 @@ tasks.withType<JavaExec>().configureEach {
 }
 
 modPublishing {
-    output.set(tasks.jarJar)
+    output.set(tasks.named<Jar>("reobfJar"))
     requiredDependencies.set(
         listOf(
             "cc-tweaked",
@@ -221,8 +288,13 @@ modPublishing {
     shake()
 }
 
+// Buildenv and Minotaur only detect ForgeGradle; name the loader for the MDG legacy build.
+modrinth { loaders.add("forge") }
 tasks.withType<TaskPublishCurseForge>().configureEach {
-    uploadArtifacts.forEach { it.addEnvironment("Client", "Server") }
+    uploadArtifacts.forEach {
+        it.addModLoader("Forge")
+        it.addEnvironment("Client", "Server")
+    }
 }
 
 val copyPowah by tasks.register<Copy>("copyPowah") {
@@ -263,5 +335,9 @@ tasks.spotlessJava {
 }
 
 tasks.spotlessKotlin {
+    dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
+}
+
+tasks.named("sourcesJar") {
     dependsOn(copyPowah, copyLanterns, copyAutomobility, copyKubeJS)
 }

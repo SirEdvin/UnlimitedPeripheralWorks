@@ -22,7 +22,7 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
         fun collectUpgradesData(dataStorage: IDataStorage): List<UpgradeData<IPocketUpgrade>> {
             return getActiveUpgrades(dataStorage).mapNotNull {
                 val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(it) ?: return@mapNotNull null
-                return@mapNotNull UpgradeData(upgrade, getDataForUpgrade(upgrade.upgradeID.toString(), dataStorage))
+                return@mapNotNull getUpgradeData(upgrade, dataStorage)
             }
         }
     }
@@ -36,34 +36,36 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
         activeUpgrades.forEach {
             val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(it)
             if (upgrade != null) {
-                connectPocketUpgrade(UpgradeData.of(upgrade, getDataForUpgrade(upgrade.upgradeID.toString())))
+                connectPocketUpgrade(getUpgradeData(upgrade))
             }
         }
     }
 
     fun connectPocketUpgrade(upgrade: UpgradeData<IPocketUpgrade>) {
-        val wrapper = LocalPocketWrapper(peripheralOwner.pocket, upgrade.upgrade, upgrade.upgrade.upgradeID.toString(), this)
-        if (!upgrade.data.isEmpty) setDataForUpdate(wrapper.id, upgrade.data)
+        val wrapper = LocalPocketWrapper(peripheralOwner.pocket, upgrade.upgrade(), upgrade.upgrade().upgradeID.toString(), this)
+        if (!upgrade.data().isEmpty) setDataForUpdate(wrapper.id, upgrade.data())
         activePocketUpgrades.add(wrapper)
         if (wrapper.peripheral != null) {
-            attachRemotePeripheral(wrapper.peripheral!!, upgrade.upgrade.upgradeID.toString())
+            attachRemotePeripheral(wrapper.peripheral!!, upgrade.upgrade().upgradeID.toString())
         }
     }
 
     fun disconnectPocketUpgrade(upgrade: UpgradeData<IPocketUpgrade>) {
-        val wrapper = activePocketUpgrades.find { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) } ?: return
+        val wrapper = activePocketUpgrades.find { it.upgrade.upgradeID.equals(upgrade.upgrade().upgradeID) } ?: return
         activePocketUpgrades.remove(wrapper)
         setDataForUpdate(wrapper.id, null)
-        removeRemotePeripheral(upgrade.upgrade.upgradeID.toString())
+        setItemForUpgrade(wrapper.id, null)
+        removeRemotePeripheral(upgrade.upgrade().upgradeID.toString())
     }
 
     fun attachPocketUpgrade(upgrade: UpgradeData<IPocketUpgrade>) {
-        attachUpgrade(upgrade.upgrade.upgradeID)
+        attachUpgrade(upgrade.upgrade().upgradeID)
+        setItemForUpgrade(upgrade.upgrade().upgradeID.toString(), upgrade.upgradeItem)
         connectPocketUpgrade(upgrade)
     }
 
     fun detachPocketUpgrade(upgrade: UpgradeData<IPocketUpgrade>) {
-        detachUpgrade(upgrade.upgrade.upgradeID)
+        detachUpgrade(upgrade.upgrade().upgradeID)
         disconnectPocketUpgrade(upgrade)
     }
 
@@ -71,7 +73,7 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
 
     override fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activePocketUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
+        if (activePocketUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade().upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
         return Pair(true, null)
@@ -79,7 +81,7 @@ class PocketPeripheraliumHubPeripheral(maxUpdateCount: Int, access: IPocketAcces
 
     override fun equipImpl(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = ComputerPlatformToolkit.get().getPocketUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activePocketUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
+        if (activePocketUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade().upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
         attachPocketUpgrade(upgrade)

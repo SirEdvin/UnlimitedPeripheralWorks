@@ -19,7 +19,7 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
         fun collectUpgradesData(dataStorage: IDataStorage): List<UpgradeData<ITurtleUpgrade>> {
             return getActiveUpgrades(dataStorage).mapNotNull {
                 val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(it) ?: return@mapNotNull null
-                return@mapNotNull UpgradeData(upgrade, getDataForUpgrade(upgrade.upgradeID.toString(), dataStorage))
+                return@mapNotNull getUpgradeData(upgrade, dataStorage)
             }
         }
     }
@@ -33,25 +33,26 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
         activeUpgrades.forEach {
             val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(it)
             if (upgrade != null) {
-                connectTurtleUpgrade(UpgradeData(upgrade, getDataForUpgrade(upgrade.upgradeID.toString())))
+                connectTurtleUpgrade(getUpgradeData(upgrade))
             }
         }
     }
 
     fun connectTurtleUpgrade(upgrade: UpgradeData<ITurtleUpgrade>) {
-        val wrapper = LocalTurtleWrapper(peripheralOwner.turtle, peripheralOwner.side, upgrade.upgrade, upgrade.upgrade.upgradeID.toString(), this)
-        if (!upgrade.data.isEmpty) setDataForUpdate(wrapper.id, upgrade.data)
+        val wrapper = LocalTurtleWrapper(peripheralOwner.turtle, peripheralOwner.side, upgrade.upgrade(), upgrade.upgrade().upgradeID.toString(), this)
+        if (!upgrade.data().isEmpty) setDataForUpdate(wrapper.id, upgrade.data())
         activeTurtleUpgrades.add(wrapper)
         if (wrapper.peripheral != null) {
-            attachRemotePeripheral(wrapper.peripheral, upgrade.upgrade.upgradeID.toString())
+            attachRemotePeripheral(wrapper.peripheral, upgrade.upgrade().upgradeID.toString())
         }
     }
 
     fun disconnectTurtleUpgrade(upgrade: UpgradeData<ITurtleUpgrade>) {
-        val wrapper = activeTurtleUpgrades.find { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) } ?: return
+        val wrapper = activeTurtleUpgrades.find { it.upgrade.upgradeID.equals(upgrade.upgrade().upgradeID) } ?: return
         activeTurtleUpgrades.remove(wrapper)
         setDataForUpdate(wrapper.id, null)
-        removeRemotePeripheral(upgrade.upgrade.upgradeID.toString())
+        setItemForUpgrade(wrapper.id, null)
+        removeRemotePeripheral(upgrade.upgrade().upgradeID.toString())
     }
 
     fun swapUpgrade(old: UpgradeData<ITurtleUpgrade>?, new: UpgradeData<ITurtleUpgrade>?) {
@@ -64,12 +65,13 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
     }
 
     fun attachTurtleUpgrade(upgrade: UpgradeData<ITurtleUpgrade>) {
-        attachUpgrade(upgrade.upgrade.upgradeID)
+        attachUpgrade(upgrade.upgrade().upgradeID)
+        setItemForUpgrade(upgrade.upgrade().upgradeID.toString(), upgrade.upgradeItem)
         connectTurtleUpgrade(upgrade)
     }
 
     fun detachTurtleUpgrade(upgrade: UpgradeData<ITurtleUpgrade>) {
-        detachUpgrade(upgrade.upgrade.upgradeID)
+        detachUpgrade(upgrade.upgrade().upgradeID)
         disconnectTurtleUpgrade(upgrade)
     }
 
@@ -77,7 +79,7 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
 
     override fun isEquitable(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
+        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade().upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
         return Pair(true, null)
@@ -85,7 +87,7 @@ class TurtlePeripheraliumHubPeripheral(maxUpdateCount: Int, access: ITurtleAcces
 
     override fun equipImpl(stack: ItemStack): Pair<Boolean?, String?> {
         val upgrade = ComputerPlatformToolkit.get().getTurtleUpgrade(stack) ?: return Pair(null, "Item is not an upgrade")
-        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade.upgradeID) }) {
+        if (activeTurtleUpgrades.any { it.upgrade.upgradeID.equals(upgrade.upgrade().upgradeID) }) {
             return Pair(null, "Duplicate upgrades are not allowed")
         }
         attachTurtleUpgrade(upgrade)

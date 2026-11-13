@@ -21,7 +21,7 @@ tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileKotlin") {
 
 baseShaking {
     projectPart.set("fabric")
-    integrationRepositories.set(false)
+    integrationRepositories.set(true)
     shake()
 }
 
@@ -64,17 +64,17 @@ tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotl
 net.fabricmc.loom.configuration.RemapConfigurations.setupForSourceSet(project, testMod)
 
 val testiariumCctArtifacts = configurations.detachedConfiguration(
-    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1:cct-test-mod@jar"),
-    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1:cct-test-mod@jar"),
+    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:${libs.versions.testiarium.get()}:cct-test-mod@jar"),
+    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:${libs.versions.testiarium.get()}:cct-test-mod@jar"),
 ).apply { isTransitive = false }
 
 val testiariumTestModArtifacts = configurations.detachedConfiguration(
-    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1:test-mod@jar"),
+    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:${libs.versions.testiarium.get()}:test-mod@jar"),
 ).apply { isTransitive = false }
 
 val testiariumMainArtifacts = configurations.detachedConfiguration(
-    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:0.1.1"),
-    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:0.1.1"),
+    project.dependencies.create("site.siredvin:testiarium-core-1.20.1:${libs.versions.testiarium.get()}"),
+    project.dependencies.create("site.siredvin:testiarium-fabric-1.20.1:${libs.versions.testiarium.get()}"),
 ).apply { isTransitive = false }
 
 loom {
@@ -132,9 +132,49 @@ loom {
 
 repositories {
     mavenLocal()
-    maven {
-        name = "SirEdvin's Maven proxy"
-        url = uri("https://mvn.siredvin.site/minecraft")
+    maven("https://maven.fabricmc.net/") { content { includeGroup("teamreborn") } }
+    maven("https://maven.blamejared.com/") { content { includeGroup("mezz.jei") } }
+    maven("https://maven.wispforest.io") { content { includeGroup("io.wispforest") } }
+    maven("https://maven.nucleoid.xyz") {
+        content {
+            includeGroup("eu.pb4")
+            includeGroup("xyz.nucleoid")
+        }
+    }
+    maven("https://maven.terraformersmc.com/") {
+        content {
+            includeGroup("com.terraformersmc")
+            includeGroup("dev.emi")
+        }
+    }
+    maven("https://maven.ladysnake.org/releases") {
+        content {
+            includeGroup("io.github.ladysnake")
+            includeGroupByRegex("io\\.github\\.onyxstudios.*")
+        }
+    }
+    maven("https://mvn.devos.one/snapshots/") {
+        content {
+            includeGroup("com.simibubi.create")
+            includeGroup("com.tterrag.registrate_fabric")
+            includeGroup("io.github.tropheusj")
+            includeGroupByRegex("io\\.github\\.fabricators_of_create.*")
+        }
+    }
+    maven("https://maven.jamieswhiteshirt.com/libs-release/") { content { includeGroup("com.jamieswhiteshirt") } }
+    maven("https://modmaven.dev/") { content { includeGroup("com.jozufozu.flywheel") } }
+    maven("https://maven.latvian.dev/releases") {
+        content {
+            includeGroup("dev.latvian.mods")
+            includeGroup("dev.latvian.apps")
+        }
+    }
+    maven("https://jitpack.io") {
+        content {
+            includeGroup("com.github.llamalad7.mixinextras")
+            includeGroup("com.github.Chocohead")
+            includeGroup("com.github.rtyley")
+        }
     }
 }
 

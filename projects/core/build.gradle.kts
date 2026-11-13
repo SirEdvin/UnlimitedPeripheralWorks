@@ -1,6 +1,8 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("site.siredvin.vanilla")
+    // Loom 1.18 run tasks resolve a classpath variant from every project the Fabric module depends on.
+    id("net.fabricmc.fabric-loom-companion")
     id("site.siredvin.publishing")
 }
 
@@ -12,6 +14,7 @@ spotless { kotlin { target("src/**/*.kt") } }
 
 baseShaking {
     projectPart.set("common")
+    integrationRepositories.set(true)
     shake()
 }
 
@@ -35,10 +38,6 @@ if (minimalTestEnvironment) {
 
 repositories {
     mavenLocal()
-    maven {
-        name = "SirEdvin's Maven proxy"
-        url = uri("https://mvn.siredvin.site/minecraft")
-    }
 }
 
 dependencies {
@@ -47,8 +46,8 @@ dependencies {
     api(libs.bundles.apicommon)
     compileOnly(libs.mixin)
     add(testMod.implementationConfigurationName, libs.testiarium.core)
-    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:0.1.1:test-mod@jar")
-    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:0.1.1:cct-test-mod@jar")
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:${libs.versions.testiarium.get()}:test-mod@jar")
+    add(testMod.implementationConfigurationName, "site.siredvin:testiarium-core-1.20.1:${libs.versions.testiarium.get()}:cct-test-mod@jar")
     add(testMod.compileOnlyConfigurationName, libs.bundles.cccommon)
 }
 

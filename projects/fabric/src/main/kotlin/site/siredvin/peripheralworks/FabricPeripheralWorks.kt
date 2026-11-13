@@ -1,5 +1,5 @@
 package site.siredvin.peripheralworks
-import dan200.computercraft.api.node.wired.WiredElementLookup
+import dan200.computercraft.api.network.wired.WiredElementLookup
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry
 import net.fabricmc.api.ModInitializer

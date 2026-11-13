@@ -1,12 +1,19 @@
 package site.siredvin.peripheralworks.testmod
 
 import com.electronwill.nightconfig.core.UnmodifiableConfig
+import dan200.computercraft.api.turtle.TurtleSide
+import dan200.computercraft.api.upgrades.UpgradeData
+import dan200.computercraft.impl.PocketUpgrades
+import dan200.computercraft.impl.TurtleUpgrades
+import dan200.computercraft.shared.ModRegistry
+import dan200.computercraft.shared.turtle.blocks.TurtleBlockEntity
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.gametest.framework.GameTest
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.network.chat.Component
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.level.block.Block
@@ -23,6 +30,8 @@ import site.siredvin.peripheralworks.common.configuration.IntegrationConfigurati
 import site.siredvin.peripheralworks.common.item.UltimateConfigurator
 import site.siredvin.peripheralworks.common.setup.Blocks
 import site.siredvin.peripheralworks.common.setup.Items
+import site.siredvin.peripheralworks.computercraft.peripherals.PeripheraliumHubPeripheral
+import site.siredvin.peripheralworks.computercraft.peripherals.turtles.TurtlePeripheraliumHubPeripheral
 import site.siredvin.peripheralworks.subsystem.configurator.BoxStyle
 import site.siredvin.peripheralworks.subsystem.configurator.ConfiguratorTarget
 import site.siredvin.peripheralworks.subsystem.configurator.NetworkManagerMode
@@ -32,6 +41,7 @@ import site.siredvin.peripheralworks.subsystem.configurator.TextStyle
 import site.siredvin.peripheralworks.xplat.ModPlatform
 import site.siredvin.testiarium.api.TestGroup
 import site.siredvin.testiarium.cct.thenLua
+import site.siredvin.tweakium.modules.platform.ComputerPlatformToolkit
 
 @TestGroup("peripheralworks")
 class PeripheralWorksGameTests {
@@ -476,6 +486,34 @@ class PeripheralWorksGameTests {
         stack.orCreateTag.put(UltimateConfigurator.RECENT_TARGETS, ListTag().apply { add(unloaded.toNBT()) })
         check(!helper.level.isLoaded(unloaded.pos))
         check(configurator.selectTarget(stack, helper.level, unloaded) == UltimateConfigurator.SelectionResult.UNAVAILABLE)
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun upgradesHaveSuitableDefaultItems(helper: GameTestHelper) {
+        // CC:Tweaked builds this for every registered upgrade (creative tab, recipe viewers) and throws on an unsuitable crafting item.
+        (TurtleUpgrades.instance().upgrades + PocketUpgrades.instance().upgrades).forEach { UpgradeData.ofDefault(it) }
+        helper.succeed()
+    }
+
+    @GameTest(template = "empty")
+    fun peripheraliumHubReturnsEquippedItem(helper: GameTestHelper) {
+        val pos = BlockPos(1, 1, 1)
+        helper.setBlock(pos, ModRegistry.Blocks.TURTLE_NORMAL.get())
+        val turtle = (helper.getBlockEntity(pos) as TurtleBlockEntity).access
+        turtle.setUpgradeWithData(TurtleSide.LEFT, ComputerPlatformToolkit.get().getTurtleUpgrade(ItemStack(Items.PERIPHERALIUM_HUB.get())))
+        val hub = turtle.getPeripheral(TurtleSide.LEFT) as TurtlePeripheraliumHubPeripheral
+        // A CC tool keeps its state on the equipped item only, so the name is lost unless the hub stores that item.
+        val pickaxe = ItemStack(net.minecraft.world.item.Items.DIAMOND_PICKAXE).setHoverName(Component.literal("Hub pickaxe"))
+        check(hub.equipImpl(pickaxe).first == true) { "Hub rejected a named pickaxe" }
+        val handle = hub.activeTurtleUpgrades.single().getUpgradeHandle(TurtleSide.LEFT)!!
+        check(ItemStack.matches(pickaxe, handle.item)) { "Hub stored ${handle.item} (${handle.item.tag}) instead of the equipped item" }
+        // A nested upgrade rewrites its own item through the handle, as CC tools do when they take damage.
+        val renamed = pickaxe.copy().setHoverName(Component.literal("Renamed"))
+        handle.setItem(renamed)
+        val returned = hub.unequipImpl(hub.getUpgrades().single())
+        check(ItemStack.matches(renamed, returned)) { "Hub returned $returned (${returned.tag}) instead of the stored item" }
+        check(hub.getUpgrades().isEmpty() && hub.peripheralOwner.dataStorage.getCompound(PeripheraliumHubPeripheral.TWEAKED_ITEMS).isEmpty) { "Hub kept data of an unequipped upgrade" }
         helper.succeed()
     }
 

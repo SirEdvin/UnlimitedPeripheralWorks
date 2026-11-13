@@ -19,11 +19,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Java 17
+      - name: Install Java 17 toolchain
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "17"
+
+      # Loom 1.18 needs Gradle itself to run on Java 25; Minecraft still compiles on 17.
+      - name: Set up Java 25 launcher
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
