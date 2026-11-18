@@ -50,6 +50,8 @@ class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mu
             if (_bakedQuads != newBakedQuads) {
                 setBakedQuads(newBakedQuads, mutableState, true)
             }
+        } else if (_bakedQuads != null) {
+            clear(mutableState, true)
         }
         return mutableState
     }
@@ -97,5 +99,7 @@ class FlexibleStatueBlockEntity(blockPos: BlockPos, blockState: BlockState) : Mu
 
     fun refreshShape() {
         _blockShape = _bakedQuads?.shape?.rotate(Direction.NORTH, facing)
+        // Block-entity packets do not necessarily change the blockstate or dirty its render section.
+        if (level?.isClientSide == true) triggerRenderUpdate()
     }
 }

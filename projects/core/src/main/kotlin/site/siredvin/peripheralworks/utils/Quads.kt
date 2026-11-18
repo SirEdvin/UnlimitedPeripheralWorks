@@ -44,9 +44,6 @@ data class QuadData(val x1: Float, val x2: Float, val y1: Float, val y2: Float, 
     val end: Vector3f
         get() = Vector3f(x2, y2, z2)
 
-    val uv: FloatArray
-        get() = floatArrayOf(x1 / 4, z1 / 4, x2 / 4, z2 / 4)
-
     val shape: VoxelShape
         get() = Shapes.box(
             (x1 / 16).toDouble(),
