@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.1] - 2026-11-19
+
+### Fixed
+
+- Ars Nouveau magic tome pocket upgrades no longer crash the game on startup with CC:Tweaked 1.121+, and a spell book can be equipped to them again.
+
 ## [1.10.0] - 2026-11-12
 
 ### Changed

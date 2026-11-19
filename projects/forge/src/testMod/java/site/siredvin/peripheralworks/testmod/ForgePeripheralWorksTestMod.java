@@ -27,6 +27,9 @@ public final class ForgePeripheralWorksTestMod {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.GTCEUPeripheralGameTests"));
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.GTCEUInfoGameTests"));
             }
+            if (ModList.get().isLoaded("ars_nouveau")) {
+                Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.ArsMagicTomeGameTests"));
+            }
             if (ModList.get().isLoaded("hostilenetworks")) {
                 Testiarium.register(Class.forName("site.siredvin.peripheralworks.testmod.NeuralNetworksGameTests"));
             }

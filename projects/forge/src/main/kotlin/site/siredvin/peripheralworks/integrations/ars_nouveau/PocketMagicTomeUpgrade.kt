@@ -40,10 +40,11 @@ class PocketMagicTomeUpgrade(type: ResourceLocation, stack: ItemStack) :
 
     override fun onRightClick(world: Level, access: IPocketAccess, peripheral: IPeripheral?): Boolean = super.onRightClick(world, access, peripheral)
 
-    override fun isItemSuitable(stack: ItemStack): Boolean {
-        val tweakedStack = stack.copy()
-        tweakedStack.remove(DataComponentRegistry.SPELL_CASTER.get())
-        tweakedStack.remove(DataComponentRegistry.TOME_CASTER.get())
-        return super.isItemSuitable(tweakedStack)
+    // Ars sets the caster components as prototype defaults, so both sides must be stripped or the crafting item never matches.
+    override fun isItemSuitable(stack: ItemStack): Boolean = ItemStack.isSameItemSameComponents(withoutCasterData(craftingItem), withoutCasterData(stack))
+
+    private fun withoutCasterData(stack: ItemStack): ItemStack = stack.copy().apply {
+        remove(DataComponentRegistry.SPELL_CASTER.get())
+        remove(DataComponentRegistry.TOME_CASTER.get())
     }
 }
