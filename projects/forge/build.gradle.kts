@@ -76,6 +76,10 @@ tasks.named<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>("compileTestModKotl
     if (!minimalTestEnvironment || gtceuTestEnvironment) {
         source(fileTree("src/gtceuTest/kotlin"))
     }
+    // Ars Nouveau is only on the classpath in the full environment.
+    if (!minimalTestEnvironment) {
+        source(fileTree("src/arsTest/kotlin"))
+    }
 }
 
 if (minimalTestEnvironment) {
